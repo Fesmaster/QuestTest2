@@ -1,19 +1,37 @@
-minetest.log("QTS loading!")
+minetest.log("info", "QTS loading!")
 qts = {}
 qts_internal = {}
+qts.path = minetest.get_modpath("qts")
+dofile(qts.path.."/worldsettings.lua")
+--load the QT2 Settings File
+qts.GameSettings = CreateSettingsFunctions(minetest.get_modpath("qts") .. "\\QT2Settings.conf")
 
---TODO: Move worldsettings into another file and extend API
-qts.WORLDSETTING = Settings(minetest.get_worldpath().."/QTConf.conf")
-qts.ISDEV = qts.WORLDSETTING:get("QT_DEV_WORLD") == "true"
-if (not qts.ISDEV) then
-	qts.WORLDSETTING.set("QT_DEV_WORLD", "false") --makes sure the file contains the key, and exists
+dofile(qts.path.."/util.lua")
+--any other code here
+
+
+
+dofile(qts.path.."/chatcommands.lua")
+dofile(qts.path.."/mt_impl.lua")
+
+
+
+
+
+if qts.ISDEV then
+	minetest.register_tool("qts:testingTool", {
+		description = "Testing Tool:\nCurrently Removes nodes in radius",
+		inventory_image = "qts_testing_tool.png",
+		range = 10.0,
+		liquids_pointable = true,
+		on_use = function(itemstack, user, pointed_thing)
+			minetest.log("QTS Testing Tool used")
+			if pointed_thing.under then
+				nodes = qts.get_nodes_in_radius(pointed_thing.under, 5)
+				for i, n in ipairs(nodes) do
+					minetest.set_node(n.pos, {name="air"})
+				end
+			end
+		end,
+	})
 end
-
---TODO: When more functionality needed, move these to another file, and add to. Dont make more registers()
-minetest.register_on_joinplayer(function(player)
-	minetest.chat_send_all("QuestTest Dev Mode: ".. tostring(qts.ISDEV)) --Testing ONLY
-end)
-
-minetest.register_on_shutdown(function()
-    qts.WORLDSETTING:write()
-end)
