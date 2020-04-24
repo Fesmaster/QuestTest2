@@ -49,4 +49,54 @@ minetest.register_node("default:default", {
 	sounds = default.node_sound_defaults(),
 })
 
+--devmode items that are used for fun testing stuff
+if qts.ISDEV then
+	minetest.register_tool("default:testingTool", {
+		description = "Testing Tool:\nCurrently hammers nodes \nand functions as a screwdriver \nif shift held",
+		inventory_image = "qts_testing_tool.png",
+		range = 10.0,
+		liquids_pointable = true,
+		on_use = function(itemstack, user, pointed_thing)
+			minetest.log("QTS Testing Tool used")
+			if pointed_thing.under then
+				if user:get_player_control().sneak then
+					qts.screwdriver.apply(pointed_thing, user, qts.screwdriver.ROTATE_FACE)
+				else
+					qts.hammer.apply(pointed_thing, user, qts.hammer.CHANGE_TYPE)
+				end		
+			end
+			
+		end,
+		on_place = function(itemstack, user, pointed_thing)
+		minetest.log("QTS Testing Tool placed")
+			if pointed_thing.under then
+				if user:get_player_control().sneak then
+					qts.screwdriver.apply(pointed_thing, user, qts.screwdriver.ROTATE_AXIS)
+				else
+					qts.hammer.apply(pointed_thing, user, qts.hammer.CHANGE_STYLE)
+				end
+			end
+			
+		end
+	})
+	
+	qts.register_shaped_node("default:testNode", 
+		"Test Node", 
+		{oddly_breakable_by_hand=3}, 
+		{"default_testing.png"}, 
+		default.node_sound_defaults(), 
+		nil, 
+		true, 
+		false
+	)
+	
+	minetest.register_on_joinplayer(function(player)
+		local inv = player:get_inventory()
+		inv:add_item("main", "default:testingTool")
+		inv:add_item("main", "default:testNode 99")
+	end)
+	
+end
+
+
 
