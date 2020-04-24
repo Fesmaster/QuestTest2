@@ -3,7 +3,7 @@
 --
 
 
-minetest.register_alias("mapgen_stone", "default:default")
+minetest.register_alias("mapgen_stone", "default:stone")
 minetest.register_alias("mapgen_dirt", "default:default")
 minetest.register_alias("mapgen_dirt_with_grass", "default:default")
 minetest.register_alias("mapgen_sand", "default:default")
@@ -17,8 +17,8 @@ minetest.register_alias("mapgen_leaves", "default:default")
 minetest.register_alias("mapgen_apple", "default:default")
 minetest.register_alias("mapgen_junglegrass", "default:default")
 
-minetest.register_alias("mapgen_cobble", "default:default")
-minetest.register_alias("mapgen_stair_cobble", "stairs:default")
+minetest.register_alias("mapgen_cobble", "default:cobble")
+minetest.register_alias("mapgen_stair_cobble", "stairs:cobble")
 minetest.register_alias("mapgen_mossycobble", "default:default")
 
 minetest.clear_registered_biomes()
