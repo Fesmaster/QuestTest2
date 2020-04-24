@@ -90,10 +90,79 @@ if qts.ISDEV then
 	minetest.register_on_joinplayer(function(player)
 		local inv = player:get_inventory()
 		inv:add_item("main", "default:testingTool")
+		inv:add_item("main", "default:gauntlet")
 		inv:add_item("main", "default:testNode 99")
 	end)
 	
 end
 
 --register materials here
+minetest.register_tool ("default:gauntlet", {
+	description = ("Gauntlet of DESTRUCTION"),
+	inventory_image = "wieldhand.png",
+	wield_image = "wieldhand.png",
+	tool_capabilities = {
+		full_punch_interval = 1.2,
+		max_drop_level=0,
+		groupcaps={
+			cracky = {times={[3]=.1, [2]=.25, [1]=.5}, uses=1000000000000000000000, maxlevel=3},
+			crumbly = {times={[3]=.1, [2]=.25, [1]=.5}, uses=1000000000000000000000, maxlevel=3},
+			choppy = {times={[3]=.1, [2]=.25, [1]=.5}, uses=1000000000000000000000, maxlevel=3},
+			snappy = {times={[3]=.1, [2]=.25, [1]=.5}, uses=1000000000000000000000, maxlevel=3},
+			oddly_breakable_by_hand = {times={[3]=.1, [2]=.25, [1]=.5}, uses=1000000000000000000000, maxlevel=3},
+		},
+		damage_groups = {fleshy=10000},
+	},
+})
 
+
+qts.register_shaped_node("default:stone", {
+	description = "stone",
+	tiles = {"default_stone.png"},
+	groups = {cracky=3, stone=1},
+	sounds = default.node_sound_defaults(),
+	drop = "default:cobble"
+})
+
+qts.register_shaped_node ("default:cobble", {
+	description = "cobble",
+	tiles = {"default_cobble.png"},
+	groups = {cracky=3, stone=1},
+	sounds = default.node_sound_defaults(),
+})
+	
+qts.register_shaped_node ("default:mossycobble", {
+	description = "mossy cobble",
+	tiles = {"default_mosssycobble.png"},
+	groups = {cracky=3, stone=1},
+	sounds = default.node_sound_defaults(),
+})
+
+qts.register_shaped_node ("default:sandstone", {
+	description = "sandstone",
+	tiles = {"default_sandstone.png"},
+	groups = {cracky=3, stone=1},
+	sounds = default.node_sound_defaults(),
+})
+
+qts.register_shaped_node ("default:stone_brick", {
+	description = "Stone Brick",
+	tiles = {"default_stone_brick.png"},
+	groups = {cracky=3, stone=1},
+	sounds = default.node_sound_defaults(),
+})
+
+qts.register_shaped_node ("default:obsidian", {
+	description = "obsidian",
+	tiles = {"default_obsidian.png"},
+	groups = {cracky=1},
+	sounds = default.node_sound_defaults(),
+})
+
+qts.register_shaped_node ("default:brick", {
+	description = "Brick",
+	tiles = {"default_brick.png"},
+	groups = {cracky=3},
+	sounds = default.node_sound_defaults(),
+})
+	
