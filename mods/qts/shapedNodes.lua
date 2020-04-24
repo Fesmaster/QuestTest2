@@ -43,10 +43,10 @@ function qts.hammer.rotate_and_set(placer, pointed_thing, node)
 		end
 		
 		local finepos = minetest.pointed_thing_to_face_pos(placer, pointed_thing)
-		local fpos = finepos.y % 1
+		local fpos = finepos.y - math.floor(p0.y)
+		minetest.log("Face pos:"..tostring(fpos))
 		
-		if p0.y - 1 == p1.y or (fpos > 0 and fpos < 0.5)
-				or (fpos < -0.5 and fpos > -0.999999999999) then
+		if p0.y - 1 == p1.y or (fpos > -1 and fpos < 0 and not(placer:get_pos().y+1 > p0.y))then
 			param2 = param2 + 20
 			if param2 == 21 then
 				param2 = 23
