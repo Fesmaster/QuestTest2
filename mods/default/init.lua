@@ -169,6 +169,6 @@ qts.register_shaped_node ("default:brick", {
 qts.register_shaped_node ("default:wood", {
 	description = "Wood Planks",
 	tiles = {"default_wood.png"},
-	groups = {choppy=3},
+	groups = {choppy=3, oddly_breakable_by_hand=2},
 	sounds = default.node_sound_defaults(),
 })
