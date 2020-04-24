@@ -1,8 +1,8 @@
 
 
-function qts.vector_round(pos)
+function qts.vector_round(vec)
 	local p = {}
-	for n, v in pairs(pos) do
+	for n, v in pairs(vec) do
 		if v and n then
 			if math.modf(v) <= 0.5 then
 				p[n] = math.floor(v)

@@ -95,12 +95,12 @@ qts.screwdriver.apply = function(pointed_thing, user, mode)
 	local node = minetest.get_node(pos)
 	local ndef = minetest.registered_nodes[node.name]
 	if not ndef then
-		return itemstack
+		return
 	end
 	-- can we rotate this paramtype2?
 	local fn = qts.screwdriver.rotate[ndef.paramtype2]
 	if not fn and not ndef.on_rotate then
-		return itemstack
+		return
 	end
 
 	local should_rotate = true
@@ -118,14 +118,14 @@ qts.screwdriver.apply = function(pointed_thing, user, mode)
 				{name = node.name, param1 = node.param1, param2 = node.param2},
 				user, mode, new_param2)
 		if result == false then -- Disallow rotation
-			return itemstack
+			return
 		elseif result == true then
 			should_rotate = false
 		end
 	elseif ndef.on_rotate == false then
-		return itemstack
+		return
 	elseif ndef.can_dig and not ndef.can_dig(pos, user) then
-		return itemstack
+		return
 	end
 
 	if should_rotate and new_param2 ~= node.param2 then

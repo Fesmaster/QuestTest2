@@ -4,7 +4,7 @@ qts_internal = {}
 qts.path = minetest.get_modpath("qts")
 dofile(qts.path.."/worldsettings.lua")
 --load the QT2 Settings File
-qts.GameSettings = CreateSettingsFunctions(minetest.get_modpath("qts") .. "\\QT2Settings.conf")
+qts.settings = qts.create_settings_clojure(minetest.get_modpath("qts") .. "\\QT2Settings.conf")
 
 dofile(qts.path.."/util.lua")
 dofile(qts.path.."/shapedNodes.lua")

@@ -1,0 +1,278 @@
+####QuestTest 2 System API####
+
+This "System" (under the namespace 'qts') refers to the API used in QuestTest
+This API is implemented in the qts mod, and used in the other mods,
+meaning all of them should depend on qts
+
+####GLOBAL_STATE####
+TODO: GLOBAL_STATE Marker
+
+It is best to ONLY read from the global state
+NEVER SET THESE VARIABLES, they are handled by the qts internal systems
+
+ISDEV
+	a boolean value that tells if the world is in dev mode (used to change what is registered / how it is registered)
+	
+hammer.CHANGE_TYPE   
+hammer.CHANGE_STYLE 
+	enumerator values that are used for the mode on hammer.apply()
+
+screwdriver.ROTATE_FACE
+screwdriver.ROTATE_AXIS
+	enumerator values that are used for screwdriver.apply()
+
+
+####SYNTAX_COPY#####
+TODO: SYNTAX_COPY Marker
+
+func(param1, param2)
+	Destription:
+	desc
+	
+	Paramaters:
+	param1 - type - desc
+	param2 - type - desc
+	
+	Return:
+	type - desc
+
+####REGISTRATION_FUNCTIONS#####
+TODO: REGISTRATION_FUNCTIONS Marker
+
+	Registration functions are used to register nodes, entities, decorations, effects, weapon/tool modifiers, etc
+	they are more of "make a new specific type" than "do a thing" functions
+	
+	
+qts.register_shaped_node(name, def)
+	Description:
+	retgisters a bunch of shaped nodes (stairs, slabs, whole)
+	and primes them for use with hammers
+	
+	Params:
+	exactly like minetest.register_node()
+	
+	Return: none
+
+####UTIL_FUNCTIONS######
+TODO: UTIL_FUNCTIONS Marker
+
+create_settings_clojure(filepath)
+	Description:
+	Creates a clojure around a minetest settings object, so that the object has
+	a long lifetime, and no chance of being overridden
+	
+	Paramaters:
+	filepath - string - the path to the file to load as settings
+	
+	Return:
+	table{
+		get_str(key)
+		get_num(key)
+		get_bool(key)
+		get_noiseParams(key)
+		get_magpen_flags(key)
+		set_str(key, val)
+		set_num(key, val)
+		set_bool(key, val)
+		set_noiseParams(key, val)
+		remove_key(key)
+		keys()
+		to_table()
+		save()
+	} --see the documentation on the minetest settings object, lua_api.txt, line 6251
+
+vector_round(vec)
+	Destription:
+	rounds a vector to the nearest integer value for each axis
+	
+	Paramaters:
+	vec - vector - the in vector
+	
+	Return:
+	vector - rounded vector
+
+nearly_equal(a, b, degree)
+	Destription:
+	checks to see if a and b are within degree of each other
+	
+	Paramaters:
+	a - float - in valeue to check
+	b - float - in valeue to check
+	degree - float - the max that they can be seperated
+	
+	Return:
+	bool - are they within degree?
+
+nearly_equal_vec(a, b, degree)
+	Destription:
+	checks to see if vectors a and b are within degree of each other, in all axis
+	
+	Paramaters:
+	a - vec - in valeue to check
+	b - vec - in valeue to check
+	degree - float - the max that they can be seperated
+	
+	Return:
+	bool - are they within degree?
+	
+nearly_equal_vec_xz(a, b, degree)
+	Destription:
+	checks to see if a and b are within degree of each other, in x and z axis (y ignored)
+	
+	Paramaters:
+	a - vec - in valeue to check
+	b - vec - in valeue to check
+	degree - float - the max that they can be seperated
+	
+	Return:
+	bool - are they within degree?
+
+get_nodes_in_radius(pos, radius)
+	Destription:
+	Gets the noderef and pos of all the nodes within a given radius
+	
+	Paramaters:
+	pos - vector as position - the center of the sphere
+	radius - float - the radius of the sphere
+	
+	Return:
+	Table [index] = {
+		pos - vector as pos - the worldpos of 
+		noderef - node - the node at pos
+	}
+	
+	
+get_nodes_on_radius(pos, radius)
+	Destription:
+	Gets the noderef and pos of all the nodes on the outside of a given radius
+	
+	Paramaters:
+	pos - vector as position - the center of the sphere
+	radius - float - the radius of the sphere
+	
+	Return:
+	Table [index] = {
+		pos - vector as pos - the worldpos of 
+		noderef - node - the node at pos
+	}
+
+hammer.rotate_and_place(itemstack, placer, pointed_thing)
+	Destription:
+	rotates and places nodes, in the same manner as item_place(...)
+	but with facedir rotation
+	basically the same as the identical function in the stairs mod from minetest_game
+	
+	Paramaters:
+	itemstack - the player's wielditem
+	placer - playerref - the player placing
+	pointed_thing - pointed_thing - what the player is pointing at
+	
+	Return: 
+		itemstack - the modified itemstack
+		position - the pos placed or nil
+
+
+hammer.rotate_and_set(setter, pointed_thing, node)
+	Destription:
+	rotates and set nodes, similar to minetest.set_node
+	intended for when the player does something to override an existing node
+	
+	Paramaters:
+	setter - playerref - the player placing
+	pointed_thing - pointed_thing - what the player is pointing at
+	node - noderef - the node to set (after rotating)
+	
+	Return: 
+		whatever minetest.swap_node() returns.
+
+hammer.apply(pointed_thing, user, mode)
+	Description:
+	hammers the node at pointed_thing.under. 
+	DOES NOT CHECK FOR A VALID POINTED_THING
+	DOES NOT APPLY TOOL WEAR
+	respects protections
+	
+	Paramaters:
+	pointed_thing - pointed_thing - the pointed_thing
+	user - playerref - the person doing the hammering
+	mode - how the hammering is to be done, either hammer.CHANGE_TYPE or hammer.CHANGE_STYLE
+	
+	Return:
+	nothing
+
+screwdriver.apply(pointed_thing, user, mode)
+	Description:
+	rotates the node at pointed_thing.under, in the same manner as a screwdriver
+	DOES NOT CHECK FOR A VALID POINTED_THING
+	DOES NOT APPLY TOOL WEAR
+	respects protections
+	
+	Paramaters:
+	pointed_thing - pointed_thing - the pointed_thing
+	user - playerref - the person doing the hammering
+	mode - how the hammering is to be done, either hammer.CHANGE_TYPE or hammer.CHANGE_STYLE
+	
+	Return:
+	nothing
+
+isDamageTick()
+	Description:
+	checks to see if this is considered a damage tick by the qts
+	
+	Return:
+	bool, true if it is a damage tick
+
+####CALLBACK_FUNCTIONS######
+TODO: CALLBACK_FUNCTIONS Marker
+
+on_walk = function(pos, entity)
+	Description:
+	Run every tick for the node a entity is standing on
+	
+	Paramaters
+	pos - vector as pos -  worldpos of the node
+	entity - objectref - the entity doing the standing
+	
+	Return: None
+	
+	
+on_walk_in = function(pos, entity)
+	Description:
+	Run every tick for the node a entity is standing in
+	
+	Paramaters
+	pos - vector as pos -  worldpos of the node
+	entity - objectref - the entity doing the standing
+
+	Return: None
+	
+	
+on_carry = function(itmestack, player, damage)
+	Description:
+	Run every tick for every item in the player inventory
+	
+	Paramaters
+	itemstack - the itemstack of the particular item in question
+	player - objectref - the player doing the standing
+
+	Return: 
+	itemstack - if not nil, a returned itemstack is set to the slot's itemstack.
+	
+	
+on_wield = function(itmestack, player, damage)
+	Description:
+	Run every tick for the item a player is holding. This runs after on_carry is finished.
+	
+	Paramaters
+	itemstack - the itemstack of the particular item in question
+	player - objectref - the player doing the standing
+
+	Return: 
+	itemstack - if not nil, a returned itemstack is set to the player's wielditem
+
+
+####DATA_TYPES######
+TODO: DATA_TYPES Marker
+
+
+

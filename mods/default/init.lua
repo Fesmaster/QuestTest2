@@ -80,15 +80,12 @@ if qts.ISDEV then
 		end
 	})
 	
-	qts.register_shaped_node("default:testNode", 
-		"Test Node", 
-		{oddly_breakable_by_hand=3}, 
-		{"default_testing.png"}, 
-		default.node_sound_defaults(), 
-		nil, 
-		true, 
-		false
-	)
+	qts.register_shaped_node("default:testNode", {
+		description = "Test Node", 
+		tiles ={"default_testing.png"}, 
+		groups = {oddly_breakable_by_hand=3},
+		sounds = default.node_sound_defaults(),
+	})
 	
 	minetest.register_on_joinplayer(function(player)
 		local inv = player:get_inventory()
@@ -98,5 +95,5 @@ if qts.ISDEV then
 	
 end
 
-
+--register materials here
 

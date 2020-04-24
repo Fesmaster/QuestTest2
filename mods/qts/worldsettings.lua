@@ -1,6 +1,6 @@
 
 --clojure function to gen the worldsettings and have the settings object protected
-function CreateSettingsFunctions(filename)
+function qts.create_settings_clojure(filename)
 	local settings = Settings(filename)
 	
 	local function get_str(key)
@@ -59,10 +59,11 @@ function CreateSettingsFunctions(filename)
 	}
 end
 
+
 --load the WorldSettings into the qts namespace
-qts.WorldSettings = CreateSettingsFunctions(minetest.get_worldpath().."/QTConf.conf")
-qts.ISDEV = qts.WorldSettings.get_bool("QT_DEV_WORLD") --setup qts.ISDEV
+qts.world_settings = qts.create_settings_clojure(minetest.get_worldpath().."/QTConf.conf")
+qts.ISDEV = qts.world_settings.get_bool("QT_DEV_WORLD") --setup qts.ISDEV
 if (not qts.ISDEV) then
-	qts.WorldSettings.set_bool("QT_DEV_WORLD", false) --makes sure the file contains the key, and exists
+	qts.world_settings.set_bool("QT_DEV_WORLD", false) --makes sure the file contains the key, and exists
 end
 
