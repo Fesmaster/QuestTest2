@@ -157,7 +157,7 @@ qts.register_shaped_node ("default:brick", {
 qts.register_shaped_node ("default:wood", {
 	description = "Wood Planks",
 	tiles = {"default_wood.png"},
-	groups = {choppy=3, oddly_breakable_by_hand=2},
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
 	sounds = default.node_sound_defaults(),
 })
 
@@ -165,5 +165,54 @@ qts.register_shaped_node ("default:dirt", {
 	description = "dirt",
 	tiles = {"default_dirt.png"},
 	groups = {oddly_breakable_by_hand=1},
+	sounds = default.node_sound_defaults(),
+})
+
+qts.register_shaped_node ("default:sand", {
+	description = "sand",
+	tiles = {"default_sand.png"},
+	groups = {oddly_breakable_by_hand=1, falling_node=1},
+	sounds = default.node_sound_defaults(),
+})
+
+qts.register_shaped_node ("default:desert_sand", {
+	description = "desert_sand",
+	tiles = {"default_desert_sand.png"},
+	groups = {oddly_breakable_by_hand=1, falling_node=1},
+	sounds = default.node_sound_defaults(),
+})
+
+qts.register_shaped_node ("default:desert_sand_sandstone", {
+	description = "Desert Sandstone",
+	tiles = {"default_desert_sandstone.png"},
+	groups = {cracky=3, stone=1},
+	sounds = default.node_sound_defaults(),
+})
+
+qts.register_shaped_node ("default:desert_stone", {
+	description = "Desert Stone",
+	tiles = {"default_desert_stone.png"},
+	groups = {cracky=3, stone=1},
+	sounds = default.node_sound_defaults(),
+})
+
+qts.register_shaped_node ("default:desert_cobble", {
+	description = "Desert Cobblestone",
+	tiles = {"default_desert_cobble.png"},
+	groups = {cracky=3, stone=1},
+	sounds = default.node_sound_defaults(),
+})
+
+qts.register_shaped_node ("default:desert_stone_brick", {
+	description = "Desert Stone Brick",
+	tiles = {"default_desert_stone_brick.png"},
+	groups = {cracky=3},
+	sounds = default.node_sound_defaults(),
+})
+
+qts.register_shaped_node ("default:sandstone_brick", {
+	description = "Sandstone Brick",
+	tiles = {"default_sandstone_brick.png"},
+	groups = {cracky=3},
 	sounds = default.node_sound_defaults(),
 })
