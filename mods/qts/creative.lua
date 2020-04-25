@@ -13,7 +13,7 @@ local creative_mode_cache = minetest.settings:get_bool("creative_mode")
 
 --actual get creative api
 function qts.isCreativeFor(playername)
-	return creative_mode_cache or minetest.check_player_privs(name, {creative = true})
+	return creative_mode_cache or minetest.check_player_privs(playername, {creative = true})
 end
 
 --register the hand (both creative and not)
