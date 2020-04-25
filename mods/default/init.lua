@@ -160,3 +160,10 @@ qts.register_shaped_node ("default:wood", {
 	groups = {choppy=3, oddly_breakable_by_hand=2},
 	sounds = default.node_sound_defaults(),
 })
+
+qts.register_shaped_node ("default:dirt", {
+	description = "dirt",
+	tiles = {"default_dirt.png"},
+	groups = {oddly_breakable_by_hand=1},
+	sounds = default.node_sound_defaults(),
+})

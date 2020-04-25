@@ -4,8 +4,8 @@
 
 
 minetest.register_alias("mapgen_stone", "default:stone")
-minetest.register_alias("mapgen_dirt", "default:default")
-minetest.register_alias("mapgen_dirt_with_grass", "default:default")
+minetest.register_alias("mapgen_dirt", "default:dirt")
+minetest.register_alias("mapgen_dirt_with_grass", "default:dirt")
 minetest.register_alias("mapgen_sand", "default:default")
 minetest.register_alias("mapgen_water_source", "air")
 minetest.register_alias("mapgen_river_water_source", "air")
