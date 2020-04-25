@@ -133,7 +133,7 @@ qts.register_shaped_node ("default:cobble", {
 	
 qts.register_shaped_node ("default:mossycobble", {
 	description = "mossy cobble",
-	tiles = {"default_mosssycobble.png"},
+	tiles = {"default_mossycobble.png"},
 	groups = {cracky=3, stone=1},
 	sounds = default.node_sound_defaults(),
 })
@@ -166,3 +166,9 @@ qts.register_shaped_node ("default:brick", {
 	sounds = default.node_sound_defaults(),
 })
 	
+qts.register_shaped_node ("default:wood", {
+	description = "Wood Planks",
+	tiles = {"default_wood.png"},
+	groups = {choppy=3, oddly_breakable_by_hand=2},
+	sounds = default.node_sound_defaults(),
+})
