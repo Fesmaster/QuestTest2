@@ -1,0 +1,109 @@
+register_GUI(???)
+	registers a new gui to load on a load_gui(name) call
+
+
+
+register_material(name, nodedef_info)
+	registers a bunch of nodes that share most of the same properties, 
+	but have different shapes, set by a 'hammer'
+
+
+
+register_effect(name, def)
+	regsters a effect that can be applied to a player or entity
+	def contains:
+		on_apply = function(entity, ref, applier)
+			called when the effect is applied
+			
+			entity (objref) - the entity it is applied to
+			ref (effectref) - the effect reference
+			applier (objref or Nil) - the thing applying the effect (ie, an enemy who poisons the player) Can be Nil
+
+		
+		on_update = function(entity, ref, deltaTime)
+			called every frame the effect is applied
+			
+			entity (objref) - the entity the effect is applied to
+			ref (effectref) - the effect reference
+			deltaTime (number) - the time since last updated (MAY NOT EXIST
+			
+		on_remove = function(entity, ref, from_timeout)
+			called thwn the effect ends
+			
+			entity (objref) - the entity the effect is applied to
+			ref (effectref) - the effect reference
+			from_timeout (bool) - true if the effect is ending 'naturally' from timeout, false if otherwise
+			
+		max_time (number) - the max ammount of time the effect can be applied for
+		player_only (bool) - if the effect only applies to players
+		
+		--OPTIONAL--
+		data = {***arbitrary data here***} - data to be stored in the effect ref before on_apply is called 
+			***SHOULD BE STATIC***
+
+
+register_toolmod(name, data)
+	registers a tool modifier (ie, enchantment)
+	data contains (all optional):
+	copied from lua_api.txt
+		
+		on_place = function(itemstack, placer, pointed_thing),
+        -- Shall place item and return the leftover itemstack.
+        -- The placer may be any ObjectRef or nil.
+        -- default: minetest.item_place
+
+        on_secondary_use = function(itemstack, user, pointed_thing),
+        -- Same as on_place but called when not pointing at a node.
+        -- The user may be any ObjectRef or nil.
+        -- default: nil
+		
+		on_use = function(itemstack, user, pointed_thing),
+        -- default: nil
+        -- Function must return either nil if no item shall be removed from
+        -- inventory, or an itemstack to replace the original itemstack.
+        -- e.g. itemstack:take_item(); return itemstack
+        -- Otherwise, the function is free to do what it wants.
+        -- The user may be any ObjectRef or nil.
+        -- The default functions handle regular use cases.
+		
+		on_attack = function(attacked, puncher, time_from_last_punch, tool_capabilities, dir),
+		--same as entity:on_punch
+
+load_gui(name)
+	loads a registered formspec and stuff....
+
+hammer_node(pos, type, ??)
+	performs a 'hammer' action on the node
+	if the node is a material node, it changes the shape
+	otherwise, it does nothing
+
+hammer_reset(pos, ??)
+	resets a material type node to be its default shape (solid cube)
+
+effect_apply(target, effect_name, applier, time, level)
+	applies an effect to target, using time and level in its ref
+	see desc of register_effect and effectref for details about its params
+
+effect_end(target, effect_name)
+	ends effect of effect_name on target. if effect_name == "all" then ends all of them
+	
+	
+
+--effectref--
+A reference to an active effect's internal data.
+It is a table stored in the meta of the entity in question
+
+effect meta table structure:
+	{
+	effect1_name = {
+			time_remain (number) = how much time remaining
+			level (number) = the power of the effect (used by implementation)
+			***arbitrary data here***
+		}
+	effect2_name = {
+			time_remain (number) = how much time remaining
+			level (number) = the power of the effect (used by implementation)
+			***arbitrary data here***
+		}
+	...
+	}

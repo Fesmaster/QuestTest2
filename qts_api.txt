@@ -43,7 +43,7 @@ TODO: REGISTRATION_FUNCTIONS Marker
 	they are more of "make a new specific type" than "do a thing" functions
 	
 	
-qts.register_shaped_node(name, def)
+register_shaped_node(name, def)
 	Description:
 	retgisters a bunch of shaped nodes (stairs, slabs, whole)
 	and primes them for use with hammers
@@ -51,8 +51,36 @@ qts.register_shaped_node(name, def)
 	Params:
 	exactly like minetest.register_node()
 	
-	Return: none
-
+register_gui(name, def)
+	Description:
+	retgisters a gui form to show. 
+	NOTE: any form that contains tabs has to be registered before its tabs
+	
+	Params:
+	name - string - the name of the gui. used for showing it later
+	def - table -{
+		--options: one or none of these two sets of values--
+		
+		tab = true - if the gui is a tab in another gui
+		caption = "name of tab" - the name of the tab, if tab = true.
+		owner = "name of owner gui" - the name of the owner gui if tab = true
+		
+		tab_owner = true - gui that ownns tabs. usually does nothing but own tabs
+		
+		--these two must always be present--
+		get = function(data, pos, name ...) --called when the gui is loaded. returns a minetest formspec string
+			--data is a table that is maintained across the unique instance of the form
+			--pos is ???
+			--name is the player's name
+			--...optional params from show_gui()
+		
+		handle(data, pos, name, fields) --called when the gui receives fields. NOTE: the owner get the fields first, then the tab
+			--same as above and
+			--fields is the fields returned from on_player_recieve_fields callback (its a table)
+	}
+	
+	
+	
 ####UTIL_FUNCTIONS######
 TODO: UTIL_FUNCTIONS Marker
 
@@ -221,6 +249,18 @@ isDamageTick()
 	
 	Return:
 	bool, true if it is a damage tick
+
+
+show_gui(pos, player, guiname, tabindex = 1, ...)
+	Description:
+	Shows a gui on the screen.
+	
+	Paramaters:
+	pos - a position - either the node to which the gui is attached or the player pos
+	player - player name or player ref - the player that is loading the gui
+	guiname = "name_of_the_gui" - the name of the gui to load. see register_gui()
+	tabindex = 1 - the index of the tab to load, if the gui is a tab_owner. ignored otherwise
+	... options that are passed to guiname.get()
 
 ####CALLBACK_FUNCTIONS######
 TODO: CALLBACK_FUNCTIONS Marker

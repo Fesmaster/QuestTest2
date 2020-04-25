@@ -10,7 +10,7 @@ dofile(qts.path.."/util.lua")
 dofile(qts.path.."/shapedNodes.lua")
 dofile(qts.path.."/screwdriver.lua")
 --any other code here
-
+dofile(qts.path.."/gui.lua")
 
 
 dofile(qts.path.."/chatcommands.lua")

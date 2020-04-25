@@ -18,7 +18,7 @@ minetest.register_alias("mapgen_apple", "default:default")
 minetest.register_alias("mapgen_junglegrass", "default:default")
 
 minetest.register_alias("mapgen_cobble", "default:default")
-minetest.register_alias("mapgen_stair_cobble", "stairs:default")
+minetest.register_alias("mapgen_stair_cobble", "default:default")
 minetest.register_alias("mapgen_mossycobble", "default:default")
 
 minetest.clear_registered_biomes()

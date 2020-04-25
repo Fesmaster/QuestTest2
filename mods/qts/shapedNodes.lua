@@ -87,12 +87,14 @@ function qts.register_shaped_node(name, def)
 		if type(image) == "string" then
 			imgs[i] = {
 				name = image,
-				backface_culling = true
+				backface_culling = true,
+				align_style = "world"
 			}
 		else
 			imgs[i] = table.copy(image)
 			if imgs[i].backface_culling == nil then
 				img[i].backface_culling = true
+				img[i].align_style = "world"
 			end
 		end
 	end
