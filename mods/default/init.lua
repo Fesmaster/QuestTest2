@@ -87,12 +87,16 @@ if qts.ISDEV then
 		sounds = default.node_sound_defaults(),
 	})
 	
-	minetest.register_on_joinplayer(function(player)
-		local inv = player:get_inventory()
+	
+	minetest.register_chatcommand("toys", {
+	params = "<text>",
+	description = "Get you some toys",
+	func = function(name, param)
+		local inv = minetest.get_player_by_name(name):get_inventory()
 		inv:add_item("main", "default:testingTool")
 		inv:add_item("main", "default:gauntlet")
-		inv:add_item("main", "default:testNode 99")
-	end)
+	end
+})
 	
 end
 
