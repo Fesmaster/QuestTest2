@@ -223,3 +223,40 @@ qts.register_shaped_node ("default:dirt_with_grass", {
 	groups = {oddly_breakable_by_hand=1},
 	sounds = default.node_sound_defaults(),
 })
+
+
+
+
+
+
+--fences and the like
+qts.register_fencelike_node("default:wood_fence", "fence", {
+	description = "Wood Fance",
+	texture = "default_wood.png",
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
+	sounds = default.node_sound_defaults(),
+})
+
+qts.register_fencelike_node("default:wood_rail", "rail", {
+	description = "Wood Rail",
+	texture = "default_wood.png",
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
+	sounds = default.node_sound_defaults(),
+})
+
+qts.register_fencelike_node("default:stone_brick_wall", "wall", {
+	description = "Stone Brick Wall",
+	texture = "default_stone_brick.png",
+	groups = {cracky=3, stone=1},
+	sounds = default.node_sound_defaults(),
+})
+
+--[[
+--this is how you would do panes
+qts.register_fencelike_node("default:stone_brick_pane", "pane", {
+	description = "Stone Brick Wall",
+	texture = "default_stone_brick.png",
+	groups = {cracky=3, stone=1},
+	sounds = default.node_sound_defaults(),
+})
+--]]

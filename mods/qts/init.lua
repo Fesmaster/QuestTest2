@@ -8,6 +8,7 @@ qts.settings = qts.create_settings_clojure(minetest.get_modpath("qts") .. "\\QT2
 
 dofile(qts.path.."/util.lua")
 dofile(qts.path.."/creative.lua")
+dofile(qts.path.."/nodetypes.lua")
 dofile(qts.path.."/shapedNodes.lua")
 dofile(qts.path.."/screwdriver.lua")
 --any other code here
