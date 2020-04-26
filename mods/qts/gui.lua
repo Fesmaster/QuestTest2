@@ -4,6 +4,7 @@
 qts.forms = {} -- the registered forms
 qts.formData = {} --any form-instance specific data
 qts_internal.formContext = {} --stores the context of open forms, to see if a player has one
+local inventoryFormName = nil
 
 function qts.register_gui(name, def)
 	minetest.log("form registered")
@@ -57,10 +58,11 @@ function qts.handle_tabs(pos, playername, formname, fields)
 	end
 end
 
-function qts.show_gui(pos, player, formname, tabindex, ...)
-	minetest.log(""..formname.." attemting to load (1)")
+function qts.show_gui(pos, player, formname, tabindex, show, ...)
+	--minetest.log(""..formname.." attemting to load (1)")
 	if qts.forms[formname] then --does the form name exist?
-		minetest.log(""..formname.." attemting to load (2)")
+		--minetest.log(""..formname.." attemting to load (2)")
+		if show == nil then show = true end --show default value
 		if not tabindex then 
 			tabindex = 1 
 			minetest.log(""..formname.." tab defaulting to 0")
@@ -73,9 +75,8 @@ function qts.show_gui(pos, player, formname, tabindex, ...)
 		--init form data
 		if not qts.formData[pname] then qts.formData[pname] = {} end
 		
-		
 		local formstr = qts.forms[formname].get(qts.formData[pname], pos, pname, ...)
-		if qts.forms[formname].tab_owner and qts.forms[formname].tabs then
+		if qts.forms[formname].tab_owner and qts.forms[formname].tabs and #qts.forms[formname].tabs > 0 then
 			if qts.forms[formname].tabs[tabindex] == nil then minetest.log("Tab does not exist! Index: "..tostring(tabindex)) end
 			formstr =  formstr .. qts.generate_tabs(tabindex, formname) .. 
 				qts.forms[formname].tabs[tabindex].get(qts.formData[pname], pos, pname, ...)
@@ -91,16 +92,23 @@ function qts.show_gui(pos, player, formname, tabindex, ...)
 			formname = qts.forms[formname].owner
 		end
 		qts.formData[pname].activeTab = tabindex--update the tab index
-		
-		minetest.log(""..formname.." loading. string: "..formstr)
-		minetest.show_formspec(pname, "qts:"..formname, formstr)
 		qts_internal.formContext[pname] = pos
+		if show then
+			minetest.log(""..formname.." loading. string: "..formstr)
+			minetest.show_formspec(pname, "qts:"..formname, formstr)
+		else
+			return {"qts:"..formname, formstr}
+		end
+		
 	end
 end
 
 --TODO: move to mt_impl.lua
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	--handle registered forms
+	if formname == "" and inventoryFormName then
+		formname = "qts:"..inventoryFormName
+	end
 	local formname = formname:split(":")
 	if formname[1] == "qts" and formname[2] then
 		--found a form registered by this API
@@ -112,11 +120,18 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			
 			if not qts.handle_tabs(qts_internal.formContext[pname], pname, formname[2], fields) and handle_func then
 				handle_func(qts.formData[pname], qts_internal.formContext[pname], pname, fields)
-				if qts.forms[formname[2]].tab_owner then
+				if qts.forms[formname[2]].tab_owner and #qts.forms[formname[2]].tabs > 0 and qts.forms[formname[2]].tabs[qts.formData[pname].activeTab] then
 					--pass the event to the active tab
 					qts.forms[formname[2]].tabs[qts.formData[pname].activeTab].handle(qts.formData[pname], qts_internal.formContext[pname], pname, fields)
 				end
 			end
 		end
+	else
+		minetest.log("qts gui system: unknown form: "..dump(formname))
 	end
 end)
+
+
+function qts.set_inventory_qui_name(name)
+	inventoryFormName = name
+end

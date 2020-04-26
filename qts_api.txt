@@ -74,7 +74,7 @@ register_gui(name, def)
 			--name is the player's name
 			--...optional params from show_gui()
 		
-		handle(data, pos, name, fields) --called when the gui receives fields. NOTE: the owner get the fields first, then the tab
+		handle = function(data, pos, name, fields) --called when the gui receives fields. NOTE: the owner get the fields first, then the tab
 			--same as above and
 			--fields is the fields returned from on_player_recieve_fields callback (its a table)
 	}
