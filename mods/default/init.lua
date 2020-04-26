@@ -162,7 +162,7 @@ qts.register_shaped_node ("default:wood", {
 })
 
 qts.register_shaped_node ("default:dirt", {
-	description = "dirt",
+	description = "Dirt",
 	tiles = {"default_dirt.png"},
 	groups = {oddly_breakable_by_hand=1},
 	sounds = default.node_sound_defaults(),
@@ -214,5 +214,12 @@ qts.register_shaped_node ("default:sandstone_brick", {
 	description = "Sandstone Brick",
 	tiles = {"default_sandstone_brick.png"},
 	groups = {cracky=3},
+	sounds = default.node_sound_defaults(),
+})
+
+qts.register_shaped_node ("default:dirt_with_grass", {
+	description = "Dirt with Grass",
+	tiles = {"default_grass.png"},
+	groups = {oddly_breakable_by_hand=1},
 	sounds = default.node_sound_defaults(),
 })
