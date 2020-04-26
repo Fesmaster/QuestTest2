@@ -194,11 +194,14 @@ function qts.register_shaped_node(name, def)
 end
 
 local fence_collision_extra = minetest.settings:get_bool("enable_fence_tall") and 3/8 or 0
-function qts.register_fencelike_node(name, style, def)
+function qts.register_fencelike_node(name, def)
+	
+	if not def.type then minetest.log("qts.register_fencelike_node: the node def must contain type = [fence, rail, wall, pane]") end
+	if not def.texture then minetest.log("qts.register_fencelike_node: instead of using tiles = {}, use texture = \"texturename\". This works better.") end
 	
 	local default_fields = {}
 	--fence style
-	if style == "fence" then
+	if def.type == "fence" then
 		local fence_texture = "default_fence_overlay.png^" .. def.texture ..
 				"^default_fence_overlay.png^[makealpha:255,126,126"
 		-- Allow almost everything to be overridden
@@ -240,7 +243,7 @@ function qts.register_fencelike_node(name, style, def)
 		-- Always add to the fence group, even if no group provided
 		def.groups.fence = 1
 
-	elseif style == "rail" then
+	elseif def.type == "rail" then
 		local fence_rail_texture = "default_fence_rail_overlay.png^" .. def.texture ..
 				"^default_fence_rail_overlay.png^[makealpha:255,126,126"
 		-- Allow almost everything to be overridden
@@ -282,7 +285,7 @@ function qts.register_fencelike_node(name, style, def)
 		}
 		def.groups.fence = 1
 		
-	elseif style == "wall" then
+	elseif def.type == "wall" then
 		-- Allow almost everything to be overridden
 		default_fields = {
 			paramtype = "light",
@@ -314,7 +317,7 @@ function qts.register_fencelike_node(name, style, def)
 			groups = {},
 		}
 		def.groups.wall = 1
-	elseif style == "pane" then
+	elseif def.type == "pane" then
 	
 		default_fields = {
 			paramtype = "light",
@@ -348,11 +351,12 @@ function qts.register_fencelike_node(name, style, def)
 		}
 		def.groups.pane = 1
 	else
-		minetest.log("qts.register_fencelike_node: type is incorrect. must be: [fence, rail, wall, pane]")
+		minetest.log("qts.register_fencelike_node: the node def must contain type = [fence, rail, wall, pane]")
 	end
 	
 	def.texture = nil
 	def.material = nil
+	def.type = nil
 	for k, v in pairs(default_fields) do
 		if def[k] == nil then
 			def[k] = v
@@ -360,3 +364,203 @@ function qts.register_fencelike_node(name, style, def)
 	end
 	minetest.register_node(name, def)
 end
+
+local liquid_cache = {}
+local bucket_cache = {}
+--liquid helper funcs
+local function to_bucket_name(name)
+	return "_"..name:gsub(":", "_"):gsub("_source", "")
+end
+
+--this is to register a bucket combo for the specific liquid
+local function register_bucket_full(bucketid, liquidid)
+	local bucket_data = bucket_cache[bucketid]
+	local liquid_data = liquid_cache[liquidid]
+
+	--copy groups into one table
+	local groups = {}
+	for k, v in pairs(bucket_data.groups) do
+		if not groups[k] then groups[k] = v end
+	end
+	for k, v in pairs(liquid_data.groups) do
+		if not groups[k] then groups[k] = v end
+	end
+	--for clojure
+	local source_name = liquid_data.name.."_source"
+	
+	--yes, this is about as insane as it looks. go for it!
+	minetest.register_craftitem(bucket_data.name .. to_bucket_name(liquid_data.name), {
+		description = bucket_data.desc .. " of " .. liquid_data.desc,
+		inventory_image = bucket_data.image.."^"..liquid_data.image,
+		groups = groups,
+		stack_max = 1,
+		liquids_pointable = true,
+		
+		on_place = function(itemstack, user, pointed_thing)
+			if pointed_thing.type ~= "node" then
+				return
+			end
+
+			local node = minetest.get_node_or_nil(pointed_thing.under)
+			local ndef = node and minetest.registered_nodes[node.name]
+
+			-- Call on_rightclick if the pointed node defines it
+			if ndef and ndef.on_rightclick and
+					not (user and user:is_player() and user:get_player_control().sneak) then
+				return ndef.on_rightclick(pointed_thing.under, node, user, itemstack)
+			end
+
+			local lpos
+
+			-- Check if pointing to a buildable node
+			if ndef and ndef.buildable_to then
+				-- buildable; replace the node
+				lpos = pointed_thing.under
+			else
+				-- not buildable to; place the liquid above
+				-- check if the node above can be replaced
+
+				lpos = pointed_thing.above
+				node = minetest.get_node_or_nil(lpos)
+				local above_ndef = node and minetest.registered_nodes[node.name]
+
+				if not above_ndef or not above_ndef.buildable_to then
+					-- do not remove the bucket with the liquid
+					return itemstack
+				end
+			end
+			
+			
+			minetest.set_node(lpos, {name = source_name})
+			return ItemStack(itemstack:get_name():gsub(to_bucket_name(source_name), ""))
+		end
+	})
+end
+
+
+
+
+function qts.register_liquid(name, def)
+	local defaults = {
+		waving = 3,
+		paramtype = "light",
+		alpha = 191, --default transperancy
+		walkable = false,
+		pointable = false,
+		diggable = false,
+		buildable_to = true,
+		is_ground_content = false,
+		drop = "",
+		drowning = 1,
+		liquid_alternative_flowing = name.."_flowing",
+		liquid_alternative_source = name.."_source",
+		liquid_viscosity = 1,
+		post_effect_color = {a = 103, r = 30, g = 60, b = 90},
+		groups = {}
+	}
+	
+	for k, v in pairs(defaults) do
+		if def[k] == nil then
+			def[k] = v
+		end
+	end
+	
+	if not def.groups.liquid then def.groups.liquid = 1 end
+	
+	--add to the liquid cache
+	local self_id = #liquid_cache+ 1
+	liquid_cache[self_id] = {name = name, desc = def.description, groups = def.groups, image = def.bucket_image}
+	def.bucket_image = nil
+	
+	local prev_desc = def.description
+	
+	--source
+	def.drawtype = "liquid"
+	def.description = prev_desc.." Source"
+	def.liquidtype = "source"
+	minetest.register_node(":"..name.."_source", qts.table_deep_copy(def))
+	
+	--flowing
+	def.drawtype = "flowingliquid"
+	def.description = prev_desc.." Flowing"
+	def.paramtype2 = "flowingliquid"
+	def.liquidtype = "flowing"
+	minetest.register_node(":"..name.."_flowing", qts.table_deep_copy(def))
+	
+	--now, backpropigate already registered buckets
+	for bk_id, bk in ipairs(bucket_cache) do
+		register_bucket_full(bk_id, self_id)
+	end
+end
+
+--this func is MUCH more locked in than any of the other.
+--[[
+	def contains:
+		description
+		inventory_image
+		groups {bucket_level >= 1}
+--]]
+function qts.register_bucket(name, def)
+	if not def.groups then def.groups = {} end
+	def.groups.tool = 1
+	if not def.groups.bucket_level then def.groups.bucket_level = 1 end
+	
+	local self_id = #bucket_cache + 1
+	
+	bucket_cache[self_id] = {name = name, desc = def.description, groups = def.groups, image = def.inventory_image}
+	
+	minetest.register_craftitem(":"..name, {
+		description = "Empty "..def.description,
+		inventory_image = def.inventory_image,
+		groups = def.groups,
+		liquids_pointable = true,
+		on_use = function(itemstack, user, pointed_thing)
+			--handle non-node cases
+			if pointed_thing.type == "object" then
+				pointed_thing.ref:punch(user, 1.0, { full_punch_interval=1.0 }, nil)
+				return user:get_wielded_item()
+			elseif pointed_thing.type ~= "node" then
+				-- do nothing if it's neither object nor node
+				return
+			end
+			
+			local node =  minetest.get_node(pointed_thing.under)
+			local self_name = itemstack:get_name()
+			local bucket_name = self_name..to_bucket_name(node.name)
+			local item_count = user:get_wielded_item():get_count()
+			if minetest.registered_items[bucket_name] then
+					--the bucket type exists, unless some wierdness is done
+				local ret = bucket_name
+				if item_count > 1 then
+						-- if space in inventory add filled bucked, otherwise drop as item
+					local inv = user:get_inventory()
+					if inv:room_for_item("main", {name=bucket_name}) then
+						inv:add_item("main", bucket_name)
+					else
+						local pos = user:get_pos()
+						pos.y = math.floor(pos.y + 0.5)
+						minetest.add_item(pos, bucket_name)
+					end
+					
+					ret = self_name.." "..tostring(item_count - 1)
+				end
+				
+				minetest.set_node(pointed_thing.under, {name = "air"})
+				return ret
+			else
+				--trigger the node's on_punch
+				local node_def = minetest.registered_nodes[node.name]
+				if node_def then
+					node_def.on_punch(pointed_thing.under, node, user, pointed_thing)
+				end
+				return user:get_wielded_item()
+			end
+		end
+	})
+	
+	--now, backpropigate already registered liquids
+	for lq_id, lq in ipairs(liquid_cache) do
+		register_bucket_full(self_id, lq_id)
+	end
+end
+

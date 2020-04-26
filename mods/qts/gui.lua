@@ -6,6 +6,50 @@ qts.formData = {} --any form-instance specific data
 qts_internal.formContext = {} --stores the context of open forms, to see if a player has one
 local inventoryFormName = nil
 
+
+--convert from old to new pos and size types
+qts.gui_conv = {
+	padding = 3/8,
+	spaceing = 5/4,
+}
+qts.gui_makepos = function(x, y, new)
+	local get = function(self)
+		return tostring(self.x)..","..tostring(self.y)
+	end
+	if not new then
+		return {
+			x = (x)*qts.gui_conv.spaceing + qts.gui_conv.padding,
+			y = (y)*qts.gui_conv.spaceing + qts.gui_conv.padding,
+			get = get
+		}
+	else
+		return 	{
+		x = x,
+		y = y,
+		get = get
+	}
+	end
+end
+qts.gui_makesize = function(x, y, new)
+	local get = function(self)
+		return tostring(self.x)..","..tostring(self.y)
+	end
+	if not new then
+		return {
+			x = (x) * qts.gui_conv.spaceing + (qts.gui_conv.padding * 2) + 1,
+			y = (y) * qts.gui_conv.spaceing + (qts.gui_conv.padding * 2) + 1,
+			get = get,
+		}
+	else
+		return 	{
+		x = x,
+		y = y,
+		get = get,
+	}
+	end
+end
+
+
 function qts.register_gui(name, def)
 	minetest.log("form registered")
 	def.name = name
@@ -58,6 +102,13 @@ function qts.handle_tabs(pos, playername, formname, fields)
 	end
 end
 
+function qts.pass_tabs(pos, playername, formname, fields)
+	local tab = tonumber(fields.tabs)
+	if tab and qts.forms[formname].tab_owner and qts.forms[formname].tabs[tab] then
+		qts.forms[formname].tab_update(pos, qts_internal.formContext[playername], playername, fields, tab)
+	end
+end
+
 function qts.show_gui(pos, player, formname, tabindex, show, ...)
 	--minetest.log(""..formname.." attemting to load (1)")
 	if qts.forms[formname] then --does the form name exist?
@@ -106,8 +157,10 @@ end
 --TODO: move to mt_impl.lua
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	--handle registered forms
+	local inv = false
 	if formname == "" and inventoryFormName then
 		formname = "qts:"..inventoryFormName
+		inv = true
 	end
 	local formname = formname:split(":")
 	if formname[1] == "qts" and formname[2] then
@@ -116,9 +169,19 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		local pname = player:get_player_name()
 		if qts_internal.formContext[pname] then
 			--init form data
-			if not qts.formData[pname] then qts.formData[pname] = {activeTab = 0} end
+			if not qts.formData[pname] then qts.formData[pname] = {activeTab = 1} end
 			
-			if not qts.handle_tabs(qts_internal.formContext[pname], pname, formname[2], fields) and handle_func then
+			--if this is an inventory, dont handle tabs automatically
+			if inv then
+				if qts.forms[formname[2]].tab_update then
+					--qts.forms[formname[2]].tab_update(qts.formData[pname], qts_internal.formContext[pname], pname, fields)
+					qts.pass_tabs(qts_internal.formContext[pname], pname, formname[2], fields)
+				end
+			else
+				--else, handle them
+				qts.handle_tabs(qts_internal.formContext[pname], pname, formname[2], fields)
+			end
+			if handle_func then
 				handle_func(qts.formData[pname], qts_internal.formContext[pname], pname, fields)
 				if qts.forms[formname[2]].tab_owner and #qts.forms[formname[2]].tabs > 0 and qts.forms[formname[2]].tabs[qts.formData[pname].activeTab] then
 					--pass the event to the active tab

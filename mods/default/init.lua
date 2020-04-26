@@ -7,7 +7,7 @@
 default = {}
 
 -- Load other files
-dofile(minetest.get_modpath("default").."/mapgen.lua")
+
 
 
 
@@ -39,7 +39,7 @@ if qts.ISDEV then
 		description = "Testing Tool:\nCurrently hammers nodes \nand functions as a screwdriver \nif shift held",
 		inventory_image = "qts_testing_tool.png",
 		range = 10.0,
-		liquids_pointable = true,
+		--liquids_pointable = true,
 		on_use = function(itemstack, user, pointed_thing)
 			minetest.log("QTS Testing Tool used")
 			if pointed_thing.under then
@@ -223,22 +223,25 @@ qts.register_shaped_node ("default:sandstone_brick", {
 
 
 --fences and the like
-qts.register_fencelike_node("default:wood_fence", "fence", {
+qts.register_fencelike_node("default:wood_fence", {
 	description = "Wood Fance",
+	type = "fence",
 	texture = "default_wood.png",
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
 	sounds = default.node_sound_defaults(),
 })
 
-qts.register_fencelike_node("default:wood_rail", "rail", {
+qts.register_fencelike_node("default:wood_rail", {
 	description = "Wood Rail",
+	type = "rail",
 	texture = "default_wood.png",
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
 	sounds = default.node_sound_defaults(),
 })
 
-qts.register_fencelike_node("default:stone_brick_wall", "wall", {
+qts.register_fencelike_node("default:stone_brick_wall", {
 	description = "Stone Brick Wall",
+	type = "wall",
 	texture = "default_stone_brick.png",
 	groups = {cracky=3, stone=1},
 	sounds = default.node_sound_defaults(),
@@ -246,10 +249,74 @@ qts.register_fencelike_node("default:stone_brick_wall", "wall", {
 
 --[[
 --this is how you would do panes
-qts.register_fencelike_node("default:stone_brick_pane", "pane", {
+qts.register_fencelike_node("default:stone_brick_pane", {
 	description = "Stone Brick Wall",
+	type = "pane",
 	texture = "default_stone_brick.png",
 	groups = {cracky=3, stone=1},
 	sounds = default.node_sound_defaults(),
 })
 --]]
+--bucket
+qts.register_bucket("default:bucket", {
+	description = "Bucket",
+	inventory_image = "bucket.png",
+	groups= {bucket_level = 1},
+})
+
+--liquid nodes
+qts.register_liquid("default:water", {
+	description = "Water",
+	tiles = {
+		{
+			name = "default_water_source_animated.png",
+			backface_culling = false,
+			animation = {
+				type = "vertical_frames",
+				aspect_w = 16,
+				aspect_h = 16,
+				length = 2.0,
+			},
+		},
+		{
+			name = "default_water_source_animated.png",
+			backface_culling = true,
+			animation = {
+				type = "vertical_frames",
+				aspect_w = 16,
+				aspect_h = 16,
+				length = 2.0,
+			},
+		},
+	},
+	special_tiles = {
+		{
+			name = "default_water_flowing_animated.png",
+			backface_culling = false,
+			animation = {
+				type = "vertical_frames",
+				aspect_w = 16,
+				aspect_h = 16,
+				length = 0.5,
+			},
+		},
+		{
+			name = "default_water_flowing_animated.png",
+			backface_culling = true,
+			animation = {
+				type = "vertical_frames",
+				aspect_w = 16,
+				aspect_h = 16,
+				length = 0.5,
+			},
+		},
+	},
+	bucket_image = "bucket_water.png",
+	post_effect_color = {a = 103, r = 30, g = 60, b = 90},
+	groups = {water = 3, liquid = 3, cools_lava = 1},
+})
+
+
+
+--run mapgen
+dofile(minetest.get_modpath("default").."/mapgen.lua")
