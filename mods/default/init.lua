@@ -5,7 +5,16 @@
 
 -- Definitions made by this mod that other mods can use too
 default = {}
+function default.node_sound_defaults(table)
+	table = table or {}
+	table.footstep = table.footstep or
+			{name="", gain=1.0}
+	table.dug = table.dug or
+			{name="default_dug_node", gain=1.0}
+	return table
+end
 
+dofile(minetest.get_modpath("default").."/nodes.lua")
 -- Load other files
 
 
@@ -15,14 +24,7 @@ default = {}
 
 -- Default node sounds
 
-function default.node_sound_defaults(table)
-	table = table or {}
-	table.footstep = table.footstep or
-			{name="", gain=1.0}
-	table.dug = table.dug or
-			{name="default_dug_node", gain=1.0}
-	return table
-end
+
 
 -- Register nodes
 
@@ -36,31 +38,21 @@ minetest.register_node("default:default", {
 --devmode items that are used for fun testing stuff
 if qts.ISDEV then
 	minetest.register_tool("default:testingTool", {
-		description = "Testing Tool:\nCurrently hammers nodes \nand functions as a screwdriver \nif shift held",
+		description = "Testing Tool:\nCurrently spawns a strange temple",
 		inventory_image = "qts_testing_tool.png",
 		range = 10.0,
 		--liquids_pointable = true,
 		on_use = function(itemstack, user, pointed_thing)
 			minetest.log("QTS Testing Tool used")
 			if pointed_thing.under then
-				if user:get_player_control().sneak then
-					qts.screwdriver.apply(pointed_thing, user, qts.screwdriver.ROTATE_FACE)
-				else
-					qts.hammer.apply(pointed_thing, user, qts.hammer.CHANGE_TYPE)
-				end		
-			end
-			
-		end,
-		on_place = function(itemstack, user, pointed_thing)
-		minetest.log("QTS Testing Tool placed")
-			if pointed_thing.under then
-				if user:get_player_control().sneak then
-					qts.screwdriver.apply(pointed_thing, user, qts.screwdriver.ROTATE_AXIS)
-				else
-					qts.hammer.apply(pointed_thing, user, qts.hammer.CHANGE_STYLE)
+				local sucess = minetest.place_schematic(pointed_thing.above, minetest.get_modpath("default") .. "/schems/strange.mts", "0", nil, true)
+				if sucess == nil then
+					minetest.log("error placing schematic")
 				end
 			end
-			
+		end,
+		on_place = function(itemstack, user, pointed_thing)
+			minetest.log("QTS Testing Tool placed")
 		end
 	})
 	
@@ -84,6 +76,35 @@ if qts.ISDEV then
 	
 end
 
+minetest.register_tool("default:testingHammer", {
+	description = "Testing Hammer",
+	inventory_image = "qts_testing_tool.png",
+	range = 10.0,
+	--liquids_pointable = true,
+	on_use = function(itemstack, user, pointed_thing)
+		minetest.log("QTS Testing Tool used")
+		if pointed_thing.under then
+			if user:get_player_control().sneak then
+				qts.screwdriver.apply(pointed_thing, user, qts.screwdriver.ROTATE_FACE)
+			else
+				qts.hammer.apply(pointed_thing, user, qts.hammer.CHANGE_TYPE)
+			end		
+		end
+		
+	end,
+	on_place = function(itemstack, user, pointed_thing)
+	minetest.log("QTS Testing Tool placed")
+		if pointed_thing.under then
+			if user:get_player_control().sneak then
+				qts.screwdriver.apply(pointed_thing, user, qts.screwdriver.ROTATE_AXIS)
+			else
+				qts.hammer.apply(pointed_thing, user, qts.hammer.CHANGE_STYLE)
+			end
+		end
+		
+	end
+})
+
 --register materials here
 minetest.register_tool ("default:gauntlet", {
 	description = ("Gauntlet of DESTRUCTION"),
@@ -104,155 +125,7 @@ minetest.register_tool ("default:gauntlet", {
 })
 
 
-qts.register_shaped_node("default:stone", {
-	description = "stone",
-	tiles = {"default_stone.png"},
-	groups = {cracky=3, stone=1},
-	sounds = default.node_sound_defaults(),
-	drop = "default:cobble"
-})
 
-qts.register_shaped_node ("default:cobble", {
-	description = "cobble",
-	tiles = {"default_cobble.png"},
-	groups = {cracky=3, stone=1},
-	sounds = default.node_sound_defaults(),
-})
-	
-qts.register_shaped_node ("default:mossycobble", {
-	description = "mossy cobble",
-	tiles = {"default_mossycobble.png"},
-	groups = {cracky=3, stone=1},
-	sounds = default.node_sound_defaults(),
-})
-
-qts.register_shaped_node ("default:sandstone", {
-	description = "sandstone",
-	tiles = {"default_sandstone.png"},
-	groups = {cracky=3, stone=1},
-	sounds = default.node_sound_defaults(),
-})
-
-qts.register_shaped_node ("default:stone_brick", {
-	description = "Stone Brick",
-	tiles = {"default_stone_brick.png"},
-	groups = {cracky=3, stone=1},
-	sounds = default.node_sound_defaults(),
-})
-
-qts.register_shaped_node ("default:obsidian", {
-	description = "obsidian",
-	tiles = {"default_obsidian.png"},
-	groups = {cracky=1},
-	sounds = default.node_sound_defaults(),
-})
-
-qts.register_shaped_node ("default:brick", {
-	description = "Brick",
-	tiles = {"default_brick.png"},
-	groups = {cracky=3},
-	sounds = default.node_sound_defaults(),
-})
-	
-qts.register_shaped_node ("default:wood", {
-	description = "Wood Planks",
-	tiles = {"default_wood.png"},
-	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
-	sounds = default.node_sound_defaults(),
-})
-
-qts.register_shaped_node ("default:dirt", {
-	description = "Dirt",
-	tiles = {"default_dirt.png"},
-	groups = {oddly_breakable_by_hand=1},
-	sounds = default.node_sound_defaults(),
-})
-
-qts.register_shaped_node ("default:sand", {
-	description = "sand",
-	tiles = {"default_sand.png"},
-	groups = {oddly_breakable_by_hand=1, falling_node=1},
-	sounds = default.node_sound_defaults(),
-})
-
-qts.register_shaped_node ("default:desert_sand", {
-	description = "desert_sand",
-	tiles = {"default_desert_sand.png"},
-	groups = {oddly_breakable_by_hand=1, falling_node=1},
-	sounds = default.node_sound_defaults(),
-})
-
-qts.register_shaped_node ("default:desert_sand_sandstone", {
-	description = "Desert Sandstone",
-	tiles = {"default_desert_sandstone.png"},
-	groups = {cracky=3, stone=1},
-	sounds = default.node_sound_defaults(),
-})
-
-qts.register_shaped_node ("default:desert_stone", {
-	description = "Desert Stone",
-	tiles = {"default_desert_stone.png"},
-	groups = {cracky=3, stone=1},
-	sounds = default.node_sound_defaults(),
-})
-
-qts.register_shaped_node ("default:desert_cobble", {
-	description = "Desert Cobblestone",
-	tiles = {"default_desert_cobble.png"},
-	groups = {cracky=3, stone=1},
-	sounds = default.node_sound_defaults(),
-})
-
-qts.register_shaped_node ("default:desert_stone_brick", {
-	description = "Desert Stone Brick",
-	tiles = {"default_desert_stone_brick.png"},
-	groups = {cracky=3},
-	sounds = default.node_sound_defaults(),
-})
-
-qts.register_shaped_node ("default:sandstone_brick", {
-	description = "Sandstone Brick",
-	tiles = {"default_sandstone_brick.png"},
-	groups = {cracky=3},
-	sounds = default.node_sound_defaults(),
-})
-
-qts.register_shaped_node ("default:dirt_with_grass", {
-	description = "Dirt with Grass",
-	tiles = {"default_grass.png"},
-	groups = {oddly_breakable_by_hand=1},
-	sounds = default.node_sound_defaults(),
-})
-
-
-
-
-
-
---fences and the like
-qts.register_fencelike_node("default:wood_fence", {
-	description = "Wood Fance",
-	type = "fence",
-	texture = "default_wood.png",
-	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
-	sounds = default.node_sound_defaults(),
-})
-
-qts.register_fencelike_node("default:wood_rail", {
-	description = "Wood Rail",
-	type = "rail",
-	texture = "default_wood.png",
-	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
-	sounds = default.node_sound_defaults(),
-})
-
-qts.register_fencelike_node("default:stone_brick_wall", {
-	description = "Stone Brick Wall",
-	type = "wall",
-	texture = "default_stone_brick.png",
-	groups = {cracky=3, stone=1},
-	sounds = default.node_sound_defaults(),
-})
 
 --[[
 --this is how you would do panes

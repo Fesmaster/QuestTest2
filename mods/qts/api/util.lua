@@ -100,3 +100,12 @@ function qts.get_nodes_on_radius(pos, radius)
 		return nil
 	end
 end
+
+
+function qts.Set(t)
+	s = {}
+	for i, v in ipairs(t) do
+		s[v] = true
+	end
+	return s
+end

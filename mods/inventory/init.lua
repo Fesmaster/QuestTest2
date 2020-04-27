@@ -7,7 +7,7 @@ inventory.listdata_player = {}
 inventory.list_items = {}
 
 local esc = minetest.formspec_escape
-local P = function(x,y) return qts.gui_makepos(x,y):get() end
+local P = function(x,y) return qts.gui.gui_makepos(x,y):get() end
 dofile(minetest.get_modpath("inventory") .."\\functions.lua")
 dofile(minetest.get_modpath("inventory") .."\\detached.lua")
 
@@ -26,7 +26,7 @@ end)
 
 
 --register the main player inventory gui
-qts.register_gui("inventory", {
+qts.gui.register_gui("inventory", {
 	tab_owner = true,
 	get = function(data, pos, name)
 		if not data.player_item_list_page then data.player_item_list_page = 1 end
@@ -85,10 +85,10 @@ qts.register_gui("inventory", {
 		inventory.refresh_inv(name, tabnumber)
 	end,
 })
-qts.set_inventory_qui_name("inventory") --set it to the main inventory
+qts.gui.set_inventory_qui_name("inventory") --set it to the main inventory
 
 
-qts.register_gui("inv_tab_craft", {
+qts.gui.register_gui("inv_tab_craft", {
 	tab = true,
 	caption = "Crafting",
 	owner = "inventory",
@@ -105,7 +105,7 @@ qts.register_gui("inv_tab_craft", {
 	end,
 })
 
-qts.register_gui("inv_tab_test", {
+qts.gui.register_gui("inv_tab_test", {
 	tab = true,
 	caption = "Test",
 	owner = "inventory",

@@ -1,14 +1,14 @@
 
 local esc = minetest.formspec_escape
 
-local P = function(x,y) return qts.gui_makepos(x,y):get() end
+local P = function(x,y) return qts.gui.gui_makepos(x,y):get() end
 
 
 --default inventory form getter functions
 inventory.get_player_main = function(pos)
 	--pos = inventory.convert_pos(pos)
 	--local x, y = pos.x, pos.y
-	if not pos then pos = qts.gui_makepos(0, 5.1) end
+	if not pos then pos = qts.gui.gui_makepos(0, 5.1) end
 	local str =  "container["..pos:get().."]"
 	for i = 0,7 do
 		str = str .. "image["..P(i,0)..";1,1;gui_hb_bg.png]"
@@ -24,7 +24,7 @@ end
 inventory.get_button_grid = function(playername, current_page, prev_search, pos)
 	if not current_page then current_page = 1 end
 	if not prev_search then prev_search = "" end
-	if not pos then pos = qts.gui_makepos(12, 0) end
+	if not pos then pos = qts.gui.gui_makepos(12, 0) end
 	
 	--minetest.log(dump(pos:get()))
 	
@@ -58,7 +58,7 @@ inventory.get_button_grid = function(playername, current_page, prev_search, pos)
 end
 
 inventory.get_util_bar = function(pos)
-	if not pos then pos = qts.gui_makepos(0, 9.5) end
+	if not pos then pos = qts.gui.gui_makepos(0, 9.5) end
 	local str = "container["..pos:get().."]"
 	
 	for i, btn in ipairs(inventory.utils) do
@@ -70,7 +70,7 @@ inventory.get_util_bar = function(pos)
 end
 
 inventory.get_craft_area = function(pos)
-	if not pos then pos = qts.gui_makepos(1.75, 0.5) end
+	if not pos then pos = qts.gui.gui_makepos(1.75, 0.5) end
 	return "container["..pos:get().."]"..
 			"list[current_player;craft;"..P(0,0)..";3,3;]"..
 			"list[current_player;craftpreview;"..P(4,1)..";1,1;]"..
@@ -80,7 +80,7 @@ end
 
 inventory.get_default_size = function()
 	--return "size[18,10.5]"
-	return "size["..qts.gui_makesize(18, 10.5):get().."]real_coordinates[true]"
+	return "size["..qts.gui.gui_makesize(18, 10.5):get().."]real_coordinates[true]"
 end
 
 --registration stuff
@@ -151,5 +151,5 @@ inventory.refresh_inv = function(player, tab)
 		player = minetest.get_player_by_name(player)
 	end
 	if not tab then tab = 1 end
-	player:set_inventory_formspec(qts.show_gui(player:get_pos(), player, "inventory", tab, false)[2]) 
+	player:set_inventory_formspec(qts.gui.show_gui(player:get_pos(), player, "inventory", tab, false)[2]) 
 end

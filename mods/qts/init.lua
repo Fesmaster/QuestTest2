@@ -5,14 +5,21 @@ qts.path = minetest.get_modpath("qts")
 dofile(qts.path.."/worldsettings.lua")
 --load the QT2 Settings File
 qts.settings = qts.create_settings_clojure(minetest.get_modpath("qts") .. "\\QT2Settings.conf")
-
-dofile(qts.path.."/util.lua")
-dofile(qts.path.."/creative.lua")
-dofile(qts.path.."/nodetypes.lua")
-dofile(qts.path.."/shapedNodes.lua")
-dofile(qts.path.."/screwdriver.lua")
+dofile(qts.path.."/benchmark.lua")
+dofile(qts.path.."/api/util.lua")
+dofile(qts.path.."/api/creative.lua")
+dofile(qts.path.."/api/nodetypes.lua")
+dofile(qts.path.."/api/shapedNodes.lua")
+dofile(qts.path.."/api/screwdriver.lua")
+dofile(qts.path.."/api/gui.lua")
 --any other code here
-dofile(qts.path.."/gui.lua")
+
+
+
+dofile(qts.path.."/worldgen/worldgen.lua")
+--post worldgen files
+
+
 
 
 dofile(qts.path.."/chatcommands.lua")
