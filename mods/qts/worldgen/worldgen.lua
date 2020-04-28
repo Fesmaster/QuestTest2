@@ -145,8 +145,6 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 				daylight = LightData[Area:index(x, groundHeight+1, z)] % 16 --get the first 4 bits
 			end
 			
-			
-			
 			--generate the biome solid materials
 			if isground and below >= 0 and biomeRef 
 					and (airdepth == -1 or airdepth >= biomeRef.min_air) 
@@ -154,19 +152,6 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 				below = below + 1 --increase below to measure correctly
 				if below <= biomeRef.surface_depth then
 					nID = qts.worldgen.get_biome_node(biomeID,"surface")
-					
-					--plant generation
-					--if y < maxp.y and biomeRef.plant and math.random(100-biomeRef.plant_freq) == 1 then
-					--	--plant gen code
-					--	minetest.log("Plant placed at: "..dump({x=x,y=y,z=z}))
-					--	local pID = qts.worldgen.get_biome_node(biomeID,"plant")
-					--	if pID then
-					--		Data[Area:index(x, y+1, z)] = pID
-					--		
-					--	end
-					--	
-					--end
-					
 				elseif below <= biomeRef.fill_depth then
 					nID = qts.worldgen.get_biome_node(biomeID,"fill")
 				elseif below <= biomeRef.stone_depth then
@@ -180,7 +165,6 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 				--dbg_placed = true
 			end
 		end
-		
 		
 		--gen trees, structures
 		for y = maxp.y, minp.y, -1 do
@@ -212,12 +196,10 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 					end
 				end
 			end
-			
 			if nID then
 				Data[i] = nID
 			end
 		end
-		
 		
 		--place plants
 		for y = maxp.y, minp.y, -1 do
@@ -239,7 +221,6 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 				Data[i] = nID
 			end
 		end
-		
 		
 		--retrace for dust
 		if biomeRef.dust and false then

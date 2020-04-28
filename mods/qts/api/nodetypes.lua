@@ -572,6 +572,8 @@ function qts.register_ingot(name, def)
 	local groups_node = qts.table_deep_copy(def.groups)
 	groups_item.placeable_ingot = 1
 	groups_node.placed_ingot = 1
+	groups_node.not_in_creative_inventory = 1
+	groups_node.falling_node = 1
 	
 	--register the ingot craftitem
 	minetest.register_craftitem(":"..name, {
@@ -594,7 +596,13 @@ function qts.register_ingot(name, def)
 			
 			local fpos = pointed_thing.under
 			
-			if node.name:find(itemstack:get_name().."_stacked") then
+			local itemdef = minetest.registered_items[itemstack:get_name().."_stacked_1"]
+			local sound = nil
+			if itemdef and itemdef.sounds and itemdef.sounds.place then
+				sound = itemdef.sounds.place
+			end
+			
+			if node.name:find(itemstack:get_name().."_stacked") and not(tonumber(node.name:sub(-1)) == 8) then
 				--minetest.log("found one")
 				
 			else
@@ -605,6 +613,10 @@ function qts.register_ingot(name, def)
 				else
 					--place a new bar on the ground
 					minetest.place_node(pointed_thing.above, {name = itemstack:get_name().."_stacked_1"})
+					--sound
+					if sound then
+						minetest.sound_play(sound, {gain = 1.0, max_hear_distance = 32, loop = false, pos = pointed_thing.above})
+					end
 					itemstack:take_item()
 					return itemstack
 				end
@@ -615,9 +627,19 @@ function qts.register_ingot(name, def)
 			--minetest.log(dump(start_count))
 			if start_count < 8 then
 				local newname = node.name:sub(1,-2)..tostring(start_count + 1)
-				minetest.log(dump(newname))
 				minetest.set_node(fpos, {name = "air"})
 				minetest.place_node(fpos, {name = newname})
+				if sound then
+					minetest.sound_play(sound, {gain = 1.0, max_hear_distance = 32, loop = false, pos = pointed_thing.above})
+				end
+				itemstack:take_item()
+			elseif not vector.equals(fpos, pointed_thing.above) then
+				--place a new bar on the ground
+				minetest.place_node(pointed_thing.above, {name = itemstack:get_name().."_stacked_1"})
+				--sound
+				if sound then
+					minetest.sound_play(sound, {gain = 1.0, max_hear_distance = 32, loop = false, pos = pointed_thing.above})
+				end
 				itemstack:take_item()
 			end
 			--TODO:finish ingot item def

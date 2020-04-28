@@ -2,9 +2,9 @@
 Here live the sound data gen functions, similar to those that live in default from minetest_game
 --]]
 
-sounds = {}
 
-function sounds.node_sound_defaults(table)
+
+function conf.node_sound_defaults(table)
 	table = table or {}
 	table.footstep = table.footstep or
 			{name = "", gain = 1.0}
@@ -15,7 +15,7 @@ function sounds.node_sound_defaults(table)
 	return table
 end
 
-function sounds.node_sound_dirt(table)
+function conf.node_sound_dirt(table)
 	table = table or {}
 	table.footstep = table.footstep or
 			{name = "sounds_gravel_footstep", gain = 0.25}
@@ -26,7 +26,7 @@ function sounds.node_sound_dirt(table)
 	return table
 end
 
-function sounds.node_sound_sand(table)
+function conf.node_sound_sand(table)
 	table = table or {}
 	table.footstep = table.footstep or
 			{name = "sounds_sand_footstep", gain = 0.25}
@@ -37,7 +37,7 @@ function sounds.node_sound_sand(table)
 	return table
 end
 
-function sounds.node_sound_grass(table)
+function conf.node_sound_grass(table)
 	table = table or {}
 	table.footstep = table.footstep or
 			{name = "sounds_grass_footstep", gain = 0.25}
@@ -48,7 +48,7 @@ function sounds.node_sound_grass(table)
 	return table
 end
 
-function sounds.node_sound_stone(table)
+function conf.node_sound_stone(table)
 	table = table or {}
 	table.footstep = table.footstep or
 			{name = "sounds_hard_footstep", gain = 0.25}
@@ -59,7 +59,7 @@ function sounds.node_sound_stone(table)
 	return table
 end
 
-function sounds.node_sound_wood(table)
+function conf.node_sound_wood(table)
 	table = table or {}
 	table.footstep = table.footstep or
 			{name = "sounds_wood_footstep", gain = 0.25}
@@ -70,7 +70,7 @@ function sounds.node_sound_wood(table)
 	return table
 end
 
-function sounds.node_sound_metal(table)
+function conf.node_sound_metal(table)
 	table = table or {}
 	table.footstep = table.footstep or
 			{name = "sounds_metal_footstep", gain = 0.25}
@@ -81,7 +81,7 @@ function sounds.node_sound_metal(table)
 	return table
 end
 
-function sounds.node_sound_glass(table)
+function conf.node_sound_glass(table)
 	table = table or {}
 	table.footstep = table.footstep or
 			{name = "sounds_glass_footstep", gain = 0.25}
