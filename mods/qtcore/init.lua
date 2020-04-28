@@ -7,6 +7,7 @@
 	they are not part of the content-agnostic QuestTest Sytem (qts)
 	and thus do not belong in that mod
 --]]
-core = {}
-dofile(minetest.get_modpath("core").."\\sounds.lua")
-dofile(minetest.get_modpath("core").."\\nodeboxes.lua")
+qtcore = {}
+dofile(minetest.get_modpath("qtcore").."\\sounds.lua")
+dofile(minetest.get_modpath("qtcore").."\\nodeboxes.lua")
+dofile(minetest.get_modpath("qtcore").."\\textures.lua")

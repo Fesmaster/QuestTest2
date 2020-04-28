@@ -221,7 +221,7 @@ qts.register_ingot("default:iron_bar", {
 	inventory_image = "default_iron_ingot.png",
 	tiles = {"default_iron_block.png"},
 	groups = {cracky=3, iron = 1},
-	sounds = core.node_sound_metal(),
+	sounds = qtcore.node_sound_metal(),
 })
 
 
