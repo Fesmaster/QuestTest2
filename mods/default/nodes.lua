@@ -15,7 +15,7 @@ qts.register_shaped_node("default:stone", {
 	description = "Stone",
 	tiles = {"default_stone.png"},
 	groups = {cracky=3, stone=1},
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 	drop = "default:cobble"
 })
 
@@ -24,7 +24,7 @@ qts.register_shaped_node ("default:stone_cobble", {
 	tiles = {"default_stone_cobble.png"},
 	groups = {cracky=3, stone=1},
 	is_ground_content = false,
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
 minetest.register_alias("default:cobble", "default:stone_cobble")
 
@@ -33,7 +33,7 @@ qts.register_shaped_node ("default:stone_brick", {
 	tiles = {"default_stone_brick.png"},
 	groups = {cracky=3, stone=1},
 	is_ground_content = false,
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
 
 qts.register_shaped_node ("default:stone_block", {
@@ -41,7 +41,7 @@ qts.register_shaped_node ("default:stone_block", {
 	tiles = {"default_stone_block.png"},
 	groups = {cracky=3, stone=1},
 	is_ground_content = false,
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
 	
 qts.register_shaped_node ("default:stone_cobble_mossy", {
@@ -49,7 +49,7 @@ qts.register_shaped_node ("default:stone_cobble_mossy", {
 	tiles = {"default_stone_cobble_mossy.png"},
 	groups = {cracky=3, stone=1},
 	is_ground_content = false,
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
 
 qts.register_shaped_node ("default:stone_brick_mossy", {
@@ -57,7 +57,7 @@ qts.register_shaped_node ("default:stone_brick_mossy", {
 	tiles = {"default_stone_brick_mossy.png"},
 	groups = {cracky=3, stone=1},
 	is_ground_content = false,
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
 
 --desert_stone
@@ -65,7 +65,7 @@ qts.register_shaped_node ("default:red_stone", {
 	description = "Red Stone",
 	tiles = {"default_red_stone.png"},
 	groups = {cracky=3, stone=1},
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 	drop = "default:red_stone_cobble"
 })
 
@@ -74,7 +74,7 @@ qts.register_shaped_node ("default:red_stone_cobble", {
 	tiles = {"default_red_cobble.png"},
 	groups = {cracky=3, stone=1},
 	is_ground_content = false,
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
 
 qts.register_shaped_node ("default:red_stone_brick", {
@@ -82,7 +82,7 @@ qts.register_shaped_node ("default:red_stone_brick", {
 	tiles = {"default_red_stone_brick.png"},
 	groups = {cracky=3,stone=1},
 	is_ground_content = false,
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
 
 qts.register_shaped_node ("default:red_stone_block", {
@@ -90,7 +90,7 @@ qts.register_shaped_node ("default:red_stone_block", {
 	tiles = {"default_red_stone_block.png"},
 	groups = {cracky=3,stone=1},
 	is_ground_content = false,
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
 
 
@@ -99,7 +99,7 @@ qts.register_shaped_node ("default:sandstone", {
 	description = "sandstone",
 	tiles = {"default_sandstone.png"},
 	groups = {cracky=3, stone=1},
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 	drop = "default:sandstone_cobble"
 })
 
@@ -108,7 +108,7 @@ qts.register_shaped_node ("default:sandstone_cobble", {
 	tiles = {"default_sandstone_cobble.png"},
 	groups = {cracky=3,stone=1},
 	is_ground_content = false,
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
 
 qts.register_shaped_node ("default:sandstone_brick", {
@@ -116,7 +116,7 @@ qts.register_shaped_node ("default:sandstone_brick", {
 	tiles = {"default_sandstone_brick.png"},
 	groups = {cracky=3,stone=1},
 	is_ground_content = false,
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
 
 qts.register_shaped_node ("default:sandstone_block", {
@@ -124,14 +124,14 @@ qts.register_shaped_node ("default:sandstone_block", {
 	tiles = {"default_sandstone_block.png"},
 	groups = {cracky=3,stone=1},
 	is_ground_content = false,
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
 
 qts.register_shaped_node ("default:desert_sandstone", {
 	description = "Desert Sandstone",
 	tiles = {"default_desert_sandstone.png"},
 	groups = {cracky=3, stone=1},
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 	drop = "default:desert_sandstone_cobble"
 })
 
@@ -140,7 +140,7 @@ qts.register_shaped_node ("default:desert_sandstone_cobble", {
 	tiles = {"default_desert_sandstone_cobble.png"},
 	groups = {cracky=3,stone=1},
 	is_ground_content = false,
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
 
 qts.register_shaped_node ("default:desert_sandstone_brick", {
@@ -148,7 +148,7 @@ qts.register_shaped_node ("default:desert_sandstone_brick", {
 	tiles = {"default_desert_sandstone_brick.png"},
 	groups = {cracky=3,stone=1},
 	is_ground_content = false,
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
 
 qts.register_shaped_node ("default:desert_sandstone_block", {
@@ -156,7 +156,7 @@ qts.register_shaped_node ("default:desert_sandstone_block", {
 	tiles = {"default_desert_sandstone_block.png"},
 	groups = {cracky=3,stone=1},
 	is_ground_content = false,
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
 
 
@@ -164,7 +164,7 @@ qts.register_shaped_node ("default:obsidian", {
 	description = "Obsidian",
 	tiles = {"default_obsidian.png"},
 	groups = {cracky=1, obsidian=1},
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
 
 qts.register_shaped_node ("default:obsidian_brick", {
@@ -172,7 +172,7 @@ qts.register_shaped_node ("default:obsidian_brick", {
 	tiles = {"default_obsidian_brick.png"},
 	groups = {cracky=1, obsidian=1},
 	is_ground_content = false,
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
 
 qts.register_shaped_node ("default:obsidian_block", {
@@ -180,7 +180,7 @@ qts.register_shaped_node ("default:obsidian_block", {
 	tiles = {"default_obsidian_block.png"},
 	groups = {cracky=1, obsidian=1},
 	is_ground_content = false,
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
 
 
@@ -189,7 +189,7 @@ qts.register_shaped_node ("default:brick", {
 	tiles = {"default_brick.png"},
 	groups = {cracky=3, bricks=1},
 	is_ground_content = false,
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
 
 qts.register_shaped_node ("default:brick_grey", {
@@ -197,7 +197,7 @@ qts.register_shaped_node ("default:brick_grey", {
 	tiles = {"default_brick_grey.png"},
 	groups = {cracky=3, bricks=1},
 	is_ground_content = false,
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
 
 --soils and the like
@@ -206,14 +206,14 @@ qts.register_shaped_node ("default:dirt", {
 	description = "Dirt",
 	tiles = {"default_dirt.png"},
 	groups = {crumbly = 3, soil=1},
-	sounds = conf.node_sound_dirt(),
+	sounds = core.node_sound_dirt(),
 })
 
 qts.register_shaped_node ("default:dirt_with_grass", {
 	description = "Dirt with Grass",
 	tiles = {"default_grass.png"},
 	groups = {crumbly = 3, soil=1, spreading_dirt_type=1},
-	sounds = conf.node_sound_grass(),
+	sounds = core.node_sound_grass(),
 	drop = "default:dirt"
 })
 --fix the sides of grass on the full node
@@ -227,14 +227,14 @@ qts.register_shaped_node ("default:sand", {
 	description = "sand",
 	tiles = {"default_sand.png"},
 	groups = {crumbly = 3, falling_node=1, sand=1},
-	sounds = conf.node_sound_sand(),
+	sounds = core.node_sound_sand(),
 })
 
 qts.register_shaped_node ("default:desert_sand", {
 	description = "desert_sand",
 	tiles = {"default_desert_sand.png"},
 	groups = {crumbly = 3, falling_node=1, sand=1},
-	sounds = conf.node_sound_sand(),
+	sounds = core.node_sound_sand(),
 })
 
 --wood and the like
@@ -243,7 +243,7 @@ qts.register_shaped_node ("default:wood_planks", {
 	description = "Wood Planks",
 	tiles = {"default_wood.png"},
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
-	sounds = conf.node_sound_wood(),
+	sounds = core.node_sound_wood(),
 })
 
 
@@ -262,7 +262,7 @@ qts.register_fencelike_node("default:wood_fence", {
 	type = "fence",
 	texture = "default_wood.png",
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
-	sounds = conf.node_sound_wood(),
+	sounds = core.node_sound_wood(),
 })
 
 qts.register_fencelike_node("default:wood_rail", {
@@ -270,7 +270,7 @@ qts.register_fencelike_node("default:wood_rail", {
 	type = "rail",
 	texture = "default_wood.png",
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
-	sounds = conf.node_sound_wood(),
+	sounds = core.node_sound_wood(),
 })
 
 qts.register_fencelike_node("default:stone_brick_wall", {
@@ -278,5 +278,5 @@ qts.register_fencelike_node("default:stone_brick_wall", {
 	type = "wall",
 	texture = "default_stone_brick.png",
 	groups = {cracky=3, stone=1},
-	sounds = conf.node_sound_stone(),
+	sounds = core.node_sound_stone(),
 })
