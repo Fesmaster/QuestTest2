@@ -56,6 +56,25 @@ if qts.ISDEV then
 		end
 	})
 	
+	minetest.register_tool("default:analitics_tools", {
+		description = "Analitics Tool:\nCurrently check heat/humid",
+		inventory_image = "default_red_wand.png",
+		range = 10.0,
+		--liquids_pointable = true,
+		on_use = function(itemstack, user, pointed_thing)
+			if user then
+				local p = user:get_pos()
+				local humid = minetest.get_humidity(p)
+				local heat = minetest.get_heat(p)
+				local str = "Pos: ".. minetest.pos_to_string(p) .." Heat: "..dump(heat) .. " Humidity: "..dump(humid)
+				minetest.chat_send_all(str)
+				minetest.log(str)
+			end
+		end,
+
+	})
+	
+	
 	qts.register_shaped_node("default:testNode", {
 		description = "Test Node", 
 		tiles ={"default_testing.png"}, 

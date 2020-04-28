@@ -28,8 +28,8 @@ qts.worldgen.register_biome("grasslands", {
 	surface = "default:dirt_with_grass",
 	fill = "default:dirt",
 	stone = "default:stone",
-	plant = "default:wood_fence",
-	plant_freq = 75,
+	plant = nil,
+	plant_freq = 0,
 	surface_depth = 1,
 	fill_depth = 2,
 	stone_depth = 0,
@@ -46,9 +46,9 @@ qts.worldgen.register_biome("desert", {
 	fill = {"default:desert_sand", "default:desert_sandstone"},
 	stone = "default:desert_sandstone",
 	plant = nil,
-	plant_freq = 75,
-	surface_depth = 1,
-	fill_depth = 2,
+	plant_freq = 0,
+	surface_depth = 5,
+	fill_depth = 10,
 	stone_depth = 20,
 })
 

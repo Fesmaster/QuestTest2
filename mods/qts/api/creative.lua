@@ -25,6 +25,7 @@ if creative_mode_cache then
 		type = "none",
 		wield_image = "wieldhand.png",
 		wield_scale = {x=1,y=1,z=2.5},
+		range = 10.0,
 		tool_capabilities = {
 			full_punch_interval = 1.0,
 			max_drop_level = 0,

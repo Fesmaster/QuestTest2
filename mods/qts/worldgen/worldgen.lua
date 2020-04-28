@@ -62,8 +62,6 @@ end)
 
 
 minetest.register_on_generated(function(minp, maxp, blockseed)
-	local S, S_ = Stopwatch("world_gen")
-	S()
 	local columnID = 1
 	local heightmap = minetest.get_mapgen_object("heightmap")
 	local heatmap = minetest.get_mapgen_object("heatmap")
@@ -293,5 +291,4 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 		)
 		--minetest.log("Structure Placed: "..dump(sucess).." : "..dump(struct.pos))
 	end
-	S_()
 end)
