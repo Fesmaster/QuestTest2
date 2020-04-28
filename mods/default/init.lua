@@ -216,6 +216,14 @@ qts.register_liquid("default:water", {
 })
 
 
+qts.register_ingot("default:iron_bar", {
+	description = "Iron Bar",
+	inventory_image = "default_iron_ingot.png",
+	tiles = {"default_iron_block.png"},
+	groups = {cracky=3, iron = 1},
+	sounds = sounds.node_sound_metal(),
+})
+
 
 --run mapgen
 dofile(minetest.get_modpath("default").."/mapgen.lua")

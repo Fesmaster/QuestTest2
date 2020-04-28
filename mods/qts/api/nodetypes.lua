@@ -1,3 +1,7 @@
+--this file contains the "special" registrations that make 
+--nodes and items of specific types 
+--that often have lots of code attached to then
+
 function qts.register_shaped_node(name, def)
 	--prep the data for node registration
 	local imgs = {}
@@ -437,9 +441,6 @@ local function register_bucket_full(bucketid, liquidid)
 	})
 end
 
-
-
-
 function qts.register_liquid(name, def)
 	local defaults = {
 		waving = 3,
@@ -485,6 +486,7 @@ function qts.register_liquid(name, def)
 	def.description = prev_desc.." Flowing"
 	def.paramtype2 = "flowingliquid"
 	def.liquidtype = "flowing"
+	def.groups.not_in_creative_inventory = 1
 	minetest.register_node(":"..name.."_flowing", qts.table_deep_copy(def))
 	
 	--now, backpropigate already registered buckets
@@ -564,3 +566,98 @@ function qts.register_bucket(name, def)
 	end
 end
 
+function qts.register_ingot(name, def)
+	--group setup
+	local groups_item = qts.table_deep_copy(def.groups)
+	local groups_node = qts.table_deep_copy(def.groups)
+	groups_item.placeable_ingot = 1
+	groups_node.placed_ingot = 1
+	
+	--register the ingot craftitem
+	minetest.register_craftitem(":"..name, {
+		description = def.description,
+		inventory_image = def.inventory_image,
+		groups = groups_item,
+		on_place = function(itemstack, user, pointed_thing)
+			if pointed_thing.type ~= "node" then
+				return
+			end
+
+			local node = minetest.get_node_or_nil(pointed_thing.under)
+			local ndef = node and minetest.registered_nodes[node.name]
+
+			-- Call on_rightclick if the pointed node defines it
+			if ndef and ndef.on_rightclick and
+					not (user and user:is_player() and user:get_player_control().sneak) then
+				return ndef.on_rightclick(pointed_thing.under, node, user, itemstack)
+			end
+			
+			local fpos = pointed_thing.under
+			
+			if node.name:find(itemstack:get_name().."_stacked") then
+				--minetest.log("found one")
+				
+			else
+				local node_above = minetest.get_node_or_nil(pointed_thing.above)
+				if node_above and node_above.name:find(itemstack:get_name().."_stacked") then
+					fpos = pointed_thing.above
+					--minetest.log("found one above")
+				else
+					--place a new bar on the ground
+					minetest.place_node(pointed_thing.above, {name = itemstack:get_name().."_stacked_1"})
+					itemstack:take_item()
+					return itemstack
+				end
+			end
+			
+			node = minetest.get_node_or_nil(fpos) --override node
+			local start_count = tonumber(node.name:sub(-1))
+			--minetest.log(dump(start_count))
+			if start_count < 8 then
+				local newname = node.name:sub(1,-2)..tostring(start_count + 1)
+				minetest.log(dump(newname))
+				minetest.set_node(fpos, {name = "air"})
+				minetest.place_node(fpos, {name = newname})
+				itemstack:take_item()
+			end
+			--TODO:finish ingot item def
+			return itemstack
+		end,
+	})
+	
+	local nodeboxes = {
+		{-0.4375, -0.5, -0.3125, 0.4375, -0.3125, -0.0625}, -- NodeBox1
+		{-0.4375, -0.5, 0.0625, 0.4375, -0.3125, 0.3125}, -- NodeBox2
+		{-0.3125, -0.3125, -0.4375, -0.0625, -0.125, 0.4375}, -- NodeBox3
+		{0.0625, -0.3125, -0.4375, 0.3125, -0.125, 0.4375}, -- NodeBox4
+		{-0.4375, -0.125, -0.3125, 0.4375, 0.0625, -0.0624999}, -- NodeBox5
+		{-0.4375, -0.125, 0.0625, 0.4375, 0.0625, 0.3125}, -- NodeBox6
+		{-0.3125, 0.0625, -0.4375, -0.0624999, 0.25, 0.4375}, -- NodeBox7
+		{0.0625, 0.0625, -0.4375, 0.3125, 0.25, 0.4375}, -- NodeBox8
+	}
+	
+	for i = 1,8 do
+		
+		--copy the content of nodeboxes into local
+		local nb = {}
+		for j = 1,i do 
+			nb[j] = nodeboxes[j]
+		end
+		
+		--register the nodes
+		minetest.register_node(":"..name.."_stacked_"..i, {
+			description = "Stack of "..def.description,
+			tiles = def.tiles,
+			drawtype = "nodebox",
+			paramtype = "light",
+			node_box = {
+				type = "fixed",
+				fixed = nb
+			},
+			drop = name.." "..i,--FIX: finish
+			groups = groups_node,
+			sounds = def.sounds,
+		})
+	end
+	
+end

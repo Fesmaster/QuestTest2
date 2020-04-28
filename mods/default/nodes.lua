@@ -227,14 +227,14 @@ qts.register_shaped_node ("default:sand", {
 	description = "sand",
 	tiles = {"default_sand.png"},
 	groups = {crumbly = 3, falling_node=1, sand=1},
-	sounds = sounds.node_sound_dirt(),
+	sounds = sounds.node_sound_sand(),
 })
 
 qts.register_shaped_node ("default:desert_sand", {
 	description = "desert_sand",
 	tiles = {"default_desert_sand.png"},
 	groups = {crumbly = 3, falling_node=1, sand=1},
-	sounds = sounds.node_sound_dirt(),
+	sounds = sounds.node_sound_sand(),
 })
 
 --wood and the like
@@ -243,7 +243,7 @@ qts.register_shaped_node ("default:wood_planks", {
 	description = "Wood Planks",
 	tiles = {"default_wood.png"},
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
-	sounds = sounds.node_sound_defaults(),
+	sounds = sounds.node_sound_wood(),
 })
 
 
@@ -262,7 +262,7 @@ qts.register_fencelike_node("default:wood_fence", {
 	type = "fence",
 	texture = "default_wood.png",
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
-	sounds = sounds.node_sound_defaults(),
+	sounds = sounds.node_sound_wood(),
 })
 
 qts.register_fencelike_node("default:wood_rail", {
@@ -270,7 +270,7 @@ qts.register_fencelike_node("default:wood_rail", {
 	type = "rail",
 	texture = "default_wood.png",
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
-	sounds = sounds.node_sound_defaults(),
+	sounds = sounds.node_sound_wood(),
 })
 
 qts.register_fencelike_node("default:stone_brick_wall", {
@@ -278,5 +278,5 @@ qts.register_fencelike_node("default:stone_brick_wall", {
 	type = "wall",
 	texture = "default_stone_brick.png",
 	groups = {cracky=3, stone=1},
-	sounds = sounds.node_sound_defaults(),
+	sounds = sounds.node_sound_stone(),
 })
