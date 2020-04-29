@@ -216,10 +216,53 @@ qts.register_shaped_node ("default:dirt_with_grass", {
 	sounds = qtcore.node_sound_grass(),
 	drop = "default:dirt"
 })
+
 --fix the sides of grass on the full node
 minetest.override_item("default:dirt_with_grass", {
 	tiles = {"default_grass.png", "default_dirt.png",
 		{name = "default_dirt.png^default_grass_side.png",
+			tileable_vertical = false}},
+})
+
+qts.register_shaped_node ("default:dirt_with_swamp_grass", {
+	description = "Swamp Dirt with Grass",
+	tiles = {"default_swamp_grass.png"},
+	groups = {crumbly = 3, soil=1, spreading_dirt_type=1},
+	sounds = qtcore.node_sound_grass(),
+	drop = "default:dirt"
+})
+
+minetest.override_item("default:dirt_with_swamp_grass", {
+	tiles = {"default_swamp_grass.png", "default_dirt.png",
+		{name = "default_dirt.png^default_swamp_grass_side.png",
+			tileable_vertical = false}},
+})
+
+qts.register_shaped_node ("default:dirt_with_prarie_grass", {
+	description = "Prarie Dirt with Grass",
+	tiles = {"default_prarie_grass.png"},
+	groups = {crumbly = 3, soil=1, spreading_dirt_type=1},
+	sounds = qtcore.node_sound_grass(),
+	drop = "default:dirt"
+})
+
+minetest.override_item("default:dirt_with_prarie_grass", {
+	tiles = {"default_prarie_grass.png", "default_dirt.png",
+		{name = "default_dirt.png^default_prarie_grass_side.png",
+			tileable_vertical = false}},
+})
+
+qts.register_shaped_node ("default:dirt_with_mushroom_grass", {
+	description = "Dirt with Decaying Matter",
+	tiles = {"default_mushroom_grass.png"},
+	groups = {crumbly = 3, soil=1, spreading_dirt_type=1},
+	sounds = qtcore.node_sound_grass(),
+	drop = "default:dirt"
+})
+
+minetest.override_item("default:dirt_with_mushroom_grass", {
+	tiles = {"default_mushroom_grass.png", "default_dirt.png",
+		{name = "default_dirt.png^default_mushroom_grass_side.png",
 			tileable_vertical = false}},
 })
 
