@@ -267,14 +267,21 @@ minetest.override_item("default:dirt_with_mushroom_grass", {
 })
 
 qts.register_shaped_node ("default:sand", {
-	description = "sand",
+	description = "Sand",
 	tiles = {"default_sand.png"},
-	groups = {crumbly = 3, falling_node=1, sand=1},
+	groups = {oddly_breakable_by_hand = 3, crumbly = 3, falling_node=1, sand=1},
+	sounds = qtcore.node_sound_sand(),
+})
+
+qts.register_shaped_node ("default:gravel", {
+	description = "Gravel",
+	tiles = {"default_gravel.png"},
+	groups = {oddly_breakable_by_hand = 2, crumbly = 2, falling_node=1, sand=1},
 	sounds = qtcore.node_sound_sand(),
 })
 
 qts.register_shaped_node ("default:desert_sand", {
-	description = "desert_sand",
+	description = "Desert Sand",
 	tiles = {"default_desert_sand.png"},
 	groups = {crumbly = 3, falling_node=1, sand=1},
 	sounds = qtcore.node_sound_sand(),
