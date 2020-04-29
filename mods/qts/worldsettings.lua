@@ -10,7 +10,7 @@ function qts.create_settings_clojure(filename)
 		return settings:set(key, str)
 	end
 	local function get_bool(key)
-		return settings:get_bool(key, false)
+		return settings:get_bool(key, nil)
 	end
 	local function set_bool(key, val)
 		return settings:set_bool(key, val)

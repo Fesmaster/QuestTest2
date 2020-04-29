@@ -70,7 +70,8 @@ end
 
 --name = biome name
 --ntype = "dust", "surface", "fill", "stone", "plant"
-qts.worldgen.get_biome_node = function(name, ntype)
+qts.worldgen.get_biome_node = function(name, ntype, asCID)
+	if asCID == nil then asCID = true end
 	if qts.worldgen.registered_biomes[name] and qts.worldgen.registered_biomes[name][ntype] then
 		local nodelist = qts.worldgen.registered_biomes[name][ntype]
 		local found = nil
@@ -80,17 +81,25 @@ qts.worldgen.get_biome_node = function(name, ntype)
 				found = nodename
 			end
 		end
-		return CID[found]
+		if asCID then
+			return CID[found]
+		else
+			return found
+		end
 	end
 	minetest.log("get_biome_node: biome or level do not exist Biome: ".. name .. " Node Type: "..ntype)
 	return nil
 end
 
-qts.worldgen.is_biome_node = function(cid, biome, solidOnly)
+qts.worldgen.is_biome_node = function(cid, biome, group, solidOnly)
 	if solidOnly == nil then solidOnly = true end
 	local check = {"dust", "surface", "fill", "stone", "plant"}
+	if group then
+		check = group
+	end
 	if solidOnly then
-		check = {"surface", "fill", "stone"}
+		check.dust = nil
+		check.plant = nil
 	end
 	local biomeDef =  qts.worldgen.registered_biomes[biome]
 	if biomeDef then

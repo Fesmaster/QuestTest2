@@ -181,6 +181,17 @@ qts.register_ingot("default:iron_bar", {
 	tiles = {"default_iron_block.png"},
 	groups = {cracky=3, iron = 1},
 	sounds = qtcore.node_sound_metal(),
+	nodeboxes = {
+		{-0.5, -0.5, 0.1875, 0.125, -0.3125, 0.4375}, -- NodeBox45
+		{-0.5, -0.5, -0.125, 0.125, -0.3125, 0.125}, -- NodeBox46
+		{-0.5, -0.5, -0.4375, 0.125, -0.3125, -0.1875}, -- NodeBox49
+		{-0.5, -0.3125, -0.3125, 0.125, -0.125, -0.0624999}, -- NodeBox51
+		{-0.5, -0.3125, 0.0625, 0.125, -0.125, 0.3125}, -- NodeBox52
+		{-0.5, -0.125, -0.125, 0.125, 0.0625, 0.125}, -- NodeBox53
+		{0.1875, -0.5, -0.375, 0.4375, -0.3125, 0.25}, -- NodeBox54
+		{0.125, -0.3125, -0.25, 0.3125, -0.0625, 0.375}, -- NodeBox55
+	},
+	levels = 8,
 })
 
 --for i=1,7 do
@@ -196,12 +207,24 @@ qts.register_ingot("default:iron_bar", {
 --end
 minetest.register_node("default:boxtest", {
 	description = "BoxTest Node",
-	tiles ={"default_testing.png"},
+	tiles ={"default_oak_leaves.png", "default_oak_leaves.png", 
+		"default_oak_leaves.png^[lowpart:37:default_sapling_test_bottom.png"},
 	groups = {oddly_breakable_by_hand=3},
 	sounds = qtcore.node_sound_stone(),
 	drawtype = "nodebox",
 	paramtype = "light",
-	node_box = qtcore.nb_chest(),
+	node_box = {
+		type = "fixed",
+		fixed = {
+			--{-0.1875, -0.5, -0.1875, 0.1875, -0.4375, 0.1875}, -- NodeBox1
+			--{-0.125, -0.4375, -0.125, 0.125, -0.375, 0.125}, -- NodeBox2
+			{-0.0625, -0.5, -0.0625, 0.0625, 0.1875, 0.0625}, -- NodeBox3
+			{-0.25, -0.125, -0.25, 0.25, 0.4375, 0.25}, -- NodeBox4
+			{-0.3125, 0.25, -0.3125, -0.0625, 0.5, -0.0624999}, -- NodeBox5
+			{0.0625, 0.125, -0.25, 0.3125, 0.375, 7.45058e-008}, -- NodeBox6
+			{-0.25, -0.0625, 0.0625, 1.49012e-008, 0.1875, 0.3125}, -- NodeBox7
+		}
+	},
 	
 	paramtype2 = "facedir",
 	--on_place = function(itemstack, placer, pointed_thing)
@@ -211,6 +234,23 @@ minetest.register_node("default:boxtest", {
 	--	return qts.rotate_and_place(itemstack, placer, pointed_thing)
 	--end,
 })
+
+minetest.register_node("default:grass_5", {
+	description = "Grass Node",
+	tiles ={"default_grass_5.png"},
+	drawtype = "plantlike",
+	paramtype = "light",
+	paramtype2 = "meshoptions",
+	sunlight_propagates = true,
+	walkable = false,
+	waving = 1,
+	selection_box = qtcore.nb_level1(),
+	groups = {snappy=3, flammable = 2, grass = 1},
+	sounds = qtcore.node_sound_stone(),
+	on_place = qtcore.place_random_plantlike,
+})
+
+
 
 
 --run mapgen

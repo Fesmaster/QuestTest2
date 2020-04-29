@@ -117,10 +117,12 @@ qts.screwdriver.apply = function(pointed_thing, user, mode)
 		local result = ndef.on_rotate(vector.new(pos),
 				{name = node.name, param1 = node.param1, param2 = node.param2},
 				user, mode, new_param2)
-		if result == false then -- Disallow rotation
+		if result == nil then
 			return
-		elseif result == true then
+		elseif result == false then -- Disallow rotation
 			should_rotate = false
+		elseif result == true then
+			should_rotate = true
 		end
 	elseif ndef.on_rotate == false then
 		return

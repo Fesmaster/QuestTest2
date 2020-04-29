@@ -26,7 +26,7 @@ qts.register_shaped_node ("default:stone_cobble", {
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
 })
-minetest.register_alias("default:cobble", "default:stone_cobble")
+minetest.register_alias("default:cobble", "default:stone_cobble")--TODO: remove backwards compatability
 
 qts.register_shaped_node ("default:stone_brick", {
 	description = "Stone Brick",
@@ -296,19 +296,13 @@ qts.register_shaped_node ("default:desert_sand", {
 
 --wood and the like
 
-qts.register_shaped_node ("default:wood_planks", {
+qts.register_shaped_node ("default:oak_wood_planks", {
 	description = "Wood Planks",
 	tiles = {"default_wood.png"},
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
 })
-
-
-
-
-
-
-
+minetest.register_alias("default:wood_planks", "default:oak_wood_planks") --TODO: remove backwards compatability
 
 
 
@@ -337,3 +331,80 @@ qts.register_fencelike_node("default:stone_brick_wall", {
 	groups = {cracky=3, stone=1},
 	sounds = qtcore.node_sound_stone(),
 })
+
+
+
+--leaves
+--[[
+leaves use param2 to hold if they were placed by the player
+to allow player-placed leaves to not decay
+--]]
+minetest.register_node("default:oak_leaves", {
+	description = "Oak Leaves",
+	drawtype = "allfaces_optional",
+	waving = 1,
+	tiles = {"default_oak_leaves.png"},
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	--drop = {
+	--	--TODO: finish leaf drops
+	--},
+	sounds = qtcore.node_sound_grass(),
+	after_place_node = qtcore.after_place_leaves;
+})
+
+minetest.register_node("default:aspen_leaves", {
+	description = "Aspen Leaves",
+	drawtype = "allfaces_optional",
+	waving = 1,
+	tiles = {"default_aspen_leaves.png"},
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	--drop = {
+	--	--TODO: finish leaf drops
+	--},
+	sounds = qtcore.node_sound_grass(),
+	after_place_node = qtcore.after_place_leaves;
+})	
+
+minetest.register_node("default:apple_leaves", {
+	description = "Apple Leaves",
+	drawtype = "allfaces_optional",
+	waving = 1,
+	tiles = {"default_apple_leaves.png"},
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	--drop = {
+	--	--TODO: finish leaf drops
+	--},
+	sounds = qtcore.node_sound_grass(),
+	after_place_node = qtcore.after_place_leaves;
+})
+
+minetest.register_node("default:apple_leaves_fruit", {
+	description = "Apple Leaves with Apples",
+	drawtype = "allfaces_optional",
+	waving = 1,
+	tiles = {"default_apple_leaves_fruit.png"},
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	--drop = {
+	--	--TODO: finish leaf drops
+	--},
+	sounds = qtcore.node_sound_grass(),
+	after_place_node = qtcore.after_place_leaves;
+})	
+
+minetest.register_node("default:rowan_leaves", {
+	description = "Rowan Leaves",
+	drawtype = "allfaces_optional",
+	waving = 1,
+	tiles = {"default_rowan_leaves.png"},
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	--drop = {
+	--	--TODO: finish leaf drops
+	--},
+	sounds = qtcore.node_sound_grass(),
+	after_place_node = qtcore.after_place_leaves;
+})	

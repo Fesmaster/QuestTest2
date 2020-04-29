@@ -575,6 +575,22 @@ function qts.register_ingot(name, def)
 	groups_node.not_in_creative_inventory = 1
 	groups_node.falling_node = 1
 	
+	--allow user-defined nodeboxes
+	local nodeboxes = def.nodeboxes or {
+		{-0.4375, -0.5, -0.3125, 0.4375, -0.3125, -0.0625}, -- NodeBox1
+		{-0.4375, -0.5, 0.0625, 0.4375, -0.3125, 0.3125}, -- NodeBox2
+		{-0.3125, -0.3125, -0.4375, -0.0625, -0.125, 0.4375}, -- NodeBox3
+		{0.0625, -0.3125, -0.4375, 0.3125, -0.125, 0.4375}, -- NodeBox4
+		{-0.4375, -0.125, -0.3125, 0.4375, 0.0625, -0.0624999}, -- NodeBox5
+		{-0.4375, -0.125, 0.0625, 0.4375, 0.0625, 0.3125}, -- NodeBox6
+		{-0.3125, 0.0625, -0.4375, -0.0624999, 0.25, 0.4375}, -- NodeBox7
+		{0.0625, 0.0625, -0.4375, 0.3125, 0.25, 0.4375}, -- NodeBox8
+	}
+	
+	
+	local levels = def.levels or 8
+	
+	
 	--register the ingot craftitem
 	minetest.register_craftitem(":"..name, {
 		description = def.description,
@@ -627,8 +643,8 @@ function qts.register_ingot(name, def)
 			--minetest.log(dump(start_count))
 			if start_count < 8 then
 				local newname = node.name:sub(1,-2)..tostring(start_count + 1)
-				minetest.set_node(fpos, {name = "air"})
-				minetest.place_node(fpos, {name = newname})
+				minetest.set_node(fpos, {name = newname})
+				--minetest.place_node(fpos, {name = newname})
 				if sound then
 					minetest.sound_play(sound, {gain = 1.0, max_hear_distance = 32, loop = false, pos = pointed_thing.above})
 				end
@@ -647,18 +663,9 @@ function qts.register_ingot(name, def)
 		end,
 	})
 	
-	local nodeboxes = {
-		{-0.4375, -0.5, -0.3125, 0.4375, -0.3125, -0.0625}, -- NodeBox1
-		{-0.4375, -0.5, 0.0625, 0.4375, -0.3125, 0.3125}, -- NodeBox2
-		{-0.3125, -0.3125, -0.4375, -0.0625, -0.125, 0.4375}, -- NodeBox3
-		{0.0625, -0.3125, -0.4375, 0.3125, -0.125, 0.4375}, -- NodeBox4
-		{-0.4375, -0.125, -0.3125, 0.4375, 0.0625, -0.0624999}, -- NodeBox5
-		{-0.4375, -0.125, 0.0625, 0.4375, 0.0625, 0.3125}, -- NodeBox6
-		{-0.3125, 0.0625, -0.4375, -0.0624999, 0.25, 0.4375}, -- NodeBox7
-		{0.0625, 0.0625, -0.4375, 0.3125, 0.25, 0.4375}, -- NodeBox8
-	}
 	
-	for i = 1,8 do
+	
+	for i = 1,levels do
 		
 		--copy the content of nodeboxes into local
 		local nb = {}
@@ -672,6 +679,7 @@ function qts.register_ingot(name, def)
 			tiles = def.tiles,
 			drawtype = "nodebox",
 			paramtype = "light",
+			paramtype2 = "facedir",
 			node_box = {
 				type = "fixed",
 				fixed = nb
@@ -679,6 +687,13 @@ function qts.register_ingot(name, def)
 			drop = name.." "..i,--FIX: finish
 			groups = groups_node,
 			sounds = def.sounds,
+			on_rotate = function(pos, node, user, mode, new_param2)
+				if mode == qts.screwdriver.ROTATE_FACE then
+					return true
+				else
+					return false
+				end
+			end
 		})
 	end
 	

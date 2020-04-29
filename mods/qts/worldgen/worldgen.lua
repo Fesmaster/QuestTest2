@@ -13,6 +13,14 @@ local CID = qts.worldgen.CID --to simplify and shorten the naming
 
 dofile(qts.path .."/worldgen/wg_functions.lua") --load all the functions
 
+local function genParam2Meshoptions()
+	return (math.random(0,4)		--first 3 bits (0,1,2)
+		+ (math.random(0,1) * 8)    --bit 3
+		+ (math.random(0,1) * 16)   --bit 4
+		+ (math.random(0,1) * 32))  --bit 5
+end
+
+
 minetest.register_on_mods_loaded(function()
 	minetest.set_mapgen_setting("mg_flags", "caves,nodungeons,light,decorations,biomes", true)
 	
@@ -70,6 +78,7 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 	local Area = VoxelArea:new{MinEdge = {x = emin.x, y = emin.y, z = emin.z}, MaxEdge = {x = emax.x, y = emax.y, z = emax.z}}
 	local Data= VM:get_data()
 	local LightData = VM:get_light_data()
+	local Param2Data = VM:get_param2_data()
 	
 	local biomeID = nil
 	local biomeRef = nil 
@@ -191,6 +200,7 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 							--minetest.log("Structure Placed: "..dump(sucess).." : "..dump({x=x, y=y, z=z}))
 							structures[#structures + 1] = {pos = {x=x, y=y, z=z}, name = name}
 							struc = true
+							break
 						end
 						--minetest.log("Structure can be placed")
 					end
@@ -205,20 +215,29 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 		for y = maxp.y, minp.y, -1 do
 			local i = Area:index(x, y, z)
 			local nID = nil
+			local param2 = nil
 			if y < maxp.y then
 				local j = Area:index(x, y-1, z)
 				
-				if Data[i] == CID["air"] and qts.worldgen.is_biome_node(Data[j], biomeID, true) then
+				if Data[i] == CID["air"] and qts.worldgen.is_biome_node(Data[j], biomeID,{"surface"}, true) then
 					--it can be a plant
 					--minetest.log("plant")
-					if biomeRef.plant and math.random(100-biomeRef.plant_freq) == 1 then
-						nID = qts.worldgen.get_biome_node(biomeID,"plant")
+					if biomeRef.plant and math.random(101-biomeRef.plant_freq) == 1 then
+						local name = qts.worldgen.get_biome_node(biomeID,"plant", false)
+						nID = CID[name]
+						local nameDef = minetest.registered_nodes[name]
+						if nameDef and nameDef.paramtype2 and nameDef.paramtype2 == "meshoptions" then
+							param2 = genParam2Meshoptions()
+						end
 					end
 				end
 			end
 			
 			if nID then
 				Data[i] = nID
+			end
+			if param2 then
+				Param2Data[i] = param2
 			end
 		end
 		
@@ -235,6 +254,7 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 						--place dust
 						nID = qts.worldgen.get_biome_node(biomeID,"dust")
 						dust_placed = true
+						break
 					end
 					if nID then
 						Data[i] = nID
@@ -253,6 +273,8 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 	
 	--set node data, and write to map
 	VM:set_data(Data)
+	VM:set_light_data(LightData)
+	VM:set_param2_data(Param2Data)
 	--VM:set_lighting{day=0, night=0}
 	VM:calc_lighting()
 	VM:write_to_map()
