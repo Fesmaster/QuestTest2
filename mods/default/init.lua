@@ -171,6 +171,7 @@ qts.register_liquid("default:water", {
 	bucket_image = "bucket_water.png",
 	post_effect_color = {a = 103, r = 30, g = 60, b = 90},
 	groups = {water = 3, liquid = 3, cools_lava = 1},
+	sounds = qtcore.node_sound_water(),
 })
 
 --ingot type object

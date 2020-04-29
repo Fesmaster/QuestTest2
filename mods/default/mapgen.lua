@@ -55,7 +55,7 @@ qts.worldgen.register_biome("prarie", {
 })
 
 qts.worldgen.register_biome("swamp", {
-	heat_point = 85,
+	heat_point = 25,
 	humidity_point = 95,
 	min_ground_height = 5,
 	max_ground_height = 30,
@@ -64,6 +64,42 @@ qts.worldgen.register_biome("swamp", {
 	dust = nil,
 	surface = {"default:dirt_with_swamp_grass"},
 	fill = "default:dirt", --TODO: add peat?
+	stone = "default:stone",
+	plant = nil,
+	plant_freq = 0,
+	surface_depth = 1,
+	fill_depth = 5,
+	stone_depth = 0,
+})
+
+qts.worldgen.register_biome("rainforest", {
+	heat_point = 70,
+	humidity_point = 75,
+	min_ground_height = 5,
+	max_ground_height = 80,
+	min_light = 4,--half
+	min_air = 10,
+	dust = nil,
+	surface = {"default:dirt_with_rainforest_grass"},
+	fill = "default:dirt", 
+	stone = "default:stone",
+	plant = nil,
+	plant_freq = 0,
+	surface_depth = 1,
+	fill_depth = 5,
+	stone_depth = 0,
+})
+
+qts.worldgen.register_biome("mushroom_forest", {
+	heat_point = 70,
+	humidity_point = 110,
+	min_ground_height = 3,
+	max_ground_height = 10,
+	min_light = 7,--half
+	min_air = 10,
+	dust = nil,
+	surface = {"default:dirt_with_mushroom_grass"},
+	fill = "default:dirt", 
 	stone = "default:stone",
 	plant = nil,
 	plant_freq = 0,
