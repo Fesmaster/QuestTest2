@@ -47,7 +47,7 @@ function qts.register_shaped_node(name, def)
 		if pointed_thing.type ~= "node" then
 			return itemstack
 		end
-		return qts.hammer.rotate_and_place(itemstack, placer, pointed_thing)
+		return qts.rotate_and_place(itemstack, placer, pointed_thing)
 	end
 	minetest.register_node(":" .. name .."_stair", qts.table_deep_copy(def))
 	--STAIR INNER-----------------------
@@ -189,7 +189,7 @@ function qts.register_shaped_node(name, def)
 			end
 			return itemstack
 		else
-			return qts.hammer.rotate_and_place(itemstack, placer, pointed_thing)
+			return qts.rotate_and_place(itemstack, placer, pointed_thing)
 		end
 	end
 	

@@ -32,7 +32,7 @@ minetest.register_node("default:default", {
 	description = "Default Node",
 	tiles ={"default.png"},
 	groups = {oddly_breakable_by_hand=3},
-	sounds = default.node_sound_defaults(),
+	sounds = qtcore.node_sound_defaults(),
 })
 
 --devmode items that are used for fun testing stuff
@@ -79,7 +79,7 @@ if qts.ISDEV then
 		description = "Test Node", 
 		tiles ={"default_testing.png"}, 
 		groups = {oddly_breakable_by_hand=3},
-		sounds = default.node_sound_defaults(),
+		sounds = qtcore.node_sound_defaults(),
 	})
 	
 	
@@ -166,62 +166,49 @@ qts.register_bucket("default:bucket", {
 --liquid nodes
 qts.register_liquid("default:water", {
 	description = "Water",
-	tiles = {
-		{
-			name = "default_water_source_animated.png",
-			backface_culling = false,
-			animation = {
-				type = "vertical_frames",
-				aspect_w = 16,
-				aspect_h = 16,
-				length = 2.0,
-			},
-		},
-		{
-			name = "default_water_source_animated.png",
-			backface_culling = true,
-			animation = {
-				type = "vertical_frames",
-				aspect_w = 16,
-				aspect_h = 16,
-				length = 2.0,
-			},
-		},
-	},
-	special_tiles = {
-		{
-			name = "default_water_flowing_animated.png",
-			backface_culling = false,
-			animation = {
-				type = "vertical_frames",
-				aspect_w = 16,
-				aspect_h = 16,
-				length = 0.5,
-			},
-		},
-		{
-			name = "default_water_flowing_animated.png",
-			backface_culling = true,
-			animation = {
-				type = "vertical_frames",
-				aspect_w = 16,
-				aspect_h = 16,
-				length = 0.5,
-			},
-		},
-	},
+	tiles = qtcore.liquid_texture("default_water_source_animated.png", 2.0),
+	special_tiles = qtcore.liquid_texture("default_water_flowing_animated.png", 0.5),
 	bucket_image = "bucket_water.png",
 	post_effect_color = {a = 103, r = 30, g = 60, b = 90},
 	groups = {water = 3, liquid = 3, cools_lava = 1},
 })
 
-
+--ingot type object
 qts.register_ingot("default:iron_bar", {
 	description = "Iron Bar",
 	inventory_image = "default_iron_ingot.png",
 	tiles = {"default_iron_block.png"},
 	groups = {cracky=3, iron = 1},
 	sounds = qtcore.node_sound_metal(),
+})
+
+--for i=1,7 do
+--	minetest.register_node("default:boxtest"..i, {
+--		description = "BoxTest Node "..i,
+--		tiles ={"default_testing.png"},
+--		groups = {oddly_breakable_by_hand=3},
+--		sounds = qtcore.node_sound_stone(),
+--		drawtype = "nodebox",
+--		paramtype = "light",
+--		node_box = qtcore["nb_level"..i]()
+--	})
+--end
+minetest.register_node("default:boxtest", {
+	description = "BoxTest Node",
+	tiles ={"default_testing.png"},
+	groups = {oddly_breakable_by_hand=3},
+	sounds = qtcore.node_sound_stone(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = qtcore.nb_chest(),
+	
+	paramtype2 = "facedir",
+	--on_place = function(itemstack, placer, pointed_thing)
+	--	if pointed_thing.type ~= "node" then
+	--		return itemstack
+	--	end
+	--	return qts.rotate_and_place(itemstack, placer, pointed_thing)
+	--end,
 })
 
 
