@@ -3,7 +3,7 @@
 --liscensed under lgpl (see the liscense for QT2 in general)
 
 qts.hammer = {}
-function qts.hammer.rotate_and_place(itemstack, placer, pointed_thing)
+function qts.rotate_and_place(itemstack, placer, pointed_thing)
 	local p0 = pointed_thing.under
 	local p1 = pointed_thing.above
 	local param2 = 0

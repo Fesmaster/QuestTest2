@@ -91,3 +91,11 @@ function qtcore.node_sound_glass(table)
 			{name = "sounds_place_node_hard", gain = 0.5} --
 	return table
 end
+
+
+function qtcore.node_sound_water(table)
+	table = table or {}
+	table.footstep = table.footstep or
+			{name = "sounds_water_footstep", gain = 0.5}
+	return table
+end
