@@ -11,7 +11,6 @@ qtcore = {}
 dofile(minetest.get_modpath("qtcore").."\\sounds.lua")
 dofile(minetest.get_modpath("qtcore").."\\nodeboxes.lua")
 dofile(minetest.get_modpath("qtcore").."\\textures.lua")
-dofile(minetest.get_modpath("qtcore").."\\chatcommands.lua")
 
 --[[
 Random functions are placed here
@@ -39,4 +38,11 @@ qtcore.after_place_leaves = function(pos, placer, itemstack, pointed_thing)
 			minetest.set_node(pos, node)
 		end
 	end
+end
+
+qtcore.get_random_meshdata = function()
+	return (math.random(0,4)			--first 3 bits (0,1,2)
+		+ (math.random(0,1) * 8)    --bit 3
+		+ (math.random(0,1) * 16)   --bit 4
+		+ (math.random(0,1) * 32))  --bit 5
 end

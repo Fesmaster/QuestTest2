@@ -35,65 +35,7 @@ minetest.register_node("default:default", {
 	sounds = qtcore.node_sound_defaults(),
 })
 
---devmode items that are used for fun testing stuff
-if qts.ISDEV then
-	minetest.register_tool("default:testingTool", {
-		description = "Testing Tool:\nCurrently spawns a strange temple",
-		inventory_image = "qts_testing_tool.png",
-		range = 10.0,
-		--liquids_pointable = true,
-		on_use = function(itemstack, user, pointed_thing)
-			minetest.log("QTS Testing Tool used")
-			if pointed_thing.under then
-				local sucess = minetest.place_schematic(pointed_thing.above, minetest.get_modpath("default") .. "/schems/strange.mts", "0", nil, true)
-				if sucess == nil then
-					minetest.log("error placing schematic")
-				end
-			end
-		end,
-		on_place = function(itemstack, user, pointed_thing)
-			minetest.log("QTS Testing Tool placed")
-		end
-	})
-	
-	minetest.register_tool("default:analitics_tools", {
-		description = "Analitics Tool:\nCurrently check heat/humid",
-		inventory_image = "default_red_wand.png",
-		range = 10.0,
-		--liquids_pointable = true,
-		on_use = function(itemstack, user, pointed_thing)
-			if user then
-				local p = user:get_pos()
-				local humid = minetest.get_humidity(p)
-				local heat = minetest.get_heat(p)
-				local str = "Pos: ".. minetest.pos_to_string(p) .." Heat: "..dump(heat) .. " Humidity: "..dump(humid)
-				minetest.chat_send_all(str)
-				minetest.log(str)
-			end
-		end,
 
-	})
-	
-	
-	qts.register_shaped_node("default:testNode", {
-		description = "Test Node", 
-		tiles ={"default_testing.png"}, 
-		groups = {oddly_breakable_by_hand=3},
-		sounds = qtcore.node_sound_defaults(),
-	})
-	
-	
-	minetest.register_chatcommand("toys", {
-	params = "<text>",
-	description = "Get you some toys",
-	func = function(name, param)
-		local inv = minetest.get_player_by_name(name):get_inventory()
-		inv:add_item("main", "default:testingTool")
-		inv:add_item("main", "default:gauntlet")
-	end
-})
-	
-end
 
 minetest.register_tool("default:testingHammer", {
 	description = "Testing Hammer",
@@ -125,23 +67,7 @@ minetest.register_tool("default:testingHammer", {
 })
 
 --register materials here
-minetest.register_tool ("default:gauntlet", {
-	description = ("Gauntlet of DESTRUCTION"),
-	inventory_image = "wieldhand.png",
-	wield_image = "wieldhand.png",
-	tool_capabilities = {
-		full_punch_interval = 1.2,
-		max_drop_level=0,
-		groupcaps={
-			cracky = {times={[3]=.1, [2]=.25, [1]=.5}, uses=1000000000000000000000, maxlevel=3},
-			crumbly = {times={[3]=.1, [2]=.25, [1]=.5}, uses=1000000000000000000000, maxlevel=3},
-			choppy = {times={[3]=.1, [2]=.25, [1]=.5}, uses=1000000000000000000000, maxlevel=3},
-			snappy = {times={[3]=.1, [2]=.25, [1]=.5}, uses=1000000000000000000000, maxlevel=3},
-			oddly_breakable_by_hand = {times={[3]=.1, [2]=.25, [1]=.5}, uses=1000000000000000000000, maxlevel=3},
-		},
-		damage_groups = {fleshy=10000},
-	},
-})
+
 
 
 
@@ -235,7 +161,7 @@ minetest.register_node("default:boxtest", {
 	--end,
 })
 
-minetest.register_node("default:grass_5", {
+qts.register_growable_node("default:grass_5", {
 	description = "Grass Node",
 	tiles ={"default_grass_5.png"},
 	drawtype = "plantlike",
@@ -245,9 +171,17 @@ minetest.register_node("default:grass_5", {
 	walkable = false,
 	waving = 1,
 	selection_box = qtcore.nb_level1(),
-	groups = {snappy=3, flammable = 2, grass = 1},
+	groups = {snappy=3, flammable = 2, grass = 1, growable =1},
 	sounds = qtcore.node_sound_stone(),
 	on_place = qtcore.place_random_plantlike,
+	
+	grow_timer = 1,
+	grow_timer_random = 0,
+	on_grow = function(pos)
+		minetest.log("Grass Grown")
+		minetest.set_node(pos, {name = "default:grass_5", param2 = qtcore.get_random_meshdata()})
+		--minetest.log("Grass should be placed")
+	end,
 })
 
 

@@ -12,6 +12,8 @@ dofile(qts.path.."/api/nodetypes.lua")
 dofile(qts.path.."/api/shapedNodes.lua")
 dofile(qts.path.."/api/screwdriver.lua")
 dofile(qts.path.."/api/gui.lua")
+dofile(qts.path.."/api/growing.lua")
+
 --any other code here
 
 

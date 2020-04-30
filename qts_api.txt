@@ -68,7 +68,7 @@ register_gui(name, def)
 		tab_owner = true - gui that ownns tabs. usually does nothing but own tabs
 		
 		--these two must always be present--
-		get = function(data, pos, name ...) --called when the gui is loaded. returns a minetest formspec string
+		get = function(data, pos, name, ...) --called when the gui is loaded. returns a minetest formspec string
 			--data is a table that is maintained across the unique instance of the form
 			--pos is ???
 			--name is the player's name

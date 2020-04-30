@@ -148,7 +148,7 @@ function qts.gui.show_gui(pos, player, formname, tabindex, show, ...)
 		qts.gui.formData[pname].activeTab = tabindex--update the tab index
 		formContext[pname] = pos
 		if show then
-			minetest.log(""..formname.." loading. string: "..formstr)
+			--minetest.log(""..formname.." loading. string: "..formstr)
 			minetest.show_formspec(pname, "qts:"..formname, formstr)
 		else
 			return {"qts:"..formname, formstr}
@@ -185,6 +185,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				qts.gui.handle_tabs(formContext[pname], pname, formname[2], fields)
 			end
 			if handle_func then
+				minetest.log("handle function should be called")
 				handle_func(qts.gui.formData[pname], formContext[pname], pname, fields)
 				if qts.gui.forms[formname[2]].tab_owner and #qts.gui.forms[formname[2]].tabs > 0 and qts.gui.forms[formname[2]].tabs[qts.gui.formData[pname].activeTab] then
 					--pass the event to the active tab
