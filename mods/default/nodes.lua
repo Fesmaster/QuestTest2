@@ -290,7 +290,7 @@ qts.register_shaped_node ("default:sand", {
 qts.register_shaped_node ("default:gravel", {
 	description = "Gravel",
 	tiles = {"default_gravel.png"},
-	groups = {oddly_breakable_by_hand = 2, crumbly = 2, falling_node=1, sand=1},
+	groups = {oddly_breakable_by_hand = 2, crumbly = 2, falling_node=1},
 	sounds = qtcore.node_sound_sand(),
 })
 
@@ -304,14 +304,33 @@ qts.register_shaped_node ("default:desert_sand", {
 --wood and the like
 
 qts.register_shaped_node ("default:oak_wood_planks", {
-	description = "Wood Planks",
-	tiles = {"default_wood.png"},
+	description = "Oak Wood Planks",
+	tiles = {"default_oak_wood.png"},
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
 })
 minetest.register_alias("default:wood_planks", "default:oak_wood_planks") --TODO: remove backwards compatability
 
+qts.register_shaped_node ("default:oak_log", {
+	description = "Oak Log",
+	tiles = {"default_oak_top.png", "default_oak_top.png", "default_oak_side.png"},
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1},
+	sounds = qtcore.node_sound_wood(),
+})
 
+qts.register_shaped_node ("default:rowan_wood_planks", {
+	description = "Rowan Wood Planks",
+	tiles = {"default_rowan_wood.png"},
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
+	sounds = qtcore.node_sound_wood(),
+})
+
+qts.register_shaped_node ("default:rowan_log", {
+	description = "Rowan Log",
+	tiles = {"default_rowan_top.png", "default_rowan_top.png", "default_rowan_side.png"},
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1},
+	sounds = qtcore.node_sound_wood(),
+})
 
 
 --fences and the like
