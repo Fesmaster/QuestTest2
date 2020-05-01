@@ -306,6 +306,7 @@ qts.register_shaped_node ("default:desert_sand", {
 qts.register_shaped_node ("default:oak_wood_planks", {
 	description = "Oak Wood Planks",
 	tiles = {"default_oak_wood.png"},
+	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
 })
@@ -322,6 +323,7 @@ qts.register_shaped_node ("default:oak_log", {
 qts.register_shaped_node ("default:rowan_wood_planks", {
 	description = "Rowan Wood Planks",
 	tiles = {"default_rowan_wood.png"},
+	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
 })
@@ -337,6 +339,7 @@ qts.register_shaped_node ("default:rowan_log", {
 qts.register_shaped_node ("default:apple_wood_planks", {
 	description = "Apple Wood Planks",
 	tiles = {"default_apple_wood.png"},
+	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
 })
@@ -352,6 +355,7 @@ qts.register_shaped_node ("default:apple_log", {
 qts.register_shaped_node ("default:aspen_wood_planks", {
 	description = "Aspen Wood Planks",
 	tiles = {"default_aspen_wood.png"},
+	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
 })
@@ -368,6 +372,7 @@ qts.register_shaped_node ("default:lanternfruit_wood_planks", {
 	description = "Lanternfruit Wood Planks",
 	tiles = {"default_lanternfruit_wood.png"},
 	paramtype2 = "facedir",
+	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
 })
@@ -375,6 +380,22 @@ qts.register_shaped_node ("default:lanternfruit_wood_planks", {
 qts.register_shaped_node ("default:lanterfruit_log", {
 	description = "Lanternfruit Log",
 	tiles = {"default_lanternfruit_top.png", "default_lanternfruit_top.png", "default_lanternfruit_side.png"},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1},
+	sounds = qtcore.node_sound_wood(),
+})
+
+qts.register_shaped_node ("default:coffee_wood_planks", {
+	description = "Coffee Wood Planks",
+	tiles = {"default_coffee_wood.png"},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
+	sounds = qtcore.node_sound_wood(),
+})
+
+qts.register_shaped_node ("default:coffee_log", {
+	description = "Coffee Log",
+	tiles = {"default_coffee_top.png", "default_coffee_top.png", "default_coffee_side.png"},
 	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1},
 	sounds = qtcore.node_sound_wood(),
