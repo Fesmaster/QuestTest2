@@ -23,3 +23,21 @@ minetest.register_chatcommand("toys", {
 		inv:add_item("main", "dtools:gauntlet")
 	end,
 })
+
+minetest.register_chatcommand("playground", {
+	params = "None",
+	description = "Make a nice, flat area",
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		if player then
+			local pos = player:get_pos()
+			for x = -20,20 do
+			for z = -20,20 do
+				local p = {x=pos.x + x, y = pos.y - 1, z = pos.z + z}
+				minetest.set_node(p, {name = "default:stone_cobble"})
+				
+			end
+			end
+		end
+	end,
+})

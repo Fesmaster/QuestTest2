@@ -60,13 +60,15 @@ function schm.scan_meta(pos1, pos2)
 		local node = minetest.get_node_or_nil(scanpos)
 		
 		local prob, force_place
-		if node == nil or node.name == "dtools:schm_void" then
+		if node == nil or node.name == "dtools:schem_void" then
 			prob = 0
 			force_place = false
 		else
 			local meta = minetest.get_meta(scanpos)
-			prob = tonumber(meta:get_string("schm_prob")) or 255 --full prob
-			local fp = meta:get_string("schm_force_place")--always force place if its not there
+			prob = tonumber(meta:get_string("schem_prob")) or 255 --full prob
+			minetest.log("Prob (scantime): "..dump(prob))
+			
+			local fp = meta:get_string("schem_force_place")--always force place if its not there
 			--if node.name == "dtools:schm_air" then fp = "true" end --force place dtools:schm_air
 			if fp == "true" then
 				force_place = true
@@ -109,7 +111,7 @@ function schm.set_probtool_meta(itemstack, prob, force_place)
 	--update force place
 	if force_place == true then
 		meta:set_string("schem_force_place", "true")
-	elseif frce_place ==false then
+	elseif force_place ==false then
 		meta:set_string("schem_force_place", nil)
 	end
 	
@@ -152,7 +154,7 @@ function schm.mark_border(pos)
 				x = pos1.x + sizex - 0.5, 
 				y = pos1.y + sizey - 0.5, 
 				z = z + offset
-			}, "dtools:schm_disp")
+			}, "dtools:schem_disp")
 		if marker ~= nil then
 			marker:set_properties({
 				visual_size={x=(sizex+0.01) * 2, y=sizey * 2},
@@ -177,7 +179,7 @@ function schm.mark_border(pos)
 				x = x + offset, 
 				y = pos1.y + sizey - 0.5, 
 				z = pos1.z + sizez - 0.5
-			},"dtools:schm_disp")
+			},"dtools:schem_disp")
 		if marker ~= nil then
 			marker:set_properties({
 				visual_size={x=(sizez+0.01) * 2, y=sizey * 2},
@@ -450,6 +452,8 @@ qts.gui.register_gui("schem_create", {
 			local probability_list = {}
 			for hash, i in pairs(plist) do
 				local prob = prob_lua_to_schem(i.prob)
+				if prob < 128 then minetest.log("Prob: "..dump(prob) .. " (original: "..dump(i.prob)) end
+				
 				if i.force_place then
 					prob = prob + 128 --set the 8th bit to be true
 				end
@@ -679,6 +683,59 @@ qts.gui.register_gui("schem_probtool", {
 	end
 })
 
+
+qts.gui.register_gui("schem_place_tool", {
+	get = function(data, pos, name)
+		local player = minetest.get_player_by_name(name)
+		if not player then return end
+		
+		local placetool = player:get_wielded_item()
+		if placetool:get_name() ~= "dtools:schem_placetool" then return end
+		
+		local meta = placetool:get_meta()
+		local filename = meta:get_string("schem_name")
+		if not filename then filename = "" end
+		
+		local form = "size[5,4]"..
+			"label[0,0;"..F("Schematic Placement Tool").."]"..
+			"field[0.75,1;4,1;schem_name;"..F("Schematic Name")..";"..F(tostring(filename)).."]"..
+			"button_exit[0.25,3;2,1;cancel;"..F("Cancel").."]"..
+			"button_exit[2.75,3;2,1;submit;"..F("Apply").."]"..
+			"tooltip[schem_name;"..F("Schematic to Place").."]"..
+			"field_close_on_enter[schem_name;false]"
+		return form
+	end,
+	handle = function(data, pos, name, fields)
+		--minetest.log("Got to handle func")
+		if fields.submit then --TODO: probtool GUI
+			minetest.log("ok")
+			local filename = fields.schem_name
+			local player = minetest.get_player_by_name(name)
+			if not player then return end
+			
+			
+			
+			local placetool = player:get_wielded_item()
+			if placetool:get_name() ~= "dtools:schem_placetool" then return end
+			
+			local meta = placetool:get_meta()
+			
+			if filename and filename ~= "" then
+				local file_full
+				if string.sub(filename, string.len(filename)-3, string.len(filename)) == ".mts" then
+					file_full = filename
+				else
+					file_full = filename .. ".mts"
+				end
+				meta:set_string("schem_name", file_full)
+			else
+				meta:set_string("schem_name", nil)
+			end
+			
+			player:set_wielded_item(placetool)
+		end
+	end
+})
 --[[
 
 
@@ -713,7 +770,7 @@ minetest.register_globalstep(function(dtime)
 			if displayed_waypoints[pname].display_active then
 				local item = player:get_wielded_item()
 				if item:get_name() ~= "dtools:schem_probtool" then
-					schem.clear_displayed_node_probs(player)
+					schm.clear_displayed_node_probs(player)
 				end
 			end
 		end
@@ -841,7 +898,7 @@ minetest.register_tool("dtools:schem_probtool", {
 		local pos = pointed_thing.under
 		local node = minetest.get_node(pos)
 		-- Schematic void are ignored, they always have probability 0
-		if node.name == "dtools:schm_void" then
+		if node.name == "dtools:schem_void" then
 			return itemstack
 		end
 		local nmeta = minetest.get_meta(pos)
@@ -868,7 +925,7 @@ minetest.register_tool("dtools:schem_probtool", {
 	end,
 })
 
-minetest.register_node("dtools:schm_void", {
+minetest.register_node("dtools:schem_void", {
 	description = "Schematic Void",
 	tiles = { "dtools_schm_void.png" },
 	drawtype = "nodebox",
@@ -886,7 +943,7 @@ minetest.register_node("dtools:schm_void", {
 })
 
 -- [entity] Visible schematic border
-minetest.register_entity("dtools:schm_disp", {
+minetest.register_entity("dtools:schem_disp", {
 	visual = "upright_sprite",
 	textures = {"dtool_schm_border.png"},
 	visual_size = {x=10, y=10},
@@ -908,16 +965,32 @@ minetest.register_entity("dtools:schm_disp", {
 
 
 --TODO: finish shematic placer tool
---minetest.register_tool("dtools:schem_probtool", {
---	description = "Schematic Node Probability Tool",
---	wield_image = "dtools_schm_prob.png",
---	inventory_image = "dtools_schm_prob.png",
---	liquids_pointable = true,
---	groups = { disable_repair = 1 },
---	on_use = function(itemstack, user, pointed_thing)
---		
---	end,
---})
+minetest.register_tool("dtools:schem_placetool", {
+	description = "Schematic Placement Tool",
+	wield_image = "dtool_schm_place.png",
+	inventory_image = "dtool_schm_place.png",
+	liquids_pointable = true,
+	groups = { disable_repair = 1 },
+	on_use = function(itemstack, user, pointed_thing)
+		if pointed_thing.under then
+			local meta = itemstack:get_meta()
+			local filename = meta:get_string("schem_name")
+			if filename and filename ~= "" then
+				local success = minetest.place_schematic(pointed_thing.above, export_path .. DIR_DELIM .. filename, "random", nil, false)
+				
+				if sucess == nil then
+					minetest.chat_send_player(user:get_player_name(), minetest.colorize("#ff0000", "Schematic could not be loaded. ["..filename .. "] must be invalid."))
+				end
+			else
+				minetest.chat_send_player(user:get_player_name(), minetest.colorize("#ff0000", "You must specify a file name"))
+			end
+		end
+	end,
+	on_place = function(itemstack, placer, pointed_thing)
+		qts.gui.show_gui(placer:get_pos(), placer, "schem_place_tool")
+	end,
+})
+--schem_place_tool
 
 --[[
 Copied from License of the schemedit mod

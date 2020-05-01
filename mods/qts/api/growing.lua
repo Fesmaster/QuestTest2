@@ -13,9 +13,16 @@ function qts.start_node_growth(pos)
 	end
 end
 
+function qts.fertalize_node(pos)
+	local node = minetest.get_node_or_nil(pos)
+	if node and minetest.get_item_group(node.name, "growable") > 0 then
+		local t = nodedef.grow_timer
+		t:set(t:get_timeout(), t:get_elapsed()/2)
+	end
+end
+
 function qts.start_area_growth(pos1, pos2)
 	pos1, pos2 = vector.sort(pos1, pos2)
-	
 	for z = pos1.z, pos2.z do
 	for y = pos1.y, pos2.y do
 	for z = pos1.x, pos2.x do
@@ -28,7 +35,6 @@ function qts.start_area_growth(pos1, pos2)
 	end
 	end
 end
-
 
 function qts.register_growable_node(name, def)
 	
