@@ -4,6 +4,15 @@
 
 function qts.register_shaped_node(name, def)
 	--prep the data for node registration
+	
+	
+	--groups setup
+	def.groups.shaped_node = 1
+	--SOLID-----------------------
+	def.groups.shaped_full = 1
+	minetest.register_node(":"..name, qts.table_deep_copy(def))
+	
+	--NON_SOLID-------------------
 	local imgs = {}
 	for i, image in ipairs(def.tiles) do
 		if type(image) == "string" then
@@ -23,11 +32,6 @@ function qts.register_shaped_node(name, def)
 	def.tiles = imgs --overwrite old tiles
 	if def.drop == nil then def.drop = name end --setup drops
 	
-	--groups setup
-	def.groups.shaped_node = 1
-	--SOLID-----------------------
-	def.groups.shaped_full = 1
-	minetest.register_node(":"..name, qts.table_deep_copy(def))
 	--STAIR-----------------------
 	--change def to get various drawtypes etc
 	def.groups.not_in_creative_inventory = 1

@@ -38,3 +38,15 @@ qtcore.nb_chest = function()
 		}
 	}
 end
+
+qtcore.nb_lantern_fruit = function()
+	return{
+		type = "fixed",
+		fixed = {
+			{-0.1875, -0.4375, -0.1875, 0.1875, 0.125, 0.1875}, -- NodeBox1
+			{-0.125, -0.5, -0.125, 0.125, -0.4375, 0.125}, -- NodeBox2
+			{-0.125, 0.125, -0.125, 0.125, 0.3125, 0.125}, -- NodeBox3
+			{-0.03125, 0.3125, -0.03125, 0.03125, 0.5, 0.03125}, -- NodeBox4
+		}
+	}
+end

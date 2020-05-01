@@ -367,6 +367,7 @@ qts.register_shaped_node ("default:aspen_log", {
 qts.register_shaped_node ("default:lanternfruit_wood_planks", {
 	description = "Lanternfruit Wood Planks",
 	tiles = {"default_lanternfruit_wood.png"},
+	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
 })
@@ -573,4 +574,24 @@ minetest.register_node("default:lanternfruit_leaves", {
 	--},
 	sounds = qtcore.node_sound_grass(),
 	after_place_node = qtcore.after_place_leaves;
+})
+
+
+
+
+--fruit
+
+minetest.register_node("default:lantern_fruit", {
+	description = "Lantern Fruit",
+	tiles ={"default_lantern_fruit_top.png", "default_lantern_fruit_bottom.png", 
+		"default_lantern_fruit_side.png"},
+	drawtype = "nodebox",
+	node_box = qtcore.nb_lantern_fruit(),
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	walkable = false,
+	groups = {snappy = 3, fruit = 1},
+	sounds = qtcore.node_sound_stone(),
+	light_source = 12,
 })
