@@ -332,6 +332,33 @@ qts.register_shaped_node ("default:rowan_log", {
 	sounds = qtcore.node_sound_wood(),
 })
 
+qts.register_shaped_node ("default:apple_wood_planks", {
+	description = "Apple Wood Planks",
+	tiles = {"default_apple_wood.png"},
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
+	sounds = qtcore.node_sound_wood(),
+})
+
+qts.register_shaped_node ("default:apple_log", {
+	description = "Apple Log",
+	tiles = {"default_apple_top.png", "default_apple_top.png", "default_apple_side.png"},
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1},
+	sounds = qtcore.node_sound_wood(),
+})
+
+qts.register_shaped_node ("default:aspen_wood_planks", {
+	description = "Aspen Wood Planks",
+	tiles = {"default_aspen_wood.png"},
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
+	sounds = qtcore.node_sound_wood(),
+})
+
+qts.register_shaped_node ("default:aspen_log", {
+	description = "Aspen Log",
+	tiles = {"default_aspen_top.png", "default_aspen_top.png", "default_aspen_side.png"},
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1},
+	sounds = qtcore.node_sound_wood(),
+})
 
 --fences and the like
 qts.register_fencelike_node("default:wood_fence", {
