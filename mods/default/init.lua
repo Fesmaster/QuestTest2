@@ -161,7 +161,7 @@ minetest.register_node("default:boxtest", {
 	--end,
 })
 
-qts.register_growable_node("default:grass_5", {
+minetest.register_node("default:grass_5", {
 	description = "Grass Node",
 	tiles ={"default_grass_5.png"},
 	drawtype = "plantlike",
@@ -175,13 +175,13 @@ qts.register_growable_node("default:grass_5", {
 	sounds = qtcore.node_sound_stone(),
 	on_place = qtcore.place_random_plantlike,
 	
-	grow_timer = 1,
-	grow_timer_random = 0,
-	on_grow = function(pos)
-		minetest.log("Grass Grown")
-		minetest.set_node(pos, {name = "default:grass_5", param2 = qtcore.get_random_meshdata()})
-		--minetest.log("Grass should be placed")
-	end,
+	--grow_timer = 1,
+	--grow_timer_random = 0,
+	--on_grow = function(pos)
+	--	minetest.log("Grass Grown")
+	--	minetest.set_node(pos, {name = "default:grass_5", param2 = qtcore.get_random_meshdata()})
+	--	--minetest.log("Grass should be placed")
+	--end,
 })
 
 

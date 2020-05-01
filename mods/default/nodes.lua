@@ -502,6 +502,8 @@ minetest.register_node("default:oak_leaves", {
 	--drop = {
 	--	--TODO: finish leaf drops
 	--},
+	walkable = false,
+	climbable = true,
 	sounds = qtcore.node_sound_grass(),
 	after_place_node = qtcore.after_place_leaves;
 })
@@ -516,6 +518,8 @@ minetest.register_node("default:aspen_leaves", {
 	--drop = {
 	--	--TODO: finish leaf drops
 	--},
+	walkable = false,
+	climbable = true,
 	sounds = qtcore.node_sound_grass(),
 	after_place_node = qtcore.after_place_leaves;
 })	
@@ -530,6 +534,8 @@ minetest.register_node("default:apple_leaves", {
 	--drop = {
 	--	--TODO: finish leaf drops
 	--},
+	walkable = false,
+	climbable = true,
 	sounds = qtcore.node_sound_grass(),
 	after_place_node = qtcore.after_place_leaves;
 })
@@ -544,6 +550,8 @@ minetest.register_node("default:apple_leaves_fruit", {
 	--drop = {
 	--	--TODO: finish leaf drops
 	--},
+	walkable = false,
+	climbable = true,
 	sounds = qtcore.node_sound_grass(),
 	after_place_node = qtcore.after_place_leaves;
 })	
@@ -558,6 +566,8 @@ minetest.register_node("default:rowan_leaves", {
 	--drop = {
 	--	--TODO: finish leaf drops
 	--},
+	walkable = false,
+	climbable = true,
 	sounds = qtcore.node_sound_grass(),
 	after_place_node = qtcore.after_place_leaves;
 })	
@@ -572,11 +582,76 @@ minetest.register_node("default:lanternfruit_leaves", {
 	--drop = {
 	--	--TODO: finish leaf drops
 	--},
+	walkable = false,
+	climbable = true,
+	sounds = qtcore.node_sound_grass(),
+	after_place_node = qtcore.after_place_leaves;
+})
+
+minetest.register_node("default:coffeetree_leaves", {
+	description = "Coffee Tree Leaves",
+	drawtype = "allfaces_optional",
+	waving = 1,
+	tiles = {"default_coffee_leaves.png"},
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	--drop = {
+	--	--TODO: finish leaf drops
+	--},
+	walkable = false,
+	climbable = true,
+	sounds = qtcore.node_sound_grass(),
+	after_place_node = qtcore.after_place_leaves;
+})
+
+minetest.register_node("default:mahogany_leaves", {
+	description = "Mahogany Leaves",
+	drawtype = "allfaces_optional",
+	waving = 1,
+	tiles = {"default_mahogany_leaves.png"},
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	--drop = {
+	--	--TODO: finish leaf drops
+	--},
+	walkable = false,
+	climbable = true,
+	sounds = qtcore.node_sound_grass(),
+	after_place_node = qtcore.after_place_leaves;
+})
+
+minetest.register_node("default:blackwood_leaves", {
+	description = "Blackwood Leaves",
+	drawtype = "allfaces_optional",
+	waving = 1,
+	tiles = {"default_blackwood_leaves.png"},
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	--drop = {
+	--	--TODO: finish leaf drops
+	--},
+	walkable = false,
+	climbable = true,
 	sounds = qtcore.node_sound_grass(),
 	after_place_node = qtcore.after_place_leaves;
 })
 
 
+minetest.register_node("default:rosewood_leaves", {
+	description = "Rosewood Leaves",
+	drawtype = "allfaces_optional",
+	waving = 1,
+	tiles = {"default_rosewood_leaves.png"},
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	--drop = {
+	--	--TODO: finish leaf drops
+	--},
+	walkable = false,
+	climbable = true,
+	sounds = qtcore.node_sound_grass(),
+	after_place_node = qtcore.after_place_leaves;
+})
 
 
 --fruit
