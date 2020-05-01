@@ -38,8 +38,8 @@ minetest.register_node("default:default", {
 
 
 minetest.register_tool("default:testingHammer", {
-	description = "Testing Hammer",
-	inventory_image = "qts_testing_tool.png",
+	description = "Hammer",
+	inventory_image = "default_hammer.png",
 	range = 10.0,
 	--liquids_pointable = true,
 	on_use = function(itemstack, user, pointed_thing)

@@ -364,22 +364,117 @@ qts.register_shaped_node ("default:aspen_log", {
 	sounds = qtcore.node_sound_wood(),
 })
 
---fences and the like
-qts.register_fencelike_node("default:wood_fence", {
-	description = "Wood Fance",
-	type = "fence",
-	texture = "default_wood.png",
-	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
+qts.register_shaped_node ("default:lanternfruit_wood_planks", {
+	description = "Lanternfruit Wood Planks",
+	tiles = {"default_lanternfruit_wood.png"},
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
 })
 
-qts.register_fencelike_node("default:wood_rail", {
-	description = "Wood Rail",
-	type = "rail",
-	texture = "default_wood.png",
-	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
+qts.register_shaped_node ("default:lanterfruit_log", {
+	description = "Lanternfruit Log",
+	tiles = {"default_lanternfruit_top.png", "default_lanternfruit_top.png", "default_lanternfruit_side.png"},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1},
 	sounds = qtcore.node_sound_wood(),
 })
+
+--fences and the like
+qts.register_fencelike_node("default:oak_wood_fence", {
+	description = "Oak Wood Fance",
+	type = "fence",
+	texture = "default_oak_wood.png",
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:oak_wood_rail", 
+})
+
+qts.register_fencelike_node("default:oak_wood_rail", {
+	description = "Oak Wood Rail",
+	type = "rail",
+	texture = "default_oak_wood.png",
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1, not_in_creative_inventory=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:oak_wood_fence", 
+	drop = "default:oak_wood_fence",
+})
+
+qts.register_fencelike_node("default:rowan_wood_fence", {
+	description = "Rowan Wood Fance",
+	type = "fence",
+	texture = "default_rowan_wood.png",
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:rowan_wood_rail", 
+})
+
+qts.register_fencelike_node("default:rowan_wood_rail", {
+	description = "Rowan Wood Rail",
+	type = "rail",
+	texture = "default_rowan_wood.png",
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1, not_in_creative_inventory=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:rowan_wood_fence", 
+	drop = "default:rowan_wood_fence",
+})
+
+qts.register_fencelike_node("default:apple_wood_fence", {
+	description = "Apple Wood Fance",
+	type = "fence",
+	texture = "default_apple_wood.png",
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:apple_wood_rail", 
+})
+
+qts.register_fencelike_node("default:apple_wood_rail", {
+	description = "Apple Wood Rail",
+	type = "rail",
+	texture = "default_apple_wood.png",
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1, not_in_creative_inventory=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:apple_wood_fence", 
+	drop = "default:apple_wood_fence",
+})
+
+qts.register_fencelike_node("default:aspen_wood_fence", {
+	description = "Aspen Wood Fance",
+	type = "fence",
+	texture = "default_aspen_wood.png",
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:aspen_wood_rail", 
+})
+
+qts.register_fencelike_node("default:aspen_wood_rail", {
+	description = "Aspen Wood Rail",
+	type = "rail",
+	texture = "default_aspen_wood.png",
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1, not_in_creative_inventory=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:aspen_wood_fence",
+	drop = "default:aspen_wood_fence",	
+})
+
+qts.register_fencelike_node("default:lanternfruit_wood_fence", {
+	description = "Lanternfruit Wood Fance",
+	type = "fence",
+	texture = "default_lanternfruit_wood_fence.png",
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:lanternfruit_wood_rail", 
+})
+
+qts.register_fencelike_node("default:lanternfruit_wood_rail", {
+	description = "Lanternfruit Wood Rail",
+	type = "rail",
+	texture = "default_lanternfruit_wood_rail.png",
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1, not_in_creative_inventory=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:lanternfruit_wood_fence", 
+	drop = "default:lanternfruit_wood_fence",
+})
+
 
 qts.register_fencelike_node("default:stone_brick_wall", {
 	description = "Stone Brick Wall",
@@ -465,3 +560,17 @@ minetest.register_node("default:rowan_leaves", {
 	sounds = qtcore.node_sound_grass(),
 	after_place_node = qtcore.after_place_leaves;
 })	
+
+minetest.register_node("default:lanternfruit_leaves", {
+	description = "Lanternfruit Leaves",
+	drawtype = "allfaces_optional",
+	waving = 1,
+	tiles = {"default_lanternfruit_leaves.png"},
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	--drop = {
+	--	--TODO: finish leaf drops
+	--},
+	sounds = qtcore.node_sound_grass(),
+	after_place_node = qtcore.after_place_leaves;
+})

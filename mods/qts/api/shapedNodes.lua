@@ -73,6 +73,13 @@ function qts.hammer.apply(pointed_thing, user, mode)
 	end
 	local pos = pointed_thing.under
 	local node = minetest.get_node(pos)
+	local nodedef= minetest.registered_nodes[node.name]
+	if nodedef.on_hammer then
+		local rval = nodedef.on_hammer(pointed_thing.under, user, mode)
+		if rval == nil or rval == true then
+			return
+		end
+	end
 	if minetest.get_item_group(node.name, "shaped_node") >= 1 then
 		if node.name:find("_stair") then
 			if mode and mode == qts.hammer.CHANGE_STYLE then

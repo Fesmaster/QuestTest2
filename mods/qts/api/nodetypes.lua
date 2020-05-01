@@ -209,6 +209,7 @@ function qts.register_fencelike_node(name, def)
 		local fence_texture = "default_fence_overlay.png^" .. def.texture ..
 				"^default_fence_overlay.png^[makealpha:255,126,126"
 		-- Allow almost everything to be overridden
+		
 		default_fields = {
 			paramtype = "light",
 			drawtype = "nodebox",
@@ -244,6 +245,22 @@ function qts.register_fencelike_node(name, def)
 			is_ground_content = false,
 			groups = {},
 		}
+		
+		if def.fence_alt then
+			local fence_alt = def.fence_alt
+			default_fields.on_hammer = function(pos, user, mode)
+				local node = minetest.get_node_or_nil(pos)
+				if node then
+					minetest.set_node(pos, {
+						name = fence_alt, 
+						param1 = node.param1, 
+						param2 = node.param2
+					})
+				end
+			end
+			def.fence_alt = nil
+		end
+		
 		-- Always add to the fence group, even if no group provided
 		def.groups.fence = 1
 
@@ -287,6 +304,22 @@ function qts.register_fencelike_node(name, def)
 			is_ground_content = false,
 			groups = {},
 		}
+		
+		if def.fence_alt then
+			local fence_alt = def.fence_alt
+			default_fields.on_hammer = function(pos, user, mode)
+				local node = minetest.get_node_or_nil(pos)
+				if node then
+					minetest.set_node(pos, {
+						name = fence_alt, 
+						param1 = node.param1, 
+						param2 = node.param2
+					})
+				end
+			end
+			def.fence_alt = nil
+		end
+		
 		def.groups.fence = 1
 		
 	elseif def.type == "wall" then
