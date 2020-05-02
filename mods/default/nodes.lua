@@ -401,6 +401,22 @@ qts.register_shaped_node ("default:coffee_log", {
 	sounds = qtcore.node_sound_wood(),
 })
 
+qts.register_shaped_node ("default:rosewood_wood_planks", {
+	description = "Rosewood Planks",
+	tiles = {"default_rosewood_wood.png"},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
+	sounds = qtcore.node_sound_wood(),
+})
+
+qts.register_shaped_node ("default:rosewood_log", {
+	description = "Rosewood Log",
+	tiles = {"default_rosewood_top.png", "default_rosewood_top.png", "default_rosewood_side.png"},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1},
+	sounds = qtcore.node_sound_wood(),
+})
+
 --fences and the like
 qts.register_fencelike_node("default:oak_wood_fence", {
 	description = "Oak Wood Fance",
@@ -497,6 +513,43 @@ qts.register_fencelike_node("default:lanternfruit_wood_rail", {
 	drop = "default:lanternfruit_wood_fence",
 })
 
+qts.register_fencelike_node("default:coffee_wood_fence", {
+	description = "Coffee Wood Fance",
+	type = "fence",
+	texture = "default_coffee_wood.png",
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:coffee_wood_rail", 
+})
+
+qts.register_fencelike_node("default:coffee_wood_rail", {
+	description = "Coffee Wood Rail",
+	type = "rail",
+	texture = "default_coffee_wood.png",
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1, not_in_creative_inventory=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:coffee_wood_fence", 
+	drop = "default:coffee_wood_fence",
+})
+
+qts.register_fencelike_node("default:rosewood_wood_fence", {
+	description = "Rosewood Wood Fance",
+	type = "fence",
+	texture = "default_rosewood_wood.png",
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:rosewood_wood_rail", 
+})
+
+qts.register_fencelike_node("default:rosewood_wood_rail", {
+	description = "Rosewood Wood Rail",
+	type = "rail",
+	texture = "default_rosewood_wood.png",
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1, not_in_creative_inventory=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:rosewood_wood_fence", 
+	drop = "default:rosewood_wood_fence",
+})
 
 qts.register_fencelike_node("default:stone_brick_wall", {
 	description = "Stone Brick Wall",
