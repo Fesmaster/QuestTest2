@@ -5,19 +5,23 @@ local P = function(x,y) return qts.gui.gui_makepos(x,y):get() end
 
 
 --default inventory form getter functions
-inventory.get_player_main = function(pos)
+inventory.get_player_main = function(pos, showTrash)
 	--pos = inventory.convert_pos(pos)
 	--local x, y = pos.x, pos.y
+	if showTrash == nil then showTrash = true end
 	if not pos then pos = qts.gui.gui_makepos(0, 5.1) end
 	local str =  "container["..pos:get().."]"
 	for i = 0,7 do
 		str = str .. "image["..P(i,0)..";1,1;gui_hb_bg.png]"
 	end
-		str = str .."list[current_player;main;"..P(0,0)..";8,1;]"..
-			"list[current_player;main;"..P(0,1.15)..";8,3;8]"..
-			"image["..P(7,-1)..";1,1;inv_trash.png]"..
-			"list[detached:trash;main;"..P(7,-1)..";1,1;]"..
-			"container_end[]"
+	str = str .."list[current_player;main;"..P(0,0)..";8,1;]"..
+		"list[current_player;main;"..P(0,1.15)..";8,3;8]"
+		
+	if showTrash then
+		str = str .. "image["..P(7,-1)..";1,1;inv_trash.png]"..
+			"list[detached:trash;main;"..P(7,-1)..";1,1;]"
+	end
+	str = str.. "container_end[]"
 	return str
 end
 

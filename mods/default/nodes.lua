@@ -370,7 +370,7 @@ qts.register_shaped_node ("default:aspen_log", {
 
 qts.register_shaped_node ("default:lanternfruit_wood_planks", {
 	description = "Lanternfruit Wood Planks",
-	tiles = {"default_lanternfruit_wood.png"},
+	tiles = {{name = "default_lanternfruit_wood.png", align_style = "node"}},
 	paramtype2 = "facedir",
 	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
