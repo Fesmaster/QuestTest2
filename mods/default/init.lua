@@ -15,6 +15,7 @@ function default.node_sound_defaults(table)
 end
 
 dofile(minetest.get_modpath("default").."/nodes.lua")
+dofile(minetest.get_modpath("default").."/crate.lua")
 -- Load other files
 
 

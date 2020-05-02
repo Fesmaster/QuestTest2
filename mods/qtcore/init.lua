@@ -11,7 +11,7 @@ qtcore = {}
 dofile(minetest.get_modpath("qtcore").."\\sounds.lua")
 dofile(minetest.get_modpath("qtcore").."\\nodeboxes.lua")
 dofile(minetest.get_modpath("qtcore").."\\textures.lua")
-
+dofile(minetest.get_modpath("qtcore").."\\forms.lua")
 --[[
 Random functions are placed here
 --]]
@@ -46,3 +46,4 @@ qtcore.get_random_meshdata = function()
 		+ (math.random(0,1) * 16)   --bit 4
 		+ (math.random(0,1) * 32))  --bit 5
 end
+
