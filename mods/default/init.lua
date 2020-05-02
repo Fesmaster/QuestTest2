@@ -16,6 +16,8 @@ end
 
 dofile(minetest.get_modpath("default").."/nodes.lua")
 dofile(minetest.get_modpath("default").."/crate.lua")
+dofile(minetest.get_modpath("default").."/craftitems.lua")
+dofile(minetest.get_modpath("default").."/crafts.lua")
 -- Load other files
 
 
@@ -101,25 +103,7 @@ qts.register_liquid("default:water", {
 	sounds = qtcore.node_sound_water(),
 })
 
---ingot type object
-qts.register_ingot("default:iron_bar", {
-	description = "Iron Bar",
-	inventory_image = "default_iron_ingot.png",
-	tiles = {"default_iron_block.png"},
-	groups = {cracky=3, iron = 1},
-	sounds = qtcore.node_sound_metal(),
-	nodeboxes = {
-		{-0.5, -0.5, 0.1875, 0.125, -0.3125, 0.4375}, -- NodeBox45
-		{-0.5, -0.5, -0.125, 0.125, -0.3125, 0.125}, -- NodeBox46
-		{-0.5, -0.5, -0.4375, 0.125, -0.3125, -0.1875}, -- NodeBox49
-		{-0.5, -0.3125, -0.3125, 0.125, -0.125, -0.0624999}, -- NodeBox51
-		{-0.5, -0.3125, 0.0625, 0.125, -0.125, 0.3125}, -- NodeBox52
-		{-0.5, -0.125, -0.125, 0.125, 0.0625, 0.125}, -- NodeBox53
-		{0.1875, -0.5, -0.375, 0.4375, -0.3125, 0.25}, -- NodeBox54
-		{0.125, -0.3125, -0.25, 0.3125, -0.0625, 0.375}, -- NodeBox55
-	},
-	levels = 8,
-})
+
 
 --for i=1,7 do
 --	minetest.register_node("default:boxtest"..i, {
