@@ -117,3 +117,19 @@ minetest.register_craft({
 	type = "toolrepair",
 	additional_wear = -0.02,
 })
+
+
+--smelting
+
+minetest.register_craft({
+	type = "cooking",
+	output = "default:stone",
+	recipe = "default:stone_cobble",
+})
+
+--fuel
+minetest.register_craft({
+	type = "fuel",
+	recipe = "group:log",
+	burntime = 30,
+})

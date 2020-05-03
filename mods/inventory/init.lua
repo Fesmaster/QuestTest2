@@ -123,7 +123,14 @@ qts.gui.register_gui("inv_tab_test", {
 minetest.register_on_joinplayer(function(player)
 	local formspec = [[
 			bgcolor[#080808BB;true]
-			listcolors[#00000069;#5A5A5A;#141318;#30434C;#FFF] ]]
+			listcolors[#00000069;#5A5A5A;#141318;#30434C;#FFF] 
+			style_type[button,button_exit,image_button,item_image_button;
+				bgimg=gui_button.png;
+				bgimg_hovered=gui_button_hovered.png;
+				bgimg_pressed=gui_button_clicked.png;
+				bgimg_middle=8;
+				border=false]
+		]]
 	local name = player:get_player_name()
 	local info = minetest.get_player_information(name)
 	if info.formspec_version > 1 then

@@ -2,7 +2,7 @@
 local esc = minetest.formspec_escape
 
 local P = function(x,y) return qts.gui.gui_makepos(x,y):get() end
-
+local S = function(x,y) return qts.gui.gui_makesize(x,y):get() end
 
 --default inventory form getter functions
 inventory.get_player_main = function(pos, showTrash)
@@ -33,6 +33,7 @@ inventory.get_button_grid = function(playername, current_page, prev_search, pos)
 	--minetest.log(dump(pos:get()))
 	
 	local str = "container["..pos:get().."]"..
+		"background9[0,0;"..S(5.6,9.4)..";gui_buttonareabg.png;false;16]"..
 		"label["..P(0,0)..";"..tostring(current_page).."/"..tostring(inventory.listdata_player[playername].pages).."]"..
 		"container["..P(0,0).."]"
 	

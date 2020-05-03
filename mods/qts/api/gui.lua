@@ -52,9 +52,32 @@ qts.gui.gui_makesize = function(x, y, new)
 	end
 end
 
+function qts.gui.get_open_gui(player)
+	if type(player) ~= "string" then
+		player = player:get_player_name()
+	end
+	if formContext[player] and formContext[player].name then
+		--minetest.log(dump(formContext[player]))
+		return formContext[player].name
+	end
+	return ""
+end
+
+function qts.gui.push_to_form(player, data)
+	if type(player) ~= "string" then
+		player = player:get_player_name()
+	end
+	if formContext[player] and qts.gui.formData[player] then
+		for k, v in pairs(data) do
+			qts.gui.formData[player][k] = v
+		end
+		return true
+	end
+	return false
+end
 
 function qts.gui.register_gui(name, def)
-	minetest.log("form registered")
+	--minetest.log("form registered")
 	def.name = name
 	qts.gui.forms[name] = def
 	if def.get == nil or def.handle == nil then
@@ -63,18 +86,18 @@ function qts.gui.register_gui(name, def)
 	end
 	
 	if def.tab then
-		minetest.log("tab type form")
+		--minetest.log("tab type form")
 		--this form is a tab in another form
 		if def.owner and qts.gui.forms[def.owner] and qts.gui.forms[def.owner].tab_owner then
 			local count = #qts.gui.forms[def.owner].tabs
-			minetest.log("tab form stored in "..tostring(count).."index of: " .. def.owner)
+			--minetest.log("tab form stored in "..tostring(count).."index of: " .. def.owner)
 			qts.gui.forms[def.owner].tabs[count+1] = def
 		else
 			minetest.log("error", "qts.gui.register_form: if it is a tab type, a valid, registered owning form must be specified. Regsitration Failed!")
 		end
 		return
 	elseif def.tab_owner then
-		minetest.log("tab owner type form")
+		--minetest.log("tab owner type form")
 		--this form is the owner of a tab
 		def.tabs = {}
 	end
@@ -108,7 +131,8 @@ end
 function qts.gui.pass_tabs(pos, playername, formname, fields)
 	local tab = tonumber(fields.tabs)
 	if tab and qts.gui.forms[formname].tab_owner and qts.gui.forms[formname].tabs[tab] then
-		qts.gui.forms[formname].tab_update(pos, formContext[playername], playername, fields, tab)
+		--(data, pos, name, fields, tabnumber)
+		qts.gui.forms[formname].tab_update(qts.gui.formData[pname], pos, playername, fields, tab)
 	end
 end
 
@@ -119,7 +143,7 @@ function qts.gui.show_gui(pos, player, formname, tabindex, show, ...)
 		if show == nil then show = true end --show default value
 		if not tabindex then 
 			tabindex = 1 
-			minetest.log(""..formname.." tab defaulting to 0")
+			--minetest.log(""..formname.." tab defaulting to 0")
 		end
 		--handle the player variable being a name or player ref
 		if type(player) == "string" then
@@ -131,7 +155,7 @@ function qts.gui.show_gui(pos, player, formname, tabindex, show, ...)
 		
 		local formstr = qts.gui.forms[formname].get(qts.gui.formData[pname], pos, pname, ...)
 		if qts.gui.forms[formname].tab_owner and qts.gui.forms[formname].tabs and #qts.gui.forms[formname].tabs > 0 then
-			if qts.gui.forms[formname].tabs[tabindex] == nil then minetest.log("Tab does not exist! Index: "..tostring(tabindex)) end
+			if qts.gui.forms[formname].tabs[tabindex] == nil then minetest.log("error", "Tab does not exist! Index: "..tostring(tabindex)) end
 			formstr =  formstr .. qts.gui.generate_tabs(tabindex, formname) .. 
 				qts.gui.forms[formname].tabs[tabindex].get(qts.gui.formData[pname], pos, pname, ...)
 		elseif  qts.gui.forms[formname].tab then
@@ -146,7 +170,7 @@ function qts.gui.show_gui(pos, player, formname, tabindex, show, ...)
 			formname = qts.gui.forms[formname].owner
 		end
 		qts.gui.formData[pname].activeTab = tabindex--update the tab index
-		formContext[pname] = pos
+		formContext[pname] = {pos=pos, name=formname}
 		if show then
 			--minetest.log(""..formname.." loading. string: "..formstr)
 			minetest.show_formspec(pname, "qts:"..formname, formstr)
@@ -178,20 +202,28 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			if inv then
 				if qts.gui.forms[formname[2]].tab_update then
 					--qts.gui.forms[formname[2]].tab_update(qts.gui.formData[pname], formContext[pname], pname, fields)
-					qts.gui.pass_tabs(formContext[pname], pname, formname[2], fields)
+					qts.gui.pass_tabs(formContext[pname].pos, pname, formname[2], fields)
 				end
 			else
 				--else, handle them
-				qts.gui.handle_tabs(formContext[pname], pname, formname[2], fields)
+				qts.gui.handle_tabs(formContext[pname].pos, pname, formname[2], fields)
 			end
 			if handle_func then
-				minetest.log("handle function should be called")
-				handle_func(qts.gui.formData[pname], formContext[pname], pname, fields)
+				--minetest.log("handle function should be called")
+				handle_func(qts.gui.formData[pname], formContext[pname].pos, pname, fields)
 				if qts.gui.forms[formname[2]].tab_owner and #qts.gui.forms[formname[2]].tabs > 0 and qts.gui.forms[formname[2]].tabs[qts.gui.formData[pname].activeTab] then
 					--pass the event to the active tab
-					qts.gui.forms[formname[2]].tabs[qts.gui.formData[pname].activeTab].handle(qts.gui.formData[pname], formContext[pname], pname, fields)
+					qts.gui.forms[formname[2]].tabs[qts.gui.formData[pname].activeTab].handle(qts.gui.formData[pname], formContext[pname].pos, pname, fields)
 				end
+			else
+				--minetest.log("handle function does not exist")
 			end
+		else
+			--minetest.log("No form context!")
+		end
+		
+		if fields.quit then
+			formContext[pname].name = nil
 		end
 	else
 		minetest.log("qts gui system: unknown form: "..dump(formname))
