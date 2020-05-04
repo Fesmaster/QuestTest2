@@ -36,3 +36,8 @@ qts.register_ingot("default:stick", {
 	},
 	levels = 8,
 })
+
+minetest.register_craftitem("default:clay_lump", {
+	description = ("Clay"),
+	inventory_image = "default_clay_lump.png",
+})

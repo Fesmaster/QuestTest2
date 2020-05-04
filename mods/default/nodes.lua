@@ -202,6 +202,15 @@ qts.register_shaped_node ("default:brick_grey", {
 
 --soils and the like
 
+qts.register_shaped_node("default:clay", {
+	description = "Clay Block",
+	tiles = {"default_clay_block.png"},
+	groups = {crumbly=3},
+	sounds = qtcore.node_sound_stone(),
+	drop = "default:clay_lump"
+})
+
+
 qts.register_shaped_node ("default:dirt", {
 	description = "Dirt",
 	tiles = {"default_dirt.png"},
