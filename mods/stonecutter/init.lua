@@ -132,8 +132,6 @@ qts.gui.register_gui("stonecutter", {
 				end
 			end
 		end
-		
-		
 	end,
 })
 
@@ -229,6 +227,9 @@ minetest.register_node("stonecutter:stonecutter", {
 	end,
 })
 
+--
+--Registrations
+--
 
 stonecutter.register_stonetype("stone", {
 	"default:stone", 
@@ -236,6 +237,9 @@ stonecutter.register_stonetype("stone", {
 	"default:stone_brick", 
 	"default:stone_block", 
 	"default:brick_grey",
+	"default:stone_wall",
+	"default:stone_cobble_wall",
+	"default:stone_brick_wall",
 })
 
 stonecutter.register_stonetype("red_stone", {
@@ -243,6 +247,9 @@ stonecutter.register_stonetype("red_stone", {
 	"default:red_stone_cobble", 
 	"default:red_stone_brick", 
 	"default:red_stone_block", 
+	"default:red_stone_wall",
+	"default:red_stone_cobble_wall",
+	"default:red_stone_brick_wall",
 })
 
 stonecutter.register_stonetype("sandstone", {
@@ -250,6 +257,9 @@ stonecutter.register_stonetype("sandstone", {
 	"default:sandstone_cobble", 
 	"default:sandstone_brick", 
 	"default:sandstone_block", 
+	"default:sandstone_wall",
+	"default:sandstone_cobble_wall",
+	"default:sandstone_brick_wall",
 })
 
 stonecutter.register_stonetype("desert_sandstone", {
@@ -257,6 +267,9 @@ stonecutter.register_stonetype("desert_sandstone", {
 	"default:desert_sandstone_cobble", 
 	"default:desert_sandstone_brick", 
 	"default:desert_sandstone_block", 
+	"default:desert_sandstone_wall",
+	"default:desert_sandstone_cobble_wall",
+	"default:desert_sandstone_brick_wall",
 })
 
 stonecutter.register_stonetype("obsidian", {
