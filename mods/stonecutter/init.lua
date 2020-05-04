@@ -75,7 +75,8 @@ qts.gui.register_gui("stonecutter", {
 		for itemname in stonecutter.stones() do
 			if fields[itemname] then
 				data.stonecutter_selected = itemname
-				minetest.log(dump(itemname) .. " is selected")
+				--minetest.log(dump(itemname) .. " is selected")
+				qts.gui.click(name)
 				qts.gui.show_gui(pos, name, "stonecutter")
 			end
 		end
@@ -94,6 +95,7 @@ qts.gui.register_gui("stonecutter", {
 		end
 		
 		if doCraft and data.stonecutter_selected then
+			qts.gui.click(name)
 			local meta = minetest.get_meta(pos)
 			local inv = meta:get_inventory()
 			local srclist = inv:get_list("src")

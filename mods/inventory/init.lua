@@ -45,6 +45,7 @@ qts.gui.register_gui("inventory", {
 					local inv = minetest.get_player_by_name(name):get_inventory()
 					local item_name = inventory.itemlist_player[name][offset + i]
 					inv:add_item("main", item_name .. " " .. (minetest.registered_items[item_name].stack_max or 99))
+					qts.gui.click(name)
 				end
 			end
 		end
@@ -54,6 +55,7 @@ qts.gui.register_gui("inventory", {
 			page = page - 1
 			if page <= 0 then page = inventory.listdata_player[name].pages end
 			data.player_item_list_page = page
+			qts.gui.click(name)
 			inventory.refresh_inv(name, data.activeTab)
 			return
 		end
@@ -61,6 +63,7 @@ qts.gui.register_gui("inventory", {
 			page = page + 1
 			if page > inventory.listdata_player[name].pages then page = 1 end
 			data.player_item_list_page = page
+			qts.gui.click(name)
 			inventory.refresh_inv(name, data.activeTab)
 			return
 		end
@@ -78,6 +81,7 @@ qts.gui.register_gui("inventory", {
 		for i, btn in ipairs(inventory.utils) do
 			if fields["util_btn_"..tostring(i)] then
 				btn.on_click(name)
+				qts.gui.click(name)
 			end
 		end
 	end,

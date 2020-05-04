@@ -76,6 +76,11 @@ function qts.gui.push_to_form(player, data)
 	return false
 end
 
+function qts.gui.click(name)
+	minetest.sound_play("gui_button", {gain = 0.5, to_player = name})
+end
+
+
 function qts.gui.register_gui(name, def)
 	--minetest.log("form registered")
 	def.name = name
