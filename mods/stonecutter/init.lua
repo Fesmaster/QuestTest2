@@ -235,8 +235,6 @@ stonecutter.register_stonetype("stone", {
 	"default:stone_cobble", 
 	"default:stone_brick", 
 	"default:stone_block", 
-	"default:stone_cobble_mossy", 
-	"default:stone_brick_mossy", 
 	"default:brick_grey",
 })
 
@@ -245,4 +243,24 @@ stonecutter.register_stonetype("red_stone", {
 	"default:red_stone_cobble", 
 	"default:red_stone_brick", 
 	"default:red_stone_block", 
+})
+
+stonecutter.register_stonetype("sandstone", {
+	"default:sandstone", 
+	"default:sandstone_cobble", 
+	"default:sandstone_brick", 
+	"default:sandstone_block", 
+})
+
+stonecutter.register_stonetype("desert_sandstone", {
+	"default:desert_sandstone", 
+	"default:desert_sandstone_cobble", 
+	"default:desert_sandstone_brick", 
+	"default:desert_sandstone_block", 
+})
+
+stonecutter.register_stonetype("obsidian", {
+	"default:obsidian", 
+	"default:obsidian_brick", 
+	"default:obsidian_block", 
 })
