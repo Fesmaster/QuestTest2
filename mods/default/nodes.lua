@@ -426,6 +426,21 @@ qts.register_shaped_node ("default:rosewood_log", {
 	sounds = qtcore.node_sound_wood(),
 })
 
+qts.register_shaped_node ("default:mahogany_wood_planks", {
+	description = "Mahogany Planks",
+	tiles = {"default_mahogany_wood.png"},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
+	sounds = qtcore.node_sound_wood(),
+})
+
+qts.register_shaped_node ("default:mahogany_log", {
+	description = "Mahogany Log",
+	tiles = {"default_mahogany_top.png", "default_mahogany_top.png", "default_mahogany_side.png"},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1},
+	sounds = qtcore.node_sound_wood(),
+})
 
 
 
