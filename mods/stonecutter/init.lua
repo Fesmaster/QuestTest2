@@ -6,7 +6,6 @@ local P = function(x,y) return qts.gui.gui_makepos(x,y):get() end
 local S = function(x,y) return qts.gui.gui_makesize(x,y):get() end
 
 qts.gui.register_gui("stonecutter", {
-	tab_owner = true,
 	get = function(data, pos, name)
 		local spos = pos.x .. "," .. pos.y .. "," .. pos.z
 		

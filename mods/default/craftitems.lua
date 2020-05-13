@@ -2,7 +2,7 @@
 qts.register_ingot("default:iron_bar", {
 	description = "Iron Bar",
 	inventory_image = "default_iron_ingot.png",
-	tiles = {"default_iron_block.png"},
+	tiles = {"default_iron_ingot_stack.png"},
 	groups = {cracky=3, iron = 1},
 	sounds = qtcore.node_sound_metal(),
 	nodeboxes = {
@@ -16,6 +16,14 @@ qts.register_ingot("default:iron_bar", {
 		{0.125, -0.3125, -0.25, 0.3125, -0.0625, 0.375}, -- NodeBox55
 	},
 	levels = 8,
+})
+
+--metal block here TEMP
+qts.register_shaped_node("default:iron_block", {
+	description = "Iron Block",
+	tiles = {"default_iron_block.png"},
+	groups = {cracky=2},
+	sounds = qtcore.node_sound_metal(),
 })
 
 qts.register_ingot("default:stick", {

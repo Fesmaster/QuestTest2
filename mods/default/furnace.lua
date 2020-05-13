@@ -30,7 +30,7 @@ qts.gui.register_gui("default_furnace", {
 			"listring[current_player;main]"
 		
 		
-		minetest.after(0.2, function(pos, name)
+		minetest.after(0.8, function(pos, name)
 			if qts.gui.get_open_gui(name) == "default_furnace" then
 				qts.gui.show_gui(pos, name, "default_furnace")
 			end

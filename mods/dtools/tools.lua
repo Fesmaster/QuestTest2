@@ -19,21 +19,29 @@ minetest.register_tool ("dtools:gauntlet", {
 })
 
 minetest.register_tool("dtools:testingTool", {
-	description = "Testing Tool:\nCurrently spawns a strange temple",
+	description = "Testing Tool:\nCurrently messes with param2",
 	inventory_image = "dtools_green_wand.png",
 	range = 10.0,
 	--liquids_pointable = true,
 	on_use = function(itemstack, user, pointed_thing)
 		minetest.log("QTS Testing Tool used")
 		if pointed_thing.under then
-			local sucess = minetest.place_schematic(pointed_thing.above, minetest.get_modpath("dtools") .. "/schems/test1.mts", "0", nil, true)
-			if sucess == nil then
-				minetest.log("error placing schematic")
+			local node = minetest.get_node_or_nil(pointed_thing.under)
+			if node then
+				node.param2 = node.param2 + 1
 			end
+			minetest.set_node(pointed_thing.under, node)
 		end
 	end,
 	on_place = function(itemstack, user, pointed_thing)
 		minetest.log("QTS Testing Tool placed")
+		if pointed_thing.under then
+			local node = minetest.get_node_or_nil(pointed_thing.under)
+			if node then
+				node.param2 = node.param2 - 1
+			end
+			minetest.set_node(pointed_thing.under, node)
+		end
 	end
 })
 

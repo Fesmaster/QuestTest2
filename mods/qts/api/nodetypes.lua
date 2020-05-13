@@ -667,6 +667,14 @@ function qts.register_ingot(name, def)
 					--minetest.log("found one above")
 				else
 					--place a new bar on the ground
+					local n = minetest.get_node_or_nil(pointed_thing.above) --buildable_to
+					local def = n and minetest.registered_nodes[n.name]
+					if def and n.name ~= "air" then
+						if not def.buildable_to then
+							return
+						end
+					end
+					
 					minetest.place_node(pointed_thing.above, {name = itemstack:get_name().."_stacked_1"})
 					--sound
 					if sound then

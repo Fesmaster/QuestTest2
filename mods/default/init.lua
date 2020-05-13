@@ -48,7 +48,6 @@ minetest.register_tool("default:testingHammer", {
 	range = 10.0,
 	--liquids_pointable = true,
 	on_use = function(itemstack, user, pointed_thing)
-		minetest.log("QTS Testing Tool used")
 		if pointed_thing.under then
 			if user:get_player_control().sneak then
 				qts.screwdriver.apply(pointed_thing, user, qts.screwdriver.ROTATE_FACE)
@@ -59,7 +58,6 @@ minetest.register_tool("default:testingHammer", {
 		
 	end,
 	on_place = function(itemstack, user, pointed_thing)
-	minetest.log("QTS Testing Tool placed")
 		if pointed_thing.under then
 			if user:get_player_control().sneak then
 				qts.screwdriver.apply(pointed_thing, user, qts.screwdriver.ROTATE_AXIS)

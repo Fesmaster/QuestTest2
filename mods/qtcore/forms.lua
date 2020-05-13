@@ -37,3 +37,20 @@ qtcore.get_default_chest_formspec = function(pos, pname)
 		qtcore.get_chest_liststring(pos)..
 		"listring[current_player;main]"
 end
+
+
+qtcore.vprogressbar = function(pos, size, progress)
+	if not pos then pos = qts.gui.gui_makepos(0, 0) end
+	if not size then size = "1,1" end
+	if not progress then progress = 0.5 end
+	return "image["..pos:get()..";"..size..";gui_progressbar_bg.png^[lowpart:"..
+			(progress)..":gui_progressbar_fg.png]"
+end
+qtcore.hprogressbar = function(pos, size, progress)
+	if not pos then pos = qts.gui.gui_makepos(0, 0) end
+	if not size then size = "1,1" end
+	if not progress then progress = 0.5 end
+	return "image["..pos:get()..";"..size..";gui_progressbar_bg.png^[lowpart:"..
+			(progress)..":gui_progressbar_fg.png^[transformR270]"
+end
+
