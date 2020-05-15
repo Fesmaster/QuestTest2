@@ -268,13 +268,16 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 	end
 	
 	--run ore and deco generation
-	minetest.generate_ores(VM, minp, maxp)
-	minetest.generate_decorations(VM, minp, maxp)
+	
 	
 	--set node data, and write to map
 	VM:set_data(Data)
 	VM:set_light_data(LightData)
 	VM:set_param2_data(Param2Data)
+	--generate the ores
+	minetest.generate_ores(VM, minp, maxp)
+	minetest.generate_decorations(VM, minp, maxp)
+	
 	--VM:set_lighting{day=0, night=0}
 	VM:calc_lighting()
 	VM:write_to_map()

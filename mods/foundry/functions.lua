@@ -276,7 +276,7 @@ end
 --init a new foundry. Auto-checks if the foundry is already initialized
 --MAKE SURE TO CALL AFTER make_foundry()
 function foundry.InitFoundry(pos)
-minetest.log("here")
+	--minetest.log("here")
 	local lvl = foundry.is_foundry(pos, false)
 	if not lvl then return end
 	local node = minetest.get_node(pos)
@@ -284,7 +284,7 @@ minetest.log("here")
 	do
 		local dstr = meta:get_string("foundry_data")
 		if dstr ~= "" then 
-			minetest.log("Data loaded: "..dstr)
+			--minetest.log("Data loaded: "..dstr)
 			return 
 		end --already initialized
 	end
@@ -364,12 +364,12 @@ function FoundryData(tbl)
 			local ppercent = self.smeltPercent[i]/100 -- 0->1 value
 			local recepie = foundry.registered_smeltables[stack:get_name()]
 			if recepie then
-				minetest.log("item found: " .. stack:get_name())
+				--minetest.log("item found: " .. stack:get_name())
 				local t = ppercent * recepie.smelt_time
 				t = t + dtime
 				local npercent = t / recepie.smelt_time
 				if npercent >= 1 then
-					minetest.log("item ".. stack:get_name() .. " should be finished melting")
+					--minetest.log("item ".. stack:get_name() .. " should be finished melting")
 					--apply the stuff
 					local ok = true
 					if recepie.type == "melt" then
@@ -397,8 +397,8 @@ function FoundryData(tbl)
 					end
 				else
 					--set the new percentage
-					minetest.log("item ".. stack:get_name() .. " should have some percentage added")
-					minetest.log("--"..tostring(npercent))
+					--minetest.log("item ".. stack:get_name() .. " should have some percentage added")
+					--minetest.log("--"..tostring(npercent))
 					self.smeltPercent[i] = math.floor(npercent * 100)
 				end
 				
@@ -613,6 +613,26 @@ foundry.register_metal = function(name, def)
 	def.crucible_name = "foundry:crucible_"..name
 	
 	foundry.registered_metals[name] = def
+	
+	--register melting for the ingot and block
+	foundry.register_smeltable({
+		itemname = def.ingot,
+		smelt_time = 2,
+		type = "melt",
+		heat = 1,
+		metal = def.name,
+		metal_ammount = 1,
+	})
+	
+	foundry.register_smeltable({
+		itemname = def.block,
+		smelt_time = 8,
+		type = "melt",
+		heat = 8,
+		metal = def.name,
+		metal_ammount = 16,
+	})
+	
 end
 
 --[[

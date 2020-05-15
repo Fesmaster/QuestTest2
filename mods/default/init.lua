@@ -20,6 +20,8 @@ dofile(minetest.get_modpath("default").."/crate.lua")
 dofile(minetest.get_modpath("default").."/craftitems.lua")
 dofile(minetest.get_modpath("default").."/crafts.lua")
 dofile(minetest.get_modpath("default").."/furnace.lua")
+dofile(minetest.get_modpath("default").."/metals.lua")
+dofile(minetest.get_modpath("default").."/jems.lua")
 -- Load other files
 
 

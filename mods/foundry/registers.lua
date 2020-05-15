@@ -64,21 +64,7 @@ minetest.register_node("foundry:crucible_empty", {
 
 
 
-foundry.register_metal("iron", {
-	description = "Iron",
-	texture = "foundry_steel_molten.png",
-	ingot = "default:iron_bar",
-	block = "default:iron_block",
-})
 
-foundry.register_smeltable({
-	itemname = "default:iron_bar",
-	smelt_time = 4,
-	type = "melt",
-	heat = 1,
-	metal = "iron",
-	metal_ammount = 1,
-})
 
 local rot_from_facedir = {
 	[0] = 0,
