@@ -57,7 +57,7 @@ minetest.register_node("foundry:crucible_empty", {
 	--special_tiles = {"foundry_test_brass.png"},
 	paramtype = "light",
 	--paramtype2 = "glasslikeliquidlevel",
-	groups = {cracky=3, bricks=1, foundry_crucible = 1},
+	groups = {cracky=3, bricks=1, foundry_crucible = 1, not_in_creative_inventory = 1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
 })

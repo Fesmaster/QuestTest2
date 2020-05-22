@@ -55,7 +55,7 @@ minetest.register_node("foundry:foundry_active", {
 	paramtype2 = "facedir",
 	light_source = 10,
 	drop = "foundry:foundry_inactive",
-	groups = {cracky=3, foundry_controller = 1},
+	groups = {cracky=3, foundry_controller = 1, not_in_creative_inventory = 1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
 	

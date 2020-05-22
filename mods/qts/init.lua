@@ -14,6 +14,8 @@ dofile(qts.path.."/api/screwdriver.lua")
 dofile(qts.path.."/api/gui.lua")
 dofile(qts.path.."/api/growing.lua")
 dofile(qts.path.."/api/chest.lua")
+dofile(qts.path.."/api/itemModifiers.lua")
+dofile(qts.path.."/api/playereffects.lua")
 --any other code here
 
 

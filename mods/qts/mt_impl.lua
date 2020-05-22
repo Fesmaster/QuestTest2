@@ -1,5 +1,6 @@
 --this file handles all the minetest.register_whatever_func_here
 --this is to keep it in one centralized location
+--scratch that. TODO: change this to callbacks.lua
 
 
 

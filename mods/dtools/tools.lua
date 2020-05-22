@@ -64,3 +64,34 @@ minetest.register_tool("dtools:biome_check_tools", {
 })
 
 
+qts.register_item_modifier("testPlace", {
+	description = "Test Place Modifier",
+	on_place = function(pos, newnode, placer, oldnode, itemstack, pointed_thing)
+		minetest.log("Test Place Modifier Placed")
+		return false
+	end,
+	on_dignode = function(pos, node, digger)
+		minetest.log("modified Item used to dig")
+	end,
+	on_punch_node = function(pos, node, puncher, pointed_thing)
+		minetest.log("modified Item used to punch a node")
+	end,
+	on_punch_player_ = function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
+		minetest.log("modified Item used to punch a player")
+	end,
+	on_punch_entity = function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
+		minetest.log("modified Item used to punch a entity")
+	end,
+	on_dieplayer = function(player, reason)
+		minetest.log("player died with modified Item in the inventory")
+	end,
+	inventory_can_act = function(player, action, inventory, inventory_info)
+		minetest.log("player inventory action check with modified Item")
+		return -1 --all are OK, or, ignore the results of this func
+	end,
+	inventory_on_act = function(player, action, inventory, inventory_info)
+		minetest.log("player inventory action execute with modified Item")
+	end,
+})
+
+

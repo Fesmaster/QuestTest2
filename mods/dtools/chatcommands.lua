@@ -41,3 +41,23 @@ minetest.register_chatcommand("playground", {
 		end
 	end,
 })
+
+
+minetest.register_chatcommand("tmod", {
+	params = "<text>",
+	description = "Apply the test modifer to the itemstack helt",
+	func = function(name, param)
+		local itemstack = minetest.get_player_by_name(name):get_wielded_item()
+		qts.apply_item_modifier(itemstack, "testPlace", 1)
+		minetest.get_player_by_name(name):set_wielded_item(itemstack)
+	end,
+})
+
+minetest.register_chatcommand("punchme", {
+	params = "<text>",
+	description = "Player punches themselves in the arm",
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		player:punch(player, 1.0, {fleshy=5}, nil)
+	end,
+})
