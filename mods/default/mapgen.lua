@@ -36,6 +36,24 @@ qts.worldgen.register_biome("grasslands", {
 	stone_depth = 0,
 })
 
+qts.worldgen.register_biome("woods", {
+	heat_point = 30,
+	humidity_point = 40,
+	min_ground_height = 5,
+	max_ground_height = 94,
+	min_light = 7,--half
+	min_air = 10,
+	dust = nil,
+	surface = "default:dirt_with_grass",
+	fill = "default:dirt",
+	stone = "default:stone",
+	plant = "default:grass_5",
+	plant_freq = 90,
+	surface_depth = 1,
+	fill_depth = 2,
+	stone_depth = 0,
+})
+
 qts.worldgen.register_biome("prarie", {
 	heat_point = 50,
 	humidity_point = 50,

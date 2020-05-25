@@ -26,11 +26,7 @@ minetest.register_tool("dtools:testingTool", {
 	on_use = function(itemstack, user, pointed_thing)
 		minetest.log("QTS Testing Tool used")
 		if pointed_thing.under then
-			local node = minetest.get_node_or_nil(pointed_thing.under)
-			if node then
-				node.param2 = node.param2 + 1
-			end
-			minetest.set_node(pointed_thing.under, node)
+			qtcore.grow_oak_tree(pointed_thing.above)
 		end
 	end,
 	on_place = function(itemstack, user, pointed_thing)
