@@ -41,6 +41,36 @@ minetest.register_tool("dtools:testingTool", {
 	end
 })
 
+minetest.register_tool("dtools:anti_stone", {
+	description = "Anti Stone Tool",
+	inventory_image = "dtools_green_wand.png",
+	range = 10.0,
+	--liquids_pointable = true,
+	on_use = function(itemstack, user, pointed_thing)
+		minetest.log("QTS Testing Tool used")
+		if pointed_thing.under then
+			local nodes = qts.get_nodes_in_radius(pointed_thing.under, 10)
+			for i, nodedat in ipairs(nodes) do
+				if nodedat.noderef.name == "default:stone" then
+					minetest.remove_node(nodedat.pos)
+				end
+			end
+		end
+	end,
+	--[[
+	on_place = function(itemstack, user, pointed_thing)
+		minetest.log("QTS Testing Tool placed")
+		if pointed_thing.under then
+			local node = minetest.get_node_or_nil(pointed_thing.under)
+			if node then
+				node.param2 = node.param2 - 1
+			end
+			minetest.set_node(pointed_thing.under, node)
+		end
+	end
+	--]]
+})
+
 minetest.register_tool("dtools:biome_check_tools", {
 	description = "Biome Analitics Tool:\nCheck heat/humidity",
 	inventory_image = "dtools_red_wand.png",

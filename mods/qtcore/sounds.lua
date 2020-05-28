@@ -99,3 +99,9 @@ function qtcore.node_sound_water(table)
 			{name = "sounds_water_footstep", gain = 0.5}
 	return table
 end
+
+function qtcore.tool_sounds_default(table)
+	table = table or {}
+	table.breaks = table.breaks or {name = "default_tool_breaks", gain = 1.0}
+	return table
+end

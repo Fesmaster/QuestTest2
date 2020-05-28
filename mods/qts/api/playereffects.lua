@@ -65,15 +65,15 @@ function qts.get_player_modifier(player, id)
 	if type(player) ~= "string" then
 		player = player:get_player_name()
 	end
-	
-	if qts.player_modifer_lists[name] and qts.player_modifer_lists[name][id] then
-		local mod = qts.player_modifer_lists[name][id]
+	if qts.player_modifer_lists[player] and qts.player_modifer_lists[player][id] then
+		local mod = qts.player_modifer_lists[player][id]
 		return{ --copy these three values ONLY
 			speed = mod.speed,
 			jump = mod.jump,
 			gravity = mod.gravity
 		}
 	else
+		minetest.log("PlayerEffects Info Unavalable")
 		return nil
 	end
 end

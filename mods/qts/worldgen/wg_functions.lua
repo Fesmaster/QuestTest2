@@ -237,7 +237,7 @@ end
 
 --used to get the flag string for centering a schmatic
 qts.worldgen.centers = function(x, y, z)
-	str = ""
+	local str = ""
 	if x then str = str .. "place_center_x," end
 	if y then str = str .. "place_center_y," end
 	if z then str = str .. "place_center_z" end

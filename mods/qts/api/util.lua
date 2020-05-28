@@ -22,35 +22,6 @@ function qts.table_deep_copy(orig, copies)
     return copy
 end
 
-function qts.vector_round(vec)
-	local p = {}
-	for n, v in pairs(vec) do
-		if v and n then
-			if math.modf(v) <= 0.5 then
-				p[n] = math.floor(v)
-			else
-				p[n] = math.ceil(v)
-			end
-		else
-			minetest.debug("invalid field: ["..n.."]")
-		end
-	end
-	return p
-end
-
-
-function qts.nearly_equal(a, b, degree)
-	return (a >= b-degree and a <= b+degree)
-end
-
-function qts.nearly_equal_vec(a, b, degree)
-	return (qts.nearly_equal(a.x, b.x, degree) and qts.nearly_equal(a.y, b.y, degree) and qts.nearly_equal(a.z, b.z, degree))
-end
-
-function qts.nearly_equal_vec_xz(a, b, degree)
-	return (qts.nearly_equal(a.x, b.x, degree) and qts.nearly_equal(a.z, b.z, degree))
-end
-
 function qts.get_nodes_in_radius(pos, radius)
 	if pos ~= nil and radius ~= nil then
 		local ntable = {}
@@ -103,7 +74,7 @@ end
 
 
 function qts.Set(t)
-	s = {}
+	local s = {}
 	for i, v in ipairs(t) do
 		s[v] = true
 	end
