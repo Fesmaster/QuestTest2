@@ -5,11 +5,13 @@
 qts.worldgen = {}
 qts.worldgen.mpagen_aliases = {} --holder for the alias system
 qts.worldgen.CID = {} --holder for contentIDs
+qts.worldgen.ORE = {}
 qts.worldgen.CID_source = {}
 qts.worldgen.registered_biomes = {}
 qts.worldgen.registered_structures = {}
 
 local CID = qts.worldgen.CID --to simplify and shorten the naming
+local ORE = qts.worldgen.ORE --also faster
 
 dofile(qts.path .."/worldgen/wg_functions.lua") --load all the functions
 
@@ -21,10 +23,14 @@ local function genParam2Meshoptions()
 end
 
 local function isGenGround(cid)
-	if cid == CID["air"] or cid == CID["water"] or cid == CID["river"] then
-		return false
-	else
-		return true
+	--if cid == CID["air"] or cid == CID["water"] or cid == CID["river"] then
+	--	return false
+	--else
+	--	return true
+	--end
+	if cid == CID['ground'] then return true end
+	for name, c in pairs(ORE) do
+		if cid == c then return true end
 	end
 end
 
@@ -43,6 +49,10 @@ minetest.register_on_mods_loaded(function()
 	CID["ground"] = minetest.get_content_id(qts.worldgen.mpagen_aliases.stone)
 	CID["water"] = minetest.get_content_id(qts.worldgen.mpagen_aliases.water)
 	CID["river"] = minetest.get_content_id(qts.worldgen.mpagen_aliases.river)
+	
+	for name, _ in pairs(ORE) do
+		ORE[name] = CID[name]
+	end
 	--minetest.register_alias("mapgen_singlenode", "air")
 	
 	--mapgen v6 aliases. NOT SET
@@ -132,11 +142,12 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 					if y == maxp.y then --the height of the ground is the top of the generated area. This is a problem
 						--groundHeight = heightmap[columnID]
 						local n = minetest.get_node_or_nil({x=x, y=y+1,z=z})
-						if n and n.name then
-							local cidbelow = minetest.get_content_id(n.name)
-							if qts.worldgen.is_biome_node(cidbelow, biomeID,{"surface", "fill", "stone"}, true) or cidbelow == CID["ground"] then
+						if n and n.name and n.name == "air" then
+							--local cidbelow = minetest.get_content_id(n.name)
+							--if qts.worldgen.is_biome_node(cidbelow, biomeID,{"surface", "fill", "stone"}, true) 
+							--		or cidbelow == CID["ground"] then
 								groundHeight = y
-							end
+							--end
 						else
 							--attempt trace up, since the data is not readily avalable
 							local depth = nil
@@ -146,12 +157,13 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 									local off_y = y - delta_y
 									local n = minetest.get_node_or_nil({x=x, y=off_y,z=z})
 									
-									if n and n.name then
-										local cidbelow = minetest.get_content_id(n.name)
-										if qts.worldgen.is_biome_node(cidbelow, biomeID,{"surface", "fill", "stone"}, true) or cidbelow == CID["ground"] then
+									if n and n.name and n.name == "air" then
+										--local cidbelow = minetest.get_content_id(n.name)
+										--if qts.worldgen.is_biome_node(cidbelow, biomeID,{"surface", "fill", "stone"}, true) 
+										--		or cidbelow == CID["ground"] then
 											depth = delta_y + 2
 											traceup_found = true
-										end
+										--end
 									end
 								end
 							end
