@@ -18,6 +18,8 @@ minetest.register_tool ("dtools:gauntlet", {
 	},
 })
 
+
+
 minetest.register_tool("dtools:testingTool", {
 	description = "Testing Tool:\nCurrently messes with param2",
 	inventory_image = "dtools_green_wand.png",
@@ -26,9 +28,81 @@ minetest.register_tool("dtools:testingTool", {
 	on_use = function(itemstack, user, pointed_thing)
 		minetest.log("QTS Testing Tool used")
 		if pointed_thing.under then
-			qtcore.grow_oak_tree(pointed_thing.above)
+			qts.explode(pointed_thing.under, 20, {
+					destroy_nodes = true,
+					make_drops = false,
+					drop_speed_multiplier = 1,
+					make_sound = true,
+					make_particles = false,
+					particle_multiplier = 1,
+					damage_entities = false,
+					push_entities = false,
+					damage_player = false,
+					damage_type = "fleshy",
+					exploder = user
+				})
 		end
 	end,
+	on_place = function(itemstack, user, pointed_thing)
+		minetest.log("QTS Testing Tool placed")
+		if pointed_thing.under then
+			--qts.test_distribute_node(pointed_thing.under, 100, 10, "dtools:test_node")
+			qts.explode(pointed_thing.under, 80, {
+					destroy_nodes = true,
+					make_drops = true,
+					drop_speed_multiplier = 1,
+					make_sound = true,
+					make_particles = true,
+					particle_multiplier = 1,
+					damage_entities = true,
+					push_entities = true,
+					damage_player = true,
+					damage_type = "fleshy",
+					exploder = user
+				})
+		end
+	end
+})
+
+minetest.register_tool("dtools:summoning_wand", {
+	description = "Summoning Wand\nCurrently Summoning: dtools:static_entity",
+	inventory_image = "dtools_blue_wand.png",
+	range = 10.0,
+	--liquids_pointable = true,
+	on_use = function(itemstack, user, pointed_thing)
+		minetest.log("QTS Summoning Wand used")
+		if pointed_thing.above then
+			minetest.add_entity(pointed_thing.above, "dtools:static_entity")
+		end
+	end,
+	on_place = function(itemstack, user, pointed_thing)
+		minetest.log("QTS Summoning Tool placed")
+		minetest.log (dump(user:get_look_dir()))
+	end,
+	on_secondary_use = function(itemstack, user, pointed_thing)
+		minetest.log("QTS Summoning Tool rightclicked")
+		dtools.player_launch_projectile(user, "dtools:testing_projectile")
+		--dtools.launch_test_projectile(vector.add(user:get_pos(), {x=0, y=1.5, z=0}), user:get_look_dir(), 25)
+	end
+})
+
+minetest.register_tool("dtools:anti_stone", {
+	description = "Anti Stone Tool",
+	inventory_image = "dtools_green_wand.png",
+	range = 10.0,
+	--liquids_pointable = true,
+	on_use = function(itemstack, user, pointed_thing)
+		minetest.log("QTS Testing Tool used")
+		if pointed_thing.under then
+			local nodes = qts.get_nodes_in_radius(pointed_thing.under, 10)
+			for i, nodedat in ipairs(nodes) do
+				if nodedat.noderef.name == "default:stone" then
+					minetest.remove_node(nodedat.pos)
+				end
+			end
+		end
+	end,
+	--[[
 	on_place = function(itemstack, user, pointed_thing)
 		minetest.log("QTS Testing Tool placed")
 		if pointed_thing.under then
@@ -39,6 +113,7 @@ minetest.register_tool("dtools:testingTool", {
 			minetest.set_node(pointed_thing.under, node)
 		end
 	end
+	--]]
 })
 
 minetest.register_tool("dtools:biome_check_tools", {

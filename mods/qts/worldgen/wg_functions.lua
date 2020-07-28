@@ -1,6 +1,7 @@
 
 --qts.worldgen functionality
 local CID = qts.worldgen.CID
+local ORE = qts.worldgen.ORE
 --qts.worldgen.mpagen_aliases
 
 qts.worldgen.set_mapgen_defaults = function(stone, water, river)
@@ -17,6 +18,28 @@ end
 qts.worldgen.add_to_CID = function(name)
 	qts.worldgen.CID_source[name] = true
 end
+
+--[[
+ORE OVERRIDE
+minetest.register_ore({
+	ore_type       = "scatter",
+	ore            = "default:stone_with_tin",
+	wherein        = "default:stone",
+	clust_scarcity = 10 * 10 * 10,
+	clust_num_ores = 5,
+	clust_size     = 3,
+	y_max          = 1025,
+	y_min          = -64,
+})
+]]
+local register_ore_internal = minetest.register_ore
+
+minetest.register_ore = function(def)
+	ORE[def.ore] = true
+	qts.worldgen.add_to_CID(def.ore)
+	register_ore_internal(def)
+end
+
 --[[
 biome registration
 keys in def:
@@ -237,7 +260,7 @@ end
 
 --used to get the flag string for centering a schmatic
 qts.worldgen.centers = function(x, y, z)
-	str = ""
+	local str = ""
 	if x then str = str .. "place_center_x," end
 	if y then str = str .. "place_center_y," end
 	if z then str = str .. "place_center_z" end

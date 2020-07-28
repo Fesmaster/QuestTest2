@@ -6,9 +6,10 @@ foundry = {}
 local fpath = minetest.get_modpath("foundry")
 dofile( fpath.."\\gui.lua")
 dofile( fpath.."\\functions.lua")
+dofile( fpath.."\\casting_api.lua")
 dofile( fpath.."\\registers.lua")
 dofile( fpath.."\\metals.lua")
-
+dofile( fpath.."\\castings.lua")
 --[[
 Main Foundry Content (ie, the controller and its logic)
 --]]

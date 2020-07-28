@@ -9,6 +9,116 @@ local nodeboxes = {
 		{0.125, -0.3125, -0.25, 0.3125, -0.0625, 0.375}, -- NodeBox55
 	}
 
+--[[ Alloy Only Metals ]]
+
+--TIN
+qts.register_ingot("default:tin_bar", {
+	description = "Tin Bar",
+	inventory_image = "default_tin_ingot.png",
+	tiles = {"default_tin_ingot_stack.png"},
+	groups = {cracky=3, iron = 1},
+	sounds = qtcore.node_sound_metal(),
+	nodeboxes = nodeboxes,
+	levels = 8,
+})
+
+qts.register_shaped_node("default:tin_block", {
+	description = "Tin Block",
+	tiles = {"default_tin_block.png"},
+	groups = {cracky=2},
+	sounds = qtcore.node_sound_metal(),
+})
+
+qts.register_shaped_node("default:stone_with_tin", {
+	description = "Tin Ore",
+	tiles = {"default_stone.png^default_stone_with_tin.png"},
+	groups = {cracky=3, stone=1, ore=1},
+	sounds = qtcore.node_sound_stone(),
+})
+
+--ZINC
+qts.register_ingot("default:zinc_bar", {
+	description = "Zinc Bar",
+	inventory_image = "default_zinc_ingot.png",
+	tiles = {"default_zinc_ingot_stack.png"},
+	groups = {cracky=3, iron = 1},
+	sounds = qtcore.node_sound_metal(),
+	nodeboxes = nodeboxes,
+	levels = 8,
+})
+
+qts.register_shaped_node("default:zinc_block", {
+	description = "ZInc Block",
+	tiles = {"default_zinc_block.png"},
+	groups = {cracky=2},
+	sounds = qtcore.node_sound_metal(),
+})
+
+qts.register_shaped_node("default:stone_with_zinc", {
+	description = "Zinc Ore",
+	tiles = {"default_stone.png^default_stone_with_zinc.png"},
+	groups = {cracky=3, stone=1, ore=1},
+	sounds = qtcore.node_sound_stone(),
+})
+
+--[[ INDUSTRIAL METALS ]]
+
+--copper
+qts.register_ingot("default:copper_bar", {
+	description = "Copepr Bar",
+	inventory_image = "default_copper_ingot.png",
+	tiles = {"default_copper_ingot_stack.png"},
+	groups = {cracky=3, iron = 1},
+	sounds = qtcore.node_sound_metal(),
+	nodeboxes = nodeboxes,
+	levels = 8,
+})
+
+qts.register_shaped_node("default:copper_block", {
+	description = "Copper Block",
+	tiles = {"default_copper_block.png"},
+	groups = {cracky=2},
+	sounds = qtcore.node_sound_metal(),
+})
+
+qts.register_shaped_node("default:stone_with_copper", {
+	description = "Copper Ore",
+	tiles = {"default_stone.png^default_stone_with_copper.png"},
+	groups = {cracky=3, stone=1, ore=1},
+	sounds = qtcore.node_sound_stone(),
+})
+
+
+--bronze
+qts.register_ingot("default:bronze_bar", {
+	description = "Bronze Bar",
+	inventory_image = "default_bronze_ingot.png",
+	tiles = {"default_bronze_ingot_stack.png"},
+	groups = {cracky=3, iron = 1},
+	sounds = qtcore.node_sound_metal(),
+	nodeboxes = nodeboxes,
+	levels = 8,
+})
+
+qts.register_shaped_node("default:bronze_block", {
+	description = "Bronze Block",
+	tiles = {"default_bronze_block.png"},
+	groups = {cracky=2},
+	sounds = qtcore.node_sound_metal(),
+})
+
+minetest.register_craftitem("default:bronze_alloy", {
+	description = "Bronze Alloy Mixture",
+	inventory_image = "default_bronze_alloy.png",
+	groups = {alloy = 1,},
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "default:bronze_alloy 2",
+	recipe = {"default:copper_bar", "default:tin_bar"},
+})
+
 --IRON
 qts.register_ingot("default:iron_bar", {
 	description = "Iron Bar",
@@ -64,81 +174,7 @@ minetest.register_craft({
 	recipe = {"default:iron_bar", "default:coal"},
 })
 
---TIN
-qts.register_ingot("default:tin_bar", {
-	description = "Tin Bar",
-	inventory_image = "default_tin_ingot.png",
-	tiles = {"default_tin_ingot_stack.png"},
-	groups = {cracky=3, iron = 1},
-	sounds = qtcore.node_sound_metal(),
-	nodeboxes = nodeboxes,
-	levels = 8,
-})
-
-qts.register_shaped_node("default:tin_block", {
-	description = "Tin Block",
-	tiles = {"default_tin_block.png"},
-	groups = {cracky=2},
-	sounds = qtcore.node_sound_metal(),
-})
-
-qts.register_shaped_node("default:stone_with_tin", {
-	description = "Tin Ore",
-	tiles = {"default_stone.png^default_stone_with_tin.png"},
-	groups = {cracky=3, stone=1, ore=1},
-	sounds = qtcore.node_sound_stone(),
-})
-
---ZINC
-qts.register_ingot("default:zinc_bar", {
-	description = "Zinc Bar",
-	inventory_image = "default_zinc_ingot.png",
-	tiles = {"default_zinc_ingot_stack.png"},
-	groups = {cracky=3, iron = 1},
-	sounds = qtcore.node_sound_metal(),
-	nodeboxes = nodeboxes,
-	levels = 8,
-})
-
-qts.register_shaped_node("default:zinc_block", {
-	description = "ZInc Block",
-	tiles = {"default_zinc_block.png"},
-	groups = {cracky=2},
-	sounds = qtcore.node_sound_metal(),
-})
-
-qts.register_shaped_node("default:stone_with_zinc", {
-	description = "Zinc Ore",
-	tiles = {"default_stone.png^default_stone_with_zinc.png"},
-	groups = {cracky=3, stone=1, ore=1},
-	sounds = qtcore.node_sound_stone(),
-})
-
---copper
-qts.register_ingot("default:copper_bar", {
-	description = "Copepr Bar",
-	inventory_image = "default_copper_ingot.png",
-	tiles = {"default_copper_ingot_stack.png"},
-	groups = {cracky=3, iron = 1},
-	sounds = qtcore.node_sound_metal(),
-	nodeboxes = nodeboxes,
-	levels = 8,
-})
-
-qts.register_shaped_node("default:copper_block", {
-	description = "Copper Block",
-	tiles = {"default_copper_block.png"},
-	groups = {cracky=2},
-	sounds = qtcore.node_sound_metal(),
-})
-
-qts.register_shaped_node("default:stone_with_copper", {
-	description = "Copper Ore",
-	tiles = {"default_stone.png^default_stone_with_copper.png"},
-	groups = {cracky=3, stone=1, ore=1},
-	sounds = qtcore.node_sound_stone(),
-})
-
+--[[ WEALTH METALS ]]
 
 --brass
 qts.register_ingot("default:brass_bar", {
@@ -168,36 +204,6 @@ minetest.register_craft({
 	type = "shapeless",
 	output = "default:brass_alloy 2",
 	recipe = {"default:copper_bar", "default:zinc_bar"},
-})
-
---bronze
-qts.register_ingot("default:bronze_bar", {
-	description = "Bronze Bar",
-	inventory_image = "default_bronze_ingot.png",
-	tiles = {"default_bronze_ingot_stack.png"},
-	groups = {cracky=3, iron = 1},
-	sounds = qtcore.node_sound_metal(),
-	nodeboxes = nodeboxes,
-	levels = 8,
-})
-
-qts.register_shaped_node("default:bronze_block", {
-	description = "Bronze Block",
-	tiles = {"default_bronze_block.png"},
-	groups = {cracky=2},
-	sounds = qtcore.node_sound_metal(),
-})
-
-minetest.register_craftitem("default:bronze_alloy", {
-	description = "Bronze Alloy Mixture",
-	inventory_image = "default_bronze_alloy.png",
-	groups = {alloy = 1,},
-})
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:bronze_alloy 2",
-	recipe = {"default:copper_bar", "default:tin_bar"},
 })
 
 --gold

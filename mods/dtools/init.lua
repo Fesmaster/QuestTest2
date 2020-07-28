@@ -7,6 +7,7 @@ make and analize during QuestTest development
 ]]
 
 if qts.ISDEV then
+dtools = {}
 local path = minetest.get_modpath("dtools")
 dofile(path.."\\chatcommands.lua")
 dofile(path.."\\tools.lua")

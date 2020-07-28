@@ -3,164 +3,65 @@ QuestTest Player Mod
 
 Player visuals and controls
 ]]
-minetest.settings:set_bool("fast_move", false)
+Player_API = {}
+dofile(minetest.get_modpath("player").."\\api.lua")
+
+--minetest.settings:set_bool("fast_move", false)
 minetest.settings:set_bool("aux1_decends", false)
-minetest.settings:set_bool("always_fly_fast", false)
+minetest.settings:set_bool("always_fly_fast", true)
 
-SPRINT_MODE = 1
-SPRINT_MULT = 2.5
-SNEAK_MULT = 0.75
-DOUBLECLICK_TIME = 0.50
+Player_API.SPRINT_MODE = 1
+Player_API.SPRINT_INCREASE = 0.01
+Player_API.SPRINT_MULT = 2.5
+Player_API.SNEAK_MULT = 0.75
+Player_API.DOUBLECLICK_TIME = 0.50
+Player_API.SPRINT_MIN_SPEED = 0.75
 
-PlayerControls = {}
+
+Player_API.register_model("character.b3d", {
+	animation_speed = 30,
+	textures = {"character.png", },
+	animations = {
+		-- Standard animations.
+		stand     = {x = 0,   y = 79},
+		lay       = {x = 162, y = 166},
+		walk      = {x = 168, y = 187},
+		mine      = {x = 189, y = 198},
+		walk_mine = {x = 200, y = 219},
+		sit       = {x = 81,  y = 160},
+	},
+	collisionbox = {-0.3, 0.0, -0.3, 0.3, 1.7, 0.3},
+	stepheight = 0.6,
+	eye_height = 1.47,
+})
 
 minetest.register_on_joinplayer(function(player)
-	PlayerControls[player:get_player_name()] = {
-		jump = -1,
-		right = -1,
-		left = -1,
-		LMB = -1,
-		RMB = -1,
-		sneak = -1,
-		aux1 = -1,
-		down = -1,
-		up = -1,
-		sprint = false,
-		can_dodge = true,
-	}
-	 qts.set_player_modifier(player, "CONTROL_INTERNAL", {}) --empty list, just making a default one exist
+	Player_API.new_player(player)
+	Player_API.set_model(player, "character.b3d")
+	Player_API.set_animation(player, "stand", 30)
 end)
 
-local function rotateVectorYaw(vec, angle)
-	return {x = (vec.x * math.cos(angle) - vec.z * math.sin(angle)), y = vec.y, z = (vec.x * math.sin(angle) + vec.z * math.cos(angle))}
-end
-
-local function sprint(player, on)
-	if PlayerControls[player:get_player_name()].sneak > 0 and on then
-		minetest.log("Cannot sprint while sneaking!")
-		return
-	end
-	if on and PlayerControls[player:get_player_name()].sprint == false then
-		minetest.log("Sprint ON")
-		qts.set_player_modifier(player, "CONTROL_INTERNAL", {speed = SPRINT_MULT})
-		PlayerControls[player:get_player_name()].sprint = true
-	elseif on == false and PlayerControls[player:get_player_name()].sprint then
-		minetest.log("Sprint OFF")
-		qts.set_player_modifier(player, "CONTROL_INTERNAL", {speed = 1})
-		PlayerControls[player:get_player_name()].sprint = false
-	end
-end
-
-local function sneak(player, on)
-	--sprint(player, false)
-	if PlayerControls[player:get_player_name()].sprint then
-		minetest.log("Sprint disabled by sneak")
-		PlayerControls[player:get_player_name()].sprint = false
-	end
-	if on then
-		player:set_eye_offset({x=0,y=-0.75,z=0}, {x=0,y=0,z=0})
-		qts.set_player_modifier(player, "CONTROL_INTERNAL", {speed = SNEAK_MULT})
-	else
-		player:set_eye_offset({x=0,y=0,z=0}, {x=0,y=0,z=0})
-		qts.set_player_modifier(player, "CONTROL_INTERNAL", {speed = 1})
-	end
-end
-
-local function doubleclick_func(clicker, control) --can_dodge
-	if control == "right" and PlayerControls[clicker:get_player_name()].can_dodge then
-		local angle = clicker:get_look_horizontal()
-		local dir = {x=1, y=0.1, z= 0}
-		clicker:add_player_velocity(vector.multiply(rotateVectorYaw(dir, angle), 10))
-		minetest.log("Doged Right!")
-	elseif control == "left" and PlayerControls[clicker:get_player_name()].can_dodge then
-		local angle = clicker:get_look_horizontal()
-		local dir = {x=-1, y=0.1, z= 0}
-		clicker:add_player_velocity(vector.multiply(rotateVectorYaw(dir, angle), 10))
-		minetest.log("Doged Left!")
-	elseif control  == "up" and SPRINT_MODE == 1 then
-		sprint(clicker, true)
-	else
-		minetest.log("Double Click: " .. dump(control))
-	end
-	
-end
-
-
-
-minetest.register_globalstep(function(dtime)
-	for _, player in ipairs(minetest.get_connected_players()) do
-		--update the control counters
-		local ctrl = player:get_player_control()
-		local ctrlCount = PlayerControls[player:get_player_name()]
-		local switched = {}
-		local prevCtrlCount = {}
-		--collect the controls
-		for control, val in pairs(ctrl) do
-			prevCtrlCount[control] = ctrlCount[control]
-			if val then
-				if ctrlCount[control] > 0 then
-					ctrlCount[control] = ctrlCount[control] + dtime
-				else
-					ctrlCount[control] = dtime
-					--minetest.log("SWTITCH ON: "..dump(control) .. " | " .. dump(prevCtrlCount[control]))
-					switched[control] = true
-				end
-			else
-				if ctrlCount[control] < 0 then
-					ctrlCount[control] = ctrlCount[control] - dtime
-				else
-					ctrlCount[control] = -dtime
-					--minetest.log("SWTITCH OFF: "..dump(control) .. " | " .. dump(prevCtrlCount[control]))
-					switched[control] = true
-				end
-			end
-		end
-		
-		--process doubleclicks
-		for control, _ in pairs(switched) do
-			if math.abs(prevCtrlCount[control]) <= DOUBLECLICK_TIME and ctrl[control] then
-				 doubleclick_func(player, control)
-			end
-		end
-		
-		--stop sprinting if not holding forward key
-		if not ctrl.up then
-			sprint(player, false)
-		end
-		--stop sprinting if vel ~ 0
-		local vel = vector.length(player:get_player_velocity())
-		if vel < 0.5 then
-			--minetest.log("sprint off from low vel")
-			sprint(player, false)
-		end
-		
-		--can or cannot dodge
-		if ctrl.sneak or not ctrl.up then
-			ctrlCount.can_dodge = false
-		else
-			ctrlCount.can_dodge = true
-		end
-		--sneak controls
-		if switched.sneak then
-			sneak(player, ctrl.sneak)
-		end
-		
-		--sprint 2:
-		if switched.aux1 and SPRINT_MODE == 2 then
-			minetest.settings:set_bool("fast_move", false)
-			sprint(player, ctrl.aux1)
-		end
-		
-		--sprint 3
-		if SPRINT_MODE == 3 then
-			if ctrl.up and ctrlCount.up > 3 then
-				sprint(player, true)
-			end
-		end
-		
+Player_API.register_on_doubleclick(function(player, control)
+	local dat = Player_API.player_data[player:get_player_name()]
+	if control == "right" and dat.can_dodge then
+		Player_API.dodge(player, "right")
+	elseif control == "left" and dat.can_dodge then
+		Player_API.dodge(player, "left")
+	--else
+	--	minetest.log("Double Click: " .. dump(control))
 	end
 end)
 
+---[[
+Player_API.register_on_special_key(function(player, isClicked, newEvent)
+	if newEvent then
+		minetest.log("SPECIAL")
+	end
+end)
+--]]
+
+
+--[[DEBUG STUFF]]
 minetest.register_chatcommand("phys", {
 	params = "<text>",
 	description = "Log your physics overrdie",
@@ -177,11 +78,11 @@ minetest.register_chatcommand("sprintmode", {
 	func = function(name, param)
 		minetest.log(dump(param))
 		if param == '1' then
-			SPRINT_MODE = 1
+			Player_API.SPRINT_MODE = 1
 		elseif param == '2' then
-			SPRINT_MODE = 2
+			Player_API.SPRINT_MODE = 2
  		else
-			SPRINT_MODE = 3
+			Player_API.SPRINT_MODE = 3
 		end
 	end
 })

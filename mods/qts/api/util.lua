@@ -22,35 +22,6 @@ function qts.table_deep_copy(orig, copies)
     return copy
 end
 
-function qts.vector_round(vec)
-	local p = {}
-	for n, v in pairs(vec) do
-		if v and n then
-			if math.modf(v) <= 0.5 then
-				p[n] = math.floor(v)
-			else
-				p[n] = math.ceil(v)
-			end
-		else
-			minetest.debug("invalid field: ["..n.."]")
-		end
-	end
-	return p
-end
-
-
-function qts.nearly_equal(a, b, degree)
-	return (a >= b-degree and a <= b+degree)
-end
-
-function qts.nearly_equal_vec(a, b, degree)
-	return (qts.nearly_equal(a.x, b.x, degree) and qts.nearly_equal(a.y, b.y, degree) and qts.nearly_equal(a.z, b.z, degree))
-end
-
-function qts.nearly_equal_vec_xz(a, b, degree)
-	return (qts.nearly_equal(a.x, b.x, degree) and qts.nearly_equal(a.z, b.z, degree))
-end
-
 function qts.get_nodes_in_radius(pos, radius)
 	if pos ~= nil and radius ~= nil then
 		local ntable = {}
@@ -101,11 +72,49 @@ function qts.get_nodes_on_radius(pos, radius)
 	end
 end
 
+--get an even distribution of # of points on a sphere. sphere's radius is 1
+function qts.distribute_points_on_sphere(point_count)
+	local points = {}
+	
+	local phi = math.pi * (3 - math.sqrt(5)) --golden angle in randians
+	
+	for i = 0, point_count do
+		
+		local y = 1 - (i / (point_count-1)) * 2 --  1 to -1
+		local radius = math.sqrt(1 - y*y)
+		local theta = phi * i
+		
+		local x = math.cos(theta) * radius
+		local z = math.sin(theta) * radius
+		
+		points[#points+1] = {x=x, y=y, z=z}
+	end
+	
+	return points
+end
+
+--testing function that places given node count times around a sphere of radius dist located at pos
+function qts.test_distribute_node(pos, count, dist, node)
+	local points = qts.distribute_points_on_sphere(count)
+	for i, point in ipairs(points) do
+		local p = vector.multiply(point, dist)
+		p = vector.add(pos, p)
+		minetest.set_node(p, {name = node})
+	end
+end
 
 function qts.Set(t)
-	s = {}
+	local s = {}
 	for i, v in ipairs(t) do
 		s[v] = true
 	end
 	return s
+end
+
+function qts.ObjectName(obj)
+	if (obj:is_player()) then
+		return obj:get_player_name()
+	else
+		return obj:get_luaentity().name
+	end
 end

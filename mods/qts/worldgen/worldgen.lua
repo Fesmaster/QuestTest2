@@ -5,11 +5,13 @@
 qts.worldgen = {}
 qts.worldgen.mpagen_aliases = {} --holder for the alias system
 qts.worldgen.CID = {} --holder for contentIDs
+qts.worldgen.ORE = {}
 qts.worldgen.CID_source = {}
 qts.worldgen.registered_biomes = {}
 qts.worldgen.registered_structures = {}
 
 local CID = qts.worldgen.CID --to simplify and shorten the naming
+local ORE = qts.worldgen.ORE --also faster
 
 dofile(qts.path .."/worldgen/wg_functions.lua") --load all the functions
 
@@ -20,6 +22,17 @@ local function genParam2Meshoptions()
 		+ (math.random(0,1) * 32))  --bit 5
 end
 
+local function isGenGround(cid)
+	--if cid == CID["air"] or cid == CID["water"] or cid == CID["river"] then
+	--	return false
+	--else
+	--	return true
+	--end
+	if cid == CID['ground'] then return true end
+	for name, c in pairs(ORE) do
+		if cid == c then return true end
+	end
+end
 
 minetest.register_on_mods_loaded(function()
 	minetest.set_mapgen_setting("mg_flags", "caves,nodungeons,light,decorations,biomes", true)
@@ -36,6 +49,10 @@ minetest.register_on_mods_loaded(function()
 	CID["ground"] = minetest.get_content_id(qts.worldgen.mpagen_aliases.stone)
 	CID["water"] = minetest.get_content_id(qts.worldgen.mpagen_aliases.water)
 	CID["river"] = minetest.get_content_id(qts.worldgen.mpagen_aliases.river)
+	
+	for name, _ in pairs(ORE) do
+		ORE[name] = CID[name]
+	end
 	--minetest.register_alias("mapgen_singlenode", "air")
 	
 	--mapgen v6 aliases. NOT SET
@@ -70,6 +87,7 @@ end)
 
 
 minetest.register_on_generated(function(minp, maxp, blockseed)
+	--minetest.log("WORLDGEN 1")
 	local columnID = 1
 	local heightmap = minetest.get_mapgen_object("heightmap")
 	local heatmap = minetest.get_mapgen_object("heatmap")
@@ -85,25 +103,42 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 	
 	local structures = {}
 	
+	local biomeBuffer = {}
+	--local heightBuffer = {}
+	--minetest.log("WORLDGEN 2")
 	--for every Y column
 	for z = minp.z, maxp.z do
 	for x = minp.x, maxp.x do
 		--get the biome data
 		biomeID = qts.worldgen.get_biome_name(heatmap[columnID],humiditymap[columnID],heightmap[columnID])
 		biomeRef = qts.worldgen.registered_biomes[biomeID]
+		biomeBuffer[columnID] = biomeID
 		--ground scanning setup
 		local groundHeight = -31000
 		local isground = false
 		local airdepth = -1
 		
 		--now, for every node in column, top down
+		
 		for y = maxp.y, minp.y, -1 do
 			--per-Node data
 			local i = Area:index(x, y, z)
 			local nID = nil
 			
+			if (Data[i] ~= CID["air"]) and 
+					(Data[i] ~= CID["ground"]) and 
+					(Data[i] ~= CID["water"]) and 
+					(Data[i] ~= CID["river"]) then
+				for name, c in pairs(ORE) do
+					if Data[i] == c then 
+						Data[i] = CID["ground"]
+						nID = CID["ground"]
+					end
+				end
+			end 
+			
 			--update ground scan
-			if Data[i] ~= CID["ground"] then
+			if (not isGenGround(Data[i])) then
 				--air or otherwise
 				if isground then 
 					isground = false
@@ -120,7 +155,11 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 						--groundHeight = heightmap[columnID]
 						local n = minetest.get_node_or_nil({x=x, y=y+1,z=z})
 						if n and n.name and n.name == "air" then
-							groundHeight = y
+							--local cidbelow = minetest.get_content_id(n.name)
+							--if qts.worldgen.is_biome_node(cidbelow, biomeID,{"surface", "fill", "stone"}, true) 
+							--		or cidbelow == CID["ground"] then
+								groundHeight = y
+							--end
 						else
 							--attempt trace up, since the data is not readily avalable
 							local depth = nil
@@ -129,9 +168,14 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 								if traceup_found == false then
 									local off_y = y - delta_y
 									local n = minetest.get_node_or_nil({x=x, y=off_y,z=z})
+									
 									if n and n.name and n.name == "air" then
-										depth = delta_y + 2
-										traceup_found = true
+										--local cidbelow = minetest.get_content_id(n.name)
+										--if qts.worldgen.is_biome_node(cidbelow, biomeID,{"surface", "fill", "stone"}, true) 
+										--		or cidbelow == CID["ground"] then
+											depth = delta_y + 2
+											traceup_found = true
+										--end
 									end
 								end
 							end
@@ -174,7 +218,20 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 				--dbg_placed = true
 			end
 		end
-		
+		columnID = columnID + 1
+	end
+	end
+	
+	--minetest.log("WORLDGEN 3")
+	--set the data
+	VM:set_data(Data)
+	VM:set_light_data(LightData)
+	VM:set_param2_data(Param2Data)
+	
+	columnID = 1
+	for z = minp.z, maxp.z do
+	for x = minp.x, maxp.x do
+		local biomeID = biomeBuffer[columnID]
 		--gen trees, structures
 		for y = maxp.y, minp.y, -1 do
 			local i = Area:index(x, y, z)
@@ -189,16 +246,17 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 							local strucDef = qts.worldgen.registered_structures[name]
 							local rotation = "0"
 							if strucDef.rotate then rotation = "random" end
-							--local sucess = minetest.place_schematic(
-							--	vector.add({x=x,y=y,z=z}, strucDef.offset), 
-							--	strucDef.schematic, 
-							--	rotation, 
-							--	nil, 
-							--	strucDef.force_place, 
-							--	strucDef.flags
-							--)
+							local sucess = minetest.place_schematic_on_vmanip(
+								VM,
+								vector.add({x=x,y=y,z=z}, strucDef.offset), 
+								strucDef.schematic, 
+								rotation, 
+								nil, 
+								strucDef.force_place, 
+								strucDef.flags
+							)
 							--minetest.log("Structure Placed: "..dump(sucess).." : "..dump({x=x, y=y, z=z}))
-							structures[#structures + 1] = {pos = {x=x, y=y, z=z}, name = name}
+							--structures[#structures + 1] = {pos = {x=x, y=y, z=z}, name = name}
 							struc = true
 							break
 						end
@@ -210,7 +268,19 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 				Data[i] = nID
 			end
 		end
-		
+		columnID = columnID + 1
+	end
+	end
+	--minetest.log("WORLDGEN 4")
+	--get the new valid data
+	Data= VM:get_data()
+	LightData = VM:get_light_data()
+	Param2Data = VM:get_param2_data()
+	
+	columnID = 1
+	for z = minp.z, maxp.z do
+	for x = minp.x, maxp.x do
+		local biomeID = biomeBuffer[columnID]
 		--place plants
 		for y = maxp.y, minp.y, -1 do
 			local i = Area:index(x, y, z)
@@ -263,10 +333,11 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 				end
 			end
 		end
+		
 		columnID = columnID + 1
 	end
 	end
-	
+	--minetest.log("WORLDGEN 5")
 	--run ore and deco generation
 	
 	
@@ -283,6 +354,7 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 	VM:write_to_map()
 	
 	--place structures
+	--[[
 	for i, struct in ipairs(structures) do
 		local strucDef = qts.worldgen.registered_structures[struct.name]
 		local rotation = "0"
@@ -297,4 +369,5 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 		)
 		--minetest.log("Structure Placed: "..dump(sucess).." : "..dump(struct.pos))
 	end
+	]]
 end)
