@@ -265,27 +265,39 @@ show_gui(pos, player, guiname, tabindex = 1, ...)
 ####CALLBACK_FUNCTIONS######
 TODO: CALLBACK_FUNCTIONS Marker
 
-on_walk = function(pos, entity)
+on_walk = function(pos, obj)
 	Description:
 	Run every tick for the node a entity is standing on
 	
 	Paramaters
 	pos - vector as pos -  worldpos of the node
-	entity - objectref - the entity doing the standing
+	obj - objectref - the entity doing the standing
+	
 	
 	Return: None
 	
 	
-on_walk_in = function(pos, entity)
+on_walk_in = function(pos, obj)
 	Description:
 	Run every tick for the node a entity is standing in
 	
 	Paramaters
 	pos - vector as pos -  worldpos of the node
-	entity - objectref - the entity doing the standing
+	obj - objectref - the entity doing the standing
+	entered - boolean - true if this is the first tick walking on node
 
 	Return: None
+
+on_walk_exit = function(pos, obj)
+	Description:
+	Run the frame after an entity leaves a node
 	
+	Paramaters
+	pos - vector as pos -  worldpos of the node
+	obj - objectref - the entity doing the standing
+
+	Return: None
+
 	
 on_carry = function(itmestack, player, damage)
 	Description:

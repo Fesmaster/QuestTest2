@@ -77,11 +77,20 @@ minetest.register_tool("dtools:summoning_wand", {
 	end,
 	on_place = function(itemstack, user, pointed_thing)
 		minetest.log("QTS Summoning Tool placed")
-		minetest.log (dump(user:get_look_dir()))
+		if (pointed_thing.under) then
+			qts.projetile_launch_to(
+				"dtools:testing_projectile", 
+				vector.add(user:get_pos(), {x=0, y=1.5, z=0}), 
+				pointed_thing.under, 
+				user, 
+				25
+			)
+		end
 	end,
 	on_secondary_use = function(itemstack, user, pointed_thing)
 		minetest.log("QTS Summoning Tool rightclicked")
-		dtools.player_launch_projectile(user, "dtools:testing_projectile")
+		--dtools.player_launch_projectile(user, "dtools:testing_projectile")
+		qts.projectile_launch_player("dtools:testing_projectile", user, 5)
 		--dtools.launch_test_projectile(vector.add(user:get_pos(), {x=0, y=1.5, z=0}), user:get_look_dir(), 25)
 	end
 })

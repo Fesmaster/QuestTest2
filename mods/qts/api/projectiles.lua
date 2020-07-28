@@ -170,19 +170,21 @@ function qts.register_projectile(name, def)
 					--struck an entity
 					for i, obj in ipairs(objs) do
 						--make sure not the same obj and the other is not a projectile either
-						if (not pcall(function() 
-							if (obj:is_player()) then
-								if (self.launcher and self.launcher:is_player()) then
-									if (obj:get_player_name() ~= self.launcher:get_player_name()) then
+						if (not pcall(function()
+							if (qts.get_object_id(obj) ~= self.QTID and qts.objects_overlapping(self.object, obj)) then
+								if (obj:is_player()) then
+									if (self.launcher and self.launcher:is_player()) then
+										if (obj:get_player_name() ~= self.launcher:get_player_name()) then
+											self:on_strike_entity(obj)
+										end
+									else
 										self:on_strike_entity(obj)
 									end
-								else
+								elseif ((obj.get_luaentity ~= nil) --there is a strange error that obj might no longer exits on the next line
+										and (obj:get_luaentity().name ~= self.name)
+										and (obj:get_luaentity().name ~= "__builtin:item")) then 
 									self:on_strike_entity(obj)
 								end
-							elseif ((obj.get_luaentity ~= nil) --there is a strange error that obj might no longer exits on the next line
-									and (obj:get_luaentity().name ~= self.name)
-									and (obj:get_luaentity().name ~= "__builtin:item")) then 
-								self:on_strike_entity(obj)
 							end
 						end)) then 
 							minetest.log("QUESTEST ERROR: An error occured with a projectile targeting a deleted entity. Gracefully skipping.")
@@ -200,6 +202,7 @@ function qts.register_projectile(name, def)
 								if (obj and obj:is_player() and self.collectable ~= "") then
 									local inv = obj:get_inventory()
 									local left = inv:add_item("main", self.collectable)
+									qts.pickup_sound(obj)
 									if (left and not left:is_empty()) then
 										self.collectable = ItemStack(left):to_string()
 									else
@@ -276,4 +279,69 @@ end
 
 qts.projectile_default_timeout = function(luaentity)
 	luaentity.object:remove()
+end
+
+
+--[[
+Launching Functions
+
+
+
+--]]
+
+function qts.projectile_launch_player(projectile, player, inacuracy)
+	local pos = player:get_pos()
+	if (not inacuracy) then inacuracy = 0 end
+	if (player:is_player()) then
+		pos = vector.add(pos, {x=0, y=1.5, z=0})
+		local dir = player:get_look_dir()
+		pos = vector.add(pos, dir)
+		local obj = minetest.add_entity(pos, projectile)
+		if (inacuracy ~= 0) then
+			inacuracy = inacuracy / 100
+			dir = {
+				x = dir.x + ((math.random() - 0.5 ) * inacuracy), 
+				y = dir.y + ((math.random() - 0.5 ) * inacuracy),
+				z = dir.z + ((math.random() - 0.5 ) * inacuracy),
+			}
+		end
+		if obj:get_luaentity().launch ~= nil then
+			obj:get_luaentity():launch(dir, player)
+		end
+	end
+end
+
+function qts.projetile_launch_to(projectile, origin, target, launcher, inacuracy)
+	local dir = vector.direction(origin, target)
+	if (not inacuracy) then inacuracy = 0 end
+	if (inacuracy ~= 0) then
+		inacuracy = inacuracy / 100
+		dir = {
+			x = dir.x + ((math.random() - 0.5 ) * inacuracy), 
+			y = dir.y + ((math.random() - 0.5 ) * inacuracy),
+			z = dir.z + ((math.random() - 0.5 ) * inacuracy),
+		}
+	end
+	local obj = minetest.add_entity(origin, projectile)
+	if obj:get_luaentity().launch ~= nil then
+		obj:get_luaentity():launch(dir, launcher)
+	end
+end
+
+
+function qts.projetile_launch_dir(projectile, origin, dir, launcher, inacuracy)
+	dir = vector.normalize(dir)
+	if (not inacuracy) then inacuracy = 0 end
+	if (inacuracy ~= 0) then
+		inacuracy = inacuracy / 100
+		dir = {
+			x = dir.x + ((math.random() - 0.5 ) * inacuracy), 
+			y = dir.y + ((math.random() - 0.5 ) * inacuracy),
+			z = dir.z + ((math.random() - 0.5 ) * inacuracy),
+		}
+	end
+	local obj = minetest.add_entity(origin, projectile)
+	if obj:get_luaentity().launch ~= nil then
+		obj:get_luaentity():launch(dir, launcher)
+	end
 end

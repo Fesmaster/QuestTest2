@@ -57,7 +57,7 @@ minetest.register_entity("dtools:static_entity", {
 	
 	on_activate = function(self, staticdata, dtime_s)
 		self.object:set_armor_groups({fleshy = 0})
-		self.id = dtools.static_entity_id()
+		self.QTID = qts.gen_entity_id()
 	end,
 	
 	on_step = function(self, dtime)
@@ -75,7 +75,7 @@ minetest.register_entity("dtools:static_entity", {
 			for i,obj in ipairs(objs) do
 				pcall(function()
 					if (qts.object_name(obj) ~= "dtools:static_entity") or 
-						(obj:get_luaentity().id ~= self.id) then
+						(qts.get_object_id(obj) ~= self.QTID) then
 						if (qts.objects_overlapping(self.object, obj)) then
 							minetest.log("COLLISION DETECTED")
 							colliding = true
@@ -211,6 +211,9 @@ minetest.register_node("dtools:ecd_inactive", {
 	on_projectile_enter = function(projectile, pos) 
 		minetest.set_node(pos, {name = "dtools:ecd_active"})
 	end,
+	on_walk_in = function(pos, walker, entry)
+		minetest.set_node(pos, {name = "dtools:ecd_active"})
+	end
 })
 
 minetest.register_node("dtools:ecd_active", {
@@ -225,4 +228,7 @@ minetest.register_node("dtools:ecd_active", {
 	on_projectile_exit = function(projectile, pos) 
 		minetest.set_node(pos, {name = "dtools:ecd_inactive"})
 	end,
+	on_walk_exit = function(pos, walker, entry)
+		minetest.set_node(pos, {name = "dtools:ecd_inactive"})
+	end
 })

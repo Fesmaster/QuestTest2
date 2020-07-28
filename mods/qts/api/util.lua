@@ -142,3 +142,11 @@ function qts.get_object_id(obj)
 		end
 	end
 end
+
+function qts.pickup_sound(player)
+	if (type(player) ~= "string") then player = player:get_player_name() end
+	minetest.sound_play("pickup", {
+		to_player = player,
+		gain = 1.0,
+	})
+end
