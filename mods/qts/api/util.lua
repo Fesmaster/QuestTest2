@@ -111,10 +111,34 @@ function qts.Set(t)
 	return s
 end
 
-function qts.ObjectName(obj)
+function qts.object_name(obj)
 	if (obj:is_player()) then
 		return obj:get_player_name()
 	else
 		return obj:get_luaentity().name
+	end
+end
+
+function qts.new_counter()
+	local i = 0
+	return function()
+		i = i + 1
+		return i
+	end
+end
+
+qts.gen_entity_id = qts.new_counter()
+
+function qts.get_object_id(obj)
+	if obj:is_player() then
+		return obj:get_player_name()
+	else
+		local le = obj:get_luaentity()
+		if le.QTID then 
+			return le.QTID 
+		else
+			le.QTID = qts.gen_entity_id()
+			return le.QTIDs
+		end
 	end
 end

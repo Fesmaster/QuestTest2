@@ -116,6 +116,8 @@ function qts.register_projectile(name, def)
 		
 		
 		on_activate = function(self, staticdata, dtime_s)
+			self.QTID = qts.gen_entity_id()
+		
 			self.object:set_armor_groups({fleshy = 0, projectile = 100})
 			
 			self.prevpos = self.object:get_pos()
@@ -163,7 +165,7 @@ function qts.register_projectile(name, def)
 						end
 					end
 				end
-				local objs = minetest.get_objects_inside_radius(pos, 2)
+				local objs = minetest.get_objects_inside_radius(pos, math.max(2, self.radius * 2))
 				if (#objs > 0) then
 					--struck an entity
 					for i, obj in ipairs(objs) do

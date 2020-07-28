@@ -12,12 +12,31 @@ minetest.register_node("dtools:blue_node", {
 	tiles ={"dtools_blue.png"},
 	groups = {oddly_breakable_by_hand=3},
 	sounds = qtcore.node_sound_defaults(),
+	--[[
 	on_projectile_strike = function(projectile, pointed_thing)
 		if (pointed_thing.above) then
 			minetest.set_node(pointed_thing.above, {name = "dtools:blue_node"})
 		end
 	end
+	--]]
 })
+
+minetest.register_node("dtools:red_node", {
+	description = "Red Node",
+	tiles ={"dtools_red.png"},
+	groups = {oddly_breakable_by_hand=3},
+	sounds = qtcore.node_sound_defaults(),
+})
+
+local function iterator()
+	local index = 0
+	return function()
+		index = index + 1
+		return index
+	end
+end
+
+dtools.static_entity_id = iterator()
 
 minetest.register_entity("dtools:static_entity", {
 	initial_properties = {
@@ -26,6 +45,7 @@ minetest.register_entity("dtools:static_entity", {
 		physical = true,
 		weight = 1,
 		collisionbox = {-0.5, -0.5, -0.5, 0.5, 0.5, 0.5},
+		collide_with_objects = false, --using manual detection
 		visual = "wielditem",
 		visual_size = {x=.7, y=.7, z=.7},
 		textures = {"dtools:blue_node"},
@@ -37,6 +57,7 @@ minetest.register_entity("dtools:static_entity", {
 	
 	on_activate = function(self, staticdata, dtime_s)
 		self.object:set_armor_groups({fleshy = 0})
+		self.id = dtools.static_entity_id()
 	end,
 	
 	on_step = function(self, dtime)
@@ -46,6 +67,33 @@ minetest.register_entity("dtools:static_entity", {
 			self.object:set_acceleration({x=0, y=0, z=0})
 		else
 			self.object:set_acceleration(vector.multiply(vel, -2))
+		end
+		
+		local objs = minetest.get_objects_inside_radius(self.object:get_pos(), 2)
+		if (#objs > 1) then
+			local colliding = false
+			for i,obj in ipairs(objs) do
+				pcall(function()
+					if (qts.object_name(obj) ~= "dtools:static_entity") or 
+						(obj:get_luaentity().id ~= self.id) then
+						if (qts.objects_overlapping(self.object, obj)) then
+							minetest.log("COLLISION DETECTED")
+							colliding = true
+						end
+					end
+				end)
+			end
+			if (colliding) then
+				self.object:set_properties({
+					textures = {"dtools:red_node"},
+				})
+			else
+				self.object:set_properties({
+					textures = {"dtools:blue_node"},
+				})
+			end
+		else
+			--minetest.log("STATIC ENTITY: One or less objects in area")
 		end
 	end,
 	
@@ -59,7 +107,7 @@ minetest.register_entity("dtools:static_entity", {
 			self.object:add_velocity(vector.multiply(dir, 10))
 		end
 		
-		minetest.log("Punched by ".. qts.ObjectName(puncher) .. "with damage " .. dump(tool_capabilities))
+		--minetest.log("Punched by ".. qts.ObjectName(puncher) .. "with damage " .. dump(tool_capabilities))
 	end,
 	
 	on_rightclick = function(self, clicker)

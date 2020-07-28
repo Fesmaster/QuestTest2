@@ -127,9 +127,7 @@ minetest.register_node("default:boxtest", {
 	sounds = qtcore.node_sound_stone(),
 	drawtype = "nodebox",
 	paramtype = "light",
-	node_box = qtcore.nb_sapling()
-	},
-	
+	node_box = qtcore.nb_sapling(),
 	paramtype2 = "facedir",
 	--on_place = function(itemstack, placer, pointed_thing)
 	--	if pointed_thing.type ~= "node" then
