@@ -442,6 +442,13 @@ qts.register_shaped_node ("default:mahogany_log", {
 	sounds = qtcore.node_sound_wood(),
 })
 
+qts.register_shaped_node ("default:blue_mushroom_trunk", {
+	description = "Blue Mushroom Trunk",
+	tiles = {"default_b_shroom_top.png", "default_b_shroom_side.png", "default_mahogany_side.png"},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1},
+	sounds = qtcore.node_sound_wood(),
+})
 
 
 
