@@ -72,6 +72,36 @@ function qts.get_nodes_on_radius(pos, radius)
 	end
 end
 
+--get an even distribution of # of points on a sphere. sphere's radius is 1
+function qts.distribute_points_on_sphere(point_count)
+	local points = {}
+	
+	local phi = math.pi * (3 - math.sqrt(5)) --golden angle in randians
+	
+	for i = 0, point_count do
+		
+		local y = 1 - (i / (point_count-1)) * 2 --  1 to -1
+		local radius = math.sqrt(1 - y*y)
+		local theta = phi * i
+		
+		local x = math.cos(theta) * radius
+		local z = math.sin(theta) * radius
+		
+		points[#points+1] = {x=x, y=y, z=z}
+	end
+	
+	return points
+end
+
+--testing function that places given node count times around a sphere of radius dist located at pos
+function qts.test_distribute_node(pos, count, dist, node)
+	local points = qts.distribute_points_on_sphere(count)
+	for i, point in ipairs(points) do
+		local p = vector.multiply(point, dist)
+		p = vector.add(pos, p)
+		minetest.set_node(p, {name = node})
+	end
+end
 
 function qts.Set(t)
 	local s = {}
@@ -79,4 +109,12 @@ function qts.Set(t)
 		s[v] = true
 	end
 	return s
+end
+
+function qts.ObjectName(obj)
+	if (obj:is_player()) then
+		return obj:get_player_name()
+	else
+		return obj:get_luaentity().name
+	end
 end

@@ -61,3 +61,12 @@ minetest.register_chatcommand("punchme", {
 		player:punch(player, 1.0, {fleshy=5}, nil)
 	end,
 })
+
+minetest.register_chatcommand("healme", {
+	params = "<text>",
+	description = "Player punches themselves in the arm",
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		player:set_hp(20)
+	end,
+})

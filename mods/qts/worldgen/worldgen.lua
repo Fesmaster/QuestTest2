@@ -125,6 +125,18 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 			local i = Area:index(x, y, z)
 			local nID = nil
 			
+			if (Data[i] ~= CID["air"]) and 
+					(Data[i] ~= CID["ground"]) and 
+					(Data[i] ~= CID["water"]) and 
+					(Data[i] ~= CID["river"]) then
+				for name, c in pairs(ORE) do
+					if Data[i] == c then 
+						Data[i] = CID["ground"]
+						nID = CID["ground"]
+					end
+				end
+			end 
+			
 			--update ground scan
 			if (not isGenGround(Data[i])) then
 				--air or otherwise
