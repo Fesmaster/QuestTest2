@@ -1,11 +1,17 @@
 --[[
-	This file manages player specific data
-	TODO: change this to player.lua
+	This file manages player specific data,
+	callbacks on nodes and items,
+	and ambient sounds
 --]]
 
-qts_internal.nodeDamageTimer = 0
+local nodeDamageTimer = 0
+
+local ambient_sound_cycles = 2
+local ambient_sound_timer = 0
+local ambient_sound_radius = 8
+
 function qts.isDamageTick()
-	return qts_internal.nodeDamageTimer >= 1
+	return nodeDamageTimer >= 1
 end
 
 qts.player_data = {}
@@ -51,10 +57,10 @@ end
 
 minetest.register_globalstep(function(dtime)
 	--damage tick update
-	if qts_internal.nodeDamageTimer >= 1 then
-		qts_internal.nodeDamageTimer = 0
+	if nodeDamageTimer >= 1 then
+		nodeDamageTimer = 0
 	end
-	qts_internal.nodeDamageTimer = qts_internal.nodeDamageTimer + dtime
+	nodeDamageTimer = nodeDamageTimer + dtime
 	
 	--player node and item callbacks
 	for _, player in ipairs(minetest.get_connected_players()) do
@@ -77,7 +83,7 @@ minetest.register_globalstep(function(dtime)
 		local node_under = minetest.get_node(pos)
 		local node_dat_under = minetest.registered_nodes[node_under.name]
 		if node_dat_under and node_dat_under.on_walk then
-			node_dat_under.on_walk(pos, player, std.node_damage)
+			node_dat_under.on_walk(pos, player)
 		end
 
 		local node_in = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z})
@@ -124,10 +130,10 @@ minetest.register_globalstep(function(dtime)
 				player:set_wielded_item(wield_n)
 			end
 		end
+		
 		--[[
 			Pick up dropped items in the world
 		--]]
-		---[[
 		local objs = minetest.get_objects_inside_radius(vector.add(pos, {x=0, y=1, z=0}), 1.5)
 		if (#objs > 1) then
 			for i, obj in ipairs(objs) do
@@ -149,7 +155,100 @@ minetest.register_globalstep(function(dtime)
 				end)
 			end
 		end
+		
+		--[[
+			Ambient Sounds
+			
+			inside of a register_node, under [sounds] = {}, 
+			ambience = {
+				name = "name"
+				spec = simple_sound_spec
+				chance = 1 in value
+				playtime = number
+				positional = boolean
+				
+				--if playtime is nil, the sound is killed every sound cycle (default: 3 seconds)
+			}
+			
+			in player data, a table of {
+				nodename = {
+					timer = time_left
+					handle = sound_handle
+					
+				}
+			}
 		--]]
+		
+		ambient_sound_timer = ambient_sound_timer + dtime
+		local playing_sounds = qts.get_player_data(name, "INTERNAL", "playing_sounds") or {}
+		for k, v in pairs(playing_sounds) do
+			v.timer = v.timer - dtime;
+			if (v.timer <= 0) then
+				minetest.sound_stop(v.handle) --kill sounds
+				playing_sounds[k] = nil
+			end
+		end
+		
+		if (ambient_sound_timer >= ambient_sound_cycles) then
+			ambient_sound_timer = 0
+			
+			local as_pos_list, as_num = minetest.find_nodes_in_area(
+				vector.subtract(pos, ambient_sound_radius),
+				vector.add(pos, ambient_sound_radius),
+				{"group:ambient"}
+			)
+			
+			local as_count = 0
+			for i, v in pairs(as_num) do 
+				as_count = as_count + v
+			end
+			
+			--if there is an ambient sound node in the area
+			if (as_count >= 1) then
+				
+				for i, as_pos in ipairs(as_pos_list) do
+					--minetest.log("ambient sound update")
+					local sound_node = minetest.get_node_or_nil(as_pos)
+					if (sound_node) then
+						local sound_node_name = sound_node.name
+						if (playing_sounds[sound_node_name] == nil) then 
+							--minetest.log("new sound - " .. sound_node_name)
+							--only play sounds from a node type not already playing
+							local sound_node_def = minetest.registered_nodes[sound_node_name]
+							if (sound_node_def) then
+								--minetest.log("def exists")
+								local sound_profile = sound_node_def.sounds.ambience --ambience 
+								if (sound_profile) then
+									--minetest.log("sound profile exists")
+									if (math.random(sound_profile.chance) == 1) then
+										--minetest.log("chance suceeded. player: " .. name)
+										local spec = {
+											max_hear_distance = sound_profile.spec.max_hear_distance or 32,
+											gain = sound_profile.spec.gain or 1,
+											--loop = sound_profile.spec.loop,
+											to_player = name,
+										}
+										if (sound_profile.positional) then
+											spec.pos = as_pos
+										end
+										local h = minetest.sound_play(sound_profile.name, spec)
+										playing_sounds[sound_node_name] = {
+											handle = h,
+											timer = sound_profile.playtime or ambient_sound_cycles
+										}
+									end
+								end
+							end
+						end
+					end
+					
+				end
+			end
+			
+		end
+		qts.set_player_data(name, "INTERNAL", "playing_sounds", playing_sounds)
+		
+		
 		--update prevpos
 		qts.set_player_data(name, "INTERNAL", "prevpos", player:get_pos())
 	end

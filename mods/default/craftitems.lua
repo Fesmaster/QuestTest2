@@ -30,3 +30,13 @@ minetest.register_craftitem("default:coal", {
 	inventory_image = "default_coal.png",
 	groups = {coal = 1,},
 })
+
+minetest.register_craftitem("default:flint", {
+	description = ("Flint"),
+	inventory_image = "default_flint.png",
+})
+
+minetest.register_craftitem("default:tinder", {
+	description = ("Tinder"),
+	inventory_image = "default_tinder.png",
+})

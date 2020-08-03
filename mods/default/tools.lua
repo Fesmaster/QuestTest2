@@ -1,5 +1,33 @@
 
 --[[
+Special tools
+
+]]
+
+minetest.register_tool("default:knife_flint", {
+	description = "Flint Knife",
+	inventory_image = "default_knife_flint.png",
+	tool_capabilities = {
+		full_punch_interval = 1.0,
+		max_drop_level=1,
+		groupcaps={
+			snappy = {times={[1]=0.60, [2]=0.30, [3]=0.10}, uses=100, maxlevel=1},
+		},
+		damage_groups = {fleshy=7},
+	},
+	sound = qtcore.tool_sounds_default(),
+	groups = {knife = 1}
+})
+minetest.register_craft({
+	output = "default:knife_flint",
+	recipe = {
+		{'default:flint'},
+		{'group:stick'},
+	}
+})
+
+
+--[[
 	Pickaxes
 	default_pick_rusted.png
 ]]
@@ -148,6 +176,31 @@ minetest.register_craft({
 --[[
 AXES
 ]]
+--flint
+minetest.register_tool("default:axe_flint", {
+	description = "Flint Axe",
+	inventory_image = "default_axe_flint.png",
+	tool_capabilities = {
+		full_punch_interval = 1.0,
+		max_drop_level=1,
+		groupcaps={
+			choppy = {times={[2]=0.50, [3]=0.30}, uses=30, maxlevel=1},
+		},
+		damage_groups = {fleshy=5},
+	},
+	sound = qtcore.tool_sounds_default(),
+	groups = {axe = 1}
+})
+minetest.register_craft({
+	output = "default:axe_flint",
+	recipe = {
+		{'default:flint', 'default:flint' },
+		{'group:stick', 'default:flint' },
+		{'group:stick', '' },
+	}
+})
+
+
 --copper
 minetest.register_craftitem("default:axe_head_copper", {
 	description = ("Copper Axe Head"),

@@ -49,6 +49,14 @@ minetest.register_craft({
 	}
 })
 
+minetest.register_craft({
+	output = "default:mahogany_wood_planks 4",
+	recipe = {
+		{"default:mahogany_log"},
+	}
+})
+
+--mahogany_wood_planks
 --stick
 minetest.register_craft({
 	output = "default:stick 4",
@@ -111,6 +119,119 @@ minetest.register_craft({
 	}
 })
 
+--knife recipies
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "default:tinder",
+	recipe = {
+		 "default:knife_flint", 
+		 "group:stick"
+	},
+	replacements = {
+		{"default:knife_flint", "default:knife_flint"}
+	}
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "default:tinder 4",
+	recipe = {
+		"default:knife_flint", 
+		'group:stick', 
+		'group:stick', 
+		'group:stick', 
+		'group:stick'
+	},
+	replacements = {
+		{"default:knife_flint", "default:knife_flint"}
+	}
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "default:tinder 8",
+	recipe = {
+		"default:knife_flint", 
+		'group:stick', 
+		'group:stick', 
+		'group:stick', 
+		'group:stick', 
+		'group:stick', 
+		'group:stick', 
+		'group:stick', 
+		'group:stick'
+	},
+	replacements = {
+		{"default:knife_flint", "default:knife_flint"}
+	}
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "default:tinder",
+	recipe = {
+		 "default:knife_flint", 
+		 "group:leaves"
+	},
+	replacements = {
+		{"default:knife_flint", "default:knife_flint"}
+	}
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "default:tinder 4",
+	recipe = {
+		 "default:knife_flint", 
+		 "group:leaves",
+		 "group:leaves",
+		 "group:leaves",
+		 "group:leaves"
+	},
+	replacements = {
+		{"default:knife_flint", "default:knife_flint"}
+	}
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "default:tinder 8",
+	recipe = {
+		 "default:knife_flint", 
+		 "group:leaves",
+		 "group:leaves",
+		 "group:leaves",
+		 "group:leaves",
+		 "group:leaves",
+		 "group:leaves",
+		 "group:leaves",
+		 "group:leaves"
+	},
+	replacements = {
+		{"default:knife_flint", "default:knife_flint"}
+	}
+})
+
+--various other
+
+minetest.register_craft({
+	output = "default:tinderbox",
+	recipe = {
+		{ "group:stick", 'group:stick', "group:stick" },
+		{ "default:tinder", 'default:flint', "default:tinder" },
+		{ "default:tinder", 'default:tinder', "default:tinder" },
+	}
+})
+
+minetest.register_craft({
+	output = "default:campfire",
+	recipe = {
+		{ "group:wood", "", "group:wood" },
+		{ "", "group:wood", "" },
+		{ "group:wood", "", "group:wood" },
+	}
+})
 
 --toolrepair
 minetest.register_craft({

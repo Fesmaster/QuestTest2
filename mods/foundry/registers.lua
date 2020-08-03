@@ -135,7 +135,7 @@ minetest.register_node("foundry:spout", {
 })
 --flowing metal
 minetest.register_entity("foundry:casting_flow", {
-	qtid = "foundry_casting_flow",
+	--qtid = "foundry_casting_flow",
 	visual = "mesh",
 	mesh = "flow.obj",
 	static_save = false,
@@ -156,6 +156,7 @@ minetest.register_entity("foundry:casting_flow", {
 	end,
 	on_activate = function(self)
 		self.object:set_armor_groups({immortal = 1})
+		self.QTID = qts.gen_entity_id()
 	end,
 })
 

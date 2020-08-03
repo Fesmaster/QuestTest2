@@ -207,7 +207,7 @@ qts.register_shaped_node("default:clay", {
 	tiles = {"default_clay_block.png"},
 	groups = {crumbly=3},
 	sounds = qtcore.node_sound_stone(),
-	drop = "default:clay_lump"
+	drop = "default:clay_lump 4"
 })
 
 
@@ -216,6 +216,18 @@ qts.register_shaped_node ("default:dirt", {
 	tiles = {"default_dirt.png"},
 	groups = {crumbly = 3, soil=1},
 	sounds = qtcore.node_sound_dirt(),
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				rarity = 32,
+				items = {"default:flint"},
+			},
+			{
+				items = {"default:dirt"}
+			}
+		}
+	}
 })
 
 qts.register_shaped_node ("default:dirt_with_grass", {
@@ -223,7 +235,18 @@ qts.register_shaped_node ("default:dirt_with_grass", {
 	tiles = {"default_grass.png"},
 	groups = {crumbly = 3, soil=1, spreading_dirt_type=1},
 	sounds = qtcore.node_sound_grass(),
-	drop = "default:dirt"
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				rarity = 32,
+				items = {"default:flint"},
+			},
+			{
+				items = {"default:dirt"}
+			}
+		}
+	}
 })
 
 --fix the sides of grass on the full node
@@ -238,7 +261,18 @@ qts.register_shaped_node ("default:dirt_with_swamp_grass", {
 	tiles = {"default_swamp_grass.png"},
 	groups = {crumbly = 3, soil=1, spreading_dirt_type=1},
 	sounds = qtcore.node_sound_grass(),
-	drop = "default:dirt"
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				rarity = 32,
+				items = {"default:flint"},
+			},
+			{
+				items = {"default:dirt"}
+			}
+		}
+	}
 })
 
 minetest.override_item("default:dirt_with_swamp_grass", {
@@ -252,7 +286,18 @@ qts.register_shaped_node ("default:dirt_with_prarie_grass", {
 	tiles = {"default_prarie_grass.png"},
 	groups = {crumbly = 3, soil=1, spreading_dirt_type=1},
 	sounds = qtcore.node_sound_grass(),
-	drop = "default:dirt"
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				rarity = 32,
+				items = {"default:flint"},
+			},
+			{
+				items = {"default:dirt"}
+			}
+		}
+	}
 })
 
 minetest.override_item("default:dirt_with_prarie_grass", {
@@ -266,7 +311,18 @@ qts.register_shaped_node ("default:dirt_with_mushroom_grass", {
 	tiles = {"default_mushroom_grass.png"},
 	groups = {crumbly = 3, soil=1, spreading_dirt_type=1},
 	sounds = qtcore.node_sound_grass(),
-	drop = "default:dirt"
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				rarity = 32,
+				items = {"default:flint"},
+			},
+			{
+				items = {"default:dirt"}
+			}
+		}
+	}
 })
 
 minetest.override_item("default:dirt_with_mushroom_grass", {
@@ -280,7 +336,18 @@ qts.register_shaped_node ("default:dirt_with_rainforest_grass", {
 	tiles = {"default_rainforest_grass.png"},
 	groups = {crumbly = 3, soil=1, spreading_dirt_type=1},
 	sounds = qtcore.node_sound_grass(),
-	drop = "default:dirt"
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				rarity = 32,
+				items = {"default:flint"},
+			},
+			{
+				items = {"default:dirt"}
+			}
+		}
+	}
 })
 
 minetest.override_item("default:dirt_with_rainforest_grass", {
@@ -294,6 +361,18 @@ qts.register_shaped_node ("default:sand", {
 	tiles = {"default_sand.png"},
 	groups = {oddly_breakable_by_hand = 3, crumbly = 3, falling_node=1, sand=1},
 	sounds = qtcore.node_sound_sand(),
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				rarity = 32,
+				items = {"default:flint"},
+			},
+			{
+				items = {"default:sand"}
+			}
+		}
+	}
 })
 
 qts.register_shaped_node ("default:gravel", {
@@ -301,6 +380,18 @@ qts.register_shaped_node ("default:gravel", {
 	tiles = {"default_gravel.png"},
 	groups = {oddly_breakable_by_hand = 2, crumbly = 2, falling_node=1},
 	sounds = qtcore.node_sound_sand(),
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				rarity = 8,
+				items = {"default:flint"},
+			},
+			{
+				items = {"default:gravel"}
+			}
+		}
+	}
 })
 
 qts.register_shaped_node ("default:desert_sand", {
@@ -308,6 +399,18 @@ qts.register_shaped_node ("default:desert_sand", {
 	tiles = {"default_desert_sand.png"},
 	groups = {crumbly = 3, falling_node=1, sand=1},
 	sounds = qtcore.node_sound_sand(),
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				rarity = 32,
+				items = {"default:flint"},
+			},
+			{
+				items = {"default:desert_sand"}
+			}
+		}
+	}
 })
 
 --wood and the like
