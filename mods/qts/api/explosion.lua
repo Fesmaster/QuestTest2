@@ -58,6 +58,10 @@ local function destroy_exploded_nodes(foundList)
 			end
 		end
 	end
+	--check for falling node AFTER all removed
+	for pos, code in pairs(foundList) do
+		minetest.check_for_falling(pos)
+	end
 end
 
 local function append_found_list(FL1, FL2)

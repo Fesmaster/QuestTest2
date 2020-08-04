@@ -132,19 +132,19 @@ local function campfire_rightclick(pos, node, clicker, itemstack, pointed_thing)
 	return itemstack
 end
 
+local function campfire_flood(pos, oldnode, newnode)
+	minetest.sound_play("sounds_cooling_hiss",	{pos = pos, gain = 1})
+	return false
+end
 
 minetest.register_node("default:campfire", {
 	description = "Campfire",
 	drawtype = "mesh",
-	tiles ={"default_campfire.png"},--{
-	--	name = "default_campfire_animated.png",
-	--	animation = {type = "vertical_frames", aspect_w = 16, aspect_h = 16, length = 1}
-	--}},
+	tiles ={"default_campfire.png"},
 	mesh = "campfire.obj",
-	groups = {oddly_breakable_by_hand=3, campfire=1},
-	is_ground_content = false,
-	sounds = qtcore.node_sound_wood(),
 	paramtype = "light",
+	is_ground_content = false,
+	floodable = true,
 	collision_box = {
 		type = "fixed",
 		fixed = {{-0.375000, -0.5, -0.375000, 0.375000, -0.375000, 0.375000}}
@@ -153,6 +153,8 @@ minetest.register_node("default:campfire", {
 		type = "fixed",
 		fixed = {{-0.375000, -0.5, -0.375000, 0.375000, -0.375000, 0.375000}}
 	},
+	groups = {oddly_breakable_by_hand=3, campfire=1},
+	sounds = qtcore.node_sound_wood(),
 	
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
@@ -172,6 +174,8 @@ minetest.register_node("default:campfire", {
 	end,
 	
 	on_rightclick = campfire_rightclick,
+	
+	on_flood = campfire_flood,
 })
 
 minetest.register_node("default:campfire_lit", {
@@ -182,8 +186,20 @@ minetest.register_node("default:campfire_lit", {
 		animation = {type = "vertical_frames", aspect_w = 16, aspect_h = 16, length = 1}
 	}},
 	mesh = "campfire.obj",
-	groups = {oddly_breakable_by_hand=3, campfire=1, ambient=1, not_in_creative_inventory = 1},
+	light_source = 13,
+	paramtype = "light",
 	is_ground_content = false,
+	floodable = true,
+	drop = "default:campfire",
+	collision_box = {
+		type = "fixed",
+		fixed = {{-0.375000, -0.5, -0.375000, 0.375000, -0.375000, 0.375000}}
+	},
+	selection_box = {
+		type = "fixed",
+		fixed = {{-0.375000, -0.5, -0.375000, 0.375000, -0.375000, 0.375000}}
+	},
+	groups = {oddly_breakable_by_hand=3, campfire=1, ambient=1, not_in_creative_inventory = 1},
 	sounds = qtcore.node_sound_wood({
 		ambience = {
 			name = "campfire",
@@ -194,23 +210,14 @@ minetest.register_node("default:campfire_lit", {
 			loop = true,
 		}
 	}),
-	drop = "default:campfire",
-	light_source = 13,
-	paramtype = "light",
-	collision_box = {
-		type = "fixed",
-		fixed = {{-0.375000, -0.5, -0.375000, 0.375000, -0.375000, 0.375000}}
-	},
-	selection_box = {
-		type = "fixed",
-		fixed = {{-0.375000, -0.5, -0.375000, 0.375000, -0.375000, 0.375000}}
-	},
 	
 	on_timer = campfire_node_timer,
 	
 	on_ignite = function(pos, igniter) return end,
 	
 	on_rightclick = campfire_rightclick,
+	
+	on_flood = campfire_flood,
 })
 
 

@@ -130,6 +130,7 @@ qts.register_liquid("default:lava", {
 		end
 	end,
 	on_cool = function(pos, node)
+		minetest.sound_play("sounds_cooling_hiss", {gain = 1.0, pos = pos})
 		if (node.name == "default:lava_source") then
 			minetest.set_node(pos, {name = "default:obsidian"})
 		else
