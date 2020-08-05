@@ -139,3 +139,33 @@ qts.worldgen.register_structure("tree_mahogany2", {
 	rotate = true,
 	flags = qts.worldgen.centers(true, false, true),
 })
+
+qts.worldgen.register_structure("tree_lantern1", {
+	schematic = path .. "lantern1.mts",
+	chance = 30,
+	biomes = {"rainforest"},
+	nodes = {"default:dirt_with_rainforest_grass"},
+	force_place = false,
+	rotate = true,
+	flags = qts.worldgen.centers(true, false, true),
+})
+
+qts.worldgen.register_structure("tree_lantern2", {
+	schematic = path .. "lantern2.mts",
+	chance = 30,
+	biomes = {"rainforest"},
+	nodes = {"default:dirt_with_rainforest_grass"},
+	force_place = false,
+	rotate = true,
+	flags = qts.worldgen.centers(true, false, true),
+})
+
+qts.worldgen.register_structure("tree_rosewood1", {
+	schematic = path .. "rosewood1.mts",
+	chance = 30,
+	biomes = {"prarie"},
+	nodes = {"default:dirt_with_prarie_grass"},
+	force_place = false,
+	rotate = true,
+	flags = qts.worldgen.centers(true, false, true),
+})

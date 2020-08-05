@@ -635,3 +635,75 @@ minetest.register_node("default:lantern_fruit", {
 	sounds = qtcore.node_sound_stone(),
 	light_source = 12,
 })
+
+minetest.register_node("default:oak_sapling", {
+	description = "Oak Sapling",
+	tiles ={"default_oak_leaves.png", "default_oak_leaves.png", 
+		"default_oak_leaves.png^[lowpart:37:default_oak_side.png"},
+	groups = {oddly_breakable_by_hand=3},
+	sounds = qtcore.node_sound_stone(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = qtcore.nb_sapling(),
+	paramtype2 = "facedir",
+	--on_place = function(itemstack, placer, pointed_thing)
+	--	if pointed_thing.type ~= "node" then
+	--		return itemstack
+	--	end
+	--	return qts.rotate_and_place(itemstack, placer, pointed_thing)
+	--end,
+})
+
+minetest.register_node("default:apple_sapling", {
+	description = "Apple Sapling",
+	tiles ={"default_apple_leaves.png", "default_apple_leaves.png", 
+		"default_apple_leaves.png^[lowpart:37:default_apple_side.png"},
+	groups = {oddly_breakable_by_hand=3},
+	sounds = qtcore.node_sound_stone(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = qtcore.nb_sapling(),
+	paramtype2 = "facedir",
+	--on_place = function(itemstack, placer, pointed_thing)
+	--	if pointed_thing.type ~= "node" then
+	--		return itemstack
+	--	end
+	--	return qts.rotate_and_place(itemstack, placer, pointed_thing)
+	--end,
+})
+
+minetest.register_node("default:aspen_sapling", {
+	description = "Aspen Sapling",
+	tiles ={"default_aspen_leaves.png", "default_aspen_leaves.png", 
+		"default_aspen_leaves.png^[lowpart:37:default_aspen_side.png"},
+	groups = {oddly_breakable_by_hand=3},
+	sounds = qtcore.node_sound_stone(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = qtcore.nb_sapling(),
+	paramtype2 = "facedir",
+	--on_place = function(itemstack, placer, pointed_thing)
+	--	if pointed_thing.type ~= "node" then
+	--		return itemstack
+	--	end
+	--	return qts.rotate_and_place(itemstack, placer, pointed_thing)
+	--end,
+})
+
+minetest.register_node("default:rowan_sapling", {
+	description = "Rowan Sapling",
+	tiles ={"default_rowan_leaves.png", "default_rowan_leaves.png", 
+		"default_rowan_leaves.png^[lowpart:37:default_rowan_side.png"},
+	groups = {oddly_breakable_by_hand=3},
+	sounds = qtcore.node_sound_stone(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = qtcore.nb_sapling(),
+	paramtype2 = "facedir",
+	--on_place = function(itemstack, placer, pointed_thing)
+	--	if pointed_thing.type ~= "node" then
+	--		return itemstack
+	--	end
+	--	return qts.rotate_and_place(itemstack, placer, pointed_thing)
+	--end,
+})
