@@ -277,7 +277,7 @@ on_walk = function(pos, obj)
 	Return: None
 	
 	
-on_walk_in = function(pos, obj)
+on_walk_in = function(pos, obj, entered)
 	Description:
 	Run every tick for the node a entity is standing in
 	
