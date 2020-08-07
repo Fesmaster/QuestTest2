@@ -27,7 +27,7 @@ dofile(qts.path.."/api/elements.lua")
 --any other code here 
 
 
-
+dofile(qts.path.."/mobs/mobs.lua")
 dofile(qts.path.."/worldgen/worldgen.lua")
 --post worldgen files
 

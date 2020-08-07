@@ -16,7 +16,9 @@ qts.register_shaped_node("default:stone", {
 	tiles = {"default_stone.png"},
 	groups = {cracky=3, stone=1},
 	sounds = qtcore.node_sound_stone(),
-	drop = "default:cobble"
+	drop = "default:cobble",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:stone_cobble", {
@@ -25,6 +27,8 @@ qts.register_shaped_node ("default:stone_cobble", {
 	groups = {cracky=3, stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 minetest.register_alias("default:cobble", "default:stone_cobble")--TODO: remove backwards compatability
 
@@ -34,6 +38,8 @@ qts.register_shaped_node ("default:stone_brick", {
 	groups = {cracky=3, stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:stone_block", {
@@ -42,6 +48,8 @@ qts.register_shaped_node ("default:stone_block", {
 	groups = {cracky=3, stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 	
 qts.register_shaped_node ("default:stone_cobble_mossy", {
@@ -50,6 +58,8 @@ qts.register_shaped_node ("default:stone_cobble_mossy", {
 	groups = {cracky=3, stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:stone_brick_mossy", {
@@ -58,6 +68,8 @@ qts.register_shaped_node ("default:stone_brick_mossy", {
 	groups = {cracky=3, stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 --desert_stone
@@ -66,7 +78,9 @@ qts.register_shaped_node ("default:red_stone", {
 	tiles = {"default_red_stone.png"},
 	groups = {cracky=3, stone=1},
 	sounds = qtcore.node_sound_stone(),
-	drop = "default:red_stone_cobble"
+	drop = "default:red_stone_cobble",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:red_stone_cobble", {
@@ -75,6 +89,8 @@ qts.register_shaped_node ("default:red_stone_cobble", {
 	groups = {cracky=3, stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:red_stone_brick", {
@@ -83,6 +99,8 @@ qts.register_shaped_node ("default:red_stone_brick", {
 	groups = {cracky=3,stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:red_stone_block", {
@@ -91,6 +109,8 @@ qts.register_shaped_node ("default:red_stone_block", {
 	groups = {cracky=3,stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 
@@ -100,7 +120,9 @@ qts.register_shaped_node ("default:sandstone", {
 	tiles = {"default_sandstone.png"},
 	groups = {cracky=3, stone=1},
 	sounds = qtcore.node_sound_stone(),
-	drop = "default:sandstone_cobble"
+	drop = "default:sandstone_cobble",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:sandstone_cobble", {
@@ -109,6 +131,8 @@ qts.register_shaped_node ("default:sandstone_cobble", {
 	groups = {cracky=3,stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:sandstone_brick", {
@@ -117,6 +141,8 @@ qts.register_shaped_node ("default:sandstone_brick", {
 	groups = {cracky=3,stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:sandstone_block", {
@@ -125,6 +151,8 @@ qts.register_shaped_node ("default:sandstone_block", {
 	groups = {cracky=3,stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:desert_sandstone", {
@@ -132,7 +160,9 @@ qts.register_shaped_node ("default:desert_sandstone", {
 	tiles = {"default_desert_sandstone.png"},
 	groups = {cracky=3, stone=1},
 	sounds = qtcore.node_sound_stone(),
-	drop = "default:desert_sandstone_cobble"
+	drop = "default:desert_sandstone_cobble",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:desert_sandstone_cobble", {
@@ -141,6 +171,8 @@ qts.register_shaped_node ("default:desert_sandstone_cobble", {
 	groups = {cracky=3,stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:desert_sandstone_brick", {
@@ -149,6 +181,8 @@ qts.register_shaped_node ("default:desert_sandstone_brick", {
 	groups = {cracky=3,stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:desert_sandstone_block", {
@@ -157,6 +191,8 @@ qts.register_shaped_node ("default:desert_sandstone_block", {
 	groups = {cracky=3,stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 
@@ -190,6 +226,8 @@ qts.register_shaped_node ("default:brick", {
 	groups = {cracky=3, bricks=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:brick_grey", {
@@ -198,6 +236,8 @@ qts.register_shaped_node ("default:brick_grey", {
 	groups = {cracky=3, bricks=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 --soils and the like
@@ -421,6 +461,8 @@ qts.register_shaped_node ("default:oak_wood_planks", {
 	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 minetest.register_alias("default:wood_planks", "default:oak_wood_planks") --TODO: remove backwards compatability
 
@@ -438,6 +480,8 @@ qts.register_shaped_node ("default:rowan_wood_planks", {
 	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:rowan_log", {
@@ -454,6 +498,8 @@ qts.register_shaped_node ("default:apple_wood_planks", {
 	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:apple_log", {
@@ -470,6 +516,8 @@ qts.register_shaped_node ("default:aspen_wood_planks", {
 	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:aspen_log", {
@@ -487,6 +535,8 @@ qts.register_shaped_node ("default:lanternfruit_wood_planks", {
 	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:lanterfruit_log", {
@@ -503,6 +553,8 @@ qts.register_shaped_node ("default:coffee_wood_planks", {
 	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:coffee_log", {
@@ -519,6 +571,8 @@ qts.register_shaped_node ("default:rosewood_wood_planks", {
 	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:rosewood_log", {
@@ -535,6 +589,8 @@ qts.register_shaped_node ("default:mahogany_wood_planks", {
 	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("default:mahogany_log", {

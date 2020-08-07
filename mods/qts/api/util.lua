@@ -93,30 +93,12 @@ function qts.distribute_points_on_sphere(point_count)
 	return points
 end
 
---testing function that places given node count times around a sphere of radius dist located at pos
-function qts.test_distribute_node(pos, count, dist, node)
-	local points = qts.distribute_points_on_sphere(count)
-	for i, point in ipairs(points) do
-		local p = vector.multiply(point, dist)
-		p = vector.add(pos, p)
-		minetest.set_node(p, {name = node})
-	end
-end
-
 function qts.Set(t)
 	local s = {}
 	for i, v in ipairs(t) do
 		s[v] = true
 	end
 	return s
-end
-
-function qts.object_name(obj)
-	if (obj:is_player()) then
-		return obj:get_player_name()
-	else
-		return obj:get_luaentity().name
-	end
 end
 
 function qts.new_counter()
@@ -127,26 +109,14 @@ function qts.new_counter()
 	end
 end
 
-qts.gen_entity_id = qts.new_counter()
-
-function qts.get_object_id(obj)
-	if obj:is_player() then
-		return obj:get_player_name()
-	else
-		local le = obj:get_luaentity()
-		if le.QTID then 
-			return le.QTID 
-		else
-			le.QTID = qts.gen_entity_id()
-			return le.QTIDs
-		end
-	end
-end
-
 function qts.pickup_sound(player)
 	if (type(player) ~= "string") then player = player:get_player_name() end
 	minetest.sound_play("pickup", {
 		to_player = player,
 		gain = 1.0,
 	})
+end
+
+function qts.ignite(pos)
+	minetest.log("qts.ignite should be implemented in default mod")
 end

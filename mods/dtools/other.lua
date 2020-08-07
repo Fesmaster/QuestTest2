@@ -52,6 +52,7 @@ minetest.register_entity("dtools:static_entity", {
 		colors = {},
 		is_visible = true,
 		makes_footsteps_sounds = false,
+		--automatic_face_movement_dir = true,
 		
 	},
 	
@@ -95,7 +96,21 @@ minetest.register_entity("dtools:static_entity", {
 		else
 			--minetest.log("STATIC ENTITY: One or less objects in area")
 		end
+		
+		objs = minetest.get_objects_inside_radius(self.object:get_pos(), 64)
+		if (#objs > 1) then
+			for i,obj in ipairs(objs) do
+				pcall(function()
+					if (obj:is_player()) then
+						--qts.ai.face(self.object, vector.add(obj:get_pos(), {x=0, y=1.5, z=0}), false)
+						qts.ai.rotate_to(self.object, vector.add(obj:get_pos(), {x=0, y=1.5, z=0}), 0.1, false)
+					end
+				end)
+			end
+		end
+		
 	end,
+	
 	
 	on_punch = function(self, puncher, time_from_last_punch, tool_capabilities, dir)
 		--self.object:remove()
@@ -107,6 +122,7 @@ minetest.register_entity("dtools:static_entity", {
 			self.object:add_velocity(vector.multiply(dir, 10))
 		end
 		
+		minetest.log("ROTATION: "..dump(self.object:get_rotation()))
 		--minetest.log("Punched by ".. qts.ObjectName(puncher) .. "with damage " .. dump(tool_capabilities))
 	end,
 	
@@ -121,6 +137,70 @@ minetest.register_entity("dtools:static_entity", {
 		return ""
 	end,
 	
+})
+
+
+minetest.register_entity("dtools:mob_test_entity", {
+	initial_properties = {
+		--
+		hp_max = 1,
+		physical = true,
+		weight = 1,
+		collisionbox = {-0.3, 0.0, -0.3, 0.3, 1.7, 0.3},
+		collide_with_objects = false, --using manual detection
+		visual = "mesh",
+		visual_size = {x=1, y=1, z=1},
+		mesh = "character.b3d",
+		textures = {"character.png"},
+		colors = {},
+		is_visible = true,
+		makes_footsteps_sounds = false,
+		--automatic_face_movement_dir = true,
+	},
+	
+	on_activate = function(self, staticdata, dtime_s)
+		self.object:set_armor_groups({fleshy = 0})
+		self.QTID = qts.gen_entity_id()
+		self.object:set_acceleration({x=0, y=-9.8, z=0})
+	end,
+	
+	on_step = function(self, dtime)
+		local objs = minetest.get_objects_inside_radius(self.object:get_pos(), 64)
+		if (#objs > 1) then
+			for i,obj in ipairs(objs) do
+				pcall(function()
+					if (obj:is_player()) then
+						qts.ai.face(self.object, vector.add(obj:get_pos(), {x=0, y=1.5, z=0}), true)
+						--qts.ai.rotate_to(self.object, vector.add(obj:get_pos(), {x=0, y=1.5, z=0}), 0.01, true)
+						
+					end
+				end)
+			end
+		end
+		
+		--local v = qts.ai.walk(self.object, 1, false)
+		--self.object:add_velocity(v)
+		--qts.ai.fly(self.object, 1)
+		qts.ai.straife(self.object, 1)
+	end,
+	
+	
+	on_punch = function(self, puncher, time_from_last_punch, tool_capabilities, dir)
+		minetest.log("\nAcceleration: " .. dump(minetest.pos_to_string(self.object:get_acceleration()))..
+			"\nVelicity: ".. dump(minetest.pos_to_string(self.object:get_velocity()))
+		)
+	end,
+	
+	on_rightclick = function(self, clicker)
+		if (clicker:is_player()) then
+			minetest.log( "Clicked by player: " .. dump(clicker:get_player_name()))
+			self.object:remove()
+		end
+	end,
+	
+	get_staticdata = function(self)
+		return ""
+	end,
 })
 
 --[[

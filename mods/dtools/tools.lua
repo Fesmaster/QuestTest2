@@ -72,7 +72,7 @@ minetest.register_tool("dtools:summoning_wand", {
 	on_use = function(itemstack, user, pointed_thing)
 		minetest.log("QTS Summoning Wand used")
 		if pointed_thing.above then
-			minetest.add_entity(pointed_thing.above, "dtools:static_entity")
+			minetest.add_entity(pointed_thing.above, "dtools:mob_test_entity")
 		end
 	end,
 	on_place = function(itemstack, user, pointed_thing)
@@ -174,4 +174,41 @@ qts.register_item_modifier("testPlace", {
 	end,
 })
 
+
+minetest.register_tool("dtools:paintbrush", {
+	description = "Paintbrush",
+	inventory_image = "dtools_paintbrush.png",
+	range = 10.0,
+	--liquids_pointable = true,
+	on_use = function(itemstack, user, pointed_thing)
+		minetest.log("Paintbrush Used")
+		if (pointed_thing.type == "node") then
+			local node = minetest.get_node(pointed_thing.under)
+			local node_def = minetest.registered_nodes[node.name]
+			if not node_def then return itemstack end
+			if (node_def.palette) then
+				local pindex = node.param2 / 32
+				pindex = pindex + 1
+				if (pindex >= 8) then pindex = 0 end
+				node.param2 = pindex * 32
+				minetest.set_node(pointed_thing.under, node)
+			end
+		end
+	end,
+	on_place = function(itemstack, user, pointed_thing)
+		minetest.log("Paintbrush Placed")
+		if (pointed_thing.type == "node") then
+			local node = minetest.get_node(pointed_thing.under)
+			local node_def = minetest.registered_nodes[node.name]
+			if not node_def then return itemstack end
+			if (node_def.palette) then
+				local pindex = node.param2 / 32
+				pindex = pindex - 1
+				if (pindex <= -1) then pindex = 7 end
+				node.param2 = pindex * 32
+				minetest.set_node(pointed_thing.under, node)
+			end
+		end
+	end,
+})
 

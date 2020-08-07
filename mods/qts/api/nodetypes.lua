@@ -4,7 +4,9 @@
 
 function qts.register_shaped_node(name, def)
 	--prep the data for node registration
-	
+	if (not def.drops) then
+		def.drop = name
+	end
 	
 	--groups setup
 	def.groups.shaped_node = 1
@@ -41,7 +43,11 @@ function qts.register_shaped_node(name, def)
 	def.groups.shaped_stair = 1
 	def.drawtype = "nodebox"
 	def.paramtype = "light"
-	def.paramtype2 = "facedir"
+	if (def.palette) then
+		def.paramtype2 = "colorfacedir"
+	else
+		def.paramtype2 = "facedir"
+	end
 	def.node_box = {
 		type = "fixed",
 		fixed = {

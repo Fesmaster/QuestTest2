@@ -23,6 +23,26 @@ local function fire_flood(pos, oldnode, newnode)
 	return false
 end
 
+qts.ignite = function(pos)
+	--local sound_pos = pointed_thing.above or user:get_pos()
+		minetest.sound_play(
+			"tinderbox",
+			{pos = poo, gain = 1, max_hear_distance = 8},
+			true
+		)
+		
+		local node = minetest.get_node(pos)
+		local nodedef = minetest.registered_nodes[node.name]
+		if (nodedef and nodedef.on_ignite) then
+			nodedef.on_ignite(pos, user)
+		else
+			local p = minetest.find_node_near(pos, 1, {"air"})
+			if p then
+				minetest.set_node(p, {name = "default:fire"})
+			end
+		end
+	
+end
 
 
 minetest.register_tool("default:tinderbox", {
@@ -31,28 +51,15 @@ minetest.register_tool("default:tinderbox", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {tinderbox = 1},
 	on_use = function(itemstack, user, pointed_thing)
-		local sound_pos = pointed_thing.above or user:get_pos()
-		minetest.sound_play(
-			"tinderbox",
-			{pos = sound_pos, gain = 1, max_hear_distance = 8},
-			true
-		)
 		
 		if (pointed_thing.type == "node") then
+			--remove item from inv
 			local inv = user:get_inventory()
 			local removed = inv:remove_item("main", "default:tinder 1")
 			if (ItemStack(removed):is_empty()) then return end
-			
-			local under = minetest.get_node(pointed_thing.under)
-			local underdef = minetest.registered_nodes[under.name]
-			if (underdef and underdef.on_ignite) then
-				underdef.on_ignite(pointed_thing.under, user)
-			else
-				minetest.log("SORRY! FIRE NOT IMPLEMENTED YET")
-				--TODO:Implement Fire
-			end
-		end
 		
+			qts.ignite(pointed_thing.under)
+		end
 	end
 })
 
