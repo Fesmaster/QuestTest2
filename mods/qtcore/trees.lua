@@ -169,3 +169,23 @@ qts.worldgen.register_structure("tree_rosewood1", {
 	rotate = true,
 	flags = qts.worldgen.centers(true, false, true),
 })
+
+qts.worldgen.register_structure("tree_small_b_shroom", {
+	schematic = path .. "small_b_shroom.mts",
+	chance = 30,
+	biomes = {"mushroom_forest"},
+	nodes = {"default:dirt_with_mushroom_grass"},
+	force_place = false,
+	rotate = true,
+	flags = qts.worldgen.centers(true, false, true),
+})
+
+qts.worldgen.register_structure("tree_large_b_shroom", {
+	schematic = path .. "large_b_shroom.mts",
+	chance = 15,
+	biomes = {"mushroom_forest"},
+	nodes = {"default:dirt_with_mushroom_grass"},
+	force_place = false,
+	rotate = true,
+	flags = qts.worldgen.centers(true, false, true),
+})
