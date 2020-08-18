@@ -122,6 +122,14 @@ minetest.register_craft({
 --knife recipies
 
 minetest.register_craft({
+	output = "default:knife_flint",
+	recipe = {
+		{ "default:flint"},
+		{ "default:stick"},
+	}
+})
+
+minetest.register_craft({
 	type = "shapeless",
 	output = "default:tinder",
 	recipe = {
@@ -259,4 +267,13 @@ minetest.register_craft({
 	type = "fuel",
 	recipe = "group:wood",
 	burntime = 7,
+})
+
+minetest.register_craft({
+	output = "default:crate",
+	recipe = {
+		{ "default:stick", 'group:stick', "default:stick" },
+		{ "default:stick", '', "default:stick" },
+		{ "default:stick", 'group:stick', "default:stick" },
+	}
 })
