@@ -23,6 +23,8 @@ dofile(minetest.get_modpath("default").."/furnace.lua")
 dofile(minetest.get_modpath("default").."/metals.lua")
 dofile(minetest.get_modpath("default").."/jems.lua")
 dofile(minetest.get_modpath("default").."/tools.lua")
+dofile(minetest.get_modpath("default").."/campfire.lua")
+dofile(minetest.get_modpath("default").."/fire.lua")
 -- Load other files
 
 
