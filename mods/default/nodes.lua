@@ -577,6 +577,96 @@ qts.register_shaped_node ("default:gold_mushroom_cap", {
 	sounds = qtcore.node_sound_wood(),
 })
 
+minetest.register_node("default:g_shroom_spore", {
+	description = "Golden Mushroom Spore",
+	tiles = {
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png"
+	},
+	drawtype = "nodebox",
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		}
+	}
+})
+
+minetest.register_node("default:g_shroom_spore", {
+	description = "Golden Mushroom Spore",
+	tiles = {
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png"
+	},
+	drawtype = "nodebox",
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.25, -0.5, -0.4375, 0, -0.3125, -0.1875}, -- NodeBox1
+			{0.0625, -0.5, -0.25, 0.4375, -0.25, 0.125}, -- NodeBox2
+			{-0.25, -0.5, -0.0625, -0.125, -0.375, 0.0625}, -- NodeBox3
+			{-0.3125, -0.5, 0.125, 0.0625, -0.1875, 0.4375}, -- NodeBox4
+		}
+	}
+})
+
+
+minetest.register_node("default:small_shroom", {
+	description = "A Small Edible Mushroom",
+	tiles = {
+		"default_small_shroom.png",
+		"default_small_shroom.png",
+		"default_small_shroom.png",
+		"default_small_shroom.png",
+		"default_small_shroom.png",
+		"default_small_shroom.png"
+	},
+	drawtype = "nodebox",
+	paramtype = "light",
+	
+	groups = {snappy = 3, flammable = 2, leaves = 1},node_box = {
+		type = "fixed",
+		fixed = {
+		}
+	}
+})
+
+minetest.register_node("default:small_shroom", {
+	description = "A Small Edible Mushroom",
+	tiles = {
+		"default_small_shroom.png",
+		"default_small_shroom.png",
+		"default_small_shroom.png",
+		"default_small_shroom.png",
+		"default_small_shroom.png",
+		"default_small_shroom.png"
+	},
+	drawtype = "nodebox",
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.1875, -0.5, 0.125, -0.125, -0.3125, 0.1875}, -- NodeBox5
+			{-0.25, -0.3125, 0.0625, -0.0625, -0.25, 0.25}, -- NodeBox6
+			{-0.25, -0.375, 0, -0.0625, -0.3125, 0.3125}, -- NodeBox7
+			{-0.3125, -0.375, 0.0625, 0, -0.3125, 0.25}, -- NodeBox8
+			{0.125, -0.5, -0.1875, 0.1875, -0.4375, -0.125}, -- NodeBox9
+			{0.0625, -0.4375, -0.25, 0.25, -0.375, -0.0625}, -- NodeBox10
+		}
+	}
+})
 --leaves
 --[[
 leaves use param2 to hold if they were placed by the player
