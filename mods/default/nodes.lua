@@ -922,3 +922,32 @@ minetest.register_node("default:rowan_sapling", {
 	--	return qts.rotate_and_place(itemstack, placer, pointed_thing)
 	--end,
 })
+
+minetest.register_node("default:table", {
+	description = "A Table",
+	tiles = {
+		"default_oak_wood.png",
+		"default_oak_wood.png",
+		"default_oak_wood.png",
+		"default_oak_wood.png",
+		"default_oak_wood.png",
+		"default_oak_wood.png"
+	},
+	drawtype = "nodebox",
+	paramtype = "light",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{0.0625, -0.25, 0.0625, 0.1875, 0.0625, 0.1875}, -- NodeBox1
+			{-0.125, -0.5, -0.125, 0.125, -0.25, 0.125}, -- NodeBox2
+			{-0.5, 0.4375, -0.5, 0.5, 0.5, 0.5}, -- NodeBox3
+			{-0.1875, -0.25, -0.1875, -0.0625, 0.0625, -0.0625}, -- NodeBox4
+			{0.0625, -0.25, -0.1875, 0.1875, 0.0625, -0.0625}, -- NodeBox5
+			{-0.1875, -0.25, 0.0625, -0.0625, 0.0625, 0.1875}, -- NodeBox6
+			{-0.125, 0.0625, -0.125, 0.125, 0.3125, 0.125}, -- NodeBox7
+			{-0.1875, 0.3125, -0.4375, 0.1875, 0.4375, 0.4375}, -- NodeBox8
+			{-0.375, 0.3125, -0.125, 0.4375, 0.4375, 0.125}, -- NodeBox9
+		}
+	}
+})
