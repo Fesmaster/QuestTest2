@@ -11,6 +11,13 @@ INDEX
 
 
 --stone
+qts.register_shaped_node("default:cement", {
+	description = "Cement",
+	tiles = {"default_cement.png"},
+	groups = {cracky=3},
+	sounds = qtcore.node_sound_stone(),
+})
+
 qts.register_shaped_node("default:stone", {
 	description = "Stone",
 	tiles = {"default_stone.png"},
@@ -601,6 +608,30 @@ qts.register_shaped_node ("default:mahogany_log", {
 	sounds = qtcore.node_sound_wood(),
 })
 
+minetest.register_node("default:swamp_tree", {
+	description = "Swamp Log",
+	tiles = {
+		"default_swamp_log_top.png",
+		"default_swamp_log_bottom.png",
+		"default_swamp_log_side.png",
+		"default_swamp_log_side.png",
+		"default_swamp_log_side.png",
+		"default_swamp_log_side.png"
+	},
+	drawtype = "nodebox",
+	paramtype = "light",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.3125, -0.5, -0.375, 0, 0.5, -0.0625}, -- NodeBox10
+			{0.0625, -0.5, 0, 0.4375, 0.9375, 0.375}, -- NodeBox11
+		}
+	}
+})
+
+
+
 qts.register_shaped_node ("default:blue_mushroom_trunk", {
 	description = "Blue Mushroom Trunk",
 	tiles = {"default_b_shroom_top.png", "default_b_shroom_top.png", "default_b_shroom_side.png"},
@@ -633,11 +664,131 @@ qts.register_shaped_node ("default:gold_mushroom_cap", {
 	sounds = qtcore.node_sound_wood(),
 })
 
+minetest.register_node("default:g_shroom_spore", {
+	description = "Golden Mushroom Spore",
+	tiles = {
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png"
+	},
+	drawtype = "nodebox",
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		}
+	}
+})
+
+minetest.register_node("default:g_shroom_spore", {
+	description = "Golden Mushroom Spore",
+	tiles = {
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png",
+		"default_g_shroom_spore.png"
+	},
+	drawtype = "nodebox",
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.25, -0.5, -0.4375, 0, -0.3125, -0.1875}, -- NodeBox1
+			{0.0625, -0.5, -0.25, 0.4375, -0.25, 0.125}, -- NodeBox2
+			{-0.25, -0.5, -0.0625, -0.125, -0.375, 0.0625}, -- NodeBox3
+			{-0.3125, -0.5, 0.125, 0.0625, -0.1875, 0.4375}, -- NodeBox4
+		}
+	}
+})
+
+
+minetest.register_node("default:small_shroom", {
+	description = "A Small Edible Mushroom",
+	tiles = {
+		"default_small_shroom.png",
+		"default_small_shroom.png",
+		"default_small_shroom.png",
+		"default_small_shroom.png",
+		"default_small_shroom.png",
+		"default_small_shroom.png"
+	},
+	drawtype = "nodebox",
+	paramtype = "light",
+	
+	groups = {snappy = 3, flammable = 2, leaves = 1},node_box = {
+		type = "fixed",
+		fixed = {
+		}
+	}
+})
+
+minetest.register_node("default:small_shroom", {
+	description = "A Small Edible Mushroom",
+	tiles = {
+		"default_small_shroom.png",
+		"default_small_shroom.png",
+		"default_small_shroom.png",
+		"default_small_shroom.png",
+		"default_small_shroom.png",
+		"default_small_shroom.png"
+	},
+	drawtype = "nodebox",
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.1875, -0.5, 0.125, -0.125, -0.3125, 0.1875}, -- NodeBox5
+			{-0.25, -0.3125, 0.0625, -0.0625, -0.25, 0.25}, -- NodeBox6
+			{-0.25, -0.375, 0, -0.0625, -0.3125, 0.3125}, -- NodeBox7
+			{-0.3125, -0.375, 0.0625, 0, -0.3125, 0.25}, -- NodeBox8
+			{0.125, -0.5, -0.1875, 0.1875, -0.4375, -0.125}, -- NodeBox9
+			{0.0625, -0.4375, -0.25, 0.25, -0.375, -0.0625}, -- NodeBox10
+		}
+	}
+})
 --leaves
 --[[
 leaves use param2 to hold if they were placed by the player
 to allow player-placed leaves to not decay
 --]]
+
+minetest.register_node("default:swamp_leaves", {
+	description = "Swamp Leaves",
+	tiles = {
+		"default_swamp_leaves.png",
+		"default_swamp_leaves.png",
+		"default_swamp_leaves.png",
+		"default_swamp_leaves.png",
+		"default_swamp_leaves.png",
+		"default_swamp_leaves.png"
+	},
+	drawtype = "nodebox",
+	waving = 1,
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	walkable = false,
+	climbable = true,
+	sounds = qtcore.node_sound_grass(),
+	after_place_node = qtcore.after_place_leaves;
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.625, -0.5, -0.625, 0.625, 0.6875, 0.625}, -- NodeBox12
+			{-0.0625, 0.125, 0.1875, 0.75, 0.9375, 0.875}, -- NodeBox13
+			{-0.9375, -0.75, -1, -0.125, 0, -0.125}, -- NodeBox14
+		}
+	}
+})
+
+
 minetest.register_node("default:oak_leaves", {
 	description = "Oak Leaves",
 	drawtype = "allfaces_optional",
@@ -887,4 +1038,42 @@ minetest.register_node("default:rowan_sapling", {
 	--	end
 	--	return qts.rotate_and_place(itemstack, placer, pointed_thing)
 	--end,
+})
+
+minetest.register_node("default:table", {
+	description = "A Table",
+	tiles = {
+		"default_oak_wood.png",
+		"default_oak_wood.png",
+		"default_oak_wood.png",
+		"default_oak_wood.png",
+		"default_oak_wood.png",
+		"default_oak_wood.png"
+	},
+	drawtype = "nodebox",
+	paramtype = "light",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{0.0625, -0.25, 0.0625, 0.1875, 0.0625, 0.1875}, -- NodeBox1
+			{-0.125, -0.5, -0.125, 0.125, -0.25, 0.125}, -- NodeBox2
+			{-0.5, 0.4375, -0.5, 0.5, 0.5, 0.5}, -- NodeBox3
+			{-0.1875, -0.25, -0.1875, -0.0625, 0.0625, -0.0625}, -- NodeBox4
+			{0.0625, -0.25, -0.1875, 0.1875, 0.0625, -0.0625}, -- NodeBox5
+			{-0.1875, -0.25, 0.0625, -0.0625, 0.0625, 0.1875}, -- NodeBox6
+			{-0.125, 0.0625, -0.125, 0.125, 0.3125, 0.125}, -- NodeBox7
+			{-0.1875, 0.3125, -0.4375, 0.1875, 0.4375, 0.4375}, -- NodeBox8
+			{-0.375, 0.3125, -0.125, 0.4375, 0.4375, 0.125}, -- NodeBox9
+		}
+	}
+})
+
+minetest.register_node("default:swamp_plant", {
+	description = "A Strange Plant that lives in the swamp",
+	tiles = {"default_swamp_temp_plant.png"},
+	drawtype = "plantlike",
+	paramtype = "light",
+	groups = {oddly_breakable_by_hand=2, flammable=2},
+
 })

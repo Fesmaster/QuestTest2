@@ -170,6 +170,16 @@ qts.worldgen.register_structure("tree_rosewood1", {
 	flags = qts.worldgen.centers(true, false, true),
 })
 
+qts.worldgen.register_structure("tree_swamp", {
+	schematic = path .. "swamp_tree.mts",
+	chance = 30,
+	biomes = {"swamp"},
+	nodes = {"default:dirt_with_swamp_grass"},
+	force_place = false,
+	rotate = true,
+	flags = qts.worldgen.centers(true, false, true),
+})
+
 qts.worldgen.register_structure("tree_small_b_shroom", {
 	schematic = path .. "small_b_shroom.mts",
 	chance = 30,
@@ -183,6 +193,16 @@ qts.worldgen.register_structure("tree_small_b_shroom", {
 qts.worldgen.register_structure("tree_large_b_shroom", {
 	schematic = path .. "large_b_shroom.mts",
 	chance = 15,
+	biomes = {"mushroom_forest"},
+	nodes = {"default:dirt_with_mushroom_grass"},
+	force_place = false,
+	rotate = true,
+	flags = qts.worldgen.centers(true, false, true),
+})
+
+qts.worldgen.register_structure("tree_gold_shroom_1", {
+	schematic = path .. "gold_shroom_1.mts",
+	chance = 7,
 	biomes = {"mushroom_forest"},
 	nodes = {"default:dirt_with_mushroom_grass"},
 	force_place = false,
