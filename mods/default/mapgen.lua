@@ -83,8 +83,8 @@ qts.worldgen.register_biome("swamp", {
 	surface = {"default:dirt_with_swamp_grass"},
 	fill = "default:dirt", --TODO: add peat?
 	stone = "default:stone",
-	plant = nil,
-	plant_freq = 0,
+	plant = "default:swamp_plant",
+	plant_freq = 10,
 	surface_depth = 1,
 	fill_depth = 5,
 	stone_depth = 0,

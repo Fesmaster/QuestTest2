@@ -11,6 +11,13 @@ INDEX
 
 
 --stone
+qts.register_shaped_node("default:cement", {
+	description = "Cement",
+	tiles = {"default_cement.png"},
+	groups = {cracky=3},
+	sounds = qtcore.node_sound_stone(),
+})
+
 qts.register_shaped_node("default:stone", {
 	description = "Stone",
 	tiles = {"default_stone.png"},
@@ -1004,4 +1011,13 @@ minetest.register_node("default:table", {
 			{-0.375, 0.3125, -0.125, 0.4375, 0.4375, 0.125}, -- NodeBox9
 		}
 	}
+})
+
+minetest.register_node("default:swamp_plant", {
+	description = "A Strange Plant that lives in the swamp",
+	tiles = {"default_swamp_temp_plant.png"},
+	drawtype = "plantlike",
+	paramtype = "light",
+	groups = {oddly_breakable_by_hand=2, flammable=2},
+
 })
