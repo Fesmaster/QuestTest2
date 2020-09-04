@@ -372,8 +372,8 @@ qts.register_shaped_node ("default:sand", {
 		max_items = 1,
 		items = {
 			{
-				rarity = 32,
-				items = {"default:flint"},
+				rarity = 8,
+				items = {"default:shell_peices"},
 			},
 			{
 				items = {"default:sand"}

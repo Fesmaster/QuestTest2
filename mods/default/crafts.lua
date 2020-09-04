@@ -300,14 +300,6 @@ minetest.register_craft({
 	},
 })
 
-minetest.register_craft({
-	output = "default:cement 4",
-	recipe = {
-		{ "", 'group:sand', "" },
-		{ "group:sand", "default:calcium_oxide", "group:sand" },
-		{ "", 'group:sand', "" },
-	}
-})
 
 minetest.register_craft({
 	output = "foundry:foundry_inactive",
@@ -323,6 +315,24 @@ minetest.register_craft({
 	recipe = {
 		{ "default:brick_single", 'default:brick_single', "" },
 		{ "default:brick_single", "default:brick_single", "" },
+		{ "", '', "" },
+	}
+})
+
+minetest.register_craft({
+	output = "default:cement 4",
+	recipe = {
+		{ "", 'group:sand', "" },
+		{ "group:sand", "default:calcium_oxide", "group:sand" },
+		{ "", 'group:sand', "" },
+	}
+})
+
+minetest.register_craft({
+	output = "default:clay",
+	recipe = {
+		{ "default:clay_lump", 'default:clay_lump', "" },
+		{ "default:clay_lump", "default:clay_lump", "" },
 		{ "", '', "" },
 	}
 })
