@@ -1021,3 +1021,4 @@ minetest.register_node("default:swamp_plant", {
 	groups = {oddly_breakable_by_hand=2, flammable=2},
 
 })
+

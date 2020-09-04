@@ -256,6 +256,19 @@ minetest.register_craft({
 	recipe = "default:stone_cobble",
 })
 
+minetest.register_craft({
+	type = "cooking",
+	output = "default:calcium_oxide",
+	recipe = "default:shell_peices",
+})
+
+minetest.register_craft({
+	type = "cooking",
+	output = "default:brick_single",
+	recipe = "default:clay_lump",
+})
+
+
 --fuel
 minetest.register_craft({
 	type = "fuel",
@@ -275,5 +288,41 @@ minetest.register_craft({
 		{ "default:stick", 'group:stick', "default:stick" },
 		{ "default:stick", '', "default:stick" },
 		{ "default:stick", 'group:stick', "default:stick" },
+	}
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "foundry:spout",
+	recipe = {
+		 "default:cement", 
+		 "default:clay_lump"
+	},
+})
+
+minetest.register_craft({
+	output = "default:cement 4",
+	recipe = {
+		{ "", 'group:sand', "" },
+		{ "group:sand", "default:calcium_oxide", "group:sand" },
+		{ "", 'group:sand', "" },
+	}
+})
+
+minetest.register_craft({
+	output = "foundry:foundry_inactive",
+	recipe = {
+		{ "", 'default:brick', "" },
+		{ "default:brick", "default:cement", "default:brick" },
+		{ "", 'default:brick', "" },
+	}
+})
+
+minetest.register_craft({
+	output = "default:brick",
+	recipe = {
+		{ "default:brick_single", 'default:brick_single', "" },
+		{ "default:brick_single", "default:brick_single", "" },
+		{ "", '', "" },
 	}
 })
