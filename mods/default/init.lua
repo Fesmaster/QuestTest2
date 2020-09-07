@@ -25,6 +25,7 @@ dofile(minetest.get_modpath("default").."/jems.lua")
 dofile(minetest.get_modpath("default").."/tools.lua")
 dofile(minetest.get_modpath("default").."/campfire.lua")
 dofile(minetest.get_modpath("default").."/fire.lua")
+dofile(minetest.get_modpath("default").."/torches.lua")
 -- Load other files
 
 

@@ -82,8 +82,6 @@ minetest.register_node("dtools:torch_ceiling", {
 	sounds = qtcore.node_sound_wood(),
 })
 
---]]
-
 qts.register_torch("dtools:torch", {
 	description = "Testing Torch",
 	tiles = {"default_torch.png"},
@@ -92,6 +90,10 @@ qts.register_torch("dtools:torch", {
 	groups = {choppy=2, dig_immediate=3, flammable=1, attached_node=1},
 	sounds = qtcore.node_sound_wood(),
 })
+
+--]]
+
+
 
 
 local function iterator()
