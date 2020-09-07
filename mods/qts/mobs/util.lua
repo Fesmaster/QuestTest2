@@ -99,7 +99,7 @@ function qts.slerp(start, finish, alpha)
 	return (start + ((finish - start) * alpha)) % (math.pi*2)
 end
 
-function qts.ai.get_walking_speed(object)
+function qts.ai.get_current_speed(object)
 	local v = object:get_velocity()
 	return (v.x^2 + v.z^2)^(0.5)
 end
@@ -238,6 +238,7 @@ function vector.get_rot(vec)
 	
 	local dist = math.sqrt((vec.x^2)+(vec.z^2))
 	rot.x = math.atan(vec.y/dist)
+	return rot
 end
 
 --TODO: vector.set_rot(vec, rot)

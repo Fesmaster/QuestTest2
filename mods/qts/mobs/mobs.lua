@@ -7,12 +7,14 @@
 
 qts.ai = {}
 
-qts.registered_mobs = {}
+qts.registered_creatures = {}
+qts.registered_behaviors = {}
 
 --[[
 DOFILES
 -]]
 dofile(qts.path.."/mobs/util.lua")
 dofile(qts.path.."/mobs/movement.lua")
+dofile(qts.path.."/mobs/behavior.lua")
 
 

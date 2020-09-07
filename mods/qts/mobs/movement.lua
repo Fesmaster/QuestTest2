@@ -45,7 +45,9 @@ qts.ai.rotate_to(object, facing_pos, max_rotation, yaw_only, dont_set)
 function qts.ai.face(object, facing_pos, yaw_only, dont_set)
 	if (yaw_only == nil) then yaw_only = true end
 	if object and facing_pos then
+		
 		local pos = object:get_pos()
+		
 		local dir = vector.direction(pos, facing_pos)
 		local rotation = object:get_rotation()
 		rotation.y = vector.get_rot(dir).y
@@ -174,10 +176,10 @@ function qts.ai.walk(object, speed, dont_set)
 		if not dont_set then
 			object:set_velocity(dir)
 		end
+		return dir
 	else
 		return nil
 	end
-	return dir
 end
 
 function qts.ai.fly(object, speed, dont_set)
@@ -311,18 +313,33 @@ qts.ai.fly_to(object, dest_pos, speed, yaw_turn_only, turning_max, dont_set)
 	Return - vector - the new velocity
 
 
+qts.ai.straife_around(object, target_pos, speed, spiral, can_jump, jump_height, dont_set)
+	Causes the entity to walk in circles around the target pos
+	
+	Params:
+	object - the luaentity
+	target_pos - vector - the destination to circle
+	speed - number - the entity's speed
+	spiral - how much to tigten the circle (pos) or loosen (neg) 	
+	can_jump - boolean - can the entity jump?
+	jump_height - number - the height the entity can jump. 
+		Should not be 0 if can_jump is true, 
+		can be nil if can_jump is false
+	dont_set - if true, the value is calculated, but not set. It is still returned
+	
+	Return - vector - the new velocity
 
 --]]
 
 function qts.ai.walk_to(object, dest_pos, speed, can_jump, jump_height, dont_set)
 	if object and dest_pos and speed then
 		qts.ai.face(object, dest_pos, true, dont_set)
-		local dir = ai.walk(object, speed, true)
+		local dir = qts.ai.walk(object, speed, true)
 		if can_jump == true then
-			if qts.ai.get_walking_speed(object) < 0.5 then
+			if qts.ai.get_current_speed(object) < 0.5 then
 				local jump = qts.ai.jump(object, jump_height, 0, true)
 				if jump then
-					dir.y = jump
+					dir.y = jump.y
 				end
 			end
 		end
@@ -363,6 +380,38 @@ function qts.ai.fly_to(object, dest_pos, speed, yaw_turn_only, turning_max, dont
 end
 
 
+function qts.ai.straife_around(object, target_pos, speed, spiral, can_jump, jump_height, dont_set)
+	if object and target_pos and speed and spiral then
+		qts.ai.face(object, target_pos, dont_set)
+		local dir
+		if spiral ~= 0 then
+			dir = qts.ai.straife(object, speed, true)
+			local forward = qts.ai.walk(object, speed, true)
+			forward = vector.multiply(forward, spiral)
+			dir = vector.add(dir, forward)
+			dir = vector.normalize(dir)
+			dir.x=dir.x*-speed
+			dir.z=dir.z*speed
+			dir.y = object:get_velocity().y
+		else
+			dir = qts.ai.straife(object, speed, true)
+		end
+		if can_jump == true then
+			if qts.ai.get_current_speed(object) < 0.5 then
+				jump = qts.ai.jump(object, jump_height, 0, true)
+				if jump then
+					dir.y = jump.y
+				end
+			end
+		end
+		if dont_set == false then
+			object:set_velocity(dir)
+		end
+		return dir
+	else
+		return nil
+	end
+end
 
 --[[
 Pathfinding Movement

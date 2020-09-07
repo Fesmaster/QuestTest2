@@ -28,6 +28,72 @@ minetest.register_node("dtools:red_node", {
 	sounds = qtcore.node_sound_defaults(),
 })
 
+--[[
+minetest.register_node("dtools:torch", {
+	description = "Testing Torch",
+	drawtype = "mesh",
+	mesh = "torch_floor.obj",
+	tiles = {"default_torch.png"},
+	paramtype = "light",
+	sunlight_propagates = true,
+	walkable = false,
+	selection_box = {
+		type = "fixed",
+		fixed = {-3/16, -1/2, -3/16, 3/16, 7/16, 3/16},
+	},
+	light_source = 12,
+	groups = {choppy=2, dig_immediate=3, flammable=1, attached_node=1, torch=1},
+	sounds = qtcore.node_sound_wood(),
+})
+
+minetest.register_node("dtools:torch_side", {
+	description = "Testing Torch - Side",
+	drawtype = "mesh",
+	mesh = "torch_wall.obj",
+	tiles = {"default_torch.png"},
+	paramtype = "light",
+	paramtype2 = "wallmounted",
+	sunlight_propagates = true,
+	walkable = false,
+	selection_box = {
+		type = "wallmounted",
+		wall_side = {-1/2, -1/2, -3/16, 0, 5/16, 3/16},
+	},
+	light_source = 12,
+	groups = {choppy=2, dig_immediate=3, flammable=1, attached_node=1, torch=1},
+	sounds = qtcore.node_sound_wood(),
+})
+
+minetest.register_node("dtools:torch_ceiling", {
+	description = "Testing Torch - Ceiling",
+	drawtype = "mesh",
+	mesh = "torch_ceiling.obj",
+	tiles = {"default_torch.png"},
+	paramtype = "light",
+	paramtype2 = "wallmounted",
+	sunlight_propagates = true,
+	walkable = false,
+	selection_box = {
+		type = "wallmounted",
+		wall_top = {-3/16, -1/2, -3/16, 3/16, 7/16, 3/16},
+	},
+	light_source = 12,
+	groups = {choppy=2, dig_immediate=3, flammable=1, attached_node=1, torch=1},
+	sounds = qtcore.node_sound_wood(),
+})
+
+--]]
+
+qts.register_torch("dtools:torch", {
+	description = "Testing Torch",
+	tiles = {"default_torch.png"},
+	walkable = false,
+	light_source = 12,
+	groups = {choppy=2, dig_immediate=3, flammable=1, attached_node=1},
+	sounds = qtcore.node_sound_wood(),
+})
+
+
 local function iterator()
 	local index = 0
 	return function()
@@ -170,9 +236,7 @@ minetest.register_entity("dtools:mob_test_entity", {
 			for i,obj in ipairs(objs) do
 				pcall(function()
 					if (obj:is_player()) then
-						qts.ai.face(self.object, vector.add(obj:get_pos(), {x=0, y=1.5, z=0}), true)
-						--qts.ai.rotate_to(self.object, vector.add(obj:get_pos(), {x=0, y=1.5, z=0}), 0.01, true)
-						
+						qts.ai.walk_to(self.object, obj:get_pos(), 2, true, 0.9, false)
 					end
 				end)
 			end
@@ -181,7 +245,7 @@ minetest.register_entity("dtools:mob_test_entity", {
 		--local v = qts.ai.walk(self.object, 1, false)
 		--self.object:add_velocity(v)
 		--qts.ai.fly(self.object, 1)
-		qts.ai.straife(self.object, 1)
+		--qts.ai.straife(self.object, 1)
 	end,
 	
 	

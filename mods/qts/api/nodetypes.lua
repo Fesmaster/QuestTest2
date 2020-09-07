@@ -749,5 +749,81 @@ function qts.register_ingot(name, def)
 			end
 		})
 	end
+end
+
+function qts.register_torch(name, def)
+	local sound_flood = def.sound_flood
+	def.sound_flood = nil
+	
+	def.drawtype = "mesh"
+	def.paramtype = "light"
+	def.paramtype2 = "wallmounted"
+	def.groups.torch = 1
+	def.groups.attached_node = 1
+	def.sunlight_propagates = true
+	def.on_rotate = false
+	
+	--in case they forget the light.....
+	def.light_source = def.light_source or 12
+	
+	local torch_main_def = qts.table_deep_copy(def)
+	torch_main_def.mesh = "torch_floor.obj"
+	torch_main_def.selection_box = {
+		type = "wallmounted",
+		wall_bottom = {-3/16, -1/2, -3/16, 3/16, 7/16, 3/16},
+	}
+	torch_main_def.on_place = function(itemstack, placer, pointed_thing)
+		local under = pointed_thing.under
+		local node = minetest.get_node(under)
+		local def = minetest.registered_nodes[node.name]
+		if def and def.on_rightclick and
+			not (placer and placer:is_player() and
+			placer:get_player_control().sneak) then
+			return def.on_rightclick(under, node, placer, itemstack,
+				pointed_thing) or itemstack
+		end
+
+		local above = pointed_thing.above
+		local wdir = minetest.dir_to_wallmounted(vector.subtract(under, above))
+		local fakestack = itemstack
+		if wdir == 0 then
+			fakestack:set_name(name.."_ceiling")
+		elseif wdir == 1 then
+			fakestack:set_name(name)
+		else
+			fakestack:set_name(name.."_wall")
+		end
+
+		itemstack = minetest.item_place(fakestack, placer, pointed_thing, wdir)
+		itemstack:set_name(name)
+
+		return itemstack
+	end
+	
+	minetest.register_node(name, torch_main_def)
+	
+	
+	local torch_wall_def = qts.table_deep_copy(def)
+	torch_wall_def.groups.not_in_creative_inventory = 1
+	torch_wall_def.mesh = "torch_wall.obj"
+	torch_wall_def.selection_box = {
+		type = "wallmounted",
+		wall_side = {-1/2, -1/2, -3/16, 0, 5/16, 3/16},
+	}
+	torch_wall_def.drop = name
+	minetest.register_node(name.."_wall", torch_wall_def)
+	
+	
+	local torch_ceil_def = qts.table_deep_copy(def)
+	
+	torch_ceil_def.groups.not_in_creative_inventory = 1
+	torch_ceil_def.mesh = "torch_ceiling.obj"
+	torch_ceil_def.selection_box = {
+		type = "wallmounted",
+		wall_top = {-3/16, -1/2, -3/16, 3/16, 7/16, 3/16},
+	}
+	torch_ceil_def.drop = name
+	minetest.register_node(name.."_ceiling", torch_ceil_def)
 	
 end
+

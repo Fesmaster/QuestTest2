@@ -105,3 +105,20 @@ function qtcore.tool_sounds_default(table)
 	table.breaks = table.breaks or {name = "default_tool_breaks", gain = 1.0}
 	return table
 end
+
+
+function qtcore.tourch_flood(pos, oldnode, newnode, item)
+	minetest.add_item(pos, ItemStack(item.." 1"))
+	-- Play flame-extinguish sound if liquid is not an 'igniter'
+	local nodedef = minetest.registered_items[newnode.name]
+	if not (nodedef and nodedef.groups and
+			nodedef.groups.igniter and nodedef.groups.igniter > 0) then
+		minetest.sound_play(
+			"sounds_cooling_hiss",
+			{pos = pos, max_hear_distance = 16, gain = 0.1},
+			true
+		)
+	end
+	-- Remove the torch node
+	return false
+end
