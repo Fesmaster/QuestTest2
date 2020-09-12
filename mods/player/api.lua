@@ -243,6 +243,11 @@ minetest.register_globalstep(function(dtime)
 		local pdat = player_data[name] --the player data
 		local switched = {} --the prev time of ONLY the switched controls
 		
+		if not pdat then
+			Player_API.new_player(player)
+			pdat = player_data[name]
+		end
+		
 		--first, collect the changes in the controls, and update the timers
 		for control, val in pairs(ctrl) do
 			local prev = pdat.controlTimer[control]

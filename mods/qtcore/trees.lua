@@ -1,5 +1,5 @@
 --apple
-local path = minetest.get_modpath("qtcore") .. "\\schems\\"
+local path = minetest.get_modpath("qtcore") .. "/schems/"
 local flags = "place_center_x,place_center_z"
 
 

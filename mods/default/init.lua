@@ -1,18 +1,14 @@
--- default (Minetest 0.4 mod)
--- Most default stuff
+--[[
+Default (QuestTest Version)
 
--- The API documentation in here was moved into doc/lua_api.txt
+THIS MOD IS NOT TO BE CONFUSED WITH DEFAULT FROM MINETEST_GAME
 
--- Definitions made by this mod that other mods can use too
+This mod loads most of the content of QuestTest
+You will find almost all "regular" content from the overworld here,
+unless it belongs to a specific system.
+
+--]]
 default = {}
-function default.node_sound_defaults(table)
-	table = table or {}
-	table.footstep = table.footstep or
-			{name="", gain=1.0}
-	table.dug = table.dug or
-			{name="default_dug_node", gain=1.0}
-	return table
-end
 
 dofile(minetest.get_modpath("default").."/nodes.lua")
 dofile(minetest.get_modpath("default").."/fence.lua")
@@ -26,19 +22,14 @@ dofile(minetest.get_modpath("default").."/tools.lua")
 dofile(minetest.get_modpath("default").."/campfire.lua")
 dofile(minetest.get_modpath("default").."/fire.lua")
 dofile(minetest.get_modpath("default").."/torches.lua")
+dofile(minetest.get_modpath("default").."/initial_items.lua")
 -- Load other files
-
-
-
-
-
-
--- Default node sounds
 
 
 
 -- Register nodes
 
+--Ancient default node, the first made in QuestTest2
 minetest.register_node("default:default", {
 	description = "Default Node",
 	tiles ={"default.png"},
@@ -75,11 +66,6 @@ minetest.register_tool("default:testingHammer", {
 	end
 })
 
---register materials here
-
-
-
-
 
 --[[
 --this is how you would do panes
@@ -91,13 +77,16 @@ qts.register_fencelike_node("default:stone_brick_pane", {
 	sounds = default.node_sound_defaults(),
 })
 --]]
+
+--[[
+LIQUID TESTS
+--]]
 --bucket
 qts.register_bucket("default:bucket", {
 	description = "Bucket",
 	inventory_image = "bucket.png",
 	groups= {bucket_level = 1},
 })
-
 --liquid nodes
 qts.register_liquid("default:water", {
 	description = "Water",
@@ -122,6 +111,8 @@ qts.register_liquid("default:water", {
 --		node_box = qtcore["nb_level"..i]()
 --	})
 --end
+
+--NODEBOX TESTING NODE
 minetest.register_node("default:boxtest", {
 	description = "BoxTest Node",
 	tiles ={"default_oak_leaves.png", "default_oak_leaves.png", 
@@ -140,6 +131,7 @@ minetest.register_node("default:boxtest", {
 	--end,
 })
 
+--TESTING GRASS NODE
 minetest.register_node("default:grass_5", {
 	description = "Grass Node",
 	tiles ={"default_grass_5.png"},
