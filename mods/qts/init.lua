@@ -6,7 +6,7 @@ qts.LIGHT_MAX = 14
 
 dofile(qts.path.."/worldsettings.lua")
 --load the QT2 Settings File
-qts.settings = qts.create_settings_clojure(minetest.get_modpath("qts") .. "\\QT2Settings.conf")
+qts.settings = qts.create_settings_clojure(minetest.get_modpath("qts") .. "/QT2Settings.conf")
 dofile(qts.path.."/benchmark.lua")
 dofile(qts.path.."/api/maths.lua")
 dofile(qts.path.."/api/util.lua")

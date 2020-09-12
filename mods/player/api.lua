@@ -246,19 +246,21 @@ minetest.register_globalstep(function(dtime)
 		--first, collect the changes in the controls, and update the timers
 		for control, val in pairs(ctrl) do
 			local prev = pdat.controlTimer[control]
-			if val then 
-				if prev > 0 then
-					pdat.controlTimer[control] = prev + dtime
+			if prev then
+				if val then 
+					if prev > 0 then
+						pdat.controlTimer[control] = prev + dtime
+					else
+						pdat.controlTimer[control] = dtime
+						switched[control] = prev
+					end
 				else
-					pdat.controlTimer[control] = dtime
-					switched[control] = prev
-				end
-			else
-				if prev < 0 then
-					pdat.controlTimer[control] = prev - dtime
-				else
-					pdat.controlTimer[control] = -dtime
-					switched[control] = prev
+					if prev < 0 then
+						pdat.controlTimer[control] = prev - dtime
+					else
+						pdat.controlTimer[control] = -dtime
+						switched[control] = prev
+					end
 				end
 			end
 		end

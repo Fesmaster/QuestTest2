@@ -8,8 +8,8 @@ inventory.list_items = {}
 
 local esc = minetest.formspec_escape
 local P = function(x,y) return qts.gui.gui_makepos(x,y):get() end
-dofile(minetest.get_modpath("inventory") .."\\functions.lua")
-dofile(minetest.get_modpath("inventory") .."\\detached.lua")
+dofile(minetest.get_modpath("inventory") .."/functions.lua")
+dofile(minetest.get_modpath("inventory") .."/detached.lua")
 
 
 --register util buttons

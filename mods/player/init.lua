@@ -4,7 +4,7 @@ QuestTest Player Mod
 Player visuals and controls
 ]]
 Player_API = {}
-dofile(minetest.get_modpath("player").."\\api.lua")
+dofile(minetest.get_modpath("player").."/api.lua")
 
 --minetest.settings:set_bool("fast_move", false)
 minetest.settings:set_bool("aux1_decends", false)

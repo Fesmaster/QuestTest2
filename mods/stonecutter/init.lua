@@ -1,5 +1,5 @@
 
-dofile(minetest.get_modpath("stonecutter").."\\functions.lua")
+dofile(minetest.get_modpath("stonecutter").."/functions.lua")
 
 local esc = minetest.formspec_escape
 local P = function(x,y) return qts.gui.gui_makepos(x,y):get() end
