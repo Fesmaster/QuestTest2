@@ -7,6 +7,13 @@ foundry.register_smeltable({
 	heat = 5,
 })
 
+foundry.register_smeltable({
+	itemname = "default:charcoal",
+	smelt_time = 2,
+	type = "fuel",
+	heat = 2,
+})
+
 
 --iron
 foundry.register_metal("iron", {

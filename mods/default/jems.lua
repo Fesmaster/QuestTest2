@@ -1,4 +1,22 @@
 
+--Coal
+--While not a traditional gemstone, Coal has no other logical place to go
+
+minetest.register_craftitem("default:coal", {
+	description = "Coal Lump",
+	inventory_image = "default_coal.png",
+	groups = {coal = 1,},
+})
+
+qts.register_shaped_node("default:stone_with_coal", {
+	description = "Coal in Stone",
+	tiles = {"default_stone.png^default_stone_with_coal.png"},
+	groups = {cracky=3, stone=1, ore=1},
+	sounds = qtcore.node_sound_stone(),
+	drop = "default:coal",
+})
+
+--Traditional Gemstones
 
 minetest.register_craftitem("default:jem_ruby", {
 	description = "Ruby Gemstone",

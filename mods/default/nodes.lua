@@ -266,13 +266,8 @@ qts.register_shaped_node ("default:dirt", {
 	drop = {
 		max_items = 1,
 		items = {
-			{
-				rarity = 32,
-				items = {"default:flint"},
-			},
-			{
-				items = {"default:dirt"}
-			}
+			{items = {"default:flint"},rarity = 32},
+			{items = {"default:dirt"}}
 		}
 	}
 })

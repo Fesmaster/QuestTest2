@@ -163,7 +163,7 @@ minetest.register_entity("foundry:casting_flow", {
 
 
 
-qts.register_shaped_node ("foundry:ingot_mold", {
+minetest.register_node ("foundry:ingot_mold", {
 	description = "Ingot Mold",
 	tiles = {"foundry_ingot_mold.png"},
 	groups = {cracky=3, foundry_mold=1},
@@ -225,7 +225,7 @@ qts.register_shaped_node ("foundry:ingot_mold", {
 
 
 
-qts.register_shaped_node ("foundry:block_mold", {
+minetest.register_node ("foundry:block_mold", {
 	description = "Block Mold",
 	tiles = {"foundry_block_mold.png"},
 	groups = {cracky=3, foundry_mold=1},
@@ -271,4 +271,28 @@ qts.register_shaped_node ("foundry:block_mold", {
 		minetest.node_dig(pos, node, digger)
 		return
 	end,
+})
+
+
+--[[
+CRAFTING
+--]]
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "foundry:spout",
+	recipe = {
+		 "default:cement", 
+		 "default:clay_lump"
+	},
+})
+
+
+minetest.register_craft({
+	output = "foundry:foundry_inactive",
+	recipe = {
+		{ "", 'default:brick', "" },
+		{ "default:brick", "default:cement", "default:brick" },
+		{ "", 'default:brick', "" },
+	}
 })

@@ -18,7 +18,7 @@ function foundry.register_casting_type(name, def)
 	def.recepies = {}
 	RCR[name] = def
 	
-	qts.register_shaped_node ("foundry:"..name.."_mold", {
+	minetest.register_node ("foundry:"..name.."_mold", {
 		description = def.description .. " Mold",
 		tiles =def.block_tiles,
 		groups = {cracky=3, foundry_mold=1},

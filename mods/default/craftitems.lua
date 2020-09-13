@@ -20,15 +20,15 @@ qts.register_ingot("default:stick", {
 	levels = 8,
 })
 
+minetest.register_craftitem("default:charcoal", {
+	description = "Charcoal Lump",
+	inventory_image = "default_charcoal.png",
+	groups = {coal = 1,},
+})
+
 minetest.register_craftitem("default:clay_lump", {
 	description = ("Clay"),
 	inventory_image = "default_clay_lump.png",
-})
-
-minetest.register_craftitem("default:coal", {
-	description = "Coal Lump",
-	inventory_image = "default_coal.png",
-	groups = {coal = 1,},
 })
 
 minetest.register_craftitem("default:flint", {

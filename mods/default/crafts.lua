@@ -252,8 +252,14 @@ minetest.register_craft({
 
 minetest.register_craft({
 	type = "cooking",
-	output = "default:stone",
-	recipe = "default:stone_cobble",
+	output = "default:charcoal 4",
+	recipe = "group:log",
+})
+
+minetest.register_craft({
+	type = "cooking",
+	output = "default:charcoal",
+	recipe = "group:wood",
 })
 
 minetest.register_craft({
@@ -273,14 +279,22 @@ minetest.register_craft({
 minetest.register_craft({
 	type = "fuel",
 	recipe = "group:log",
-	burntime = 30,
+	burntime = 32,
 })
 
 minetest.register_craft({
 	type = "fuel",
 	recipe = "group:wood",
-	burntime = 7,
+	burntime = 8,
 })
+
+minetest.register_craft({
+	type = "fuel",
+	recipe = "group:coal",
+	burntime = 128,
+})
+
+--Other Crafting
 
 minetest.register_craft({
 	output = "default:crate",
@@ -291,24 +305,7 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_craft({
-	type = "shapeless",
-	output = "foundry:spout",
-	recipe = {
-		 "default:cement", 
-		 "default:clay_lump"
-	},
-})
 
-
-minetest.register_craft({
-	output = "foundry:foundry_inactive",
-	recipe = {
-		{ "", 'default:brick', "" },
-		{ "default:brick", "default:cement", "default:brick" },
-		{ "", 'default:brick', "" },
-	}
-})
 
 minetest.register_craft({
 	output = "default:brick",
@@ -331,8 +328,15 @@ minetest.register_craft({
 minetest.register_craft({
 	output = "default:clay",
 	recipe = {
-		{ "default:clay_lump", 'default:clay_lump', "" },
-		{ "default:clay_lump", "default:clay_lump", "" },
-		{ "", '', "" },
+		{ "default:clay_lump", 'default:clay_lump'},
+		{ "default:clay_lump", "default:clay_lump"},
+	}
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "default:clay_lump 4",
+	recipe = {
+		"default:clay"
 	}
 })

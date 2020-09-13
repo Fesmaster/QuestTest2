@@ -4,8 +4,9 @@
 
 function qts.register_shaped_node(name, def)
 	--prep the data for node registration
-	if (not def.drops) then
+	if (def.drop == nil) then
 		def.drop = name
+		minetest.log("Node "..name .." did not have any drops")
 	end
 	
 	--groups setup

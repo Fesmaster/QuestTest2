@@ -214,7 +214,9 @@ minetest.register_ore({
 		persist = 0.0
 	},
 })
---[[
+
+--Coal
+---[[
 minetest.register_ore({
 	ore_type       = "scatter",
 	ore            = "default:stone_with_coal",
