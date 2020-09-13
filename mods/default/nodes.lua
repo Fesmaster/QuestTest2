@@ -659,36 +659,9 @@ qts.register_shaped_node ("default:gold_mushroom_cap", {
 	sounds = qtcore.node_sound_wood(),
 })
 
-minetest.register_node("default:g_shroom_spore", {
+minetest.register_node("default:gold_shroom_spore", {
 	description = "Golden Mushroom Spore",
-	tiles = {
-		"default_g_shroom_spore.png",
-		"default_g_shroom_spore.png",
-		"default_g_shroom_spore.png",
-		"default_g_shroom_spore.png",
-		"default_g_shroom_spore.png",
-		"default_g_shroom_spore.png"
-	},
-	drawtype = "nodebox",
-	paramtype = "light",
-	groups = {snappy = 3, flammable = 2, leaves = 1},
-	node_box = {
-		type = "fixed",
-		fixed = {
-		}
-	}
-})
-
-minetest.register_node("default:g_shroom_spore", {
-	description = "Golden Mushroom Spore",
-	tiles = {
-		"default_g_shroom_spore.png",
-		"default_g_shroom_spore.png",
-		"default_g_shroom_spore.png",
-		"default_g_shroom_spore.png",
-		"default_g_shroom_spore.png",
-		"default_g_shroom_spore.png"
-	},
+	tiles = {"default_g_shroom_spore.png"},
 	drawtype = "nodebox",
 	paramtype = "light",
 	groups = {snappy = 3, flammable = 2, leaves = 1},
@@ -703,37 +676,9 @@ minetest.register_node("default:g_shroom_spore", {
 	}
 })
 
-
 minetest.register_node("default:small_shroom", {
 	description = "A Small Edible Mushroom",
-	tiles = {
-		"default_small_shroom.png",
-		"default_small_shroom.png",
-		"default_small_shroom.png",
-		"default_small_shroom.png",
-		"default_small_shroom.png",
-		"default_small_shroom.png"
-	},
-	drawtype = "nodebox",
-	paramtype = "light",
-	
-	groups = {snappy = 3, flammable = 2, leaves = 1},node_box = {
-		type = "fixed",
-		fixed = {
-		}
-	}
-})
-
-minetest.register_node("default:small_shroom", {
-	description = "A Small Edible Mushroom",
-	tiles = {
-		"default_small_shroom.png",
-		"default_small_shroom.png",
-		"default_small_shroom.png",
-		"default_small_shroom.png",
-		"default_small_shroom.png",
-		"default_small_shroom.png"
-	},
+	tiles = {"default_small_shroom.png"},
 	drawtype = "nodebox",
 	paramtype = "light",
 	groups = {snappy = 3, flammable = 2, leaves = 1},
@@ -755,33 +700,7 @@ leaves use param2 to hold if they were placed by the player
 to allow player-placed leaves to not decay
 --]]
 
-minetest.register_node("default:swamp_leaves", {
-	description = "Swamp Leaves",
-	tiles = {
-		"default_swamp_leaves.png",
-		"default_swamp_leaves.png",
-		"default_swamp_leaves.png",
-		"default_swamp_leaves.png",
-		"default_swamp_leaves.png",
-		"default_swamp_leaves.png"
-	},
-	drawtype = "nodebox",
-	waving = 1,
-	paramtype = "light",
-	groups = {snappy = 3, flammable = 2, leaves = 1},
-	walkable = false,
-	climbable = true,
-	sounds = qtcore.node_sound_grass(),
-	after_place_node = qtcore.after_place_leaves;
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{-0.625, -0.5, -0.625, 0.625, 0.6875, 0.625}, -- NodeBox12
-			{-0.0625, 0.125, 0.1875, 0.75, 0.9375, 0.875}, -- NodeBox13
-			{-0.9375, -0.75, -1, -0.125, 0, -0.125}, -- NodeBox14
-		}
-	}
-})
+
 
 
 minetest.register_node("default:oak_leaves", {
@@ -791,9 +710,13 @@ minetest.register_node("default:oak_leaves", {
 	tiles = {"default_oak_leaves.png"},
 	paramtype = "light",
 	groups = {snappy = 3, flammable = 2, leaves = 1},
-	--drop = {
-	--	--TODO: finish leaf drops
-	--},
+	drop = {
+		max_items = 1,
+		items = {
+			{items = {"default:oak_sapling"}, rarity = 16},
+			{items = {"default:oak_leaves"}},
+		}
+	},
 	walkable = false,
 	climbable = true,
 	sounds = qtcore.node_sound_grass(),
@@ -807,9 +730,13 @@ minetest.register_node("default:aspen_leaves", {
 	tiles = {"default_aspen_leaves.png"},
 	paramtype = "light",
 	groups = {snappy = 3, flammable = 2, leaves = 1},
-	--drop = {
-	--	--TODO: finish leaf drops
-	--},
+	drop = {
+		max_items = 1,
+		items = {
+			{items = {"default:aspen_sapling"}, rarity = 16},
+			{items = {"default:aspen_leaves"}},
+		}
+	},
 	walkable = false,
 	climbable = true,
 	sounds = qtcore.node_sound_grass(),
@@ -823,9 +750,13 @@ minetest.register_node("default:apple_leaves", {
 	tiles = {"default_apple_leaves.png"},
 	paramtype = "light",
 	groups = {snappy = 3, flammable = 2, leaves = 1},
-	--drop = {
-	--	--TODO: finish leaf drops
-	--},
+	drop = {
+		max_items = 1,
+		items = {
+			{items = {"default:apple_sapling"}, rarity = 16},
+			{items = {"default:apple_leaves"}},
+		}
+	},
 	walkable = false,
 	climbable = true,
 	sounds = qtcore.node_sound_grass(),
@@ -855,9 +786,13 @@ minetest.register_node("default:rowan_leaves", {
 	tiles = {"default_rowan_leaves.png"},
 	paramtype = "light",
 	groups = {snappy = 3, flammable = 2, leaves = 1},
-	--drop = {
-	--	--TODO: finish leaf drops
-	--},
+	drop = {
+		max_items = 1,
+		items = {
+			{items = {"default:rowan_sapling"}, rarity = 16},
+			{items = {"default:rowan_leaves"}},
+		}
+	},
 	walkable = false,
 	climbable = true,
 	sounds = qtcore.node_sound_grass(),
@@ -871,9 +806,13 @@ minetest.register_node("default:lanternfruit_leaves", {
 	tiles = {"default_lanternfruit_leaves.png"},
 	paramtype = "light",
 	groups = {snappy = 3, flammable = 2, leaves = 1},
-	--drop = {
-	--	--TODO: finish leaf drops
-	--},
+	drop = {
+		max_items = 1,
+		items = {
+			{items = {"default:lanternfruit_sapling"}, rarity = 16},
+			{items = {"default:lanternfruit_leaves"}},
+		}
+	},
 	walkable = false,
 	climbable = true,
 	sounds = qtcore.node_sound_grass(),
@@ -887,9 +826,13 @@ minetest.register_node("default:coffeetree_leaves", {
 	tiles = {"default_coffee_leaves.png"},
 	paramtype = "light",
 	groups = {snappy = 3, flammable = 2, leaves = 1},
-	--drop = {
-	--	--TODO: finish leaf drops
-	--},
+	drop = {
+		max_items = 1,
+		items = {
+			{items = {"default:coffeetree_sapling"}, rarity = 16},
+			{items = {"default:coffeetree_leaves"}},
+		}
+	},
 	walkable = false,
 	climbable = true,
 	sounds = qtcore.node_sound_grass(),
@@ -903,9 +846,13 @@ minetest.register_node("default:mahogany_leaves", {
 	tiles = {"default_mahogany_leaves.png"},
 	paramtype = "light",
 	groups = {snappy = 3, flammable = 2, leaves = 1},
-	--drop = {
-	--	--TODO: finish leaf drops
-	--},
+	drop = {
+		max_items = 1,
+		items = {
+			{items = {"default:mahogany_sapling"}, rarity = 16},
+			{items = {"default:mahogany_leaves"}},
+		}
+	},
 	walkable = false,
 	climbable = true,
 	sounds = qtcore.node_sound_grass(),
@@ -936,15 +883,39 @@ minetest.register_node("default:rosewood_leaves", {
 	tiles = {"default_rosewood_leaves.png"},
 	paramtype = "light",
 	groups = {snappy = 3, flammable = 2, leaves = 1},
-	--drop = {
-	--	--TODO: finish leaf drops
-	--},
+	drop = {
+		max_items = 1,
+		items = {
+			{items = {"default:rosewood_sapling"}, rarity = 16},
+			{items = {"default:rosewood_leaves"}},
+		}
+	},
 	walkable = false,
 	climbable = true,
 	sounds = qtcore.node_sound_grass(),
 	after_place_node = qtcore.after_place_leaves;
 })
 
+minetest.register_node("default:swamp_leaves", {
+	description = "Swamp Leaves",
+	tiles = {"default_swamp_leaves.png"},
+	drawtype = "nodebox",
+	waving = 1,
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	walkable = false,
+	climbable = true,
+	sounds = qtcore.node_sound_grass(),
+	after_place_node = qtcore.after_place_leaves;
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.625, -0.5, -0.625, 0.625, 0.6875, 0.625}, -- NodeBox12
+			{-0.0625, 0.125, 0.1875, 0.75, 0.9375, 0.875}, -- NodeBox13
+			{-0.9375, -0.75, -1, -0.125, 0, -0.125}, -- NodeBox14
+		}
+	}
+})
 
 --fruit
 
@@ -963,77 +934,11 @@ minetest.register_node("default:lantern_fruit", {
 	light_source = 12,
 })
 
-minetest.register_node("default:oak_sapling", {
-	description = "Oak Sapling",
-	tiles ={"default_oak_leaves.png", "default_oak_leaves.png", 
-		"default_oak_leaves.png^[lowpart:37:default_oak_side.png"},
-	groups = {oddly_breakable_by_hand=3},
-	sounds = qtcore.node_sound_stone(),
-	drawtype = "nodebox",
-	paramtype = "light",
-	node_box = qtcore.nb_sapling(),
-	paramtype2 = "facedir",
-	--on_place = function(itemstack, placer, pointed_thing)
-	--	if pointed_thing.type ~= "node" then
-	--		return itemstack
-	--	end
-	--	return qts.rotate_and_place(itemstack, placer, pointed_thing)
-	--end,
-})
 
-minetest.register_node("default:apple_sapling", {
-	description = "Apple Sapling",
-	tiles ={"default_apple_leaves.png", "default_apple_leaves.png", 
-		"default_apple_leaves.png^[lowpart:37:default_apple_side.png"},
-	groups = {oddly_breakable_by_hand=3},
-	sounds = qtcore.node_sound_stone(),
-	drawtype = "nodebox",
-	paramtype = "light",
-	node_box = qtcore.nb_sapling(),
-	paramtype2 = "facedir",
-	--on_place = function(itemstack, placer, pointed_thing)
-	--	if pointed_thing.type ~= "node" then
-	--		return itemstack
-	--	end
-	--	return qts.rotate_and_place(itemstack, placer, pointed_thing)
-	--end,
-})
 
-minetest.register_node("default:aspen_sapling", {
-	description = "Aspen Sapling",
-	tiles ={"default_aspen_leaves.png", "default_aspen_leaves.png", 
-		"default_aspen_leaves.png^[lowpart:37:default_aspen_side.png"},
-	groups = {oddly_breakable_by_hand=3},
-	sounds = qtcore.node_sound_stone(),
-	drawtype = "nodebox",
-	paramtype = "light",
-	node_box = qtcore.nb_sapling(),
-	paramtype2 = "facedir",
-	--on_place = function(itemstack, placer, pointed_thing)
-	--	if pointed_thing.type ~= "node" then
-	--		return itemstack
-	--	end
-	--	return qts.rotate_and_place(itemstack, placer, pointed_thing)
-	--end,
-})
 
-minetest.register_node("default:rowan_sapling", {
-	description = "Rowan Sapling",
-	tiles ={"default_rowan_leaves.png", "default_rowan_leaves.png", 
-		"default_rowan_leaves.png^[lowpart:37:default_rowan_side.png"},
-	groups = {oddly_breakable_by_hand=3},
-	sounds = qtcore.node_sound_stone(),
-	drawtype = "nodebox",
-	paramtype = "light",
-	node_box = qtcore.nb_sapling(),
-	paramtype2 = "facedir",
-	--on_place = function(itemstack, placer, pointed_thing)
-	--	if pointed_thing.type ~= "node" then
-	--		return itemstack
-	--	end
-	--	return qts.rotate_and_place(itemstack, placer, pointed_thing)
-	--end,
-})
+
+--FUNATURE
 
 minetest.register_node("default:table", {
 	description = "A Table",

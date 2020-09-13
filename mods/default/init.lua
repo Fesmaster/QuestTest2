@@ -22,6 +22,9 @@ dofile(minetest.get_modpath("default").."/tools.lua")
 dofile(minetest.get_modpath("default").."/campfire.lua")
 dofile(minetest.get_modpath("default").."/fire.lua")
 dofile(minetest.get_modpath("default").."/torches.lua")
+dofile(minetest.get_modpath("default").."/saplings.lua")
+dofile(minetest.get_modpath("default").."/liquids.lua")
+
 dofile(minetest.get_modpath("default").."/initial_items.lua")
 -- Load other files
 
@@ -81,22 +84,7 @@ qts.register_fencelike_node("default:stone_brick_pane", {
 --[[
 LIQUID TESTS
 --]]
---bucket
-qts.register_bucket("default:bucket", {
-	description = "Bucket",
-	inventory_image = "bucket.png",
-	groups= {bucket_level = 1},
-})
---liquid nodes
-qts.register_liquid("default:water", {
-	description = "Water",
-	tiles = qtcore.liquid_texture("default_water_source_animated.png", 2.0),
-	special_tiles = qtcore.liquid_texture("default_water_flowing_animated.png", 0.5),
-	bucket_image = "bucket_water.png",
-	post_effect_color = {a = 103, r = 30, g = 60, b = 90},
-	groups = {water = 3, liquid = 3, cools_lava = 1},
-	sounds = qtcore.node_sound_water(),
-})
+
 
 
 

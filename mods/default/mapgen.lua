@@ -196,6 +196,10 @@ qts.worldgen.register_biome("beach", {
 	stone_depth = 10,
 })
 
+--[[
+ORES
+--]]
+
 minetest.register_ore({
 	ore_type        = "blob",
 	ore             = "default:clay",

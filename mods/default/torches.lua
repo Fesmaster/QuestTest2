@@ -2,6 +2,8 @@
 
 qts.register_torch("default:torch", {
 	description = "Torch",
+	inventory_image = "default_torch_inv.png",
+	wield_image = "default_torch_inv.png",
 	tiles = {{
 		name = "default_torch.png",
 		animation = {type = "vertical_frames", aspect_w = 32, aspect_h = 32, length = 1.5}

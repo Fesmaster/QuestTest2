@@ -2,31 +2,55 @@
 local path = minetest.get_modpath("qtcore") .. "/schems/"
 local flags = "place_center_x,place_center_z"
 
-
-qtcore.grow_apple_tree = function(pos)
-	return minetest.place_schematic(pos, path .. "apple1.mts", random, nil, false, flags)
-end
-
 qtcore.grow_oak_tree = function(pos)
-	return minetest.place_schematic(pos, path .. "oak" .. tostring(math.random(1,3)) .. ".mts", random, nil, false, flags)
-end
-
-qtcore.grow_coffee_tree = function(pos)
-	return minetest.place_schematic(pos, path .. "coffee1.mts", random, nil, false, flags)
-end
-
-qtcore.grow_rowan_tree = function(pos)
-	return minetest.place_schematic(pos, path .. "rowan1.mts", random, nil, false, flags)
+	return minetest.place_schematic(pos, path .. "oak" .. tostring(math.random(1,3)) .. ".mts", 'random', nil, false, flags)
 end
 
 qtcore.grow_aspen_tree = function(pos)
 	--local name = {"aspen1","aspen2"}[math.random(1,2)]
-	return minetest.place_schematic(pos, path .. "aspen" .. tostring(math.random(1,2)) .. ".mts", random, nil, false, flags)
+	return minetest.place_schematic(pos, path .. "aspen" .. tostring(math.random(1,2)) .. ".mts", 'random', nil, false, flags)
+end
+
+qtcore.grow_apple_tree = function(pos)
+	return minetest.place_schematic(pos, path .. "apple1.mts", 'random', nil, false, flags)
+end
+
+qtcore.grow_rowan_tree = function(pos)
+	return minetest.place_schematic(pos, path .. "rowan1.mts", 'random', nil, false, flags)
+end
+
+qtcore.grow_lantern_tree = function(pos)
+	return minetest.place_schematic(pos, path .. "lantern" .. tostring(math.random(1,2)) .. ".mts", 'random', nil, false, flags)
+end
+
+qtcore.grow_coffee_tree = function(pos)
+	return minetest.place_schematic(pos, path .. "coffee1.mts", 'random', nil, false, flags)
 end
 
 qtcore.grow_mahogany_tree = function(pos)
-	return minetest.place_schematic(pos, path .. "mahogany" .. tostring(math.random(1,2)) .. ".mts", random, nil, false, flags)
+	return minetest.place_schematic(pos, path .. "mahogany" .. tostring(math.random(1,2)) .. ".mts", 'random', nil, false, flags)
 end
+
+--blackwood?
+
+qtcore.grow_rosewood_tree = function(pos)
+	return minetest.place_schematic(pos, path .. "rosewood1.mts", 'random', nil, false, flags)
+end
+
+
+
+qtcore.grow_swamp_tree = function(pos)
+	return minetest.place_schematic(pos, path .. "swamp_tree1.mts", 'random', nil, false, flags)
+end
+
+qtcore.grow_blue_mushroom = function(pos)
+	return minetest.place_schematic(pos, path .. "blue_shroom" .. tostring(math.random(1,2)) .. ".mts", 'random', nil, false, flags)
+end
+
+qtcore.grow_gold_mushroom = function(pos)
+	return minetest.place_schematic(pos, path .. "tree_gold_shroom_1.mts", 'random', nil, false, flags)
+end
+
 
 --[[
 def contains:
@@ -171,7 +195,7 @@ qts.worldgen.register_structure("tree_rosewood1", {
 })
 
 qts.worldgen.register_structure("tree_swamp", {
-	schematic = path .. "swamp_tree.mts",
+	schematic = path .. "swamp_tree1.mts",
 	chance = 30,
 	biomes = {"swamp"},
 	nodes = {"default:dirt_with_swamp_grass"},
@@ -181,7 +205,7 @@ qts.worldgen.register_structure("tree_swamp", {
 })
 
 qts.worldgen.register_structure("tree_small_b_shroom", {
-	schematic = path .. "small_b_shroom.mts",
+	schematic = path .. "blue_shroom2.mts",
 	chance = 30,
 	biomes = {"mushroom_forest"},
 	nodes = {"default:dirt_with_mushroom_grass"},
@@ -191,7 +215,7 @@ qts.worldgen.register_structure("tree_small_b_shroom", {
 })
 
 qts.worldgen.register_structure("tree_large_b_shroom", {
-	schematic = path .. "large_b_shroom.mts",
+	schematic = path .. "blue_shroom2.mts",
 	chance = 15,
 	biomes = {"mushroom_forest"},
 	nodes = {"default:dirt_with_mushroom_grass"},

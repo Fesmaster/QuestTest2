@@ -12,13 +12,6 @@ minetest.register_node("dtools:blue_node", {
 	tiles ={"dtools_blue.png"},
 	groups = {oddly_breakable_by_hand=3},
 	sounds = qtcore.node_sound_defaults(),
-	--[[
-	on_projectile_strike = function(projectile, pointed_thing)
-		if (pointed_thing.above) then
-			minetest.set_node(pointed_thing.above, {name = "dtools:blue_node"})
-		end
-	end
-	--]]
 })
 
 minetest.register_node("dtools:red_node", {
@@ -26,6 +19,15 @@ minetest.register_node("dtools:red_node", {
 	tiles ={"dtools_red.png"},
 	groups = {oddly_breakable_by_hand=3},
 	sounds = qtcore.node_sound_defaults(),
+})
+
+minetest.register_node("dtools:white_BG_node", {
+	description = "White BG Node",
+	tiles ={"White_PX.png"},
+	groups = {oddly_breakable_by_hand=3},
+	sounds = qtcore.node_sound_defaults(),
+	light_source = 10,
+	paramtype = "light"
 })
 
 --[[

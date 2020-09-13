@@ -3,6 +3,34 @@ function qts.start_node_growth(pos)
 	local node = minetest.get_node_or_nil(pos)
 	if node == nil then return end
 	local nodedef = minetest.registered_nodes[node.name]
+			
+	if nodedef.growable_nodes then
+		--check below for a valid node
+		local nodeb = minetest.get_node_or_nil(vector.add(pos, {x=0, y=-1, z=0}))
+		if nodeb == nil then return false end
+		local nameb = nodeb.name
+		
+		local f = false
+		for i, gnode_name in ipairs(nodedef.growable_nodes) do
+			if (qts.get_modname_from_item(gnode_name) == "group") then
+				if (minetest.get_item_group(nameb, qts.remove_modname_from_item(gnode_name)) ~= 0) then
+					f = true
+					break
+				end
+			else
+				if gnode_name == nameb then
+					f = true
+					break
+				end
+			end
+		end
+		--the node is not on a growable surface
+		if (not f) then
+			return
+		end
+		
+	end
+	
 	if nodedef.grow_timer and nodedef.grow_timer > 0 then
 		local t = nodedef.grow_timer
 		if nodedef.grow_timer_random and nodedef.grow_timer_random < t then
@@ -41,16 +69,47 @@ function qts.register_growable_node(name, def)
 	local defualts = {
 		on_timer = function(pos, elapsed)
 			local node = minetest.get_node_or_nil(pos)
-			if node == nil then return end
+			if node == nil then return false end
+			
 			local nodedef = minetest.registered_nodes[node.name]
+			
+			if nodedef.growable_nodes then
+				--check below for a valid node, or restart timer
+				local nodeb = minetest.get_node_or_nil(vector.add(pos, {x=0, y=-1, z=0}))
+				if nodeb == nil then return false end
+				local nameb = nodeb.name
+				
+				local f = false
+				for i, gnode_name in ipairs(nodedef.growable_nodes) do
+					if (qts.get_modname_from_item(gnode_name) == "group") then
+						if (minetest.get_item_group(nameb, qts.remove_modname_from_item(gnode_name)) ~= 0) then
+							f = true
+							break
+						end
+					else
+						if gnode_name == nameb then
+							f = true
+							break
+						end
+					end
+				end
+				--the node is not on a growable surface
+				if (not f) then
+					return false
+				end
+				
+			end
+			
 			if nodedef.on_grow then
-				nodedef.on_grow(pos)
+				return nodedef.on_grow(pos)
+			else
+				return false
 			end
 		end,
 		on_construct = qts.start_node_growth,
 		groups = {},
 		on_grow = function(pos)
-			return
+			return false
 		end,
 	}
 	
@@ -61,5 +120,7 @@ function qts.register_growable_node(name, def)
 	end
 	
 	def.groups.growable = 1
+	
+	
 	minetest.register_node(name, def)
 end

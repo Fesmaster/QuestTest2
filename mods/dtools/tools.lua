@@ -21,7 +21,7 @@ minetest.register_tool ("dtools:gauntlet", {
 
 
 minetest.register_tool("dtools:testingTool", {
-	description = "Testing Tool:\nCurrently messes with param2",
+	description = "Testing Tool:\nCurrently makes expltions",
 	inventory_image = "dtools_green_wand.png",
 	range = 10.0,
 	--liquids_pointable = true,
@@ -63,6 +63,27 @@ minetest.register_tool("dtools:testingTool", {
 		end
 	end
 })
+
+minetest.register_tool("dtools:timer_tool", {
+	description = "Timer Tool:\nShows the node's timer",
+	inventory_image = "dtools_green_wand.png",
+	range = 10.0,
+	--liquids_pointable = true,
+	on_use = function(itemstack, user, pointed_thing)
+		minetest.log("QTS Timer Tool used")
+		if pointed_thing.under then
+			local timer = minetest.get_node_timer(pointed_thing.under)
+			if timer then
+				minetest.log("Node Timer at: " .. minetest.pos_to_string(pointed_thing.under) .. "\n" ..
+					dump(timer:get_elapsed()) .. "/" .. dump(timer:get_timeout()) .. 
+					"  -  started? " .. dump(timer:is_started()))
+				--qts.get_modname_from_item(itemname)
+				
+			end
+		end
+	end,
+})
+
 
 minetest.register_tool("dtools:summoning_wand", {
 	description = "Summoning Wand\nCurrently Summoning: dtools:static_entity",

@@ -120,3 +120,11 @@ end
 function qts.ignite(pos)
 	minetest.log("qts.ignite should be implemented in default mod")
 end
+
+function qts.get_modname_from_item(itemname)
+	return string.match(itemname, '([%w_]*):')
+end
+
+function qts.remove_modname_from_item(itemname)
+	return string.match(itemname, ':([%w_]*)')
+end
