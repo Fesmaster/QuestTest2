@@ -23,7 +23,18 @@ qts.register_shaped_node("default:stone", {
 	tiles = {"default_stone.png"},
 	groups = {cracky=3, stone=1},
 	sounds = qtcore.node_sound_stone(),
-	drop = "default:cobble",
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				rarity = 32,
+				items = {"default:flint"}
+			},
+			{
+				items = {"default:stone_cobble"}
+			}
+		}
+	},
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })

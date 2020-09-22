@@ -63,7 +63,7 @@ minetest.register_craftitem("default:sword_template", {
 
 minetest.register_craftitem("default:axe_template", {
 	description = ("A Wooden Axe Template"),
-	inventory_image = "default_axe_tem,plate.png",
+	inventory_image = "default_axe_template.png",
 })
 
 minetest.register_craftitem("default:pickaxe_template", {

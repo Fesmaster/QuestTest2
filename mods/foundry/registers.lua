@@ -50,6 +50,13 @@ qts.register_shaped_node ("foundry:scorched_brick", {
 	sounds = qtcore.node_sound_stone(),
 })
 
+minetest.register_node ("foundry:casting_sand",  {
+description = "Casting Sand",
+	tiles = {"foundry_casting_sand.png"},
+	groups = {oddly_breakable_by_hand=1},
+	sounds = qtcore.node_sound_sand(),
+})
+
 minetest.register_node("foundry:crucible_empty", {
 	description = "Empty Crucible",
 	drawtype = "glasslike_framed",
@@ -287,6 +294,67 @@ minetest.register_craft({
 	},
 })
 
+minetest.register_craft({
+	type = "shapeless",
+	output = "foundry:casting_sand",
+	recipe = {
+		 "default:sand", 
+		 "default:clay_lump"
+	},
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "foundry:block_mold",
+	recipe = {
+		 "foundry:casting_sand", 
+		 "group:wood"
+	},
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "foundry:ingot_mold",
+	recipe = {
+		 "foundry:casting_sand"
+	},
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "foundry:pick_mold",
+	recipe = {
+		 "foundry:casting_sand", 
+		 "default:pickaxe_template"
+	},
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "foundry:axe_mold",
+	recipe = {
+		 "foundry:casting_sand", 
+		 "default:axe_template"
+	},
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "foundry:shovel_mold",
+	recipe = {
+		 "foundry:casting_sand", 
+		 "default:shovel_template"
+	},
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "foundry:sword_mold",
+	recipe = {
+		 "foundry:casting_sand", 
+		 "default:sword_template"
+	},
+})
 
 minetest.register_craft({
 	output = "foundry:foundry_inactive",
@@ -294,5 +362,41 @@ minetest.register_craft({
 		{ "", 'default:brick', "" },
 		{ "default:brick", "default:cement", "default:brick" },
 		{ "", 'default:brick', "" },
+	}
+})
+
+minetest.register_craft({
+	output = "default:axe_template",
+	recipe = {
+		{ "", 'default:knife_flint', "" },
+		{ "", "group:wood", "" },
+		{ "", "", "" },
+	}
+})
+
+minetest.register_craft({
+	output = "default:pickaxe_template",
+	recipe = {
+		{ "", "", "" },
+		{ "", "group:wood", "default:knife_flint" },
+		{ "", "", "" },
+	}
+})
+
+minetest.register_craft({
+	output = "default:shovel_template",
+	recipe = {
+		{ "", "", "" },
+		{ "default:knife_flint", "group:wood", "" },
+		{ "", "", "" },
+	}
+})
+
+minetest.register_craft({
+	output = "default:sword_template",
+	recipe = {
+		{ "", "", "" },
+		{ "", "group:wood", "" },
+		{ "", "default:knife_flint", "" },
 	}
 })
