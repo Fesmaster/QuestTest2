@@ -223,7 +223,7 @@ end
 --clear the data for a particular player when they leave
 minetest.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
-	player_model[name] = nil
+	player_data[name] = nil
 end)
 
 --[[

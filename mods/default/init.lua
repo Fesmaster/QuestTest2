@@ -69,6 +69,26 @@ minetest.register_tool("default:testingHammer", {
 	end
 })
 
+--[[
+qts.register_craft({
+	ingredients = {"group:wood 1"},
+	results = {"default:stick 4"},
+	--near_nodes = {"default:crate"},
+	--held_items = {"default:knife_flint"},
+	--type = "default",
+	--on_craft = function(crafter, results) return results end
+})
+
+qts.register_craft({
+	ingredients = {"group:wood 1", "default:stone 5"},
+	near_nodes = {"default:crate"},
+	held_items = {"default:knife_flint"},
+	results = {"default:stick 200"},
+	type = "testing",
+	--on_craft = function(crafter, results) return results end
+})
+
+--]]
 
 --[[
 --this is how you would do panes

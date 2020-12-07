@@ -1,245 +1,261 @@
 
 --Wood planks
-minetest.register_craft({
-	output = "default:oak_wood_planks 4",
-	recipe = {
-		{"default:oak_log"},
-	}
+qts.register_craft({
+	ingredients = {"default:oak_log 1"},
+	results = {"default:oak_wood_planks 4"},
+})
+qts.register_craft({
+	ingredients = {"default:rowan_log 1"},
+	results = {"default:rowan_wood_planks 4"},
+})
+qts.register_craft({
+	ingredients = {"default:apple_log 1"},
+	results = {"default:apple_wood_planks 4"},
+})
+qts.register_craft({
+	ingredients = {"default:aspen_log 1"},
+	results = {"default:aspen_wood_planks 4"},
+})
+qts.register_craft({
+	ingredients = {"default:lanterfruit_log 1"},
+	results = {"default:lanternfruit_wood_planks 4"},
+})
+qts.register_craft({
+	ingredients = {"default:coffee_log 1"},
+	results = {"default:coffee_wood_planks 4"},
+})
+qts.register_craft({
+	ingredients = {"default:rosewood_log"},
+	results = {"default:rosewood_wood_planks 4"},
+})
+qts.register_craft({
+	ingredients = {"default:mahogany_log 1"},
+	results = {"default:mahogany_wood_planks 4"},
 })
 
-minetest.register_craft({
-	output = "default:rowan_wood_planks 4",
-	recipe = {
-		{"default:rowan_log"},
-	}
-})
 
-minetest.register_craft({
-	output = "default:apple_wood_planks 4",
-	recipe = {
-		{"default:apple_log"},
-	}
-})
-
-minetest.register_craft({
-	output = "default:aspen_wood_planks 4",
-	recipe = {
-		{"default:aspen_log"},
-	}
-})
-
-minetest.register_craft({
-	output = "default:lanternfruit_wood_planks 4",
-	recipe = {
-		{"default:lanterfruit_log"},
-	}
-})
-
-minetest.register_craft({
-	output = "default:coffee_wood_planks 4",
-	recipe = {
-		{"default:coffee_log"},
-	}
-})
-
-minetest.register_craft({
-	output = "default:rosewood_wood_planks 4",
-	recipe = {
-		{"default:rosewood_log"},
-	}
-})
-
-minetest.register_craft({
-	output = "default:mahogany_wood_planks 4",
-	recipe = {
-		{"default:mahogany_log"},
-	}
-})
-
---mahogany_wood_planks
---stick
-minetest.register_craft({
-	output = "default:stick 4",
-	recipe = {
-		{"group:wood"},
-	}
-})
 
 
 
 --fences
-minetest.register_craft({
-	output = "default:oak_wood_fence 4",
-	recipe = {
-		{ "default:oak_wood_planks", 'group:stick', "default:oak_wood_planks" },
-		{ "default:oak_wood_planks", 'group:stick', "default:oak_wood_planks" },
-	}
+qts.register_craft({
+	ingredients = {"default:oak_wood_planks 2"},
+	results = {"default:oak_wood_fence 4"},
+})
+qts.register_craft({
+	ingredients = {"default:rowan_wood_planks 2"},
+	results = {"default:rowan_wood_fence 4"},
+})
+qts.register_craft({
+	ingredients = {"default:apple_wood_planks 2"},
+	results = {"default:apple_wood_fence 4"},
+})
+qts.register_craft({
+	ingredients = {"default:aspen_wood_planks 2"},
+	results = {"default:aspen_wood_fence 4"},
+})
+qts.register_craft({
+	ingredients = {"default:lanternfruit_wood_planks 2"},
+	results = {"default:lanternfruit_wood_fence 4"},
+})
+qts.register_craft({
+	ingredients = {"default:coffee_wood_planks 2"},
+	results = {"default:coffee_wood_fence 4"},
+})
+qts.register_craft({
+	ingredients = {"default:rosewood_wood_planks 2"},
+	results = {"default:rosewood_wood_fence 4"},
 })
 
-minetest.register_craft({
-	output = "default:rowan_wood_fence 4",
-	recipe = {
-		{ "default:rowan_wood_planks", 'group:stick', "default:rowan_wood_planks" },
-		{ "default:rowan_wood_planks", 'group:stick', "default:rowan_wood_planks" },
-	}
-})
-minetest.register_craft({
-	output = "default:apple_wood_fence 4",
-	recipe = {
-		{ "default:apple_wood_planks", 'group:stick', "default:apple_wood_planks" },
-		{ "default:apple_wood_planks", 'group:stick', "default:apple_wood_planks" },
-	}
-})
-minetest.register_craft({
-	output = "default:aspen_wood_fence 4",
-	recipe = {
-		{ "default:aspen_wood_planks", 'group:stick', "default:aspen_wood_planks" },
-		{ "default:aspen_wood_planks", 'group:stick', "default:aspen_wood_planks" },
-	}
-})
-minetest.register_craft({
-	output = "default:lanternfruit_wood_fence 4",
-	recipe = {
-		{ "default:lanternfruit_wood_planks", 'group:stick', "default:lanternfruit_wood_planks" },
-		{ "default:lanternfruit_wood_planks", 'group:stick', "default:lanternfruit_wood_planks" },
-	}
-})
-minetest.register_craft({
-	output = "default:coffee_wood_fence 4",
-	recipe = {
-		{ "default:coffee_wood_planks", 'group:stick', "default:coffee_wood_planks" },
-		{ "default:coffee_wood_planks", 'group:stick', "default:coffee_wood_planks" },
-	}
-})
-minetest.register_craft({
-	output = "default:rosewood_wood_fence 4",
-	recipe = {
-		{ "default:rosewood_wood_planks", 'group:stick', "default:rosewood_wood_planks" },
-		{ "default:rosewood_wood_planks", 'group:stick', "default:rosewood_wood_planks" },
-	}
-})
+
 
 --knife recipies
-
-minetest.register_craft({
-	output = "default:knife_flint",
-	recipe = {
-		{ "default:flint"},
-		{ "default:stick"},
-	}
+qts.register_craft({
+	ingredients = {"default:flint", "group:wood"},
+	results = {"default:knife_flint"},
 })
 
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:tinder",
-	recipe = {
-		 "default:knife_flint", 
-		 "group:stick"
-	},
-	replacements = {
-		{"default:knife_flint", "default:knife_flint"}
-	}
+qts.register_craft({
+	ingredients = {"group:wood"},
+	results = {"default:tinder"},
+	held = {"group:knife"},
 })
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:tinder 4",
-	recipe = {
-		"default:knife_flint", 
-		'group:stick', 
-		'group:stick', 
-		'group:stick', 
-		'group:stick'
-	},
-	replacements = {
-		{"default:knife_flint", "default:knife_flint"}
-	}
+qts.register_craft({
+	ingredients = {"group:leaves"},
+	results = {"default:tinder"},
+	held = {"group:knife"},
 })
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:tinder 8",
-	recipe = {
-		"default:knife_flint", 
-		'group:stick', 
-		'group:stick', 
-		'group:stick', 
-		'group:stick', 
-		'group:stick', 
-		'group:stick', 
-		'group:stick', 
-		'group:stick'
-	},
-	replacements = {
-		{"default:knife_flint", "default:knife_flint"}
-	}
-})
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:tinder",
-	recipe = {
-		 "default:knife_flint", 
-		 "group:leaves"
-	},
-	replacements = {
-		{"default:knife_flint", "default:knife_flint"}
-	}
-})
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:tinder 4",
-	recipe = {
-		 "default:knife_flint", 
-		 "group:leaves",
-		 "group:leaves",
-		 "group:leaves",
-		 "group:leaves"
-	},
-	replacements = {
-		{"default:knife_flint", "default:knife_flint"}
-	}
-})
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:tinder 8",
-	recipe = {
-		 "default:knife_flint", 
-		 "group:leaves",
-		 "group:leaves",
-		 "group:leaves",
-		 "group:leaves",
-		 "group:leaves",
-		 "group:leaves",
-		 "group:leaves",
-		 "group:leaves"
-	},
-	replacements = {
-		{"default:knife_flint", "default:knife_flint"}
-	}
+qts.register_craft({
+	ingredients = {"group:wood", "default:tinder", "default:flint"},
+	results = {"default:tinderbox"},
 })
 
 --various other
-
-minetest.register_craft({
-	output = "default:tinderbox",
-	recipe = {
-		{ "group:stick", 'group:stick', "group:stick" },
-		{ "default:tinder", 'default:flint', "default:tinder" },
-		{ "default:tinder", 'default:tinder', "default:tinder" },
-	}
+qts.register_craft({
+	ingredients = {"group:wood 5"},
+	results = {"default:campfire"},
 })
 
-minetest.register_craft({
-	output = "default:campfire",
-	recipe = {
-		{ "group:wood", "", "group:wood" },
-		{ "", "group:wood", "" },
-		{ "group:wood", "", "group:wood" },
-	}
+qts.register_craft({
+	ingredients = {"group:wood 4"},
+	results = {"default:crate"},
 })
+
+qts.register_craft({
+	ingredients = {"default:brick_single 4"},
+	results = {"default:brick"},
+})
+
+qts.register_craft({
+	ingredients = {"default:calcium_oxide", "group:sand 4"},
+	results = {"default:cement 4"},
+})
+
+qts.register_craft({
+	ingredients = {"default:clay_lump 4"},
+	results = {"default:clay"},
+})
+
+qts.register_craft({
+	ingredients = {"default:clay"},
+	results = {"default:clay_lump 4"},
+})
+
+--stone and stone walls
+qts.register_craft({
+	ingredients = {"group:grey_stone"},
+	results = {"default:stone"},
+})
+qts.register_craft({
+	ingredients = {"group:grey_stone"},
+	results = {"default:stone_cobble"},
+})
+qts.register_craft({
+	ingredients = {"group:grey_stone"},
+	results = {"default:stone_brick"},
+})
+qts.register_craft({
+	ingredients = {"group:grey_stone"},
+	results = {"default:stone_block"},
+})
+qts.register_craft({
+	ingredients = {"group:grey_stone"},
+	results = {"default:brick_grey"},
+})
+qts.register_craft({
+	ingredients = {"group:grey_stone"},
+	results = {"default:stone_wall"},
+})
+qts.register_craft({
+	ingredients = {"group:grey_stone"},
+	results = {"default:stone_cobble_wall"},
+})
+qts.register_craft({
+	ingredients = {"group:grey_stone"},
+	results = {"default:stone_brick_wall"},
+})
+
+qts.register_craft({
+	ingredients = {"group:red_stone"},
+	results = {"default:red_stone"},
+})
+qts.register_craft({
+	ingredients = {"group:red_stone"},
+	results = {"default:red_stone_cobble"},
+})
+qts.register_craft({
+	ingredients = {"group:red_stone"},
+	results = {"default:red_stone_brick"},
+})
+qts.register_craft({
+	ingredients = {"group:red_stone"},
+	results = {"default:red_stone_block"},
+})
+qts.register_craft({
+	ingredients = {"group:red_stone"},
+	results = {"default:red_stone_wall"},
+})
+qts.register_craft({
+	ingredients = {"group:red_stone"},
+	results = {"default:red_stone_cobble_wall"},
+})
+qts.register_craft({
+	ingredients = {"group:red_stone"},
+	results = {"default:red_stone_brick_wall"},
+})
+
+qts.register_craft({
+	ingredients = {"group:sand_stone"},
+	results = {"default:sandstone"},
+})
+qts.register_craft({
+	ingredients = {"group:sand_stone"},
+	results = {"default:sandstone_cobble"},
+})
+qts.register_craft({
+	ingredients = {"group:sand_stone"},
+	results = {"default:sandstone_brick"},
+})
+qts.register_craft({
+	ingredients = {"group:sand_stone"},
+	results = {"default:sandstone_block"},
+})
+qts.register_craft({
+	ingredients = {"group:sand_stone"},
+	results = {"default:sandstone_wall"},
+})
+qts.register_craft({
+	ingredients = {"group:sand_stone"},
+	results = {"default:sandstone_cobble_wall"},
+})
+qts.register_craft({
+	ingredients = {"group:sand_stone"},
+	results = {"default:sandstone_brick_wall"},
+})
+
+qts.register_craft({
+	ingredients = {"group:desert_stone"},
+	results = {"default:desert_sandstone"},
+})
+qts.register_craft({
+	ingredients = {"group:desert_stone"},
+	results = {"default:desert_sandstone_cobble"},
+})
+qts.register_craft({
+	ingredients = {"group:desert_stone"},
+	results = {"default:desert_sandstone_brick"},
+})
+qts.register_craft({
+	ingredients = {"group:desert_stone"},
+	results = {"default:desert_sandstone_block"},
+})
+qts.register_craft({
+	ingredients = {"group:desert_stone"},
+	results = {"default:desert_sandstone_wall"},
+})
+qts.register_craft({
+	ingredients = {"group:desert_stone"},
+	results = {"default:desert_sandstone_cobble_wall"},
+})
+qts.register_craft({
+	ingredients = {"group:desert_stone"},
+	results = {"default:desert_sandstone_brick_wall"},
+})
+
+qts.register_craft({
+	ingredients = {"group:obsidian"},
+	results = {"default:obsidian"},
+})
+qts.register_craft({
+	ingredients = {"group:obsidian"},
+	results = {"default:obsidian_brick"},
+})
+qts.register_craft({
+	ingredients = {"group:obsidian"},
+	results = {"default:obsidian_block"},
+})
+
+
 
 --toolrepair
 minetest.register_craft({
@@ -296,47 +312,3 @@ minetest.register_craft({
 
 --Other Crafting
 
-minetest.register_craft({
-	output = "default:crate",
-	recipe = {
-		{ "default:stick", 'group:stick', "default:stick" },
-		{ "default:stick", '', "default:stick" },
-		{ "default:stick", 'group:stick', "default:stick" },
-	}
-})
-
-
-
-minetest.register_craft({
-	output = "default:brick",
-	recipe = {
-		{ "default:brick_single", 'default:brick_single', "" },
-		{ "default:brick_single", "default:brick_single", "" },
-		{ "", '', "" },
-	}
-})
-
-minetest.register_craft({
-	output = "default:cement 4",
-	recipe = {
-		{ "", 'group:sand', "" },
-		{ "group:sand", "default:calcium_oxide", "group:sand" },
-		{ "", 'group:sand', "" },
-	}
-})
-
-minetest.register_craft({
-	output = "default:clay",
-	recipe = {
-		{ "default:clay_lump", 'default:clay_lump'},
-		{ "default:clay_lump", "default:clay_lump"},
-	}
-})
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:clay_lump 4",
-	recipe = {
-		"default:clay"
-	}
-})

@@ -18,13 +18,7 @@ minetest.register_tool("default:knife_flint", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {knife = 1}
 })
-minetest.register_craft({
-	output = "default:knife_flint",
-	recipe = {
-		{'default:flint'},
-		{'group:stick'},
-	}
-})
+
 
 
 --[[
