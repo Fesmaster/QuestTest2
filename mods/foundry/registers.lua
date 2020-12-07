@@ -285,118 +285,80 @@ minetest.register_node ("foundry:block_mold", {
 CRAFTING
 --]]
 
-minetest.register_craft({
-	type = "shapeless",
-	output = "foundry:spout",
-	recipe = {
-		 "default:cement", 
-		 "default:clay_lump"
-	},
+
+qts.register_craft({
+	ingredients = {"default:cement", "default:clay_lump"},
+	results = {"foundry:spout",},
 })
 
-minetest.register_craft({
-	type = "shapeless",
-	output = "foundry:casting_sand",
-	recipe = {
-		 "default:sand", 
-		 "default:clay_lump"
-	},
+qts.register_craft({
+	ingredients = {"default:sand", "default:clay_lump"},
+	results = {"foundry:casting_sand",},
 })
 
-minetest.register_craft({
-	type = "shapeless",
-	output = "foundry:block_mold",
-	recipe = {
-		 "foundry:casting_sand", 
-		 "group:wood"
-	},
+qts.register_craft({
+	ingredients = {"default:sand", "default:clay_lump"},
+	results = {"foundry:block_mold",},
 })
 
-minetest.register_craft({
-	type = "shapeless",
-	output = "foundry:ingot_mold",
-	recipe = {
-		 "foundry:casting_sand"
-	},
+qts.register_craft({
+	ingredients = {"default:sand", "default:clay_lump"},
+	results = {"foundry:ingot_mold",},
 })
 
-minetest.register_craft({
-	type = "shapeless",
-	output = "foundry:pick_mold",
-	recipe = {
-		 "foundry:casting_sand", 
-		 "default:pickaxe_template"
-	},
+qts.register_craft({
+	ingredients = {"default:sand", "default:clay_lump"},
+	results = {"foundry:pick_mold",},
 })
 
-minetest.register_craft({
-	type = "shapeless",
-	output = "foundry:axe_mold",
-	recipe = {
-		 "foundry:casting_sand", 
-		 "default:axe_template"
-	},
+qts.register_craft({
+	ingredients = {"default:sand", "default:clay_lump"},
+	results = {"foundry:axe_mold",},
 })
 
-minetest.register_craft({
-	type = "shapeless",
-	output = "foundry:shovel_mold",
-	recipe = {
-		 "foundry:casting_sand", 
-		 "default:shovel_template"
-	},
+qts.register_craft({
+	ingredients = {"default:sand", "default:clay_lump"},
+	results = {"foundry:shovel_mold",},
 })
 
-minetest.register_craft({
-	type = "shapeless",
-	output = "foundry:sword_mold",
-	recipe = {
-		 "foundry:casting_sand", 
-		 "default:sword_template"
-	},
+qts.register_craft({
+	ingredients = {"default:sand", "default:clay_lump"},
+	results = {"foundry:sword_mold",},
 })
 
-minetest.register_craft({
-	output = "foundry:foundry_inactive",
-	recipe = {
-		{ "", 'default:brick', "" },
-		{ "default:brick", "default:cement", "default:brick" },
-		{ "", 'default:brick', "" },
-	}
+
+qts.register_craft({
+	ingredients = {"foundry:casting_sand"},
+	results = {"foundry:block_mold",},
 })
 
-minetest.register_craft({
-	output = "default:axe_template",
-	recipe = {
-		{ "", 'default:knife_flint', "" },
-		{ "", "group:wood", "" },
-		{ "", "", "" },
-	}
+qts.register_craft({
+	ingredients = {"foundry:casting_sand"},
+	results = {"foundry:ingot_mold",},
 })
 
-minetest.register_craft({
-	output = "default:pickaxe_template",
-	recipe = {
-		{ "", "", "" },
-		{ "", "group:wood", "default:knife_flint" },
-		{ "", "", "" },
-	}
+qts.register_craft({
+	ingredients = {"foundry:casting_sand"},
+	results = {"foundry:pick_mold",},
 })
 
-minetest.register_craft({
-	output = "default:shovel_template",
-	recipe = {
-		{ "", "", "" },
-		{ "default:knife_flint", "group:wood", "" },
-		{ "", "", "" },
-	}
+qts.register_craft({
+	ingredients = {"foundry:casting_sand"},
+	results = {"foundry:axe_mold",},
 })
 
-minetest.register_craft({
-	output = "default:sword_template",
-	recipe = {
-		{ "", "", "" },
-		{ "", "group:wood", "" },
-		{ "", "default:knife_flint", "" },
-	}
+qts.register_craft({
+	ingredients = {"foundry:casting_sand"},
+	results = {"foundry:shovel_mold",},
+})
+
+qts.register_craft({
+	ingredients = {"foundry:casting_sand"},
+	results = {"foundry:sword_mold",},
+})
+
+
+qts.register_craft({
+	ingredients = {"default:brick 4", "default:cement"},
+	results = {"foundry:foundry_inactive",},
 })

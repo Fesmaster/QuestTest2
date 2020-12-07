@@ -14,11 +14,4 @@ qts.register_torch("default:torch", {
 	sounds = qtcore.node_sound_wood(),
 })
 
-minetest.register_craft({
-	output = "default:torch 4",
-	recipe = {
-		{"group:coal"},
-		{'group:stick'},
-		{'group:stick'},
-	}
-})
+

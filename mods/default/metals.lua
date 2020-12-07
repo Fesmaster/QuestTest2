@@ -113,10 +113,9 @@ minetest.register_craftitem("default:bronze_alloy", {
 	groups = {alloy = 1,},
 })
 
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:bronze_alloy 2",
-	recipe = {"default:copper_bar", "default:tin_bar"},
+qts.register_craft({
+	ingredients = {"default:copper_bar", "default:tin_bar"},
+	results = {"default:bronze_alloy 2"},
 })
 
 --IRON
@@ -168,10 +167,9 @@ minetest.register_craftitem("default:steel_alloy", {
 	groups = {alloy = 1,},
 })
 
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:steel_alloy 2",
-	recipe = {"default:iron_bar", "default:coal"},
+qts.register_craft({
+	ingredients = {"default:iron_bar", "default:coal"},
+	results = {"default:steel_alloy 2"},
 })
 
 --[[ WEALTH METALS ]]
@@ -200,10 +198,9 @@ minetest.register_craftitem("default:brass_alloy", {
 	groups = {alloy = 1,},
 })
 
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:brass_alloy 2",
-	recipe = {"default:copper_bar", "default:zinc_bar"},
+qts.register_craft({
+	ingredients = {"default:copper_bar", "default:zinc_bar"},
+	results = {"default:brass_alloy 2"},
 })
 
 --gold

@@ -33,10 +33,6 @@ qts.register_craft({
 	results = {"default:mahogany_wood_planks 4"},
 })
 
-
-
-
-
 --fences
 qts.register_craft({
 	ingredients = {"default:oak_wood_planks 2"},
@@ -66,7 +62,6 @@ qts.register_craft({
 	ingredients = {"default:rosewood_wood_planks 2"},
 	results = {"default:rosewood_wood_fence 4"},
 })
-
 
 
 --knife recipies
@@ -121,6 +116,86 @@ qts.register_craft({
 	results = {"default:clay_lump 4"},
 })
 
+qts.register_craft({
+	ingredients = {"group:wood", "group:coal"},
+	results = {"default:torch 4",},
+})
+
+--weapons and tools
+--picks
+qts.register_craft({
+	ingredients = {"group:wood", "default:pick_head_copper"},
+	results = {"default:pick_copper"},
+})
+qts.register_craft({
+	ingredients = {"group:wood", "default:pick_head_bronze"},
+	results = {"default:pick_bronze"},
+})
+qts.register_craft({
+	ingredients = {"group:wood", "default:pick_head_iron"},
+	results = {"default:pick_iron"},
+})
+qts.register_craft({
+	ingredients = {"group:wood", "default:pick_head_steel"},
+	results = {"default:pick_steel"},
+})
+--axes
+qts.register_craft({
+	ingredients = {"group:wood", "default:flint 3"},
+	results = {"default:axe_flint"},
+})
+qts.register_craft({
+	ingredients = {"group:wood", "default:axe_head_copper"},
+	results = {"default:axe_copper"},
+})
+qts.register_craft({
+	ingredients = {"group:wood", "default:axe_head_bronze"},
+	results = {"default:axe_bronze"},
+})
+qts.register_craft({
+	ingredients = {"group:wood", "default:axe_head_iron"},
+	results = {"default:axe_iron"},
+})
+qts.register_craft({
+	ingredients = {"group:wood", "default:axe_head_steel"},
+	results = {"default:axe_steel"},
+})
+--shovels
+qts.register_craft({
+	ingredients = {"group:wood", "default:shovel_head_copper"},
+	results = {"default:shovel_copper"},
+})
+qts.register_craft({
+	ingredients = {"group:wood", "default:shovel_head_bronze"},
+	results = {"default:shovel_bronze"},
+})
+qts.register_craft({
+	ingredients = {"group:wood", "default:shovel_head_iron"},
+	results = {"default:shovel_iron"},
+})
+qts.register_craft({
+	ingredients = {"group:wood", "default:shovel_head_steel"},
+	results = {"default:shovel_steel"},
+})
+--swords
+qts.register_craft({
+	ingredients = {"group:wood", "default:sword_blade_copper"},
+	results = {"default:sword_copper"},
+})
+qts.register_craft({
+	ingredients = {"group:wood", "default:sword_blade_bronze"},
+	results = {"default:sword_bronze"},
+})
+qts.register_craft({
+	ingredients = {"group:wood", "default:sword_blade_iron"},
+	results = {"default:sword_iron"},
+})
+qts.register_craft({
+	ingredients = {"group:wood", "default:sword_blade_steel"},
+	results = {"default:sword_steel"},
+})
+
+
 --stone and stone walls
 qts.register_craft({
 	ingredients = {"group:grey_stone"},
@@ -154,7 +229,6 @@ qts.register_craft({
 	ingredients = {"group:grey_stone"},
 	results = {"default:stone_brick_wall"},
 })
-
 qts.register_craft({
 	ingredients = {"group:red_stone"},
 	results = {"default:red_stone"},
@@ -183,7 +257,6 @@ qts.register_craft({
 	ingredients = {"group:red_stone"},
 	results = {"default:red_stone_brick_wall"},
 })
-
 qts.register_craft({
 	ingredients = {"group:sand_stone"},
 	results = {"default:sandstone"},
@@ -212,7 +285,6 @@ qts.register_craft({
 	ingredients = {"group:sand_stone"},
 	results = {"default:sandstone_brick_wall"},
 })
-
 qts.register_craft({
 	ingredients = {"group:desert_stone"},
 	results = {"default:desert_sandstone"},
@@ -241,7 +313,6 @@ qts.register_craft({
 	ingredients = {"group:desert_stone"},
 	results = {"default:desert_sandstone_brick_wall"},
 })
-
 qts.register_craft({
 	ingredients = {"group:obsidian"},
 	results = {"default:obsidian"},
