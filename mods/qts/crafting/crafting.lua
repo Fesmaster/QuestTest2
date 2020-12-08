@@ -12,10 +12,10 @@
 
 qts.register_craft({
 	ingredients = {"itemname", "itemname 2" ...},
-	near_nodes = {"nodename", "nodename" ...},
-	held_items = {"item", "item" ...},
+	near OR near_nodes = {"nodename", "nodename" ...},
+	held OR held_items = {"item", "item" ...},
 	results = {"itemname", "itemname" ...},
-	type = "type",
+	type = "type", [default: 'default']
 	on_craft = function(crafter, results) return results end
 })
 --]]
@@ -23,10 +23,9 @@ qts.register_craft({
 qts.crafts = {}
 
 --[[
-Registers a crafting recipe.
+creating an arbitrary craft recipe
 --]]
-qts.register_craft = function(recip)
-	--minetest.log("CRAFT REGISTRATION BEGIN: " .. dump(recip))
+qts.create_craft_recipe = function(recip)
 	local t = {}
 	t.ingredients = {}
 	t.near = {}
@@ -52,7 +51,16 @@ qts.register_craft = function(recip)
 	for k, v in ipairs(recip.results) do
 		t.results[v] = 1 
 	end
-	
+	return t
+end
+
+
+--[[
+Registers a crafting recipe.
+--]]
+qts.register_craft = function(recip)
+	--minetest.log("CRAFT REGISTRATION BEGIN: " .. dump(recip))
+	local t = qts.create_craft_recipe(recip)
 	--minetest.log("recip data: " .. dump(t))
 	for key, v in pairs(t.results) do
 		local itemName = ItemStack(key):get_name()
@@ -63,6 +71,8 @@ qts.register_craft = function(recip)
 		qts.crafts[itemName][#qts.crafts[itemName]+1] = t
 	end
 end
+
+
 
 --[[
 gets a list of crafting recipes that result in a particular item.

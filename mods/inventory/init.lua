@@ -48,7 +48,7 @@ qts.gui.register_gui("inventory", {
 		--item buttons
 		for i = 1,6*8,1 do
 			if fields["btn_item_"..tostring(i)] then
-				
+				qts.gui.click(name)
 				local item_name = inventory.itemlist_player[name][offset + i]
 				local recipe_list = qts.get_craft_recipes(item_name)
 				if recipe_list then
@@ -62,7 +62,7 @@ qts.gui.register_gui("inventory", {
 					local inv = minetest.get_player_by_name(name):get_inventory()
 					local item_name = inventory.itemlist_player[name][offset + i]
 					inv:add_item("main", item_name .. " " .. (minetest.registered_items[item_name].stack_max or 99))
-					qts.gui.click(name)
+					
 				else
 					inventory.refresh_inv(name, 2) --TODO: make sure tab 2 is always crafting tab.
 				end
@@ -106,6 +106,7 @@ qts.gui.register_gui("inventory", {
 		
 		--craft buttions
 		if fields.craft_prev then
+			qts.gui.click(name)
 			local i = (data.currRecipeIndex or 0)-1
 			if (i < 1) then
 				i = #data.currRecipeList or 1
@@ -115,6 +116,7 @@ qts.gui.register_gui("inventory", {
 		end
 		
 		if fields.craft_next then
+			qts.gui.click(name)
 			local i = (data.currRecipeIndex or 0)+1
 			local l = #data.currRecipeList or 1
 			if (i > l) then
@@ -125,6 +127,7 @@ qts.gui.register_gui("inventory", {
 		end
 		
 		if (fields.craft_one) then
+			qts.gui.click(name)
 			if (data.currRecipeIndex and data.currRecipeList) then
 				local recipe = data.currRecipeList[data.currRecipeIndex]
 				if (recipe) then
@@ -135,6 +138,7 @@ qts.gui.register_gui("inventory", {
 		end
 		
 		if (fields.craft_ten or fields.craft_all) then
+			qts.gui.click(name)
 			local count = 0
 			if (data.currRecipeIndex and data.currRecipeList) then
 				local recipe = data.currRecipeList[data.currRecipeIndex]
