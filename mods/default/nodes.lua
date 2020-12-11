@@ -928,6 +928,33 @@ minetest.register_node("default:swamp_leaves", {
 	}
 })
 
+--minetest.register_node("default:palm_leaves", {
+--	description = "Palm Leaf",
+--	tiles = {
+--		"default_palm_leaves_hfaces.png",
+--		"default_palm_leaves_hfaces.png",
+--		"default_cement.png",
+--		"default_mahogany_top.png",
+--		"default_palm_leaves_rfaces.png",
+--		"default_palm_leaves_gfaces.png"
+--	},
+--	drawtype = "nodebox",
+--	paramtype = "light",
+--	groups = {snappy = 3, flammable = 2, leaves = 1},
+--	walkable = false,
+--	climbable = true,
+--	sounds = qtcore.node_sound_grass(),
+--	after_place_node = qtcore.after_place_leaves;
+--	node_box = {
+--		type = "fixed",
+--		fixed = {
+--			{-0.5, -0.3, -0.1875, 3.5, 0.0625, 0.25},
+--		}
+--	}
+--})
+
+
+
 --fruit
 
 minetest.register_node("default:lantern_fruit", {
@@ -945,7 +972,34 @@ minetest.register_node("default:lantern_fruit", {
 	light_source = 12,
 })
 
-
+minetest.register_node("default:apple", {
+	description = ("Apple"),
+	drawtype = "nodebox",
+	tiles = {
+		"default_apple.png",
+		"default_apple.png",
+		"default_apple.png",
+		"default_apple.png",
+		"default_apple.png",
+		"default_apple.png"
+	},
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.125, -0.4375, -0.125, 0.0625, -0.25, 0.1875}, -- NodeBox1
+			{-0.0625, -0.5, 0, 0, -0.0625, 0.0625}, -- NodeBox2
+			{-0.1875, -0.4375, -0.0625, 0.125, -0.25, 0.125}, -- NodeBox3
+			{-0.125, -0.5, -0.0625, 0.0625, -0.1875, 0.125}, -- NodeBox4
+		}
+	},
+	sunlight_propagates = true,
+	walkable = false,
+	is_ground_content = false,
+	groups = {snappy=1},
+	on_use = minetest.item_eat(2),
+})
 
 
 

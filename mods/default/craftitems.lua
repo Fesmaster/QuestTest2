@@ -55,23 +55,3 @@ minetest.register_craftitem("default:brick_single", {
 	description = ("A Brick"),
 	inventory_image = "default_brick_single.png",
 })
-
-minetest.register_craftitem("default:sword_template", {
-	description = ("A Wooden Sword Template"),
-	inventory_image = "default_sword_template.png",
-})
-
-minetest.register_craftitem("default:axe_template", {
-	description = ("A Wooden Axe Template"),
-	inventory_image = "default_axe_template.png",
-})
-
-minetest.register_craftitem("default:pickaxe_template", {
-	description = ("A Wooden Pickaxe Template"),
-	inventory_image = "default_pickaxe_template.png",
-})
-
-minetest.register_craftitem("default:shovel_template", {
-	description = ("A Wooden Shovel Template"),
-	inventory_image = "default_shovel_template.png",
-})
