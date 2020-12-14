@@ -137,7 +137,7 @@ function qts.gui.pass_tabs(pos, playername, formname, fields)
 	local tab = tonumber(fields.tabs)
 	if tab and qts.gui.forms[formname].tab_owner and qts.gui.forms[formname].tabs[tab] then
 		--(data, pos, name, fields, tabnumber)
-		qts.gui.forms[formname].tab_update(qts.gui.formData[pname], pos, playername, fields, tab)
+		qts.gui.forms[formname].tab_update(qts.gui.formData[playername], pos, playername, fields, tab)
 	end
 end
 

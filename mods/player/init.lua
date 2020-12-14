@@ -17,10 +17,10 @@ Player_API.SNEAK_MULT = 0.75
 Player_API.DOUBLECLICK_TIME = 0.50
 Player_API.SPRINT_MIN_SPEED = 0.75
 
-
-Player_API.register_model("character.b3d", {
+--"player_armor.png"
+Player_API.register_model("character2.b3d", {
 	animation_speed = 30,
-	textures = {"character.png", },
+	textures = {qts.humanoid_texture("player_base.png", nil, nil, nil, nil)},
 	animations = {
 		-- Standard animations.
 		stand     = {x = 0,   y = 79},
@@ -37,7 +37,7 @@ Player_API.register_model("character.b3d", {
 
 minetest.register_on_joinplayer(function(player)
 	Player_API.new_player(player)
-	Player_API.set_model(player, "character.b3d")
+	Player_API.set_model(player, "character2.b3d")
 	Player_API.set_animation(player, "stand", 30)
 end)
 

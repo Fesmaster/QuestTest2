@@ -138,7 +138,7 @@ qts.register_fencelike_node("default:stone_wall", {
 	description = "Stone Wall",
 	type = "wall",
 	texture = "default_stone.png",
-	groups = {cracky=3, stone=1},
+	groups = {cracky=3, stone=1, grey_stone=1},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -146,7 +146,7 @@ qts.register_fencelike_node("default:stone_cobble_wall", {
 	description = "Cobblestone Wall",
 	type = "wall",
 	texture = "default_stone_cobble.png",
-	groups = {cracky=3, stone=1},
+	groups = {cracky=3, stone=1, grey_stone=1},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -154,7 +154,7 @@ qts.register_fencelike_node("default:stone_brick_wall", {
 	description = "Stone Brick Wall",
 	type = "wall",
 	texture = "default_stone_brick.png",
-	groups = {cracky=3, stone=1},
+	groups = {cracky=3, stone=1, grey_stone=1},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -162,7 +162,7 @@ qts.register_fencelike_node("default:stone_cobble_mossy_wall", {
 	description = "Mossy Cobblestone Wall",
 	type = "wall",
 	texture = "default_stone_cobble_mossy.png",
-	groups = {cracky=3, stone=1},
+	groups = {cracky=3, stone=1, grey_stone=1},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -170,7 +170,7 @@ qts.register_fencelike_node("default:stone_brick_mossy_wall", {
 	description = "Mossy Stone Brick Wall",
 	type = "wall",
 	texture = "default_stone_brick_mossy.png",
-	groups = {cracky=3, stone=1},
+	groups = {cracky=3, stone=1, grey_stone=1},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -179,7 +179,7 @@ qts.register_fencelike_node("default:red_stone_wall", {
 	description = "Red Stone Wall",
 	type = "wall",
 	texture = "default_red_stone.png",
-	groups = {cracky=3, stone=1},
+	groups = {cracky=3, stone=1, red_stone=1},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -187,7 +187,7 @@ qts.register_fencelike_node("default:red_stone_cobble_wall", {
 	description = "Red Cobblestone Wall",
 	type = "wall",
 	texture = "default_red_cobble.png",
-	groups = {cracky=3, stone=1},
+	groups = {cracky=3, stone=1, red_stone=1},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -195,7 +195,7 @@ qts.register_fencelike_node("default:red_stone_brick_wall", {
 	description = "Red Stone Brick Wall",
 	type = "wall",
 	texture = "default_red_stone_brick.png",
-	groups = {cracky=3, stone=1},
+	groups = {cracky=3, stone=1, red_stone=1},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -204,7 +204,7 @@ qts.register_fencelike_node("default:sandstone_wall", {
 	description = "Sandstone Wall",
 	type = "wall",
 	texture = "default_sandstone.png",
-	groups = {cracky=3, stone=1},
+	groups = {cracky=3, stone=1, sand_stone=1},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -212,7 +212,7 @@ qts.register_fencelike_node("default:sandstone_cobble_wall", {
 	description = "Sandstone Cobble Wall",
 	type = "wall",
 	texture = "default_sandstone_cobble.png",
-	groups = {cracky=3, stone=1},
+	groups = {cracky=3, stone=1, sand_stone=1},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -220,7 +220,7 @@ qts.register_fencelike_node("default:sandstone_brick_wall", {
 	description = "Sandstone Brick Wall",
 	type = "wall",
 	texture = "default_sandstone_brick.png",
-	groups = {cracky=3, stone=1},
+	groups = {cracky=3, stone=1, sand_stone=1},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -229,7 +229,7 @@ qts.register_fencelike_node("default:desert_sandstone_wall", {
 	description = "Desert Sandstone Wall",
 	type = "wall",
 	texture = "default_desert_sandstone.png",
-	groups = {cracky=3, stone=1},
+	groups = {cracky=3, stone=1, desert_stone=1},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -237,7 +237,7 @@ qts.register_fencelike_node("default:desert_sandstone_cobble_wall", {
 	description = "Desert Sandstone Cobble Wall",
 	type = "wall",
 	texture = "default_desert_sandstone_cobble.png",
-	groups = {cracky=3, stone=1},
+	groups = {cracky=3, stone=1, desert_stone=1},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -245,6 +245,6 @@ qts.register_fencelike_node("default:desert_sandstone_brick_wall", {
 	description = "Desert Sandstone Brick Wall",
 	type = "wall",
 	texture = "default_desert_sandstone_brick.png",
-	groups = {cracky=3, stone=1},
+	groups = {cracky=3, stone=1, desert_stone=1},
 	sounds = qtcore.node_sound_stone(),
 })

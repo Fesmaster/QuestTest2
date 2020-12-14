@@ -23,6 +23,13 @@ inventory.register_util_btn("Morning!", function(playername)
 	minetest.set_timeofday(0.25)
 end)
 
+inventory.register_util_btn("Wood Group remove", function(playername)
+	minetest.log("Removing 1 wood group item!")
+	local inv = minetest.get_player_by_name(playername):get_inventory()
+	local rval = qts.inv_take_group(inv, "group:wood 1")
+	minetest.log(dump(rval))
+end)
+
 
 
 --register the main player inventory gui
@@ -41,11 +48,23 @@ qts.gui.register_gui("inventory", {
 		--item buttons
 		for i = 1,6*8,1 do
 			if fields["btn_item_"..tostring(i)] then
+				qts.gui.click(name)
+				local item_name = inventory.itemlist_player[name][offset + i]
+				local recipe_list = qts.get_craft_recipes(item_name)
+				if recipe_list then
+					data.currRecipeList = recipe_list
+					data.currRecipeIndex = 1
+					data.currRecipeItem = item_name
+					minetest.log("Data set.")
+				end
+				
 				if qts.isCreativeFor(name) then
 					local inv = minetest.get_player_by_name(name):get_inventory()
 					local item_name = inventory.itemlist_player[name][offset + i]
 					inv:add_item("main", item_name .. " " .. (minetest.registered_items[item_name].stack_max or 99))
-					qts.gui.click(name)
+					
+				else
+					inventory.refresh_inv(name, 2) --TODO: make sure tab 2 is always crafting tab.
 				end
 			end
 		end
@@ -84,6 +103,60 @@ qts.gui.register_gui("inventory", {
 				qts.gui.click(name)
 			end
 		end
+		
+		--craft buttions
+		if fields.craft_prev then
+			qts.gui.click(name)
+			local i = (data.currRecipeIndex or 0)-1
+			if (i < 1) then
+				i = #data.currRecipeList or 1
+			end
+			data.currRecipeIndex = i
+			inventory.refresh_inv(name, data.activeTab)
+		end
+		
+		if fields.craft_next then
+			qts.gui.click(name)
+			local i = (data.currRecipeIndex or 0)+1
+			local l = #data.currRecipeList or 1
+			if (i > l) then
+				i = 1
+			end
+			data.currRecipeIndex = i
+			inventory.refresh_inv(name, data.activeTab)
+		end
+		
+		if (fields.craft_one) then
+			qts.gui.click(name)
+			if (data.currRecipeIndex and data.currRecipeList) then
+				local recipe = data.currRecipeList[data.currRecipeIndex]
+				if (recipe) then
+					qts.execute_craft(recipe, name)
+					inventory.refresh_inv(name, data.activeTab)
+				end
+			end
+		end
+		
+		if (fields.craft_ten or fields.craft_all) then
+			qts.gui.click(name)
+			local count = 0
+			if (data.currRecipeIndex and data.currRecipeList) then
+				local recipe = data.currRecipeList[data.currRecipeIndex]
+				if (recipe) then
+					while(qts.player_can_craft(recipe, name)) do
+						qts.execute_craft(recipe, name)
+						count = count + 1
+						if (fields.craft_ten and count >= 10) then
+							break
+						end
+						if (count > 10000) then
+							break --prevent inf. crafting loops
+						end
+					end
+					inventory.refresh_inv(name, data.activeTab)
+				end
+			end
+		end
 	end,
 	tab_update = function(data, pos, name, fields, tabnumber) --only used for inventory
 		inventory.refresh_inv(name, tabnumber)
@@ -92,14 +165,26 @@ qts.gui.register_gui("inventory", {
 qts.gui.set_inventory_qui_name("inventory") --set it to the main inventory
 
 
+qts.gui.register_gui("inv_tab_equipment", {
+	tab = true,
+	caption = "Equipment",
+	owner = "inventory",
+	get = function(data, pos, name)
+		return inventory.get_player_main()..
+			inventory.get_button_grid(name, data.player_item_list_page, data.prev_search)..
+			inventory.get_util_bar()
+	end,
+	handle = function(data, pos, name, fields)
+		return
+	end,
+})
+
 qts.gui.register_gui("inv_tab_craft", {
 	tab = true,
 	caption = "Crafting",
 	owner = "inventory",
 	get = function(data, pos, name)
-		return inventory.get_craft_area()..
-			"listring[current_player;main]"..
-			"listring[current_player;craft]"..
+		return inventory.get_craft_area(data, name)..
 			inventory.get_player_main()..
 			inventory.get_button_grid(name, data.player_item_list_page, data.prev_search)..
 			inventory.get_util_bar()
@@ -147,6 +232,12 @@ minetest.register_on_joinplayer(function(player)
 	-- Set hotbar textures
 	player:hud_set_hotbar_image("gui_hotbar.png")
 	player:hud_set_hotbar_selected_image("gui_hotbar_selected.png")
+	player:hud_set_hotbar_itemcount(10) --10 slot HUD
+	
+	--set the inventory properties
+	local inv = player:get_inventory()
+	inv:set_size("main", 40) -- 10*4
+	
 	
 	--set the inventory formspec
 	inventory.gen_item_list_for_player(name)

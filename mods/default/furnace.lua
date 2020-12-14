@@ -292,7 +292,7 @@ minetest.register_node("default:furnace", {
 		"default_furnace_side.png", "default_furnace_front.png"
 	},
 	paramtype2 = "facedir",
-	groups = {cracky=2},
+	groups = {cracky=2, furnace=1},
 	--legacy_facedir_simple = true,
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
@@ -344,7 +344,7 @@ minetest.register_node("default:furnace_active", {
 		"default_furnace_side.png", "default_furnace_front_active.png" --TODO: animate this
 	},
 	paramtype2 = "facedir",
-	groups = {cracky=2, not_in_creative_inventory = 1},
+	groups = {cracky=2, not_in_creative_inventory = 1, furnace=1},
 	--legacy_facedir_simple = true,
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),

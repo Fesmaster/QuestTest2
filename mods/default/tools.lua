@@ -1,9 +1,7 @@
-
 --[[
 Special tools
 
-]]
-
+--]]
 minetest.register_tool("default:knife_flint", {
 	description = "Flint Knife",
 	inventory_image = "default_knife_flint.png",
@@ -18,19 +16,10 @@ minetest.register_tool("default:knife_flint", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {knife = 1}
 })
-minetest.register_craft({
-	output = "default:knife_flint",
-	recipe = {
-		{'default:flint'},
-		{'group:stick'},
-	}
-})
-
 
 --[[
-	Pickaxes
-	default_pick_rusted.png
-]]
+Pickaxes
+--]]
 --rusted
 minetest.register_tool("default:pick_rusted", {
 	description = "Rusted Pickaxe",
@@ -46,15 +35,11 @@ minetest.register_tool("default:pick_rusted", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {pickaxe = 1}
 })
-
-
-
 --copper
 minetest.register_craftitem("default:pick_head_copper", {
 	description = ("Copper Pickaxe Head"),
 	inventory_image = "default_pick_head_copper.png",
 })
-
 minetest.register_tool("default:pick_copper", {
 	description = "Copper Pickaxe",
 	inventory_image = "default_pick_copper.png",
@@ -69,23 +54,11 @@ minetest.register_tool("default:pick_copper", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {pickaxe = 1}
 })
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:pick_copper",
-	recipe = {
-		"group:stick", 
-		"default:pick_head_copper",
-	}
-})
-
-
 --bronze
 minetest.register_craftitem("default:pick_head_bronze", {
 	description = ("Bronze Pickaxe Head"),
 	inventory_image = "default_pick_head_bronze.png",
 })
-
 minetest.register_tool("default:pick_bronze", {
 	description = "Bronze Pickaxe",
 	inventory_image = "default_pick_bronze.png",
@@ -100,23 +73,11 @@ minetest.register_tool("default:pick_bronze", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {pickaxe = 1}
 })
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:pick_bronze",
-	recipe = {
-		"group:stick", 
-		"default:pick_head_bronze",
-	}
-})
-
-
 --iron
 minetest.register_craftitem("default:pick_head_iron", {
 	description = ("Iron Pickaxe Head"),
 	inventory_image = "default_pick_head_iron.png",
 })
-
 minetest.register_tool("default:pick_iron", {
 	description = "Iron Pickaxe",
 	inventory_image = "default_pick_iron.png",
@@ -131,23 +92,11 @@ minetest.register_tool("default:pick_iron", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {pickaxe = 1}
 })
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:pick_iron",
-	recipe = {
-		"group:stick", 
-		"default:pick_head_iron",
-	}
-})
-
-
 --steel
 minetest.register_craftitem("default:pick_head_steel", {
 	description = ("Steel Pickaxe Head"),
 	inventory_image = "default_pick_head_steel.png",
 })
-
 minetest.register_tool("default:pick_steel", {
 	description = "Steel Pickaxe",
 	inventory_image = "default_pick_steel.png",
@@ -163,19 +112,9 @@ minetest.register_tool("default:pick_steel", {
 	groups = {pickaxe = 1}
 })
 
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:pick_steel",
-	recipe = {
-		"group:stick", 
-		"default:pick_head_steel",
-	}
-})
-
-
 --[[
 AXES
-]]
+--]]
 --flint
 minetest.register_tool("default:axe_flint", {
 	description = "Flint Axe",
@@ -191,22 +130,11 @@ minetest.register_tool("default:axe_flint", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {axe = 1}
 })
-minetest.register_craft({
-	output = "default:axe_flint",
-	recipe = {
-		{'default:flint', 'default:flint' },
-		{'group:stick', 'default:flint' },
-		{'group:stick', '' },
-	}
-})
-
-
 --copper
 minetest.register_craftitem("default:axe_head_copper", {
 	description = ("Copper Axe Head"),
 	inventory_image = "default_axe_head_copper.png",
 })
-
 minetest.register_tool("default:axe_copper", {
 	description = "Copper Axe",
 	inventory_image = "default_axe_copper.png",
@@ -221,23 +149,11 @@ minetest.register_tool("default:axe_copper", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {axe = 1}
 })
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:axe_copper",
-	recipe = {
-		"group:stick", 
-		"default:axe_head_copper",
-	}
-})
-
-
 --bronze
 minetest.register_craftitem("default:axe_head_bronze", {
 	description = ("Bronze Axe Head"),
 	inventory_image = "default_axe_head_bronze.png",
 })
-
 minetest.register_tool("default:axe_bronze", {
 	description = "Bronze Axe",
 	inventory_image = "default_axe_bronze.png",
@@ -252,23 +168,11 @@ minetest.register_tool("default:axe_bronze", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {axe = 1}
 })
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:axe_bronze",
-	recipe = {
-		"group:stick", 
-		"default:axe_head_bronze",
-	}
-})
-
-
 --iron
 minetest.register_craftitem("default:axe_head_iron", {
 	description = ("Iron Axe Head"),
 	inventory_image = "default_axe_head_iron.png",
 })
-
 minetest.register_tool("default:axe_iron", {
 	description = "Iron Axe",
 	inventory_image = "default_axe_iron.png",
@@ -283,23 +187,11 @@ minetest.register_tool("default:axe_iron", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {axe = 1}
 })
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:axe_iron",
-	recipe = {
-		"group:stick", 
-		"default:axe_head_iron",
-	}
-})
-
-
 --steel
 minetest.register_craftitem("default:axe_head_steel", {
 	description = ("Steel Axe Head"),
 	inventory_image = "default_axe_head_steel.png",
 })
-
 minetest.register_tool("default:axe_steel", {
 	description = "Steel Axe",
 	inventory_image = "default_axe_steel.png",
@@ -315,25 +207,14 @@ minetest.register_tool("default:axe_steel", {
 	groups = {axe = 1}
 })
 
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:axe_steel",
-	recipe = {
-		"group:stick", 
-		"default:axe_head_steel",
-	}
-})
-
-
 --[[
 SHOVELS
-]]
+--]]
 --copper
 minetest.register_craftitem("default:shovel_head_copper", {
 	description = ("Copper Shovel Head"),
 	inventory_image = "default_shovel_head_copper.png",
 })
-
 minetest.register_tool("default:shovel_copper", {
 	description = "Copper Shovel",
 	inventory_image = "default_shovel_copper.png",
@@ -348,23 +229,11 @@ minetest.register_tool("default:shovel_copper", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {shovel = 1}
 })
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:shovel_copper",
-	recipe = {
-		"group:stick", 
-		"default:shovel_head_copper",
-	}
-})
-
-
 --bronze
 minetest.register_craftitem("default:shovel_head_bronze", {
 	description = ("Bronze Shovel Head"),
 	inventory_image = "default_shovel_head_bronze.png",
 })
-
 minetest.register_tool("default:shovel_bronze", {
 	description = "Bronze Shovel",
 	inventory_image = "default_shovel_bronze.png",
@@ -379,23 +248,11 @@ minetest.register_tool("default:shovel_bronze", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {shovel = 1}
 })
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:shovel_bronze",
-	recipe = {
-		"group:stick", 
-		"default:shovel_head_bronze",
-	}
-})
-
-
 --iron
 minetest.register_craftitem("default:shovel_head_iron", {
 	description = ("Iron Shovel Head"),
 	inventory_image = "default_shovel_head_iron.png",
 })
-
 minetest.register_tool("default:shovel_iron", {
 	description = "Iron Shovel",
 	inventory_image = "default_shovel_iron.png",
@@ -410,23 +267,11 @@ minetest.register_tool("default:shovel_iron", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {shovel = 1}
 })
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:shovel_iron",
-	recipe = {
-		"group:stick", 
-		"default:shovel_head_iron",
-	}
-})
-
-
 --steel
 minetest.register_craftitem("default:shovel_head_steel", {
 	description = ("Steel Shovel Head"),
 	inventory_image = "default_shovel_head_steel.png",
 })
-
 minetest.register_tool("default:shovel_steel", {
 	description = "Steel Shovel",
 	inventory_image = "default_shovel_steel.png",
@@ -442,26 +287,14 @@ minetest.register_tool("default:shovel_steel", {
 	groups = {shovel = 1}
 })
 
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:shovel_steel",
-	recipe = {
-		"group:stick", 
-		"default:shovel_head_steel",
-	}
-})
-
-
-
 --[[
 SWORDS
-]]
+--]]
 --copper
 minetest.register_craftitem("default:sword_blade_copper", {
 	description = ("Copper Sword Head"),
 	inventory_image = "default_sword_blade_copper.png",
 })
-
 minetest.register_tool("default:sword_copper", {
 	description = "Copper Sword",
 	inventory_image = "default_sword_copper.png",
@@ -476,23 +309,11 @@ minetest.register_tool("default:sword_copper", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {sword = 1}
 })
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:sword_copper",
-	recipe = {
-		"group:stick", 
-		"default:sword_blade_copper",
-	}
-})
-
-
 --bronze
 minetest.register_craftitem("default:sword_blade_bronze", {
 	description = ("Bronze Sword Head"),
 	inventory_image = "default_sword_blade_bronze.png",
 })
-
 minetest.register_tool("default:sword_bronze", {
 	description = "Bronze Sword",
 	inventory_image = "default_sword_bronze.png",
@@ -507,23 +328,11 @@ minetest.register_tool("default:sword_bronze", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {sword = 1}
 })
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:sword_bronze",
-	recipe = {
-		"group:stick", 
-		"default:sword_blade_bronze",
-	}
-})
-
-
 --iron
 minetest.register_craftitem("default:sword_blade_iron", {
 	description = ("Iron Sword Head"),
 	inventory_image = "default_sword_blade_iron.png",
 })
-
 minetest.register_tool("default:sword_iron", {
 	description = "Iron Sword",
 	inventory_image = "default_sword_iron.png",
@@ -538,23 +347,11 @@ minetest.register_tool("default:sword_iron", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {sword = 1}
 })
-
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:sword_iron",
-	recipe = {
-		"group:stick", 
-		"default:sword_blade_iron",
-	}
-})
-
-
 --steel
 minetest.register_craftitem("default:sword_blade_steel", {
 	description = ("Steel Sword Head"),
 	inventory_image = "default_sword_blade_steel.png",
 })
-
 minetest.register_tool("default:sword_steel", {
 	description = "Steel Sword",
 	inventory_image = "default_sword_steel.png",
@@ -570,11 +367,4 @@ minetest.register_tool("default:sword_steel", {
 	groups = {sword = 1}
 })
 
-minetest.register_craft({
-	type = "shapeless",
-	output = "default:sword_steel",
-	recipe = {
-		"group:stick", 
-		"default:sword_blade_steel",
-	}
-})
+

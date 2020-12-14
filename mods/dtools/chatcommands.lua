@@ -58,15 +58,27 @@ minetest.register_chatcommand("punchme", {
 	description = "Player punches themselves in the arm",
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
-		player:punch(player, 1.0, {fleshy=5}, nil)
+		player:punch(player, 1.0, {fleshy=100}, nil)
 	end,
 })
 
 minetest.register_chatcommand("healme", {
 	params = "<text>",
-	description = "Player punches themselves in the arm",
+	description = "Player heals themselves",
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
-		player:set_hp(20)
+		local props = player:get_properties()
+		player:set_hp(props.hp_max)
+	end,
+})
+
+minetest.register_chatcommand("hp100me", {
+	params = "<text>",
+	description = "Player sets their own HP max to 100",
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		local props = player:get_properties()
+		props.hp_max = 100
+		player:set_properties(props)
 	end,
 })

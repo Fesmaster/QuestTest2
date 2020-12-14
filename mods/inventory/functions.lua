@@ -10,16 +10,17 @@ inventory.get_player_main = function(pos, showTrash)
 	--local x, y = pos.x, pos.y
 	if showTrash == nil then showTrash = true end
 	if not pos then pos = qts.gui.gui_makepos(0, 5.1) end
-	local str =  "container["..pos:get().."]"
+	local str =  "container["..pos:get().."]" --.. 
+		--"background9[0,0;"..S(9.5,3.5)..";gui_buttonareabg.png;false;16]"
 	for i = 0,7 do
 		str = str .. "image["..P(i,0)..";1,1;gui_hb_bg.png]"
 	end
-	str = str .."list[current_player;main;"..P(0,0)..";8,1;]"..
-		"list[current_player;main;"..P(0,1.15)..";8,3;8]"
+	str = str .."list[current_player;main;"..P(0,0)..";10,1;]"..
+		"list[current_player;main;"..P(0,1.15)..";10,3;10]"
 		
 	if showTrash then
-		str = str .. "image["..P(7,-1)..";1,1;inv_trash.png]"..
-			"list[detached:trash;main;"..P(7,-1)..";1,1;]"
+		str = str .. "image["..P(10,0)..";1,1;inv_trash.png]"..
+			"list[detached:trash;main;"..P(10,0)..";1,1;]"
 	end
 	str = str.. "container_end[]"
 	return str
@@ -28,7 +29,7 @@ end
 inventory.get_button_grid = function(playername, current_page, prev_search, pos)
 	if not current_page then current_page = 1 end
 	if not prev_search then prev_search = "" end
-	if not pos then pos = qts.gui.gui_makepos(12, 0) end
+	if not pos then pos = qts.gui.gui_makepos(11.5, 0) end
 	
 	--minetest.log(dump(pos:get()))
 	
@@ -74,13 +75,110 @@ inventory.get_util_bar = function(pos)
 	return str
 end
 
-inventory.get_craft_area = function(pos)
-	if not pos then pos = qts.gui.gui_makepos(1.75, 0.5) end
-	return "container["..pos:get().."]"..
-			"list[current_player;craft;"..P(0,0)..";3,3;]"..
-			"list[current_player;craftpreview;"..P(4,1)..";1,1;]"..
-			"image["..P(3,1)..";1,1;inventory_craft_arrow.png]"..
-			"container_end[]"
+
+minetest.register_craftitem("inventory:groupItem", {
+	description = "GROUP ITEM",
+	inventory_image = "inv_gear.png",
+	groups = {not_in_creative_inventory = 1,},
+})
+
+inventory.get_craft_area = function(data, name, pos)
+	if not pos then pos = qts.gui.gui_makepos(0, 0) end
+	local cs = ""
+	local needs_craft_imgs = true
+	local recipe_list = data.currRecipeList
+	local recipe_index = data.currRecipeIndex
+	if recipe_list and recipe_index then
+		if not (recipe_list[recipe_index]) then
+			recipe_index = 0
+		end
+		local resultItemName = ItemStack(data.currRecipeItem):get_name()
+		cs = cs .. "label["..P(5.5,0)..";Recipe: "..recipe_index.."]"..
+				"label["..P(5.5,0.4)..";Result: ".. (minetest.registered_items[resultItemName].description or "ERROR") .."]"
+		local recip = recipe_list[recipe_index]
+		if recip then
+			local i = 0
+			local j = 0
+			for item, v in pairs(recip.ingredients) do
+				local name = ItemStack(item):get_name()
+				local count = ItemStack(item):get_count()
+				if (qts.is_group(item)) then
+					cs = cs .."item_image["..P(i,j)..";1,1;inventory:groupItem " ..count.."]"..
+						"tooltip["..P(i,j)..";1,1;Group: ".. qts.remove_modname_from_item(name) .. " " .. count .."]"
+				else
+					cs = cs .."item_image["..P(i,j)..";1,1;" ..item.."]"..
+						"tooltip["..P(i,j)..";1,1;".. minetest.registered_items[name].description .. " " .. count .."]"
+				end
+				i = i+1;
+				if i > 2 then j = j+1 end
+				if j > 2 then break end
+			end
+			i = 0
+			for item, v in pairs(recip.results) do
+				local name = ItemStack(item):get_name()
+				local count = ItemStack(item):get_count()
+				cs = cs .."item_image["..P(i+4.5,1)..";1,1;" ..item.."]"..
+					"tooltip["..P(i+4.5,1)..";1,1;".. minetest.registered_items[name].description .. " " .. count .."]"
+				i = i+1;
+				if i > 4 then break end
+			end
+			--near and held items
+			i = 0
+			for item, v in pairs(recip.near) do
+				local name = ItemStack(item):get_name()
+				if (qts.is_group(item)) then
+					cs = cs .."item_image["..P(i,4)..";1,1;inventory:groupItem]"..
+						"tooltip["..P(i,4)..";1,1;Group: ".. qts.remove_modname_from_item(name) .. "]"
+				else
+					cs = cs .."item_image["..P(i,4)..";1,1;" ..item.."]"..
+						"tooltip["..P(i,4)..";1,1;".. minetest.registered_items[name].description .. "]"
+				end
+				i = i+1;
+				if i > 4 then break end
+			end
+			i = 0
+			for item, v in pairs(recip.held) do
+				local name = ItemStack(item):get_name()
+				if (qts.is_group(item)) then
+					cs = cs .."item_image["..P(i+5.5,4)..";1,1;inventory:groupItem]"..
+						"tooltip["..P(i+5.5,4)..";1,1;Group: ".. qts.remove_modname_from_item(name) .. "]"
+				else
+					cs = cs .."item_image["..P(i+5.5,4)..";1,1;" ..item.."]"..
+						"tooltip["..P(i+5.5,4)..";1,1;".. minetest.registered_items[name].description .. "]"
+				end
+				i = i+1;
+				if i > 4 then break end
+			end
+			
+			if (qts.player_can_craft(recip, name)) then
+				cs = cs .. "image_button["..P(5,2.25)..";1,1;gui_one.png;craft_one;]" ..
+					"image_button["..P(6.5,2.25)..";1,1;gui_ten.png;craft_ten;]"..
+					"image_button["..P(8,2.25)..";1,1;gui_all.png;craft_all;]"
+				needs_craft_imgs = false
+			end
+		end
+	end
+	if (needs_craft_imgs) then
+		cs = cs .. 
+			"image["..P(5,2.25)..";1,1;gui_hb_bg.png]"..
+			"image["..P(6.5,2.25)..";1,1;gui_hb_bg.png]"..
+			"image["..P(8,2.25)..";1,1;gui_hb_bg.png]"..
+			"image["..P(5,2.25)..";1,1;gui_one.png]"..
+			"image["..P(6.5,2.25)..";1,1;gui_ten.png]"..
+			"image["..P(8,2.25)..";1,1;gui_all.png]"
+	end
+	return "container["..pos:get().."]" .. 
+		"background9["..P(-0.25,-0.25)..";"..S(2,2)..";gui_buttonareabg.png;false;16]"..
+		"background9["..P(4.25,0.75)..";"..S(4,0)..";gui_buttonareabg.png;false;16]"..
+		"image["..P(3.25,1)..";1,1;inventory_craft_arrow.png]"..
+		"image_button["..P(4.5, -0.25)..";1,1;lshift.png;craft_prev;]"..
+			"tooltip["..P(4.5,-0.25)..";1,1;Prev Recipe]"..
+		"image_button["..P(8.5, -0.25)..";1,1;rshift.png;craft_next;]"..
+			"tooltip["..P(8.5,-0.25)..";1,1;Next Recipe]"..
+		"label["..P(0,3.9)..";Required Nearby Nodes:]"..
+		"label["..P(5.5,3.9)..";Required Held Items:]"..
+		cs ..
+		"container_end[]"
 end
 
 inventory.get_default_size = function()

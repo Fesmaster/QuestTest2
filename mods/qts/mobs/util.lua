@@ -312,3 +312,73 @@ function vector.slerp(rot1, rot2, alpha)
 	return result
 end
 
+--[[
+Humanoid texture generation function
+16*4 by 16*6 texture
+
+qts.humanoid_texture()
+	base: 64 by 32 image
+	armor_list: list of 64 by 32 images
+	item: image texture for the held item
+	node: { ... } image list for the held node
+		1 item = all sides the same
+		3 items = +Y, -Y, sides
+		6 items = +Y, -Y, +X, -X, +Z, -Z
+	crown: image texture for teh held crown
+		
+--]]
+local function insert_backslash(s)
+	s=string.gsub(s, "%^", "\\^")
+	s=string.gsub(s, ":", "\\:")
+	s=string.gsub(s, "\\\\", "\\^")
+	return s
+end
+
+function qts.humanoid_texture(base, armor_list, item, node, crown)
+	local s = "[combine:64x96:0,0=" .. base ..  "\\^[resize\\:64x32"
+	if (armor_list and #armor_list > 0) then
+		s=s..":0,32=("..armor_list[1]
+		for i = 2,#armor_list do
+			armor_list[i] = insert_backslash(armor_list[i])
+			s = s .. "\\^" .. armor_list[i] ..  "\\^[resize\\:64x32"
+		end
+		s=s..")"
+	end
+	if (item) then
+		s=s..":32,64=(".. insert_backslash(item) ..")\\^[resize\\:16x16"
+	end
+	
+	if node then
+		for i = 1, #node do
+			node[i] = insert_backslash(node[i])
+		end
+		if #node == 1 then
+			s=s..":0,64=(".. node[1] .."\\^[resize\\:16x16)"..
+				":16,64=(".. node[1] .."\\^[resize\\:16x16)"..
+				 ":0,80=(".. node[1] .."\\^[resize\\:16x16)"..
+				":16,80=(".. node[1] .."\\^[resize\\:16x16)"..
+				":32,80=(".. node[1] .."\\^[resize\\:16x16)"..
+				":48,80=(".. node[1] .."\\^[resize\\:16x16)"
+		elseif #node == 3 then
+			
+			s=s..":0,64=(".. node[1] .."\\^[resize\\:16x16)"..
+				":16,64=(".. node[2] .."\\^[resize\\:16x16)"..
+				 ":0,80=(".. node[3] .."\\^[resize\\:16x16)"..
+				":16,80=(".. node[3] .."\\^[resize\\:16x16)"..
+				":32,80=(".. node[3] .."\\^[resize\\:16x16)"..
+				":48,80=(".. node[3] .."\\^[resize\\:16x16)"
+		elseif #node == 6 then
+			s=s..":0,64=(".. node[1] .."\\^[resize\\:16x16)"..
+				":16,64=(".. node[2] .."\\^[resize\\:16x16)"..
+				 ":0,80=(".. node[3] .."\\^[resize\\:16x16)"..
+				":16,80=(".. node[4] .."\\^[resize\\:16x16)"..
+				":32,80=(".. node[5] .."\\^[resize\\:16x16)"..
+				":48,80=(".. node[6] .."\\^[resize\\:16x16)"
+		end
+	end
+	
+	if (crown) then
+		s=s..":48,64=(".. insert_backslash(crown) .."\\^[resize\\:16x16)"
+	end
+	return s
+end
