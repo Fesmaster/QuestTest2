@@ -58,12 +58,13 @@ qts.gui.register_gui("inventory", {
 					minetest.log("Data set.")
 				end
 				
-				if qts.isCreativeFor(name) then
+				if qts.is_player_creative(name) and data.cheat_mode_enabled then
 					local inv = minetest.get_player_by_name(name):get_inventory()
 					local item_name = inventory.itemlist_player[name][offset + i]
 					inv:add_item("main", item_name .. " " .. (minetest.registered_items[item_name].stack_max or 99))
 					
 				else
+					data.activeTab = 2
 					inventory.refresh_inv(name, 2) --TODO: make sure tab 2 is always crafting tab.
 				end
 			end
@@ -157,6 +158,13 @@ qts.gui.register_gui("inventory", {
 				end
 			end
 		end
+		
+		if (fields.cheat_toggle) then
+			--toggle cheat mode
+			qts.gui.click(name)
+			data.cheat_mode_enabled = not data.cheat_mode_enabled
+			inventory.refresh_inv(name, data.activeTab)
+		end
 	end,
 	tab_update = function(data, pos, name, fields, tabnumber) --only used for inventory
 		inventory.refresh_inv(name, tabnumber)
@@ -171,7 +179,8 @@ qts.gui.register_gui("inv_tab_equipment", {
 	owner = "inventory",
 	get = function(data, pos, name)
 		return inventory.get_player_main()..
-			inventory.get_button_grid(name, data.player_item_list_page, data.prev_search)..
+			inventory.get_button_grid(name, data.player_item_list_page, 
+				data.prev_search, data.cheat_mode_enabled)..
 			inventory.get_util_bar()
 	end,
 	handle = function(data, pos, name, fields)
@@ -186,7 +195,8 @@ qts.gui.register_gui("inv_tab_craft", {
 	get = function(data, pos, name)
 		return inventory.get_craft_area(data, name)..
 			inventory.get_player_main()..
-			inventory.get_button_grid(name, data.player_item_list_page, data.prev_search)..
+			inventory.get_button_grid(name, data.player_item_list_page, 
+				data.prev_search, data.cheat_mode_enabled)..
 			inventory.get_util_bar()
 	end,
 	handle = function(data, pos, name, fields)
@@ -200,7 +210,8 @@ qts.gui.register_gui("inv_tab_test", {
 	owner = "inventory",
 	get = function(data, pos, name)
 		return --inventory.get_player_main()..
-			inventory.get_button_grid(name, data.player_item_list_page, data.prev_search)
+			inventory.get_button_grid(name, data.player_item_list_page, 
+				data.prev_search, data.cheat_mode_enabled)
 			--inventory.get_util_bar()
 	end,
 	handle = function(data, pos, name, fields)

@@ -129,22 +129,6 @@ function qts.distribute_points_on_sphere(point_count)
 	return points
 end
 
-function qts.Set(t)
-	local s = {}
-	for i, v in ipairs(t) do
-		s[v] = true
-	end
-	return s
-end
-
-function qts.new_counter()
-	local i = 0
-	return function()
-		i = i + 1
-		return i
-	end
-end
-
 function qts.pickup_sound(player)
 	if (type(player) ~= "string") then player = player:get_player_name() end
 	minetest.sound_play("pickup", {
@@ -244,16 +228,4 @@ function qts.inv_take_group(inv, groupString, ignoreNames)
 	return removeList
 end
 
-
---[[
-Extentions to Vector Library
-See AI section for more
-
-vector.fill(number)
-	creates a vector with number in X, Y, and Z
---]]
-
-function vector.fill(x)
-	return vector.new(x, x, x)
-end
 

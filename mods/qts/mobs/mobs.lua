@@ -6,6 +6,7 @@
 --]] 
 
 qts.ai = {}
+qts.ai.MELEE_RADIUS = 1.5 --the distance a mob can be from a player to enact melee damage
 
 qts.registered_creatures = {}
 qts.registered_behaviors = {}

@@ -26,12 +26,10 @@ inventory.get_player_main = function(pos, showTrash)
 	return str
 end
 
-inventory.get_button_grid = function(playername, current_page, prev_search, pos)
+inventory.get_button_grid = function(playername, current_page, prev_search, cheat_mode, pos)
 	if not current_page then current_page = 1 end
 	if not prev_search then prev_search = "" end
 	if not pos then pos = qts.gui.gui_makepos(11.5, 0) end
-	
-	--minetest.log(dump(pos:get()))
 	
 	local str = "container["..pos:get().."]"..
 		"background9[0,0;"..S(5.6,9.4)..";gui_buttonareabg.png;false;16]"..
@@ -50,13 +48,22 @@ inventory.get_button_grid = function(playername, current_page, prev_search, pos)
 			end
 		end
 	end
+	local cheat_img = "gui_toggle_off.png"
+	if (cheat_mode) then cheat_img = "gui_toggle_on.png" end
 	str = str .. "container_end[]"..
 		"container["..P(0,8.5).."]"..
 		"image_button["..P(0,0)..";1,1;lshift.png;btn_page_back;]"..
 		"image_button["..P(5,0)..";1,1;rshift.png;btn_page_forward;]"..
-		"field["..P(1,0)..";3,1;search_bar;entry_search:;"..esc(prev_search).."]"..
+		"field["..P(1,0)..";3,1;search_bar;Search:;"..esc(prev_search).."]"..
 		"field_close_on_enter[search_bar;false]"..
 		"image_button["..P(4,0)..";1,1;inv_glass.png;btn_search;]"..
+		--cheat toggle button
+		"style[cheat_toggle;bgimg=Transparent.png;"..
+			"bgimg_hovered=Transparent.png;bgimg_pressed=Transparent.png;"..
+			"bgimg_middle=0;border=false]"..
+		"image_button["..P(5,1)..";1,0.5;"..cheat_img..";cheat_toggle;]"..
+		"tooltip[cheat_toggle;Toggle Cheat Mode]"..
+		
 		"container_end[]"..
 		"container_end[]"
 	--minetest.log(str)
@@ -235,9 +242,11 @@ inventory.gen_item_list_for_player = function(playername, filter)
 	inventory.init_item_list()
 	local order = {}
 	for id, name in ipairs(inventory.list_items) do
-		--local def = minetest.registered_items[name]
-		--TODO: add group filtering
 		local m = match(minetest.registered_items[name].description, filter) or match(name, filter)
+		if not m then
+			m = minetest.get_item_group(name, filter)
+			if m ==0 then m = nil end
+		end
 		if m then
 			inventory.itemlist_player[playername][#inventory.itemlist_player[playername]+1] = name
 			order[name] = string.format("%02d", m) .. name

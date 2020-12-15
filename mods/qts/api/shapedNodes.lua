@@ -67,11 +67,11 @@ qts.hammer.CHANGE_STYLE = 2
 function qts.hammer.apply(pointed_thing, user, mode)
 	if not mode then mode = qts.hammer.CHANGE_TYPE end
 	local player_name = user:get_player_name() or ""
+	local pos = pointed_thing.under
 	if minetest.is_protected(pos, player_name) then
 		minetest.record_protection_violation(pos, player_name)
 		return
 	end
-	local pos = pointed_thing.under
 	local node = minetest.get_node(pos)
 	local nodedef= minetest.registered_nodes[node.name]
 	if nodedef.on_hammer then

@@ -58,7 +58,10 @@ minetest.register_chatcommand("punchme", {
 	description = "Player punches themselves in the arm",
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
-		player:punch(player, 1.0, {fleshy=100}, nil)
+		player:punch(player, 1.0, {
+				full_punch_interval = 0.9,
+				damage_groups = {fleshy = 50},
+			}, nil)
 	end,
 })
 
@@ -80,5 +83,47 @@ minetest.register_chatcommand("hp100me", {
 		local props = player:get_properties()
 		props.hp_max = 100
 		player:set_properties(props)
+	end,
+})
+
+minetest.register_chatcommand("randpos_check", {
+	params = "<text>",
+	description = "Player is randomly teleported in a range of 64 blocks",
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		for i = 0, 50 do
+			local pos = qts.ai.get_random_navagatable_point_in_radius(
+				player:get_pos(), 
+				32, 
+				{airlike=true,check_ground=true}, 
+				2
+			)
+			if pos then
+				minetest.set_node(pos, {name="default:copper_block"})
+				--player:set_pos(pos)
+			else
+				minetest.log("No position returned. try: " .. i)
+			end
+		end
+	end,
+})
+
+minetest.register_chatcommand("randpos_clear", {
+	params = "<text>",
+	description = "Player is randomly teleported in a range of 64 blocks",
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		local pos = player:get_pos()
+		for x = -32, 32 do
+		for y = -32, 32 do
+		for z = -32, 32 do
+			local p = vector.add({x=x,y=y,z=z}, pos)
+			local node = minetest.get_node_or_nil(p)
+			if node and node.name == "default:copper_block" then
+				minetest.set_node(p, {name="air"})
+			end
+		end
+		end
+		end
 	end,
 })

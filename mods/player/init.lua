@@ -20,7 +20,7 @@ Player_API.SPRINT_MIN_SPEED = 0.75
 --"player_armor.png"
 Player_API.register_model("character2.b3d", {
 	animation_speed = 30,
-	textures = {qts.humanoid_texture("player_base.png", nil, nil, nil, nil)},
+	textures = {qts.make_humanoid_texture("player_base.png", nil, nil, nil, nil)},
 	animations = {
 		-- Standard animations.
 		stand     = {x = 0,   y = 79},

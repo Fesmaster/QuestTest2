@@ -235,16 +235,7 @@ local player_data = Player_API.player_data
 local player_set_animation = Player_API.set_animation
 local player_attached = Player_API.player_attached
 ]]
-local cubic_drawtype = {
-	["normal"] = true,
-	["liquid"] = true,
-	["flowingliquid"] = true,
-	["glasslike"] = true,
-	["glasslike_framed"] = true,
-	["glasslike_framed_optional"] = true,
-	["allfaces"] = true,
-	["allfaces_optional"] = true
-}
+
 minetest.register_globalstep(function(dtime)
 	for _, player in ipairs(minetest.get_connected_players()) do
 		local name = player:get_player_name()
@@ -259,25 +250,8 @@ minetest.register_globalstep(function(dtime)
 		
 		--texture updating
 		if (pdat.wield_index ~= player:get_wield_index()) then
-		---[[
 			pdat.wield_index = player:get_wield_index()
-			local ptexture = ""
-			local wield_name = player:get_wielded_item():get_name()
-			
-			local itemdef = minetest.registered_items[wield_name]
-			if itemdef and wield_name ~= "" then
-				if (itemdef.type=="node" and cubic_drawtype[itemdef.drawtype]) then
-					ptexture = qts.humanoid_texture("player_base.png", {}, nil, itemdef.tiles, nil)
-				elseif (itemdef.inventory_image and itemdef.inventory_image ~= "") then
-					ptexture = qts.humanoid_texture("player_base.png", {}, itemdef.inventory_image, {}, nil)
-				elseif (itemdef.wield_image and itemdef.wield_image ~= "") then
-					ptexture = qts.humanoid_texture("player_base.png", {}, itemdef.wield_image, {}, nil)
-				else
-					ptexture = qts.humanoid_texture("player_base.png", {}, nil, {}, nil)
-				end
-				Player_API.set_textures(player, {ptexture})
-			end
-		--]]
+			Player_API.set_textures(player, {qts.humanoid_texture(player, "player_base.png")})
 		end
 		
 		

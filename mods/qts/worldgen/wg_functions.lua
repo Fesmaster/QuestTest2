@@ -171,6 +171,7 @@ local select_dist_func = "euclidian"
 qts.worldgen.set_dist_func = function(fname)
 	if qts.worldgen.dist_funcs[fname] then
 		qts.worldgen.select_dist_func = fname
+		select_dist_func = fname
 	end
 end
 
@@ -227,13 +228,13 @@ qts.worldgen.register_structure = function(name, def)
 		local s = def.biomes
 		def.biomes = {s = true}
 	else
-		def.biomes = qts.Set(def.biomes)
+		def.biomes = Set(def.biomes)
 	end
 	if type(def.nodes) == "string" then
 		local n = def.nodes
 		def.nodes = {n = true}
 	else
-		def.nodes = qts.Set(def.nodes)
+		def.nodes = Set(def.nodes)
 	end
 	if def.force_place == nil then def.force_place = false end
 	if def.rotate == nil then def.rotate = false end

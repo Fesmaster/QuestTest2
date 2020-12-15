@@ -63,7 +63,7 @@ qts.ai.is_point_in_front_of(object, pos)
 
 --]]
 
-qts.gen_entity_id = qts.new_counter()
+qts.gen_entity_id = Counter()
 
 function qts.get_object_id(obj)
 	if obj:is_player() then
@@ -119,198 +119,101 @@ function qts.ai.is_point_in_front_of(object, pos)
 	end
 end
 
+
+--[[
+qts.ai.get_random_navagatable_point_in_radius(pos, radius, query, shape)
+	Description: gets a point in radius around pos that matches query and shape.
+	
+	Paramaters:
+	pos - vector as position
+	radius - float
+	query - {
+		One or more of the following:
+			airlike - boolean - search for standard airlike nodes
+			group - string as item group - search for nodes with this group
+			name - string as item name - search for nodes of this name
+		if wanted:
+			check_ground = boolean - if the node below the possible position should be not matching query.
+	} - choose one of these, make the rest nil
+	height - the height of the column.
+	
+	shape - {
+		size - float - the x and z size in nodes to check
+		height float - the y height in nodes to check
+	} - a person would be {size = 1, height = 2}
+	
+	Return:
+	pos - vector as position - if found, the pos of the found spot. nil if no spots found.
+--]]
+local function check_pos_for_target(pos, query)
+	local node = minetest.get_node_or_nil(pos)
+	if not node then
+		--minetest.log("invalid node position")
+		return false
+	elseif query.airlike and query.airlike == true then
+		local node_info = minetest.registered_nodes[node.name]
+		if node.name ~= "air" or node_info.walkable ~= false then
+			return false
+		end
+	elseif query.group then
+		local group = minetest.get_item_group(node.name, query.group)
+		if group == 0 then
+			return false
+		end
+	elseif query.name then
+		if node.name ~= query.name then
+			return false
+		end
+	end
+	return true
+end
+function qts.ai.get_random_navagatable_point_in_radius(pos, radius, query, height)
+	pos = vector.round(pos)
+	for i = 0, radius do
+		
+		local x = math.random(-radius, radius)
+		local z = math.random(-radius, radius)
+		local dist_horz = (x^2+z^2)^0.5
+		if dist_horz < radius then
+			--minetest.log("search " .. i .. "  Position: x=" .. x+pos.x .. " z=" .. z+pos.z)
+			--trace down till we find a node 
+			local h = (radius^2 - dist_horz^2)^0.5
+			
+			local target_node_found = false
+			local target_height = 0
+			for y = h, -h, -1 do
+				local dist = (x^2+z^2+y^2)^0.5
+				if (dist > (radius/2)) then
+					local p = vector.add({x=x,y=y,z=z}, pos)
+					--minetest.log("Vertical Scan: " .. y .. " Pos: " .. minetest.pos_to_string(p))
+					if (check_pos_for_target(p, query)) then
+						--minetest.log("found target node " .. target_height)
+						if (not target_node_found) then
+							target_node_found = true
+						end
+						target_height = target_height + 1
+					else
+						if (target_node_found) then
+							if (target_height >= height) then
+								return {x=p.x, y=p.y+1, z=p.z}
+							else
+								target_node_found = false
+								target_height = 0
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	return nil
+end
+
 --[[
 Additions to the vector library
 These are built in here because they are so darn useful for mobs
-
-vector.unit()
-	Returns a unit vector, pointing to z+
-	
-	Params: None
-	
-	Return: {x=0, y=0, z=1}
-
-
-vector.flat_dist(pos1, pos2)
-	Gets the distance between two points, ignoring height distance
-	
-	Params:
-	pos1 = vector, first position
-	pos2 = vector, second position
-	
-	Return: the distance 
-	
-
-vector.get_rot(vec)
-	Gets the rotation of a directional vector
-	
-	Params:
-	vec - a vector (as a direction / offset)
-	
-	Return: rot - a vector (as a euler rotation)
-	
-
-vector.get_forward_vector([rot] [yaw, (pitch)])
-	Gets the forward vector of a rotation
-	
-	Params:
-	rot - a vector, as rotation
-	--OR--
-	yaw - the yaw or the rotation
-	pitch (optional) - the pitch of the rotation
-	
-	Return: vector, as direction
-
-
-vector.get_right_vector([rot] [yaw, (pitch)])
-	Gets the right vector of a rotation
-	
-	Params:
-	rot - a vector, as rotation
-	--OR--
-	yaw - the yaw or the rotation
-	pitch (optional) - the pitch of the rotation
-	
-	Return: vector, as direction
-
-vector.get_up_vector([rot] [yaw, (pitch)])
-	gets the up vector of a rotation
-	
-	Params:
-	rot - a vector, as rotation
-	--OR--
-	yaw - the yaw or the rotation
-	pitch (optional) - the pitch of the rotation. If nil, assumed to be 0
-	
-	Return: vector, as direction
-
-vector.lerp(vec1, vec2, alpha)
-	Linear Iterpalation between two points / directions
-	
-	Params:
-	vec1 - vector, the origin
-	vec2 - vector, the end
-	alpha - 0 to 1 value, where in between you are
-	
-	Return: vector - the interpalated value
-
-vector.slerp(rot1, rot2, alpha)
-	Sphereical Iterpalation between two rotations
-	
-	Params:
-	rot1 - vector, as rotation, the origin
-	rot2 - vector, as rotation, the end
-	alpha - 0 to 1 valeu, where in between you are
-	
-	Return: vector, as rotation - the interpalated value
-
-vector.
-	
-	
-	Params:
-	
-	
-	Return:
-
 --]]
 
-function vector.unit()
-	return vector.new(0, 0, 1)
-end
-
-function vector.flat_dist(pos1, pos2)
-	return vector.distance({x=pos1.x, y=0, z=pos1.z}, {x=pos2.x, y=0, z=pos2.z})
-end
-
-function vector.get_yaw(vec)
-	error("DEPRECIATED: Use vector.get_rot(vec).y instead")
-end
-
-function vector.get_pitch(vec)
-	error("DEPRECIATED: Use vector.get_rot(vec).x instead")
-end
-
-function vector.get_rot(vec)
-	local rot = {x=0, y=0, z=0}
-	
-	rot.y = math.atan(vec.z/vec.x)+math.pi/2
-	if (vec.x > 0) then rot.y = rot.y + math.pi end
-	
-	local dist = math.sqrt((vec.x^2)+(vec.z^2))
-	rot.x = math.atan(vec.y/dist)
-	return rot
-end
-
---TODO: vector.set_rot(vec, rot)
-
-local function get_forward_vector(yaw, pitch)
-	local dir = {}
-	dir.x = math.sin(yaw)
-	dir.y = math.cos(pitch or math.pi) --if pitch is null, PI used (dir.y == 0)
-	dir.z = math.cos(yaw)
-	if dir.x ~= dir.x then 
-		dir.x=0
-	end
-	if dir.y ~= dir.y then 
-		dir.y=0
-	end
-	if dir.z ~= dir.z then 
-		dir.z=0
-	end
-	dir.x = dir.x*-1
-	return dir
-end
-
-function vector.get_forward_vector(yaw, pitch)
-	if (type(yaw) == "table") and yaw.x ~= nil and yaw.y ~= nil then
-		return get_forward_vector(yaw.y, yaw.x)
-	else
-		return get_forward_vector(yaw, pitch)
-	end
-end
-
-function vector.get_right_vector(yaw, pitch)
-	if (type(yaw) == "table") and yaw.x and yaw.y then
-		return get_forward_vector(yaw.y+(math.pi/2), yaw.z)
-	else
-		return get_forward_vector(yaw+(math.pi/2), pitch)
-	end
-end
-
-function vector.get_up_vector(yaw, pitch)
-	if (type(yaw) == "table") and yaw.x and yaw.y then
-		return get_forward_vector(yaw.y, yaw.z+(math.pi/2))
-	else
-		return get_forward_vector(yaw, (pitch or 0) +(math.pi/2))
-	end
-end
-
-function vector.lerp(vec1, vec2, alpha)
-	local result = vector.new()
-	for k, v in pairs(vec1) do
-		result[k] = vec1[k] + ((vec2[k] - vec1[k]) * alpha)
-	end
-	return result
-end
-
---THIS FUNCTION IS INTENDED FOR ROTATIONS EXPRESSED IN RADIANS
-function vector.slerp(rot1, rot2, alpha)
-	local result = vector.new()
-	for k, v in pairs(rot1) do
-		local diff = math.abs(rot2[k] - rot1[k])
-		local start = rot1[k]
-		local finish = rot2[k]
-		if (diff > math.pi) then
-			if (finish > start) then
-				start = start + math.pi*2
-			else
-				finish = finish + math.pi*2
-			end
-		end 
-		result[k] = (start + ((finish - start) * alpha)) % (math.pi*2)
-	end
-	return result
-end
 
 --[[
 Humanoid texture generation function
@@ -327,14 +230,22 @@ qts.humanoid_texture()
 	crown: image texture for teh held crown
 		
 --]]
+
 local function insert_backslash(s)
+	if type(s) == "table" and s.name then
+		s = s.name
+	end
+	if (type(s) ~= "string") then
+		minetest.log("ERROR: " .. dump(s) .. "\nis not a string! Must be a string texture name!")
+		return ""
+	end
 	s=string.gsub(s, "%^", "\\^")
 	s=string.gsub(s, ":", "\\:")
 	s=string.gsub(s, "\\\\", "\\^")
 	return s
 end
 
-function qts.humanoid_texture(base, armor_list, item, node, crown)
+function qts.make_humanoid_texture(base, armor_list, item, node, crown)
 	local s = "[combine:64x96:0,0=" .. base ..  "\\^[resize\\:64x32"
 	if (armor_list and #armor_list > 0) then
 		s=s..":0,32=("..armor_list[1]
@@ -381,4 +292,44 @@ function qts.humanoid_texture(base, armor_list, item, node, crown)
 		s=s..":48,64=(".. insert_backslash(crown) .."\\^[resize\\:16x16)"
 	end
 	return s
+end
+
+local cubic_drawtype = {
+	["normal"] = true,
+	["liquid"] = true,
+	["flowingliquid"] = true,
+	["glasslike"] = true,
+	["glasslike_framed"] = true,
+	["glasslike_framed_optional"] = true,
+	["allfaces"] = true,
+	["allfaces_optional"] = true
+}
+function qts.humanoid_texture(entity, base)
+	local armor_list = {}
+	local item = nil
+	local node = {}
+	local crown = nil
+	
+	--get the wielded item
+	local wield_name = entity:get_wielded_item():get_name()
+	local itemdef = minetest.registered_items[wield_name]
+	if itemdef and wield_name ~= "" then
+		if (itemdef.type=="node" and cubic_drawtype[itemdef.drawtype]) then
+			node = itemdef.tiles
+		elseif (itemdef.inventory_image and itemdef.inventory_image ~= "") then
+			item = itemdef.inventory_image
+		elseif (itemdef.wield_image and itemdef.wield_image ~= "") then
+			item = itemdef.wield_image
+		end
+	end
+	
+	--get armor
+	
+	--get crown
+	
+	return qts.make_humanoid_texture(base, armor_list, item, node, crown)
+end
+
+function qts.modify_value_by_level(value, level)
+	return value*((level*qts.LEVEL_MULTIPLIER)+1)
 end

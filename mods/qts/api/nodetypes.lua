@@ -1,12 +1,31 @@
---this file contains the "special" registrations that make 
---nodes and items of specific types 
---that often have lots of code attached to then
+--[[
+this file contains the "special" registrations that make 
+nodes and items of specific types 
+that often have lots of code attached to then
 
+qts.register_shaped_node(name, def)
+	no special things.
+qts.register_fencelike_node(name, def)
+	def.type = [fence, rail, wall, pane]
+	def.texture = "texture.png" (DEPRICIATED, use def.tiles = {"texture1.png", ...})
+qts.register_liquid(name, def)
+	no special things
+qts.register_bucket(name, def)
+	def contains:
+		description
+		inventory_image
+		groups {bucket_level >= 1}
+	Note: this function is much more restricted than the others in this file.
+qts.register_ingot(name, def)
+	no special things
+qts.register_torch(name, def)
+	no special things
+--]]
 function qts.register_shaped_node(name, def)
 	--prep the data for node registration
 	if (def.drop == nil) then
 		def.drop = name
-		minetest.log("Node "..name .." did not have any drops")
+		--minetest.log("Node "..name .." did not have any drops")
 	end
 	
 	--groups setup
@@ -212,17 +231,27 @@ end
 
 local fence_collision_extra = minetest.settings:get_bool("enable_fence_tall") and 3/8 or 0
 function qts.register_fencelike_node(name, def)
-	
 	if not def.type then minetest.log("qts.register_fencelike_node: the node def must contain type = [fence, rail, wall, pane]") end
-	if not def.texture then minetest.log("qts.register_fencelike_node: instead of using tiles = {}, use texture = \"texturename\". This works better.") end
+	if def.texture and not def.tiles then 
+		minetest.log("qts.register_fencelike_node: instead of using texture = \"texturename\", use tiles = {}. This works better.") 
+		def.tiles = {def.texture}
+	end
 	
 	local default_fields = {}
 	--fence style
+	
 	if def.type == "fence" then
-		local fence_texture = "default_fence_overlay.png^" .. def.texture ..
-				"^default_fence_overlay.png^[makealpha:255,126,126"
-		-- Allow almost everything to be overridden
+		local fence_texture = "default_fence_overlay.png^" .. def.tiles[1] ..
+			"^default_fence_overlay.png^[makealpha:255,126,126"
 		
+		if not def.no_tile_transform then
+			for i, v in ipairs(def.tiles) do
+				def.tiles[i] = def.tiles[i] .. "^(" .. def.tiles[i] .."^[transformR90^[mask:fence_pole_mask.png)"
+			end
+			def.no_tile_transform = nil
+		end
+		
+		-- Allow almost everything to be overridden
 		default_fields = {
 			paramtype = "light",
 			drawtype = "nodebox",
@@ -253,7 +282,7 @@ function qts.register_fencelike_node(name, def)
 			connects_to = {"group:fence", "group:wood", "group:tree", "group:wall"},
 			inventory_image = fence_texture,
 			wield_image = fence_texture,
-			tiles = {def.texture},
+			tiles = def.tiles or tiles,
 			sunlight_propagates = true,
 			is_ground_content = false,
 			groups = {},
@@ -278,8 +307,9 @@ function qts.register_fencelike_node(name, def)
 		def.groups.fence = 1
 
 	elseif def.type == "rail" then
-		local fence_rail_texture = "default_fence_rail_overlay.png^" .. def.texture ..
-				"^default_fence_rail_overlay.png^[makealpha:255,126,126"
+		local fence_rail_texture =  "default_fence_rail_overlay.png^" .. def.tiles[1] ..
+			"^default_fence_rail_overlay.png^[makealpha:255,126,126"
+		
 		-- Allow almost everything to be overridden
 		default_fields = {
 			paramtype = "light",
@@ -312,7 +342,7 @@ function qts.register_fencelike_node(name, def)
 			connects_to = {"group:fence", "group:wall"},
 			inventory_image = fence_rail_texture,
 			wield_image = fence_rail_texture,
-			tiles = {def.texture},
+			tiles = def.tiles or tiles,
 			sunlight_propagates = true,
 			is_ground_content = false,
 			groups = {},
@@ -360,7 +390,7 @@ function qts.register_fencelike_node(name, def)
 				connect_right = {1/4,-1/2,-1/4,1/2,1/2 + fence_collision_extra,1/4},
 			},
 			connects_to = { "group:wall", "group:stone", "group:fence" },
-			tiles = {def.texture},
+			tiles = def.tiles or tiles,
 			sunlight_propagates = true,
 			is_ground_content = false,
 			walkable = true,
@@ -390,9 +420,9 @@ function qts.register_fencelike_node(name, def)
 				connect_right = {{1/32, -1/2, -1/32, 1/2, 1/2, 1/32}},
 			},
 			connects_to = {"group:pane", "group:stone", "group:glass", "group:wood", "group:tree"},
-			tiles = {def.texture},
-			inventory_image = def.texture,
-			wield_image = def.texture,
+			tiles = def.tiles or tiles,
+			inventory_image = def.inventory_image or def.tiles[1] or tiles[1],
+			wield_image = def.wield_image or def.tiles[1] or tiles[1],
 			sunlight_propagates = true,
 			is_ground_content = false,
 			use_texture_alpha = true,

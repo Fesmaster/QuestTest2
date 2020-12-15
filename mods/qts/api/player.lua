@@ -4,14 +4,14 @@
 	and ambient sounds
 --]]
 
-local nodeDamageTimer = 0
+local node_damage_timer = 0
 
 local ambient_sound_cycles = 2
 local ambient_sound_timer = 0
 local ambient_sound_radius = 8
 
-function qts.isDamageTick()
-	return nodeDamageTimer >= 1
+function qts.is_damage_tick()
+	return node_damage_timer >= 1
 end
 
 qts.player_data = {}
@@ -57,10 +57,10 @@ end
 
 minetest.register_globalstep(function(dtime)
 	--damage tick update
-	if nodeDamageTimer >= 1 then
-		nodeDamageTimer = 0
+	if node_damage_timer >= 1 then
+		node_damage_timer = 0
 	end
-	nodeDamageTimer = nodeDamageTimer + dtime
+	node_damage_timer = node_damage_timer + dtime
 	
 	--player node and item callbacks
 	for _, player in ipairs(minetest.get_connected_players()) do
@@ -256,9 +256,17 @@ minetest.register_globalstep(function(dtime)
 	
 end)
 
---minetest.register_on_joinplayer(function(player)
---	minetest.chat_send_all("QuestTest Dev Mode: ".. tostring(qts.ISDEV)) --Testing ONLY
---end)
+--enable zoom and map in creative
+minetest.register_on_joinplayer(function(player)
+	if qts.is_player_creative(player) then
+		player:set_properties({zoom_fov = 15})
+		player:hud_set_flags({
+			minimap = true,
+			minimap_radar = true
+		})
+	end
+	--minetest.chat_send_all("QuestTest Dev Mode: ".. tostring(qts.ISDEV)) --Testing ONLY
+end)
 
 minetest.register_on_shutdown(function()
 	qts.world_settings.set_bool("QT_DEV_WORLD", qts.ISDEV)

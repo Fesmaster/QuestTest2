@@ -4,15 +4,12 @@ minetest.register_privilege("creative", {
 	description = "Creative Mode (as a priv!)",
 	give_to_singleplayer = false,
 	give_to_admin = false,
-	--TODO: inventory update code
-	--on_grant = update_sfinv,
-	--on_revoke = update_sfinv,
 })
 
 local creative_mode_cache = minetest.settings:get_bool("creative_mode")
 
 --actual get creative api
-function qts.isCreativeFor(playername)
+function qts.is_player_creative(playername)
 	return creative_mode_cache or minetest.check_player_privs(playername, {creative = true})
 end
 
@@ -61,10 +58,9 @@ end
 
 
 --handle unlimited node placement
---not in mt_impl.lua because it needs to be seperate for retuns
 minetest.register_on_placenode(function(pos, newnode, placer, oldnode, itemstack)
 	if placer and placer:is_player() then
-		return qts.isCreativeFor(placer:get_player_name())
+		return qts.is_player_creative(placer:get_player_name())
 	end
 end)
 
@@ -72,7 +68,7 @@ local old_handle_node_drops = minetest.handle_node_drops
 function minetest.handle_node_drops(pos, drops, digger)
 	--pass along to the old func
 	if not digger or not digger:is_player() or
-			not qts.isCreativeFor(digger:get_player_name()) then
+			not qts.is_player_creative(digger:get_player_name()) then
 		return old_handle_node_drops(pos, drops, digger)
 	end
 	local inv = digger:get_inventory()

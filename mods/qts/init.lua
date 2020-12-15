@@ -4,12 +4,24 @@ qts_internal = {}
 qts.path = minetest.get_modpath("qts")
 qts.LIGHT_MAX = 14
 
+--default stack max changes.
+minetest.nodedef_default.stack_max = 999
+minetest.craftitemdef_default.stack_max = 999
+minetest.noneitemdef_default.stack_max = 999
+
 dofile(qts.path.."/worldsettings.lua")
 --load the QT2 Settings File
 qts.settings = qts.create_settings_clojure(minetest.get_modpath("qts") .. "/QT2Settings.conf")
+--setup some constants
+--qts.world_settings.
+qts.LEVEL_MULTIPLIER = qts.world_settings.get_num("LEVEL_MULTIPLIER") or 0.2 --five levels for 2x effect
+
+
 dofile(qts.path.."/benchmark.lua")
-dofile(qts.path.."/api/maths.lua")
+dofile(qts.path.."/api/maths.lua") --non-vector math
+dofile(qts.path.."/api/vector.lua") --vector math
 dofile(qts.path.."/api/util.lua")
+
 dofile(qts.path.."/api/creative.lua")
 dofile(qts.path.."/api/player.lua")
 dofile(qts.path.."/api/nodetypes.lua")
@@ -21,7 +33,6 @@ dofile(qts.path.."/api/chest.lua")
 dofile(qts.path.."/api/itemModifiers.lua")
 dofile(qts.path.."/api/playereffects.lua")
 dofile(qts.path.."/api/explosion.lua")
-dofile(qts.path.."/api/collisions.lua")
 dofile(qts.path.."/api/projectiles.lua")
 dofile(qts.path.."/api/elements.lua")
 --any other code here 

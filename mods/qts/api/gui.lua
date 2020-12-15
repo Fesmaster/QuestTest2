@@ -186,7 +186,7 @@ function qts.gui.show_gui(pos, player, formname, tabindex, show, ...)
 	end
 end
 
---TODO: move to mt_impl.lua
+
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	--handle registered forms
 	local inv = false
@@ -238,4 +238,7 @@ end)
 
 function qts.gui.set_inventory_qui_name(name)
 	inventoryFormName = name
+end
+function qts.gui.get_inventory_qui_name()
+	return inventoryFormName
 end

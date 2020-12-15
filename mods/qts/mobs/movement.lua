@@ -160,6 +160,16 @@ qts.ai.jump(object, height, forward_ammount, dont_set)
 	dont_set - if true, the value is calculated, but not set. It is still returned
 
 	Return: - the new velocity of the object
+
+qts.ai.freeze(object, ignore_vertical, dont_set)
+	Causes the object to freeze in place
+	Params:
+	object - the luaentity begin told to jump
+	ignore_vertical - ignore vertical motion
+	dont_set - if true, the value is calculated, but not set. It is still returned
+
+	Return: - the new velocity of the object
+	
 --]]
 
 function qts.ai.walk(object, speed, dont_set)
@@ -262,6 +272,23 @@ function qts.ai.jump(object, height, forward_ammount, dont_set)
 			object:set_velocity(dir)
 		end
 		return dir
+	end
+end
+
+function qts.ai.freeze(object, ignore_vertical, dont_set)
+	local v = object:get_velocity()
+	if v.x == 0 and v.z == 0 and (v.y == 0 or ignore_vertical) then
+		return v
+	else
+		v.x = 0
+		v.z = 0
+		if (not ignore_vertical) then
+			v.y = 0
+		end
+		if (not dont_set) then
+			object:set_velocity(v)
+		end
+		return v
 	end
 end
 

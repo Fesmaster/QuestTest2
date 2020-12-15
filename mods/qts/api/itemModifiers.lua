@@ -17,8 +17,9 @@ function list:
 	on_dieplayer(player, reason) -- the player with this in his inv dies
 	on_item_eat(hp_change, replace_with_item, itemstack, user, pointed_thing) --the item is eaten (return true to prevent HPChange)
 	
-	inventory_can_act(player, action, inventory, inventory_info)
-	inventory_on_act(player, action, inventory, inventory_info)
+	inventory_can_act(player, action, inventory, inventory_info) -- used to check if some inventory operation can be done to the item
+	inventory_on_act(player, action, inventory, inventory_info) --called when an inventory operation is done on the item
+	
 	
 minetest.register_on_placenode(function(pos, newnode, placer, oldnode, itemstack, pointed_thing))
 minetest.register_on_dignode(function(pos, oldnode, digger))

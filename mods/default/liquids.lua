@@ -33,7 +33,7 @@ qts.register_liquid("default:lava", {
 	light_source = 13,
 	alpha = 255,
 	on_walk_in = function(pos, obj, entered)
-		if (qts.isDamageTick()) then
+		if (qts.is_damage_tick()) then
 			obj:punch(obj, 1, {
 				full_punch_interval = 0.9,
 				damage_groups = {fleshy = 7},
