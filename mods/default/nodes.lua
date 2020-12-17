@@ -23,18 +23,7 @@ qts.register_shaped_node("default:stone", {
 	tiles = {"default_stone.png"},
 	groups = {cracky=3, stone=1, grey_stone=1},
 	sounds = qtcore.node_sound_stone(),
-	drop = {
-		max_items = 1,
-		items = {
-			{
-				rarity = 32,
-				items = {"default:flint"}
-			},
-			{
-				items = {"default:stone_cobble"}
-			}
-		}
-	},
+	drop = "default:stone_cobble",
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
@@ -619,9 +608,6 @@ minetest.register_node("default:swamp_tree", {
 	tiles = {
 		"default_swamp_log_top.png",
 		"default_swamp_log_bottom.png",
-		"default_swamp_log_side.png",
-		"default_swamp_log_side.png",
-		"default_swamp_log_side.png",
 		"default_swamp_log_side.png"
 	},
 	drawtype = "nodebox",
@@ -687,24 +673,7 @@ minetest.register_node("default:gold_shroom_spore", {
 	}
 })
 
-minetest.register_node("default:small_shroom", {
-	description = "A Small Edible Mushroom",
-	tiles = {"default_small_shroom.png"},
-	drawtype = "nodebox",
-	paramtype = "light",
-	groups = {snappy = 3, flammable = 2, leaves = 1},
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{-0.1875, -0.5, 0.125, -0.125, -0.3125, 0.1875}, -- NodeBox5
-			{-0.25, -0.3125, 0.0625, -0.0625, -0.25, 0.25}, -- NodeBox6
-			{-0.25, -0.375, 0, -0.0625, -0.3125, 0.3125}, -- NodeBox7
-			{-0.3125, -0.375, 0.0625, 0, -0.3125, 0.25}, -- NodeBox8
-			{0.125, -0.5, -0.1875, 0.1875, -0.4375, -0.125}, -- NodeBox9
-			{0.0625, -0.4375, -0.25, 0.25, -0.375, -0.0625}, -- NodeBox10
-		}
-	}
-})
+
 --leaves
 --[[
 leaves use param2 to hold if they were placed by the player
@@ -972,15 +941,14 @@ minetest.register_node("default:lantern_fruit", {
 	light_source = 12,
 })
 
+
+--Other nodes and stuff
+
+
 minetest.register_node("default:apple", {
 	description = ("Apple"),
 	drawtype = "nodebox",
 	tiles = {
-		"default_apple.png",
-		"default_apple.png",
-		"default_apple.png",
-		"default_apple.png",
-		"default_apple.png",
 		"default_apple.png"
 	},
 	drawtype = "nodebox",
@@ -997,27 +965,87 @@ minetest.register_node("default:apple", {
 	sunlight_propagates = true,
 	walkable = false,
 	is_ground_content = false,
-	groups = {snappy=1},
+	groups = {snappy=3, oddly_breakable_by_hand=3, fruit = 1},
 	on_use = minetest.item_eat(2),
+	sounds = qtcore.node_sound_wood(),
 })
 
+minetest.register_node("default:workbench", {
+	description = "Workbench",
+	tiles = {
+		"default_workbench_top.png",
+		"default_workbench_bottom.png",
+		"default_workbench_side.png"
+	},
+	drawtype = "nodebox",
+	paramtype = "light",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, workbench=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, 0.25, -0.5, 0.5, 0.4375, 0.5}, -- Top
+			{-0.4375, -0.5, -0.4375, -0.25, 0.25, -0.25}, -- leg1
+			{0.25, -0.5, -0.4375, 0.4375, 0.25, -0.25}, -- leg2
+			{0.25, -0.5, 0.25, 0.4375, 0.25, 0.4375}, -- leg3
+			{-0.4375, -0.5, 0.25, -0.25, 0.25, 0.4375}, -- leg4
+			--{-0.3125, -0.25, -0.3125, 0.3125, -0.1875, 0.3125}, -- shelf
+		}
+	},
+	sounds = qtcore.node_sound_wood(),
+})
 
+minetest.register_node("default:workbench_heavy", {
+	description = "Heavy Workbench",
+	tiles = {
+		"default_workbench_heavy_top.png",
+		"default_workbench_bottom.png",
+		"default_workbench_heavy_side.png"
+	},
+	drawtype = "nodebox",
+	paramtype = "light",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, workbench=2, workbench_heavy=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, 0.25, -0.5, 0.5, 0.4375, 0.5}, -- Top
+			{-0.4375, -0.5, -0.4375, -0.25, 0.25, -0.25}, -- leg1
+			{0.25, -0.5, -0.4375, 0.4375, 0.25, -0.25}, -- leg2
+			{0.25, -0.5, 0.25, 0.4375, 0.25, 0.4375}, -- leg3
+			{-0.4375, -0.5, 0.25, -0.25, 0.25, 0.4375}, -- leg4
+			--{-0.3125, -0.25, -0.3125, 0.3125, -0.1875, 0.3125}, -- shelf
+		}
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+
+qts.register_shaped_node("default:anvil", {
+	description = "Steel Block",
+	tiles = {"default_anvil.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, 0.0625, -0.3125, 0.5, 0.375, 0.3125}, -- Head
+			{-0.375, -0.5, -0.3125, 0.375, -0.3125, 0.3125}, -- Base
+			{-0.3125, -0.3125, -0.25, 0.3125, -0.25, 0.25}, -- Base2
+			{-0.1875, -0.375, -0.125, 0.1875, 0.125, 0.125}, -- Stem
+			{-0.375, 0, -0.1875, 0.375, 0.0625, 0.1875}, -- Head2
+		}
+	},
+	groups = {cracky=2, falling_node=1, anvil=1},
+	sounds = qtcore.node_sound_metal(),
+})
 
 --FUNATURE
 
 minetest.register_node("default:table", {
-	description = "A Table",
-	tiles = {
-		"default_oak_wood.png",
-		"default_oak_wood.png",
-		"default_oak_wood.png",
-		"default_oak_wood.png",
-		"default_oak_wood.png",
-		"default_oak_wood.png"
-	},
+	description = "Table",
+	tiles = {"default_oak_wood.png"},
 	drawtype = "nodebox",
 	paramtype = "light",
-	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1},
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -1031,15 +1059,9 @@ minetest.register_node("default:table", {
 			{-0.1875, 0.3125, -0.4375, 0.1875, 0.4375, 0.4375}, -- NodeBox8
 			{-0.375, 0.3125, -0.125, 0.4375, 0.4375, 0.125}, -- NodeBox9
 		}
-	}
+	},
+	sounds = qtcore.node_sound_wood(),
 })
 
-minetest.register_node("default:swamp_plant", {
-	description = "A Strange Plant that lives in the swamp",
-	tiles = {"default_swamp_temp_plant.png"},
-	drawtype = "plantlike",
-	paramtype = "light",
-	groups = {oddly_breakable_by_hand=2, flammable=2},
 
-})
 

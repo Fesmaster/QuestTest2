@@ -184,12 +184,14 @@ function Player_API.sneak(player, on)
 		dat.sprint = false
 	end
 	if on and dat.sneak == false then
-		player:set_eye_offset({x=0,y=-0.75,z=0}, {x=0,y=0,z=0})
+		player:set_eye_offset({x=0,y=-1.5,z=0}, {x=0,y=0,z=0})
 		qts.set_player_modifier(player, "CONTROL_INTERNAL", {speed = Player_API.SNEAK_MULT})
+		player:set_properties({collisionbox = {-0.3, 0.0, -0.3, 0.3, 1.3, 0.3},})
 		dat.sneak = true
 	elseif on == false and dat.sneak then
 		player:set_eye_offset({x=0,y=0,z=0}, {x=0,y=0,z=0})
 		qts.set_player_modifier(player, "CONTROL_INTERNAL", {speed = 1})
+		player:set_properties({collisionbox = {-0.3, 0.0, -0.3, 0.3, 1.7, 0.3},})
 		dat.sneak = false
 	end
 end

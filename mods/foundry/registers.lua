@@ -130,10 +130,15 @@ minetest.register_node("foundry:spout", {
 						local flow = minetest.add_entity(pos, "foundry:casting_flow")
 						flow:set_yaw(rot_from_facedir[node.param2 % 4])
 						minetest.log(minetest.pos_to_string(pos) .. "|"..minetest.pos_to_string(flow:get_pos()))
-						minetest.after(0.75, function(func, flow, pos, below, FD, clicker)
+						minetest.after(0.75, function(func, flow, pos, below, fpos, clicker)
+							local FD = foundry.GetFoundryData(fpos)
 							flow:remove()
-							func(pos, below, FD, clicker)
-						end, func, flow, vector.add(pos, {x=0, y=-1, z=0}), below, FD, clicker)
+							if FD then
+								func(pos, below, FD, clicker)
+							else
+								minetest.log("Foundry Issue")
+							end
+						end, func, flow, vector.add(pos, {x=0, y=-1, z=0}), below, fpos, clicker)
 					end
 				end
 			end

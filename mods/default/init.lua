@@ -24,7 +24,9 @@ dofile(minetest.get_modpath("default").."/fire.lua")
 dofile(minetest.get_modpath("default").."/torches.lua")
 dofile(minetest.get_modpath("default").."/saplings.lua")
 dofile(minetest.get_modpath("default").."/liquids.lua")
+dofile(minetest.get_modpath("default").."/foliage.lua")
 
+dofile(minetest.get_modpath("default").."/exemplar.lua")
 dofile(minetest.get_modpath("default").."/initial_items.lua")
 -- Load other files
 
@@ -140,28 +142,7 @@ minetest.register_node("default:boxtest", {
 })
 
 --TESTING GRASS NODE
-minetest.register_node("default:grass_5", {
-	description = "Grass Node",
-	tiles ={"default_grass_5.png"},
-	drawtype = "plantlike",
-	paramtype = "light",
-	paramtype2 = "meshoptions",
-	sunlight_propagates = true,
-	walkable = false,
-	waving = 1,
-	selection_box = qtcore.nb_level1(),
-	groups = {snappy=3, flammable = 2, grass = 1, growable =1},
-	sounds = qtcore.node_sound_stone(),
-	on_place = qtcore.place_random_plantlike,
-	
-	--grow_timer = 1,
-	--grow_timer_random = 0,
-	--on_grow = function(pos)
-	--	minetest.log("Grass Grown")
-	--	minetest.set_node(pos, {name = "default:grass_5", param2 = qtcore.get_random_meshdata()})
-	--	--minetest.log("Grass should be placed")
-	--end,
-})
+
 
 
 

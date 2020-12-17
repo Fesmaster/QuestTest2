@@ -20,7 +20,7 @@ minetest.register_node("foundry:foundry_inactive", {
 		"foundry_scorched_brick.png", "foundry_scorched_brick.png", 
 		"foundry_scorched_brick.png", "foundry_smelter_inactive.png"},
 	paramtype2 = "facedir",
-	groups = {cracky=3, foundry_controller = 1},
+	groups = {cracky=3, foundry_controller = 1, furnace=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
 	after_place_node = function(pos, placer, itemstack, pointed_thing)
@@ -56,7 +56,7 @@ minetest.register_node("foundry:foundry_active", {
 	paramtype2 = "facedir",
 	light_source = 10,
 	drop = "foundry:foundry_inactive",
-	groups = {cracky=3, foundry_controller = 1, not_in_creative_inventory = 1},
+	groups = {cracky=3, foundry_controller = 1, not_in_creative_inventory = 1, furnace=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
 	

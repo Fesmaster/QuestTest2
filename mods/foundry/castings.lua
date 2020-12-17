@@ -10,6 +10,7 @@ def contains - {
 	
 }
 ]]
+--[[
 foundry.register_casting_type("pick", {
 	description = "Pick",
 	volume = 3,
@@ -34,6 +35,24 @@ foundry.register_casting_type("sword", {
 	block_tiles = {"foundry_sword_mold.png"},
 })
 
+]]
+
+foundry.register_casting_type("anvil", {
+	description = "Anvil",
+	volume = 12,
+	block_tiles = {"foundry_anvil_mold.png"},
+})
+
+foundry.register_casting_recepie("anvil", {
+	metal = "steel",
+	result = "default:anvil 1",
+})
+
+qts.register_craft({
+	ingredients = {"default:sand", "default:clay_lump"},
+	results = {"foundry:anvil_mold",},
+})
+
 --[[
 rtype = "recepie type" 
 def = {
@@ -43,6 +62,7 @@ def = {
 }
 ]]
 
+--[[
 --pick
 foundry.register_casting_recepie("pick", {
 	metal = "copper",
@@ -131,3 +151,4 @@ foundry.register_casting_recepie("sword", {
 	result = "default:sword_blade_steel 1",
 })
 
+--]]

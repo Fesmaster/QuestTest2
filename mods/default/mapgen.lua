@@ -29,8 +29,8 @@ qts.worldgen.register_biome("grasslands", {
 	surface = "default:dirt_with_grass",
 	fill = "default:dirt",
 	stone = "default:stone",
-	plant = "default:grass_5",
-	plant_freq = 90,
+	plant = {"default:grass_tall", "default:grass_short"},
+	plant_freq = 10,
 	surface_depth = 1,
 	fill_depth = 2,
 	stone_depth = 0,
@@ -47,8 +47,8 @@ qts.worldgen.register_biome("woods", {
 	surface = "default:dirt_with_grass",
 	fill = "default:dirt",
 	stone = "default:stone",
-	plant = "default:grass_5",
-	plant_freq = 90,
+	plant = {"default:grass_tall", "default:grass_short"},
+	plant_freq = 10,
 	surface_depth = 1,
 	fill_depth = 2,
 	stone_depth = 0,
@@ -65,8 +65,8 @@ qts.worldgen.register_biome("prarie", {
 	surface = "default:dirt_with_prarie_grass",
 	fill = "default:dirt",
 	stone = "default:stone",
-	plant = nil,
-	plant_freq = 0,
+	plant = {"default:grass_dry_tall", "default:grass_dry_short"},
+	plant_freq = 10,
 	surface_depth = 1,
 	fill_depth = 3,
 	stone_depth = 0,
@@ -81,9 +81,9 @@ qts.worldgen.register_biome("swamp", {
 	min_air = 50,
 	dust = nil,
 	surface = {"default:dirt_with_swamp_grass"},
-	fill = "default:dirt", --TODO: add peat?
-	stone = "default:stone",
-	plant = "default:swamp_plant",
+	fill = {"default:dirt"}, --TODO: add peat?
+	stone = {"default:stone"},
+	plant = {"default:swamp_plant"},
 	plant_freq = 10,
 	surface_depth = 1,
 	fill_depth = 5,
@@ -101,8 +101,8 @@ qts.worldgen.register_biome("rainforest", {
 	surface = {"default:dirt_with_rainforest_grass"},
 	fill = "default:dirt", 
 	stone = "default:stone",
-	plant = nil,
-	plant_freq = 0,
+	plant = {"default:underbrush_short","default:underbrush_tall"},
+	plant_freq = 2,
 	surface_depth = 1,
 	fill_depth = 5,
 	stone_depth = 0,
@@ -117,10 +117,10 @@ qts.worldgen.register_biome("mushroom_forest", {
 	min_air = 10,
 	dust = nil,
 	surface = {"default:dirt_with_mushroom_grass"},
-	fill = "default:dirt", 
-	stone = "default:stone",
-	plant = "default:small_shroom",
-	plant_freq = 90,
+	fill = {"default:dirt"}, 
+	stone = {"default:stone"},
+	plant = {"default:small_shroom"},
+	plant_freq = 7,
 	surface_depth = 1,
 	fill_depth = 5,
 	stone_depth = 0,
@@ -183,7 +183,7 @@ qts.worldgen.register_biome("desert_mountains", {
 qts.worldgen.register_biome("beach", {
 	heat_point = 50,
 	humidity_point = 50,
-	min_ground_height = -100000,
+	min_ground_height = 0,
 	max_ground_height = 5,
 	min_light = 0,--half
 	min_air = 10,
@@ -191,10 +191,29 @@ qts.worldgen.register_biome("beach", {
 	surface = "default:sand",
 	fill = {"default:sand","default:sandstone"},
 	stone = "default:sandstone",
+	underwater = "default:sand",
 	surface_depth = 2,
 	fill_depth = 4,
 	stone_depth = 10,
 })
+---[[
+qts.worldgen.register_biome("underwater", {
+	heat_point = 50,
+	humidity_point = 50,
+	min_ground_height = -100000,
+	max_ground_height = 0,
+	min_light = 0,--half
+	min_air = 10,
+	dust = "air",
+	underwater = "default:sand",
+	--fill = {"default:sand","default:sandstone"},
+	--stone = "default:sandstone",
+	surface_depth = 2,
+	fill_depth = 4,
+	stone_depth = 10,
+})
+--]]
+
 
 --[[
 ORES

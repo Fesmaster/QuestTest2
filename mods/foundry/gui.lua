@@ -10,9 +10,9 @@ qts.gui.register_gui("foundry", {
 	get = function(data, pos, name)
 		local spos = pos.x .. "," .. pos.y .. "," .. pos.z
 		local FD = foundry.GetFoundryData(pos)
-		if not FD then return "size["..S(8.5,8).."]" end
+		if not FD then return "size["..S(10.5,8).."]" end
 		
-		local str = "size["..S(8.5,8).."]real_coordinates[true]"..
+		local str = "size["..S(9.75,8.2).."]real_coordinates[true]"..
 			"container["..P(0,0).."]"..
 			"list[nodemeta:" .. spos .. ";main;"..P(0,0)..";6,4;]"..--the inv
 			--qtcore.vprogressbar(mp(7,0), "0.15,1", 50)

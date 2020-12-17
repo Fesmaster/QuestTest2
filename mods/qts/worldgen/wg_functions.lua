@@ -64,13 +64,13 @@ keys in def:
 	stone_depth = number
 	
 	#special spawn chance
-	plant_freq (0-100) % chance of a plant growing math: math.random(100-plant_freq) == 1
+	plant_freq 1 in x chance 
 	
 --]]
 --qts.worldgen.registered_biomes
 qts.worldgen.register_biome = function(name, def)
 	--add to worldgen CID system
-	for i, t in ipairs{"dust", "surface", "fill", "stone", "plant"} do
+	for i, t in ipairs{"dust", "surface", "fill", "stone", "plant", "surface_water", "underwater"} do
 		if type(def[t]) == "string" then
 			qts.worldgen.add_to_CID(def[t])
 			def[t] = {def[t]} --force into a table
@@ -83,7 +83,8 @@ qts.worldgen.register_biome = function(name, def)
 	--min air reqired to generate surface
 	if not def.min_air then def.min_air = 10 end
 	if not def.min_light then def.min_light = 0 end
-	if not def.plant_freq then def.plant_freq = 50 end
+	if not def.plant_freq then def.plant_freq = 0 end
+	if not def.surface_water then def.surface_water = -1 end
 	--make these indexed to the surface
 	def.stone_depth = def.stone_depth + def.fill_depth + def.surface_depth
 	def.fill_depth = def.fill_depth + def.surface_depth
@@ -110,13 +111,13 @@ qts.worldgen.get_biome_node = function(name, ntype, asCID)
 			return found
 		end
 	end
-	minetest.log("get_biome_node: biome or level do not exist Biome: ".. name .. " Node Type: "..ntype)
+	--minetest.log("get_biome_node: biome or level do not exist Biome: ".. name .. " Node Type: "..ntype)
 	return nil
 end
 
 qts.worldgen.is_biome_node = function(cid, biome, group, solidOnly)
 	if solidOnly == nil then solidOnly = true end
-	local check = {"dust", "surface", "fill", "stone", "plant"}
+	local check = {"dust", "surface", "fill", "stone", "plant", "underwater", "surface_water"}
 	if group then
 		check = group
 	end
@@ -182,29 +183,37 @@ end
 qts.worldgen.get_biome_name = function(heat, humidity, height)
 	local nearest_name = nil
 	local nearest_dist = nil
+	
 	local df = qts.worldgen.dist_funcs[select_dist_func]
 	for name, def in pairs(qts.worldgen.registered_biomes) do --
+		--minetest.log("Checking biome: " .. dump(name))
 		if 	(def.min_ground_height == nil and def.max_ground_height == nil)
 				or (def.min_ground_height == nil and height <= def.max_ground_height)
 				or (def.max_ground_height == nil and height >= def.min_ground_height) 
 				or (height <= def.max_ground_height and height >= def.min_ground_height) then
 			--it works
+			--minetest.log("Biome: " .. dump(name) .. ": Checking nearest...")
 			if nearest_name then
 				local dist = df({heat = heat, humid = humidity}, {heat = def.heat_point, humid = def.humidity_point})
 				if dist < nearest_dist then
+				--	minetest.log("Biome: " .. dump(name) .. ": Nearest replacement")
 					nearest_dist = dist
 					nearest_name = name
 				end
 			else
+			--	minetest.log("Biome: " .. dump(name) .. ": No nearest. Using this")
 				nearest_name = name
 				nearest_dist = df({heat = heat, humid = humidity}, {heat = def.heat_point, humid = def.humidity_point})
 			end
-		--else
+		else
+		--	minetest.log("Biome: " .. dump(name) .. " is not in the right height")
 			--minetest.log("Ignoring biome (wrong height): "..dump(name)..", height: "..dump(height))
 		end
 	end
 	if nearest_name then
 		return nearest_name
+	else
+		error("WORLDGEN: error: biome generation issue")
 	end
 end
 
@@ -214,7 +223,8 @@ end
 --[[
 def contains:
 	schematic = "path to schematic.mts" --must contain ".mts", it is not added for you!!
-	chance = (0-100) % chance of placing. math: math.random(100-freq) == 1
+	chance = 0+ one in chance of placing. math: math.random(chance) == 1
+	(0-100) % chance of placing. math: math.random(100-freq) == 1
 	biomes = {} or "name" (converted to table in register)
 	nodes = {} or "name" (converted to table in register)
 	force_place = false -- should the placement be forced?
@@ -250,7 +260,7 @@ qts.worldgen.check_structure = function(name, biome, cid)
 	if strucDef then
 		if strucDef.biomes[biome] and strucDef.nodes[minetest.get_name_from_content_id(cid)] then
 			--minetest.log("Structure chance")
-			return math.random(100-strucDef.chance) == 1
+			return math.random(strucDef.chance) == 1
 		else
 			--minetest.log("Error:"..dump(strucDef.biomes).."\n"..dump(strucDef.nodes))
 			return false

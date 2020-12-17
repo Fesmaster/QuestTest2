@@ -76,10 +76,17 @@ end
 	Finds if a nodename or a node of group group:name is in a radius around pos.
 	If it finds one, then it returns the position.
 	
+	for groups, using
+	"group:wood 4"
+	means that the node must have group wood equal to 4 or greater
+	
 	TODO: Possible change so that it prioritizes the closest node that matches the criteria
 --]]
 function qts.is_node_in_radius(pos, radius, nodename)
 	if pos == nil or radius == nil or nodename == nil then return nil end
+	local IS = ItemStack(nodename)
+	nodename = IS:get_name()
+	local count = IS:get_count()
 	local isGroup = qts.is_group(nodename)
 	if (isGroup) then
 		nodename = qts.remove_modname_from_item(nodename)
@@ -93,7 +100,7 @@ function qts.is_node_in_radius(pos, radius, nodename)
 			local nref = minetest.get_node(npos)
 			
 			if (isGroup) then
-				if (minetest.get_item_group(nref.name, nodename) ~= 0) then
+				if (minetest.get_item_group(nref.name, nodename) >= count) then
 					return npos
 				end
 			else
@@ -172,6 +179,7 @@ qts.inv_take_group(inv, groupString, [ignoreNames])
 function qts.inv_contains_group(inv, groupString, ignoreNames)
 	if not ignoreNames then ignoreNames = {} end
 	local groupStack = ItemStack(groupString)
+	--local minlevel = groupStack:get_count()
 	if (qts.get_modname_from_item(groupStack:get_name()) ~= "group") then return nil end --not a group.
 	local groupname = qts.remove_modname_from_item(groupStack:get_name())
 	local itemList = inv:get_list("main")
@@ -197,6 +205,7 @@ end
 function qts.inv_take_group(inv, groupString, ignoreNames)
 	if not ignoreNames then ignoreNames = {} end
 	local groupStack = ItemStack(groupString)
+	--local minlevel = groupStack:get_count()
 	if (qts.get_modname_from_item(groupStack:get_name()) ~= "group") then return nil end --not a group.
 	local groupname = qts.remove_modname_from_item(groupStack:get_name())
 	local itemList = inv:get_list("main")

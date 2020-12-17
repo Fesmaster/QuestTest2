@@ -5,7 +5,7 @@ local esc = minetest.formspec_escape
 
 qts.gui.register_gui("default_furnace", {
 	get = function(data, pos, name)
-		local str = "size["..S(8,8.8).."]real_coordinates[true]"
+		local str = "size["..S(9.75,8.25).."]real_coordinates[true]"
 		local spos = pos.x .. "," .. pos.y .. "," .. pos.z
 		local meta = minetest.get_meta(pos)
 		--Get the percentage values from the item meta, instead of constantly calculating on the fly, twice!

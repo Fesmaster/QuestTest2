@@ -5,11 +5,13 @@ inventory.utils = {}
 inventory.itemlist_player = {}
 inventory.listdata_player = {}
 inventory.list_items = {}
+inventory.exemplar = {}
 
 local esc = minetest.formspec_escape
 local P = function(x,y) return qts.gui.gui_makepos(x,y):get() end
 dofile(minetest.get_modpath("inventory") .."/functions.lua")
 dofile(minetest.get_modpath("inventory") .."/detached.lua")
+--dofile(minetest.get_modpath("inventory") .."/exemplar.lua")
 
 
 --register util buttons
@@ -55,7 +57,7 @@ qts.gui.register_gui("inventory", {
 					data.currRecipeList = recipe_list
 					data.currRecipeIndex = 1
 					data.currRecipeItem = item_name
-					minetest.log("Data set.")
+					--minetest.log("Data set.")
 				end
 				
 				if qts.is_player_creative(name) and data.cheat_mode_enabled then

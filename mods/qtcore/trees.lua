@@ -66,7 +66,7 @@ def contains:
 
 qts.worldgen.register_structure("tree_apple", {
 	schematic = path .. "apple1.mts",
-	chance = 20,
+	chance = 80,
 	biomes = {"woods"},
 	nodes = {"default:dirt_with_grass"},
 	force_place = false,
@@ -76,7 +76,7 @@ qts.worldgen.register_structure("tree_apple", {
 
 qts.worldgen.register_structure("tree_oak1", {
 	schematic = path .. "oak1.mts",
-	chance = 30,
+	chance = 70,
 	biomes = {"woods"},
 	nodes = {"default:dirt_with_grass"},
 	force_place = false,
@@ -86,7 +86,7 @@ qts.worldgen.register_structure("tree_oak1", {
 
 qts.worldgen.register_structure("tree_oak2", {
 	schematic = path .. "oak2.mts",
-	chance = 30,
+	chance = 70,
 	biomes = {"woods"},
 	nodes = {"default:dirt_with_grass"},
 	force_place = false,
@@ -96,7 +96,7 @@ qts.worldgen.register_structure("tree_oak2", {
 
 qts.worldgen.register_structure("tree_oak3", {
 	schematic = path .. "oak3.mts",
-	chance = 30,
+	chance = 70,
 	biomes = {"woods"},
 	nodes = {"default:dirt_with_grass"},
 	force_place = false,
@@ -106,7 +106,7 @@ qts.worldgen.register_structure("tree_oak3", {
 
 qts.worldgen.register_structure("tree_aspen1", {
 	schematic = path .. "aspen1.mts",
-	chance = 30,
+	chance = 70,
 	biomes = {"woods"},
 	nodes = {"default:dirt_with_grass"},
 	force_place = false,
@@ -116,7 +116,7 @@ qts.worldgen.register_structure("tree_aspen1", {
 
 qts.worldgen.register_structure("tree_aspen2", {
 	schematic = path .. "aspen2.mts",
-	chance = 30,
+	chance = 70,
 	biomes = {"woods"},
 	nodes = {"default:dirt_with_grass"},
 	force_place = false,
@@ -126,7 +126,7 @@ qts.worldgen.register_structure("tree_aspen2", {
 
 qts.worldgen.register_structure("tree_rowan", {
 	schematic = path .. "rowan1.mts",
-	chance = 20,
+	chance = 80,
 	biomes = {"woods"},
 	nodes = {"default:dirt_with_grass"},
 	force_place = false,
@@ -136,7 +136,7 @@ qts.worldgen.register_structure("tree_rowan", {
 
 qts.worldgen.register_structure("tree_coffee", {
 	schematic = path .. "coffee1.mts",
-	chance = 20,
+	chance = 80,
 	biomes = {"rainforest"},
 	nodes = {"default:dirt_with_rainforest_grass"},
 	force_place = false,
@@ -146,7 +146,7 @@ qts.worldgen.register_structure("tree_coffee", {
 
 qts.worldgen.register_structure("tree_mahogany1", {
 	schematic = path .. "mahogany1.mts",
-	chance = 30,
+	chance = 70,
 	biomes = {"rainforest"},
 	nodes = {"default:dirt_with_rainforest_grass"},
 	force_place = false,
@@ -156,7 +156,7 @@ qts.worldgen.register_structure("tree_mahogany1", {
 
 qts.worldgen.register_structure("tree_mahogany2", {
 	schematic = path .. "mahogany2.mts",
-	chance = 30,
+	chance = 70,
 	biomes = {"rainforest"},
 	nodes = {"default:dirt_with_rainforest_grass"},
 	force_place = false,
@@ -166,7 +166,7 @@ qts.worldgen.register_structure("tree_mahogany2", {
 
 qts.worldgen.register_structure("tree_lantern1", {
 	schematic = path .. "lantern1.mts",
-	chance = 30,
+	chance = 70,
 	biomes = {"rainforest"},
 	nodes = {"default:dirt_with_rainforest_grass"},
 	force_place = false,
@@ -176,7 +176,7 @@ qts.worldgen.register_structure("tree_lantern1", {
 
 qts.worldgen.register_structure("tree_lantern2", {
 	schematic = path .. "lantern2.mts",
-	chance = 30,
+	chance = 70,
 	biomes = {"rainforest"},
 	nodes = {"default:dirt_with_rainforest_grass"},
 	force_place = false,
@@ -186,7 +186,7 @@ qts.worldgen.register_structure("tree_lantern2", {
 
 qts.worldgen.register_structure("tree_rosewood1", {
 	schematic = path .. "rosewood1.mts",
-	chance = 30,
+	chance = 70,
 	biomes = {"prarie"},
 	nodes = {"default:dirt_with_prarie_grass"},
 	force_place = false,
@@ -196,7 +196,7 @@ qts.worldgen.register_structure("tree_rosewood1", {
 
 qts.worldgen.register_structure("tree_swamp", {
 	schematic = path .. "swamp_tree1.mts",
-	chance = 30,
+	chance = 70,
 	biomes = {"swamp"},
 	nodes = {"default:dirt_with_swamp_grass"},
 	force_place = false,
@@ -206,7 +206,7 @@ qts.worldgen.register_structure("tree_swamp", {
 
 qts.worldgen.register_structure("tree_small_b_shroom", {
 	schematic = path .. "blue_shroom2.mts",
-	chance = 30,
+	chance = 70,
 	biomes = {"mushroom_forest"},
 	nodes = {"default:dirt_with_mushroom_grass"},
 	force_place = false,
@@ -216,7 +216,7 @@ qts.worldgen.register_structure("tree_small_b_shroom", {
 
 qts.worldgen.register_structure("tree_large_b_shroom", {
 	schematic = path .. "blue_shroom2.mts",
-	chance = 15,
+	chance = 85,
 	biomes = {"mushroom_forest"},
 	nodes = {"default:dirt_with_mushroom_grass"},
 	force_place = false,
@@ -226,7 +226,7 @@ qts.worldgen.register_structure("tree_large_b_shroom", {
 
 qts.worldgen.register_structure("tree_gold_shroom_1", {
 	schematic = path .. "gold_shroom_1.mts",
-	chance = 7,
+	chance = 93,
 	biomes = {"mushroom_forest"},
 	nodes = {"default:dirt_with_mushroom_grass"},
 	force_place = false,

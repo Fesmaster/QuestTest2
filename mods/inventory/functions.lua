@@ -110,8 +110,9 @@ inventory.get_craft_area = function(data, name, pos)
 				local name = ItemStack(item):get_name()
 				local count = ItemStack(item):get_count()
 				if (qts.is_group(item)) then
-					cs = cs .."item_image["..P(i,j)..";1,1;inventory:groupItem " ..count.."]"..
-						"tooltip["..P(i,j)..";1,1;Group: ".. qts.remove_modname_from_item(name) .. " " .. count .."]"
+					name = qts.remove_modname_from_item(name)
+					cs = cs .."item_image["..P(i,j)..";1,1;".. (inventory.exemplar[name] or "inventory:groupItem") .. " " ..count.."]"..
+						"tooltip["..P(i,j)..";1,1;Group: ".. name .. " " .. count .."]"
 				else
 					cs = cs .."item_image["..P(i,j)..";1,1;" ..item.."]"..
 						"tooltip["..P(i,j)..";1,1;".. minetest.registered_items[name].description .. " " .. count .."]"
@@ -129,13 +130,15 @@ inventory.get_craft_area = function(data, name, pos)
 				i = i+1;
 				if i > 4 then break end
 			end
-			--near and held items
+			--near items
 			i = 0
 			for item, v in pairs(recip.near) do
 				local name = ItemStack(item):get_name()
+				local count = ItemStack(item):get_count()
 				if (qts.is_group(item)) then
-					cs = cs .."item_image["..P(i,4)..";1,1;inventory:groupItem]"..
-						"tooltip["..P(i,4)..";1,1;Group: ".. qts.remove_modname_from_item(name) .. "]"
+					name = qts.remove_modname_from_item(name)
+					cs = cs .."item_image["..P(i,4)..";1,1;".. (inventory.exemplar[name] or "inventory:groupItem") .. "]"..
+						"tooltip["..P(i,4)..";1,1;Group: ".. name .. " ("..count..")" .. "]"
 				else
 					cs = cs .."item_image["..P(i,4)..";1,1;" ..item.."]"..
 						"tooltip["..P(i,4)..";1,1;".. minetest.registered_items[name].description .. "]"
@@ -144,11 +147,13 @@ inventory.get_craft_area = function(data, name, pos)
 				if i > 4 then break end
 			end
 			i = 0
+			--held items
 			for item, v in pairs(recip.held) do
 				local name = ItemStack(item):get_name()
 				if (qts.is_group(item)) then
-					cs = cs .."item_image["..P(i+5.5,4)..";1,1;inventory:groupItem]"..
-						"tooltip["..P(i+5.5,4)..";1,1;Group: ".. qts.remove_modname_from_item(name) .. "]"
+					name = qts.remove_modname_from_item(name)
+					cs = cs .."item_image["..P(i+5.5,4)..";1,1;".. (inventory.exemplar[name] or "inventory:groupItem") .. "]"..
+						"tooltip["..P(i+5.5,4)..";1,1;Group: ".. name .. "]"
 				else
 					cs = cs .."item_image["..P(i+5.5,4)..";1,1;" ..item.."]"..
 						"tooltip["..P(i+5.5,4)..";1,1;".. minetest.registered_items[name].description .. "]"
@@ -200,6 +205,15 @@ inventory.register_util_btn = function(label, on_click)
 			label = label,
 			on_click = on_click,
 		}
+	end
+end
+
+inventory.register_exemplar_item =function(group, item)
+	if (minetest.registered_items[item]) then
+		inventory.exemplar[group] = item
+		minetest.log("Inventory: exemplar item for " .. group .. " added: " .. item)
+	else
+		minetest.log("Warning: Inventory: register_exemplar_item: invalid item. please declare first!")
 	end
 end
 

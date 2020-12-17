@@ -36,10 +36,6 @@ minetest.register_tool("default:pick_rusted", {
 	groups = {pickaxe = 1}
 })
 --copper
-minetest.register_craftitem("default:pick_head_copper", {
-	description = ("Copper Pickaxe Head"),
-	inventory_image = "default_pick_head_copper.png",
-})
 minetest.register_tool("default:pick_copper", {
 	description = "Copper Pickaxe",
 	inventory_image = "default_pick_copper.png",
@@ -55,10 +51,6 @@ minetest.register_tool("default:pick_copper", {
 	groups = {pickaxe = 1}
 })
 --bronze
-minetest.register_craftitem("default:pick_head_bronze", {
-	description = ("Bronze Pickaxe Head"),
-	inventory_image = "default_pick_head_bronze.png",
-})
 minetest.register_tool("default:pick_bronze", {
 	description = "Bronze Pickaxe",
 	inventory_image = "default_pick_bronze.png",
@@ -74,10 +66,6 @@ minetest.register_tool("default:pick_bronze", {
 	groups = {pickaxe = 1}
 })
 --iron
-minetest.register_craftitem("default:pick_head_iron", {
-	description = ("Iron Pickaxe Head"),
-	inventory_image = "default_pick_head_iron.png",
-})
 minetest.register_tool("default:pick_iron", {
 	description = "Iron Pickaxe",
 	inventory_image = "default_pick_iron.png",
@@ -93,10 +81,6 @@ minetest.register_tool("default:pick_iron", {
 	groups = {pickaxe = 1}
 })
 --steel
-minetest.register_craftitem("default:pick_head_steel", {
-	description = ("Steel Pickaxe Head"),
-	inventory_image = "default_pick_head_steel.png",
-})
 minetest.register_tool("default:pick_steel", {
 	description = "Steel Pickaxe",
 	inventory_image = "default_pick_steel.png",
@@ -131,10 +115,6 @@ minetest.register_tool("default:axe_flint", {
 	groups = {axe = 1}
 })
 --copper
-minetest.register_craftitem("default:axe_head_copper", {
-	description = ("Copper Axe Head"),
-	inventory_image = "default_axe_head_copper.png",
-})
 minetest.register_tool("default:axe_copper", {
 	description = "Copper Axe",
 	inventory_image = "default_axe_copper.png",
@@ -150,10 +130,6 @@ minetest.register_tool("default:axe_copper", {
 	groups = {axe = 1}
 })
 --bronze
-minetest.register_craftitem("default:axe_head_bronze", {
-	description = ("Bronze Axe Head"),
-	inventory_image = "default_axe_head_bronze.png",
-})
 minetest.register_tool("default:axe_bronze", {
 	description = "Bronze Axe",
 	inventory_image = "default_axe_bronze.png",
@@ -169,10 +145,6 @@ minetest.register_tool("default:axe_bronze", {
 	groups = {axe = 1}
 })
 --iron
-minetest.register_craftitem("default:axe_head_iron", {
-	description = ("Iron Axe Head"),
-	inventory_image = "default_axe_head_iron.png",
-})
 minetest.register_tool("default:axe_iron", {
 	description = "Iron Axe",
 	inventory_image = "default_axe_iron.png",
@@ -188,10 +160,6 @@ minetest.register_tool("default:axe_iron", {
 	groups = {axe = 1}
 })
 --steel
-minetest.register_craftitem("default:axe_head_steel", {
-	description = ("Steel Axe Head"),
-	inventory_image = "default_axe_head_steel.png",
-})
 minetest.register_tool("default:axe_steel", {
 	description = "Steel Axe",
 	inventory_image = "default_axe_steel.png",
@@ -211,10 +179,6 @@ minetest.register_tool("default:axe_steel", {
 SHOVELS
 --]]
 --copper
-minetest.register_craftitem("default:shovel_head_copper", {
-	description = ("Copper Shovel Head"),
-	inventory_image = "default_shovel_head_copper.png",
-})
 minetest.register_tool("default:shovel_copper", {
 	description = "Copper Shovel",
 	inventory_image = "default_shovel_copper.png",
@@ -230,10 +194,6 @@ minetest.register_tool("default:shovel_copper", {
 	groups = {shovel = 1}
 })
 --bronze
-minetest.register_craftitem("default:shovel_head_bronze", {
-	description = ("Bronze Shovel Head"),
-	inventory_image = "default_shovel_head_bronze.png",
-})
 minetest.register_tool("default:shovel_bronze", {
 	description = "Bronze Shovel",
 	inventory_image = "default_shovel_bronze.png",
@@ -249,10 +209,6 @@ minetest.register_tool("default:shovel_bronze", {
 	groups = {shovel = 1}
 })
 --iron
-minetest.register_craftitem("default:shovel_head_iron", {
-	description = ("Iron Shovel Head"),
-	inventory_image = "default_shovel_head_iron.png",
-})
 minetest.register_tool("default:shovel_iron", {
 	description = "Iron Shovel",
 	inventory_image = "default_shovel_iron.png",
@@ -268,10 +224,6 @@ minetest.register_tool("default:shovel_iron", {
 	groups = {shovel = 1}
 })
 --steel
-minetest.register_craftitem("default:shovel_head_steel", {
-	description = ("Steel Shovel Head"),
-	inventory_image = "default_shovel_head_steel.png",
-})
 minetest.register_tool("default:shovel_steel", {
 	description = "Steel Shovel",
 	inventory_image = "default_shovel_steel.png",
@@ -291,10 +243,6 @@ minetest.register_tool("default:shovel_steel", {
 SWORDS
 --]]
 --copper
-minetest.register_craftitem("default:sword_blade_copper", {
-	description = ("Copper Sword Head"),
-	inventory_image = "default_sword_blade_copper.png",
-})
 minetest.register_tool("default:sword_copper", {
 	description = "Copper Sword",
 	inventory_image = "default_sword_copper.png",
@@ -310,10 +258,6 @@ minetest.register_tool("default:sword_copper", {
 	groups = {sword = 1}
 })
 --bronze
-minetest.register_craftitem("default:sword_blade_bronze", {
-	description = ("Bronze Sword Head"),
-	inventory_image = "default_sword_blade_bronze.png",
-})
 minetest.register_tool("default:sword_bronze", {
 	description = "Bronze Sword",
 	inventory_image = "default_sword_bronze.png",
@@ -329,10 +273,6 @@ minetest.register_tool("default:sword_bronze", {
 	groups = {sword = 1}
 })
 --iron
-minetest.register_craftitem("default:sword_blade_iron", {
-	description = ("Iron Sword Head"),
-	inventory_image = "default_sword_blade_iron.png",
-})
 minetest.register_tool("default:sword_iron", {
 	description = "Iron Sword",
 	inventory_image = "default_sword_iron.png",
@@ -348,10 +288,6 @@ minetest.register_tool("default:sword_iron", {
 	groups = {sword = 1}
 })
 --steel
-minetest.register_craftitem("default:sword_blade_steel", {
-	description = ("Steel Sword Head"),
-	inventory_image = "default_sword_blade_steel.png",
-})
 minetest.register_tool("default:sword_steel", {
 	description = "Steel Sword",
 	inventory_image = "default_sword_steel.png",

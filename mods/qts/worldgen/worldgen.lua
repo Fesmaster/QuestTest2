@@ -23,6 +23,10 @@ local function genParam2Meshoptions()
 		+ (math.random(0,1) * 32))  --bit 5
 end
 
+local function genParam2Facedir()
+	return math.random(0,3)
+end
+
 local function isGenGround(cid)
 	--if cid == CID["air"] or cid == CID["water"] or cid == CID["river"] then
 	--	return false
@@ -35,6 +39,13 @@ local function isGenGround(cid)
 	end
 end
 
+local function isGenWater(cid)
+	--if cid == CID["water"] or cid == CID["river"] then
+	if cid == CID["water"]	then
+		return true
+	end
+	return false
+end
 minetest.register_on_mods_loaded(function()
 	minetest.set_mapgen_setting("mg_flags", "caves,nodungeons,light,decorations,biomes", true)
 	
@@ -122,21 +133,24 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 			biomeID = qts.worldgen.get_biome_name(heatmap[columnID],humiditymap[columnID],heightmap[columnID])
 			biomeRef = qts.worldgen.registered_biomes[biomeID]
 			biomeBuffer[columnID] = biomeID
+			if not biomeRef then minetest.log("LINE 131: NULL AT CREATION, Name:"..dump(biomeID)) end
 			--ground scanning setup
 			local groundHeight = -31000
 			local isground = false
 			local airdepth = -1
+			local isWaterAbove = false
 		--end
 		
 		--now, for every node in column, top down
 		
 		for y = maxp.y, minp.y, -1 do
-		
+			--if not biomeRef then minetest.log("LINE 142: NULL AT COL START") end
 			if not qts.worldgen.force_singlenode then
 				--per-Node data
 				local i = Area:index(x, y, z)
 				local nID = nil
 				
+				--replace default ores
 				if (Data[i] ~= CID["air"]) and 
 						(Data[i] ~= CID["ground"]) and 
 						(Data[i] ~= CID["water"]) and 
@@ -159,7 +173,13 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 					if airdepth ~= -1 then
 						airdepth = airdepth + 1
 					end
+					
+					isWaterAbove = isGenWater(Data[i])
+					
+					--if not biomeRef then minetest.log("LINE 177: NULL AFTER GROUND AND WATER") end
 				else
+					--isWaterAbove = isGenWater(Data[i])
+					
 					--solid ground
 					if not isground then
 						isground = true
@@ -203,6 +223,8 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 					end
 				end
 				
+				--if not biomeRef then minetest.log("LINE 222: NULL AFTER GROUND AND WATER FULL") end
+				
 				--gen below (how far below ground) and daylight data
 				local below = groundHeight - y
 				local daylight = -1
@@ -215,15 +237,22 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 						and (airdepth == -1 or airdepth >= biomeRef.min_air) 
 						and (daylight >= biomeRef.min_light) then
 					below = below + 1 --increase below to measure correctly
-					if below <= biomeRef.surface_depth then
-						nID = qts.worldgen.get_biome_node(biomeID,"surface")
-					elseif below <= biomeRef.fill_depth then
-						nID = qts.worldgen.get_biome_node(biomeID,"fill")
-					elseif below <= biomeRef.stone_depth then
-						nID = qts.worldgen.get_biome_node(biomeID,"stone")
+					if (isWaterAbove and biomeRef.underwater) then
+						if below <= biomeRef.fill_depth then
+							nID = qts.worldgen.get_biome_node(biomeID,"underwater")
+						end
+					else 
+						if below <= biomeRef.surface_depth then
+							nID = qts.worldgen.get_biome_node(biomeID,"surface")
+						elseif below <= biomeRef.fill_depth then
+							nID = qts.worldgen.get_biome_node(biomeID,"fill")
+						elseif below <= biomeRef.stone_depth then
+							nID = qts.worldgen.get_biome_node(biomeID,"stone")
+						end
 					end
 				end
 				
+				--if not biomeRef then minetest.log("LINE 251: NULL AFTER NODE DATA SET") end
 				--place the nodes
 				if nID then
 					Data[i] = nID
@@ -238,6 +267,7 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 	end
 	end
 	
+	--if not biomeRef then minetest.log("LINE 266: NULL AFTER FULL CREATION LOOP") end
 	
 	
 	--minetest.log("WORLDGEN 3")
@@ -291,6 +321,8 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 			columnID = columnID + 1
 		end
 		end
+		--if not biomeRef then minetest.log("LINE 319: NULL AFTER STRUCTURES") end
+		
 		--minetest.log("WORLDGEN 4")
 		--get the new valid data
 		Data= VM:get_data()
@@ -300,39 +332,61 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 		columnID = 1
 		for z = minp.z, maxp.z do
 		for x = minp.x, maxp.x do
-			local biomeID = biomeBuffer[columnID]
+			biomeID = biomeBuffer[columnID]
+			biomeRef = qts.worldgen.registered_biomes[biomeID]
 			--place plants
-			for y = maxp.y, minp.y, -1 do
-				local i = Area:index(x, y, z)
-				local nID = nil
-				local param2 = nil
-				if y < maxp.y then
-					local j = Area:index(x, y-1, z)
-					
-					if Data[i] == CID["air"] and qts.worldgen.is_biome_node(Data[j], biomeID,{"surface"}, true) then
-						--it can be a plant
-						--minetest.log("plant")
-						if biomeRef.plant and math.random(101-biomeRef.plant_freq) == 1 then
-							local name = qts.worldgen.get_biome_node(biomeID,"plant", false)
-							nID = CID[name]
-							local nameDef = minetest.registered_nodes[name]
-							if nameDef and nameDef.paramtype2 and nameDef.paramtype2 == "meshoptions" then
-								param2 = genParam2Meshoptions()
+			--if not biomeRef then minetest.log("LINE 331: NULL BEFORE PLANT COLUMN") end
+			if biomeRef.plant and biomeRef.plant_freq and biomeRef.plant_freq~=0 then
+				for y = maxp.y, minp.y, -1 do
+					local i = Area:index(x, y, z)
+					local nID = nil
+					local param2 = nil
+					if y < maxp.y then
+						local j = Area:index(x, y-1, z)
+						
+						if Data[i] == CID["air"] and qts.worldgen.is_biome_node(Data[j], biomeID,{"surface"}, true) then
+							--it can be a plant
+							--minetest.log("plant")
+							if math.random(1,biomeRef.plant_freq) == 1 then
+								local name = qts.worldgen.get_biome_node(biomeID,"plant", false)
+								nID = CID[name]
+								local nameDef = minetest.registered_nodes[name]
+								if nameDef and nameDef.paramtype2 then
+									if nameDef.paramtype2 == "meshoptions" then
+										param2 = genParam2Meshoptions()
+									elseif nameDef.paramtype2 == "facedir" then
+										param2 = genParam2Facedir()
+									end
+								end
+								--minetest.log("Plant Randomly placed. Biome: " .. dump(biomeID))
+							--else
+								--minetest.log("Plant Randomly not placed.")
 							end
 						end
 					end
+					
+					if nID then
+						Data[i] = nID
+					end
+					if param2 then
+						Param2Data[i] = param2
+					end
 				end
-				
-				if nID then
-					Data[i] = nID
-				end
-				if param2 then
-					Param2Data[i] = param2
-				end
+			--[[
+			else
+				if (biomeID ~= biomeRef.name) then
+				--if biomeID ~= "underwater" and biomeID ~= "beach" then
+					minetest.log("Plant Ignored. Biome: " .. dump(biomeID) .. 
+						"  Plants: " .. dump(biomeRef.plant) .. 
+						"  Freq: " .. dump(biomeRef.plant_freq))
+					--if (biomeID ~= biomeRef.name) then
+					minetest.log("\nbiomeID: " .. dump(biomeID)  .. "biomeNM: " .. dump(biomeRef.name))
+					--end
+				end--]]
 			end
-			
+			--if not biomeRef then minetest.log("LINE 361: NULL BEFORE DUST COLUMN") end
 			--retrace for dust
-			if biomeRef.dust and false then
+			if false and biomeRef and biomeRef.dust then
 				local dust_placed = false
 				for y = maxp.y, minp.y, -1 do
 					if not dust_placed then
