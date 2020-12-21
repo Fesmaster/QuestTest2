@@ -44,54 +44,6 @@ minetest.register_node("default:default", {
 
 
 
-minetest.register_tool("default:testingHammer", {
-	description = "Hammer",
-	inventory_image = "default_hammer.png",
-	range = 10.0,
-	--liquids_pointable = true,
-	on_use = function(itemstack, user, pointed_thing)
-		if pointed_thing.under then
-			if user:get_player_control().sneak then
-				qts.screwdriver.apply(pointed_thing, user, qts.screwdriver.ROTATE_FACE)
-			else
-				qts.hammer.apply(pointed_thing, user, qts.hammer.CHANGE_TYPE)
-			end		
-		end
-		
-	end,
-	on_place = function(itemstack, user, pointed_thing)
-		if pointed_thing.under then
-			if user:get_player_control().sneak then
-				qts.screwdriver.apply(pointed_thing, user, qts.screwdriver.ROTATE_AXIS)
-			else
-				qts.hammer.apply(pointed_thing, user, qts.hammer.CHANGE_STYLE)
-			end
-		end
-		
-	end
-})
-
---[[
-qts.register_craft({
-	ingredients = {"group:wood 1"},
-	results = {"default:stick 4"},
-	--near_nodes = {"default:crate"},
-	--held_items = {"default:knife_flint"},
-	--type = "default",
-	--on_craft = function(crafter, results) return results end
-})
-
-qts.register_craft({
-	ingredients = {"group:wood 1", "default:stone 5"},
-	near_nodes = {"default:crate"},
-	held_items = {"default:knife_flint"},
-	results = {"default:stick 200"},
-	type = "testing",
-	--on_craft = function(crafter, results) return results end
-})
-
---]]
-
 --[[
 --this is how you would do panes
 qts.register_fencelike_node("default:stone_brick_pane", {
@@ -123,6 +75,7 @@ LIQUID TESTS
 --end
 
 --NODEBOX TESTING NODE
+--[[
 minetest.register_node("default:boxtest", {
 	description = "BoxTest Node",
 	tiles ={"default_oak_leaves.png", "default_oak_leaves.png", 
@@ -140,9 +93,7 @@ minetest.register_node("default:boxtest", {
 	--	return qts.rotate_and_place(itemstack, placer, pointed_thing)
 	--end,
 })
-
---TESTING GRASS NODE
-
+--]]
 
 
 

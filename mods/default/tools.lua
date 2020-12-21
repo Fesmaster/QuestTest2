@@ -18,6 +18,26 @@ minetest.register_tool("default:knife_flint", {
 })
 
 --[[
+Hammers
+--]]
+qts.register_hammer("default:hammer_stone", {
+	description = "Stone Hammer",
+	inventory_image = "default_hammer_stone.png",
+	wield_image = "default_hammer_stone.png",
+	range = 7,
+	groups = {hammer=1},
+	max_uses = 100,
+})
+
+qts.register_hammer("default:hammer_steel", {
+	description = "Steel Hammer",
+	inventory_image = "default_hammer_steel.png",
+	wield_image = "default_hammer_steel.png",
+	range = 7,
+	groups = {hammer=1, level=1},
+	max_uses = 500,
+})
+--[[
 Pickaxes
 --]]
 --rusted

@@ -44,7 +44,7 @@ function qts.hammer.rotate_and_set(placer, pointed_thing, node)
 		
 		local finepos = minetest.pointed_thing_to_face_pos(placer, pointed_thing)
 		local fpos = finepos.y - math.floor(p0.y)
-		minetest.log("Face pos:"..tostring(fpos))
+		--minetest.log("Face pos:"..tostring(fpos))
 		
 		if p0.y - 1 == p1.y or (fpos > -1 and fpos < 0 and not(placer:get_pos().y+1 > p0.y))then
 			param2 = param2 + 20
@@ -122,4 +122,83 @@ function qts.hammer.apply(pointed_thing, user, mode)
 		end
 		--TODO: implement any added shapes into the hammer functionality
 	end
+end
+
+--[[
+qts.register_hammer("Name", {
+	description = "Desc",
+	inventory_image = "inventory_image.png",
+	wield_image = "wield_image.png",
+	range = 7,
+	groups = {groups=1},
+	max_uses = 1000,
+})
+--]]
+qts.register_hammer = function(name, def)
+	if not def.groups then def.groups = {} end
+	def.groups.hammer = 1
+	minetest.register_tool(":"..name, {
+		description = def.description,
+		inventory_image = def.inventory_image,
+		inventory_overlay = def.inventory_overlay,
+		wield_image = def.wield_image,
+		wield_overlay = def.wield_overlay,
+		palette = def.palette,
+		color = def.color,
+		wield_scale = def.wield_scale,
+		liquids_pointable = def.liquids_pointable,
+		range = def.range,
+		groups = def.groups,
+		sound = def.sound,
+		max_uses = def.max_uses or 1000,
+		on_use = function(itemstack, user, pointed_thing)
+			if pointed_thing.under then
+				local node = minetest.get_node(pointed_thing.under)
+				local nlvl = minetest.get_item_group(node.name, "level")
+				local hlvl = minetest.get_item_group(itemstack:get_name(), "level")
+				if nlvl <= hlvl then
+					if user:get_player_control().sneak then
+						qts.screwdriver.apply(pointed_thing, user, qts.screwdriver.ROTATE_FACE)
+					else
+						qts.hammer.apply(pointed_thing, user, qts.hammer.CHANGE_TYPE)
+					end
+					--apply wear
+					if not (qts.is_player_creative(user)) then
+						local mult = (hlvl-nlvl)^3
+						if mult == 0 then mult = 1 end
+						local wear = qts.WEAR_MAX / 
+							(minetest.registered_tools[itemstack:get_name()].max_uses * mult)
+						if not itemstack:set_wear(itemstack:get_wear() + wear) then
+							itemstack:take_item()
+						end
+					end
+				end
+			end
+			return itemstack
+		end,
+		on_place = function(itemstack, user, pointed_thing)
+			if pointed_thing.under then
+				local node = minetest.get_node(pointed_thing.under)
+				local nlvl = minetest.get_item_group(node.name, "level")
+				local hlvl = minetest.get_item_group(itemstack:get_name(), "level")
+				if nlvl <= hlvl then
+					if user:get_player_control().sneak then
+						qts.screwdriver.apply(pointed_thing, user, qts.screwdriver.ROTATE_AXIS)
+					else
+						qts.hammer.apply(pointed_thing, user, qts.hammer.CHANGE_STYLE)
+					end
+					--apply wear
+					if not (qts.is_player_creative(user)) then
+						local mult = (hlvl-nlvl)^3
+						local wear = qts.WEAR_MAX / 
+							(minetest.registered_tools[itemstack:get_name()].max_uses * mult)
+						if not itemstack:set_wear(itemstack:get_wear() + wear) then
+							itemstack:take_item()
+						end
+					end
+				end
+			end
+			return itemstack
+		end
+	})
 end

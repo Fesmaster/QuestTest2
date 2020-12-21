@@ -220,3 +220,10 @@ qts.register_shaped_node("default:gold_block", {
 	groups = {cracky=2},
 	sounds = qtcore.node_sound_metal(),
 })
+
+qts.register_shaped_node("default:stone_with_gold", {
+	description = "Gold Ore",
+	tiles = {"default_stone.png^default_stone_with_gold.png"},
+	groups = {cracky=3, stone=1, ore=1},
+	sounds = qtcore.node_sound_stone(),
+})

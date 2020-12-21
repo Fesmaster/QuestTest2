@@ -27,7 +27,7 @@ function qts.register_shaped_node(name, def)
 		def.drop = name
 		--minetest.log("Node "..name .." did not have any drops")
 	end
-	
+	def.groups = qts.table_deep_copy(def.groups) --copy the group table to prevent external modification
 	--groups setup
 	def.groups.shaped_node = 1
 	--SOLID-----------------------
@@ -236,6 +236,9 @@ function qts.register_fencelike_node(name, def)
 		minetest.log("qts.register_fencelike_node: instead of using texture = \"texturename\", use tiles = {}. This works better.") 
 		def.tiles = {def.texture}
 	end
+	if not def.drop then
+		def.drop = name
+	end
 	
 	local default_fields = {}
 	--fence style
@@ -282,7 +285,7 @@ function qts.register_fencelike_node(name, def)
 			connects_to = {"group:fence", "group:wood", "group:tree", "group:wall"},
 			inventory_image = fence_texture,
 			wield_image = fence_texture,
-			tiles = def.tiles or tiles,
+			tiles = def.tiles,
 			sunlight_propagates = true,
 			is_ground_content = false,
 			groups = {},
@@ -342,7 +345,7 @@ function qts.register_fencelike_node(name, def)
 			connects_to = {"group:fence", "group:wall"},
 			inventory_image = fence_rail_texture,
 			wield_image = fence_rail_texture,
-			tiles = def.tiles or tiles,
+			tiles = def.tiles,
 			sunlight_propagates = true,
 			is_ground_content = false,
 			groups = {},
@@ -390,7 +393,7 @@ function qts.register_fencelike_node(name, def)
 				connect_right = {1/4,-1/2,-1/4,1/2,1/2 + fence_collision_extra,1/4},
 			},
 			connects_to = { "group:wall", "group:stone", "group:fence" },
-			tiles = def.tiles or tiles,
+			tiles = def.tiles,
 			sunlight_propagates = true,
 			is_ground_content = false,
 			walkable = true,
@@ -398,31 +401,23 @@ function qts.register_fencelike_node(name, def)
 		}
 		def.groups.wall = 1
 	elseif def.type == "pane" then
-	
+		
 		default_fields = {
 			paramtype = "light",
-			--paramtype2 = "facedir",
+			paramtype2 = "facedir",
 			drawtype = "nodebox",
 			node_box = {
-				type = "connected",
-				fixed = {{-1/32, -1/2, -1/32, 1/32, 1/2, 1/32}},
-				connect_front = {{-1/32, -1/2, -1/2, 1/32, 1/2, -1/32}},
-				connect_left = {{-1/2, -1/2, -1/32, -1/32, 1/2, 1/32}},
-				connect_back = {{-1/32, -1/2, 1/32, 1/32, 1/2, 1/2}},
-				connect_right = {{1/32, -1/2, -1/32, 1/2, 1/2, 1/32}},
+				type = "fixed",
+				fixed = {{-1/2, -1/2, -1/32, 1/2, 1/2, 1/32}},
 			},
 			collision_box = {
-				type = "connected",
-				fixed = {{-1/32, -1/2, -1/32, 1/32, 1/2, 1/32}},
-				connect_front = {{-1/32, -1/2, -1/2, 1/32, 1/2, -1/32}},
-				connect_left = {{-1/2, -1/2, -1/32, -1/32, 1/2, 1/32}},
-				connect_back = {{-1/32, -1/2, 1/32, 1/32, 1/2, 1/2}},
-				connect_right = {{1/32, -1/2, -1/32, 1/2, 1/2, 1/32}},
+				type = "fixed",
+				fixed = {{-1/2, -1/2, -1/32, 1/2, 1/2, 1/32}},
 			},
-			connects_to = {"group:pane", "group:stone", "group:glass", "group:wood", "group:tree"},
-			tiles = def.tiles or tiles,
-			inventory_image = def.inventory_image or def.tiles[1] or tiles[1],
-			wield_image = def.wield_image or def.tiles[1] or tiles[1],
+			connects_to = {"group:pane","group:shaped_node", "group:stone", "group:glass", "group:wood", "group:log"},
+			--tiles = def.tiles or tiles,
+			inventory_image = def.inventory_image or def.tiles[2],
+			wield_image = def.wield_image or def.tiles[2],
 			sunlight_propagates = true,
 			is_ground_content = false,
 			use_texture_alpha = true,
@@ -430,6 +425,47 @@ function qts.register_fencelike_node(name, def)
 			groups = {},
 		}
 		def.groups.pane = 1
+		
+		--special stuff for panes
+		local tiles = def.tiles
+		def.tiles = {tiles[1], tiles[1], tiles[2]}
+		def.texture = nil
+		def.material = nil
+		def.type = nil
+		for k, v in pairs(default_fields) do
+			if def[k] == nil then
+				def[k] = v
+			end
+		end
+		
+		minetest.register_node(name, qts.table_deep_copy(def))
+		
+		if not def.drop then
+			def.drop = name
+		end
+		def.groups.not_in_creative_inventory=1
+		def.tiles = {tiles[1], tiles[1], tiles[3]}
+		def.node_box = {
+			type = "connected",
+			fixed = {{-1/32, -1/2, -1/32, 1/32, 1/2, 1/32}},
+			connect_front = {{-1/32, -1/2, -1/2, 1/32, 1/2, -1/32}},
+			connect_left = {{-1/2, -1/2, -1/32, -1/32, 1/2, 1/32}},
+			connect_back = {{-1/32, -1/2, 1/32, 1/32, 1/2, 1/2}},
+			connect_right = {{1/32, -1/2, -1/32, 1/2, 1/2, 1/32}},
+		}
+		def.collision_box = {
+			type = "connected",
+			fixed = {{-1/32, -1/2, -1/32, 1/32, 1/2, 1/32}},
+			connect_front = {{-1/32, -1/2, -1/2, 1/32, 1/2, -1/32}},
+			connect_left = {{-1/2, -1/2, -1/32, -1/32, 1/2, 1/32}},
+			connect_back = {{-1/32, -1/2, 1/32, 1/32, 1/2, 1/2}},
+			connect_right = {{1/32, -1/2, -1/32, 1/2, 1/2, 1/32}},
+		}
+		
+		minetest.register_node(name.."_part", qts.table_deep_copy(def))
+		
+		--this one has its own registration
+		return
 	else
 		minetest.log("qts.register_fencelike_node: the node def must contain type = [fence, rail, wall, pane]")
 	end
@@ -442,8 +478,92 @@ function qts.register_fencelike_node(name, def)
 			def[k] = v
 		end
 	end
-	minetest.register_node(name, def)
+	minetest.register_node(":"..name, def)
 end
+
+--Pane stuff
+--this is almost entirely copied from xpanes, but contains a few tweaks
+local function is_pane(pos)
+	return minetest.get_item_group(minetest.get_node(pos).name, "pane") > 0
+end
+
+local function connects_dir(pos, name, dir)
+	local aside = vector.add(pos, minetest.facedir_to_dir(dir))
+	if is_pane(aside) then
+		return true
+	end
+	local connects_to = minetest.registered_nodes[name].connects_to
+	if not connects_to then
+		return false
+	end
+	local list = minetest.find_nodes_in_area(aside, aside, connects_to)
+	if #list > 0 then
+		return true
+	end
+	return false
+end
+
+local function swap(pos, node, name, param2)
+	if node.name == name and node.param2 == param2 then
+		return
+	end
+	minetest.swap_node(pos, {name = name, param2 = param2})
+end
+
+local function update_pane(pos)
+	if not is_pane(pos) then
+		return
+	end
+	local node = minetest.get_node(pos)
+	local name = node.name
+	if name:sub(-5) == "_part" then
+		name = name:sub(1, -6)
+	end
+	local any = node.param2
+	local c = {}
+	local count = 0
+	for dir = 0, 3 do
+		c[dir] = connects_dir(pos, name, dir)
+		if c[dir] then
+			any = dir
+			count = count + 1
+		end
+	end
+	if count == 0 then
+		swap(pos, node, name, any)
+	elseif count == 1 then
+		swap(pos, node, name, (any + 1) % 4)
+	elseif count == 2 then
+		if (c[0] and c[2]) or (c[1] and c[3]) then
+			swap(pos, node, name, (any + 1) % 4)
+		else
+			swap(pos, node, name .. "_part", 0)
+		end
+	else
+		swap(pos, node, name .. "_part", 0)
+	end
+end
+
+minetest.register_on_placenode(function(pos, node)
+	if minetest.get_item_group(node, "pane") then
+		update_pane(pos)
+	end
+	for i = 0, 3 do
+		local dir = minetest.facedir_to_dir(i)
+		update_pane(vector.add(pos, dir))
+	end
+end)
+
+minetest.register_on_dignode(function(pos)
+	for i = 0, 3 do
+		local dir = minetest.facedir_to_dir(i)
+		update_pane(vector.add(pos, dir))
+	end
+end)
+
+--end pane stuff
+
+
 
 local liquid_cache = {}
 local bucket_cache = {}

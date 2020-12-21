@@ -109,13 +109,17 @@ inventory.get_craft_area = function(data, name, pos)
 			for item, v in pairs(recip.ingredients) do
 				local name = ItemStack(item):get_name()
 				local count = ItemStack(item):get_count()
+				local desc = "ERROR-TYPE"
+				if minetest.registered_items[name] then
+					desc = minetest.registered_items[name].description
+				end
 				if (qts.is_group(item)) then
 					name = qts.remove_modname_from_item(name)
 					cs = cs .."item_image["..P(i,j)..";1,1;".. (inventory.exemplar[name] or "inventory:groupItem") .. " " ..count.."]"..
 						"tooltip["..P(i,j)..";1,1;Group: ".. name .. " " .. count .."]"
 				else
 					cs = cs .."item_image["..P(i,j)..";1,1;" ..item.."]"..
-						"tooltip["..P(i,j)..";1,1;".. minetest.registered_items[name].description .. " " .. count .."]"
+						"tooltip["..P(i,j)..";1,1;".. desc .. " " .. count .."]"
 				end
 				i = i+1;
 				if i > 2 then j = j+1 end
@@ -125,8 +129,12 @@ inventory.get_craft_area = function(data, name, pos)
 			for item, v in pairs(recip.results) do
 				local name = ItemStack(item):get_name()
 				local count = ItemStack(item):get_count()
+				local desc = "ERROR-TYPE"
+				if minetest.registered_items[name] then
+					desc = minetest.registered_items[name].description
+				end
 				cs = cs .."item_image["..P(i+4.5,1)..";1,1;" ..item.."]"..
-					"tooltip["..P(i+4.5,1)..";1,1;".. minetest.registered_items[name].description .. " " .. count .."]"
+					"tooltip["..P(i+4.5,1)..";1,1;".. desc .. " " .. count .."]"
 				i = i+1;
 				if i > 4 then break end
 			end
@@ -135,13 +143,17 @@ inventory.get_craft_area = function(data, name, pos)
 			for item, v in pairs(recip.near) do
 				local name = ItemStack(item):get_name()
 				local count = ItemStack(item):get_count()
+				local desc = "ERROR-TYPE"
+				if minetest.registered_items[name] then
+					desc = minetest.registered_items[name].description
+				end
 				if (qts.is_group(item)) then
 					name = qts.remove_modname_from_item(name)
 					cs = cs .."item_image["..P(i,4)..";1,1;".. (inventory.exemplar[name] or "inventory:groupItem") .. "]"..
 						"tooltip["..P(i,4)..";1,1;Group: ".. name .. " ("..count..")" .. "]"
 				else
 					cs = cs .."item_image["..P(i,4)..";1,1;" ..item.."]"..
-						"tooltip["..P(i,4)..";1,1;".. minetest.registered_items[name].description .. "]"
+						"tooltip["..P(i,4)..";1,1;".. desc .. "]"
 				end
 				i = i+1;
 				if i > 4 then break end
@@ -150,13 +162,17 @@ inventory.get_craft_area = function(data, name, pos)
 			--held items
 			for item, v in pairs(recip.held) do
 				local name = ItemStack(item):get_name()
+				local desc = "ERROR-TYPE"
+				if minetest.registered_items[name] then
+					desc = minetest.registered_items[name].description
+				end
 				if (qts.is_group(item)) then
 					name = qts.remove_modname_from_item(name)
 					cs = cs .."item_image["..P(i+5.5,4)..";1,1;".. (inventory.exemplar[name] or "inventory:groupItem") .. "]"..
 						"tooltip["..P(i+5.5,4)..";1,1;Group: ".. name .. "]"
 				else
 					cs = cs .."item_image["..P(i+5.5,4)..";1,1;" ..item.."]"..
-						"tooltip["..P(i+5.5,4)..";1,1;".. minetest.registered_items[name].description .. "]"
+						"tooltip["..P(i+5.5,4)..";1,1;".. desc .. "]"
 				end
 				i = i+1;
 				if i > 4 then break end

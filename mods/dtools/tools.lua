@@ -21,45 +21,31 @@ minetest.register_tool ("dtools:gauntlet", {
 
 
 minetest.register_tool("dtools:testingTool", {
-	description = "Testing Tool:\nCurrently makes expltions",
+	description = "Testing Tool:\nCurrently messes with param2",
 	inventory_image = "dtools_green_wand.png",
 	range = 10.0,
 	--liquids_pointable = true,
 	on_use = function(itemstack, user, pointed_thing)
-		minetest.log("QTS Testing Tool used")
+		---[[
+		
 		if pointed_thing.under then
-			qts.explode(pointed_thing.under, 20, {
-					destroy_nodes = true,
-					make_drops = false,
-					drop_speed_multiplier = 1,
-					make_sound = true,
-					make_particles = false,
-					particle_multiplier = 1,
-					damage_entities = false,
-					push_entities = false,
-					damage_player = false,
-					damage_type = "fleshy",
-					exploder = user
-				})
+			minetest.log("QTS Testing Tool used")
+			local node = minetest.get_node(pointed_thing.under)
+			node.param2 = node.param2 + 1
+			minetest.set_node(pointed_thing.under, node)
+			--minetest.set_node(pointed_thing.above, {name="arcane:disollving_stone", param2=10})
 		end
+		--]]
 	end,
 	on_place = function(itemstack, user, pointed_thing)
-		minetest.log("QTS Testing Tool placed")
+		
 		if pointed_thing.under then
-			--qts.test_distribute_node(pointed_thing.under, 100, 10, "dtools:test_node")
-			qts.explode(pointed_thing.under, 80, {
-					destroy_nodes = true,
-					make_drops = true,
-					drop_speed_multiplier = 1,
-					make_sound = true,
-					make_particles = true,
-					particle_multiplier = 1,
-					damage_entities = true,
-					push_entities = true,
-					damage_player = true,
-					damage_type = "fleshy",
-					exploder = user
-				})
+			--minetest.log("QTS Testing Tool placed")
+			--local node = minetest.get_node(pointed_thing.under)
+			--node.param2 = node.param2 - 1
+			--minetest.set_node(pointed_thing.under, node)
+			--minetest.set_node(pointed_thing.above, {name="arcane:disollving_stone", param2=10})
+			minetest.log(minetest.pos_to_string(vector.subtract(pointed_thing.above, pointed_thing.under)))
 		end
 	end
 })

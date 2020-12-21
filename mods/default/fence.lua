@@ -6,7 +6,9 @@ qts.register_fencelike_node("default:oak_wood_fence", {
 	tiles = {"default_oak_wood.png"},
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
-	fence_alt = "default:oak_wood_rail", 
+	fence_alt = "default:oak_wood_rail",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_fencelike_node("default:oak_wood_rail", {
@@ -17,6 +19,8 @@ qts.register_fencelike_node("default:oak_wood_rail", {
 	sounds = qtcore.node_sound_wood(),
 	fence_alt = "default:oak_wood_fence", 
 	drop = "default:oak_wood_fence",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_fencelike_node("default:rowan_wood_fence", {
@@ -25,7 +29,9 @@ qts.register_fencelike_node("default:rowan_wood_fence", {
 	tiles = {"default_rowan_wood.png"},
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
-	fence_alt = "default:rowan_wood_rail", 
+	fence_alt = "default:rowan_wood_rail",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_fencelike_node("default:rowan_wood_rail", {
@@ -36,6 +42,8 @@ qts.register_fencelike_node("default:rowan_wood_rail", {
 	sounds = qtcore.node_sound_wood(),
 	fence_alt = "default:rowan_wood_fence", 
 	drop = "default:rowan_wood_fence",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_fencelike_node("default:apple_wood_fence", {
@@ -44,7 +52,9 @@ qts.register_fencelike_node("default:apple_wood_fence", {
 	tiles = {"default_apple_wood.png"},
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
-	fence_alt = "default:apple_wood_rail", 
+	fence_alt = "default:apple_wood_rail",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_fencelike_node("default:apple_wood_rail", {
@@ -55,6 +65,8 @@ qts.register_fencelike_node("default:apple_wood_rail", {
 	sounds = qtcore.node_sound_wood(),
 	fence_alt = "default:apple_wood_fence", 
 	drop = "default:apple_wood_fence",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_fencelike_node("default:aspen_wood_fence", {
@@ -63,7 +75,9 @@ qts.register_fencelike_node("default:aspen_wood_fence", {
 	tiles = {"default_aspen_wood.png"},
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
-	fence_alt = "default:aspen_wood_rail", 
+	fence_alt = "default:aspen_wood_rail",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_fencelike_node("default:aspen_wood_rail", {
@@ -73,7 +87,9 @@ qts.register_fencelike_node("default:aspen_wood_rail", {
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1, not_in_creative_inventory=1},
 	sounds = qtcore.node_sound_wood(),
 	fence_alt = "default:aspen_wood_fence",
-	drop = "default:aspen_wood_fence",	
+	drop = "default:aspen_wood_fence",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_fencelike_node("default:lanternfruit_wood_fence", {
@@ -86,7 +102,9 @@ qts.register_fencelike_node("default:lanternfruit_wood_fence", {
 		--grain. This texture does that manually.
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
-	fence_alt = "default:lanternfruit_wood_rail", 
+	fence_alt = "default:lanternfruit_wood_rail",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_fencelike_node("default:lanternfruit_wood_rail", {
@@ -97,6 +115,8 @@ qts.register_fencelike_node("default:lanternfruit_wood_rail", {
 	sounds = qtcore.node_sound_wood(),
 	fence_alt = "default:lanternfruit_wood_fence", 
 	drop = "default:lanternfruit_wood_fence",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_fencelike_node("default:coffee_wood_fence", {
@@ -105,7 +125,9 @@ qts.register_fencelike_node("default:coffee_wood_fence", {
 	tiles = {"default_coffee_wood.png"},
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
-	fence_alt = "default:coffee_wood_rail", 
+	fence_alt = "default:coffee_wood_rail",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_fencelike_node("default:coffee_wood_rail", {
@@ -116,6 +138,8 @@ qts.register_fencelike_node("default:coffee_wood_rail", {
 	sounds = qtcore.node_sound_wood(),
 	fence_alt = "default:coffee_wood_fence", 
 	drop = "default:coffee_wood_fence",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_fencelike_node("default:rosewood_wood_fence", {
@@ -125,6 +149,8 @@ qts.register_fencelike_node("default:rosewood_wood_fence", {
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
 	fence_alt = "default:rosewood_wood_rail", 
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 qts.register_fencelike_node("default:rosewood_wood_rail", {
@@ -135,120 +161,55 @@ qts.register_fencelike_node("default:rosewood_wood_rail", {
 	sounds = qtcore.node_sound_wood(),
 	fence_alt = "default:rosewood_wood_fence", 
 	drop = "default:rosewood_wood_fence",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
 
 --stone walls
-qts.register_fencelike_node("default:stone_wall", {
-	description = "Stone Wall",
-	type = "wall",
-	tiles = {"default_stone.png"},
-	groups = {cracky=3, stone=1, grey_stone=1},
-	sounds = qtcore.node_sound_stone(),
-})
+
 
 qts.register_fencelike_node("default:stone_cobble_wall", {
 	description = "Cobblestone Wall",
 	type = "wall",
-	tiles = {"default_stone_cobble.png"},
+	tiles = {"default_stone.png^qt_cobble_overlay.png"},
 	groups = {cracky=3, stone=1, grey_stone=1},
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
-
-qts.register_fencelike_node("default:stone_brick_wall", {
-	description = "Stone Brick Wall",
-	type = "wall",
-	tiles = {"default_stone_brick.png"},
-	groups = {cracky=3, stone=1, grey_stone=1},
-	sounds = qtcore.node_sound_stone(),
-})
-
-qts.register_fencelike_node("default:stone_cobble_mossy_wall", {
+qts.register_fencelike_node("default:moss_stone_cobble_wall", {
 	description = "Mossy Cobblestone Wall",
 	type = "wall",
-	tiles = {"default_stone_cobble_mossy.png"},
+	tiles = {"default_moss_stone.png^qt_cobble_overlay.png"},
 	groups = {cracky=3, stone=1, grey_stone=1},
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
-
-qts.register_fencelike_node("default:stone_brick_mossy_wall", {
-	description = "Mossy Stone Brick Wall",
-	type = "wall",
-	tiles = {"default_stone_brick_mossy.png"},
-	groups = {cracky=3, stone=1, grey_stone=1},
-	sounds = qtcore.node_sound_stone(),
-})
-
-
-qts.register_fencelike_node("default:red_stone_wall", {
-	description = "Red Stone Wall",
-	type = "wall",
-	tiles = {"default_red_stone.png"},
-	groups = {cracky=3, stone=1, red_stone=1},
-	sounds = qtcore.node_sound_stone(),
-})
-
 qts.register_fencelike_node("default:red_stone_cobble_wall", {
 	description = "Red Cobblestone Wall",
 	type = "wall",
-	tiles = {"default_red_cobble.png"},
+	tiles = {"default_red_stone.png^qt_cobble_overlay.png"},
 	groups = {cracky=3, stone=1, red_stone=1},
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
-
-qts.register_fencelike_node("default:red_stone_brick_wall", {
-	description = "Red Stone Brick Wall",
-	type = "wall",
-	tiles = {"default_red_stone_brick.png"},
-	groups = {cracky=3, stone=1, red_stone=1},
-	sounds = qtcore.node_sound_stone(),
-})
-
-
-qts.register_fencelike_node("default:sandstone_wall", {
-	description = "Sandstone Wall",
-	type = "wall",
-	tiles = {"default_sandstone.png"},
-	groups = {cracky=3, stone=1, sand_stone=1},
-	sounds = qtcore.node_sound_stone(),
-})
-
 qts.register_fencelike_node("default:sandstone_cobble_wall", {
 	description = "Sandstone Cobble Wall",
 	type = "wall",
-	tiles = {"default_sandstone_cobble.png"},
+	tiles = {"default_sandstone.png^qt_cobble_overlay.png"},
 	groups = {cracky=3, stone=1, sand_stone=1},
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
-
-qts.register_fencelike_node("default:sandstone_brick_wall", {
-	description = "Sandstone Brick Wall",
-	type = "wall",
-	tiles = {"default_sandstone_brick.png"},
-	groups = {cracky=3, stone=1, sand_stone=1},
-	sounds = qtcore.node_sound_stone(),
-})
-
-
-qts.register_fencelike_node("default:desert_sandstone_wall", {
-	description = "Desert Sandstone Wall",
-	type = "wall",
-	tiles = {"default_desert_sandstone.png"},
-	groups = {cracky=3, stone=1, desert_stone=1},
-	sounds = qtcore.node_sound_stone(),
-})
-
 qts.register_fencelike_node("default:desert_sandstone_cobble_wall", {
 	description = "Desert Sandstone Cobble Wall",
 	type = "wall",
-	tiles = {"default_desert_sandstone_cobble.png"},
+	tiles = {"default_desert_sandstone.png^qt_cobble_overlay.png"},
 	groups = {cracky=3, stone=1, desert_stone=1},
 	sounds = qtcore.node_sound_stone(),
-})
-
-qts.register_fencelike_node("default:desert_sandstone_brick_wall", {
-	description = "Desert Sandstone Brick Wall",
-	type = "wall",
-	tiles = {"default_desert_sandstone_brick.png"},
-	groups = {cracky=3, stone=1, desert_stone=1},
-	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
