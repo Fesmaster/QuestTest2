@@ -99,7 +99,7 @@ qts.worldgen.register_biome("rainforest", {
 	min_air = 10,
 	dust = nil,
 	surface = {"default:dirt_with_rainforest_grass"},
-	fill = "default:dirt", 
+	fill = "default:dirt",
 	stone = "default:stone",
 	plant = {"default:underbrush_short","default:underbrush_tall"},
 	plant_freq = 2,
@@ -117,7 +117,7 @@ qts.worldgen.register_biome("mushroom_forest", {
 	min_air = 10,
 	dust = nil,
 	surface = {"default:dirt_with_mushroom_grass"},
-	fill = {"default:dirt"}, 
+	fill = {"default:dirt"},
 	stone = {"default:stone"},
 	plant = {"default:small_shroom"},
 	plant_freq = 7,
@@ -187,7 +187,7 @@ qts.worldgen.register_biome("beach", {
 	max_ground_height = 5,
 	min_light = 0,--half
 	min_air = 10,
-	dust = "air",
+	--dust = "air",
 	surface = "default:sand",
 	fill = {"default:sand","default:sandstone"},
 	stone = "default:sandstone",
@@ -200,11 +200,11 @@ qts.worldgen.register_biome("beach", {
 qts.worldgen.register_biome("underwater", {
 	heat_point = 50,
 	humidity_point = 50,
-	min_ground_height = -100000,
+	min_ground_height = -300,
 	max_ground_height = 0,
 	min_light = 0,--half
 	min_air = 10,
-	dust = "air",
+	--dust = "air",
 	underwater = "default:sand",
 	--fill = {"default:sand","default:sandstone"},
 	--stone = "default:sandstone",
@@ -213,6 +213,22 @@ qts.worldgen.register_biome("underwater", {
 	stone_depth = 10,
 })
 --]]
+qts.worldgen.register_biome("caverelm", {
+	heat_point = 50,
+	humidity_point = 50,
+	min_ground_height = -31000,
+	max_ground_height = -300,
+	min_light = 0,
+	min_air = 1,
+	--dust = "air",
+	surface = "default:understone",
+	underwater = "default:understone",
+	--fill = "default:understone",
+	stone = "default:understone",
+	surface_depth = 12,
+	fill_depth = 12,
+	stone_depth = 0,
+})
 
 
 --[[
@@ -239,7 +255,7 @@ minetest.register_ore({
 })
 
 --Coal
----[[
+--[[
 minetest.register_ore({
 	ore_type       = "scatter",
 	ore            = "default:stone_with_coal",
@@ -250,7 +266,7 @@ minetest.register_ore({
 	y_max          = 31000,
 	y_min          = 1025,
 })
-
+--]]
 minetest.register_ore({
 	ore_type       = "scatter",
 	ore            = "default:stone_with_coal",
@@ -266,8 +282,8 @@ minetest.register_ore({
 	ore_type       = "scatter",
 	ore            = "default:stone_with_coal",
 	wherein        = "default:stone",
-	clust_scarcity = 12 * 12 * 12,
-	clust_num_ores = 30,
+	clust_scarcity = 16 * 16 * 16,
+	clust_num_ores = 16,
 	clust_size     = 5,
 	y_max          = -128,
 	y_min          = -31000,
@@ -291,12 +307,12 @@ minetest.register_ore({
 	ore            = "default:stone_with_tin",
 	wherein        = "default:stone",
 	clust_scarcity = 13 * 13 * 13,
-	clust_num_ores = 4,
+	clust_num_ores = 6,
 	clust_size     = 3,
 	y_max          = -64,
 	y_min          = -127,
 })
-
+--[[
 minetest.register_ore({
 	ore_type       = "scatter",
 	ore            = "default:stone_with_tin",
@@ -307,40 +323,7 @@ minetest.register_ore({
 	y_max          = -128,
 	y_min          = -31000,
 })
-
--- Zinc
-minetest.register_ore({
-	ore_type       = "scatter",
-	ore            = "default:stone_with_zinc",
-	wherein        = "default:stone",
-	clust_scarcity = 16 * 16 * 16,
-	clust_num_ores = 5,
-	clust_size     = 3,
-	y_max          = 1025,
-	y_min          = -64,
-})
-
-minetest.register_ore({
-	ore_type       = "scatter",
-	ore            = "default:stone_with_zinc",
-	wherein        = "default:stone",
-	clust_scarcity = 13 * 13 * 13,
-	clust_num_ores = 4,
-	clust_size     = 3,
-	y_max          = -64,
-	y_min          = -127,
-})
-
-minetest.register_ore({
-	ore_type       = "scatter",
-	ore            = "default:stone_with_zinc",
-	wherein        = "default:stone",
-	clust_scarcity = 10 * 10 * 10,
-	clust_num_ores = 5,
-	clust_size     = 3,
-	y_max          = -128,
-	y_min          = -31000,
-})
+--]]
 
 -- Copper
 minetest.register_ore({
@@ -359,12 +342,12 @@ minetest.register_ore({
 	ore            = "default:stone_with_copper",
 	wherein        = "default:stone",
 	clust_scarcity = 12 * 12 * 12,
-	clust_num_ores = 4,
-	clust_size     = 3,
+	clust_num_ores = 8,
+	clust_size     = 4,
 	y_max          = -64,
 	y_min          = -127,
 })
-
+--[[
 minetest.register_ore({
 	ore_type       = "scatter",
 	ore            = "default:stone_with_copper",
@@ -375,6 +358,7 @@ minetest.register_ore({
 	y_max          = -128,
 	y_min          = -31000,
 })
+--]]
 
 -- Iron
 minetest.register_ore({
@@ -382,10 +366,10 @@ minetest.register_ore({
 	ore            = "default:stone_with_iron",
 	wherein        = "default:stone",
 	clust_scarcity = 7 * 7 * 7,
-	clust_num_ores = 5,
+	clust_num_ores = 10,
 	clust_size     = 3,
-	y_max          = -128,
-	y_min          = -255,
+	y_max          = -64,
+	y_min          = -127,
 })
 
 minetest.register_ore({
@@ -393,10 +377,10 @@ minetest.register_ore({
 	ore            = "default:stone_with_iron",
 	wherein        = "default:stone",
 	clust_scarcity = 12 * 12 * 12,
-	clust_num_ores = 29,
+	clust_num_ores = 20,
 	clust_size     = 5,
-	y_max          = -256,
-	y_min          = -31000,
+	y_max          = -128,
+	y_min          = -384,
 })
 
 --gold
@@ -405,49 +389,48 @@ minetest.register_ore({
 	ore            = "default:stone_with_gold",
 	wherein        = "default:stone",
 	clust_scarcity = 20 * 20 * 20,
-	clust_num_ores = 29,
+	clust_num_ores = 20,
 	clust_size     = 5,
-	y_max          = -150,
-	y_min          = -31000,
+	y_max          = -128,
+	y_min          = -1024,
 })
 
-
-
---[[
--- Gold
+--silver
 minetest.register_ore({
 	ore_type       = "scatter",
-	ore            = "default:stone_with_gold",
+	ore            = "default:stone_with_silver",
 	wherein        = "default:stone",
-	clust_scarcity = 13 * 13 * 13,
-	clust_num_ores = 5,
-	clust_size     = 3,
-	y_max          = 31000,
-	y_min          = 1025,
+	clust_scarcity = 20 * 20 * 20,
+	clust_num_ores = 20,
+	clust_size     = 5,
+	y_max          = -128,
+	y_min          = -1024,
 })
 
-minetest.register_ore({
-	ore_type       = "scatter",
-	ore            = "default:stone_with_gold",
-	wherein        = "default:stone",
-	clust_scarcity = 15 * 15 * 15,
-	clust_num_ores = 3,
-	clust_size     = 2,
-	y_max          = -256,
-	y_min          = -511,
-})
 
-minetest.register_ore({
-	ore_type       = "scatter",
-	ore            = "default:stone_with_gold",
-	wherein        = "default:stone",
-	clust_scarcity = 13 * 13 * 13,
-	clust_num_ores = 5,
-	clust_size     = 3,
-	y_max          = -512,
-	y_min          = -31000,
-})
---]]
+--jems
+local jems = {
+	"default:stone_with_ruby",
+	"default:stone_with_fire_opal",
+	"default:stone_with_citrine",
+	"default:stone_with_emerald",
+	"default:stone_with_diamond",
+	"default:stone_with_sapphire",
+	"default:stone_with_amathest",
+	"default:stone_with_oynx",
+}
+for key, jem in ipairs(jems) do
+	minetest.register_ore({
+		ore_type       = "scatter",
+		ore            = jem,
+		wherein        = "default:stone",
+		clust_scarcity = 30 * 30 * 30,
+		clust_num_ores = 4,
+		clust_size     = 2,
+		y_max          = -256,
+		y_min          = -1024,
+	})
+end
 
 
 --[[
@@ -527,4 +510,3 @@ qts.worldgen.register_structure("", {
 --	heat_point = 50,
 --	humidity_point = 50,
 --})
-

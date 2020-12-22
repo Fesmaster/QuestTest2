@@ -420,6 +420,18 @@ qts.register_craft({
 	near = {"group:workbench_heavy"},
 })
 
+--understone
+qts.register_craft({
+	ingredients = {"group:understone"},
+	results = {"default:understone"},
+	near = {"group:workbench_heavy"},
+})
+qts.register_craft({
+	ingredients = {"group:understone"},
+	results = {"default:understone_cobble"},
+	near = {"group:workbench_heavy"},
+})
+
 qts.register_craft({
 	ingredients = {"group:red_stone"},
 	results = {"default:red_stone"},
@@ -528,4 +540,3 @@ minetest.register_craft({
 })
 
 --Other Crafting
-

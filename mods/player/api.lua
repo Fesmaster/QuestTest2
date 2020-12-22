@@ -78,9 +78,9 @@ animations contains:
 	sneak_walk
 	sneak_punch
 	sneak_walk_punch
-	
+
 	--for a custom punch for specific items ...
-	custom_punch 
+	custom_punch
 	--and maybe
 	walk_custom_punch
 	shift_custom_punch
@@ -174,7 +174,7 @@ function Player_API.sprint(player, on)
 	elseif on == false and dat.sprint then
 		qts.set_player_modifier(player, "CONTROL_INTERNAL", {speed = 1})
 		dat.sprint = false
-		
+
 	end
 end
 
@@ -201,13 +201,13 @@ function Player_API.dodge(player, dir)
 	if dir == "left" then dir = {x=-1, y=0.1, z=0}
 	elseif dir == "right" then dir = {x=1, y=0.1, z=0}
 	elseif dir == "up" then dir = {x=0, y=0.1, z=1}
-	elseif dir == "down" then dir = {x=0, y=0.1, z=-1} 
+	elseif dir == "down" then dir = {x=0, y=0.1, z=-1}
 	end
 	local angle = player:get_look_horizontal()
-	player:add_player_velocity(vector.multiply(vector.rotate_yaw(dir, angle), 10))
+	player:add_velocity(vector.multiply(vector.rotate_yaw(dir, angle), 10))
 end
 
---register a function to be called when a key is double clicked 
+--register a function to be called when a key is double clicked
 --params are: (player, key)
 function Player_API.register_on_doubleclick(func)
 	Player_API.doubleclick_funcs[#Player_API.doubleclick_funcs + 1] = func
@@ -229,7 +229,7 @@ minetest.register_on_leaveplayer(function(player)
 end)
 
 --[[
-----locals---- 
+----locals----
 local models = Player_API.registered_models
 local FDoubleClick = Player_API.doubleclick_funcs
 local FSpecialClick = Player_API.special_key_funcs
@@ -244,24 +244,24 @@ minetest.register_globalstep(function(dtime)
 		local ctrl = player:get_player_control() --current boolean control state
 		local pdat = player_data[name] --the player data
 		local switched = {} --the prev time of ONLY the switched controls
-		
+
 		if not pdat then
 			Player_API.new_player(player)
 			pdat = player_data[name]
 		end
-		
+
 		--texture updating
 		if (pdat.wield_index ~= player:get_wield_index()) then
 			pdat.wield_index = player:get_wield_index()
 			Player_API.set_textures(player, {qts.humanoid_texture(player, "player_base.png")})
 		end
-		
-		
+
+
 		--first, collect the changes in the controls, and update the timers
 		for control, val in pairs(ctrl) do
 			local prev = pdat.controlTimer[control]
 			if prev then
-				if val then 
+				if val then
 					if prev > 0 then
 						pdat.controlTimer[control] = prev + dtime
 					else
@@ -278,7 +278,7 @@ minetest.register_globalstep(function(dtime)
 				end
 			end
 		end
-		
+
 		--now, scan for double clicks and call the double click functions
 		for control, prev in pairs(switched) do
 			if math.abs(prev) <= Player_API.DOUBLECLICK_TIME and ctrl[control] then
@@ -288,13 +288,13 @@ minetest.register_globalstep(function(dtime)
 				end
 			end
 		end
-		
+
 		--cancel sprinting if the forward key is not pressed, or the player is not moving enough
-		local vel = vector.length(player:get_player_velocity())
+		local vel = vector.length(player:get_velocity())
 		if (not ctrl.up) or (vel < Player_API.SPRINT_MIN_SPEED) then
 			Player_API.sprint(player, false)
 		end
-		
+
 		--block dodging when sneaking or when not moving forward
 		if switched.sneak or switched.up then
 			if ctrl.sneak or not ctrl.up then
@@ -303,12 +303,12 @@ minetest.register_globalstep(function(dtime)
 				pdat.can_dodge = true
 			end
 		end
-		
+
 		--sneak controls
 		if switched.sneak then
 			Player_API.sneak(player, ctrl.sneak)
 		end
-		
+
 		if ctrl.aux1 then
 			--minetest.settings:set_bool("fast_move", false) --to fix that STUPID BUILTIN STUFF!!!!!!!!!
 			local newEvent = false
@@ -324,14 +324,14 @@ minetest.register_globalstep(function(dtime)
 				func(player, false, true)
 			end
 		end
-		
+
 		--sprint 3
 		--if Player_API.SPRINT_MODE == 3 then
 		if ctrl.up and pdat.controlTimer.up > 3 then
 			Player_API.sprint(player, true)
 		end
 		--end
-		
+
 		--Animation stuff
 		local model_name = pdat.model
 		local model = model_name and models[model_name]
@@ -343,7 +343,7 @@ minetest.register_globalstep(function(dtime)
 			if ctrl.sneak then
 				anim_speed_mod = anim_speed_mod / 2
 			end
-			
+
 			--apply data
 			--TODO: add sneak anims
 			if player:get_hp() == 0 then
@@ -360,7 +360,7 @@ minetest.register_globalstep(function(dtime)
 				Player_API.set_animation(player, "stand", anim_speed_mod)
 			end
 		end
-		
+
 	end
 end)
 

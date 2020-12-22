@@ -1,6 +1,6 @@
 
 
----[[
+--[[
 qts.register_shaped_node ("foundry:marker", {
 	description = "Test Marker",
 	tiles = {"foundry_marker.png"},
@@ -10,6 +10,7 @@ qts.register_shaped_node ("foundry:marker", {
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
 })
+--]]
 
 minetest.register_tool("foundry:analizer", {
 	description = "Foundry Analizer Tool",
@@ -53,7 +54,7 @@ qts.register_shaped_node ("foundry:scorched_brick", {
 minetest.register_node ("foundry:casting_sand",  {
 description = "Casting Sand",
 	tiles = {"foundry_casting_sand.png"},
-	groups = {oddly_breakable_by_hand=1},
+	groups = {oddly_breakable_by_hand = 3, crumbly = 3, falling_node=1,sand=1},
 	sounds = qtcore.node_sound_sand(),
 })
 
@@ -213,7 +214,7 @@ minetest.register_node ("foundry:ingot_mold", {
 				minetest.log("No Metal")
 			end
 		end
-		
+
 	end,
 	on_dig = function(pos, node, digger)
 		if node.param2 > 0 then
@@ -221,7 +222,7 @@ minetest.register_node ("foundry:ingot_mold", {
 			local meta = minetest.get_meta(pos)
 			local metalID = meta:get_string("metalType")
 			minetest.log("Meta: "..dump(metalID))
-			if metalID ~= "" then  
+			if metalID ~= "" then
 				local metal = foundry.registered_metals[metalID]
 				if metal then
 					minetest.handle_node_drops(pos, {ItemStack(metal.ingot.." "..node.param2)}, digger)
@@ -265,7 +266,7 @@ minetest.register_node ("foundry:block_mold", {
 				minetest.log("No Metal")
 			end
 		end
-		
+
 	end,
 	on_dig = function(pos, node, digger)
 		if node.param2 > 0 then
@@ -273,7 +274,7 @@ minetest.register_node ("foundry:block_mold", {
 			local meta = minetest.get_meta(pos)
 			local metalID = meta:get_string("metalType")
 			minetest.log("Meta: "..dump(metalID))
-			if metalID ~= "" then  
+			if metalID ~= "" then
 				local metal = foundry.registered_metals[metalID]
 				if metal then
 					minetest.handle_node_drops(pos, {ItemStack(metal.block.." "..node.param2)}, digger)
@@ -297,27 +298,27 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"default:sand", "default:clay_lump"},
+	ingredients = {"group:sand", "default:clay_lump"},
 	results = {"foundry:casting_sand",},
 })
 
 qts.register_craft({
-	ingredients = {"default:sand", "default:clay_lump"},
+	ingredients = {"group:sand", "default:clay_lump"},
 	results = {"foundry:block_mold",},
 })
 
 qts.register_craft({
-	ingredients = {"default:sand", "default:clay_lump"},
+	ingredients = {"group:sand", "default:clay_lump"},
 	results = {"foundry:ingot_mold",},
 })
 
 qts.register_craft({
-	ingredients = {"default:sand", "default:clay_lump"},
+	ingredients = {"group:sand", "default:clay_lump"},
 	results = {"foundry:pick_mold",},
 })
 
 qts.register_craft({
-	ingredients = {"default:sand", "default:clay_lump"},
+	ingredients = {"group:sand", "default:clay_lump"},
 	results = {"foundry:axe_mold",},
 })
 
@@ -327,7 +328,7 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"default:sand", "default:clay_lump"},
+	ingredients = {"group:sand", "default:clay_lump"},
 	results = {"foundry:sword_mold",},
 })
 

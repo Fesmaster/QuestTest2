@@ -37,6 +37,7 @@ qts.register_shaped_node("default:stone_with_tin", {
 })
 
 --ZINC
+--[[
 qts.register_ingot("default:zinc_bar", {
 	description = "Zinc Bar",
 	inventory_image = "default_zinc_ingot.png",
@@ -60,6 +61,7 @@ qts.register_shaped_node("default:stone_with_zinc", {
 	groups = {cracky=3, stone=1, ore=1},
 	sounds = qtcore.node_sound_stone(),
 })
+--]]
 
 --[[ INDUSTRIAL METALS ]]
 
@@ -175,6 +177,7 @@ qts.register_craft({
 --[[ WEALTH METALS ]]
 
 --brass
+--[[
 qts.register_ingot("default:brass_bar", {
 	description = "Brass Bar",
 	inventory_image = "default_brass_ingot.png",
@@ -201,6 +204,32 @@ minetest.register_craftitem("default:brass_alloy", {
 qts.register_craft({
 	ingredients = {"default:copper_bar", "default:zinc_bar"},
 	results = {"default:brass_alloy 2"},
+})
+--]]
+
+--silver
+qts.register_ingot("default:silver_bar", {
+	description = "Silver Bar",
+	inventory_image = "default_silver_ingot.png",
+	tiles = {"default_silver_ingot_stack.png"},
+	groups = {cracky=3, silver = 1},
+	sounds = qtcore.node_sound_metal(),
+	nodeboxes = nodeboxes,
+	levels = 8,
+})
+
+qts.register_shaped_node("default:silver_block", {
+	description = "Silver Block",
+	tiles = {"default_silver_block.png"},
+	groups = {cracky=2},
+	sounds = qtcore.node_sound_metal(),
+})
+
+qts.register_shaped_node("default:stone_with_silver", {
+	description = "Silver Ore",
+	tiles = {"default_stone.png^default_stone_with_silver.png"},
+	groups = {cracky=3, stone=1, ore=1},
+	sounds = qtcore.node_sound_stone(),
 })
 
 --gold

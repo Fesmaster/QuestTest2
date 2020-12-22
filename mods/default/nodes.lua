@@ -73,6 +73,33 @@ qts.register_shaped_node ("default:moss_stone_cobble", {
 	palette = "default_palette_paint_light.png",
 })
 
+--understone
+
+qts.register_shaped_node("default:understone", {
+	description = "Understone",
+	tiles = {"default_understone.png"},
+	groups = {cracky=3, stone=1, understone=1},
+	sounds = qtcore.node_sound_stone(),
+	drop = "default:understone_cobble",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
+qtcore.register_artistic_nodes("default:understone",{
+	description = "Understone",
+	tiles = {"default_understone.png"},
+	groups = {cracky=3, stone=1, understone=1},
+	sounds = qtcore.node_sound_stone(),
+	craft_group = "understone",
+})
+qts.register_shaped_node ("default:understone_cobble", {
+	description = "Cobble Understone",
+	tiles = {"default_understone.png^qt_cobble_overlay.png"},
+	groups = {cracky=3, stone=1, understone=1},
+	is_ground_content = false,
+	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
 
 --red stone
 qts.register_shaped_node ("default:red_stone", {
@@ -667,7 +694,7 @@ minetest.register_node("default:aspen_leaves", {
 	climbable = true,
 	sounds = qtcore.node_sound_grass(),
 	after_place_node = qtcore.after_place_leaves;
-})	
+})
 
 minetest.register_node("default:apple_leaves", {
 	description = "Apple Leaves",
@@ -703,7 +730,7 @@ minetest.register_node("default:apple_leaves_fruit", {
 	climbable = true,
 	sounds = qtcore.node_sound_grass(),
 	after_place_node = qtcore.after_place_leaves;
-})	
+})
 
 minetest.register_node("default:rowan_leaves", {
 	description = "Rowan Leaves",
@@ -723,7 +750,7 @@ minetest.register_node("default:rowan_leaves", {
 	climbable = true,
 	sounds = qtcore.node_sound_grass(),
 	after_place_node = qtcore.after_place_leaves;
-})	
+})
 
 minetest.register_node("default:lanternfruit_leaves", {
 	description = "Lanternfruit Leaves",
@@ -874,7 +901,7 @@ minetest.register_node("default:swamp_leaves", {
 
 minetest.register_node("default:lantern_fruit", {
 	description = "Lantern Fruit",
-	tiles ={"default_lantern_fruit_top.png", "default_lantern_fruit_bottom.png", 
+	tiles ={"default_lantern_fruit_top.png", "default_lantern_fruit_bottom.png",
 		"default_lantern_fruit_side.png"},
 	drawtype = "nodebox",
 	node_box = qtcore.nb_lantern_fruit(),
@@ -1031,6 +1058,3 @@ minetest.register_node("default:table", {
 	},
 	sounds = qtcore.node_sound_wood(),
 })
-
-
-
