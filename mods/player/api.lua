@@ -171,7 +171,7 @@ function Player_API.sprint(player, on)
 		else
 			qts.set_player_modifier(player, "CONTROL_INTERNAL", {speed = mods.speed})
 		end
-	elseif on == false and dat.sprint then
+	elseif on == false then
 		qts.set_player_modifier(player, "CONTROL_INTERNAL", {speed = 1})
 		dat.sprint = false
 

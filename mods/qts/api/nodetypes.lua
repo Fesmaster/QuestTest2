@@ -1,6 +1,6 @@
 --[[
-this file contains the "special" registrations that make 
-nodes and items of specific types 
+this file contains the "special" registrations that make
+nodes and items of specific types
 that often have lots of code attached to then
 
 qts.register_shaped_node(name, def)
@@ -33,7 +33,7 @@ function qts.register_shaped_node(name, def)
 	--SOLID-----------------------
 	def.groups.shaped_full = 1
 	minetest.register_node(":"..name, qts.table_deep_copy(def))
-	
+
 	--NON_SOLID-------------------
 	local imgs = {}
 	for i, image in ipairs(def.tiles) do
@@ -55,7 +55,7 @@ function qts.register_shaped_node(name, def)
 	end
 	def.tiles = imgs --overwrite old tiles
 	if def.drop == nil then def.drop = name end --setup drops
-	
+
 	--STAIR-----------------------
 	--change def to get various drawtypes etc
 	def.groups.not_in_creative_inventory = 1
@@ -224,7 +224,7 @@ function qts.register_shaped_node(name, def)
 			return qts.rotate_and_place(itemstack, placer, pointed_thing)
 		end
 	end
-	
+
 	minetest.register_node(":"..name.."_slab", qts.table_deep_copy(def))
 	--TODO: implement more shapes
 end
@@ -232,28 +232,28 @@ end
 local fence_collision_extra = minetest.settings:get_bool("enable_fence_tall") and 3/8 or 0
 function qts.register_fencelike_node(name, def)
 	if not def.type then minetest.log("qts.register_fencelike_node: the node def must contain type = [fence, rail, wall, pane]") end
-	if def.texture and not def.tiles then 
-		minetest.log("qts.register_fencelike_node: instead of using texture = \"texturename\", use tiles = {}. This works better.") 
+	if def.texture and not def.tiles then
+		minetest.log("qts.register_fencelike_node: instead of using texture = \"texturename\", use tiles = {}. This works better.")
 		def.tiles = {def.texture}
 	end
 	if not def.drop then
 		def.drop = name
 	end
-	
+
 	local default_fields = {}
 	--fence style
-	
+
 	if def.type == "fence" then
 		local fence_texture = "default_fence_overlay.png^" .. def.tiles[1] ..
 			"^default_fence_overlay.png^[makealpha:255,126,126"
-		
+
 		if not def.no_tile_transform then
 			for i, v in ipairs(def.tiles) do
 				def.tiles[i] = def.tiles[i] .. "^(" .. def.tiles[i] .."^[transformR90^[mask:fence_pole_mask.png)"
 			end
 			def.no_tile_transform = nil
 		end
-		
+
 		-- Allow almost everything to be overridden
 		default_fields = {
 			paramtype = "light",
@@ -290,29 +290,29 @@ function qts.register_fencelike_node(name, def)
 			is_ground_content = false,
 			groups = {},
 		}
-		
+
 		if def.fence_alt then
 			local fence_alt = def.fence_alt
 			default_fields.on_hammer = function(pos, user, mode)
 				local node = minetest.get_node_or_nil(pos)
 				if node then
 					minetest.set_node(pos, {
-						name = fence_alt, 
-						param1 = node.param1, 
+						name = fence_alt,
+						param1 = node.param1,
 						param2 = node.param2
 					})
 				end
 			end
 			def.fence_alt = nil
 		end
-		
+
 		-- Always add to the fence group, even if no group provided
 		def.groups.fence = 1
 
 	elseif def.type == "rail" then
 		local fence_rail_texture =  "default_fence_rail_overlay.png^" .. def.tiles[1] ..
 			"^default_fence_rail_overlay.png^[makealpha:255,126,126"
-		
+
 		-- Allow almost everything to be overridden
 		default_fields = {
 			paramtype = "light",
@@ -350,24 +350,24 @@ function qts.register_fencelike_node(name, def)
 			is_ground_content = false,
 			groups = {},
 		}
-		
+
 		if def.fence_alt then
 			local fence_alt = def.fence_alt
 			default_fields.on_hammer = function(pos, user, mode)
 				local node = minetest.get_node_or_nil(pos)
 				if node then
 					minetest.set_node(pos, {
-						name = fence_alt, 
-						param1 = node.param1, 
+						name = fence_alt,
+						param1 = node.param1,
 						param2 = node.param2
 					})
 				end
 			end
 			def.fence_alt = nil
 		end
-		
+
 		def.groups.fence = 1
-		
+
 	elseif def.type == "wall" then
 		-- Allow almost everything to be overridden
 		default_fields = {
@@ -401,7 +401,7 @@ function qts.register_fencelike_node(name, def)
 		}
 		def.groups.wall = 1
 	elseif def.type == "pane" then
-		
+
 		default_fields = {
 			paramtype = "light",
 			paramtype2 = "facedir",
@@ -425,7 +425,7 @@ function qts.register_fencelike_node(name, def)
 			groups = {},
 		}
 		def.groups.pane = 1
-		
+
 		--special stuff for panes
 		local tiles = def.tiles
 		def.tiles = {tiles[1], tiles[1], tiles[2]}
@@ -437,9 +437,9 @@ function qts.register_fencelike_node(name, def)
 				def[k] = v
 			end
 		end
-		
+
 		minetest.register_node(name, qts.table_deep_copy(def))
-		
+
 		if not def.drop then
 			def.drop = name
 		end
@@ -461,15 +461,15 @@ function qts.register_fencelike_node(name, def)
 			connect_back = {{-1/32, -1/2, 1/32, 1/32, 1/2, 1/2}},
 			connect_right = {{1/32, -1/2, -1/32, 1/2, 1/2, 1/32}},
 		}
-		
+
 		minetest.register_node(name.."_part", qts.table_deep_copy(def))
-		
+
 		--this one has its own registration
 		return
 	else
 		minetest.log("qts.register_fencelike_node: the node def must contain type = [fence, rail, wall, pane]")
 	end
-	
+
 	def.texture = nil
 	def.material = nil
 	def.type = nil
@@ -486,7 +486,6 @@ end
 local function is_pane(pos)
 	return minetest.get_item_group(minetest.get_node(pos).name, "pane") > 0
 end
-
 local function connects_dir(pos, name, dir)
 	local aside = vector.add(pos, minetest.facedir_to_dir(dir))
 	if is_pane(aside) then
@@ -502,14 +501,12 @@ local function connects_dir(pos, name, dir)
 	end
 	return false
 end
-
 local function swap(pos, node, name, param2)
 	if node.name == name and node.param2 == param2 then
 		return
 	end
 	minetest.swap_node(pos, {name = name, param2 = param2})
 end
-
 local function update_pane(pos)
 	if not is_pane(pos) then
 		return
@@ -543,7 +540,6 @@ local function update_pane(pos)
 		swap(pos, node, name .. "_part", 0)
 	end
 end
-
 minetest.register_on_placenode(function(pos, node)
 	if minetest.get_item_group(node, "pane") then
 		update_pane(pos)
@@ -553,7 +549,6 @@ minetest.register_on_placenode(function(pos, node)
 		update_pane(vector.add(pos, dir))
 	end
 end)
-
 minetest.register_on_dignode(function(pos)
 	for i = 0, 3 do
 		local dir = minetest.facedir_to_dir(i)
@@ -587,7 +582,7 @@ local function register_bucket_full(bucketid, liquidid)
 	end
 	--for clojure
 	local source_name = liquid_data.name.."_source"
-	
+
 	--yes, this is about as insane as it looks. go for it!
 	minetest.register_craftitem(bucket_data.name .. to_bucket_name(liquid_data.name), {
 		description = bucket_data.desc .. " of " .. liquid_data.desc,
@@ -595,7 +590,7 @@ local function register_bucket_full(bucketid, liquidid)
 		groups = groups,
 		stack_max = 1,
 		liquids_pointable = true,
-		
+
 		on_place = function(itemstack, user, pointed_thing)
 			if pointed_thing.type ~= "node" then
 				return
@@ -629,8 +624,8 @@ local function register_bucket_full(bucketid, liquidid)
 					return itemstack
 				end
 			end
-			
-			
+
+
 			minetest.set_node(lpos, {name = source_name})
 			return ItemStack(itemstack:get_name():gsub(to_bucket_name(source_name), ""))
 		end
@@ -655,28 +650,28 @@ function qts.register_liquid(name, def)
 		post_effect_color = {a = 103, r = 30, g = 60, b = 90},
 		groups = {}
 	}
-	
+
 	for k, v in pairs(defaults) do
 		if def[k] == nil then
 			def[k] = v
 		end
 	end
-	
+
 	if not def.groups.liquid then def.groups.liquid = 1 end
-	
+
 	--add to the liquid cache
 	local self_id = #liquid_cache+ 1
 	liquid_cache[self_id] = {name = name, desc = def.description, groups = def.groups, image = def.bucket_image}
 	def.bucket_image = nil
-	
+
 	local prev_desc = def.description
-	
+
 	--source
 	def.drawtype = "liquid"
 	def.description = prev_desc.." Source"
 	def.liquidtype = "source"
 	minetest.register_node(":"..name.."_source", qts.table_deep_copy(def))
-	
+
 	--flowing
 	def.drawtype = "flowingliquid"
 	def.description = prev_desc.." Flowing"
@@ -684,7 +679,7 @@ function qts.register_liquid(name, def)
 	def.liquidtype = "flowing"
 	def.groups.not_in_creative_inventory = 1
 	minetest.register_node(":"..name.."_flowing", qts.table_deep_copy(def))
-	
+
 	--now, backpropigate already registered buckets
 	for bk_id, bk in ipairs(bucket_cache) do
 		register_bucket_full(bk_id, self_id)
@@ -702,11 +697,11 @@ function qts.register_bucket(name, def)
 	if not def.groups then def.groups = {} end
 	def.groups.tool = 1
 	if not def.groups.bucket_level then def.groups.bucket_level = 1 end
-	
+
 	local self_id = #bucket_cache + 1
-	
+
 	bucket_cache[self_id] = {name = name, desc = def.description, groups = def.groups, image = def.inventory_image}
-	
+
 	minetest.register_craftitem(":"..name, {
 		description = "Empty "..def.description,
 		inventory_image = def.inventory_image,
@@ -721,7 +716,7 @@ function qts.register_bucket(name, def)
 				-- do nothing if it's neither object nor node
 				return
 			end
-			
+
 			local node =  minetest.get_node(pointed_thing.under)
 			local self_name = itemstack:get_name()
 			local bucket_name = self_name..to_bucket_name(node.name)
@@ -739,10 +734,10 @@ function qts.register_bucket(name, def)
 						pos.y = math.floor(pos.y + 0.5)
 						minetest.add_item(pos, bucket_name)
 					end
-					
+
 					ret = self_name.." "..tostring(item_count - 1)
 				end
-				
+
 				minetest.set_node(pointed_thing.under, {name = "air"})
 				return ret
 			else
@@ -755,7 +750,7 @@ function qts.register_bucket(name, def)
 			end
 		end
 	})
-	
+
 	--now, backpropigate already registered liquids
 	for lq_id, lq in ipairs(liquid_cache) do
 		register_bucket_full(self_id, lq_id)
@@ -770,7 +765,7 @@ function qts.register_ingot(name, def)
 	groups_node.placed_ingot = 1
 	groups_node.not_in_creative_inventory = 1
 	groups_node.falling_node = 1
-	
+
 	--allow user-defined nodeboxes
 	local nodeboxes = def.nodeboxes or {
 		{-0.4375, -0.5, -0.3125, 0.4375, -0.3125, -0.0625}, -- NodeBox1
@@ -782,11 +777,11 @@ function qts.register_ingot(name, def)
 		{-0.3125, 0.0625, -0.4375, -0.0624999, 0.25, 0.4375}, -- NodeBox7
 		{0.0625, 0.0625, -0.4375, 0.3125, 0.25, 0.4375}, -- NodeBox8
 	}
-	
-	
-	local levels = def.levels or 8
-	
-	
+
+
+	local levels = def.levels or #nodeboxes
+
+
 	--register the ingot craftitem
 	minetest.register_craftitem(":"..name, {
 		description = def.description,
@@ -805,18 +800,18 @@ function qts.register_ingot(name, def)
 					not (user and user:is_player() and user:get_player_control().sneak) then
 				return ndef.on_rightclick(pointed_thing.under, node, user, itemstack)
 			end
-			
+
 			local fpos = pointed_thing.under
-			
-			local itemdef = minetest.registered_items[itemstack:get_name().."_stacked_1"]
+
+			local itemdef = minetest.registered_items[itemstack:get_name().."_stacked_01"]
 			local sound = nil
 			if itemdef and itemdef.sounds and itemdef.sounds.place then
 				sound = itemdef.sounds.place
 			end
-			
-			if node.name:find(itemstack:get_name().."_stacked") and not(tonumber(node.name:sub(-1)) == 8) then
+
+			if node.name:find(itemstack:get_name().."_stacked") and not(tonumber(node.name:sub(-2)) == levels) then
 				--minetest.log("found one")
-				
+
 			else
 				local node_above = minetest.get_node_or_nil(pointed_thing.above)
 				if node_above and node_above.name:find(itemstack:get_name().."_stacked") then
@@ -831,8 +826,8 @@ function qts.register_ingot(name, def)
 							return
 						end
 					end
-					
-					minetest.place_node(pointed_thing.above, {name = itemstack:get_name().."_stacked_1"})
+
+					minetest.place_node(pointed_thing.above, {name = itemstack:get_name().."_stacked_01"})
 					--sound
 					if sound then
 						minetest.sound_play(sound, {gain = 1.0, max_hear_distance = 32, loop = false, pos = pointed_thing.above})
@@ -841,12 +836,16 @@ function qts.register_ingot(name, def)
 					return itemstack
 				end
 			end
-			
+
 			node = minetest.get_node_or_nil(fpos) --override node
-			local start_count = tonumber(node.name:sub(-1))
+			local start_count = tonumber(node.name:sub(-2))
 			--minetest.log(dump(start_count))
-			if start_count < 8 then
-				local newname = node.name:sub(1,-2)..tostring(start_count + 1)
+			if start_count < levels then
+				local namemod = start_count + 1
+				if namemod < 10 then
+					namemod = "0"..namemod
+				end
+				local newname = node.name:sub(1,-3)..tostring(namemod)
 				minetest.set_node(fpos, {name = newname})
 				--minetest.place_node(fpos, {name = newname})
 				if sound then
@@ -855,7 +854,7 @@ function qts.register_ingot(name, def)
 				itemstack:take_item()
 			elseif not vector.equals(fpos, pointed_thing.above) then
 				--place a new bar on the ground
-				minetest.place_node(pointed_thing.above, {name = itemstack:get_name().."_stacked_1"})
+				minetest.place_node(pointed_thing.above, {name = itemstack:get_name().."_stacked_01"})
 				--sound
 				if sound then
 					minetest.sound_play(sound, {gain = 1.0, max_hear_distance = 32, loop = false, pos = pointed_thing.above})
@@ -866,19 +865,22 @@ function qts.register_ingot(name, def)
 			return itemstack
 		end,
 	})
-	
-	
-	
+
+
+
 	for i = 1,levels do
-		
+
 		--copy the content of nodeboxes into local
 		local nb = {}
-		for j = 1,i do 
+		for j = 1,i do
 			nb[j] = nodeboxes[j]
 		end
-		
+		local namemod = ""..i
+		if i < 10 then
+			namemod = "0"..i
+		end
 		--register the nodes
-		minetest.register_node(":"..name.."_stacked_"..i, {
+		minetest.register_node(":"..name.."_stacked_"..namemod, {
 			description = "Stack of "..def.description,
 			tiles = def.tiles,
 			drawtype = "nodebox",
@@ -905,7 +907,7 @@ end
 function qts.register_torch(name, def)
 	local sound_flood = def.sound_flood
 	def.sound_flood = nil
-	
+
 	def.drawtype = "mesh"
 	def.paramtype = "light"
 	def.paramtype2 = "wallmounted"
@@ -913,10 +915,10 @@ function qts.register_torch(name, def)
 	def.groups.attached_node = 1
 	def.sunlight_propagates = true
 	def.on_rotate = false
-	
+
 	--in case they forget the light.....
 	def.light_source = def.light_source or 12
-	
+
 	local torch_main_def = qts.table_deep_copy(def)
 	torch_main_def.mesh = "torch_floor.obj"
 	torch_main_def.selection_box = {
@@ -950,10 +952,10 @@ function qts.register_torch(name, def)
 
 		return itemstack
 	end
-	
+
 	minetest.register_node(name, torch_main_def)
-	
-	
+
+
 	local torch_wall_def = qts.table_deep_copy(def)
 	torch_wall_def.groups.not_in_creative_inventory = 1
 	torch_wall_def.mesh = "torch_wall.obj"
@@ -963,10 +965,10 @@ function qts.register_torch(name, def)
 	}
 	torch_wall_def.drop = name
 	minetest.register_node(name.."_wall", torch_wall_def)
-	
-	
+
+
 	local torch_ceil_def = qts.table_deep_copy(def)
-	
+
 	torch_ceil_def.groups.not_in_creative_inventory = 1
 	torch_ceil_def.mesh = "torch_ceiling.obj"
 	torch_ceil_def.selection_box = {
@@ -975,6 +977,5 @@ function qts.register_torch(name, def)
 	}
 	torch_ceil_def.drop = name
 	minetest.register_node(name.."_ceiling", torch_ceil_def)
-	
-end
 
+end
