@@ -1,5 +1,30 @@
 --holds plants and underbrush
 
+minetest.register_craftitem("default:underbrush_item",{
+	description = "Underbrush",
+	inventory_image = "default_underbrush_item.png",
+	groups = {underbrush=1}
+})
+
+local underbrush_drops = {
+	max_items = 1,
+	items={
+		{
+			tools = {"~:knife"},
+			chance=1,
+			items = {"default:tinder"} --this is where to add craft items
+		},
+		{
+			tools = {"~:axe"},
+			chance=1,
+			items = {"default:tinder"}
+		},
+		{
+			chance=1,
+			items = {"default:underbrush_item"}
+		}
+	}
+}
 
 minetest.register_node("default:swamp_plant", {
 	description = "A Strange Plant that lives in the swamp",
@@ -11,8 +36,9 @@ minetest.register_node("default:swamp_plant", {
 	waving = 1,
 	buildable_to = true,
 	selection_box = qtcore.nb_level1(),
-	groups = {oddly_breakable_by_hand=2, flammable=2, snappy=3, attached_node=1},
+	groups = {oddly_breakable_by_hand=2, flammable=2, snappy=3, attached_node=1,underbrush=1},
 	sounds = qtcore.node_sound_defaults(),
+	drop = underbrush_drops,
 })
 
 minetest.register_node("default:small_shroom", {
@@ -49,9 +75,10 @@ minetest.register_node("default:grass_short", {
 	waving = 1,
 	buildable_to = true,
 	selection_box = qtcore.nb_level1(),
-	groups = {snappy=3, flammable = 2, grass = 1, growable =1, attached_node=1},
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1},
 	sounds = qtcore.node_sound_defaults(),
 	on_place = qtcore.place_random_plantlike,
+	drop = underbrush_drops,
 })
 
 minetest.register_node("default:grass_tall", {
@@ -65,9 +92,10 @@ minetest.register_node("default:grass_tall", {
 	waving = 1,
 	buildable_to = true,
 	selection_box = qtcore.nb_level1(),
-	groups = {snappy=3, flammable = 2, grass = 1, growable =1, attached_node=1},
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1},
 	sounds = qtcore.node_sound_defaults(),
 	on_place = qtcore.place_random_plantlike,
+	drop = underbrush_drops,
 })
 
 minetest.register_node("default:grass_dry_short", {
@@ -81,9 +109,10 @@ minetest.register_node("default:grass_dry_short", {
 	waving = 1,
 	buildable_to = true,
 	selection_box = qtcore.nb_level1(),
-	groups = {snappy=3, flammable = 2, grass = 1, growable =1, attached_node=1},
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1},
 	sounds = qtcore.node_sound_defaults(),
 	on_place = qtcore.place_random_plantlike,
+	drop = underbrush_drops,
 })
 
 minetest.register_node("default:grass_dry_tall", {
@@ -97,9 +126,10 @@ minetest.register_node("default:grass_dry_tall", {
 	waving = 1,
 	buildable_to = true,
 	selection_box = qtcore.nb_level1(),
-	groups = {snappy=3, flammable = 2, grass = 1, growable =1, attached_node=1},
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1},
 	sounds = qtcore.node_sound_defaults(),
 	on_place = qtcore.place_random_plantlike,
+	drop = underbrush_drops,
 })
 
 minetest.register_node("default:underbrush_short", {
@@ -120,9 +150,10 @@ minetest.register_node("default:underbrush_short", {
 			{-0.375, -0.5, -0.5, 0.25, 0.0625, 2.98023e-008}, -- NodeBox4
 		}
 	},
-	groups = {snappy=3, flammable = 2, grass = 1, growable =1, attached_node=1},
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1},
 	sounds = qtcore.node_sound_defaults(),
 	--on_place = qtcore.place_random_plantlike,
+	drop = underbrush_drops,
 })
 minetest.register_node("default:underbrush_tall", {
 	description = "Underbrush",
@@ -144,9 +175,10 @@ minetest.register_node("default:underbrush_tall", {
 			{-0.4375, -0.5, 0.125, 0, 0.1875, 0.4375}, -- NodeBox6
 		}
 	},
-	groups = {snappy=3, flammable = 2, grass = 1, growable =1, attached_node=1},
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1},
 	sounds = qtcore.node_sound_defaults(),
 	--on_place = qtcore.place_random_plantlike,
+	drop = underbrush_drops,
 })
 
 minetest.register_lbm({

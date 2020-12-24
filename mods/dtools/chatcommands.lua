@@ -125,5 +125,44 @@ minetest.register_chatcommand("randpos_clear", {
 		end
 		end
 		end
-	end,
+	end
+})
+
+minetest.register_chatcommand("clearground", {
+	params = "None",
+	description = "Make a nice, flat area",
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		if player then
+			local pos = player:get_pos()
+			for x = -20,20 do
+			for z = -20,20 do
+			for y = 0, 10 do
+				local p = {x=pos.x + x, y = pos.y + y, z = pos.z + z}
+				minetest.set_node(p, {name = "air"})
+			end
+			end
+			end
+		end
+	end
+})
+
+
+minetest.register_chatcommand("checkhand", {
+	params = "None",
+	description = "check wield hand item name",
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		if player then
+			local wield = player:get_wielded_item()
+			if wield then
+				local item = wield:get_name()
+				if item then
+					minetest.chat_send_player(name, "item: " .. dump(item))
+					return
+				end
+			end
+		end
+		minetest.chat_send_player(name, "item failure")
+	end
 })

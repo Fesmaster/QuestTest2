@@ -66,23 +66,6 @@ foundry.register_smeltable({
 	metal_ammount = 4,
 })
 
---zinc
-foundry.register_metal("zinc", {
-	description = "Zinc",
-	texture = "foundry_steel_molten.png",
-	ingot = "default:zinc_bar",
-	block = "default:zinc_block",
-})
-
-foundry.register_smeltable({
-	itemname = "default:stone_with_zinc",
-	smelt_time = 4,
-	type = "melt",
-	heat = 1,
-	metal = "zinc",
-	metal_ammount = 4,
-})
-
 --copper
 foundry.register_metal("copper", {
 	description = "Copper",
@@ -98,23 +81,6 @@ foundry.register_smeltable({
 	heat = 1,
 	metal = "copper",
 	metal_ammount = 4,
-})
-
---brass
-foundry.register_metal("brass", {
-	description = "Brass",
-	texture = "foundry_steel_molten.png",
-	ingot = "default:brass_bar",
-	block = "default:brass_block",
-})
-
-foundry.register_smeltable({
-	itemname = "default:brass_alloy",
-	smelt_time = 2,
-	type = "melt",
-	heat = 1,
-	metal = "brass",
-	metal_ammount = 1,
 })
 
 --bronze
@@ -134,8 +100,6 @@ foundry.register_smeltable({
 	metal_ammount = 1,
 })
 
-
-
 --gold
 foundry.register_metal("gold", {
 	description = "Gold",
@@ -150,5 +114,22 @@ foundry.register_smeltable({
 	type = "melt",
 	heat = 1,
 	metal = "gold",
+	metal_ammount = 4,
+})
+
+--gold
+foundry.register_metal("silver", {
+	description = "Silver",
+	texture = "foundry_steel_molten.png",
+	ingot = "default:silver_bar",
+	block = "default:silver_block",
+})
+
+foundry.register_smeltable({
+	itemname = "default:stone_with_silver",
+	smelt_time = 4,
+	type = "melt",
+	heat = 1,
+	metal = "silver",
 	metal_ammount = 4,
 })

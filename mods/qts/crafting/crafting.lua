@@ -175,3 +175,7 @@ qts.execute_craft = function(recipe, player)
 	end
 	return true
 end
+
+--Execute fallback.lua
+--this is where minetest-style crafts are re-registered
+dofile(qts.path.."/crafting/fallback.lua")

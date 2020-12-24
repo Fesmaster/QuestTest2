@@ -21,48 +21,142 @@ minetest.register_tool ("dtools:gauntlet", {
 
 
 minetest.register_tool("dtools:testingTool", {
-	description = "Testing Tool:\nCurrently makes expltions",
+	description = "Testing Tool:\nCurrently messes with param2",
 	inventory_image = "dtools_green_wand.png",
 	range = 10.0,
 	--liquids_pointable = true,
 	on_use = function(itemstack, user, pointed_thing)
+		---[[
 		minetest.log("QTS Testing Tool used")
+		local pos = nil
 		if pointed_thing.under then
-			qts.explode(pointed_thing.under, 20, {
-					destroy_nodes = true,
-					make_drops = false,
-					drop_speed_multiplier = 1,
-					make_sound = true,
-					make_particles = false,
-					particle_multiplier = 1,
-					damage_entities = false,
-					push_entities = false,
-					damage_player = false,
-					damage_type = "fleshy",
-					exploder = user
-				})
+			pos = pointed_thing.under
+		elseif user then
+			pos = user:get_pos()
 		end
+			--local node = minetest.get_node(pointed_thing.under)
+			--node.param2 = node.param2 + 1
+			--minetest.set_node(pointed_thing.under, node)
+			--minetest.set_node(pointed_thing.above, {name="arcane:disollving_stone", param2=10})
+		if pos then
+			local radius = 10
+			for x = -radius, radius do
+				for z = -radius, radius do
+					for y = -radius, radius do
+						local p = vector.add(pos, {x=x,y=y,z=z})
+						local node = minetest.get_node(p)
+						if node and node.name and minetest.get_item_group(node.name, "ore") == 0 then
+							if p.x%5==0 and p.y%5==0 and p.z%5==0 then
+								minetest.set_node(p, {name="dtools:light_node"})
+							else
+								minetest.set_node(p, {name="air"})
+							end
+						end
+					end
+				end
+			end
+		end
+		--]]
 	end,
 	on_place = function(itemstack, user, pointed_thing)
-		minetest.log("QTS Testing Tool placed")
+		--[[
 		if pointed_thing.under then
-			--qts.test_distribute_node(pointed_thing.under, 100, 10, "dtools:test_node")
-			qts.explode(pointed_thing.under, 80, {
-					destroy_nodes = true,
-					make_drops = true,
-					drop_speed_multiplier = 1,
-					make_sound = true,
-					make_particles = true,
-					particle_multiplier = 1,
-					damage_entities = true,
-					push_entities = true,
-					damage_player = true,
-					damage_type = "fleshy",
-					exploder = user
-				})
+			minetest.log("QTS Testing Tool placed")
+			local node = minetest.get_node(pointed_thing.under)
+			node.param2 = node.param2 - 1
+			minetest.set_node(pointed_thing.under, node)
+			minetest.set_node(pointed_thing.above, {name="arcane:disollving_stone", param2=20})
+			--minetest.log(minetest.pos_to_string(vector.subtract(pointed_thing.above, pointed_thing.under)))
+		end
+		--]]
+		local pos = nil
+		if pointed_thing.under then
+			pos = pointed_thing.under
+		elseif user then
+			pos = user:get_pos()
+		end
+		if pos then
+			local radius = 10
+			for x = -radius, radius do
+				for z = -radius, radius do
+					for y = -radius, radius do
+						local p = vector.add(pos, {x=x,y=y,z=z})
+						--local node = minetest.get_node(p)
+						--if node and node.name then
+						if p.x%5==0 and p.y%5==0 and p.z%5==0 then
+							minetest.set_node(p, {name="dtools:light_node"})
+						else
+							minetest.set_node(p, {name="air"})
+						end
+					end
+				end
+			end
 		end
 	end
 })
+
+minetest.register_node("dtools:light_node", {
+	description = "Light Spreading Node",
+	sunlight_propagates = true,
+	paramtype = "light",
+	drawtype = "airlike",
+	walkable = false,
+	pointable = false,
+	diggable = true,
+	floodable = true,
+	is_ground_content = false,
+	buildable_to = true,
+	light_source = minetest.LIGHT_MAX,
+})
+
+minetest.register_tool("dtools:light_wand", {
+	description = "Light Wand: Spreads Light",
+	inventory_image = "dtools_blue_wand.png",
+	range = 10.0,
+	--liquids_pointable = true,
+	on_use = function(itemstack, user, pointed_thing)
+		local pos = nil
+		if (pointed_thing.under) then
+			pos = pointed_thing.under
+		elseif user then
+			pos = user:get_pos()
+		end
+		radius = 50
+		for x = -radius, radius, 5 do
+			for y = -radius, radius, 5 do
+				for z = -radius, radius, 5 do
+					local p = vector.add(pos, {x=x,y=y,z=z})
+					local node = minetest.get_node(p)
+					if node.name == "air" then
+						minetest.set_node(p, {name="dtools:light_node"})
+					end
+				end
+			end
+		end
+	end,
+	on_place = function(itemstack, user, pointed_thing)
+		local pos = nil
+		if (pointed_thing.under) then
+			pos = pointed_thing.under
+		elseif user then
+			pos = user:get_pos()
+		end
+		radius = 50
+		for x = -radius, radius do
+			for y = -radius, radius do
+				for z = -radius, radius do
+					local p = vector.add(pos, {x=x,y=y,z=z})
+					local node = minetest.get_node(p)
+					if node.name == "default:torch" then
+						minetest.set_node(p, {name="dtools:light_node"})
+					end
+				end
+			end
+		end
+	end,
+})
+
+
 
 minetest.register_tool("dtools:timer_tool", {
 	description = "Timer Tool:\nShows the node's timer",
@@ -75,10 +169,10 @@ minetest.register_tool("dtools:timer_tool", {
 			local timer = minetest.get_node_timer(pointed_thing.under)
 			if timer then
 				minetest.log("Node Timer at: " .. minetest.pos_to_string(pointed_thing.under) .. "\n" ..
-					dump(timer:get_elapsed()) .. "/" .. dump(timer:get_timeout()) .. 
+					dump(timer:get_elapsed()) .. "/" .. dump(timer:get_timeout()) ..
 					"  -  started? " .. dump(timer:is_started()))
 				--qts.get_modname_from_item(itemname)
-				
+
 			end
 		end
 	end,
@@ -100,10 +194,10 @@ minetest.register_tool("dtools:summoning_wand", {
 		minetest.log("QTS Summoning Tool placed")
 		if (pointed_thing.under) then
 			qts.projetile_launch_to(
-				"dtools:testing_projectile", 
-				vector.add(user:get_pos(), {x=0, y=1.5, z=0}), 
-				pointed_thing.under, 
-				user, 
+				"dtools:testing_projectile",
+				vector.add(user:get_pos(), {x=0, y=1.5, z=0}),
+				pointed_thing.under,
+				user,
 				25
 			)
 		end
@@ -232,4 +326,3 @@ minetest.register_tool("dtools:paintbrush", {
 		end
 	end,
 })
-

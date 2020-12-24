@@ -27,10 +27,16 @@ qts.register_shaped_node("default:stone", {
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
-
+qtcore.register_artistic_nodes("default:stone",{
+	description = "Stone",
+	tiles = {"default_stone.png"},
+	groups = {cracky=3, stone=1, grey_stone=1},
+	sounds = qtcore.node_sound_stone(),
+	craft_group = "grey_stone",
+})
 qts.register_shaped_node ("default:stone_cobble", {
 	description = "Cobblestone",
-	tiles = {"default_stone_cobble.png"},
+	tiles = {"default_stone.png^qt_cobble_overlay.png"},
 	groups = {cracky=3, stone=1, grey_stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
@@ -39,47 +45,63 @@ qts.register_shaped_node ("default:stone_cobble", {
 })
 minetest.register_alias("default:cobble", "default:stone_cobble")--TODO: remove backwards compatability
 
-qts.register_shaped_node ("default:stone_brick", {
-	description = "Stone Brick",
-	tiles = {"default_stone_brick.png"},
-	groups = {cracky=3, stone=1, grey_stone=1},
-	is_ground_content = false,
-	sounds = qtcore.node_sound_stone(),
-	paramtype2 = "color",
-	palette = "default_palette_paint_light.png",
-})
 
-qts.register_shaped_node ("default:stone_block", {
-	description = "Stone Block",
-	tiles = {"default_stone_block.png"},
-	groups = {cracky=3, stone=1, grey_stone=1},
+--mossy
+qts.register_shaped_node ("default:moss_stone", {
+	description = "Mossy Stone",
+	tiles = {"default_moss_stone.png"},
+	groups = {cracky=3, stone=1, mossy_stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
-	
-qts.register_shaped_node ("default:stone_cobble_mossy", {
+qtcore.register_artistic_nodes("default:moss_stone",{
+	description = "Mossy Stone",
+	tiles = {"default_moss_stone.png"},
+	groups = {cracky=3, stone=1, mossy_stone=1},
+	sounds = qtcore.node_sound_stone(),
+	craft_group = "mossy_stone",
+})
+qts.register_shaped_node ("default:moss_stone_cobble", {
 	description = "Mossy Cobblestone",
-	tiles = {"default_stone_cobble_mossy.png"},
-	groups = {cracky=3, stone=1, grey_stone=1},
+	tiles = {"default_moss_stone.png^qt_cobble_overlay.png"},
+	groups = {cracky=3, stone=1, mossy_stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
 
-qts.register_shaped_node ("default:stone_brick_mossy", {
-	description = "Mossy Stone Brick",
-	tiles = {"default_stone_brick_mossy.png"},
-	groups = {cracky=3, stone=1, grey_stone=1},
+--understone
+
+qts.register_shaped_node("default:understone", {
+	description = "Understone",
+	tiles = {"default_understone.png"},
+	groups = {cracky=3, stone=1, understone=1},
+	sounds = qtcore.node_sound_stone(),
+	drop = "default:understone_cobble",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
+qtcore.register_artistic_nodes("default:understone",{
+	description = "Understone",
+	tiles = {"default_understone.png"},
+	groups = {cracky=3, stone=1, understone=1},
+	sounds = qtcore.node_sound_stone(),
+	craft_group = "understone",
+})
+qts.register_shaped_node ("default:understone_cobble", {
+	description = "Cobble Understone",
+	tiles = {"default_understone.png^qt_cobble_overlay.png"},
+	groups = {cracky=3, stone=1, understone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
 
---desert_stone
+--red stone
 qts.register_shaped_node ("default:red_stone", {
 	description = "Red Stone",
 	tiles = {"default_red_stone.png"},
@@ -89,10 +111,16 @@ qts.register_shaped_node ("default:red_stone", {
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
-
+qtcore.register_artistic_nodes("default:red_stone",{
+	description = "Red Stone",
+	tiles = {"default_red_stone.png"},
+	groups = {cracky=3, stone=1, red_stone=1},
+	sounds = qtcore.node_sound_stone(),
+	craft_group = "red_stone",
+})
 qts.register_shaped_node ("default:red_stone_cobble", {
 	description = "Red Cobblestone",
-	tiles = {"default_red_cobble.png"},
+	tiles = {"default_red_stone.png^qt_cobble_overlay.png"},
 	groups = {cracky=3, stone=1, red_stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
@@ -100,30 +128,9 @@ qts.register_shaped_node ("default:red_stone_cobble", {
 	palette = "default_palette_paint_light.png",
 })
 
-qts.register_shaped_node ("default:red_stone_brick", {
-	description = "Red Stone Brick",
-	tiles = {"default_red_stone_brick.png"},
-	groups = {cracky=3,stone=1, red_stone=1},
-	is_ground_content = false,
-	sounds = qtcore.node_sound_stone(),
-	paramtype2 = "color",
-	palette = "default_palette_paint_light.png",
-})
-
-qts.register_shaped_node ("default:red_stone_block", {
-	description = "Red Stone Block",
-	tiles = {"default_red_stone_block.png"},
-	groups = {cracky=3,stone=1, red_stone=1},
-	is_ground_content = false,
-	sounds = qtcore.node_sound_stone(),
-	paramtype2 = "color",
-	palette = "default_palette_paint_light.png",
-})
-
-
 --sandstone
 qts.register_shaped_node ("default:sandstone", {
-	description = "sandstone",
+	description = "Sandstone",
 	tiles = {"default_sandstone.png"},
 	groups = {cracky=3, stone=1, sand_stone=1},
 	sounds = qtcore.node_sound_stone(),
@@ -131,10 +138,16 @@ qts.register_shaped_node ("default:sandstone", {
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
-
+qtcore.register_artistic_nodes("default:sandstone",{
+	description = "Sandstone",
+	tiles = {"default_sandstone.png"},
+	groups = {cracky=3, stone=1, sand_stone=1},
+	sounds = qtcore.node_sound_stone(),
+	craft_group = "sand_stone",
+})
 qts.register_shaped_node ("default:sandstone_cobble", {
 	description = "Sandstone Cobble",
-	tiles = {"default_sandstone_cobble.png"},
+	tiles = {"default_sandstone.png^qt_cobble_overlay.png"},
 	groups = {cracky=3,stone=1, sand_stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
@@ -142,26 +155,7 @@ qts.register_shaped_node ("default:sandstone_cobble", {
 	palette = "default_palette_paint_light.png",
 })
 
-qts.register_shaped_node ("default:sandstone_brick", {
-	description = "Sandstone Brick",
-	tiles = {"default_sandstone_brick.png"},
-	groups = {cracky=3,stone=1, sand_stone=1},
-	is_ground_content = false,
-	sounds = qtcore.node_sound_stone(),
-	paramtype2 = "color",
-	palette = "default_palette_paint_light.png",
-})
-
-qts.register_shaped_node ("default:sandstone_block", {
-	description = "Sandstone Block",
-	tiles = {"default_sandstone_block.png"},
-	groups = {cracky=3,stone=1, sand_stone=1},
-	is_ground_content = false,
-	sounds = qtcore.node_sound_stone(),
-	paramtype2 = "color",
-	palette = "default_palette_paint_light.png",
-})
-
+--desert sandstone
 qts.register_shaped_node ("default:desert_sandstone", {
 	description = "Desert Sandstone",
 	tiles = {"default_desert_sandstone.png"},
@@ -171,10 +165,16 @@ qts.register_shaped_node ("default:desert_sandstone", {
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
-
+qtcore.register_artistic_nodes("default:desert_sandstone",{
+	description = "Desert Sandstone",
+	tiles = {"default_desert_sandstone.png"},
+	groups = {cracky=3, stone=1, desert_stone=1},
+	sounds = qtcore.node_sound_stone(),
+	craft_group = "desert_stone",
+})
 qts.register_shaped_node ("default:desert_sandstone_cobble", {
 	description = "Desert Sandstone Cobble",
-	tiles = {"default_desert_sandstone_cobble.png"},
+	tiles = {"default_desert_sandstone.png^qt_cobble_overlay.png"},
 	groups = {cracky=3,stone=1, desert_stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
@@ -182,48 +182,21 @@ qts.register_shaped_node ("default:desert_sandstone_cobble", {
 	palette = "default_palette_paint_light.png",
 })
 
-qts.register_shaped_node ("default:desert_sandstone_brick", {
-	description = "Desert Sandstone Brick",
-	tiles = {"default_desert_sandstone_brick.png"},
-	groups = {cracky=3,stone=1, desert_stone=1},
-	is_ground_content = false,
-	sounds = qtcore.node_sound_stone(),
-	paramtype2 = "color",
-	palette = "default_palette_paint_light.png",
-})
-
-qts.register_shaped_node ("default:desert_sandstone_block", {
-	description = "Desert Sandstone Block",
-	tiles = {"default_desert_sandstone_block.png"},
-	groups = {cracky=3,stone=1, desert_stone=1},
-	is_ground_content = false,
-	sounds = qtcore.node_sound_stone(),
-	paramtype2 = "color",
-	palette = "default_palette_paint_light.png",
-})
-
-
+--obsidian
 qts.register_shaped_node ("default:obsidian", {
 	description = "Obsidian",
 	tiles = {"default_obsidian.png"},
 	groups = {cracky=1, obsidian=1},
 	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
 })
-
-qts.register_shaped_node ("default:obsidian_brick", {
-	description = "Obsidian Brick",
-	tiles = {"default_obsidian_brick.png"},
-	groups = {cracky=1, obsidian=1},
-	is_ground_content = false,
+qtcore.register_artistic_nodes("default:obsidian",{
+	description = "Obsidian",
+	tiles = {"default_obsidian.png"},
+	groups = {cracky=3, stone=1, obsidian=1},
 	sounds = qtcore.node_sound_stone(),
-})
-
-qts.register_shaped_node ("default:obsidian_block", {
-	description = "Obsidian Block",
-	tiles = {"default_obsidian_block.png"},
-	groups = {cracky=1, obsidian=1},
-	is_ground_content = false,
-	sounds = qtcore.node_sound_stone(),
+	craft_group = "obsidian",
 })
 
 
@@ -729,7 +702,7 @@ minetest.register_node("default:aspen_leaves", {
 	climbable = true,
 	sounds = qtcore.node_sound_grass(),
 	after_place_node = qtcore.after_place_leaves;
-})	
+})
 
 minetest.register_node("default:apple_leaves", {
 	description = "Apple Leaves",
@@ -765,7 +738,7 @@ minetest.register_node("default:apple_leaves_fruit", {
 	climbable = true,
 	sounds = qtcore.node_sound_grass(),
 	after_place_node = qtcore.after_place_leaves;
-})	
+})
 
 minetest.register_node("default:rowan_leaves", {
 	description = "Rowan Leaves",
@@ -785,7 +758,7 @@ minetest.register_node("default:rowan_leaves", {
 	climbable = true,
 	sounds = qtcore.node_sound_grass(),
 	after_place_node = qtcore.after_place_leaves;
-})	
+})
 
 minetest.register_node("default:lanternfruit_leaves", {
 	description = "Lanternfruit Leaves",
@@ -960,7 +933,7 @@ minetest.register_node("default:swamp_leaves", {
 
 minetest.register_node("default:lantern_fruit", {
 	description = "Lantern Fruit",
-	tiles ={"default_lantern_fruit_top.png", "default_lantern_fruit_bottom.png", 
+	tiles ={"default_lantern_fruit_top.png", "default_lantern_fruit_bottom.png",
 		"default_lantern_fruit_side.png"},
 	drawtype = "nodebox",
 	node_box = qtcore.nb_lantern_fruit(),
@@ -973,10 +946,33 @@ minetest.register_node("default:lantern_fruit", {
 	light_source = 12,
 })
 
-
+qts.register_ingot("default:apple", {
+	description = "Apple",
+	inventory_image = "default_apple_fruit_item.png",
+	tiles = {"default_apple_fruit_top.png", "default_apple_fruit.png", "default_apple_fruit.png"},
+	groups = {cracky=3, fruit = 1},
+	sounds = qtcore.node_sound_stone(),
+	nodeboxes = {
+		{-0.4375, -0.5, 0.1875, -0.1875, -0.25, 0.4375}, -- NodeBox1
+		{-0.4375, -0.5, -0.125, -0.1875, -0.25, 0.125}, -- NodeBox2
+		{-0.4375, -0.5, -0.4375, -0.1875, -0.25, -0.1875}, -- NodeBox3
+		{-0.125, -0.5, 0.1875, 0.125, -0.25, 0.4375}, -- NodeBox4
+		{-0.125, -0.5, -0.125, 0.125, -0.25, 0.125}, -- NodeBox5
+		{-0.125, -0.5, -0.4375, 0.125, -0.25, -0.1875}, -- NodeBox6
+		{0.1875, -0.5, 0.1875, 0.4375, -0.25, 0.4375}, -- NodeBox7
+		{0.1875, -0.5, -0.125, 0.4375, -0.25, 0.125}, -- NodeBox8
+		{0.1875, -0.5, -0.4375, 0.4375, -0.25, -0.1875}, -- NodeBox9
+		{-0.3125, -0.25, 0.0625, -0.0624999, 2.23517e-08, 0.3125}, -- NodeBox10
+		{-0.3125, -0.25, -0.3125, -0.0624999, -5.21541e-08, -0.0625001}, -- NodeBox11
+		{0.0625, -0.25, 0.0625, 0.3125, 2.23517e-08, 0.3125}, -- NodeBox12
+		{0.0625, -0.25, -0.3125, 0.3125, 2.23517e-08, -0.0625}, -- NodeBox13
+		{-0.125, 0, -0.125, 0.125, 0.25, 0.125}, -- NodeBox14
+	},
+	levels = 14,
+})
 --Other nodes and stuff
 
-
+--[[
 minetest.register_node("default:apple", {
 	description = ("Apple"),
 	drawtype = "nodebox",
@@ -1001,6 +997,7 @@ minetest.register_node("default:apple", {
 	on_use = minetest.item_eat(2),
 	sounds = qtcore.node_sound_wood(),
 })
+--]]
 
 minetest.register_node("default:workbench", {
 	description = "Workbench",
@@ -1070,6 +1067,29 @@ qts.register_shaped_node("default:anvil", {
 	sounds = qtcore.node_sound_metal(),
 })
 
+minetest.register_node ("default:glass", {
+	description = "Glass",
+	tiles = {"default_glass.png", "default_glass_detail.png"},
+	groups = {cracky=3, glass=1, oddly_breakable_by_hand=3},
+	drawtype = "glasslike_framed_optional",
+	is_ground_content = false,
+	sounds = qtcore.node_sound_metal(),
+	paramtype = "light",
+	--paramtype2 = "color",
+	is_ground_content = false,
+	sunlight_propagates = true,
+	--palette = "default_palette_paint_light.png",
+})
+
+qts.register_fencelike_node("default:glass_pane", {
+	description = "Glass Pane",
+	type = "pane",
+	--tiles = {"default_glass_pane_top.png","default_glass_pane_top.png","default_glass_pane.png"},
+	tiles = {"default_glass_pane_top.png","default_glass.png","default_glass_pane.png"},
+	groups = {cracky=3, glass=1, oddly_breakable_by_hand=3},
+	sounds = qtcore.node_sound_metal(),
+})
+
 --FUNATURE
 
 minetest.register_node("default:table", {
@@ -1094,6 +1114,3 @@ minetest.register_node("default:table", {
 	},
 	sounds = qtcore.node_sound_wood(),
 })
-
-
-

@@ -14,6 +14,7 @@ dofile(minetest.get_modpath("qtcore").."/nodeboxes.lua")
 dofile(minetest.get_modpath("qtcore").."/textures.lua")
 dofile(minetest.get_modpath("qtcore").."/forms.lua")
 dofile(minetest.get_modpath("qtcore").."/trees.lua")
+dofile(minetest.get_modpath("qtcore").."/deconodes.lua")
 --[[
 Random functions are placed here
 --]]
