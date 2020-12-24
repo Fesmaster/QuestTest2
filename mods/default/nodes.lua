@@ -603,6 +603,14 @@ qts.register_shaped_node ("default:mahogany_log", {
 	sounds = qtcore.node_sound_wood(),
 })
 
+qts.register_shaped_node ("default:palm_log", {
+	description = "Palm Log",
+	tiles = {"default_palm_top.png", "default_palm_top.png", "default_palm_side.png"},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1},
+	sounds = qtcore.node_sound_wood(),
+})
+
 minetest.register_node("default:swamp_tree", {
 	description = "Swamp Log",
 	tiles = {
@@ -876,6 +884,54 @@ minetest.register_node("default:rosewood_leaves", {
 	after_place_node = qtcore.after_place_leaves;
 })
 
+minetest.register_node("default:palm_leaves", {
+	description = "Palm Leaves",
+	drawtype = "allfaces_optional",
+	waving = 1,
+	tiles = {"default_palm_leaves.png"},
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	drop = {
+		max_items = 1,
+		items = {
+			{items = {"default:palm_sapling"}, rarity = 16},
+			{items = {"default:palm_leaves"}},
+		}
+	},
+	walkable = false,
+	climbable = true,
+	sounds = qtcore.node_sound_grass(),
+	after_place_node = qtcore.after_place_leaves;
+})
+
+minetest.register_node("default:palm_sapling", {
+	tiles = {
+		"default_wood.png",
+		"default_wood.png",
+		"default_wood.png",
+		"default_wood.png",
+		"default_wood.png",
+		"default_wood.png"
+	},
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{0, -0.5, 0.0625, 0.0625, -0.3125, 0.125}, -- NodeBox1
+			{0, -0.3125, 0, 0.0625, -0.125, 0.0625}, -- NodeBox2
+			{-0.0625, -0.125, -0.125, 0.1875, -0.0625, 0.125}, -- NodeBox3
+			{-0.125, -0.1875, -0.0625, 0.25, -0.125, 0.0625}, -- NodeBox4
+			{0, -0.1875, -0.1875, 0.125, -0.125, 0.1875}, -- NodeBox6
+			{0, -0.3125, -0.25, 0.125, -0.1875, -0.1875}, -- NodeBox7
+			{0, -0.375, 0.1875, 0.125, -0.1875, 0.25}, -- NodeBox8
+			{0.25, -0.375, -0.0625, 0.3125, -0.1875, 0.0625}, -- NodeBox9
+			{-0.1875, -0.3125, -0.0625, -0.125, -0.1875, 0.0625}, -- NodeBox10
+		}
+	}
+})
+
+
 minetest.register_node("default:swamp_leaves", {
 	description = "Swamp Leaves",
 	tiles = {"default_swamp_leaves.png"},
@@ -897,30 +953,6 @@ minetest.register_node("default:swamp_leaves", {
 	}
 })
 
---minetest.register_node("default:palm_leaves", {
---	description = "Palm Leaf",
---	tiles = {
---		"default_palm_leaves_hfaces.png",
---		"default_palm_leaves_hfaces.png",
---		"default_cement.png",
---		"default_mahogany_top.png",
---		"default_palm_leaves_rfaces.png",
---		"default_palm_leaves_gfaces.png"
---	},
---	drawtype = "nodebox",
---	paramtype = "light",
---	groups = {snappy = 3, flammable = 2, leaves = 1},
---	walkable = false,
---	climbable = true,
---	sounds = qtcore.node_sound_grass(),
---	after_place_node = qtcore.after_place_leaves;
---	node_box = {
---		type = "fixed",
---		fixed = {
---			{-0.5, -0.3, -0.1875, 3.5, 0.0625, 0.25},
---		}
---	}
---})
 
 
 
