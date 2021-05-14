@@ -4,7 +4,7 @@ local function launch_campfire_drop(pos, itemstack)
 	if obj then
 		obj:set_velocity({x = math.random(-1, 1), y = math.random(3, 5), z = math.random(-1, 1)})
 	else
-		minetest.log("invalid drop: ".. dump(itemstack))
+		minetest.log("error","invalid drop: ".. dump(itemstack))
 	end
 end
 
@@ -47,10 +47,10 @@ local function campfire_node_timer(pos, elapsed)
 			
 			if (cooked.time ~= 0) then
 				launch_campfire_drop(pos, cooked.item)
-				minetest.log("Cooked drops launched")
+				minetest.log("info","CAMPFIRE: Cooked drops launched")
 			else
 				launch_campfire_drop(pos, cookItem)
-				minetest.log("Orig item launched")
+				minetest.log("info","CAMPFIRE: Orig item launched")
 			end
 			
 			meta:set_string("campfire_smeltable", "")
@@ -141,6 +141,7 @@ minetest.register_node("default:campfire", {
 	description = "Campfire",
 	drawtype = "mesh",
 	tiles ={"default_campfire.png"},
+	use_texture_alpha = "clip",
 	mesh = "campfire.obj",
 	paramtype = "light",
 	is_ground_content = false,
@@ -185,6 +186,7 @@ minetest.register_node("default:campfire_lit", {
 		name = "default_campfire_animated.png",
 		animation = {type = "vertical_frames", aspect_w = 16, aspect_h = 16, length = 1}
 	}},
+	use_texture_alpha = "clip",
 	mesh = "campfire.obj",
 	light_source = 13,
 	paramtype = "light",
@@ -245,7 +247,7 @@ minetest.register_entity("default:campfire_item", {
 		local node = minetest.get_node_or_nil(pos)
 		if node then
 			if minetest.get_item_group(node.name, "campfire") == 0 then
-				minetest.log("Campfire item: Self-Death")
+				minetest.log("info","CAMPFIRE: Item: Self-Death")
 				self.object:remove()
 			end
 		end
@@ -253,7 +255,7 @@ minetest.register_entity("default:campfire_item", {
 	on_activate = function(self)
 		self.object:set_armor_groups({immortal = 1})
 		self.QTID = qts.gen_entity_id()
-		minetest.log("Campfire item: CREATED. Pos:" .. minetest.pos_to_string(self.object:get_pos()))
+		minetest.log("info", "CAMPFIRE: Item: CREATED. Pos:" .. minetest.pos_to_string(self.object:get_pos()))
 	end,
 })
 

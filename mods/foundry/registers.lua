@@ -21,12 +21,12 @@ minetest.register_tool("foundry:analizer", {
 		if pointed_thing.under then
 			local p = foundry.get_pos_foundry(pointed_thing.under)
 			if p then
-				minetest.log("Foundry: "..minetest.pos_to_string(p))
+				minetest.log("info","Foundry: "..minetest.pos_to_string(p))
 				local FD = foundry.GetFoundryData(p)
 				FD:add_heat(100)
 				FD:apply()
 			else
-				minetest.log("Foundry: NONE")
+				minetest.log("info","Foundry: NONE")
 			end
 		end
 	end,
@@ -35,7 +35,7 @@ minetest.register_tool("foundry:analizer", {
 			local p = foundry.get_pos_foundry(pointed_thing.under)
 			if p then
 				local FD = foundry.GetFoundryData(p)
-				minetest.log("Foundry Data:"..dump(FD))
+				minetest.log("info","Foundry Data:"..dump(FD))
 			end
 		end
 	end,
@@ -108,7 +108,7 @@ minetest.register_node("foundry:spout", {
 		for i, obj in ipairs(objs) do
 			local luaobj = obj:get_luaentity()
 			if luaobj and luaobj.qtid and luaobj.qtid == "foundry_casting_flow" then
-				minetest.log("Casting Flow exists")
+				minetest.log("info","FOUNDRY: Casting Flow exists. Ignoring second construction.")
 				return --the casting flow exists
 			end
 		end
@@ -121,16 +121,16 @@ minetest.register_node("foundry:spout", {
 					local def = minetest.registered_nodes[below.name]
 					if def and def.can_cast then
 						if not def.can_cast(vector.add(pos, {x=0, y=-1, z=0}), below, FD, clicker) then
-							minetest.log("cannot cast")
+							minetest.log("info","FOUNDRY: cannot cast")
 							return
 						end
 					end
 					if def and def.on_cast then
 						local func = def.on_cast
-						minetest.log("Flow should be added")
+						minetest.log("info","FOUNDRY: Flow should be added")
 						local flow = minetest.add_entity(pos, "foundry:casting_flow")
 						flow:set_yaw(rot_from_facedir[node.param2 % 4])
-						minetest.log(minetest.pos_to_string(pos) .. "|"..minetest.pos_to_string(flow:get_pos()))
+						minetest.log("verbose", "FOUNDRY: pos:"..minetest.pos_to_string(pos) .. "|flow pos"..minetest.pos_to_string(flow:get_pos()))
 						minetest.after(0.75, function(func, flow, pos, below, fpos, clicker)
 							local FD = foundry.GetFoundryData(fpos)
 							flow:remove()
@@ -201,7 +201,7 @@ minetest.register_node ("foundry:ingot_mold", {
 				--check metal type
 				local metal = meta:get_string("metalType")
 				if metal ~= FD.metalID then
-					minetest.log("not the same metal added: "..dump(metal).."|"..dump(FD.metalID))
+					minetest.log("info","FOUNDRY: not the same metal added: "..dump(metal).."|"..dump(FD.metalID))
 					return
 				end
 			end
@@ -211,7 +211,7 @@ minetest.register_node ("foundry:ingot_mold", {
 				node.param2 = node.param2 + 1
 				minetest.swap_node(pos, node)
 			else
-				minetest.log("No Metal")
+				minetest.log("info","FOUNDRY: No Metal")
 			end
 		end
 
@@ -253,7 +253,6 @@ minetest.register_node ("foundry:block_mold", {
 	end,
 	on_cast = function(pos, node, FD, caster)
 		--minetest.log("From Caster:\n"..dump(FD))
-		minetest.log("Func Called")
 		if node.param2 < 1 and FD then
 			local meta = minetest.get_meta(pos)
 			meta:set_string("metalType", FD.metalID)
@@ -263,7 +262,7 @@ minetest.register_node ("foundry:block_mold", {
 				node.param2 = node.param2 + 1
 				minetest.swap_node(pos, node)
 			else
-				minetest.log("No Metal")
+				minetest.log("info","FOUNDRY: No Metal")
 			end
 		end
 
@@ -273,7 +272,6 @@ minetest.register_node ("foundry:block_mold", {
 			--foundry.registered_metals
 			local meta = minetest.get_meta(pos)
 			local metalID = meta:get_string("metalType")
-			minetest.log("Meta: "..dump(metalID))
 			if metalID ~= "" then
 				local metal = foundry.registered_metals[metalID]
 				if metal then

@@ -3,7 +3,7 @@
 --
 
 
-qts.worldgen.set_mapgen_defaults("default:stone", "default:water_source")
+qts.worldgen.set_mapgen_defaults("default:stone", "default:water_source", "default:river_water_source")
 
 --[[
 	heat_point = number

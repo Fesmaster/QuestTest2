@@ -241,7 +241,7 @@ local function insert_backslash(s)
 	end
 	s=string.gsub(s, "%^", "\\^")
 	s=string.gsub(s, ":", "\\:")
-	s=string.gsub(s, "\\\\", "\\^")
+    s=string.gsub(s, "\\\\", "\\^") --maybe should be .gsub(s, "\\\\", "\\")
 	return s
 end
 
@@ -260,31 +260,32 @@ function qts.make_humanoid_texture(base, armor_list, item, node, crown)
 	end
 	
 	if node then
+		local node2 = {} --for prevention of accumulated LONG strings of \^^\^\^^\^...
 		for i = 1, #node do
-			node[i] = insert_backslash(node[i])
+			node2[i] = insert_backslash(node[i])
 		end
 		if #node == 1 then
-			s=s..":0,64=(".. node[1] .."\\^[resize\\:16x16)"..
-				":16,64=(".. node[1] .."\\^[resize\\:16x16)"..
-				 ":0,80=(".. node[1] .."\\^[resize\\:16x16)"..
-				":16,80=(".. node[1] .."\\^[resize\\:16x16)"..
-				":32,80=(".. node[1] .."\\^[resize\\:16x16)"..
-				":48,80=(".. node[1] .."\\^[resize\\:16x16)"
+			s=s..":0,64=(".. node2[1] .."\\^[resize\\:16x16)"..
+				":16,64=(".. node2[1] .."\\^[resize\\:16x16)"..
+				 ":0,80=(".. node2[1] .."\\^[resize\\:16x16)"..
+				":16,80=(".. node2[1] .."\\^[resize\\:16x16)"..
+				":32,80=(".. node2[1] .."\\^[resize\\:16x16)"..
+				":48,80=(".. node2[1] .."\\^[resize\\:16x16)"
 		elseif #node == 3 then
 			
-			s=s..":0,64=(".. node[1] .."\\^[resize\\:16x16)"..
-				":16,64=(".. node[2] .."\\^[resize\\:16x16)"..
-				 ":0,80=(".. node[3] .."\\^[resize\\:16x16)"..
-				":16,80=(".. node[3] .."\\^[resize\\:16x16)"..
-				":32,80=(".. node[3] .."\\^[resize\\:16x16)"..
-				":48,80=(".. node[3] .."\\^[resize\\:16x16)"
+			s=s..":0,64=(".. node2[1] .."\\^[resize\\:16x16)"..
+				":16,64=(".. node2[2] .."\\^[resize\\:16x16)"..
+				 ":0,80=(".. node2[3] .."\\^[resize\\:16x16)"..
+				":16,80=(".. node2[3] .."\\^[resize\\:16x16)"..
+				":32,80=(".. node2[3] .."\\^[resize\\:16x16)"..
+				":48,80=(".. node2[3] .."\\^[resize\\:16x16)"
 		elseif #node == 6 then
-			s=s..":0,64=(".. node[1] .."\\^[resize\\:16x16)"..
-				":16,64=(".. node[2] .."\\^[resize\\:16x16)"..
-				 ":0,80=(".. node[3] .."\\^[resize\\:16x16)"..
-				":16,80=(".. node[4] .."\\^[resize\\:16x16)"..
-				":32,80=(".. node[5] .."\\^[resize\\:16x16)"..
-				":48,80=(".. node[6] .."\\^[resize\\:16x16)"
+			s=s..":0,64=(".. node2[1] .."\\^[resize\\:16x16)"..
+				":16,64=(".. node2[2] .."\\^[resize\\:16x16)"..
+				 ":0,80=(".. node2[3] .."\\^[resize\\:16x16)"..
+				":16,80=(".. node2[4] .."\\^[resize\\:16x16)"..
+				":32,80=(".. node2[5] .."\\^[resize\\:16x16)"..
+				":48,80=(".. node2[6] .."\\^[resize\\:16x16)"
 		end
 	end
 	

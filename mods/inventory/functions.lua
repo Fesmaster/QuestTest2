@@ -227,9 +227,9 @@ end
 inventory.register_exemplar_item =function(group, item)
 	if (minetest.registered_items[item]) then
 		inventory.exemplar[group] = item
-		minetest.log("Inventory: exemplar item for " .. group .. " added: " .. item)
+		minetest.log("verbose", "Inventory: exemplar item for " .. group .. " added: " .. item)
 	else
-		minetest.log("Warning: Inventory: register_exemplar_item: invalid item. please declare first!")
+		minetest.log("warning", "Inventory: register_exemplar_item: invalid item. please declare first!")
 	end
 end
 

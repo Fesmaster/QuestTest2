@@ -11,6 +11,7 @@ qts.register_chest("default:crate", {
 	invsize = 8*4,
 	get_chest_formspec = qtcore.get_default_chest_formspec,
 })
+
 --[[
 --A Test chest to see how well different inv sizes would work
 --

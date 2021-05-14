@@ -57,7 +57,6 @@ qts.gui.register_gui("inventory", {
 					data.currRecipeList = recipe_list
 					data.currRecipeIndex = 1
 					data.currRecipeItem = item_name
-					--minetest.log("Data set.")
 				end
 				
 				if qts.is_player_creative(name) and data.cheat_mode_enabled then

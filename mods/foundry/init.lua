@@ -67,14 +67,14 @@ minetest.register_node("foundry:foundry_active", {
 		meta:set_string("infotext", "Foundry")
 		local inv = meta:get_inventory()
 		inv:set_size("main", 4*6)
-		minetest.log("inv of node "..minetest.pos_to_string(pos).." should be made")
+		minetest.log("info","FOUNDRY: inv of node "..minetest.pos_to_string(pos).." should be made")
 		minetest.get_node_timer(pos):start(1.0)
 	end,
 	
 	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
 		local lvl = foundry.is_foundry(pos, true)
 		local lvl2 = foundry.is_foundry(pos, false)
-		minetest.log(dump(lvl))
+		minetest.log("verbose", "FOUNDRY: rightclick: " .. dump(lvl))
 		if lvl == false then
 			local node = minetest.get_node(pos)
 			node.name = "foundry:foundry_inactive"
@@ -169,7 +169,7 @@ minetest.register_lbm({
 	action = function(pos, node)
 		local lvl = foundry.is_foundry(pos, true)
 		if lvl then
-			minetest.log("Foundry logged")
+			minetest.log("verbose","FOUNDRY: Foundry logged")
 			node.name = "foundry:foundry_active"
 			minetest.swap_node(pos, node)
 			foundry.make_foundry(pos, lvl)

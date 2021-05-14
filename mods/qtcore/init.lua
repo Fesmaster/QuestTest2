@@ -4,7 +4,7 @@
 	for example, sound-generator functions
 	or nodebox generator functions
 	
-	they are not part of the content-agnostic QuestTest Sytem (qts)
+	they are not part of the content-agnostic QuestTest System (qts)
 	and thus do not belong in that mod
 
 --]]

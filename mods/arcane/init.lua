@@ -10,8 +10,6 @@ minetest.register_node("arcane:disollving_stone", {
 	sounds = qtcore.node_sound_stone(),
 	drop = "default:stone_cobble",
 	light_source = 9,
-	--paramtype2 = "color",
-	--palette = "default_palette_paint_light.png",
 })
 
 minetest.register_abm({
@@ -23,7 +21,6 @@ minetest.register_abm({
 	catch_up = false,
 	action = function(pos, node, active_object_count, active_object_count_wider)
 		local p2 = node.param2
-		--minetest.log("stone dissolve. param2="..dump(p2) .. " -1=" .. dump(p2-1))
 		if (p2 > 0) then
 			for x = -1,1 do
 			for y = -1,1 do
@@ -49,6 +46,7 @@ minetest.register_node("arcane:miner_unit", {
 		"arcane_miner_top.png",
 		"arcane_miner_side.png",
 	},
+	use_texture_alpha = "clip",
 	drawtype = "nodebox",
 	paramtype = "light",
 	paramtype2 = "wallmounted",

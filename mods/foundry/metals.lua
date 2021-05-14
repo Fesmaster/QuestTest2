@@ -117,7 +117,7 @@ foundry.register_smeltable({
 	metal_ammount = 4,
 })
 
---gold
+--silver
 foundry.register_metal("silver", {
 	description = "Silver",
 	texture = "foundry_steel_molten.png",

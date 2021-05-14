@@ -28,7 +28,8 @@ local underbrush_drops = {
 
 minetest.register_node("default:swamp_plant", {
 	description = "A Strange Plant that lives in the swamp",
-	tiles = {"default_swamp_temp_plant.png"},
+	tiles = {"default_swamp_plant.png"},
+	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",
 	sunlight_propagates = true,
@@ -44,6 +45,7 @@ minetest.register_node("default:swamp_plant", {
 minetest.register_node("default:small_shroom", {
 	description = "A Small Edible Mushroom",
 	tiles = {"default_small_shroom.png"},
+	use_texture_alpha = "clip",
 	drawtype = "nodebox",
 	paramtype = "light",
 	walkable = false,
@@ -67,6 +69,7 @@ minetest.register_node("default:small_shroom", {
 minetest.register_node("default:grass_short", {
 	description = "Grass Node",
 	tiles ={"default_grass_short.png"},
+	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",
 	paramtype2 = "meshoptions",
@@ -84,6 +87,7 @@ minetest.register_node("default:grass_short", {
 minetest.register_node("default:grass_tall", {
 	description = "Grass Node",
 	tiles ={"default_grass_tall.png"},
+	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",
 	paramtype2 = "meshoptions",
@@ -101,6 +105,7 @@ minetest.register_node("default:grass_tall", {
 minetest.register_node("default:grass_dry_short", {
 	description = "Dry Grass Node",
 	tiles ={"default_dry_grass_short.png"},
+	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",
 	paramtype2 = "meshoptions",
@@ -118,6 +123,7 @@ minetest.register_node("default:grass_dry_short", {
 minetest.register_node("default:grass_dry_tall", {
 	description = "Dry Grass Node",
 	tiles ={"default_dry_grass_tall.png"},
+	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",
 	paramtype2 = "meshoptions",
@@ -135,6 +141,7 @@ minetest.register_node("default:grass_dry_tall", {
 minetest.register_node("default:underbrush_short", {
 	description = "Underbrush",
 	tiles ={"default_underbrush.png"},
+	use_texture_alpha = "clip",
 	drawtype = "nodebox",
 	paramtype = "light",
 	paramtype2 = "facedir",
@@ -158,6 +165,7 @@ minetest.register_node("default:underbrush_short", {
 minetest.register_node("default:underbrush_tall", {
 	description = "Underbrush",
 	tiles ={"default_underbrush.png"},
+	use_texture_alpha = "clip",
 	drawtype = "nodebox",
 	paramtype = "light",
 	paramtype2 = "facedir",

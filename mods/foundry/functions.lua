@@ -153,12 +153,12 @@ end
 function foundry.make_foundry(pos, level)
 	--if level is directly passed from is_foundry, this makes it safe
 	if not level then
-		minetest.log("ERR: Nil level")
+		minetest.log("error","FOUNDRY: Nil level")
 		return 
 	end
 	local node = minetest.get_node_or_nil(pos)
 	if not node then 
-		minetest.log("ERR: Nil Node")
+		minetest.log("error","FOUNDRY: Nil Node")
 		return 
 	end
 	local param2 = node.param2
@@ -202,12 +202,12 @@ end
 function foundry.log_foundry(pos, level)
 	--if level is directly passed from is_foundry, this makes it safe
 	if not level then
-		minetest.log("ERR: Nil level")
+		minetest.log("error","FOUNDRY: Nil level")
 		return 
 	end
 	local node = minetest.get_node_or_nil(pos)
 	if not node then 
-		minetest.log("ERR: Nil Node")
+		minetest.log("error","FOUNDRY: Nil Node")
 		return 
 	end
 	local param2 = node.param2
@@ -527,10 +527,10 @@ function foundry.GetFoundryData(pos)
 		 if foundry.worldfoundries[minetest.hash_node_position(pos)] then
 			--the foundry data must be made
 			foundry.InitFoundry(pos)
-			minetest.log("WARNING: Foundry data was nil. created some, attempting to get")
+			minetest.log("warning","FOUNDRY: Foundry data was nil. created some, attempting to get")
 			return foundry.GetFoundryData(pos) --recursive call
 		 else
-			minetest.log("Not even a world foundry. strange")
+			minetest.log("error","FOUNDRY: Not even a world foundry. strange")
 			return
 		 end
 	end
@@ -650,7 +650,7 @@ foundry.register_smeltable = function(def)
 	end
 	if not def.smelt_time then 
 		def.smelt_time = 1
-		minetest.log("warning", "Foundry: Declare a smelt_time in register_smeltable")
+		minetest.log("warning", "FOUNDRY: Declare a smelt_time in register_smeltable")
 	end
 	if not def.type then error("Foundry: Cannot declare a smeltable without a smelting type") end
 	local t = {fuel = true, melt = true}

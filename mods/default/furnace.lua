@@ -19,7 +19,6 @@ qts.gui.register_gui("default_furnace", {
 			(fuel_percent)..":default_furnace_fire_fg.png]"..
 			"image["..P(3.75,1.5)..";1,1;gui_furnace_arrow_bg.png^[lowpart:"..
 			(item_percent)..":gui_furnace_arrow_fg.png^[transformR270]"..
-			
 			inventory.get_player_main(qts.gui.gui_makepos(0, 4.25), false) ..
 			--liststrings
 			"listring[nodemeta:"..spos..";dst]"..
@@ -28,7 +27,6 @@ qts.gui.register_gui("default_furnace", {
 			"listring[current_player;main]"..
 			"listring[nodemeta:"..spos..";fuel]"..
 			"listring[current_player;main]"
-		
 		
 		minetest.after(0.8, function(pos, name)
 			if qts.gui.get_open_gui(name) == "default_furnace" then

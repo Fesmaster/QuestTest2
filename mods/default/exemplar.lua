@@ -17,7 +17,7 @@ inventory.register_exemplar_item("leaves", "default:oak_leaves")
 
 inventory.register_exemplar_item("workbench", "default:workbench")
 inventory.register_exemplar_item("workbench_heavy", "default:workbench_heavy")
-inventory.register_exemplar_item("anvil", "default:anvil")--furnace
+inventory.register_exemplar_item("anvil", "default:anvil")
 inventory.register_exemplar_item("furnace", "default:furnace_active")
 inventory.register_exemplar_item("fruit", "default:lantern_fruit")
 inventory.register_exemplar_item("coal", "default:charcoal")

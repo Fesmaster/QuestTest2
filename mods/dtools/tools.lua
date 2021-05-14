@@ -304,7 +304,8 @@ minetest.register_tool("dtools:paintbrush", {
 			if (node_def.palette) then
 				local pindex = node.param2 / 32
 				pindex = pindex + 1
-				if (pindex >= 8) then pindex = 0 end
+				while(pindex >= 8) do pindex = pindex - 8 end
+				--if (pindex >= 8) then pindex = 0 end
 				node.param2 = pindex * 32
 				minetest.set_node(pointed_thing.under, node)
 			end
@@ -319,7 +320,8 @@ minetest.register_tool("dtools:paintbrush", {
 			if (node_def.palette) then
 				local pindex = node.param2 / 32
 				pindex = pindex - 1
-				if (pindex <= -1) then pindex = 7 end
+				while(pindex <= -1) do pindex = pindex + 8 end
+				--if (pindex <= -1) then pindex = 7 end
 				node.param2 = pindex * 32
 				minetest.set_node(pointed_thing.under, node)
 			end

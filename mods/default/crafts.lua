@@ -147,94 +147,7 @@ qts.register_craft({
 })
 
 --weapons and tools
---[[
---old tools
-qts.register_craft({
-	ingredients = {"group:wood", "default:pick_head_copper"},
-	results = {"default:pick_copper"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"group:wood", "default:pick_head_bronze"},
-	results = {"default:pick_bronze"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"group:wood", "default:pick_head_iron"},
-	results = {"default:pick_iron"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"group:wood", "default:pick_head_steel"},
-	results = {"default:pick_steel"},
-	near = {"group:workbench"},
-})
 
-qts.register_craft({
-	ingredients = {"group:wood", "default:axe_head_copper"},
-	results = {"default:axe_copper"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"group:wood", "default:axe_head_bronze"},
-	results = {"default:axe_bronze"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"group:wood", "default:axe_head_iron"},
-	results = {"default:axe_iron"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"group:wood", "default:axe_head_steel"},
-	results = {"default:axe_steel"},
-	near = {"group:workbench"},
-})
-
-qts.register_craft({
-	ingredients = {"group:wood", "default:shovel_head_copper"},
-	results = {"default:shovel_copper"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"group:wood", "default:shovel_head_bronze"},
-	results = {"default:shovel_bronze"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"group:wood", "default:shovel_head_iron"},
-	results = {"default:shovel_iron"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"group:wood", "default:shovel_head_steel"},
-	results = {"default:shovel_steel"},
-	near = {"group:workbench"},
-})
-
-qts.register_craft({
-	ingredients = {"group:wood", "default:sword_blade_copper"},
-	results = {"default:sword_copper"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"group:wood", "default:sword_blade_bronze"},
-	results = {"default:sword_bronze"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"group:wood", "default:sword_blade_iron"},
-	results = {"default:sword_iron"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"group:wood", "default:sword_blade_steel"},
-	results = {"default:sword_steel"},
-	near = {"group:workbench"},
-})
-
-
---]]
 --picks
 qts.register_craft({
 	ingredients = {"group:wood", "default:copper_bar 3"},
@@ -340,49 +253,7 @@ qts.register_craft({
 
 
 --stone and stone walls
---[[
-qts.register_craft({
-	ingredients = {"group:grey_stone"},
-	results = {"default:stone_brick"},
-	near = {"group:workbench_heavy"},
-})
-qts.register_craft({
-	ingredients = {"group:grey_stone"},
-	results = {"default:stone_block"},
-	near = {"group:workbench_heavy"},
-})
-qts.register_craft({
-	ingredients = {"group:red_stone"},
-	results = {"default:red_stone_brick"},
-	near = {"group:workbench_heavy"},
-})
-qts.register_craft({
-	ingredients = {"group:red_stone"},
-	results = {"default:red_stone_block"},
-	near = {"group:workbench_heavy"},
-})
-qts.register_craft({
-	ingredients = {"group:sand_stone"},
-	results = {"default:sandstone_brick"},
-	near = {"group:workbench_heavy"},
-})
-qts.register_craft({
-	ingredients = {"group:sand_stone"},
-	results = {"default:sandstone_block"},
-	near = {"group:workbench_heavy"},
-})
-qts.register_craft({
-	ingredients = {"group:desert_stone"},
-	results = {"default:desert_sandstone_brick"},
-	near = {"group:workbench_heavy"},
-})
-qts.register_craft({
-	ingredients = {"group:desert_stone"},
-	results = {"default:desert_sandstone_block"},
-	near = {"group:workbench_heavy"},
-})
-
---]]
+--grey stone
 qts.register_craft({
 	ingredients = {"group:grey_stone"},
 	results = {"default:stone"},
@@ -403,7 +274,7 @@ qts.register_craft({
 	results = {"default:stone_cobble_wall"},
 	near = {"group:workbench_heavy"},
 })
-
+--moss stone
 qts.register_craft({
 	ingredients = {"group:mossy_stone"},
 	results = {"default:moss_stone"},
@@ -419,7 +290,6 @@ qts.register_craft({
 	results = {"default:moss_stone_cobble_wall"},
 	near = {"group:workbench_heavy"},
 })
-
 --understone
 qts.register_craft({
 	ingredients = {"group:understone"},
@@ -431,7 +301,12 @@ qts.register_craft({
 	results = {"default:understone_cobble"},
 	near = {"group:workbench_heavy"},
 })
-
+qts.register_craft({
+	ingredients = {"group:understone"},
+	results = {"default:understone_cobble_wall"},
+	near = {"group:workbench_heavy"},
+})
+--red stone
 qts.register_craft({
 	ingredients = {"group:red_stone"},
 	results = {"default:red_stone"},
@@ -447,6 +322,7 @@ qts.register_craft({
 	results = {"default:red_stone_cobble_wall"},
 	near = {"group:workbench_heavy"},
 })
+--sandstone
 qts.register_craft({
 	ingredients = {"group:sand_stone"},
 	results = {"default:sandstone"},
@@ -462,6 +338,7 @@ qts.register_craft({
 	results = {"default:sandstone_cobble_wall"},
 	near = {"group:workbench_heavy"},
 })
+--desert sandstone
 qts.register_craft({
 	ingredients = {"group:desert_stone"},
 	results = {"default:desert_sandstone"},
@@ -477,6 +354,7 @@ qts.register_craft({
 	results = {"default:desert_sandstone_cobble_wall"},
 	near = {"group:workbench_heavy"},
 })
+--obsidian
 qts.register_craft({
 	ingredients = {"group:obsidian"},
 	results = {"default:obsidian"},

@@ -186,6 +186,15 @@ qts.register_fencelike_node("default:moss_stone_cobble_wall", {
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
+qts.register_fencelike_node("default:understone_cobble_wall", {
+	description = "Cobble Understone Wall",
+	type = "wall",
+	tiles = {"default_understone.png^qt_cobble_overlay.png"},
+	groups = {cracky=3, stone=1, understone=1},
+	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
 qts.register_fencelike_node("default:red_stone_cobble_wall", {
 	description = "Red Cobblestone Wall",
 	type = "wall",

@@ -21,6 +21,8 @@ qts.register_ingot(name, def)
 qts.register_torch(name, def)
 	no special things
 --]]
+
+--BEGIN shaped node
 function qts.register_shaped_node(name, def)
 	--prep the data for node registration
 	if (def.drop == nil) then
@@ -228,7 +230,9 @@ function qts.register_shaped_node(name, def)
 	minetest.register_node(":"..name.."_slab", qts.table_deep_copy(def))
 	--TODO: implement more shapes
 end
+--END shaped node
 
+--BEGIN fence
 local fence_collision_extra = minetest.settings:get_bool("enable_fence_tall") and 3/8 or 0
 function qts.register_fencelike_node(name, def)
 	if not def.type then minetest.log("qts.register_fencelike_node: the node def must contain type = [fence, rail, wall, pane]") end
@@ -481,7 +485,7 @@ function qts.register_fencelike_node(name, def)
 	minetest.register_node(":"..name, def)
 end
 
---Pane stuff
+--BEGIN pane
 --this is almost entirely copied from xpanes, but contains a few tweaks
 local function is_pane(pos)
 	return minetest.get_item_group(minetest.get_node(pos).name, "pane") > 0
@@ -555,11 +559,12 @@ minetest.register_on_dignode(function(pos)
 		update_pane(vector.add(pos, dir))
 	end
 end)
+--END pane
+--END fence
 
---end pane stuff
 
 
-
+--BEGIN liquid
 local liquid_cache = {}
 local bucket_cache = {}
 --liquid helper funcs
@@ -636,7 +641,8 @@ function qts.register_liquid(name, def)
 	local defaults = {
 		waving = 3,
 		paramtype = "light",
-		alpha = 191, --default transperancy
+		--alpha = 191, --default transperancy
+        use_texture_alpha = "blend",
 		walkable = false,
 		pointable = false,
 		diggable = false,
@@ -756,7 +762,9 @@ function qts.register_bucket(name, def)
 		register_bucket_full(self_id, lq_id)
 	end
 end
+--END liquid
 
+--BEGIN ingot
 function qts.register_ingot(name, def)
 	--group setup
 	local groups_item = qts.table_deep_copy(def.groups)
@@ -780,7 +788,11 @@ function qts.register_ingot(name, def)
 
 
 	local levels = def.levels or #nodeboxes
-
+	local use_namemod = (levels > 9)
+	local offset = -1
+	if use_namemod then offset = -2 end
+	local base1name = "1"
+	if use_namemod then base1name = "01" end
 
 	--register the ingot craftitem
 	minetest.register_craftitem(":"..name, {
@@ -803,13 +815,13 @@ function qts.register_ingot(name, def)
 
 			local fpos = pointed_thing.under
 
-			local itemdef = minetest.registered_items[itemstack:get_name().."_stacked_01"]
+			local itemdef = minetest.registered_items[itemstack:get_name().."_stacked_"..base1name]
 			local sound = nil
 			if itemdef and itemdef.sounds and itemdef.sounds.place then
 				sound = itemdef.sounds.place
 			end
 
-			if node.name:find(itemstack:get_name().."_stacked") and not(tonumber(node.name:sub(-2)) == levels) then
+			if node.name:find(itemstack:get_name().."_stacked") and not(tonumber(node.name:sub(offset)) == levels) then
 				--minetest.log("found one")
 
 			else
@@ -827,7 +839,7 @@ function qts.register_ingot(name, def)
 						end
 					end
 
-					minetest.place_node(pointed_thing.above, {name = itemstack:get_name().."_stacked_01"})
+					minetest.place_node(pointed_thing.above, {name = itemstack:get_name().."_stacked_"..base1name})
 					--sound
 					if sound then
 						minetest.sound_play(sound, {gain = 1.0, max_hear_distance = 32, loop = false, pos = pointed_thing.above})
@@ -838,14 +850,14 @@ function qts.register_ingot(name, def)
 			end
 
 			node = minetest.get_node_or_nil(fpos) --override node
-			local start_count = tonumber(node.name:sub(-2))
+			local start_count = tonumber(node.name:sub(offset))
 			--minetest.log(dump(start_count))
 			if start_count < levels then
 				local namemod = start_count + 1
-				if namemod < 10 then
+				if namemod < 10 and use_namemod then
 					namemod = "0"..namemod
 				end
-				local newname = node.name:sub(1,-3)..tostring(namemod)
+				local newname = node.name:sub(1,offset-1)..tostring(namemod)
 				minetest.set_node(fpos, {name = newname})
 				--minetest.place_node(fpos, {name = newname})
 				if sound then
@@ -854,7 +866,7 @@ function qts.register_ingot(name, def)
 				itemstack:take_item()
 			elseif not vector.equals(fpos, pointed_thing.above) then
 				--place a new bar on the ground
-				minetest.place_node(pointed_thing.above, {name = itemstack:get_name().."_stacked_01"})
+				minetest.place_node(pointed_thing.above, {name = itemstack:get_name().."_stacked_"..base1name})
 				--sound
 				if sound then
 					minetest.sound_play(sound, {gain = 1.0, max_hear_distance = 32, loop = false, pos = pointed_thing.above})
@@ -876,7 +888,7 @@ function qts.register_ingot(name, def)
 			nb[j] = nodeboxes[j]
 		end
 		local namemod = ""..i
-		if i < 10 then
+		if i < 10 and use_namemod then
 			namemod = "0"..i
 		end
 		--register the nodes
@@ -903,7 +915,9 @@ function qts.register_ingot(name, def)
 		})
 	end
 end
+--END ingot
 
+--BEGIN torch
 function qts.register_torch(name, def)
 	local sound_flood = def.sound_flood
 	def.sound_flood = nil
@@ -911,6 +925,7 @@ function qts.register_torch(name, def)
 	def.drawtype = "mesh"
 	def.paramtype = "light"
 	def.paramtype2 = "wallmounted"
+    def.use_texture_alpha = def.use_texture_alpha or "clip"
 	def.groups.torch = 1
 	def.groups.attached_node = 1
 	def.sunlight_propagates = true
@@ -979,3 +994,4 @@ function qts.register_torch(name, def)
 	minetest.register_node(name.."_ceiling", torch_ceil_def)
 
 end
+--END torch
