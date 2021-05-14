@@ -867,6 +867,7 @@ minetest.register_node("default:palm_leaves", {
 	drawtype = "allfaces_optional",
 	waving = 1,
 	tiles = {"default_palm_leaves.png"},
+	use_texture_alpha = "clip",
 	paramtype = "light",
 	groups = {snappy = 3, flammable = 2, leaves = 1},
 	drop = {
@@ -882,32 +883,7 @@ minetest.register_node("default:palm_leaves", {
 	after_place_node = qtcore.after_place_leaves;
 })
 
-minetest.register_node("default:palm_sapling", {
-	tiles = {
-		"default_wood.png",
-		"default_wood.png",
-		"default_wood.png",
-		"default_wood.png",
-		"default_wood.png",
-		"default_wood.png"
-	},
-	drawtype = "nodebox",
-	paramtype = "light",
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{0, -0.5, 0.0625, 0.0625, -0.3125, 0.125}, -- NodeBox1
-			{0, -0.3125, 0, 0.0625, -0.125, 0.0625}, -- NodeBox2
-			{-0.0625, -0.125, -0.125, 0.1875, -0.0625, 0.125}, -- NodeBox3
-			{-0.125, -0.1875, -0.0625, 0.25, -0.125, 0.0625}, -- NodeBox4
-			{0, -0.1875, -0.1875, 0.125, -0.125, 0.1875}, -- NodeBox6
-			{0, -0.3125, -0.25, 0.125, -0.1875, -0.1875}, -- NodeBox7
-			{0, -0.375, 0.1875, 0.125, -0.1875, 0.25}, -- NodeBox8
-			{0.25, -0.375, -0.0625, 0.3125, -0.1875, 0.0625}, -- NodeBox9
-			{-0.1875, -0.3125, -0.0625, -0.125, -0.1875, 0.0625}, -- NodeBox10
-		}
-	}
-})
+
 
 
 minetest.register_node("default:swamp_leaves", {
@@ -932,7 +908,7 @@ minetest.register_node("default:swamp_leaves", {
 	}
 })
 
-<<<<<<< ours
+
 --[[
 minetest.register_node("default:palm_leaves", {
 	description = "Palm Leaf",
@@ -959,9 +935,7 @@ minetest.register_node("default:palm_leaves", {
 	}
 })
 --]]
-=======
 
->>>>>>> theirs
 
 
 --fruit

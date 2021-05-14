@@ -180,3 +180,31 @@ qts.register_growable_node("default:rosewood_sapling", {
 		qtcore.grow_rosewood_tree(pos)
 	end,
 })
+
+--TODO: This should be growable, and have a growing function!!!!
+minetest.register_node("default:palm_sapling", {
+	tiles = {
+		"default_wood.png",
+		"default_wood.png",
+		"default_wood.png",
+		"default_wood.png",
+		"default_wood.png",
+		"default_wood.png"
+	},
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{0, -0.5, 0.0625, 0.0625, -0.3125, 0.125}, -- NodeBox1
+			{0, -0.3125, 0, 0.0625, -0.125, 0.0625}, -- NodeBox2
+			{-0.0625, -0.125, -0.125, 0.1875, -0.0625, 0.125}, -- NodeBox3
+			{-0.125, -0.1875, -0.0625, 0.25, -0.125, 0.0625}, -- NodeBox4
+			{0, -0.1875, -0.1875, 0.125, -0.125, 0.1875}, -- NodeBox6
+			{0, -0.3125, -0.25, 0.125, -0.1875, -0.1875}, -- NodeBox7
+			{0, -0.375, 0.1875, 0.125, -0.1875, 0.25}, -- NodeBox8
+			{0.25, -0.375, -0.0625, 0.3125, -0.1875, 0.0625}, -- NodeBox9
+			{-0.1875, -0.3125, -0.0625, -0.125, -0.1875, 0.0625}, -- NodeBox10
+		}
+	}
+})
