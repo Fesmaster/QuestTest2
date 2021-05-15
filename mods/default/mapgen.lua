@@ -17,7 +17,8 @@ qts.worldgen.set_mapgen_defaults("default:stone", "default:water_source", "defau
 	surface_depth = number
 	fill_depth = number
 	stone_depth = number
-	--]]
+--]]
+
 qts.worldgen.register_biome("grasslands", {
 	heat_point = 25,
 	humidity_point = 70,
@@ -224,6 +225,8 @@ qts.worldgen.register_biome("caverelm", {
 	surface = "default:understone",
 	underwater = "default:understone",
 	--fill = "default:understone",
+	plant = {"default:cave_crystal_blue", "default:cave_crystal_green", "default:cave_crystal_purple"},
+	plant_freq = 10,
 	stone = "default:understone",
 	surface_depth = 12,
 	fill_depth = 12,

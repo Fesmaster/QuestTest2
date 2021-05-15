@@ -26,6 +26,19 @@ local underbrush_drops = {
 	}
 }
 
+local function floodFunc(pos, oldnode, newnode)
+	local d = minetest.get_node_drops(oldnode, "wieldhand")
+	for index, item in ipairs(d) do
+		local obj = minetest.add_item(pos, ItemStack(item))
+		if obj then
+			obj:set_velocity({x = math.random(-1, 1), y = math.random(3, 5), z = math.random(-1, 1)})
+		else
+			minetest.log("error","invalid drop: ".. dump(itemstack))
+		end
+	end
+	return false
+end
+
 minetest.register_node("default:swamp_plant", {
 	description = "A Strange Plant that lives in the swamp",
 	tiles = {"default_swamp_plant.png"},
@@ -49,6 +62,7 @@ minetest.register_node("default:small_shroom", {
 	drawtype = "nodebox",
 	paramtype = "light",
 	walkable = false,
+	floodable = true,
 	groups = {snappy = 3, flammable = 2, snappy=3, attached_node=1},
 	node_box = {
 		type = "fixed",
@@ -62,6 +76,7 @@ minetest.register_node("default:small_shroom", {
 		}
 	},
 	sounds = qtcore.node_sound_defaults(),
+	on_flood = floodFunc,
 })
 
 
@@ -75,6 +90,7 @@ minetest.register_node("default:grass_short", {
 	paramtype2 = "meshoptions",
 	sunlight_propagates = true,
 	walkable = false,
+	floodable = true,
 	waving = 1,
 	buildable_to = true,
 	selection_box = qtcore.nb_level1(),
@@ -82,6 +98,7 @@ minetest.register_node("default:grass_short", {
 	sounds = qtcore.node_sound_defaults(),
 	on_place = qtcore.place_random_plantlike,
 	drop = underbrush_drops,
+	on_flood = floodFunc,
 })
 
 minetest.register_node("default:grass_tall", {
@@ -93,6 +110,7 @@ minetest.register_node("default:grass_tall", {
 	paramtype2 = "meshoptions",
 	sunlight_propagates = true,
 	walkable = false,
+	floodable = true,
 	waving = 1,
 	buildable_to = true,
 	selection_box = qtcore.nb_level1(),
@@ -100,6 +118,7 @@ minetest.register_node("default:grass_tall", {
 	sounds = qtcore.node_sound_defaults(),
 	on_place = qtcore.place_random_plantlike,
 	drop = underbrush_drops,
+	on_flood = floodFunc,
 })
 
 minetest.register_node("default:grass_dry_short", {
@@ -111,6 +130,7 @@ minetest.register_node("default:grass_dry_short", {
 	paramtype2 = "meshoptions",
 	sunlight_propagates = true,
 	walkable = false,
+	floodable = true,
 	waving = 1,
 	buildable_to = true,
 	selection_box = qtcore.nb_level1(),
@@ -118,6 +138,7 @@ minetest.register_node("default:grass_dry_short", {
 	sounds = qtcore.node_sound_defaults(),
 	on_place = qtcore.place_random_plantlike,
 	drop = underbrush_drops,
+	on_flood = floodFunc,
 })
 
 minetest.register_node("default:grass_dry_tall", {
@@ -129,6 +150,7 @@ minetest.register_node("default:grass_dry_tall", {
 	paramtype2 = "meshoptions",
 	sunlight_propagates = true,
 	walkable = false,
+	floodable = true,
 	waving = 1,
 	buildable_to = true,
 	selection_box = qtcore.nb_level1(),
@@ -136,6 +158,7 @@ minetest.register_node("default:grass_dry_tall", {
 	sounds = qtcore.node_sound_defaults(),
 	on_place = qtcore.place_random_plantlike,
 	drop = underbrush_drops,
+	on_flood = floodFunc,
 })
 
 minetest.register_node("default:underbrush_short", {
@@ -147,8 +170,8 @@ minetest.register_node("default:underbrush_short", {
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
 	walkable = false,
+	floodable = true,
 	buildable_to = true,
-	--selection_box = qtcore.nb_level1(),
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -159,8 +182,8 @@ minetest.register_node("default:underbrush_short", {
 	},
 	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1},
 	sounds = qtcore.node_sound_defaults(),
-	--on_place = qtcore.place_random_plantlike,
 	drop = underbrush_drops,
+	on_flood = floodFunc,
 })
 minetest.register_node("default:underbrush_tall", {
 	description = "Underbrush",
@@ -171,8 +194,8 @@ minetest.register_node("default:underbrush_tall", {
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
 	walkable = false,
+	floodable = true,
 	buildable_to = true,
-	--selection_box = qtcore.nb_level1(),
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -185,18 +208,34 @@ minetest.register_node("default:underbrush_tall", {
 	},
 	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1},
 	sounds = qtcore.node_sound_defaults(),
-	--on_place = qtcore.place_random_plantlike,
 	drop = underbrush_drops,
+	on_flood = floodFunc,
 })
 
-minetest.register_lbm({
-	label = "Legacy grass replacement",
-	name = "default:grass_5",
-	run_at_every_load = true,
-	action = function(pos, node)
-		minetest.set_node(pos, {name = "default:grass_tall", param2 = qtcore.get_random_meshdata()})
-	end
-})
+local colors = {"blue", "green", "purple"}
+local colorCap = {"Blue", "Green", "Purple"}
+
+for k, color in ipairs(colors) do
+	minetest.register_node("default:cave_crystal_"..color, {
+		description = colorCap[k].." Cave Crystal",
+		drawtype = "mesh",
+		tiles = {"default_cave_crystal_"..color..".png"},
+		mesh = "cave_crystal.obj",
+		paramtype = "light",
+		paramtype2 = "wallmounted",
+		walkable = false,
+		buildable_to = true,
+		use_texture_alpha = "blend",
+		sunlight_propagates = true,
+		on_rotate = false,
+		selection_box = qtcore.nb_level1(),
+		light_source = 10,
+		groups = {cracky=3, crystal = 1, attached_node = 1},
+		sounds = qtcore.node_sound_stone(),
+	})
+end
+
+
 
 --[[
 --grow_timer = 1,

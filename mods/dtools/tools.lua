@@ -27,6 +27,16 @@ minetest.register_tool("dtools:testingTool", {
 	--liquids_pointable = true,
 	on_use = function(itemstack, user, pointed_thing)
 		---[[
+		if pointed_thing.under then
+			local node = minetest.get_node(pointed_thing.under)
+			node.param2 = node.param2 + 1
+			minetest.set_node(pointed_thing.under, node)
+			--minetest.set_node(pointed_thing.above, {name="arcane:disollving_stone", param2=20})
+			--minetest.log(minetest.pos_to_string(vector.subtract(pointed_thing.above, pointed_thing.under)))
+			minetest.set_node(pointed_thing.above, {name="default:snow"})
+		end
+		--]]
+        --[[
 		minetest.log("QTS Testing Tool used")
 		local pos = nil
 		if pointed_thing.under then
@@ -59,16 +69,16 @@ minetest.register_tool("dtools:testingTool", {
 		--]]
 	end,
 	on_place = function(itemstack, user, pointed_thing)
-		--[[
+		---[[
 		if pointed_thing.under then
-			minetest.log("QTS Testing Tool placed")
 			local node = minetest.get_node(pointed_thing.under)
 			node.param2 = node.param2 - 1
 			minetest.set_node(pointed_thing.under, node)
-			minetest.set_node(pointed_thing.above, {name="arcane:disollving_stone", param2=20})
+			--minetest.set_node(pointed_thing.above, {name="arcane:disollving_stone", param2=20})
 			--minetest.log(minetest.pos_to_string(vector.subtract(pointed_thing.above, pointed_thing.under)))
 		end
 		--]]
+        --[[
 		local pos = nil
 		if pointed_thing.under then
 			pos = pointed_thing.under
@@ -92,6 +102,7 @@ minetest.register_tool("dtools:testingTool", {
 				end
 			end
 		end
+        --]]
 	end
 })
 

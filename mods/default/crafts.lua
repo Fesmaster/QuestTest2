@@ -105,6 +105,11 @@ qts.register_craft({
 })
 
 qts.register_craft({
+	ingredients = {"group:wood"},
+	results = {"default:ladder 8"},
+})
+
+qts.register_craft({
 	ingredients = {"group:wood 4"},
 	results = {"default:crate"},
 	near = {"group:workbench"},

@@ -18,6 +18,8 @@ qts.register_shaped_node("default:cement", {
 	sounds = qtcore.node_sound_stone(),
 })
 
+
+
 --BEGIN grey
 qts.register_shaped_node("default:stone", {
 	description = "Stone",
@@ -44,7 +46,6 @@ qts.register_shaped_node ("default:stone_cobble", {
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
-minetest.register_alias("default:cobble", "default:stone_cobble")--TODO: remove backwards compatability
 --END grey
 
 --BEGIN mossy
@@ -373,6 +374,30 @@ minetest.override_item("default:dirt_with_rainforest_grass", {
 		{name = "default_dirt.png^default_rainforest_grass_side.png",
 			tileable_vertical = false}},
 })
+
+qts.register_shaped_node ("default:dirt_with_snow", {
+	description = "Dirt with Snow",
+	tiles = {"default_snow.png"},
+	groups = {crumbly = 3, soil=1},
+	sounds = qtcore.node_sound_grass(),
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				rarity = 32,
+				items = {"default:flint"},
+			},
+			{
+				items = {"default:dirt"}
+			}
+		}
+	}
+})
+minetest.override_item("default:dirt_with_snow", {
+	tiles = {"default_snow.png", "default_dirt.png",
+		{name = "default_dirt.png^default_snow_side.png",
+			tileable_vertical = false}},
+})
 --END dirt
 
 qts.register_shaped_node ("default:sand", {
@@ -431,6 +456,59 @@ qts.register_shaped_node ("default:desert_sand", {
 		}
 	}
 })
+
+minetest.register_node("default:snow", {
+	description = "Snow",
+	tiles ={"default_snow.png"},
+	inventory_image = "default_snowball.png",
+	wield_image = "default_snowball.png",
+	groups = {crumbly=3, snow=1, falling_node=1, cooling = 1},
+	drawtype = "nodebox",
+	node_box = {
+		type = "leveled",
+		fixed = {{-1/2, -1/2, -1/2, 1/2, 1/2, 1/2}},
+	},
+	paramtype = "light",
+	sunlight_propagates = true,
+	leveled = 64,
+	leveled_max = 64,
+	paramtype2 = "leveled",
+	sounds = qtcore.node_sound_defaults(),
+	on_dig = function(pos, node, digger)
+		local p2 = (minetest.get_node(pos).param2) / 8
+		local l = minetest.node_dig(pos, node, digger)
+		if (not l) then return false end
+		if (qts.is_player_creative(digger:get_player_name()))then
+			return l
+		end
+		p2 = p2 - 1
+		if (p2 == -1)then p2 = 7 end -- param2 == 0 is full block too!
+		if (p2 > 0) then
+			local inv = digger:get_inventory()
+			local i = ItemStack("default:snow")
+			i:set_count(p2)
+			i = inv:add_item("main", i)
+			if (not i:is_empty()) then
+				minetest.item_drop(i, digger, digger:get_pos())
+			end
+		end
+		return true
+	end,
+	on_place = function(itemstack, placer, pointed_thing)
+		local placed = false
+		if (pointed_thing.under ~= nil) then
+			local n = minetest.get_node(pointed_thing.under)
+			if (n.name == "default:snow" and n.param2 < 64)then
+				n.param2 = n.param2 + 8
+				if (n.param2 == 8)then n.param2 = 16 end --fix for first level
+				if (n.param2 % 8 == 0)then n.param2 = n.param2 - (n.param2 % 8) end --fix for odd things
+				minetest.remove_node(pointed_thing.under)
+				return minetest.item_place(itemstack, placer, pointed_thing, n.param2)
+			end
+		end
+		return minetest.item_place(itemstack, placer, pointed_thing, 8)
+	end,
+})
 --END soil
 
 
@@ -444,7 +522,6 @@ qts.register_shaped_node ("default:oak_wood_planks", {
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
-minetest.register_alias("default:wood_planks", "default:oak_wood_planks") --TODO: remove backwards compatability
 qts.register_shaped_node ("default:oak_log", {
 	description = "Oak Log",
 	tiles = {"default_oak_top.png", "default_oak_top.png", "default_oak_side.png"},
@@ -600,9 +677,9 @@ minetest.register_node("default:swamp_tree", {
 		}
 	}
 })
+--END wood
 
-
-
+--BEGIN shrooms
 qts.register_shaped_node ("default:blue_mushroom_trunk", {
 	description = "Blue Mushroom Trunk",
 	tiles = {"default_b_shroom_top.png", "default_b_shroom_top.png", "default_b_shroom_side.png"},
@@ -651,7 +728,7 @@ minetest.register_node("default:gold_shroom_spore", {
 		}
 	}
 })
-
+--END shrooms
 
 --BEGIN leaves
 --[[
@@ -730,9 +807,13 @@ minetest.register_node("default:apple_leaves_fruit", {
 	use_texture_alpha = "clip",
 	paramtype = "light",
 	groups = {snappy = 3, flammable = 2, leaves = 1},
-	--drop = {
-	--	--TODO: finish leaf drops
-	--},
+	drop = {
+		max_items = 2,
+		items = {
+			{items = {"default:apple"}},
+			{items = {"default:apple_leaves"}},
+		}
+	},
 	walkable = false,
 	climbable = true,
 	sounds = qtcore.node_sound_grass(),
@@ -935,10 +1016,9 @@ minetest.register_node("default:palm_leaves", {
 	}
 })
 --]]
+--END leaves
 
 
-
---fruit
 --BEGIN fruit
 minetest.register_node("default:lantern_fruit", {
 	description = "Lantern Fruit",
@@ -964,7 +1044,11 @@ qts.register_ingot("default:apple", {
 	inventory_image = "default_apple_fruit_item.png",
 	tiles = {"default_apple_fruit_top.png", "default_apple_fruit.png", "default_apple_fruit.png"},
 	groups = {cracky=3, fruit = 1},
-	sounds = qtcore.node_sound_stone(),
+	on_use = minetest.item_eat(2),
+	sunlight_propagates = true,
+	walkable = false,
+	is_ground_content = false,
+	sounds = qtcore.node_sound_wood(),
 	nodeboxes = {
 		{-0.4375, -0.5, 0.1875, -0.1875, -0.25, 0.4375}, -- NodeBox1
 		{-0.4375, -0.5, -0.125, -0.1875, -0.25, 0.125}, -- NodeBox2
@@ -985,32 +1069,6 @@ qts.register_ingot("default:apple", {
 })
 --END fruit
 
---[[
-minetest.register_node("default:apple", {
-	description = ("Apple"),
-	drawtype = "nodebox",
-	tiles = {
-		"default_apple.png"
-	},
-	drawtype = "nodebox",
-	paramtype = "light",
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{-0.125, -0.4375, -0.125, 0.0625, -0.25, 0.1875}, -- NodeBox1
-			{-0.0625, -0.5, 0, 0, -0.0625, 0.0625}, -- NodeBox2
-			{-0.1875, -0.4375, -0.0625, 0.125, -0.25, 0.125}, -- NodeBox3
-			{-0.125, -0.5, -0.0625, 0.0625, -0.1875, 0.125}, -- NodeBox4
-		}
-	},
-	sunlight_propagates = true,
-	walkable = false,
-	is_ground_content = false,
-	groups = {snappy=3, oddly_breakable_by_hand=3, fruit = 1},
-	on_use = minetest.item_eat(2),
-	sounds = qtcore.node_sound_wood(),
-})
---]]
 
 --BEGIN crafting
 minetest.register_node("default:workbench", {
@@ -1063,7 +1121,7 @@ minetest.register_node("default:workbench_heavy", {
 	sounds = qtcore.node_sound_wood(),
 })
 
-qts.register_shaped_node("default:anvil", {
+minetest.register_node("default:anvil", {
 	description = "Steel Block",
 	tiles = {"default_anvil.png"},
 	drawtype = "nodebox",
@@ -1106,6 +1164,16 @@ qts.register_fencelike_node("default:glass_pane", {
 	groups = {cracky=3, glass=1, oddly_breakable_by_hand=3},
 	sounds = qtcore.node_sound_metal(),
 })
+
+qts.register_shaped_node("default:ice", {
+	description = "Ice",
+	tiles = {"default_ice.png"},
+	use_texture_alpha = "blend",
+	drawtype = "glasslike",
+	paramtype = "light",
+	groups = {cracky=3, ice=1, cooling=1, slippery=4},
+	sounds = qtcore.node_sound_metal(),
+})
 --END glass
 
 --BEGIN furnature
@@ -1131,4 +1199,47 @@ minetest.register_node("default:table", {
 	},
 	sounds = qtcore.node_sound_wood(),
 })
---BEGIN furnature
+
+minetest.register_node("default:ladder", {
+	description = "Ladder",
+	tiles ={"default_oak_wood.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "wallmounted",
+	walkable = true,
+	climbable = true,
+	groups = {oddly_breakable_by_hand=3, choppy=2, flammable=2},
+	node_box = {
+		type="fixed",
+		fixed = {
+			{-0.5, -0.4375, -0.375, 0.5, -0.375, -0.3125}, -- NodeBox8
+			{-0.5, -0.4375, -0.125, 0.5, -0.375, -0.0625}, -- NodeBox9
+			{-0.375, -0.5, -0.5, -0.3125, -0.4375, 0.5}, -- NodeBox10
+			{0.3125, -0.5, -0.5, 0.375, -0.4375, 0.5}, -- NodeBox13
+			{-0.5, -0.4375, 0.125, 0.5, -0.375, 0.1875}, -- NodeBox14
+			{-0.5, -0.4375, 0.375, 0.5, -0.375, 0.4375}, -- NodeBox15
+		}
+	},
+	selection_box = {
+		type="fixed",
+		fixed = {
+			{-0.5, -0.5, -0.5, 0.5, -0.375000, 0.5}
+		},
+	},
+	collision_box = {
+		type="fixed",
+		fixed = {
+			{-0.5, -0.5, -0.5, 0.5, -0.375000, 0.5}
+		},
+	},
+	sounds = qtcore.node_sound_wood(),
+	on_place = function(itemstack, placer, pointed_thing)
+		if (pointed_thing.under ~= nil and minetest.get_node(pointed_thing.under).name == "default:ladder") then
+			--place with same rotation as under
+			minetest.item_place(itemstack, placer, pointed_thing, minetest.get_node(pointed_thing.under).param2)
+		else
+			minetest.item_place(itemstack, placer, pointed_thing)
+		end
+	end,
+})
+--END furnature

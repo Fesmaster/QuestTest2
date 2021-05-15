@@ -356,6 +356,8 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 										param2 = genParam2Meshoptions()
 									elseif nameDef.paramtype2 == "facedir" then
 										param2 = genParam2Facedir()
+									elseif nameDef.paramtype2 == "wallmounted" then
+										param2 = 1
 									end
 								end
 								--minetest.log("Plant Randomly placed. Biome: " .. dump(biomeID))
@@ -386,24 +388,39 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 			end
 			--if not biomeRef then minetest.log("LINE 361: NULL BEFORE DUST COLUMN") end
 			--retrace for dust
-			if false and biomeRef and biomeRef.dust then
+			if biomeRef and biomeRef.dust then
 				local dust_placed = false
 				for y = maxp.y, minp.y, -1 do
 					if not dust_placed then
 						local i = Area:index(x, y, z)
 						local nID = nil
-						if Data[i] == CID["air"]
-								and not(Data[Area:index(x, y-1, z)] == CID["water"] 
-									or Data[Area:index(x, y-1, z)] == CID["river"] )then
+						local param2 = nil
+						if (
+								Data[i] == CID["air"]
+								and not(
+										Data[Area:index(x, y-1, z)] == CID["water"] 
+										or Data[Area:index(x, y-1, z)] == CID["river"]
+										or Data[Area:index(x, y-1, z)] == CID["air"]
+										)
+							)then
 							--place dust
-							nID = qts.worldgen.get_biome_node(biomeID,"dust")
+							
+							local name = qts.worldgen.get_biome_node(biomeID,"dust", false)
+							nID = CID[name]
+							local nameDef = minetest.registered_nodes[name]
+							if (nameDef.leveled ~= nil) then
+								param2 = 8*math.random(1, 4);
+							end
 							dust_placed = true
-							break
 						end
 						if nID then
 							Data[i] = nID
-							--dbg_placed = true
 						end
+						if param2 then
+							Param2Data[i] = param2
+						end
+					else
+						break
 					end
 				end
 			end

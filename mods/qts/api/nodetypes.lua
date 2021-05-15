@@ -648,13 +648,19 @@ function qts.register_liquid(name, def)
 		diggable = false,
 		buildable_to = true,
 		is_ground_content = false,
+		liquids_pointable = true,
 		drop = "",
 		drowning = 1,
 		liquid_alternative_flowing = name.."_flowing",
 		liquid_alternative_source = name.."_source",
 		liquid_viscosity = 1,
 		post_effect_color = {a = 103, r = 30, g = 60, b = 90},
-		groups = {}
+		groups = {},
+		--[[
+		on_place = function(itemstack, placer, pointed_thing)
+			minetest.item_place_node(itemstack, placer, pointed_thing)
+		end,
+		--]]
 	}
 
 	for k, v in pairs(defaults) do
@@ -793,12 +799,25 @@ function qts.register_ingot(name, def)
 	if use_namemod then offset = -2 end
 	local base1name = "1"
 	if use_namemod then base1name = "01" end
-
+    
+    
 	--register the ingot craftitem
 	minetest.register_craftitem(":"..name, {
 		description = def.description,
 		inventory_image = def.inventory_image,
+		inventory_overlay = def.inventory_overlay,
+		wield_image = def.wield_image,
+		wield_overlay = def.wield_overlay,
+		palette = def.palette,
+		color = def.color,
+		wield_scale = def.wield_scale,
+		stack_max = def.stack_max,
+		liquids_pointable = def.liquids_pointable,
+		light_source = def.light_source,
+		tool_capabilities = def.tool_capabilities,
+		sound = def.sound,
 		groups = groups_item,
+                                            
 		on_place = function(itemstack, user, pointed_thing)
 			if pointed_thing.type ~= "node" then
 				return
@@ -876,6 +895,11 @@ function qts.register_ingot(name, def)
 			--TODO:finish ingot item def
 			return itemstack
 		end,
+		
+		on_secondary_use = def.on_secondary_use,
+		on_drop = def.on_drop,
+		on_use = def.on_use,
+		after_use = def.after_use,
 	})
 
 
