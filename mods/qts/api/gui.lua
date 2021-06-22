@@ -84,11 +84,11 @@ end
 function qts.gui.register_gui(name, def)
 	--minetest.log("form registered")
 	def.name = name
-	qts.gui.forms[name] = def
 	if def.get == nil or def.handle == nil then
 		minetest.log("error", "qts.gui.register_form: get() and handle() must be implemented")
 		return
 	end
+	--qts.gui.forms[name] = def
 	
 	if def.tab then
 		--minetest.log("tab type form")

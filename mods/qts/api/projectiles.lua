@@ -29,7 +29,7 @@ def is a table with values:
 	on_strike_node = function(self, pos, node) - called when striking a node
 	on_strike_entity = function(self, objref) - called when striking an entity
 	on_timeout = function(self) - called when timed out
-	on_step = function(dtime) - called every frame. does not override builtin on_step function, but runs inside of it
+	on_step = function(self, dtime) - called every frame. does not override builtin on_step function, but runs inside of it
 	
 }
 
@@ -44,7 +44,7 @@ on_projectile_strike(projectile, pointed_thing) returns nil
 
 on_projectile_enter(projectile, pos) returns nil
 	called when a projectile first enters a node. Not called when a projectile strikes the node
-
+ 
 on_projectile_exit(projectile, pos) returns nil
 	called when a projectile leaves a node
 
@@ -228,7 +228,7 @@ function qts.register_projectile(name, def)
 			
 			--custom step functionality
 			if (self.custom_step) then
-				self.custom_step(dtime)
+				self:custom_step(dtime)
 			end
 			
 			--FINALIZE

@@ -65,17 +65,6 @@ Counter()
 	anoter_val = counter()
 	...etc.
 
-qts.objects_overlapping(objA, objB)
-	checks to see if the collisionbox of objA and objB are overlapping.
-	highly accurate Axis-Alligned Bounding Box overlapping
-	
-	Params: 
-	objA - objref, the first entity
-	objB - objref, the second entity
-	
-	Return: true or false
-
-
 --]]
 
 function qts.nearly_equal(a, b, degree)
@@ -164,51 +153,10 @@ function Counter()
 	end
 end
 
-function qts.objects_overlapping(objA, objB)
-	--get bounding boxes
-	local propsA = objA:get_properties()
-	local propsB = objB:get_properties()
-	local posA = objA:get_pos()
-	local posB = objB:get_pos()
-	
-	local minA = {
-		x= posA.x + propsA.collisionbox[1],
-		y= posA.y + propsA.collisionbox[2],
-		z= posA.z + propsA.collisionbox[3],
-	}
-	local maxA = {
-		x= posA.x + propsA.collisionbox[4],
-		y= posA.y + propsA.collisionbox[5],
-		z= posA.z + propsA.collisionbox[6],
-	}
-	local minB = {
-		x= posB.x + propsB.collisionbox[1],
-		y= posB.y + propsB.collisionbox[2],
-		z= posB.z + propsB.collisionbox[3],
-	}
-	local maxB = {
-		x= posB.x + propsB.collisionbox[4],
-		y= posB.y + propsB.collisionbox[5],
-		z= posB.z + propsB.collisionbox[6],
-	}
-	--check for collision
-	return (
-		(minA.x < maxB.x and  maxA.x >= minB.x) and
-		(minA.y < maxB.y and  maxA.y >= minB.y) and
-		(minA.z < maxB.z and  maxA.z >= minB.z)
-	)
-end
-
-
-
-
-
-
 
 
 --[[
 DEPRICIATED FUNCTIONS
---]]
 function qts.nearly_equal_vec(a, b, degree)
 	error("DEPRICIATED: qts.nearly_equal_vec is replaced by vector.nearly_equal")
 end
@@ -227,3 +175,4 @@ end
 function qts.new_counter()
 	error("DEPRICIATED: qts.new_counter() is depreciated. Use Counter() instead")
 end
+--]]

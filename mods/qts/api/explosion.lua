@@ -1,4 +1,4 @@
-qts.EXPLOSION_MAX_STEPS = 1000
+qts.EXPLOSION_MAX_STEPS = qts.settings.get_num('EXPLOSION_MAX_STEPS') or 1000
 --qts.EXPLOSION_DEFAULT_STEP_SIZE = 0.9
 
 --node found list

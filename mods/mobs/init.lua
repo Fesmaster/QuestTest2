@@ -3,7 +3,7 @@
 	
 	the actual code that makes the mobs of questest work lives in qts
 --]]
-
+dofile(minetest.get_modpath("mobs").."/bandit.lua")
 
 qts.ai.register_behavior("basic_humanoid_enemy", {
 	texture_is_dirty = true,

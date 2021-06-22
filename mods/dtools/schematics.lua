@@ -341,7 +341,9 @@ end
 function schm.clear_displayed_node_probs(player)
 	local playername = player:get_player_name()
 	for nodehash, hud_id in pairs(displayed_waypoints[playername]) do
-		player:hud_remove(hud_id)
+		if (type(hud_id) == "number") then
+			player:hud_remove(hud_id)
+		end
 		displayed_waypoints[playername][nodehash] = nil
 	end
 	displayed_waypoints[playername].display_active = false

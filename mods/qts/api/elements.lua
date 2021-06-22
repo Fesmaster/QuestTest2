@@ -10,7 +10,7 @@ and a callback function "on_"..name taking (pos, node, active_object_count, acti
 
 default_func takes the same params, and is run if that callback function is not found
 
-all element data is saved to qts.register_element, but is not read from it
+all element data is saved to qts.registered_element, but is not read from it
 
 --]]
 
