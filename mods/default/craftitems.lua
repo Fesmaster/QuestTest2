@@ -55,3 +55,13 @@ minetest.register_craftitem("default:brick_single", {
 	description = ("A Brick"),
 	inventory_image = "default_brick_single.png",
 })
+
+minetest.register_craftitem("default:milfoil_herb", {
+	description = "Milfoil",
+	inventory_image = "default_milfoil_herb.png",
+})
+
+minetest.register_craftitem("default:bloodbulb_herb", {
+	description = "Bloodbulb",
+	inventory_image = "default_bloodbulb_herb.png",
+})
