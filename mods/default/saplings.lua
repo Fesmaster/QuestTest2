@@ -175,36 +175,30 @@ qts.register_growable_node("default:rosewood_sapling", {
 	grow_timer = TREE_TIME,
 	grow_timer_random = TREE_VAR,
 	on_grow = function(pos)
-		minetest.log("info","An Rosewood tree has grown at "..minetest.pos_to_string(pos))
+		minetest.log("info","A Rosewood tree has grown at "..minetest.pos_to_string(pos))
 		minetest.set_node(pos, {name = "air"})
 		qtcore.grow_rosewood_tree(pos)
 	end,
 })
 
---TODO: This should be growable, and have a growing function!!!!
-minetest.register_node("default:palm_sapling", {
-	tiles = {
-		"default_wood.png",
-		"default_wood.png",
-		"default_wood.png",
-		"default_wood.png",
-		"default_wood.png",
-		"default_wood.png"
-	},
+qts.register_growable_node("default:palm_sapling", {
+	description = "Palm Sapling",
+	tiles ={"default_palm_leaves.png", "default_palm_leaves.png", 
+		"default_palm_leaves.png^[lowpart:37:default_palm_side.png"},
+	use_texture_alpha = "clip",
+	groups = {oddly_breakable_by_hand=3},
+	sounds = qtcore.node_sound_stone(),
 	drawtype = "nodebox",
 	paramtype = "light",
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{0, -0.5, 0.0625, 0.0625, -0.3125, 0.125}, -- NodeBox1
-			{0, -0.3125, 0, 0.0625, -0.125, 0.0625}, -- NodeBox2
-			{-0.0625, -0.125, -0.125, 0.1875, -0.0625, 0.125}, -- NodeBox3
-			{-0.125, -0.1875, -0.0625, 0.25, -0.125, 0.0625}, -- NodeBox4
-			{0, -0.1875, -0.1875, 0.125, -0.125, 0.1875}, -- NodeBox6
-			{0, -0.3125, -0.25, 0.125, -0.1875, -0.1875}, -- NodeBox7
-			{0, -0.375, 0.1875, 0.125, -0.1875, 0.25}, -- NodeBox8
-			{0.25, -0.375, -0.0625, 0.3125, -0.1875, 0.0625}, -- NodeBox9
-			{-0.1875, -0.3125, -0.0625, -0.125, -0.1875, 0.0625}, -- NodeBox10
-		}
-	}
+	node_box = qtcore.nb_sapling(),
+	paramtype2 = "facedir",
+	
+	growable_nodes = {"group:soil"},
+	grow_timer = TREE_TIME,
+	grow_timer_random = TREE_VAR,
+	on_grow = function(pos)
+		minetest.log("info","A Palm tree has grown at "..minetest.pos_to_string(pos))
+		minetest.set_node(pos, {name = "air"})
+		qtcore.grow_rosewood_tree(pos)
+	end,
 })

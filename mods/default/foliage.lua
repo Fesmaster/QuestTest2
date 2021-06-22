@@ -11,8 +11,18 @@ local underbrush_drops = {
 	items={
 		{
 			tools = {"~:knife"},
-			chance=1,
+			chance=5,
 			items = {"default:tinder"} --this is where to add craft items
+		},
+		{
+			tools = {"~:knife"},
+			chance=5,
+			items = {"default:milfoil_herb"} --this is where to add craft items
+		},
+		{
+			tools = {"~:knife"},
+			chance=5,
+			items = {"default:bloodbulb_herb"} --this is where to add craft items
 		},
 		{
 			tools = {"~:axe"},
@@ -63,7 +73,7 @@ minetest.register_node("default:small_shroom", {
 	paramtype = "light",
 	walkable = false,
 	floodable = true,
-	groups = {snappy = 3, flammable = 2, snappy=3, attached_node=1},
+	groups = {snappy = 3, flammable = 2, attached_node=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
