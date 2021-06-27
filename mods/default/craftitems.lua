@@ -65,3 +65,13 @@ minetest.register_craftitem("default:bloodbulb_herb", {
 	description = "Bloodbulb",
 	inventory_image = "default_bloodbulb_herb.png",
 })
+
+minetest.register_craftitem("default:wolfshood_herb", {
+	description = "Wolfshood",
+	inventory_image = "default_wolfshood_herb.png",
+})
+
+minetest.register_craftitem("default:coconut", {
+	description = "Coconut",
+	inventory_image = "default_coconut.png",
+})

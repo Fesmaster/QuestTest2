@@ -12,17 +12,12 @@ local underbrush_drops = {
 		{
 			tools = {"~:knife"},
 			chance=5,
-			items = {"default:tinder"} --this is where to add craft items
-		},
-		{
-			tools = {"~:knife"},
-			chance=5,
-			items = {"default:milfoil_herb"} --this is where to add craft items
-		},
-		{
-			tools = {"~:knife"},
-			chance=5,
-			items = {"default:bloodbulb_herb"} --this is where to add craft items
+			items = {
+			{items = {"default:milfoil_herb"}, rarity = 16},
+			{items = {"default:bloodbulb_herb"}, rarity = 16},
+			{items = {"default:wolfshood_herb"}, rarity = 16},
+			{items = {"default:tinder"}},
+			},
 		},
 		{
 			tools = {"~:axe"},
@@ -35,7 +30,6 @@ local underbrush_drops = {
 		}
 	}
 }
-
 local function floodFunc(pos, oldnode, newnode)
 	local d = minetest.get_node_drops(oldnode, "wieldhand")
 	for index, item in ipairs(d) do
@@ -66,7 +60,7 @@ minetest.register_node("default:swamp_plant", {
 })
 
 minetest.register_node("default:small_shroom", {
-	description = "A Small Edible Mushroom",
+	description = "A Small Mushroom",
 	tiles = {"default_small_shroom.png"},
 	use_texture_alpha = "clip",
 	drawtype = "nodebox",

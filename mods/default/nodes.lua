@@ -697,7 +697,7 @@ qts.register_shaped_node ("default:blue_mushroom_cap", {
 })
 
 qts.register_shaped_node ("default:gold_mushroom_trunk", {
-	description = "Blue Mushroom Trunk",
+	description = "Golden Mushroom Trunk",
 	tiles = {"default_g_shroom_top.png", "default_g_shroom_top.png", "default_g_shroom_side.png"},
 	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2},
@@ -705,7 +705,7 @@ qts.register_shaped_node ("default:gold_mushroom_trunk", {
 })
 
 qts.register_shaped_node ("default:gold_mushroom_cap", {
-	description = "Blue Mushroom Cap",
+	description = "Golden Mushroom Cap",
 	tiles = {"default_g_shroom_cap.png"},
 	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2},
@@ -955,6 +955,7 @@ minetest.register_node("default:palm_leaves", {
 		max_items = 1,
 		items = {
 			{items = {"default:palm_sapling"}, rarity = 16},
+			{items = {"default:coconut"}, rarity = 16},
 			{items = {"default:palm_leaves"}},
 		}
 	},

@@ -233,3 +233,13 @@ qts.worldgen.register_structure("tree_gold_shroom_1", {
 	rotate = true,
 	flags = qts.worldgen.centers(true, false, true),
 })
+
+qts.worldgen.register_structure("tree_palm", {
+	schematic = path .. "palm_tree_1.mts",
+	chance = 200,
+	biomes = {"beach"},
+	nodes = {"default:sand"},
+	force_place = false,
+	rotate = true,
+	flags = qts.worldgen.centers(true, false, true),
+})
