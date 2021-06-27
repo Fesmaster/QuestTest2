@@ -233,6 +233,40 @@ qts.worldgen.register_biome("caverelm", {
 	stone_depth = 0,
 })
 
+qts.worldgen.register_biome("snow", {
+	heat_point = 20,
+	humidity_point = 40,
+	min_ground_height = 5,
+	max_ground_height = 94,
+	min_light = 7,--half
+	min_air = 10,
+	dust = "default:snow",
+	surface = "default:dirt_with_snow",
+	fill = "default:dirt",
+	stone = "default:stone",
+	plant = nil,
+	plant_freq = 0,
+	surface_depth = 1,
+	fill_depth = 2,
+	stone_depth = 0,
+})
+
+qts.worldgen.register_biome("snow_beach", {
+	heat_point = 20,
+	humidity_point = 50,
+	min_ground_height = 0,
+	max_ground_height = 5,
+	min_light = 0,--half
+	min_air = 10,
+	--dust = "air",
+	surface = "default:sand",
+	fill = {"default:sand","default:sandstone"},
+	stone = "default:sandstone",
+	underwater = "default:sand",
+	surface_depth = 2,
+	fill_depth = 4,
+	stone_depth = 10,
+})
 
 --[[
 ORES
