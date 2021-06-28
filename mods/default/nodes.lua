@@ -728,6 +728,17 @@ minetest.register_node("default:gold_shroom_spore", {
 		}
 	}
 })
+
+qts.register_shaped_node ("default:pine_log", {
+	description = "Pine Log",
+	tiles = {"default_pine_top.png", "default_pine_top.png", "default_pine_side.png"},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1},
+	sounds = qtcore.node_sound_wood(),
+})
+
+
+
 --END shrooms
 
 --BEGIN leaves
@@ -990,6 +1001,26 @@ minetest.register_node("default:swamp_leaves", {
 	}
 })
 
+minetest.register_node("default:pine_leaves", {
+	description = "Pine Needles",
+	drawtype = "allfaces_optional",
+	waving = 1,
+	tiles = {"default_pine_needles.png"},
+	use_texture_alpha = "clip",
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1},
+	drop = {
+		max_items = 1,
+		items = {
+			{items = {"default:pine_sapling"}, rarity = 16},
+			{items = {"default:pine_leaves"}},
+		}
+	},
+	walkable = false,
+	climbable = true,
+	sounds = qtcore.node_sound_grass(),
+	after_place_node = qtcore.after_place_leaves;
+})
 
 --[[
 minetest.register_node("default:palm_leaves", {

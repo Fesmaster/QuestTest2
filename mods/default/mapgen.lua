@@ -152,7 +152,7 @@ qts.worldgen.register_biome("mountain", {
 	max_ground_height = 1000000,
 	min_light = 7,--half
 	min_air = 2,
-	dust = nil,
+	dust = "default:snow",
 	surface = {"default:dirt", "default:stone"}, --TODO:replace with gravel
 	fill = "default:dirt",
 	stone = "default:stone",
@@ -214,7 +214,7 @@ qts.worldgen.register_biome("underwater", {
 	stone_depth = 10,
 })
 --]]
-qts.worldgen.register_biome("caverelm", {
+qts.worldgen.register_biome("caverealm", {
 	heat_point = 50,
 	humidity_point = 50,
 	min_ground_height = -31000,

@@ -243,3 +243,13 @@ qts.worldgen.register_structure("tree_palm", {
 	rotate = true,
 	flags = qts.worldgen.centers(true, false, true),
 })
+
+qts.worldgen.register_structure("tree_pine", {
+	schematic = path .. "pine_tree1.mts",
+	chance = 90,
+	biomes = {"snow"},
+	nodes = {"default:dirt_with_snow"},
+	force_place = false,
+	rotate = true,
+	flags = qts.worldgen.centers(true, false, true),
+})

@@ -202,3 +202,25 @@ qts.register_growable_node("default:palm_sapling", {
 		qtcore.grow_rosewood_tree(pos)
 	end,
 })
+
+qts.register_growable_node("default:pine_sapling", {
+	description = "Pine Sapling",
+	tiles ={"default_pine_needles.png", "default_pine_needles.png", 
+		"default_pine_leaves.png^[lowpart:37:default_pine_side.png"},
+	use_texture_alpha = "clip",
+	groups = {oddly_breakable_by_hand=3},
+	sounds = qtcore.node_sound_stone(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = qtcore.nb_sapling(),
+	paramtype2 = "facedir",
+	
+	growable_nodes = {"group:soil"},
+	grow_timer = TREE_TIME,
+	grow_timer_random = TREE_VAR,
+	on_grow = function(pos)
+		minetest.log("info","A pine tree has grown at "..minetest.pos_to_string(pos))
+		minetest.set_node(pos, {name = "air"})
+		qtcore.grow_rosewood_tree(pos)
+	end,
+})
