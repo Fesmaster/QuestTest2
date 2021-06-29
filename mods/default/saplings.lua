@@ -206,7 +206,7 @@ qts.register_growable_node("default:palm_sapling", {
 qts.register_growable_node("default:pine_sapling", {
 	description = "Pine Sapling",
 	tiles ={"default_pine_needles.png", "default_pine_needles.png", 
-		"default_pine_leaves.png^[lowpart:37:default_pine_side.png"},
+		"default_pine_needles.png^[lowpart:37:default_pine_side.png"},
 	use_texture_alpha = "clip",
 	groups = {oddly_breakable_by_hand=3},
 	sounds = qtcore.node_sound_stone(),

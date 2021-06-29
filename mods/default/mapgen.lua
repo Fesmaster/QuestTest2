@@ -182,7 +182,7 @@ qts.worldgen.register_biome("desert_mountains", {
 })
 
 qts.worldgen.register_biome("beach", {
-	heat_point = 50,
+	heat_point = 25,
 	humidity_point = 50,
 	min_ground_height = 0,
 	max_ground_height = 5,
@@ -234,7 +234,7 @@ qts.worldgen.register_biome("caverealm", {
 })
 
 qts.worldgen.register_biome("snow", {
-	heat_point = 20,
+	heat_point = 10,
 	humidity_point = 40,
 	min_ground_height = 5,
 	max_ground_height = 94,
@@ -252,13 +252,14 @@ qts.worldgen.register_biome("snow", {
 })
 
 qts.worldgen.register_biome("snow_beach", {
-	heat_point = 20,
+	heat_point = 10,
 	humidity_point = 50,
 	min_ground_height = 0,
 	max_ground_height = 5,
 	min_light = 0,--half
 	min_air = 10,
-	--dust = "air",
+	--dust = "default:snow",
+	dust = nil,
 	surface = "default:sand",
 	fill = {"default:sand","default:sandstone"},
 	stone = "default:sandstone",
