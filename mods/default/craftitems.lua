@@ -74,4 +74,5 @@ minetest.register_craftitem("default:wolfshood_herb", {
 minetest.register_craftitem("default:coconut", {
 	description = "Coconut",
 	inventory_image = "default_coconut.png",
+	on_use = minetest.item_eat(2),
 })
