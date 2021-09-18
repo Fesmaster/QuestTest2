@@ -239,6 +239,25 @@ for k, color in ipairs(colors) do
 	})
 end
 
+minetest.register_node("default:beach_grass", {
+	description = "Grass Node",
+	tiles ={"default_beach_grass.png"},
+	use_texture_alpha = "clip",
+	drawtype = "plantlike",
+	paramtype = "light",
+	paramtype2 = "meshoptions",
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	waving = 1,
+	buildable_to = true,
+	selection_box = qtcore.nb_level1(),
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1},
+	sounds = qtcore.node_sound_defaults(),
+	on_place = qtcore.place_random_plantlike,
+	drop = underbrush_drops,
+	on_flood = floodFunc,
+})
 
 
 --[[

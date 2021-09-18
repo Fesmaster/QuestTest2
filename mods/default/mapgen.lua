@@ -192,6 +192,7 @@ qts.worldgen.register_biome("beach", {
 	surface = "default:sand",
 	fill = {"default:sand","default:sandstone"},
 	stone = "default:sandstone",
+	plant = "default:beach_grass",
 	underwater = "default:sand",
 	surface_depth = 2,
 	fill_depth = 4,
