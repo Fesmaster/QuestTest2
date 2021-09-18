@@ -56,23 +56,45 @@ minetest.register_craftitem("default:brick_single", {
 	inventory_image = "default_brick_single.png",
 })
 
-minetest.register_craftitem("default:milfoil_herb", {
+minetest.register_craftitem("default:herb_milfoil", {
 	description = "Milfoil",
-	inventory_image = "default_milfoil_herb.png",
+	inventory_image = "default_herb_milfoil.png",
 })
 
-minetest.register_craftitem("default:bloodbulb_herb", {
+minetest.register_craftitem("default:herb_bloodbulb", {
 	description = "Bloodbulb",
-	inventory_image = "default_bloodbulb_herb.png",
+	inventory_image = "default_herb_bloodbulb.png",
 })
 
-minetest.register_craftitem("default:wolfshood_herb", {
+minetest.register_craftitem("default:herb_wolfshood", {
 	description = "Wolfshood",
-	inventory_image = "default_wolfshood_herb.png",
+	inventory_image = "default_herb_wolfshood.png",
+})
+
+
+minetest.register_craftitem("default:seed_milfoil", {
+	description = "Milfoil Seeds",
+	inventory_image = "default_seeds_milfoil.png",
+})
+
+minetest.register_craftitem("default:seed_bloodbulb", {
+	description = "Bloodbulb Seeds",
+	inventory_image = "default_seeds_bloodbulb.png",
+})
+
+minetest.register_craftitem("default:seed_wolfshood", {
+	description = "Wolfshood Seeds",
+	inventory_image = "default_seeds_wolfshood.png",
 })
 
 minetest.register_craftitem("default:coconut", {
 	description = "Coconut",
 	inventory_image = "default_coconut.png",
 	on_use = minetest.item_eat(2),
+})
+
+minetest.register_craftitem("default:mush_stew", {
+	description = "A Gummy Soup",
+	inventory_image = "default_mush_stew.png",
+	on_use = minetest.item_eat(5),
 })
