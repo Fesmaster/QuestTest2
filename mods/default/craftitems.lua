@@ -71,6 +71,10 @@ minetest.register_craftitem("default:herb_wolfshood", {
 	inventory_image = "default_herb_wolfshood.png",
 })
 
+minetest.register_craftitem("default:seed_wheat", {
+	description = "Wheat Seeds",
+	inventory_image = "default_seeds_wheat.png",
+})
 
 minetest.register_craftitem("default:seed_milfoil", {
 	description = "Milfoil Seeds",
@@ -90,6 +94,12 @@ minetest.register_craftitem("default:seed_wolfshood", {
 minetest.register_craftitem("default:coconut", {
 	description = "Coconut",
 	inventory_image = "default_coconut.png",
+	on_use = minetest.item_eat(2),
+})
+
+minetest.register_craftitem("default:wheat", {
+	description = "Wheat",
+	inventory_image = "default_wheat.png",
 	on_use = minetest.item_eat(2),
 })
 

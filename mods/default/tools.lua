@@ -323,4 +323,68 @@ minetest.register_tool("default:sword_steel", {
 	groups = {sword = 1}
 })
 
+--Hoes
+--copper
 
+minetest.register_tool("default:hoe_copper", {
+	description = "Copper Hoe",
+	inventory_image = "default_hoe_copper.png",
+	tool_capabilities = {
+		full_punch_interval = 1.0,
+		max_drop_level=1,
+		groupcaps={
+			cracky = {times={[2]=1.00, [3]=0.50}, uses=60, maxlevel=1},
+		},
+		damage_groups = {fleshy=4},
+	},
+	sound = qtcore.tool_sounds_default(),
+	groups = {hoe = 1}
+})
+
+--bronze
+minetest.register_tool("default:hoe_bronze", {
+	description = "Bronze Hoe",
+	inventory_image = "default_hoe_bronze.png",
+	tool_capabilities = {
+		full_punch_interval = 1.0,
+		max_drop_level=1,
+		groupcaps={
+			cracky = {times={[2]=1.00, [3]=0.50}, uses=60, maxlevel=1},
+		},
+		damage_groups = {fleshy=4},
+	},
+	sound = qtcore.tool_sounds_default(),
+	groups = {hoe = 1}
+})
+
+--iron
+minetest.register_tool("default:hoe_iron", {
+	description = "Iron Hoe",
+	inventory_image = "default_hoe_iron.png",
+	tool_capabilities = {
+		full_punch_interval = 1.0,
+		max_drop_level=1,
+		groupcaps={
+			cracky = {times={[2]=1.00, [3]=0.50}, uses=60, maxlevel=1},
+		},
+		damage_groups = {fleshy=4},
+	},
+	sound = qtcore.tool_sounds_default(),
+	groups = {hoe = 1}
+})
+
+--steel
+minetest.register_tool("default:hoe_steel", {
+	description = "Steel Hoe",
+	inventory_image = "default_hoe_steel.png",
+	tool_capabilities = {
+		full_punch_interval = 1.0,
+		max_drop_level=1,
+		groupcaps={
+			cracky = {times={[2]=1.00, [3]=0.50}, uses=60, maxlevel=1},
+		},
+		damage_groups = {fleshy=4},
+	},
+	sound = qtcore.tool_sounds_default(),
+	groups = {hoe = 1}
+})
