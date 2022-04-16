@@ -32,6 +32,10 @@ qts.register_craft({
 	ingredients = {"default:mahogany_log 1"},
 	results = {"default:mahogany_wood_planks 4"},
 })
+qts.register_craft({
+	ingredients = {"default:pine_log 1"},
+	results = {"default:pine_wood_planks 4"},
+})
 
 --fences
 qts.register_craft({
@@ -67,6 +71,16 @@ qts.register_craft({
 qts.register_craft({
 	ingredients = {"default:rosewood_wood_planks 2"},
 	results = {"default:rosewood_wood_fence 4"},
+	near = {"group:workbench"},
+})
+qts.register_craft({
+	ingredients = {"default:mahogany_wood_planks 2"},
+	results = {"default:mahogany_wood_fence 4"},
+	near = {"group:workbench"},
+})
+qts.register_craft({
+	ingredients = {"default:pine_wood_planks 2"},
+	results = {"default:pine_wood_fence 4"},
 	near = {"group:workbench"},
 })
 
@@ -393,7 +407,7 @@ minetest.register_craft({
 minetest.register_craft({
 	type = "cooking",
 	output = "default:calcium_oxide",
-	recipe = "default:shell_peices",
+	recipe = "default:shell_pieces",
 })
 
 minetest.register_craft({

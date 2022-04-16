@@ -410,7 +410,7 @@ qts.register_shaped_node ("default:sand", {
 		items = {
 			{
 				rarity = 8,
-				items = {"default:shell_peices"},
+				items = {"default:shell_pieces"},
 			},
 			{
 				items = {"default:sand"}
@@ -658,6 +658,24 @@ qts.register_shaped_node ("default:palm_log", {
 	sounds = qtcore.node_sound_wood(),
 })
 
+qts.register_shaped_node ("default:pine_wood_planks", {
+	description = "Pine Planks",
+	tiles = {"default_pine_wood.png"},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
+	sounds = qtcore.node_sound_wood(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
+
+qts.register_shaped_node ("default:pine_log", {
+	description = "Pine Log",
+	tiles = {"default_pine_top.png", "default_pine_top.png", "default_pine_side.png"},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1},
+	sounds = qtcore.node_sound_wood(),
+})
+
 minetest.register_node("default:swamp_tree", {
 	description = "Swamp Log",
 	tiles = {
@@ -729,13 +747,7 @@ minetest.register_node("default:gold_shroom_spore", {
 	}
 })
 
-qts.register_shaped_node ("default:pine_log", {
-	description = "Pine Log",
-	tiles = {"default_pine_top.png", "default_pine_top.png", "default_pine_side.png"},
-	paramtype2 = "facedir",
-	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1},
-	sounds = qtcore.node_sound_wood(),
-})
+
 
 
 

@@ -2,7 +2,7 @@
 local function launch_campfire_drop(pos, itemstack)
 	local obj = minetest.add_item(pos, ItemStack(itemstack))
 	if obj then
-		obj:set_velocity({x = math.random(-1, 1), y = math.random(3, 5), z = math.random(-1, 1)})
+		obj:set_velocity(vector.new(math.random(-1, 1), math.random(3, 5), math.random(-1, 1)))
 	else
 		minetest.log("error","invalid drop: ".. dump(itemstack))
 	end
@@ -119,7 +119,7 @@ local function campfire_rightclick(pos, node, clicker, itemstack, pointed_thing)
 			meta:set_string("campfire_smeltable", item:to_string())
 			meta:set_int("cooking_time_left", cooked.time)
 			
-			local obj = minetest.add_entity(vector.add(pos, {x=0, y=-0.3, z=0}), "default:campfire_item")
+			local obj = minetest.add_entity(pos + vector.new(0, -0.3, 0), "default:campfire_item")
 			obj:get_luaentity():set_item(item)
 			
 		end
@@ -231,7 +231,7 @@ minetest.register_entity("default:campfire_item", {
 		weight = 1,
 		collide_with_objects = false, --using manual detection
 		visual = "wielditem",
-		visual_size = {x=.2, y=.2, z=.2},
+		visual_size = vector.new(0.2, 0.2, 0.2),
 		textures = {"default:stone"},
 		is_visible = true,
 		makes_footsteps_sounds = false,

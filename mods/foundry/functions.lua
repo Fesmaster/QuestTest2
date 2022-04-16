@@ -2,42 +2,42 @@
 foundry.core_def = {
 	bricks = {
 		--first level
-		{x= 0, y= 0, z= 1},
-		{x= 1, y= 0, z= 1},
-		{x=-1, y= 0, z= 1},
-		{x= 0, y= 0, z= 2},
+		vector.new( 0, 0, 1),
+		vector.new( 1, 0, 1),
+		vector.new(-1, 0, 1),
+		vector.new( 0, 0, 2),
 		--second level
-		{x= 0, y= 1, z= 0},
-		{x= 1, y= 1, z= 1},
-		{x=-1, y= 1, z= 1},
-		{x= 0, y= 1, z= 2},
+		vector.new( 0, 1, 0),
+		vector.new( 1, 1, 1),
+		vector.new(-1, 1, 1),
+		vector.new( 0, 1, 2),
 	},
 	crucible = { --TODO: FIX THIS SO THAT IT IS A DIRECTLY A VECTOR, NOT A LIST OF 1 ELEMENT!!!!!!!!!!!!!!!
-		{x= 0, y= 1, z= 1},
+		vector.new(0, 1, 1),
 	}
 }
 foundry.lvl2_def = {
 	bricks = {
 		--second level
-		{x= 0, y= 2, z= 0},
-		{x= 1, y= 2, z= 1},
-		{x=-1, y= 2, z= 1},
-		{x= 0, y= 2, z= 2},
+		vector.new( 0, 2, 0),
+		vector.new( 1, 2, 1),
+		vector.new(-1, 2, 1),
+		vector.new( 0, 2, 2),
 	},
 	crucible = {
-		{x= 0, y= 2, z= 1},
+		vector.new(0, 2, 1),
 	}
 }
 foundry.lvl3_def = {
 	bricks = {
 		--second level
-		{x= 0, y= 3, z= 0},
-		{x= 1, y= 3, z= 1},
-		{x=-1, y= 3, z= 1},
-		{x= 0, y= 3, z= 2},
+		vector.new( 0, 3, 0),
+		vector.new( 1, 3, 1),
+		vector.new(-1, 3, 1),
+		vector.new( 0, 3, 2),
 	},
 	crucible = {
-		{x= 0, y= 3, z= 1},
+		vector.new(0, 3, 1),
 	}
 }
 
@@ -45,11 +45,11 @@ foundry.worldfoundries = {}
 
 function foundry.rotate_vector_by_facedir(vec, dir)
 	if dir == 1 then
-		return {x = vec.z, y = vec.y, z = -vec.x}
+		return vector.new(vec.z, vec.y, -vec.x)
 	elseif dir == 2 then
-		return {x = -vec.x, y = vec.y, z = -vec.z}
+		return vector.new(-vec.x, vec.y, -vec.z)
 	elseif dir == 3 then
-		return {x = -vec.z, y = vec.y, z = vec.x}
+		return vector.new(-vec.z, vec.y, vec.x)
 	else
 		return vec
 	end
@@ -301,7 +301,7 @@ function foundry.InitFoundry(pos)
 		metalID	 = "",
 		metalLVL = 0,
 		smeltPercent = {},
-		pos = {x = pos.x, y = pos.y, z = pos.z},
+		pos = vector.copy(pos),
 		foundryID = minetest.hash_node_position(pos),
 		foundryLVL = lvl,
 	}

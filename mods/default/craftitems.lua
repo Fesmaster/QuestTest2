@@ -41,13 +41,13 @@ minetest.register_craftitem("default:tinder", {
 	inventory_image = "default_tinder.png",
 })
 
-minetest.register_craftitem("default:shell_peices", {
-	description = ("Shell Peices found in sand"),
+minetest.register_craftitem("default:shell_pieces", {
+	description = ("Shell Pieces found in sand"),
 	inventory_image = "default_shell_peices.png",
 })
 
 minetest.register_craftitem("default:calcium_oxide", {
-	description = ("Calcium Oxide Dust made from backing shells"),
+	description = ("Calcium Oxide Dust"),
 	inventory_image = "default_calcium_oxide.png",
 })
 

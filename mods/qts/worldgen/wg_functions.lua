@@ -196,24 +196,24 @@ qts.worldgen.get_biome_name = function(heat, humidity, height)
 			if nearest_name then
 				local dist = df({heat = heat, humid = humidity}, {heat = def.heat_point, humid = def.humidity_point})
 				if dist < nearest_dist then
-				--	minetest.log("Biome: " .. dump(name) .. ": Nearest replacement")
+					--minetest.log("Biome: " .. dump(name) .. ": Nearest replacement")
 					nearest_dist = dist
 					nearest_name = name
 				end
 			else
-			--	minetest.log("Biome: " .. dump(name) .. ": No nearest. Using this")
+				--minetest.log("Biome: " .. dump(name) .. ": No nearest. Using this")
 				nearest_name = name
 				nearest_dist = df({heat = heat, humid = humidity}, {heat = def.heat_point, humid = def.humidity_point})
 			end
 		else
-		--	minetest.log("Biome: " .. dump(name) .. " is not in the right height")
+			--minetest.log("Biome: " .. dump(name) .. " is not in the right height")
 			--minetest.log("Ignoring biome (wrong height): "..dump(name)..", height: "..dump(height))
 		end
 	end
 	if nearest_name then
 		return nearest_name
 	else
-		error("WORLDGEN: error: biome generation issue")
+		error("WORLDGEN: error: biome generation issue. Height: " .. dump(height))
 	end
 end
 
@@ -248,7 +248,7 @@ qts.worldgen.register_structure = function(name, def)
 	end
 	if def.force_place == nil then def.force_place = false end
 	if def.rotate == nil then def.rotate = false end
-	if not def.offset then def.offset = {x=0,y=0,z=0} end
+	if not def.offset then def.offset = vector.zero() end
 	if not def.flags then def.flags = "" end
 	def.name = name
 	

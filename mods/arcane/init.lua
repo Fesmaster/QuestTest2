@@ -25,7 +25,7 @@ minetest.register_abm({
 			for x = -1,1 do
 			for y = -1,1 do
 			for z = -1,1 do
-				local poff = {x=pos.x+x,y=pos.y+y,z=pos.z+z}
+				local poff = pos + vector.new(x,y,z)
 				local node = minetest.get_node(poff)
 				if (minetest.get_item_group(node.name, "stone") > 0 and 
 						minetest.get_item_group(node.name, "ore") == 0) then

@@ -108,9 +108,11 @@ local function eject_drops(drops, pos, radius, speed_multiplier)
 			if obj then
 				obj:get_luaentity().collect = true
 				obj:set_acceleration({x = 0, y = -10, z = 0})
-				obj:set_velocity(vector.multiply({x = math.random(-3, 3),
-						y = math.random(0, 10),
-						z = math.random(-3, 3)}, speed_multiplier))
+				obj:set_velocity(vector.multiply(vector.new(
+						math.random(-3, 3),
+						math.random(0, 10),
+						math.random(-3, 3))
+					, speed_multiplier))
 			end
 			count = count - take
 		end
@@ -139,10 +141,10 @@ function qts.explode_particles(pos, radius, mult)
 			time = 0.1,
 			minpos = vector.subtract(pos, radius / 2),
 			maxpos = vector.add(pos, radius / 2),
-			minvel = {x = -particleSpeed, y = -particleSpeed, z = -particleSpeed},
-			maxvel = {x = particleSpeed, y = particleSpeed, z = particleSpeed},
-			minacc = vector.new(),
-			maxacc = vector.new(),
+			minvel = vector.new(-particleSpeed, -particleSpeed, -particleSpeed),
+			maxvel = vector.new(particleSpeed, particleSpeed, particleSpeed),
+			minacc = vector.zero(),
+			maxacc = vector.zero(),
 			minexptime = minTime,
 			maxexptime = maxTime,
 			minsize = radius * 3,
@@ -205,7 +207,7 @@ end
 function qts.explode_ray(pos, slopeVector, stepSize, power, returnFound)
 	slopeVector = vector.multiply(vector.normalize(slopeVector), stepSize)
 	
-	local check = {x=pos.x, y=pos.y, z=pos.z}
+	local check = vector.new(pos.x, pos.y, pos.z)
 	local currentPower = power
 	local found = {}
 	local drops = {}
@@ -225,15 +227,15 @@ function qts.explode_ray(pos, slopeVector, stepSize, power, returnFound)
 		
 		DEBUG_ITERS = DEBUG_ITERS + 1
 		
-		local c1 = {x=math.floor(check.x), y=math.floor(check.y), z=math.floor(check.z)}
-		local c2 = {x=math.ceil(check.x), y=math.ceil(check.y), z=math.ceil(check.z)}
+		local c1 = vector.new(math.floor(check.x), math.floor(check.y), math.floor(check.z))
+		local c2 = vector.new(math.ceil(check.x),  math.ceil(check.y),  math.ceil(check.z) )
 		local dist = vector.distance(pos, check)
 		local maxPow = 0
 		--collect the four nodes that are hit, and explode them them
 		for x = c1.x, c2.x do
 		for y = c1.y, c2.y do
 		for z = c1.z, c2.z do
-			local p = {x=x, y=y, z=z}
+			local p = vector.new(x, y, z)
 			if not found[p] then
 				local node = minetest.get_node_or_nil(p)
 				if node then

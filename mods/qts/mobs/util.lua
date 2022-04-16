@@ -184,7 +184,7 @@ function qts.ai.get_random_navagatable_point_in_radius(pos, radius, query, heigh
 			for y = h, -h, -1 do
 				local dist = (x^2+z^2+y^2)^0.5
 				if (dist > (radius/2)) then
-					local p = vector.add({x=x,y=y,z=z}, pos)
+					local p = vector.new(x,y,z)+pos
 					--minetest.log("Vertical Scan: " .. y .. " Pos: " .. minetest.pos_to_string(p))
 					if (check_pos_for_target(p, query)) then
 						--minetest.log("found target node " .. target_height)
@@ -195,7 +195,7 @@ function qts.ai.get_random_navagatable_point_in_radius(pos, radius, query, heigh
 					else
 						if (target_node_found) then
 							if (target_height >= height) then
-								return {x=p.x, y=p.y+1, z=p.z}
+								return vector.new(p.x, p.y+1, p.z)
 							else
 								target_node_found = false
 								target_height = 0

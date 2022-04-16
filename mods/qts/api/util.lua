@@ -130,7 +130,7 @@ function qts.distribute_points_on_sphere(point_count)
 		local x = math.cos(theta) * radius
 		local z = math.sin(theta) * radius
 		
-		points[#points+1] = {x=x, y=y, z=z}
+		points[#points+1] = vector.new(x, y, z)
 	end
 	
 	return points

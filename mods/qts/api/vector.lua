@@ -174,7 +174,7 @@ end
 
 
 function vector.rotate_yaw(vec, angle)
-	return {x = (vec.x * math.cos(angle) - vec.z * math.sin(angle)), y = vec.y, z = (vec.x * math.sin(angle) + vec.z * math.cos(angle))}
+	return vector.new((vec.x * math.cos(angle) - vec.z * math.sin(angle)), vec.y, (vec.x * math.sin(angle) + vec.z * math.cos(angle)))
 end
 
 function vector.unit()
@@ -182,7 +182,7 @@ function vector.unit()
 end
 
 function vector.flat_dist(pos1, pos2)
-	return vector.distance({x=pos1.x, y=0, z=pos1.z}, {x=pos2.x, y=0, z=pos2.z})
+	return vector.distance(vector.new(pos1.x, 0, pos1.z), vector.new(pos2.x, 0, pos2.z))
 end
 
 function vector.get_yaw(vec)
@@ -194,7 +194,7 @@ function vector.get_pitch(vec)
 end
 
 function vector.get_rot(vec)
-	local rot = {x=0, y=0, z=0}
+	local rot = vector.new(0, 0, 0)
 	
 	rot.y = math.atan(vec.z/vec.x)+math.pi/2
 	if (vec.x > 0) then rot.y = rot.y + math.pi end
@@ -207,10 +207,11 @@ end
 --TODO: vector.set_rot(vec, rot)
 
 local function get_forward_vector(yaw, pitch)
-	local dir = {}
-	dir.x = math.sin(yaw)
-	dir.y = math.cos(pitch or math.pi) --if pitch is null, PI used (dir.y == 0)
-	dir.z = math.cos(yaw)
+	local dir = vector.new(
+		math.sin(yaw),
+		math.cos(pitch or math.pi), --if pitch is null, PI used (dir.y == 0)
+		math.cos(yaw)
+	)
 	if dir.x ~= dir.x then 
 		dir.x=0
 	end
@@ -253,7 +254,7 @@ function vector.lerp(vec1, vec2, alpha)
 	for k, v in pairs(vec1) do
 		result[k] = vec1[k] + ((vec2[k] - vec1[k]) * alpha)
 	end
-	return result
+	return vector.copy(result)
 end
 
 --THIS FUNCTION IS INTENDED FOR ROTATIONS EXPRESSED IN RADIANS

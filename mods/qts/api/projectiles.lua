@@ -293,17 +293,17 @@ function qts.projectile_launch_player(projectile, player, inacuracy)
 	local pos = player:get_pos()
 	if (not inacuracy) then inacuracy = 0 end
 	if (player:is_player()) then
-		pos = vector.add(pos, {x=0, y=1.5, z=0})
+		pos = vector.add(pos, vector.new(0, 1.5, 0))
 		local dir = player:get_look_dir()
 		pos = vector.add(pos, dir)
 		local obj = minetest.add_entity(pos, projectile)
 		if (inacuracy ~= 0) then
 			inacuracy = inacuracy / 100
-			dir = {
-				x = dir.x + ((math.random() - 0.5 ) * inacuracy), 
-				y = dir.y + ((math.random() - 0.5 ) * inacuracy),
-				z = dir.z + ((math.random() - 0.5 ) * inacuracy),
-			}
+			dir = vector.new(
+				dir.x + ((math.random() - 0.5 ) * inacuracy), 
+				dir.y + ((math.random() - 0.5 ) * inacuracy),
+				dir.z + ((math.random() - 0.5 ) * inacuracy)
+			)
 		end
 		if obj:get_luaentity().launch ~= nil then
 			obj:get_luaentity():launch(dir, player)
@@ -316,11 +316,11 @@ function qts.projetile_launch_to(projectile, origin, target, launcher, inacuracy
 	if (not inacuracy) then inacuracy = 0 end
 	if (inacuracy ~= 0) then
 		inacuracy = inacuracy / 100
-		dir = {
-			x = dir.x + ((math.random() - 0.5 ) * inacuracy), 
-			y = dir.y + ((math.random() - 0.5 ) * inacuracy),
-			z = dir.z + ((math.random() - 0.5 ) * inacuracy),
-		}
+		dir = vector.new(
+			dir.x + ((math.random() - 0.5 ) * inacuracy), 
+			dir.y + ((math.random() - 0.5 ) * inacuracy),
+			dir.z + ((math.random() - 0.5 ) * inacuracy)
+		)
 	end
 	local obj = minetest.add_entity(origin, projectile)
 	if obj:get_luaentity().launch ~= nil then
@@ -334,11 +334,11 @@ function qts.projetile_launch_dir(projectile, origin, dir, launcher, inacuracy)
 	if (not inacuracy) then inacuracy = 0 end
 	if (inacuracy ~= 0) then
 		inacuracy = inacuracy / 100
-		dir = {
-			x = dir.x + ((math.random() - 0.5 ) * inacuracy), 
-			y = dir.y + ((math.random() - 0.5 ) * inacuracy),
-			z = dir.z + ((math.random() - 0.5 ) * inacuracy),
-		}
+		dir = vector.new(
+			dir.x + ((math.random() - 0.5 ) * inacuracy), 
+			dir.y + ((math.random() - 0.5 ) * inacuracy),
+			dir.z + ((math.random() - 0.5 ) * inacuracy)
+		)
 	end
 	local obj = minetest.add_entity(origin, projectile)
 	if obj:get_luaentity().launch ~= nil then

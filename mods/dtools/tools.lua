@@ -28,6 +28,24 @@ minetest.register_tool("dtools:testingTool", {
 	on_use = function(itemstack, user, pointed_thing)
 		---[[
 		if pointed_thing.under then
+			qts.explode(pointed_thing.under, 10, {
+				destroy_nodes = true,
+				make_drops = true,
+				drop_speed_multiplier = 1,
+				make_sound = true,
+				make_particles = true,
+				particle_multiplier = 1,
+				damage_entities = true,
+				push_entities = true,
+				damage_player = true,
+				damage_type = "fleshy",
+				exploder = user
+			})
+		end
+		--]]
+		
+		--[[
+		if pointed_thing.under then
 			local node = minetest.get_node(pointed_thing.under)
 			node.param2 = node.param2 + 1
 			minetest.set_node(pointed_thing.under, node)
@@ -36,7 +54,8 @@ minetest.register_tool("dtools:testingTool", {
 			minetest.set_node(pointed_thing.above, {name="default:snow"})
 		end
 		--]]
-        --[[
+        
+		--[[
 		minetest.log("QTS Testing Tool used")
 		local pos = nil
 		if pointed_thing.under then

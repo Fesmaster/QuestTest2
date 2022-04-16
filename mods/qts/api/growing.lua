@@ -6,7 +6,7 @@ function qts.start_node_growth(pos)
 			
 	if nodedef.growable_nodes then
 		--check below for a valid node
-		local nodeb = minetest.get_node_or_nil(vector.add(pos, {x=0, y=-1, z=0}))
+		local nodeb = minetest.get_node_or_nil(vector.add(pos, vector.new(0, -1, 0)))
 		if nodeb == nil then return false end
 		local nameb = nodeb.name
 		
@@ -54,7 +54,7 @@ function qts.start_area_growth(pos1, pos2)
 	for z = pos1.z, pos2.z do
 	for y = pos1.y, pos2.y do
 	for z = pos1.x, pos2.x do
-		local p = {x=x,y=y,z=z}
+		local p = vector.new(x,y,z)
 		local node = minetest.get_node_or_nil(p)
 		if node and minetest.get_item_group(node.name, "growable") > 0 then
 			qts.start_node_growth(p)

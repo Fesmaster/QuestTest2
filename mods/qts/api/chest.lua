@@ -26,7 +26,7 @@ qts.gui.register_gui("qt_chest", {
 
 
 qts.is_chest_lid_obstructed = function(pos)
-	local above = {x = pos.x, y = pos.y + 1, z = pos.z}
+	local above = pos+vector.new(0,1,0)
 	local def = minetest.registered_nodes[minetest.get_node(above).name]
 	-- allow ladders, signs, wallmounted things and torches to not obstruct
 	if def and

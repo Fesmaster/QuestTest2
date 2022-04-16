@@ -127,13 +127,17 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 	--for every Y column
 	for z = minp.z, maxp.z do
 	for x = minp.x, maxp.x do
+		--fix for the heightmap sometimes having very negative values (ie: -31007)
+		if heightmap[columnID] < minp.y then
+			heightmap[columnID] = minp.y
+		end
 		
 		--if not qts.worldgen.force_singlenode then
 			--get the biome data
 			biomeID = qts.worldgen.get_biome_name(heatmap[columnID],humiditymap[columnID],heightmap[columnID])
 			biomeRef = qts.worldgen.registered_biomes[biomeID]
 			biomeBuffer[columnID] = biomeID
-			if not biomeRef then minetest.log("LINE 131: NULL AT CREATION, Name:"..dump(biomeID)) end
+			if not biomeRef then minetest.log("LINE 136: NULL AT CREATION, Name:"..dump(biomeID)) end
 			--ground scanning setup
 			local groundHeight = -31000
 			local isground = false
@@ -185,7 +189,7 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 						isground = true
 						if y == maxp.y then --the height of the ground is the top of the generated area. This is a problem
 							--groundHeight = heightmap[columnID]
-							local n = minetest.get_node_or_nil({x=x, y=y+1,z=z})
+							local n = minetest.get_node_or_nil(vector.new(x, y+1,z))
 							if n and n.name and n.name == "air" then
 								--local cidbelow = minetest.get_content_id(n.name)
 								--if qts.worldgen.is_biome_node(cidbelow, biomeID,{"surface", "fill", "stone"}, true) 
@@ -199,7 +203,7 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 								for delta_y = 2, biomeRef.stone_depth+1 do
 									if traceup_found == false then
 										local off_y = y - delta_y
-										local n = minetest.get_node_or_nil({x=x, y=off_y,z=z})
+										local n = minetest.get_node_or_nil(vector.new(x, off_y,z))
 										
 										if n and n.name and n.name == "air" then
 											--local cidbelow = minetest.get_content_id(n.name)
@@ -298,7 +302,7 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 								if strucDef.rotate then rotation = "random" end
 								local sucess = minetest.place_schematic_on_vmanip(
 									VM,
-									vector.add({x=x,y=y,z=z}, strucDef.offset), 
+									vector.new(x,y,z) + strucDef.offset, 
 									strucDef.schematic, 
 									rotation, 
 									nil, 

@@ -1,7 +1,7 @@
 
 --fences and the like
 qts.register_fencelike_node("default:oak_wood_fence", {
-	description = "Oak Wood Fance",
+	description = "Oak Wood Fence",
 	type = "fence",
 	tiles = {"default_oak_wood.png"},
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
@@ -24,7 +24,7 @@ qts.register_fencelike_node("default:oak_wood_rail", {
 })
 
 qts.register_fencelike_node("default:rowan_wood_fence", {
-	description = "Rowan Wood Fance",
+	description = "Rowan Wood Fence",
 	type = "fence",
 	tiles = {"default_rowan_wood.png"},
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
@@ -47,7 +47,7 @@ qts.register_fencelike_node("default:rowan_wood_rail", {
 })
 
 qts.register_fencelike_node("default:apple_wood_fence", {
-	description = "Apple Wood Fance",
+	description = "Apple Wood Fence",
 	type = "fence",
 	tiles = {"default_apple_wood.png"},
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
@@ -70,7 +70,7 @@ qts.register_fencelike_node("default:apple_wood_rail", {
 })
 
 qts.register_fencelike_node("default:aspen_wood_fence", {
-	description = "Aspen Wood Fance",
+	description = "Aspen Wood Fence",
 	type = "fence",
 	tiles = {"default_aspen_wood.png"},
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
@@ -93,7 +93,7 @@ qts.register_fencelike_node("default:aspen_wood_rail", {
 })
 
 qts.register_fencelike_node("default:lanternfruit_wood_fence", {
-	description = "Lanternfruit Wood Fance",
+	description = "Lanternfruit Wood Fence",
 	type = "fence",
 	tiles = {"default_lanternfruit_wood_fence.png"}, 
 	no_tile_transform=true,
@@ -120,7 +120,7 @@ qts.register_fencelike_node("default:lanternfruit_wood_rail", {
 })
 
 qts.register_fencelike_node("default:coffee_wood_fence", {
-	description = "Coffee Wood Fance",
+	description = "Coffee Wood Fence",
 	type = "fence",
 	tiles = {"default_coffee_wood.png"},
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
@@ -143,7 +143,7 @@ qts.register_fencelike_node("default:coffee_wood_rail", {
 })
 
 qts.register_fencelike_node("default:rosewood_wood_fence", {
-	description = "Rosewood Wood Fance",
+	description = "Rosewood Wood Fence",
 	type = "fence",
 	tiles = {"default_rosewood_wood.png"},
 	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
@@ -164,6 +164,54 @@ qts.register_fencelike_node("default:rosewood_wood_rail", {
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
+
+qts.register_fencelike_node("default:mahogany_wood_fence", {
+	description = "Mahogany Wood Fence",
+	type = "fence",
+	tiles = {"default_mahogany_wood_fence.png"},
+	no_tile_transform=true,
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:mahogany_wood_rail", 
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
+
+qts.register_fencelike_node("default:mahogany_wood_rail", {
+	description = "Mahogany Wood Rail",
+	type = "rail",
+	tiles = {"default_mahogany_wood_rail.png"},
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1, not_in_creative_inventory=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:mahogany_wood_fence", 
+	drop = "default:mahogany_wood_fence",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
+
+qts.register_fencelike_node("default:pine_wood_fence", {
+	description = "Pine Wood Fence",
+	type = "fence",
+	tiles = {"default_pine_wood.png"},
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:pine_wood_rail", 
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
+
+qts.register_fencelike_node("default:pine_wood_rail", {
+	description = "Pine Wood Rail",
+	type = "rail",
+	tiles = {"default_pine_wood.png"},
+	groups = {choppy=3, oddly_breakable_by_hand=2, wood=1, not_in_creative_inventory=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:pine_wood_fence", 
+	drop = "default:pine_wood_fence",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
+
 
 --stone walls
 
