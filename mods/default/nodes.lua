@@ -14,7 +14,7 @@ INDEX
 qts.register_shaped_node("default:cement", {
 	description = "Cement",
 	tiles = {"default_cement.png"},
-	groups = {cracky=3},
+	groups = {cracky=3, explode_resistance=10},
 	sounds = qtcore.node_sound_stone(),
 })
 

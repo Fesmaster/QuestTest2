@@ -8,7 +8,7 @@ qts.EXPLOSION_MAX_STEPS = qts.settings.get_num('EXPLOSION_MAX_STEPS') or 1000
 --if code == 2, it does have an on_blast function
 
 --[[
-Eplotion properties
+Explosion properties
 properties = {
 	destroy_nodes = true,
 	make_drops = true,
@@ -27,7 +27,7 @@ properties = {
 local function add_to_drops_table(drops, itemstack)
 	local itbl = ItemStack(itemstack):to_table()
 	for i, d in ipairs(drops) do
-		if d.name == itbl.name and d.metadata == d.metadata and d.wear == d.wear then
+		if d.name == itbl.name and d.metadata == itbl.metadata and d.wear == itbl.wear then
 			drops[i].count = d.count + itbl.count
 			return drops
 		end
@@ -45,25 +45,6 @@ local function append_drops_list(DL1, DL2)
 	return DL1
 end
 
-local function destroy_exploded_nodes(foundList)
-	for pos, code in pairs(foundList) do
-	
-		--create drops TODO:create drops
-		
-		if code == 1 then
-			--local name = minetest.get_node(pos).name
-			--local liquid  = minetest.get_item_group(name, "liquid")
-			if (minetest.get_item_group(minetest.get_node(pos).name, "liquid") == 0) then --dont blow up liqids
-				minetest.remove_node(pos)
-			end
-		end
-	end
-	--check for falling node AFTER all removed
-	for pos, code in pairs(foundList) do
-		minetest.check_for_falling(pos)
-	end
-end
-
 local function append_found_list(FL1, FL2)
 	for pos, code in pairs(FL2) do
 		if not FL1[pos] then
@@ -71,6 +52,26 @@ local function append_found_list(FL1, FL2)
 		end
 	end
 	return FL1
+end
+
+local function destroy_exploded_nodes(foundList)
+	for key, code in pairs(foundList) do
+		local pos, _ = vector.from_string(key)
+		if pos ~= nil then
+			if code == 1 then
+				--local name = minetest.get_node(pos).name
+				--local liquid  = minetest.get_item_group(name, "liquid")
+				if (minetest.get_item_group(minetest.get_node(pos).name, "liquid") == 0) then --don't blow up liquids
+					minetest.remove_node(pos)
+				end
+			end
+		end
+	end
+	--check for falling node AFTER all removed
+	for key, code in pairs(foundList) do
+		local pos, _ = vector.from_string(key)
+		minetest.check_for_falling(pos)
+	end
 end
 
 --stolen from tnt mod TESTING ONLY
@@ -204,9 +205,9 @@ local function blast_objects(objectList, pos, power, properties)
 	end
 end
 
-function qts.explode_ray(pos, slopeVector, stepSize, power, returnFound)
+function qts.explode_ray(pos, slopeVector, stepSize, power, returnFound, excludeDrops)
 	slopeVector = vector.multiply(vector.normalize(slopeVector), stepSize)
-	
+	excludeDrops = excludeDrops or {}
 	local check = vector.new(pos.x, pos.y, pos.z)
 	local currentPower = power
 	local found = {}
@@ -217,7 +218,7 @@ function qts.explode_ray(pos, slopeVector, stepSize, power, returnFound)
 	local prevdist = 0
 	for i = 1, qts.EXPLOSION_MAX_STEPS do
 		
-		if ( --breaking rays that have NAN diretions
+		if ( --breaking rays that have NAN directions
 				check.x ~= check.x 
 				or check.y ~= check.y 
 				or check.z ~= check.z
@@ -236,7 +237,8 @@ function qts.explode_ray(pos, slopeVector, stepSize, power, returnFound)
 		for y = c1.y, c2.y do
 		for z = c1.z, c2.z do
 			local p = vector.new(x, y, z)
-			if not found[p] then
+			local key = p:to_string()
+			if not found[key] then
 				local node = minetest.get_node_or_nil(p)
 				if node then
 					local desPow = math.max(
@@ -252,24 +254,30 @@ function qts.explode_ray(pos, slopeVector, stepSize, power, returnFound)
 					
 					local nodeDef = minetest.registered_nodes[node.name]
 					if nodeDef and nodeDef.on_blast then 
-						local customDrops = nodeDef.on_blast(p, currentPower)
-						found[p] = 2
-						for i, drop in ipairs(customDrops) do
-							drops = add_to_drops_table(drops, drop)
+						found[key] = 2
+						if excludeDrops[key] == nil then --if drops are excluded for this pos, don't call the func
+							local customDrops = nodeDef.on_blast(p, currentPower)
+							if customDrops and type(customDrops) == "table" then
+								for i, drop in ipairs(customDrops) do
+									drops = add_to_drops_table(drops, drop)
+								end
+							end
 						end
 					else
 						--ones that do not have a function
 						if desPow <= currentPower then
-							found[p] = 1
-							local nodeDrops = minetest.get_node_drops(node.name)
-							for i, drop in ipairs(nodeDrops) do
-								drops = add_to_drops_table(drops, drop)
+							found[key] = 1
+							if excludeDrops[key] == nil then --if drops are excluded for this pos, don't collect the drops
+								local nodeDrops = minetest.get_node_drops(node.name)
+								for i, drop in ipairs(nodeDrops) do
+									drops = add_to_drops_table(drops, drop)
+								end
 							end
 						end
 					end
 				end
-				if not found[p] then
-					found[p] = 0
+				if not found[key] then
+					found[key] = 0
 				end
 			end
 		end
@@ -281,7 +289,7 @@ function qts.explode_ray(pos, slopeVector, stepSize, power, returnFound)
 				check.x == check.x 
 				and check.y == check.y 
 				and check.z == check.z
-			) then --wierdness relying on NAN not being equal to itself
+			) then --weirdness relying on NAN not being equal to itself
 			
 			local objs = minetest.get_objects_inside_radius({x=check.x, y=check.y, z=check.z}, 2)
 			for i, obj in ipairs(objs) do
@@ -289,13 +297,13 @@ function qts.explode_ray(pos, slopeVector, stepSize, power, returnFound)
 					if (objects[obj:get_pos()]) then
 						--already found
 						--ignore for now
-						minetest.log("EXPLOSION RAY: object colletion: duplicate found?! Overrideing")
+						minetest.log("EXPLOSION RAY: object collection: duplicate found?! Overrideing")
 					end
 					objects[minetest.pos_to_string(obj:get_pos())] = obj
 				end
 			end
 		else
-			minetest.log("EXPLOSION RAY: Wierdness with position when getting objects")
+			minetest.log("EXPLOSION RAY: Weirdness with position when getting objects")
 		end
 		
 		local distPowLoss = (dist * dist) - (prevdist * prevdist)
@@ -315,7 +323,7 @@ function qts.explode_ray(pos, slopeVector, stepSize, power, returnFound)
 	end
 	--create drops TODO:create drops
 	eject_drops(drops, pos, 1)
-	--otherwise, actualld destroy then
+	--otherwise, actually destroy then
 	destroy_exploded_nodes(found)
 	--shove objects
 	blast_objects(objects, pos, power)
@@ -365,7 +373,7 @@ function qts.explode(pos, power, properties)
 	
 	local points = qts.distribute_points_on_sphere(rays)
 	for i, point in ipairs(points) do
-		local f = qts.explode_ray(pos, point, stepSize, power, true)
+		local f = qts.explode_ray(pos, point, stepSize, power, true, found)
 		found = append_found_list(found, f.found)
 		if (f.drops) then
 			drops = append_drops_list(drops, f.drops)

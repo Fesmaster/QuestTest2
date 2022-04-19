@@ -10,6 +10,7 @@ inventory.register_exemplar_item("desert_stone", "default:desert_sandstone")
 inventory.register_exemplar_item("obsidian", "default:obsidian")
 inventory.register_exemplar_item("bricks", "default:brick")
 inventory.register_exemplar_item("soil", "default:dirt")
+inventory.register_exemplar_item("sand", "default:sand")
 
 inventory.register_exemplar_item("log", "default:oak_log")
 inventory.register_exemplar_item("wood", "default:oak_wood_planks")
