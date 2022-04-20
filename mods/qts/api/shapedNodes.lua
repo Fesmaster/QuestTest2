@@ -1,6 +1,6 @@
 --shaped Nodes API
---some of this code is hevily based on the stairs mod in minetest_game
---liscensed under lgpl (see the liscense for QT2 in general)
+--some of this code is heavily based on the stairs mod in minetest_game
+--licensed under lgpl (see the license for QT2 in general)
 
 qts.hammer = {}
 function qts.rotate_and_place(itemstack, placer, pointed_thing)

@@ -254,6 +254,32 @@ qts.register_shaped_node ("default:dirt", {
 	}
 })
 
+minetest.register_node ("default:dirt_tilled", {
+	description = "Dirt",
+	drawtype = "nodebox",
+	tiles = {"default_dirt_tilled.png", "default_dirt.png","default_dirt.png"},
+	groups = {crumbly = 3, soil=1, farmland=1},
+	sounds = qtcore.node_sound_dirt(),
+	paramtype2 = "facedir",
+	paramtype = 'light',
+	drop = "default:dirt",
+	node_box = {
+        type = "fixed",
+        fixed = {
+			{ -8/16, -8/16, -8/16, 8/16, 7/16, 8/16, },
+			{ -8/16, 7/16, -8/16, -6/16, 8/16, 8/16, },
+			{ -1/16, 7/16, -8/16, 1/16, 8/16, 8/16, },
+			{ 6/16, 7/16, -8/16, 8/16, 8/16, 8/16, },
+		}
+    },
+	collision_box = {
+        type = "fixed",
+        fixed = {
+			{ -8/16, -8/16, -8/16, 8/16, 7/16, 8/16, },
+		}
+    },
+})
+
 qts.register_shaped_node ("default:dirt_with_grass", {
 	description = "Dirt with Grass",
 	tiles = {"default_grass.png"},
@@ -584,7 +610,6 @@ qts.register_shaped_node ("default:aspen_log", {
 qts.register_shaped_node ("default:lanternfruit_wood_planks", {
 	description = "Lanternfruit Wood Planks",
 	tiles = {{name = "default_lanternfruit_wood.png", align_style = "node"}},
-	paramtype2 = "facedir",
 	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
