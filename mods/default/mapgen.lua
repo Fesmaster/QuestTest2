@@ -153,7 +153,7 @@ qts.worldgen.register_biome("mountain", {
 	min_light = 7,--half
 	min_air = 2,
 	dust = "default:snow",
-	surface = {"default:dirt", "default:stone"}, --TODO:replace with gravel
+	surface = {"default:dirt", "default:stone"}, --TODO:replace with gravel and add pines?
 	fill = "default:dirt",
 	stone = "default:stone",
 	plant = nil,
@@ -260,8 +260,8 @@ qts.worldgen.register_biome("snow_beach", {
 	max_ground_height = 5,
 	min_light = 0,--half
 	min_air = 10,
-	--dust = "default:snow",
-	dust = nil,
+	dust = {"default:snow"},
+	--dust = nil,
 	surface = "default:sand",
 	fill = {"default:sand","default:sandstone"},
 	stone = "default:sandstone",
