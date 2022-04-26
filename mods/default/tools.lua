@@ -324,67 +324,81 @@ minetest.register_tool("default:sword_steel", {
 })
 
 --Hoes
+
+local function Hoe_Use(itemstack, user, pointed_thing)
+	if pointed_thing and pointed_thing.under then
+		local node = minetest.get_node_or_nil(pointed_thing.under)
+		if node and node.name then
+			local soilness = minetest.get_item_group(node.name, "soil")
+			local farmness = minetest.get_item_group(node.name, "farmland")
+			if soilness ~= 0 and farmness == 0 then
+				
+				local param2 = 0
+				if user then
+					local user_pos = user:get_pos()
+					if user_pos then
+						param2 = minetest.dir_to_facedir(vector.subtract(pointed_thing.above, user_pos))
+					end
+				end
+				
+				minetest.swap_node(pointed_thing.under, {name = "default:dirt_tilled", param2=param2})
+				
+				if not (qts.is_player_creative(user)) then
+					local nlvl = minetest.get_item_group(node.name, "level")
+					local hlvl = minetest.get_item_group(itemstack:get_name(), "level")
+					local mult = (hlvl-nlvl)^3
+					if mult == 0 then mult = 1 end
+					local wear = qts.WEAR_MAX / (minetest.registered_tools[itemstack:get_name()].max_uses * mult)
+					if not itemstack:set_wear(itemstack:get_wear() + wear) then
+						itemstack:take_item()
+					end
+				end
+				
+			elseif farmness == 0 then
+				minetest.punch_node(pointed_thing.under)
+			end
+		end
+	end
+	return itemstack
+end
+
 --copper
 
 minetest.register_tool("default:hoe_copper", {
 	description = "Copper Hoe",
 	inventory_image = "default_hoe_copper.png",
-	tool_capabilities = {
-		full_punch_interval = 1.0,
-		max_drop_level=1,
-		groupcaps={
-			cracky = {times={[2]=1.00, [3]=0.50}, uses=60, maxlevel=1},
-		},
-		damage_groups = {fleshy=4},
-	},
 	sound = qtcore.tool_sounds_default(),
-	groups = {hoe = 1}
+	groups = {hoe = 1},
+	on_use = Hoe_Use,
+	max_uses = 50,
 })
 
 --bronze
 minetest.register_tool("default:hoe_bronze", {
 	description = "Bronze Hoe",
 	inventory_image = "default_hoe_bronze.png",
-	tool_capabilities = {
-		full_punch_interval = 1.0,
-		max_drop_level=1,
-		groupcaps={
-			cracky = {times={[2]=1.00, [3]=0.50}, uses=60, maxlevel=1},
-		},
-		damage_groups = {fleshy=4},
-	},
 	sound = qtcore.tool_sounds_default(),
-	groups = {hoe = 1}
+	groups = {hoe = 1},
+	on_use = Hoe_Use,
+	max_uses = 100,
 })
 
 --iron
 minetest.register_tool("default:hoe_iron", {
 	description = "Iron Hoe",
 	inventory_image = "default_hoe_iron.png",
-	tool_capabilities = {
-		full_punch_interval = 1.0,
-		max_drop_level=1,
-		groupcaps={
-			cracky = {times={[2]=1.00, [3]=0.50}, uses=60, maxlevel=1},
-		},
-		damage_groups = {fleshy=4},
-	},
 	sound = qtcore.tool_sounds_default(),
-	groups = {hoe = 1}
+	groups = {hoe = 1},
+	on_use = Hoe_Use,
+	max_uses = 400,
 })
 
 --steel
 minetest.register_tool("default:hoe_steel", {
 	description = "Steel Hoe",
 	inventory_image = "default_hoe_steel.png",
-	tool_capabilities = {
-		full_punch_interval = 1.0,
-		max_drop_level=1,
-		groupcaps={
-			cracky = {times={[2]=1.00, [3]=0.50}, uses=60, maxlevel=1},
-		},
-		damage_groups = {fleshy=4},
-	},
 	sound = qtcore.tool_sounds_default(),
-	groups = {hoe = 1}
+	groups = {hoe = 1},
+	on_use = Hoe_Use,
+	max_uses = 600,
 })

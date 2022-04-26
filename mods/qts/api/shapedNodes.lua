@@ -1,6 +1,6 @@
 --shaped Nodes API
---some of this code is hevily based on the stairs mod in minetest_game
---liscensed under lgpl (see the liscense for QT2 in general)
+--some of this code is heavily based on the stairs mod in minetest_game
+--licensed under lgpl (see the license for QT2 in general)
 
 qts.hammer = {}
 function qts.rotate_and_place(itemstack, placer, pointed_thing)
@@ -166,8 +166,7 @@ qts.register_hammer = function(name, def)
 					if not (qts.is_player_creative(user)) then
 						local mult = (hlvl-nlvl)^3
 						if mult == 0 then mult = 1 end
-						local wear = qts.WEAR_MAX / 
-							(minetest.registered_tools[itemstack:get_name()].max_uses * mult)
+						local wear = qts.WEAR_MAX / (minetest.registered_tools[itemstack:get_name()].max_uses * mult)
 						if not itemstack:set_wear(itemstack:get_wear() + wear) then
 							itemstack:take_item()
 						end
@@ -190,8 +189,8 @@ qts.register_hammer = function(name, def)
 					--apply wear
 					if not (qts.is_player_creative(user)) then
 						local mult = (hlvl-nlvl)^3
-						local wear = qts.WEAR_MAX / 
-							(minetest.registered_tools[itemstack:get_name()].max_uses * mult)
+						if mult == 0 then mult = 1 end
+						local wear = qts.WEAR_MAX / (minetest.registered_tools[itemstack:get_name()].max_uses * mult)
 						if not itemstack:set_wear(itemstack:get_wear() + wear) then
 							itemstack:take_item()
 						end

@@ -62,6 +62,7 @@ minetest.register_node("foundry:crucible_empty", {
 	description = "Empty Crucible",
 	drawtype = "glasslike_framed",
 	tiles = {"foundry_crucible_top.png"},
+	drop = "",
 	--special_tiles = {"foundry_test_brass.png"},
 	paramtype = "light",
 	--paramtype2 = "glasslikeliquidlevel",
@@ -104,7 +105,7 @@ minetest.register_node("foundry:spout", {
 	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
 		local off = foundry.rotate_vector_by_facedir({x=0, y=0, z=1}, node.param2)
 		local fpos = foundry.get_pos_foundry(vector.add(pos, off))
-		objs = minetest.get_objects_inside_radius(pos, 1)
+		local objs = minetest.get_objects_inside_radius(pos, 1)
 		for i, obj in ipairs(objs) do
 			local luaobj = obj:get_luaentity()
 			if luaobj and luaobj.qtid and luaobj.qtid == "foundry_casting_flow" then
@@ -191,7 +192,6 @@ minetest.register_node ("foundry:ingot_mold", {
 	end,
 	on_cast = function(pos, node, FD, caster)
 		--minetest.log("From Caster:\n"..dump(FD))
-		minetest.log("Func Called")
 		if node.param2 < 4 and FD then
 			local meta = minetest.get_meta(pos)
 			if node.param2 == 0 then
@@ -221,7 +221,6 @@ minetest.register_node ("foundry:ingot_mold", {
 			--foundry.registered_metals
 			local meta = minetest.get_meta(pos)
 			local metalID = meta:get_string("metalType")
-			minetest.log("Meta: "..dump(metalID))
 			if metalID ~= "" then
 				local metal = foundry.registered_metals[metalID]
 				if metal then

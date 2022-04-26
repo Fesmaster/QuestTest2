@@ -604,6 +604,7 @@ foundry.register_metal = function(name, def)
 					length = 1.5,
 				},
 		}},
+		drop = "",
 		paramtype = "light",
 		paramtype2 = "glasslikeliquidlevel",
 		groups = {cracky=3, bricks=1, foundry_crucible = 1, not_in_creative_inventory = 1},

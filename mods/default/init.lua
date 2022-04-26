@@ -25,6 +25,7 @@ dofile(minetest.get_modpath("default").."/torches.lua")
 dofile(minetest.get_modpath("default").."/saplings.lua")
 dofile(minetest.get_modpath("default").."/liquids.lua")
 dofile(minetest.get_modpath("default").."/foliage.lua")
+dofile(minetest.get_modpath("default").."/farming.lua")
 
 dofile(minetest.get_modpath("default").."/exemplar.lua")
 dofile(minetest.get_modpath("default").."/initial_items.lua")

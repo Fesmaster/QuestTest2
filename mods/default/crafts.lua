@@ -270,6 +270,12 @@ qts.register_craft({
 	near = {"group:anvil", "group:furnace"},
 })
 
+qts.register_craft({
+	ingredients = {"group:wood 4"},
+	results = {"default:bucket"},
+	near = {"group:workbench"},
+})
+
 
 --stone and stone walls
 --grey stone
