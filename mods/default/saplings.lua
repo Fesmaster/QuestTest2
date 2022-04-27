@@ -199,7 +199,7 @@ qts.register_growable_node("default:palm_sapling", {
 	on_grow = function(pos)
 		minetest.log("info","A Palm tree has grown at "..minetest.pos_to_string(pos))
 		minetest.set_node(pos, {name = "air"})
-		qtcore.grow_rosewood_tree(pos)
+		qtcore.grow_palm_tree(pos)
 	end,
 })
 
@@ -221,6 +221,6 @@ qts.register_growable_node("default:pine_sapling", {
 	on_grow = function(pos)
 		minetest.log("info","A pine tree has grown at "..minetest.pos_to_string(pos))
 		minetest.set_node(pos, {name = "air"})
-		qtcore.grow_rosewood_tree(pos)
+		qtcore.grow_pine_tree(pos)
 	end,
 })

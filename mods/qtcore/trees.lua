@@ -48,8 +48,17 @@ qtcore.grow_blue_mushroom = function(pos)
 end
 
 qtcore.grow_gold_mushroom = function(pos)
-	return minetest.place_schematic(pos, path .. "tree_gold_shroom_1.mts", 'random', nil, false, flags)
+	return minetest.place_schematic(pos, path .. "tree_gold_shroom1.mts", 'random', nil, false, flags)
 end
+
+qtcore.grow_pine_tree = function(pos)
+	return minetest.place_schematic(pos, path .. "pine_tree1.mts", 'random', nil, false, flags)
+end
+
+qtcore.grow_palm_tree = function(pos)
+	return minetest.place_schematic(pos, path .. "palm_tree1.mts", 'random', nil, false, flags)
+end
+
 
 
 --[[
@@ -225,7 +234,7 @@ qts.worldgen.register_structure("tree_large_b_shroom", {
 })
 
 qts.worldgen.register_structure("tree_gold_shroom_1", {
-	schematic = path .. "gold_shroom_1.mts",
+	schematic = path .. "gold_shroom1.mts",
 	chance = 93,
 	biomes = {"mushroom_forest"},
 	nodes = {"default:dirt_with_mushroom_grass"},
@@ -235,7 +244,7 @@ qts.worldgen.register_structure("tree_gold_shroom_1", {
 })
 
 qts.worldgen.register_structure("tree_palm", {
-	schematic = path .. "palm_tree_1.mts",
+	schematic = path .. "palm_tree1.mts",
 	chance = 200,
 	biomes = {"beach"},
 	nodes = {"default:sand"},
