@@ -56,32 +56,9 @@ minetest.register_craftitem("default:brick_single", {
 	inventory_image = "default_brick_single.png",
 })
 
-minetest.register_craftitem("default:herb_milfoil", {
-	description = "Milfoil",
-	inventory_image = "default_herb_milfoil.png",
-})
-
-minetest.register_craftitem("default:herb_bloodbulb", {
-	description = "Bloodbulb",
-	inventory_image = "default_herb_bloodbulb.png",
-})
-
-minetest.register_craftitem("default:herb_wolfshood", {
-	description = "Wolfshood",
-	inventory_image = "default_herb_wolfshood.png",
-})
-
-
-
 minetest.register_craftitem("default:coconut", {
 	description = "Coconut",
 	inventory_image = "default_coconut.png",
-	on_use = minetest.item_eat(2),
-})
-
-minetest.register_craftitem("default:wheat", {
-	description = "Wheat",
-	inventory_image = "default_wheat.png",
 	on_use = minetest.item_eat(2),
 })
 

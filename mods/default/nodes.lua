@@ -278,6 +278,12 @@ minetest.register_node ("default:dirt_tilled", {
 			{ -8/16, -8/16, -8/16, 8/16, 7/16, 8/16, },
 		}
     },
+	selection_box = {
+        type = "fixed",
+        fixed = {
+			{ -8/16, -8/16, -8/16, 8/16, 7/16, 8/16, },
+		}
+    },
 })
 
 qts.register_shaped_node ("default:dirt_with_grass", {
