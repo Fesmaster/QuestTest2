@@ -77,7 +77,57 @@ qts.register_chest("default:crate_laternfruit", {
 	get_chest_formspec = qtcore.get_default_chest_formspec,
 })
 
+qts.register_chest("default:crate_pine", {
+	description = "Pine Wood Crate",
+	tiles = {"default_crate_pine.png"},
+	groups = {choppy = 2, oddly_breakable_by_hand = 2},
+	paramtype = "light",
+	paramtype2 = "facedir",
+	is_ground_content = false,
+	sounds = qtcore.node_sound_wood(),
+	
+	invsize = 8*4,
+	get_chest_formspec = qtcore.get_default_chest_formspec,
+})
 
+qts.register_chest("default:crate_rosewood", {
+	description = "Rose Wood Crate",
+	tiles = {"default_crate_rosewood.png"},
+	groups = {choppy = 2, oddly_breakable_by_hand = 2},
+	paramtype = "light",
+	paramtype2 = "facedir",
+	is_ground_content = false,
+	sounds = qtcore.node_sound_wood(),
+	
+	invsize = 8*4,
+	get_chest_formspec = qtcore.get_default_chest_formspec,
+})
+
+qts.register_chest("default:crate_rowan", {
+	description = "Rowan Wood Crate",
+	tiles = {"default_crate_rowan.png"},
+	groups = {choppy = 2, oddly_breakable_by_hand = 2},
+	paramtype = "light",
+	paramtype2 = "facedir",
+	is_ground_content = false,
+	sounds = qtcore.node_sound_wood(),
+	
+	invsize = 8*4,
+	get_chest_formspec = qtcore.get_default_chest_formspec,
+})
+
+qts.register_chest("default:crate_swamp", {
+	description = "Swamp Wood Crate",
+	tiles = {"default_crate_swamp.png"},
+	groups = {choppy = 2, oddly_breakable_by_hand = 2},
+	paramtype = "light",
+	paramtype2 = "facedir",
+	is_ground_content = false,
+	sounds = qtcore.node_sound_wood(),
+	
+	invsize = 8*4,
+	get_chest_formspec = qtcore.get_default_chest_formspec,
+})
 --[[
 --A Test chest to see how well different inv sizes would work
 --

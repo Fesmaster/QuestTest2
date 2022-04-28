@@ -707,6 +707,16 @@ qts.register_shaped_node ("default:pine_log", {
 	sounds = qtcore.node_sound_wood(),
 })
 
+qts.register_shaped_node ("default:swamp_wood_planks", {
+	description = "Swamp Wood Planks",
+	tiles = {{name = "default_swamp_wood.png", align_style = "node"}},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
+	sounds = qtcore.node_sound_wood(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
+
 minetest.register_node("default:swamp_tree", {
 	description = "Swamp Log",
 	tiles = {
