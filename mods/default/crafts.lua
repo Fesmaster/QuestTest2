@@ -130,13 +130,13 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"default:brick_single 4"},
+	ingredients = {"default:brick_item 4"},
 	results = {"default:brick"},
 	near = {"group:workbench"},
 })
 
 qts.register_craft({
-	ingredients = {"default:calcium_oxide", "group:sand 4"},
+	ingredients = {"default:lime", "group:sand 4"},
 	results = {"default:cement 4"},
 })
 
@@ -412,13 +412,13 @@ minetest.register_craft({
 
 minetest.register_craft({
 	type = "cooking",
-	output = "default:calcium_oxide",
+	output = "default:lime",
 	recipe = "default:shell_pieces",
 })
 
 minetest.register_craft({
 	type = "cooking",
-	output = "default:brick_single",
+	output = "default:brick_item",
 	recipe = "default:clay_lump",
 })
 

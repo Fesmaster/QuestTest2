@@ -27,33 +27,34 @@ minetest.register_craftitem("default:charcoal", {
 })
 
 minetest.register_craftitem("default:clay_lump", {
-	description = ("Clay"),
+	description = "Clay",
 	inventory_image = "default_clay_lump.png",
 })
 
 minetest.register_craftitem("default:flint", {
-	description = ("Flint"),
+	description = "Flint",
 	inventory_image = "default_flint.png",
 })
 
 minetest.register_craftitem("default:tinder", {
-	description = ("Tinder"),
+	description = "Tinder",
 	inventory_image = "default_tinder.png",
 })
 
 minetest.register_craftitem("default:shell_pieces", {
-	description = ("Shell Pieces found in sand"),
+	description = "Shell Pieces",
 	inventory_image = "default_shell_peices.png",
 })
 
-minetest.register_craftitem("default:calcium_oxide", {
-	description = ("Calcium Oxide Dust"),
-	inventory_image = "default_calcium_oxide.png",
+minetest.register_alias("default:calcium_oxide", "default:lime")
+minetest.register_craftitem("default:lime", {
+	description = "Lime",
+	inventory_image = "default_lime.png",
 })
-
-minetest.register_craftitem("default:brick_single", {
-	description = ("A Brick"),
-	inventory_image = "default_brick_single.png",
+minetest.register_alias("default:brick_single", "default:brick_item")
+minetest.register_craftitem("default:brick_item", {
+	description = "Brick",
+	inventory_image = "default_brick_item.png",
 })
 
 minetest.register_craftitem("default:coconut", {
@@ -62,8 +63,8 @@ minetest.register_craftitem("default:coconut", {
 	on_use = minetest.item_eat(2),
 })
 
-minetest.register_craftitem("default:mush_stew", {
-	description = "A Gummy Soup",
-	inventory_image = "default_mush_stew.png",
+minetest.register_craftitem("default:mushroom_stew", {
+	description = "Mushroom Stew",
+	inventory_image = "default_mushroom_stew.png",
 	on_use = minetest.item_eat(5),
 })

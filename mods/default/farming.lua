@@ -113,8 +113,9 @@ register_farm_plant("milfoil", {
 	seed_image = "default_seeds_milfoil_item.png",
 	seed_tiles = {"default_seeds_milfoil_top.png", "default_oak_wood.png", "default_seeds_milfoil_side.png"},
 	item_image = "default_herb_milfoil.png",
-	plant_levels = 4,
-	plant_tiles_list = {"default_herb_milfoil_0.png", "default_herb_milfoil_1.png", "default_herb_milfoil_2.png", "default_herb_milfoil_3.png"},
+	plant_levels = 8,
+	plant_tiles_list = {"default_herb_milfoil_1.png", "default_herb_milfoil_2.png", "default_herb_milfoil_3.png", "default_herb_milfoil_4.png",
+	"default_herb_milfoil_5.png", "default_herb_milfoil_6.png", "default_herb_milfoil_7.png", "default_herb_milfoil_8.png"},
 	grow_timer = 90,
 	grow_timer_random = 30,
 })
