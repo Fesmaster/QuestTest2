@@ -711,7 +711,7 @@ minetest.register_node("default:swamp_tree", {
 	description = "Swamp Log",
 	tiles = {
 		"default_swamp_log_top.png",
-		"default_swamp_log_bottom.png",
+		"default_swamp_log_top.png",
 		"default_swamp_log_side.png"
 	},
 	use_texture_alpha = "clip",
@@ -731,7 +731,7 @@ minetest.register_node("default:swamp_tree", {
 --BEGIN shrooms
 qts.register_shaped_node ("default:blue_mushroom_trunk", {
 	description = "Blue Mushroom Trunk",
-	tiles = {"default_b_shroom_top.png", "default_b_shroom_top.png", "default_b_shroom_side.png"},
+	tiles = {"default_mushroom_blue_top.png", "default_mushroom_blue_top.png", "default_mushroom_blue_side.png"},
 	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2},
 	sounds = qtcore.node_sound_wood(),
@@ -739,7 +739,7 @@ qts.register_shaped_node ("default:blue_mushroom_trunk", {
 
 qts.register_shaped_node ("default:blue_mushroom_cap", {
 	description = "Blue Mushroom Cap",
-	tiles = {"default_b_shroom_cap.png"},
+	tiles = {"default_mushroom_blue_cap.png"},
 	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2},
 	sounds = qtcore.node_sound_wood(),
@@ -747,7 +747,7 @@ qts.register_shaped_node ("default:blue_mushroom_cap", {
 
 qts.register_shaped_node ("default:gold_mushroom_trunk", {
 	description = "Golden Mushroom Trunk",
-	tiles = {"default_g_shroom_top.png", "default_g_shroom_top.png", "default_g_shroom_side.png"},
+	tiles = {"default_mushroom_gold_top.png", "default_mushroom_gold_top.png", "default_mushroom_gold_side.png"},
 	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2},
 	sounds = qtcore.node_sound_wood(),
@@ -755,7 +755,7 @@ qts.register_shaped_node ("default:gold_mushroom_trunk", {
 
 qts.register_shaped_node ("default:gold_mushroom_cap", {
 	description = "Golden Mushroom Cap",
-	tiles = {"default_g_shroom_cap.png"},
+	tiles = {"default_mushroom_gold_cap.png"},
 	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2},
 	sounds = qtcore.node_sound_wood(),
@@ -763,7 +763,7 @@ qts.register_shaped_node ("default:gold_mushroom_cap", {
 
 minetest.register_node("default:gold_shroom_spore", {
 	description = "Golden Mushroom Spore",
-	tiles = {"default_g_shroom_spore.png"},
+	tiles = {"default_mushroom_gold_spore.png"},
 	drawtype = "nodebox",
 	paramtype = "light",
 	groups = {snappy = 3, flammable = 2, leaves = 1},
