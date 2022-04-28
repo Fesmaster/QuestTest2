@@ -102,6 +102,11 @@ qts.register_craft({
 	held = {"group:knife"},
 })
 qts.register_craft({
+	ingredients = {"group:wood"},
+	results = {"default:stick 16"},
+	held = {"group:knife"},
+})
+qts.register_craft({
 	ingredients = {"group:leaves"},
 	results = {"default:tinder"},
 	held = {"group:knife"},
