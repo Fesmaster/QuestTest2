@@ -328,10 +328,11 @@ minetest.register_tool("default:sword_steel", {
 local function Hoe_Use(itemstack, user, pointed_thing)
 	if pointed_thing and pointed_thing.under then
 		local node = minetest.get_node_or_nil(pointed_thing.under)
-		if node and node.name then
+		local nodeAbove = minetest.get_node_or_nil(pointed_thing.under + vector.new(0,1,0))
+		if node and node.name and nodeAbove and nodeAbove.name and nodeAbove.name == "air" then
 			local soilness = minetest.get_item_group(node.name, "soil")
-			local farmness = minetest.get_item_group(node.name, "farmland")
-			if soilness ~= 0 and farmness == 0 then
+			--local farmness = minetest.get_item_group(node.name, "farmland")
+			if soilness ~= 0 then
 				
 				local param2 = 0
 				if user then
@@ -354,7 +355,7 @@ local function Hoe_Use(itemstack, user, pointed_thing)
 					end
 				end
 				
-			elseif farmness == 0 then
+			else
 				minetest.punch_node(pointed_thing.under)
 			end
 		end

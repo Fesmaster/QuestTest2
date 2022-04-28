@@ -548,10 +548,9 @@ minetest.register_node("default:snow", {
 qts.register_shaped_node ("default:oak_wood_planks", {
 	description = "Oak Wood Planks",
 	tiles = {"default_oak_wood.png"},
-	paramtype2 = "facedir",
+	paramtype2 = "colorfacedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
-	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
 qts.register_shaped_node ("default:oak_log", {
@@ -565,10 +564,9 @@ qts.register_shaped_node ("default:oak_log", {
 qts.register_shaped_node ("default:rowan_wood_planks", {
 	description = "Rowan Wood Planks",
 	tiles = {"default_rowan_wood.png"},
-	paramtype2 = "facedir",
+	paramtype2 = "colorfacedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
-	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
 qts.register_shaped_node ("default:rowan_log", {
@@ -582,10 +580,9 @@ qts.register_shaped_node ("default:rowan_log", {
 qts.register_shaped_node ("default:apple_wood_planks", {
 	description = "Apple Wood Planks",
 	tiles = {"default_apple_wood.png"},
-	paramtype2 = "facedir",
+	paramtype2 = "colorfacedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
-	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
 qts.register_shaped_node ("default:apple_log", {
@@ -599,10 +596,9 @@ qts.register_shaped_node ("default:apple_log", {
 qts.register_shaped_node ("default:aspen_wood_planks", {
 	description = "Aspen Wood Planks",
 	tiles = {"default_aspen_wood.png"},
-	paramtype2 = "facedir",
+	paramtype2 = "colorfacedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
-	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
 qts.register_shaped_node ("default:aspen_log", {
@@ -616,10 +612,9 @@ qts.register_shaped_node ("default:aspen_log", {
 qts.register_shaped_node ("default:lanternfruit_wood_planks", {
 	description = "Lanternfruit Wood Planks",
 	tiles = {{name = "default_lanternfruit_wood.png", align_style = "node"}},
-	paramtype2 = "facedir",
+	paramtype2 = "colorfacedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
-	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
 qts.register_shaped_node ("default:lanterfruit_log", {
@@ -633,10 +628,9 @@ qts.register_shaped_node ("default:lanterfruit_log", {
 qts.register_shaped_node ("default:coffee_wood_planks", {
 	description = "Coffee Wood Planks",
 	tiles = {"default_coffee_wood.png"},
-	paramtype2 = "facedir",
+	paramtype2 = "colorfacedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
-	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
 qts.register_shaped_node ("default:coffee_log", {
@@ -650,10 +644,9 @@ qts.register_shaped_node ("default:coffee_log", {
 qts.register_shaped_node ("default:rosewood_wood_planks", {
 	description = "Rosewood Planks",
 	tiles = {"default_rosewood_wood.png"},
-	paramtype2 = "facedir",
+	paramtype2 = "colorfacedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
-	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
 qts.register_shaped_node ("default:rosewood_log", {
@@ -667,10 +660,9 @@ qts.register_shaped_node ("default:rosewood_log", {
 qts.register_shaped_node ("default:mahogany_wood_planks", {
 	description = "Mahogany Planks",
 	tiles = {"default_mahogany_wood.png"},
-	paramtype2 = "facedir",
+	paramtype2 = "colorfacedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
-	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
 qts.register_shaped_node ("default:mahogany_log", {
@@ -692,10 +684,9 @@ qts.register_shaped_node ("default:palm_log", {
 qts.register_shaped_node ("default:pine_wood_planks", {
 	description = "Pine Planks",
 	tiles = {"default_pine_wood.png"},
-	paramtype2 = "facedir",
+	paramtype2 = "colorfacedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
-	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
 
@@ -710,10 +701,9 @@ qts.register_shaped_node ("default:pine_log", {
 qts.register_shaped_node ("default:swamp_wood_planks", {
 	description = "Swamp Wood Planks",
 	tiles = {{name = "default_swamp_wood.png", align_style = "node"}},
-	paramtype2 = "facedir",
+	paramtype2 = "colorfacedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1},
 	sounds = qtcore.node_sound_wood(),
-	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
 

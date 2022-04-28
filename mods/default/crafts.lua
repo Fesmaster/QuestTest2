@@ -36,6 +36,11 @@ qts.register_craft({
 	ingredients = {"default:pine_log 1"},
 	results = {"default:pine_wood_planks 4"},
 })
+qts.register_craft({
+	ingredients = {"default:swamp_tree 1"},
+	results = {"default:swamp_wood_planks 1"},
+})
+
 
 --fences
 qts.register_craft({

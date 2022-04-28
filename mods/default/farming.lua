@@ -57,6 +57,12 @@ local function register_farm_plant(name, def)
 			sunlight_propagates = true,
 			walkable = false,
 			waving = 1,
+			drop = {
+				max_items = 1,
+				items = {
+					{items = {"default:seed_"..name}, rarity = 5},
+				},
+			},
 			
 			growable_nodes = {"group:farmland"},
 			grow_timer = def.grow_timer or 90,
