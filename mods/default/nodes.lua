@@ -315,7 +315,7 @@ qts.register_shaped_node ("default:dirt_with_swamp_grass", {
 	description = "Dirt with Swamp Grass",
 	tiles = {"default_swamp_grass.png"},
 	groups = {crumbly = 3, soil=1, spreading_dirt_type=1},
-	sounds = qtcore.node_sound_grass(),
+	sounds = qtcore.node_sound_dirt(),
 	drop = {
 		max_items = 1,
 		items = {
