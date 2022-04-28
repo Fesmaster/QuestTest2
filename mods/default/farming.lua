@@ -114,8 +114,8 @@ register_farm_plant("milfoil", {
 	seed_tiles = {"default_seeds_milfoil_top.png", "default_oak_wood.png", "default_seeds_milfoil_side.png"},
 	item_image = "default_herb_milfoil.png",
 	plant_levels = 8,
-	plant_tiles_list = {"default_herb_milfoil_1.png", "default_herb_milfoil_2.png", "default_herb_milfoil_3.png", "default_herb_milfoil_4.png",
-	"default_herb_milfoil_5.png", "default_herb_milfoil_6.png", "default_herb_milfoil_7.png", "default_herb_milfoil_8.png"},
+	plant_tiles_list = {"default_herb_milfoil_0.png", "default_herb_milfoil_1.png", "default_herb_milfoil_2.png", "default_herb_milfoil_3.png", "default_herb_milfoil_4.png",
+	"default_herb_milfoil_5.png", "default_herb_milfoil_6.png", "default_herb_milfoil_7.png"},
 	grow_timer = 90,
 	grow_timer_random = 30,
 })
@@ -131,29 +131,19 @@ register_farm_plant("wolfshood", {
 	grow_timer_random = 30,
 })
 
+register_farm_plant("grain", {
+	description = "Grain",
+	seed_image = "default_seeds_grain_item.png",
+	seed_tiles = {"default_seeds_grain_top.png", "default_oak_wood.png", "default_seeds_grain_side.png"},
+	item_image = "default_grain.png",
+	plant_levels = 9,
+	plant_tiles_list = {"default_grain_0.png", "default_grain_1.png", "default_grain_2.png", "default_grain_3.png", "default_grain_4.png",
+	"default_grain_5.png", "default_grain_6.png", "default_grain_7.png", "default_grain_8.png"},
+	grow_timer = 90,
+	grow_timer_random = 30,
+})
 
 
 ---[[
-minetest.register_node("default:seed_wheat", {
-	description = "Wheat Seeds",
-	inventory_image = "default_seeds_wheat_item.png",
-	wield_image = "default_seeds_wheat_item.png",
-	tiles = {"default_seeds_wheat_top.png", "default_oak_wood.png", "default_seeds_wheat_side.png"},
-	use_texture_alpha = "clip",
-	sunlight_propagates = true,
-	drawtype = "nodebox",
-	paramtype = "light",
-	paramtype2 = "facedir",
-	groups = {attached_node=1, seeds=1, oddly_breakable_by_hand=3, dig_immediate=1},
-	sounds = qtcore.node_sound_defaults(),
-	node_box = qtcore.nb_dustpile(),
-	on_place = SeedPlace("default:seed_wheat"),
-})
-
-minetest.register_craftitem("default:wheat", {
-	description = "Wheat",
-	inventory_image = "default_wheat.png",
-	on_use = minetest.item_eat(2),
-})
 
 --]]
