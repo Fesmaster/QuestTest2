@@ -344,6 +344,18 @@ qts.register_craft({
 })
 
 
+qts.register_craft({
+	ingredients = {"default:brick"},
+	results = {"default:furnace_brick"},
+	near = {"group:workbench_heavy"},
+})
+
+qts.register_craft({
+	ingredients = {"default:brick_grey"},
+	results = {"default:furnace_brick_grey"},
+	near = {"group:workbench_heavy"},
+})
+
 --stone and stone walls
 --grey stone
 qts.register_craft({

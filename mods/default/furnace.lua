@@ -239,12 +239,15 @@ local function furnace_node_timer(pos, elapsed)
 	local fuel_state = "Empty"
 	local active = false
 	local result = false
+	local node = minetest.get_node_or_nil(pos)
+	local name = node.name
+	local rawName = string.gsub(name, "_active", "")
 
 	if fuel_totaltime ~= 0 then
 		active = true
 		fuel_percent = 100 - math.floor(fuel_time / fuel_totaltime * 100)
 		fuel_state = tostring(fuel_percent)
-		swap_node(pos, "default:furnace_active")
+		swap_node(pos, rawName.."_active")
 		-- make sure timer restarts automatically
 		result = true
 	else
@@ -252,7 +255,7 @@ local function furnace_node_timer(pos, elapsed)
 			fuel_state = "0"
 		end
 		
-		swap_node(pos, "default:furnace")
+		swap_node(pos, rawName)
 		-- stop timer on the inactive furnace
 		minetest.get_node_timer(pos):stop()
 	end
@@ -282,99 +285,134 @@ local function furnace_node_timer(pos, elapsed)
 	return result
 end
 
-minetest.register_node("default:furnace", {
+
+
+local function register_furnace(name, def)
+	
+	minetest.register_node(name, {
+		description = def.description,
+		tiles = def.tiles_off,
+		paramtype2 = "facedir",
+		groups = {cracky=2, furnace=1},
+		--legacy_facedir_simple = true,
+		is_ground_content = false,
+		sounds = qtcore.node_sound_stone(),
+		can_dig = can_dig,
+		on_timer = furnace_node_timer,
+		on_construct = function(pos)
+			local meta = minetest.get_meta(pos)
+			local inv = meta:get_inventory()
+			inv:set_size('src', 1)
+			inv:set_size('fuel', 1)
+			inv:set_size('dst', 4)
+			furnace_node_timer(pos, 0)
+		end,
+		on_metadata_inventory_move = function(pos)
+			minetest.get_node_timer(pos):start(1.0)
+		end,
+		on_metadata_inventory_put = function(pos)
+			-- start timer function, it will sort out whether furnace can burn or not.
+			minetest.get_node_timer(pos):start(1.0)
+		end,
+		on_blast = function(pos)
+			local drops = {}
+			qts.get_node_inventory_drops(pos, "src", drops)
+			qts.get_node_inventory_drops(pos, "fuel", drops)
+			qts.get_node_inventory_drops(pos, "dst", drops)
+			drops[#drops+1] = name
+			minetest.remove_node(pos)
+			return drops
+		end,
+		on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
+			qts.gui.show_gui(pos, clicker, "default_furnace")
+		end,
+		allow_metadata_inventory_put = allow_metadata_inventory_put,
+		allow_metadata_inventory_move = allow_metadata_inventory_move,
+		allow_metadata_inventory_take = allow_metadata_inventory_take,
+	})
+	
+	minetest.register_node(name.."_active", {
+		description = def.description,
+		tiles = def.tiles_on,
+		paramtype2 = "facedir",
+		groups = {cracky=2, not_in_creative_inventory = 1, furnace=1},
+		--legacy_facedir_simple = true,
+		is_ground_content = false,
+		sounds = qtcore.node_sound_stone(),
+	
+		can_dig = can_dig,
+	
+		on_timer = furnace_node_timer,
+	
+		on_construct = function(pos)
+			local meta = minetest.get_meta(pos)
+			local inv = meta:get_inventory()
+			inv:set_size('src', 1)
+			inv:set_size('fuel', 1)
+			inv:set_size('dst', 4)
+			furnace_node_timer(pos, 0)
+		end,
+	
+		on_blast = function(pos)
+			local drops = {}
+			default.get_inventory_drops(pos, "src", drops)
+			default.get_inventory_drops(pos, "fuel", drops)
+			default.get_inventory_drops(pos, "dst", drops)
+			drops[#drops+1] = name
+			minetest.remove_node(pos)
+			return drops
+		end,
+		
+		on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
+			qts.gui.show_gui(pos, clicker, "default_furnace")
+		end,
+		
+		allow_metadata_inventory_put = allow_metadata_inventory_put,
+		allow_metadata_inventory_move = allow_metadata_inventory_move,
+		allow_metadata_inventory_take = allow_metadata_inventory_take,
+	})
+	
+end
+
+register_furnace("default:furnace", {
 	description = "Furnace",
-	tiles = {
+	tiles_off = {
 		"default_furnace_top.png", "default_furnace_bottom.png",
 		"default_furnace_side.png", "default_furnace_side.png",
 		"default_furnace_side.png", "default_furnace_front.png"
 	},
-	paramtype2 = "facedir",
-	groups = {cracky=2, furnace=1},
-	--legacy_facedir_simple = true,
-	is_ground_content = false,
-	sounds = qtcore.node_sound_stone(),
-
-	can_dig = can_dig,
-
-	on_timer = furnace_node_timer,
-
-	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
-		local inv = meta:get_inventory()
-		inv:set_size('src', 1)
-		inv:set_size('fuel', 1)
-		inv:set_size('dst', 4)
-		furnace_node_timer(pos, 0)
-	end,
-
-	on_metadata_inventory_move = function(pos)
-		minetest.get_node_timer(pos):start(1.0)
-	end,
-	on_metadata_inventory_put = function(pos)
-		-- start timer function, it will sort out whether furnace can burn or not.
-		minetest.get_node_timer(pos):start(1.0)
-	end,
-	on_blast = function(pos)
-		local drops = {}
-		qts.get_node_inventory_drops(pos, "src", drops)
-		qts.get_node_inventory_drops(pos, "fuel", drops)
-		qts.get_node_inventory_drops(pos, "dst", drops)
-		drops[#drops+1] = "default:furnace"
-		minetest.remove_node(pos)
-		return drops
-	end,
-	
-	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
-		qts.gui.show_gui(pos, clicker, "default_furnace")
-	end,
-	
-	allow_metadata_inventory_put = allow_metadata_inventory_put,
-	allow_metadata_inventory_move = allow_metadata_inventory_move,
-	allow_metadata_inventory_take = allow_metadata_inventory_take,
-})
-
-minetest.register_node("default:furnace_active", {
-	description = "Furnace",
-	tiles = {
+	tiles_on = {
 		"default_furnace_top.png", "default_furnace_bottom.png",
 		"default_furnace_side.png", "default_furnace_side.png",
-		"default_furnace_side.png", "default_furnace_front_active.png" --TODO: animate this
+		"default_furnace_side.png", "default_furnace_front_active.png"
+	}
+})
+
+
+register_furnace("default:furnace_brick", {
+	description = "Brick Furnace",
+	tiles_off = {
+		"default_furnace_brick_top.png", "default_furnace_brick_top.png",
+		"default_furnace_brick_side.png", "default_furnace_brick_side.png",
+		"default_furnace_brick_side.png", "default_furnace_brick_front.png"
 	},
-	paramtype2 = "facedir",
-	groups = {cracky=2, not_in_creative_inventory = 1, furnace=1},
-	--legacy_facedir_simple = true,
-	is_ground_content = false,
-	sounds = qtcore.node_sound_stone(),
+	tiles_on = {
+		"default_furnace_brick_top.png", "default_furnace_brick_top.png",
+		"default_furnace_brick_side.png", "default_furnace_brick_side.png",
+		"default_furnace_brick_side.png", "default_furnace_brick_front_active.png" 
+	}
+})
 
-	can_dig = can_dig,
-
-	on_timer = furnace_node_timer,
-
-	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
-		local inv = meta:get_inventory()
-		inv:set_size('src', 1)
-		inv:set_size('fuel', 1)
-		inv:set_size('dst', 4)
-		furnace_node_timer(pos, 0)
-	end,
-
-	on_blast = function(pos)
-		local drops = {}
-		default.get_inventory_drops(pos, "src", drops)
-		default.get_inventory_drops(pos, "fuel", drops)
-		default.get_inventory_drops(pos, "dst", drops)
-		drops[#drops+1] = "default:furnace"
-		minetest.remove_node(pos)
-		return drops
-	end,
-	
-	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
-		qts.gui.show_gui(pos, clicker, "default_furnace")
-	end,
-	
-	allow_metadata_inventory_put = allow_metadata_inventory_put,
-	allow_metadata_inventory_move = allow_metadata_inventory_move,
-	allow_metadata_inventory_take = allow_metadata_inventory_take,
+register_furnace("default:furnace_brick_grey", {
+	description = "Brick Furnace",
+	tiles_off = {
+		"default_furnace_brick_grey_top.png", "default_furnace_brick_grey_top.png",
+		"default_furnace_brick_grey_side.png", "default_furnace_brick_grey_side.png",
+		"default_furnace_brick_grey_side.png", "default_furnace_brick_grey_front.png"
+	},
+	tiles_on = {
+		"default_furnace_brick_grey_top.png", "default_furnace_brick_grey_top.png",
+		"default_furnace_brick_grey_side.png", "default_furnace_brick_grey_side.png",
+		"default_furnace_brick_grey_side.png", "default_furnace_brick_grey_front_active.png"
+	}
 })
