@@ -27,6 +27,8 @@ dofile(minetest.get_modpath("default").."/liquids.lua")
 dofile(minetest.get_modpath("default").."/foliage.lua")
 dofile(minetest.get_modpath("default").."/farming.lua")
 
+dofile(minetest.get_modpath("default").."/functions.lua")
+
 dofile(minetest.get_modpath("default").."/exemplar.lua")
 dofile(minetest.get_modpath("default").."/initial_items.lua")
 -- Load other files
