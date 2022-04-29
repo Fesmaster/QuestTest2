@@ -24,10 +24,12 @@ function qts.start_node_growth(pos)
 				end
 			end
 		end
-		--the node is not on a growable surface
 		if (not f) then
 			return
 		end
+		
+		--check for light
+		--the node is not on a growable surface
 		
 	end
 	
@@ -97,7 +99,13 @@ function qts.register_growable_node(name, def)
 				if (not f) then
 					return false
 				end
-				
+			end
+			
+			if nodedef.required_light_level then
+				local light = minetest.get_node_light(pos)
+				if light < nodedef.required_light_level then
+					return true --restart the time. light may change.
+				end
 			end
 			
 			if nodedef.on_grow then
@@ -111,6 +119,7 @@ function qts.register_growable_node(name, def)
 		on_grow = function(pos)
 			return false
 		end,
+		required_light_level = 0,
 	}
 	
 	for k, v in pairs(defualts) do

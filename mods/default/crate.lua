@@ -3,8 +3,6 @@ qts.register_chest("default:crate_oak", {
 	description = "Oak Wood Crate",
 	tiles = {"default_crate_oak.png"},
 	groups = {choppy = 2, oddly_breakable_by_hand = 2},
-	paramtype = "light",
-	paramtype2 = "facedir",
 	is_ground_content = false,
 	sounds = qtcore.node_sound_wood(),
 	
@@ -16,8 +14,6 @@ qts.register_chest("default:crate_apple", {
 	description = "Apple Wood Crate",
 	tiles = {"default_crate_apple.png"},
 	groups = {choppy = 2, oddly_breakable_by_hand = 2},
-	paramtype = "light",
-	paramtype2 = "facedir",
 	is_ground_content = false,
 	sounds = qtcore.node_sound_wood(),
 	
@@ -29,8 +25,6 @@ qts.register_chest("default:crate_coffee", {
 	description = "Coffee Wood Crate",
 	tiles = {"default_crate_coffee.png"},
 	groups = {choppy = 2, oddly_breakable_by_hand = 2},
-	paramtype = "light",
-	paramtype2 = "facedir",
 	is_ground_content = false,
 	sounds = qtcore.node_sound_wood(),
 	
@@ -42,8 +36,6 @@ qts.register_chest("default:crate_aspen", {
 	description = "Aspen Wood Crate",
 	tiles = {"default_crate_aspen.png"},
 	groups = {choppy = 2, oddly_breakable_by_hand = 2},
-	paramtype = "light",
-	paramtype2 = "facedir",
 	is_ground_content = false,
 	sounds = qtcore.node_sound_wood(),
 	
@@ -55,8 +47,6 @@ qts.register_chest("default:crate_mahogany", {
 	description = "Mahogany Wood Crate",
 	tiles = {"default_crate_mahogany.png"},
 	groups = {choppy = 2, oddly_breakable_by_hand = 2},
-	paramtype = "light",
-	paramtype2 = "facedir",
 	is_ground_content = false,
 	sounds = qtcore.node_sound_wood(),
 	
@@ -68,8 +58,6 @@ qts.register_chest("default:crate_laternfruit", {
 	description = "Lantern Tree Wood Crate",
 	tiles = {"default_crate_lanternfruit.png"},
 	groups = {choppy = 2, oddly_breakable_by_hand = 2},
-	paramtype = "light",
-	paramtype2 = "facedir",
 	is_ground_content = false,
 	sounds = qtcore.node_sound_wood(),
 	
@@ -81,8 +69,6 @@ qts.register_chest("default:crate_pine", {
 	description = "Pine Wood Crate",
 	tiles = {"default_crate_pine.png"},
 	groups = {choppy = 2, oddly_breakable_by_hand = 2},
-	paramtype = "light",
-	paramtype2 = "facedir",
 	is_ground_content = false,
 	sounds = qtcore.node_sound_wood(),
 	
@@ -94,8 +80,6 @@ qts.register_chest("default:crate_rosewood", {
 	description = "Rose Wood Crate",
 	tiles = {"default_crate_rosewood.png"},
 	groups = {choppy = 2, oddly_breakable_by_hand = 2},
-	paramtype = "light",
-	paramtype2 = "facedir",
 	is_ground_content = false,
 	sounds = qtcore.node_sound_wood(),
 	
@@ -107,8 +91,6 @@ qts.register_chest("default:crate_rowan", {
 	description = "Rowan Wood Crate",
 	tiles = {"default_crate_rowan.png"},
 	groups = {choppy = 2, oddly_breakable_by_hand = 2},
-	paramtype = "light",
-	paramtype2 = "facedir",
 	is_ground_content = false,
 	sounds = qtcore.node_sound_wood(),
 	
@@ -120,8 +102,6 @@ qts.register_chest("default:crate_swamp", {
 	description = "Swamp Wood Crate",
 	tiles = {"default_crate_swamp.png"},
 	groups = {choppy = 2, oddly_breakable_by_hand = 2},
-	paramtype = "light",
-	paramtype2 = "facedir",
 	is_ground_content = false,
 	sounds = qtcore.node_sound_wood(),
 	
@@ -135,8 +115,6 @@ qtcore.register_chest("default:crate_big", {
 	description = "Big Crate",
 	tiles = {"default_crate.png"},
 	groups = {choppy = 2, oddly_breakable_by_hand = 2},
-	paramtype = "light",
-	paramtype2 = "facedir",
 	is_ground_content = false,
 	sounds = qtcore.node_sound_wood(),
 	

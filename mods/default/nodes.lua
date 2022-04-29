@@ -286,6 +286,23 @@ minetest.register_node ("default:dirt_tilled", {
     },
 })
 
+minetest.register_abm({
+	label = "Tilled Regression",
+	nodenames = {"default:dirt_tilled"},
+	interval = 1.0,
+	chance = 1,
+	catch_up = true,
+	action = function(pos, node, active_object_count, active_object_count_wider)
+		local node_above =  minetest.get_node_or_nil(pos + vector.new(0,1,0))
+		if node_above and node_above.name ~= "air" then
+			local nodeDef = minetest.registered_nodes[node_above.name]
+			if not (nodeDef and nodeDef.paramtype and nodeDef.paramtype == "light") then
+				minetest.set_node(pos, {name="default:dirt"})
+			end
+		end
+	end
+})
+
 qts.register_shaped_node ("default:dirt_with_grass", {
 	description = "Dirt with Grass",
 	tiles = {"default_grass.png"},

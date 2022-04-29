@@ -330,8 +330,15 @@ local function Hoe_Use(itemstack, user, pointed_thing)
 		local node = minetest.get_node_or_nil(pointed_thing.under)
 		local nodeAbove = minetest.get_node_or_nil(pointed_thing.under + vector.new(0,1,0))
 		if node and node.name and nodeAbove and nodeAbove.name and nodeAbove.name == "air" then
+			local underbrush = minetest.get_item_group(node.name, "underbrush")
+			local pos = pointed_thing.under
+			if (underbrush ~= 0) then
+				minetest.set_node(pointed_thing.under, {name="air"})
+				pos = pos - vector.new(0,1,0)
+				node = minetest.get_node_or_nil(pos)
+			end
+			
 			local soilness = minetest.get_item_group(node.name, "soil")
-			--local farmness = minetest.get_item_group(node.name, "farmland")
 			if soilness ~= 0 then
 				
 				local param2 = 0
@@ -342,7 +349,7 @@ local function Hoe_Use(itemstack, user, pointed_thing)
 					end
 				end
 				
-				minetest.swap_node(pointed_thing.under, {name = "default:dirt_tilled", param2=param2})
+				minetest.swap_node(pos, {name = "default:dirt_tilled", param2=param2})
 				
 				if not (qts.is_player_creative(user)) then
 					local nlvl = minetest.get_item_group(node.name, "level")
@@ -356,7 +363,7 @@ local function Hoe_Use(itemstack, user, pointed_thing)
 				end
 				
 			else
-				minetest.punch_node(pointed_thing.under)
+				minetest.punch_node(pos)
 			end
 		end
 	end

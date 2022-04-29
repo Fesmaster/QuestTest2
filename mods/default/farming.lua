@@ -67,6 +67,7 @@ local function register_farm_plant(name, def)
 			growable_nodes = {"group:farmland"},
 			grow_timer = def.grow_timer or 90,
 			grow_timer_random = def.grow_timer_random or 30,
+			required_light_level = def.required_light_level or 7,
 			on_grow = function(pos)
 				minetest.log("info","An "..name.." plant has grown at "..minetest.pos_to_string(pos))
 				minetest.set_node(pos, {name = "default:herb_"..name.."_"..(i+1), param2 = 32})
@@ -149,7 +150,3 @@ register_farm_plant("grain", {
 	grow_timer_random = 30,
 })
 
-
----[[
-
---]]
