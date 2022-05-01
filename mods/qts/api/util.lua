@@ -284,3 +284,16 @@ function qts.objects_overlapping(objA, objB)
 		(minA.z < maxB.z and  maxA.z >= minB.z)
 	)
 end
+
+
+
+function qts.apply_default_wear(name, itemstack)
+	local nlvl = minetest.get_item_group(name, "level")
+	local hlvl = minetest.get_item_group(itemstack:get_name(), "level")
+	local mult = (hlvl-nlvl)^3
+	if mult == 0 then mult = 1 end
+	local wear = qts.WEAR_MAX / (minetest.registered_tools[itemstack:get_name()].max_uses * mult)
+	if not itemstack:set_wear(itemstack:get_wear() + wear) then
+		itemstack:take_item()
+	end
+end
