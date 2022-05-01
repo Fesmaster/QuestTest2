@@ -269,3 +269,94 @@ minetest.register_node("default:beach_grass", {
 	--	--minetest.log("Grass should be placed")
 	--end,
 --]]
+
+local function reeds_rightclick(pos, node, clicker, itemstack, pointed_thing)
+	local name = itemstack:get_name()
+	if minetest.get_item_group(name, "knife") ~= 0 then
+		--holding a knife
+		local suffix = string.sub(node.name, -1)
+		local sfx = {s=1, ["2"]=2, ["3"]=3, ["4"]=4}
+		local count = sfx[suffix] -1
+		local need_to_drop = ItemStack("default:reeds " .. count)
+		if clicker then
+			local inv = clicker:get_inventory()
+			if inv then
+				--add to inv
+				need_to_drop = inv:add_item("main", need_to_drop)
+			end
+		end
+		if need_to_drop and not need_to_drop:is_empty() then
+			minetest.item_drop(need_to_drop, clicker, pos)
+		end
+		
+		minetest.swap_node(pos, {name = "default:reeds"})
+		
+		--wear
+		if not (qts.is_player_creative(user)) then
+			qts.apply_default_wear(node.name, itemstack)
+		end
+	end
+end
+
+minetest.register_node("default:reeds", {
+	description = "Reeds",
+	tiles ={"default_reeds.png"},
+	inventory_image ="default_reeds_item.png",
+	wield_image = "default_reeds_item.png",
+	use_texture_alpha = "clip",
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	walkable = false,
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -7/16, -8/16, -5/16, -3/16, 0.5, -5/16, },
+			{ -5/16, -8/16, -7/16, -5/16, 0.5, -3/16, },
+			{ -3/16, -8/16,  0/16,  3/16, 0.5,  0/16, },
+			{  3/16, -8/16, -5/16,  7/16, 0.5, -5/16, },
+			{  5/16, -8/16, -7/16,  5/16, 0.5, -3/16, },
+			{ -5/16, -8/16,  3/16, -5/16, 0.5,  7/16, },
+			{  5/16, -8/16,  3/16,  5/16, 0.5,  7/16, },
+			{ -7/16, -8/16,  5/16, -3/16, 0.5,  5/16, },
+			{  3/16, -8/16,  5/16,  7/16, 0.5,  5/16, },
+			{  0/16, -8/16, -3/16,  0/16, 0.5,  3/16, },
+		}
+	},
+	selection_box = qtcore.nb_level1(),
+	groups = {snappy=3, flammable = 2, attached_node=1, reeds=1},
+	sounds = qtcore.node_sound_defaults(),
+})
+for i = 2, 4 do
+	minetest.register_node("default:reeds_"..i, {
+		description = "Reeds " .. i,
+		tiles ={"default_reeds.png"},
+		use_texture_alpha = "clip",
+		drawtype = "nodebox",
+		paramtype = "light",
+		paramtype2 = "facedir",
+		sunlight_propagates = true,
+		walkable = false,
+		node_box = {
+			type = "fixed",
+			fixed = {
+				{ -7/16, -8/16, -5/16, -3/16, i - 0.5, -5/16, },
+				{ -5/16, -8/16, -7/16, -5/16, i - 0.5, -3/16, },
+				{ -3/16, -8/16,  0/16,  3/16, i - 0.5,  0/16, },
+				{  3/16, -8/16, -5/16,  7/16, i - 0.5, -5/16, },
+				{  5/16, -8/16, -7/16,  5/16, i - 0.5, -3/16, },
+				{ -5/16, -8/16,  3/16, -5/16, i - 0.5,  7/16, },
+				{  5/16, -8/16,  3/16,  5/16, i - 0.5,  7/16, },
+				{ -7/16, -8/16,  5/16, -3/16, i - 0.5,  5/16, },
+				{  3/16, -8/16,  5/16,  7/16, i - 0.5,  5/16, },
+				{  0/16, -8/16, -3/16,  0/16, i - 0.5,  3/16, },
+			}
+		},
+		selection_box = qtcore.nb_level1(),
+		groups = {snappy=3, flammable = 2, attached_node=1, reeds=1},
+		sounds = qtcore.node_sound_defaults(),
+		drop = "default:reeds " .. i,
+		on_rightclick = reeds_rightclick,
+	})
+end

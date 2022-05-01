@@ -48,9 +48,55 @@ minetest.register_abm({
 			end
 		end
 		if (#possible_nodes > 0) then
-			minetest.log("Grass Spread")
 			local n = possible_nodes[math.random(1, #possible_nodes)]
 			minetest.set_node(pos, {name = n})
 		end
+	end
+})
+
+minetest.register_abm({
+	label = "Reed Growth",
+	nodenames = {"group:reeds"},
+	neighbors = {"group:soil", "group:water"},
+	interval = 3.0,
+	chance = 5,
+	catch_up = false,
+	action = function(pos, node, active_object_count, active_object_count_wider)
+		--check the height of the reeds
+		local suffix = string.sub(node.name, -1)
+		local sfx = {s=1, ["2"]=2, ["3"]=3, ["4"]=4}
+		local level = sfx[suffix]
+		--early out if the reeds cannot grow
+		if level >= 4 then 
+			return 
+		end
+		
+		local grow = false
+		
+		--check for water.
+		local offs = {vector.new(1,-1,0), vector.new(-1,-1,0), vector.new(0,-1,1), vector.new(0,-1,-1) }
+		for i, vec in ipairs(offs) do
+			local qnode = minetest.get_node_or_nil(pos + vec)
+			if qnode and qnode.name and minetest.get_item_group(qnode.name, "water") ~= 0 then
+				grow = true
+			end
+		end
+		if not grow then 
+			return 
+		end
+		
+		--check for air.
+		for i = 1, level do
+			local qnode = minetest.get_node_or_nil(pos + vector.new(0,i,0))
+			if qnode and qnode.name and qnode.name ~= "air" then
+				return --there was air
+			end
+		end
+		
+		if minetest.get_node_light(pos) < 7 then
+			return
+		end
+		
+		minetest.swap_node(pos, {name = "default:reeds_" .. (level+1) })
 	end
 })
