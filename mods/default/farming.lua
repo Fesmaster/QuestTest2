@@ -161,3 +161,15 @@ register_farm_plant("potatoe", {
 	grow_timer = 90,
 	grow_timer_random = 30,
 })
+
+register_farm_plant("flax", {
+	description = "Flax",
+	seed_image = "default_seeds_grain_item.png",
+	seed_tiles = {"default_seeds_grain_top.png", "default_oak_wood.png", "default_seeds_grain_side.png"},
+	item_image = "default_flax.png",
+	plant_levels = 7,
+	plant_tiles_list = {"default_plant_0.png", "default_flax_1.png", "default_flax_2.png", "default_flax_3.png", "default_flax_4.png",
+	"default_flax_5.png", "default_flax_6.png"},
+	grow_timer = 90,
+	grow_timer_random = 30,
+})
