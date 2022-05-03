@@ -218,6 +218,32 @@ qts.register_craft({
 })
 
 qts.register_craft({
+	ingredients = {"default:clay_lump"},
+	results = {"default:dishes_greenware"},
+	near = {"group:workbench"},
+})
+
+--doesnt work, wont let any wood craft it
+qts.register_craft({
+	ingredients = {"default:dishes_clay", "group:wood 3"},
+	results = {"default:food_table"},
+	near = {"group:workbench"},
+})
+
+--not working because default:grain 4 undefined
+qts.register_craft({
+	ingredients = {"default:dishes_clay", "default:grain 4"},
+	results = {"default:flour_bowl"},
+	near = {"default:food_table"},
+})
+
+--not working b/c default:bucket_water not defined
+qts.register_craft({
+	ingredients = {"default:dishes_clay", "default:bucket_water"},
+	results = {"default:water_cups", "default:bucket"},
+})
+
+qts.register_craft({
 	ingredients = {"group:wood", "group:coal"},
 	results = {"default:torch 4",},
 })
@@ -501,6 +527,11 @@ minetest.register_craft({
 	recipe = "default:clay_lump",
 })
 
+minetest.register_craft({
+	type = "cooking",
+	output = "default:dishes_clay",
+	recipe = "default:dishes_greenware",
+})
 
 --fuel
 minetest.register_craft({

@@ -164,7 +164,7 @@ register_farm_plant("potatoe", {
 
 register_farm_plant("flax", {
 	description = "Flax",
-	seed_image = "default_seeds_grain_item.png",
+	seed_image = "default_seeds_flax_item.png",
 	seed_tiles = {"default_seeds_grain_top.png", "default_oak_wood.png", "default_seeds_grain_side.png"},
 	item_image = "default_flax.png",
 	plant_levels = 7,
