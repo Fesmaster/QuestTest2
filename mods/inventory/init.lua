@@ -185,7 +185,7 @@ qts.gui.register_gui("inv_tab_equipment", {
 			inventory.get_util_bar()
 	end,
 	handle = function(data, pos, name, fields)
-		return
+		return false
 	end,
 })
 
@@ -201,7 +201,7 @@ qts.gui.register_gui("inv_tab_craft", {
 			inventory.get_util_bar()
 	end,
 	handle = function(data, pos, name, fields)
-		return
+		return false
 	end,
 })
 
@@ -216,7 +216,7 @@ qts.gui.register_gui("inv_tab_test", {
 			--inventory.get_util_bar()
 	end,
 	handle = function(data, pos, name, fields)
-		return
+		return false
 	end,
 })
 

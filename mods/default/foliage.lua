@@ -37,7 +37,7 @@ local function floodFunc(pos, oldnode, newnode)
 		if obj then
 			obj:set_velocity({x = math.random(-1, 1), y = math.random(3, 5), z = math.random(-1, 1)})
 		else
-			minetest.log("error","invalid drop: ".. dump(itemstack))
+			minetest.log("error","invalid drop: ".. dump(obj))
 		end
 	end
 	return false
@@ -292,7 +292,7 @@ local function reeds_rightclick(pos, node, clicker, itemstack, pointed_thing)
 		minetest.swap_node(pos, {name = "default:reeds"})
 		
 		--wear
-		if not (qts.is_player_creative(user)) then
+		if not (qts.is_player_creative(clicker)) then
 			qts.apply_default_wear(node.name, itemstack)
 		end
 	end
@@ -354,9 +354,11 @@ for i = 2, 4 do
 			}
 		},
 		selection_box = qtcore.nb_level1(),
-		groups = {snappy=3, flammable = 2, attached_node=1, reeds=1},
+		groups = {snappy=3, flammable = 2, attached_node=1, reeds=1, not_in_creative_inventory=1},
 		sounds = qtcore.node_sound_defaults(),
 		drop = "default:reeds " .. i,
 		on_rightclick = reeds_rightclick,
 	})
 end
+
+minetest.register_alias("default:reeds_1", "default:reeds")

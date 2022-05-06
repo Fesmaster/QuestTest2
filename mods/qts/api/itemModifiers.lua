@@ -110,7 +110,7 @@ minetest.register_on_dignode(function(pos, oldnode, digger)
 		for mod_name, mod_level in pairs(mods) do
 			local m_def = qts.registered_item_modifiers[mod_name]
 			if m_def and m_def.on_dignode then
-				m_def.on_dignode(pos, node, digger)
+				m_def.on_dignode(pos, oldnode, digger)
 			end
 		end
 	end
@@ -218,7 +218,7 @@ minetest.register_allow_player_inventory_action(function(player, action, invento
 		end
 		return rval
 	end
-	return itemstack:get_count()
+	return 0
 end)
 
 minetest.register_on_player_inventory_action(function(player, action, inventory, inventory_info)

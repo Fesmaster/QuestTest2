@@ -32,7 +32,7 @@ qts.create_craft_recipe = function(recip)
 	t.held = {}
 	t.results = {}
 	t.type = recip.type or 'default'
-	if (recip.on_craft) then r.on_craft = recip.on_craft end
+	if (recip.on_craft) then t.on_craft = recip.on_craft end
 	for k, v in ipairs(recip.ingredients) do
 		t.ingredients[v] = 1 
 	end

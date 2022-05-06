@@ -215,7 +215,7 @@ minetest.register_node("default:campfire_lit", {
 	
 	on_timer = campfire_node_timer,
 	
-	on_ignite = function(pos, igniter) return end,
+	on_ignite = function(pos, igniter) return false end,
 	
 	on_rightclick = campfire_rightclick,
 	

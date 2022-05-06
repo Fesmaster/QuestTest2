@@ -19,14 +19,17 @@ minetest.register_tool ("dtools:gauntlet", {
 })
 
 
-
 minetest.register_tool("dtools:testingTool", {
 	description = "Testing Tool:\nCurrently messes with param2",
 	inventory_image = "dtools_green_wand.png",
 	range = 10.0,
 	--liquids_pointable = true,
 	on_use = function(itemstack, user, pointed_thing)
-		---[[
+		minetest.log("QTS Testing Tool used")
+		
+		
+		--[[
+		--explode
 		if pointed_thing.under then
 			qts.explode(pointed_thing.under, 10, {
 				destroy_nodes = true,
@@ -45,6 +48,7 @@ minetest.register_tool("dtools:testingTool", {
 		--]]
 		
 		--[[
+		--param2 mess
 		if pointed_thing.under then
 			local node = minetest.get_node(pointed_thing.under)
 			node.param2 = node.param2 + 1
@@ -56,7 +60,7 @@ minetest.register_tool("dtools:testingTool", {
 		--]]
         
 		--[[
-		minetest.log("QTS Testing Tool used")
+		
 		local pos = nil
 		if pointed_thing.under then
 			pos = pointed_thing.under
@@ -88,7 +92,9 @@ minetest.register_tool("dtools:testingTool", {
 		--]]
 	end,
 	on_place = function(itemstack, user, pointed_thing)
-		---[[
+		minetest.log("QTS Testing Tool placed")
+		--[[
+		--param2 mess
 		if pointed_thing.under then
 			local node = minetest.get_node(pointed_thing.under)
 			node.param2 = node.param2 - 1
@@ -151,7 +157,7 @@ minetest.register_tool("dtools:light_wand", {
 		elseif user then
 			pos = user:get_pos()
 		end
-		radius = 50
+		local radius = 50
 		for x = -radius, radius, 5 do
 			for y = -radius, radius, 5 do
 				for z = -radius, radius, 5 do
@@ -171,7 +177,7 @@ minetest.register_tool("dtools:light_wand", {
 		elseif user then
 			pos = user:get_pos()
 		end
-		radius = 50
+		local radius = 50
 		for x = -radius, radius do
 			for y = -radius, radius do
 				for z = -radius, radius do

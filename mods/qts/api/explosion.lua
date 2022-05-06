@@ -165,9 +165,9 @@ local function append_object_list(OL1, OL2)
 end
 
 local function blast_objects(objectList, pos, power, properties)
-	if (properties.damage_entities == null) then properties.damage_entities = true end
-	if (properties.push_entities == null) then properties.push_entities = true end
-	if (properties.damage_player == null) then properties.damage_player = true end
+	if (properties.damage_entities == nil) then properties.damage_entities = true end
+	if (properties.push_entities == nil) then properties.push_entities = true end
+	if (properties.damage_player == nil) then properties.damage_player = true end
 	properties.damage_type = properties.damage_type or "fleshy"
 	
 	for k, obj in pairs(objectList) do
@@ -327,7 +327,7 @@ function qts.explode_ray(pos, slopeVector, stepSize, power, returnFound, exclude
 	destroy_exploded_nodes(found)
 	--shove objects
 	blast_objects(objects, pos, power)
-	return
+	return {found = found, drops = drops, objects = objects}
 end
 
 --icky thing cause my calculation currently sucks

@@ -297,3 +297,123 @@ function qts.apply_default_wear(name, itemstack)
 		itemstack:take_item()
 	end
 end
+
+
+local function rect_iter(pos1, pos2)
+	for x = pos1.x, pos2.x, (pos1.x < pos2.x) and 1 or -1  do
+		for y = pos1.y, pos2.y, (pos1.y < pos2.y) and 1 or -1 do
+			for z = pos1.z, pos2.z, (pos1.z < pos2.z) and 1 or -1 do
+				coroutine.yield(vector.new(x,y,z))
+			end
+		end
+	end
+	return nil
+end
+
+local function columns_iter(pos1, pos2)
+	for x = pos1.x, pos2.x, (pos1.x < pos2.x) and 1 or -1  do
+		for z = pos1.z, pos2.z, (pos1.z < pos2.z) and 1 or -1 do
+			for y = pos1.y, pos2.y, (pos1.y < pos2.y) and 1 or -1 do
+				coroutine.yield(vector.new(x,y,z))
+			end
+		end
+	end
+	return nil
+end
+
+function qts.rectangle(pos1, pos2)
+	local co = coroutine.create(rect_iter)
+	
+	return function()
+		local state, value = coroutine.resume(co, pos1, pos2)
+		if state then 
+			return value 
+		else
+			return nil
+		end
+	end
+end
+
+function qts.columns(pos1, pos2)
+	local co = coroutine.create(columns_iter)
+	
+	return function()
+		local state, value = coroutine.resume(co, pos1, pos2)
+		if state then 
+			return value 
+		else
+			return nil
+		end
+	end
+end
+
+function qts.insert3(t, pos, item)
+	t = t or {}
+	t[pos.x] = t[pos.x] or {}
+	t[pos.x][pos.y] = t[pos.x][pos.y] or {}
+	t[pos.x][pos.y][pos.z] = item
+	return t
+end
+
+function qts.read3(t, pos)
+	if not t[pos.x] then return nil end
+	if not t[pos.x][pos.y] then return nil end
+	return t[pos.x][pos.y][pos.z]
+end
+
+function qts.readNodes(pos1, pos2)
+	local t = {}
+	pos1, pos2 = vector.sort(pos1, pos2)
+	for p in qts.rectangle(pos1, pos2) do
+		t = qts.insert3(t, p-pos1, minetest.get_node_or_nil(p))
+	end
+	return t
+end
+
+function qts.writeNodes(pos1, pos2, tbl)
+	pos1, pos2 = vector.sort(pos1, pos2)
+	for p in qts.rectangle(pos1, pos2) do
+		local node = qts.read3(tbl, p-pos1)
+		local actual = minetest.get_node_or_nil(p)
+		if node and actual and (node.name ~= actual.name or node.param2 ~= actual.param2) then
+			minetest.set_node(p, node)
+		end
+	end
+end
+
+--zero-based indexing.
+local function zpairs(tbl)
+	local i = 0
+	return function()
+		local rval = tbl[i]
+		if rval then
+			i = i+1
+			return i-1, rval
+		end
+	end
+end
+
+
+local function nodePairs_iter(tbl)
+	for x, t2 in zpairs(tbl) do
+		for y, t3 in zpairs(t2) do
+			for z, node in zpairs(t3) do
+				coroutine.yield(vector.new(x,y,z), node)
+			end
+		end
+	end
+	return nil
+end
+
+function qts.nodePairs(tbl)
+	local co = coroutine.create(nodePairs_iter)
+	
+	return function()
+		local status, pos, node = coroutine.resume(co, tbl)
+		if status then
+			return pos, node
+		else
+			return nil, nil
+		end
+	end
+end

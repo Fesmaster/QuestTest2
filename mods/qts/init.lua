@@ -4,6 +4,7 @@ qts_internal = {}
 qts.path = minetest.get_modpath("qts")
 qts.LIGHT_MAX = 14
 qts.WEAR_MAX = 65535
+qts.LEAFDECAY_RADIUS = 4
 
 --default stack max changes.
 minetest.nodedef_default.stack_max = 999

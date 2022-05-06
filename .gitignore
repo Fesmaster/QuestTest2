@@ -1,2 +1,5 @@
 /projects
 /*.kdev4
+**/*.log
+**/*.backup
+**/.vscode

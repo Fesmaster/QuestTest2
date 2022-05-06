@@ -425,7 +425,7 @@ function qts.ai.straife_around(object, target_pos, speed, spiral, can_jump, jump
 		end
 		if can_jump == true then
 			if qts.ai.get_current_speed(object) < 0.5 then
-				jump = qts.ai.jump(object, jump_height, 0, true)
+				local jump = qts.ai.jump(object, jump_height, 0, true)
 				if jump then
 					dir.y = jump.y
 				end

@@ -232,6 +232,11 @@ qts.register_craft({
 	results = {"default:workbench_heavy",},
 })
 
+qts.register_craft({
+	ingredients = {"default:reeds 2"},
+	results = {"default:paper"},
+})
+
 --weapons and tools
 
 --picks

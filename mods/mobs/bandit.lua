@@ -59,11 +59,11 @@ qts.ai.register_behavior("bandit_enemy", {
 				if mindist > qts.ai.MELEE_RADIUS*qts.ai.MELEE_RADIUS then
 					--minetest.log("player going to be attacked.")
 					self:play_animation("walk")
-					qts.ai.walk_to(self.object, target:get_pos(), self.speed, true, 1, false)
+					qts.ai.walk_to(self.object, self.target_creature:get_pos(), self.speed, true, 1, false)
 				else
 					qts.ai.freeze(self.object, true, false)
 					
-					qts.ai.face(self.object, target:get_pos(), true, false)
+					qts.ai.face(self.object, self.target_creature:get_pos(), true, false)
 					self:play_animation("mine")
 					if self.attack_timer <= 0 then
 						minetest.log("ATTACK PLAYER!")

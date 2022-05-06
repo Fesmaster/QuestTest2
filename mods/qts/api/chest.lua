@@ -70,7 +70,7 @@ qts.close_chest = function(pname)
 	
 	--play the sound
 	if is_closed and info.sound then
-		minetest.sound_play(info.sound, {gain = 0.3, pos = pos,
+		minetest.sound_play(info.sound, {gain = 0.3, pos = info.pos,
 			max_hear_distance = 10}, true)
 	end
 	
@@ -79,7 +79,7 @@ qts.close_chest = function(pname)
 	if node and node.name then
 		local nodedef = minetest.registered_nodes[node.name]
 		if nodedef and nodedef.on_chest_close then
-			nodedef.on_chest_close(pos, node, minetest.get_player_by_name(pname), is_closed)
+			nodedef.on_chest_close(info.pos, node, minetest.get_player_by_name(pname), is_closed)
 		end
 	end
 end
@@ -110,7 +110,7 @@ on_chest_close(pos, node, closer, is_final_close)
 qts.register_chest = function(name, def)
 	--this does not show a difference from the chest being open or closed
 	--local formsize = def.formsize or {x=8,y=8}
-	local invsize = def.invsize or 8*4
+	local invsize = def.invsize or (8*4)
 	local infotext = def.description or "Chest"
 	local sound_open = def.sound_open
 	local sound_close = def.sound_close

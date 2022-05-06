@@ -1,7 +1,7 @@
 # QuestTestSystem (QTS) API documentation
 
 # Globals
-<!--BEGIN Globals-->
+
 ## Settings Variables
 
 * `qts.settings`
@@ -36,16 +36,16 @@ Holds the registered item modifiers from the [Item Modifiers System](#item-modif
 * `qts.player_data[playername]`
 Holds player-specific data. This data is broken into categories, which are each a table. Data can be read from this with `qts.get_player_data(...)` and written to it with `qts.set_player_data(...)` The Categories shoudld be used for grouping similar-use fields, and avoiding field conflict names.
 
-<!--END Globals-->
+
 
 # Utility Functions 
-<!--BEGIN Utility-->
+
 ## Math and Vectors
 
 * `qts.nearly_equal(a, b, degree)` Checks to see if `a` and `b` are within `degree` of each other.
 
 ### Vector Math (api/vector.lua)
-<!--BEGIN Vector Math-->
+
 All the vector math library functions are housed inside of minetest's `vector` namespace. This is simply an addition to it.
 
 Vectors are also used to express euler rotations. In this format, the follow this guide: {x = pitch, y = yaw, z = roll}
@@ -91,10 +91,10 @@ Linear Interpalation between two points or vectors. Returns a new vector.
  
 * `vector.slerp(rot1, rot2, alpha)` 
 Spherical Interpalation between two sets of euler rotations. **Currently has bugs.**
-<!--END Vector Math-->
+
 
 ## Chests And Storage Nodes
-<!--BEGIN Chests and Storage Nodes-->
+
 * `qts.is_chest_lid_obstructed(pos)` 
 Checks if the position has a block above it that would obstruct vertical access.
 
@@ -103,35 +103,35 @@ Gets the drops from inventory `inv_name` in the metadata of the node at `pos`, a
  
 * `qts.close_chest(playername)` 
 Closes the chest opened by player `playername`, if they have one open. calls the callback `on_chest_close(pos, node, player, is_closed)`. Also handles playing the closing sound, if nesecary.
-<!--END Chests and Storage Nodes-->
 
-## Explotions 
-<!--BEGIN Explotiions-->
+
+## Explosions 
+
 * `qts.explode_sound(pos, distance)`
 Plays the sound of an explosion at `pos`, heard for `distance` blocks.
 
 * `qts.explode_particles(pos, radius, mult=1)`
-Plays the explotion particle effect at `pos` simulating an explotion of radius `radius`. The total number of particles is multiplied by `mult`.
+Plays the explosion particle effect at `pos` simulating an explosion of radius `radius`. The total number of particles is multiplied by `mult`.
 
 * `qts.explode_ray(pos, slopeVector, stepSize, power, returnFound)`
-Causes a single ray of an explotion. `pos` is the origin of the ray, and it travels in the direction of `slopeVector`. The size of the step for the ray is `stepSize`. `power` determines the strength of the ray. If `returnFound` is true, it simply returns the list of destroyed blocks in the format: `{found = array, drops = array, objects = array}`. If `returnFound` is false, it destroyes the nodes and ejects the drops, and blasts the objests.
+Causes a single ray of an explosion. `pos` is the origin of the ray, and it travels in the direction of `slopeVector`. The size of the step for the ray is `stepSize`. `power` determines the strength of the ray. If `returnFound` is true, it simply returns the list of destroyed blocks in the format: `{found = array, drops = array, objects = array}`. If `returnFound` is false, it destroys the nodes and ejects the drops, and blasts the objects.
 
 * `qts.explode(pos, power, properties)`
 The actual explosion function. This should be used for all explosions. The explosion is centered on `pos` and has a strength of `power`. `properties` is a table that controls the type of explosion, and has defaults. If any one of the flags should be changed from the default, the entire table must be set up. It's flags and defaults are thus: 
-    * `destroy_nodes = true` - if the explosion should destry nodes.
+    * `destroy_nodes = true` - if the explosion should destroy nodes.
     * `make_drops = true` - if the explosion should make nodes drop.
     * `drop_speed_multiplier = 1`- speed multiplier of the drops.
     * `make_sound = true` - if the explosion should make a sound.
     * `make_particles = true` - if the explosion should make particles.
-    * `particle_multiplier = 1` - mulitplier for the number of particles.
+    * `particle_multiplier = 1` - multiplier for the number of particles.
     * `damage_entities = true` - if the explosion should damage entities.
     * `damage_player = true` - if the explosion should damage players.
     * `damage_type = "fleshy"` - the damage type of the explosion.
     * `exploder = nil` - the objectRef responsible for the explosion (damage-wise)
-<!--END Explotiions-->
+
 
 ## Player Functions
-<!--BEGIN Player Funcs-->
+
 
 * `qts.get_player_data(player, category, field)`
 Gets the player data of the player `player` (name or playerref), part of category `category` with fieldname `field`
@@ -154,10 +154,10 @@ Adds a physics modifer to the specified player's list. `player` is a playerref o
 * `qts.get_player_modifier(player, id)`
 Gets the modifier called `id` in the specified player's modifier list. `player` is a playerref or playername. Returns a table copied from the list with the fields `speed`, `jump`, and `gravity`.
 
-<!--END Player Funcs-->
+
 
 ## Projectile Functions
-<!--BEGIN Projectile Funcs-->
+
 * `qts.projectile_launch_player(projectile, player, inaccuracy=0)`
 Called to cause a player to launch a projectile in the direction the player is looking. `projectile` is a registered projectile name. See [qts.register_projectile(...)](#qtsregister_projectilename-def). `player` is a playerref (not a playername). `inaccuracy` is a value to offset the view direction, and counts in percent of a block over a distance of one block. It defaults to 0.
 
@@ -177,10 +177,10 @@ The default function a projectile calls when it strikes an entity. It punches th
 * `qts.projectile_default_timeout(luaentity)`
 The default function a projectile calls when it's lifetimer hits 0. It removes the projectile object.
 
-<!--END Projectile Funcs-->
+
 
 ## Unsorted
-<!--BEGIN Unsorted-->
+
 * `qts.table_deep_copy(orig, copy=nil)` 
 Performs a deep copy of a table, metadata included. If copy is a table, it will be used as destination. Destination is also returned. This function is from [lua-users.org](https://lua-users.org/wiki/CopyTable)
  
@@ -221,11 +221,38 @@ Removes items from an inv that follow group `groupName`, but are not in the igno
 Checks to see if the collisionboxes of the two entityRefs are overlapping. The performs Axis-Alligned Bounding Box overlapping algorithm. It returns true/false
 
 
-<!--END Unsorted-->
-<!--END Utility-->
+* `qts.apply_default_wear(name, itemstack)`
+Applies default wear to the itemstack as if it broke a node of name. This is supplied to respect level differences, 'air' can likely be used if no node was effected.
+
+
+* `qts.rectangle(pos1, pos2)`
+an iterator for a for loop, this loops through all positions between pos1 and pos2 in an inverse x, y, z order. IE, x is the last to be changed, then y, then z updates every time. The order depending on pos1 and pos2 difference. IE, pos1 does not need to be less than pos2.
+
+* `qts.columns(pos1, pos2)`
+an iterator for a for loop, this loops through all positions between pos1 and pos2 in an inverse x, z, y order. IE, x is the last to be changed, then z, then y updates every time. This runs through each column first, the order depending on pos1 and pos2 difference. IE, pos1 does not need to be less than pos2. 
+
+## Node Lists
+Node Lists is a manner in which to simply edit a bunch of nodes in an area with a single loop
+
+* `qts.readNodes(pos1, pos2)`
+Reads a bunch of nodes between pos1 and pos2 (sorted automatically) into a returned table. The table is a 3D array, with indices going from 0 to some size.
+
+* `qts.writeNodes(pos1, pos2, tbl)`
+Writes those nodes back, but only in the position between pos1 and pos2. If that is larger or smaller than the tbl, it does not care. Nodes are only set if they are updated. Cares about param2, but not param1
+
+* `qts.nodePairs(tbl)`
+Iterate over a list of nodes as read by `qts.readNodes(...)`
+
+* `qts.insert3(tbl, pos, node)`
+Insert an item into a node list as read by `qts.readNodes(...)` can also be used to start building such a list. Indices can be random.
+
+* `qts.read3(tbl, pos)`
+Read from a node list as read by `qts.readNodes(...)`. Will return nil if not present. Will error if t is not a table
+
+
 
 # Datatypes
-<!--BEGIN Datatypes-->
+
 ### Set: `Set(t)`
 <!--BEGIN Set-->
 Creates a set from a list. A Set is just the data stored in the keys of the table, and "true" stored as the value. ie:

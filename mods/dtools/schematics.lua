@@ -359,7 +359,7 @@ qts.gui.register_gui("schem_main", {
 		return "size[7,8]"
 	end,
 	handle = function(data, pos, name, fields)
-		return
+		return false
 	end,
 })
 
@@ -615,7 +615,7 @@ qts.gui.register_gui("schem_yslice", {
 			
 			--update formspec
 			data.selected = 1
-			self.pannel_edit = nil
+			data.pannel_edit = nil
 			qts.gui.show_gui(pos, name, "schem_yslice", 1)
 		end
 		
@@ -865,7 +865,7 @@ minetest.register_tool("dtools:schem_probtool", {
 			-- within the creator's region.
 			local use_creator_region = false
 			if pointed_thing and pointed_thing.type == "node" and pointed_thing.under then
-				punchpos = pointed_thing.under
+				local punchpos = pointed_thing.under
 				local node = minetest.get_node(punchpos)
 				if node.name == "dtools:schem_creator" then
 					local pos1, pos2 = schm.getsize(punchpos)
@@ -980,7 +980,7 @@ minetest.register_tool("dtools:schem_placetool", {
 			if filename and filename ~= "" then
 				local success = minetest.place_schematic(pointed_thing.above, export_path .. DIR_DELIM .. filename, "random", nil, false)
 				
-				if sucess == nil then
+				if success == nil then
 					minetest.chat_send_player(user:get_player_name(), minetest.colorize("#ff0000", "Schematic could not be loaded. ["..filename .. "] must be invalid."))
 				end
 			else

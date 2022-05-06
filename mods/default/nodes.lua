@@ -1229,7 +1229,6 @@ minetest.register_node ("default:glass", {
 	is_ground_content = false,
 	sounds = qtcore.node_sound_metal(),
 	paramtype = "light",
-	is_ground_content = false,
 	sunlight_propagates = true,
 })
 

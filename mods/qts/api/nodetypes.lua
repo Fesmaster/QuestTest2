@@ -198,8 +198,7 @@ function qts.register_shaped_node(name, def)
 		local under = minetest.get_node(pointed_thing.under)
 		local wield_item = itemstack:get_name()
 		local player_name = placer and placer:get_player_name() or ""
-		local creative_enabled = (creative and creative.is_enabled_for
-				and creative.is_enabled_for(player_name)) --TODO: update creative API
+		local creative_enabled = qts.is_player_creative(player_name)
 
 		if under and under.name:find("_slab") then
 			-- place slab using under node orientation

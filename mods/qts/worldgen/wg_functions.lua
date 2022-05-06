@@ -266,7 +266,7 @@ qts.worldgen.check_structure = function(name, biome, cid)
 			return false
 		end
 	end
-	return
+	return false
 end
 
 --used to get the flag string for centering a schmatic

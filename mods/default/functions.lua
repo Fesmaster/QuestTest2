@@ -57,10 +57,10 @@ minetest.register_abm({
 minetest.register_abm({
 	label = "Reed Growth",
 	nodenames = {"group:reeds"},
-	neighbors = {"group:soil", "group:water"},
+	neighbors = {"group:soil", "group:sand", "group:water"},
 	interval = 3.0,
-	chance = 5,
-	catch_up = false,
+	chance = 15,
+	catch_up = true,
 	action = function(pos, node, active_object_count, active_object_count_wider)
 		--check the height of the reeds
 		local suffix = string.sub(node.name, -1)
@@ -72,6 +72,17 @@ minetest.register_abm({
 		end
 		
 		local grow = false
+		
+		--check for soil or sand
+		local qnode = minetest.get_node_or_nil(pos + vector.new(0,-1,0))
+		if qnode and qnode.name then
+			if minetest.get_item_group(qnode.name, "soil") == 0 and minetest.get_item_group(qnode.name, "sand") == 0 then
+				return --not dirt or sand under
+			end
+		else
+			minetest.log("Attemtped to grow reeds on an unloaded node")
+			return --unidentifable node below!
+		end
 		
 		--check for water.
 		local offs = {vector.new(1,-1,0), vector.new(-1,-1,0), vector.new(0,-1,1), vector.new(0,-1,-1) }
@@ -98,5 +109,31 @@ minetest.register_abm({
 		end
 		
 		minetest.swap_node(pos, {name = "default:reeds_" .. (level+1) })
+	end
+})
+
+minetest.register_abm({
+	label = "Leaf Decay",
+	nodenames = {"group:leaves"},
+	interval = 5.0,
+	chance = 20,
+	catch_up = true,
+	action = function(pos, node, active_object_count, active_object_count_wider)
+		--minetest.log("here")
+		if node.param2 ~= 0 then return end
+		local r = minetest.find_node_near(pos, qts.LEAFDECAY_RADIUS, {"group:log"}, false)
+		if r == nil then
+			minetest.set_node(pos, {name="air"})
+			if math.random(16) == 1 then
+				local drops = minetest.get_node_drops(node)
+				for i, v in ipairs(drops) do
+					if v ~= node.name then
+						drops = v
+						break
+					end
+				end
+				minetest.item_drop(ItemStack(drops), nil, pos)
+			end
+		end
 	end
 })

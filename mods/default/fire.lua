@@ -27,14 +27,14 @@ qts.ignite = function(pos)
 	--local sound_pos = pointed_thing.above or user:get_pos()
 		minetest.sound_play(
 			"tinderbox",
-			{pos = poo, gain = 1, max_hear_distance = 8},
+			{pos = pos, gain = 1, max_hear_distance = 8},
 			true
 		)
 		
 		local node = minetest.get_node(pos)
 		local nodedef = minetest.registered_nodes[node.name]
 		if (nodedef and nodedef.on_ignite) then
-			nodedef.on_ignite(pos, user)
+			nodedef.on_ignite(pos)
 		else
 			local p = minetest.find_node_near(pos, 1, {"air"})
 			if p then

@@ -41,6 +41,10 @@ minetest.register_craftitem("default:tinder", {
 	inventory_image = "default_tinder.png",
 })
 
+minetest.register_craftitem("default:paper", {
+	description = "Paper",
+	inventory_image = "default_paper.png",
+})
 
 
 minetest.register_craftitem("default:shell_pieces", {
