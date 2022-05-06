@@ -1320,7 +1320,7 @@ minetest.register_node("default:ladder", {
 })
 
 minetest.register_node("default:food_table", {
-	description = "Kitchen Table",
+	description = "Cooking Table",
 	tiles = {
 			"default_food_table_top.png",
 			"default_oak_wood.png",
@@ -1358,3 +1358,125 @@ minetest.register_node("default:food_table", {
 
 
 --END furnature
+
+--Begin Stuff
+
+minetest.register_node("default:dishes_clay", {
+	description = "Clay Dishes",
+	tiles = {
+			"default_dishes_clay.png",
+		},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+		{ -6/16, -7/16, 1/16, -5/16, -6/16, 5/16, },
+		{ -1/16, -7/16, 1/16, 0/16, -6/16, 5/16, },
+		{ -6/16, -7/16, 0/16, 0/16, -6/16, 1/16, },
+		{ -6/16, -7/16, 5/16, 0/16, -6/16, 6/16, },
+		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+		{ 2/16, -8/16, -6/16, 6/16, -7/16, -2/16, },
+		{ 2/16, -7/16, -3/16, 6/16, -2/16, -2/16, },
+		{ 2/16, -7/16, -6/16, 6/16, -2/16, -5/16, },
+		{ 5/16, -7/16, -5/16, 6/16, -2/16, -3/16, },
+		{ 2/16, -7/16, -5/16, 3/16, -2/16, -3/16, },
+
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:dishes_greenware", {
+	description = "Greenware Dishes",
+	tiles = {
+			"default_dishes_greenware.png",
+		},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+		{ -6/16, -7/16, 1/16, -5/16, -6/16, 5/16, },
+		{ -1/16, -7/16, 1/16, 0/16, -6/16, 5/16, },
+		{ -6/16, -7/16, 0/16, 0/16, -6/16, 1/16, },
+		{ -6/16, -7/16, 5/16, 0/16, -6/16, 6/16, },
+		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+		{ 2/16, -8/16, -6/16, 6/16, -7/16, -2/16, },
+		{ 2/16, -7/16, -3/16, 6/16, -2/16, -2/16, },
+		{ 2/16, -7/16, -6/16, 6/16, -2/16, -5/16, },
+		{ 5/16, -7/16, -5/16, 6/16, -2/16, -3/16, },
+		{ 2/16, -7/16, -5/16, 3/16, -2/16, -3/16, },
+
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:water_vessels", {
+	description = "Water Vessels",
+	tiles = {
+			"default_water_vessel_top.png",
+			"default_dishes_clay.png",
+			"default_dishes_clay.png"
+		},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+		{ -6/16, -7/16, 0/16, 0/16, -6/16, 6/16, },
+		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+		{ 2/16, -8/16, -6/16, 6/16, -3/16, -2/16, },
+		{ 2/16, -3/16, -3/16, 6/16, -2/16, -2/16, },
+		{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
+		{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
+		{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:flour_bowl", {
+	description = "Flour Bowl",
+	tiles = {
+			"default_flour_bowl_top.png",
+			"default_dishes_clay.png",
+			"default_flour_bowl_side.png"
+		},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -3/16, -7/16, -4/16, 4/16, -5/16, 3/16, },
+		{ -4/16, -6/16, -4/16, -3/16, -5/16, 3/16, },
+		{ 4/16, -6/16, -4/16, 5/16, -5/16, 3/16, },
+		{ -4/16, -6/16, 3/16, 5/16, -5/16, 4/16, },
+		{ -4/16, -6/16, -5/16, 5/16, -5/16, -4/16, },
+		{ -2/16, -8/16, -3/16, 3/16, -4/16, 2/16, },
+		{ -1/16, -4/16, -2/16, 2/16, -3/16, 1/16, },
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})

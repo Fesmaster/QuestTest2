@@ -75,9 +75,9 @@ minetest.register_craftitem("default:mushroom_stew", {
 	on_use = minetest.item_eat(5),
 })
 
-minetest.register_craftitem("default:water_cups", {
-	description = "Cups of Water",
-	inventory_image = "default_water_cups.png",
+--[[minetest.register_craftitem("default:water_vessels", {
+	description = "Vessels of Water",
+	inventory_image = "default_water_vessels.png",
 	on_use = minetest.item_eat(1),
 })
 
@@ -89,11 +89,10 @@ minetest.register_craftitem("default:flour_bowl", {
 minetest.register_craftitem("default:dishes_greenware", {
 	description = "Greenware Dishes",
 	inventory_image = "default_dishes_greenware.png",
-	on_use = minetest.item_eat(5),
 })
 
 minetest.register_craftitem("default:dishes_clay", {
 	description = "Fired Clay Dishes",
 	inventory_image = "default_dishes_clay.png",
-	on_use = minetest.item_eat(5),
 })
+]]--
