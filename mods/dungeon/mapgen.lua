@@ -21,6 +21,6 @@ qts.worldgen.register_scatter("lake-grassy", {
 	nodes = {"dungeon:lake_generator"},
 	replace = {"air"},
 	below = {"default:dirt_with_grass"},
-	chance = 100,
-	stage = "pre-structre",
+	chance = 4000,
+	stage = "pre-structure",
 })

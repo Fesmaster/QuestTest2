@@ -10,6 +10,7 @@ qts.worldgen.CID_source = {}
 qts.worldgen.registered_biomes = {}
 qts.worldgen.registered_structures = {}
 qts.worldgen.registered_scatters = {}
+qts.worldgen.scatters_stage_marker = {}
 qts.worldgen.force_singlenode = false
 
 local CID = qts.worldgen.CID --to simplify and shorten the naming
@@ -250,7 +251,8 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 	if not qts.worldgen.force_singlenode then
 		
 		--pre-structre scatter stage
-		qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "pre-structure")
+		Data = qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "pre-structure")
+		VM:set_data(Data)
 
 		--STRUCTURES
 		columnID = 1
@@ -303,7 +305,7 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 		Param2Data = VM:get_param2_data()
 		
 		--post-structure scatter stage
-		qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "post-structure")
+		Data = qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "post-structure")
 
 		--PLANTS and DUST
 		columnID = 1
@@ -391,7 +393,7 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 		end
 		end
 		--post-plant scatter stage
-		qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "post-plant")
+		Data = qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "post-plant")
 		
 		--set node data, and write to map
 		VM:set_data(Data)
@@ -405,7 +407,7 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 		
 		--one last scatter stage
 		Data= VM:get_data()
-		qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "post-ore")
+		Data = qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "post-ore")
 		VM:set_data(Data)
 		
 	end

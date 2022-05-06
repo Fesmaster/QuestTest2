@@ -175,14 +175,15 @@ minetest.register_node ("dungeon:lake_generator", {
 		return itemstack
 	end
 })
-
-if not qts.ISDEV then
+---[[
+--if not qts.ISDEV then
 	minetest.register_lbm({
 		label = "Lake Generator",
 		name = "dungeon:lake_generator_lbm",
 		nodenames = {"dungeon:lake_generator"},
-		run_at_every_load = false,
+		run_at_every_load = true,
 		action = function(pos, node)
+			minetest.log("Lake LBM")
 			minetest.set_node(pos, {name="air"})
 			if CheckLake(pos+vector.new(0,-1,0)) then
 				MakeLakeBasic(pos+vector.new(0,-1,0))
@@ -191,4 +192,5 @@ if not qts.ISDEV then
 			end
 		end
 	})
-end
+--end
+--]]

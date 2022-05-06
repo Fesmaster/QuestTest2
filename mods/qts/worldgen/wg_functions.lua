@@ -350,7 +350,7 @@ qts.worldgen.register_scatter = function (name, def)
 	def.chance = def.chance or 100
 	def.stage = def.stage or "pre-structure"
 	def.name = name
-
+	qts.worldgen.scatters_stage_marker[def.stage] = true
 	qts.worldgen.registered_scatters[name] = def;
 
 end
@@ -424,7 +424,6 @@ qts.worldgen.check_scatter = function(def, x, y, z, Area, Data, biomeID)
 			return false
 		end
 	end
-
 	return math.random(def.chance) == 1
 end
 
@@ -443,6 +442,8 @@ stageName - the stage name, as string. One of: ("pre-structure", "post-structure
 
 --]]
 qts.worldgen.process_scatter_stage = function(Area, Data, BiomeBuffer, minp, maxp, stageName)
+	if qts.worldgen.scatters_stage_marker[stageName] == nil then return Data end
+	--minetest.log("WorldGen: Scatterer: Running stage:" .. stageName)
 	local columnID = 1
 	for z = minp.z+1, maxp.z-1 do
 	for x = minp.x+1, maxp.x-1 do
@@ -460,4 +461,5 @@ qts.worldgen.process_scatter_stage = function(Area, Data, BiomeBuffer, minp, max
 		columnID = columnID + 1
 	end
 	end
+	return Data
 end
