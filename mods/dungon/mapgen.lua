@@ -1,3 +1,0 @@
---[[
-	Map Generation Calls
---]]

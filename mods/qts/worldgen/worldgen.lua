@@ -9,6 +9,7 @@ qts.worldgen.ORE = {}
 qts.worldgen.CID_source = {}
 qts.worldgen.registered_biomes = {}
 qts.worldgen.registered_structures = {}
+qts.worldgen.registered_scatters = {}
 qts.worldgen.force_singlenode = false
 
 local CID = qts.worldgen.CID --to simplify and shorten the naming
@@ -66,35 +67,6 @@ minetest.register_on_mods_loaded(function()
 		ORE[name] = CID[name]
 	end
 	--minetest.register_alias("mapgen_singlenode", "air")
-	
-	--mapgen v6 aliases. NOT SET
-	--mapgen_stone
-	--mapgen_water_source
-	--mapgen_lava_source
-	--mapgen_dirt
-	--mapgen_dirt_with_grass
-	--mapgen_sand
-	--mapgen_gravel
-	--mapgen_desert_stone
-	--mapgen_desert_sand
-	--mapgen_dirt_with_snow
-	--mapgen_snowblock
-	--mapgen_snow
-	--mapgen_ice
-	--
-	--mapgen_tree
-	--mapgen_leaves
-	--mapgen_apple
-	--mapgen_jungletree
-	--mapgen_jungleleaves
-	--mapgen_junglegrass
-	--mapgen_pine_tree
-	--mapgen_pine_needles
-	--
-	--mapgen_cobble
-	--mapgen_stair_cobble
-	--mapgen_mossycobble
-	--mapgen_stair_desert_stone
 end)
 
 ---[[
@@ -137,7 +109,7 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 			biomeID = qts.worldgen.get_biome_name(heatmap[columnID],humiditymap[columnID],heightmap[columnID])
 			biomeRef = qts.worldgen.registered_biomes[biomeID]
 			biomeBuffer[columnID] = biomeID
-			if not biomeRef then minetest.log("LINE 136: NULL AT CREATION, Name:"..dump(biomeID)) end
+			if not biomeRef then minetest.log("LINE 112: NULL AT CREATION, Name:"..dump(biomeID)) end
 			--ground scanning setup
 			local groundHeight = -31000
 			local isground = false
@@ -271,16 +243,15 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 	end
 	end
 	
-	--if not biomeRef then minetest.log("LINE 266: NULL AFTER FULL CREATION LOOP") end
-	
-	
-	--minetest.log("WORLDGEN 3")
-	--set the data
 	VM:set_data(Data)
 	VM:set_light_data(LightData)
 	VM:set_param2_data(Param2Data)
 	
 	if not qts.worldgen.force_singlenode then
+		
+		--pre-structre scatter stage
+		qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "pre-structure")
+
 		--STRUCTURES
 		columnID = 1
 		for z = minp.z, maxp.z do
@@ -296,7 +267,6 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 					for name, def in pairs(qts.worldgen.registered_structures) do
 						if not struc then
 							if qts.worldgen.check_structure(name, biomeID, Data[j]) then
-								--local sucess = qts.worldgen.place_structure(name,{x=x,y=y,z=z},VM)
 								local strucDef = qts.worldgen.registered_structures[name]
 								local rotation = "0"
 								if strucDef.rotate then rotation = "random" end
@@ -325,21 +295,24 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 			columnID = columnID + 1
 		end
 		end
-		--if not biomeRef then minetest.log("LINE 319: NULL AFTER STRUCTURES") end
 		
-		--minetest.log("WORLDGEN 4")
+		
 		--get the new valid data
 		Data= VM:get_data()
 		LightData = VM:get_light_data()
 		Param2Data = VM:get_param2_data()
 		
+		--post-structure scatter stage
+		qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "post-structure")
+
+		--PLANTS and DUST
 		columnID = 1
 		for z = minp.z, maxp.z do
 		for x = minp.x, maxp.x do
 			biomeID = biomeBuffer[columnID]
 			biomeRef = qts.worldgen.registered_biomes[biomeID]
-			--place plants
-			--if not biomeRef then minetest.log("LINE 331: NULL BEFORE PLANT COLUMN") end
+			
+			--PLANTS
 			if biomeRef.plant and biomeRef.plant_freq and biomeRef.plant_freq~=0 then
 				for y = maxp.y, minp.y, -1 do
 					local i = Area:index(x, y, z)
@@ -364,9 +337,6 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 										param2 = 1
 									end
 								end
-								--minetest.log("Plant Randomly placed. Biome: " .. dump(biomeID))
-							--else
-								--minetest.log("Plant Randomly not placed.")
 							end
 						end
 					end
@@ -378,20 +348,9 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 						Param2Data[i] = param2
 					end
 				end
-			--[[
-			else
-				if (biomeID ~= biomeRef.name) then
-				--if biomeID ~= "underwater" and biomeID ~= "beach" then
-					minetest.log("Plant Ignored. Biome: " .. dump(biomeID) .. 
-						"  Plants: " .. dump(biomeRef.plant) .. 
-						"  Freq: " .. dump(biomeRef.plant_freq))
-					--if (biomeID ~= biomeRef.name) then
-					minetest.log("\nbiomeID: " .. dump(biomeID)  .. "biomeNM: " .. dump(biomeRef.name))
-					--end
-				end--]]
 			end
-			--if not biomeRef then minetest.log("LINE 361: NULL BEFORE DUST COLUMN") end
-			--retrace for dust
+			
+			--DUST
 			if biomeRef and biomeRef.dust then
 				local dust_placed = false
 				for y = maxp.y, minp.y, -1 do
@@ -407,7 +366,6 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 										or Data[Area:index(x, y-1, z)] == CID["air"]
 										)
 							)then
-							--place dust
 							
 							local name = qts.worldgen.get_biome_node(biomeID,"dust", false)
 							nID = CID[name]
@@ -432,18 +390,24 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 			columnID = columnID + 1
 		end
 		end
-		--minetest.log("WORLDGEN 5")
-		--run ore and deco generation
-		
+		--post-plant scatter stage
+		qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "post-plant")
 		
 		--set node data, and write to map
 		VM:set_data(Data)
 		VM:set_light_data(LightData)
 		VM:set_param2_data(Param2Data)
-		--generate the ores
+
+
+		--generate the ores and decorations
 		minetest.generate_ores(VM, minp, maxp)
 		minetest.generate_decorations(VM, minp, maxp)
-	
+		
+		--one last scatter stage
+		Data= VM:get_data()
+		qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "post-ore")
+		VM:set_data(Data)
+		
 	end
 	
 	--VM:set_lighting{day=0, night=0}

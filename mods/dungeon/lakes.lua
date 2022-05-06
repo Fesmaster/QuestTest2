@@ -159,7 +159,7 @@ local function CheckLake(pos)
 	return varianceCount <= minAllowedVariance
 end
 
-qts.register_shaped_node ("dungeon:lake_generator", {
+minetest.register_node ("dungeon:lake_generator", {
 	description = "Lake Generator",
 	tiles = {"default.png"},
 	groups = DUNGEON_GENERATOR_GROUPS,
