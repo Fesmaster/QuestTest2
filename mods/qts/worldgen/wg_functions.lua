@@ -220,17 +220,22 @@ end
 
 
 --qts.worldgen.registered_structures
+
 --[[
 def contains:
-	schematic = "path to schematic.mts" --must contain ".mts", it is not added for you!!
-	chance = 0+ one in chance of placing. math: math.random(chance) == 1
-	(0-100) % chance of placing. math: math.random(100-freq) == 1
-	biomes = {} or "name" (converted to table in register)
-	nodes = {} or "name" (converted to table in register)
-	force_place = false -- should the placement be forced?
-	rotate = true - should the placed rotation be random?
-	offset = vector or nil
-	flags = flags for placing
+
+{
+
+	schematic = "path to schematic.mts"	--must contain ".mts", it is not added for you!!
+	chance = number						--one in chance of placing. math: math.random(chance) == 1
+	biomes = {} or "name"				--the biome names (converted to table in register)
+	nodes = {} or "name"				--the below node names (converted to table in register)
+	force_place = boolean [false]		--should the placement be forced?
+	rotate = boolen [true]				--should the placed rotation be random?
+	offset = vector or nil				--offset to placement
+	flags = string [""]					--minetest schematic placement flags
+}
+
 --]]
 qts.worldgen.register_structure = function(name, def)
 	--biomes and nodes are changed to sets, to more easily check to see if a value is in them
@@ -278,10 +283,181 @@ qts.worldgen.centers = function(x, y, z)
 	return str
 end
 
---name, pos, vm, flags
-qts.worldgen.place_structure = function(name, pos, VM)
-	local strucDef = qts.worldgen.registered_structures[name]
-	if strucDef then
-		
+--[[
+def contains:
+
+{
+
+	nodes = {} or string			--list of possible nodename
+	replace = {} or nil or string	--list of nodes that can be replaced, nil or {} to ignore
+	above = {} or nil or string		--list of nodes that must be above, nil or {} to ignore
+	below = {} or nil or string 	--list of nodes that must be below, nil or {} to ignore
+	beside = {} or nil or string	--list of nodes that must be next to, nil or {} to ignore
+	biomes = {} or nil or string	--list of the allowed biomes. nil or {} to ignore
+	beside_count = 1-4 [1]			--how many of the beside nodes must be in the category. defaults to 1
+	chance = number [100]			--one in x chance of placing this node. defaults to 100.
+	stage = one of: ("pre-structre", "post-structure", "post-plant", "post-ore")
+}
+
+--]]
+qts.worldgen.register_scatter = function (name, def)
+	if def.nodes and type(def.nodes) == "string" then
+		def.nodes = {def.nodes}
+	end
+	if def.replace and type(def.replace) == "string" then
+		def.replace = {def.replace}
+	end
+	if def.above and type(def.above) == "string" then
+		def.above = {def.above}
+	end
+	if def.below and type(def.below) == "string" then
+		def.below = {def.below}
+	end
+	if def.beside and type(def.beside) == "string" then
+		def.beside = {def.beside}
+	end
+	if def.biomes and type(def.biomes) == "string" then
+		def.biomes = {def.biomes}
+	end
+	--add stuff to CID
+	if def.nodes then
+		for i, name in ipairs(def.nodes) do
+			qts.worldgen.add_to_CID(name)
+		end
+	end
+	if def.replace then
+		for i, name in ipairs(def.replace) do
+			qts.worldgen.add_to_CID(name)
+		end
+	end
+	if def.above then
+		for i, name in ipairs(def.above) do
+			qts.worldgen.add_to_CID(name)
+		end
+	end
+	if def.below then
+		for i, name in ipairs(def.below) do
+			qts.worldgen.add_to_CID(name)
+		end
+	end
+	if def.beside then
+		for i, name in ipairs(def.beside) do
+			qts.worldgen.add_to_CID(name)
+		end
+	end
+
+	def.beside_count = def.beside_count or 1
+	def.chance = def.chance or 100
+	def.stage = def.stage or "pre-structure"
+	def.name = name
+
+	qts.worldgen.registered_scatters[name] = def;
+
+end
+
+--[[
+Check if a particular position should have a scatter node put into it
+
+def - the scatter def
+
+x, y, z - the position
+Area - the VoxelArea ref
+
+Data - the node data
+
+biomeID - the biome name. one of ("pre-structure", "post-structure", "post-plant", "post-ore")
+
+--]]
+qts.worldgen.check_scatter = function(def, x, y, z, Area, Data, biomeID)
+	local allowed = false
+
+	if def.biomes and #def.biomes > 0 then
+		allowed = false
+		for _, biome in ipairs(def.biomes) do
+			if biome == biomeID then allowed = true end
+		end
+		if not allowed then return false end
+	end
+	
+	if def.replace and #def.replace > 0 then
+		allowed = false
+		local i = Area:index(x, y, z)
+		for _, name in ipairs(def.replace) do
+			if Data[i] == CID[name] then allowed = true end
+		end 
+		if not allowed then return false end
+	end
+
+	if def.below and #def.below > 0 then 
+		allowed = false
+		local i = Area:index(x, y-1, z)
+		for _, name in ipairs(def.below) do
+			if Data[i] == CID[name] then allowed = true end
+		end
+		if not allowed then return false end
+	end
+
+	if def.above and #def.above > 0 then 
+		allowed = false
+		local i = Area:index(x, y-1, z)
+		for _, name in ipairs(def.above) do
+			if Data[i] == CID[name] then allowed = true end
+		end
+		if not allowed then return false end
+	end
+
+	if def.beside and #def.beside > 0 then 
+		local xoff = {-1, 1, 0, 0}
+		local zoff = {0, 0, -1, 1}
+		local count = 0
+		for j = 1, 4 do
+			allowed = false
+			local i = Area:index(x+xoff[j], y, z+zoff[j])
+			for _, name in ipairs(def.beside) do
+				if Data[i] == CID[name] then allowed = true end
+			end
+			if allowed then 
+				count = count + 1
+			end
+		end
+		if count < def.beside_count then
+			return false
+		end
+	end
+
+	return math.random(def.chance) == 1
+end
+
+--[[
+run a stage of the scatter process
+
+Area - the VoxelArea reference
+
+Data - the CID data
+
+BiomeBuffer - the biome buffer
+
+minp, maxp - the min and max positions as vectors
+
+stageName - the stage name, as string. One of: ("pre-structure", "post-structure", "post-plant", "post-ore")
+
+--]]
+qts.worldgen.process_scatter_stage = function(Area, Data, BiomeBuffer, minp, maxp, stageName)
+	local columnID = 1
+	for z = minp.z+1, maxp.z-1 do
+	for x = minp.x+1, maxp.x-1 do
+		local biomeID = BiomeBuffer[columnID]
+		for y = maxp.y-1, minp.y+1, -1 do
+			local i = Area:index(x, y, z)
+			for name, def in pairs(qts.worldgen.registered_scatters) do
+				if def.stage == stageName and qts.worldgen.check_scatter(def, x, y, z, Area, Data, biomeID) then
+					Data[i] = CID[def.nodes[math.random(#def.nodes)]]
+					minetest.log("A scatter placed at: {" .. x .. ", " .. y .. ", " .. z .. "}")
+					break
+				end
+			end
+		end
+		columnID = columnID + 1
+	end
 	end
 end
