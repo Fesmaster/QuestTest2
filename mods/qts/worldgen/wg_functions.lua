@@ -453,7 +453,6 @@ qts.worldgen.process_scatter_stage = function(Area, Data, BiomeBuffer, minp, max
 			for name, def in pairs(qts.worldgen.registered_scatters) do
 				if def.stage == stageName and qts.worldgen.check_scatter(def, x, y, z, Area, Data, biomeID) then
 					Data[i] = CID[def.nodes[math.random(#def.nodes)]]
-					minetest.log("A scatter placed at: {" .. x .. ", " .. y .. ", " .. z .. "}")
 					break
 				end
 			end

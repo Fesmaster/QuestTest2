@@ -44,6 +44,10 @@ inventory.get_button_grid = function(playername, current_page, prev_search, chea
 				str = str .. "item_image_button["..P(x,y)..";1,1;"..
 				esc(tostring(inventory.itemlist_player[playername][offset + counter])) .. 
 				";btn_item_"..tostring(counter)..";]"
+				if qts.ISDEV then
+					local name = tostring(inventory.itemlist_player[playername][offset + counter])
+					str=str.."tooltip[btn_item_" .. tostring(counter) .. ";" ..esc(minetest.registered_items[name].description .. "\n" .. name).. "]"
+				end
 				counter = counter + 1
 			end
 		end

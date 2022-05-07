@@ -104,6 +104,7 @@ local function MakeLakeBasic(pos)
 						
 						if nasWaterNear and math.random(5) == 1 then
 							node.name = "default:reeds_"..math.random(1,4)
+							node.param2 = 0
 						end
 					end
 				end
@@ -175,22 +176,18 @@ minetest.register_node ("dungeon:lake_generator", {
 		return itemstack
 	end
 })
----[[
---if not qts.ISDEV then
+
+if not qts.ISDEV then
 	minetest.register_lbm({
 		label = "Lake Generator",
 		name = "dungeon:lake_generator_lbm",
 		nodenames = {"dungeon:lake_generator"},
 		run_at_every_load = true,
 		action = function(pos, node)
-			minetest.log("Lake LBM")
 			minetest.set_node(pos, {name="air"})
 			if CheckLake(pos+vector.new(0,-1,0)) then
 				MakeLakeBasic(pos+vector.new(0,-1,0))
-			else
-				minetest.log("Lake Failed.")
 			end
 		end
 	})
---end
---]]
+end

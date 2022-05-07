@@ -306,7 +306,6 @@ minetest.register_node("default:reeds", {
 	use_texture_alpha = "clip",
 	drawtype = "nodebox",
 	paramtype = "light",
-	paramtype2 = "facedir",
 	sunlight_propagates = true,
 	walkable = false,
 	node_box = {
@@ -335,7 +334,6 @@ for i = 2, 4 do
 		use_texture_alpha = "clip",
 		drawtype = "nodebox",
 		paramtype = "light",
-		paramtype2 = "facedir",
 		sunlight_propagates = true,
 		walkable = false,
 		node_box = {
