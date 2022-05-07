@@ -263,6 +263,11 @@ qts.register_craft({
 	results = {"default:paper"},
 })
 
+qts.register_craft({
+	ingredients = {"default:paper 2"},
+	results = {"default:book"},
+})
+
 --weapons and tools
 
 --picks
