@@ -619,13 +619,22 @@ qts.register_shaped_node ("default:lanternfruit_wood_planks", {
 	sounds = qtcore.node_sound_wood(),
 	palette = "default_palette_paint_light.png",
 })
-qts.register_shaped_node ("default:lanterfruit_log", {
+qts.register_shaped_node ("default:lanternfruit_log", {
 	description = "Lanternfruit Log",
 	tiles = {"default_lanternfruit_top.png", "default_lanternfruit_top.png", "default_lanternfruit_side.png"},
 	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1},
 	sounds = qtcore.node_sound_wood(),
 })
+--for shematic legacy reasons
+minetest.register_alias("default:lanterfruit_log", "default:lanternfruit_log")
+minetest.register_alias("default:lanterfruit_log_stair", "default:lanternfruit_log_stair")
+minetest.register_alias("default:lanterfruit_log_stair_inner", "default:lanternfruit_log_stair_inner")
+minetest.register_alias("default:lanterfruit_log_stair_outer", "default:lanternfruit_log_stair_outer")
+minetest.register_alias("default:lanterfruit_log_slant", "default:lanternfruit_log_slant")
+minetest.register_alias("default:lanterfruit_log_slant_inner", "default:lanternfruit_log_slant_inner")
+minetest.register_alias("default:lanterfruit_log_slant_outer", "default:lanternfruit_log_slant_oute")
+minetest.register_alias("default:lanterfruit_log_slab", "default:lanternfruit_log_slab")
 
 qts.register_shaped_node ("default:coffee_wood_planks", {
 	description = "Coffee Wood Planks",
@@ -709,7 +718,7 @@ qts.register_shaped_node ("default:swamp_wood_planks", {
 	palette = "default_palette_paint_light.png",
 })
 
-minetest.register_node("default:swamp_tree", {
+minetest.register_node("default:swamp_log", {
 	description = "Swamp Log",
 	tiles = {
 		"default_swamp_log_top.png",
@@ -728,6 +737,8 @@ minetest.register_node("default:swamp_tree", {
 		}
 	}
 })
+--alias for worldgen purposes
+minetest.register_alias("default:swamp_tree", "default:swamp_log")
 --END wood
 
 --BEGIN shrooms
@@ -1067,32 +1078,7 @@ minetest.register_node("default:pine_leaves", {
 	after_place_node = qtcore.after_place_leaves;
 })
 
---[[
-minetest.register_node("default:palm_leaves", {
-	description = "Palm Leaf",
-	tiles = {
-		"default_palm_leaves_hfaces.png",
-		"default_palm_leaves_hfaces.png",
-		"default_cement.png",
-		"default_mahogany_top.png",
-		"default_palm_leaves_rfaces.png",
-		"default_palm_leaves_gfaces.png"
-	},
-	drawtype = "nodebox",
-	paramtype = "light",
-	groups = {snappy = 3, flammable = 2, leaves = 1},
-	walkable = false,
-	climbable = true,
-	sounds = qtcore.node_sound_grass(),
-	after_place_node = qtcore.after_place_leaves;
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{-0.5, -0.3, -0.1875, 3.5, 0.0625, 0.25},
-		}
-	}
-})
---]]
+
 --END leaves
 
 
@@ -1480,3 +1466,17 @@ minetest.register_node("default:flour_bowl", {
 	},
 	sounds = qtcore.node_sound_stone(),
 })
+
+local names = {"swamp", "rosewood", "pine", "oak", "mahogany", "lanternfruit", "coffee", "aspen", "apple", "rowan"}
+local defs = {"Swamp Wood", "Rosewood", "Pine", "Oak", "Mahopgany", "Lanternfruit Wood", "Coffee Wood", "Aspen", "Applewood", "Rowan"}
+
+for i, n in ipairs(names) do
+    minetest.register_node ("default:bookshelf_"..n, {
+    	description = defs[i] .. " Bookshelf",
+    	tiles = {{name = "default_"..n.."_wood.png", align_style = "node"}, {name = "default_"..n.."_wood.png", align_style = "node"}, "default_bookshelf_"..n..".png"},
+    	paramtype2 = "facedir",
+    	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, bookshelf=1},
+    	sounds = qtcore.node_sound_wood(),
+    })
+end
+

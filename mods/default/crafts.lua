@@ -1,93 +1,31 @@
 
---Wood planks
-qts.register_craft({
-	ingredients = {"default:oak_log 1"},
-	results = {"default:oak_wood_planks 4"},
-})
-qts.register_craft({
-	ingredients = {"default:rowan_log 1"},
-	results = {"default:rowan_wood_planks 4"},
-})
-qts.register_craft({
-	ingredients = {"default:apple_log 1"},
-	results = {"default:apple_wood_planks 4"},
-})
-qts.register_craft({
-	ingredients = {"default:aspen_log 1"},
-	results = {"default:aspen_wood_planks 4"},
-})
-qts.register_craft({
-	ingredients = {"default:lanterfruit_log 1"},
-	results = {"default:lanternfruit_wood_planks 4"},
-})
-qts.register_craft({
-	ingredients = {"default:coffee_log 1"},
-	results = {"default:coffee_wood_planks 4"},
-})
-qts.register_craft({
-	ingredients = {"default:rosewood_log"},
-	results = {"default:rosewood_wood_planks 4"},
-})
-qts.register_craft({
-	ingredients = {"default:mahogany_log 1"},
-	results = {"default:mahogany_wood_planks 4"},
-})
-qts.register_craft({
-	ingredients = {"default:pine_log 1"},
-	results = {"default:pine_wood_planks 4"},
-})
-qts.register_craft({
-	ingredients = {"default:swamp_tree 1"},
-	results = {"default:swamp_wood_planks 1"},
-})
-
-
---fences
-qts.register_craft({
-	ingredients = {"default:oak_wood_planks 2"},
-	results = {"default:oak_wood_fence 4"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"default:rowan_wood_planks 2"},
-	results = {"default:rowan_wood_fence 4"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"default:apple_wood_planks 2"},
-	results = {"default:apple_wood_fence 4"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"default:aspen_wood_planks 2"},
-	results = {"default:aspen_wood_fence 4"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"default:lanternfruit_wood_planks 2"},
-	results = {"default:lanternfruit_wood_fence 4"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"default:coffee_wood_planks 2"},
-	results = {"default:coffee_wood_fence 4"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"default:rosewood_wood_planks 2"},
-	results = {"default:rosewood_wood_fence 4"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"default:mahogany_wood_planks 2"},
-	results = {"default:mahogany_wood_fence 4"},
-	near = {"group:workbench"},
-})
-qts.register_craft({
-	ingredients = {"default:pine_wood_planks 2"},
-	results = {"default:pine_wood_fence 4"},
-	near = {"group:workbench"},
-})
+--wood permutations
+local names = {"swamp", "rosewood", "pine", "oak", "mahogany", "lanternfruit", "coffee", "aspen", "apple", "rowan"}
+for i, n in ipairs(names) do
+	--planks
+	qts.register_craft({
+		ingredients = {"default:"..n.."_log 1"},
+		results = {"default:"..n.."_wood_planks 4"},
+	})
+	--fences
+	qts.register_craft({
+		ingredients = {"default:"..n.."_wood_planks 2"},
+		results = {"default:"..n.."_wood_fence 4"},
+		near = {"group:workbench"},
+	})
+	--crates
+	qts.register_craft({
+		ingredients = {"default:"..n.."_wood_planks 4"},
+		results = {"default:crate_"..n},
+		near = {"group:workbench"},
+	})
+	--bookshelf
+	qts.register_craft({
+		ingredients = {"default:"..n.."_wood_planks 3", "default:book 3"},
+		results = {"default:bookshelf_"..n},
+		near = {"group:workbench"},
+	})
+end
 
 
 --knife recipies
@@ -122,66 +60,6 @@ qts.register_craft({
 	near = {"group:workbench"},
 })
 
---crate crafts
-qts.register_craft({
-	ingredients = {"default:oak_wood_planks 4"},
-	results = {"default:crate_oak"},
-	near = {"group:workbench"},
-})
-
-qts.register_craft({
-	ingredients = {"default:apple_wood_planks 4"},
-	results = {"default:crate_apple"},
-	near = {"group:workbench"},
-})
-
-qts.register_craft({
-	ingredients = {"default:aspen_wood_planks 4"},
-	results = {"default:crate_aspen"},
-	near = {"group:workbench"},
-})
-
-qts.register_craft({
-	ingredients = {"default:lanternfruit_wood_planks 4"},
-	results = {"default:crate_laternfruit"},
-	near = {"group:workbench"},
-})
-
-qts.register_craft({
-	ingredients = {"default:rowan_wood_planks 4"},
-	results = {"default:crate_rowan"},
-	near = {"group:workbench"},
-})
-
-qts.register_craft({
-	ingredients = {"default:pine_wood_planks 4"},
-	results = {"default:crate_pine"},
-	near = {"group:workbench"},
-})
-
-qts.register_craft({
-	ingredients = {"default:swamp_wood_planks 4"},
-	results = {"default:crate_swamp"},
-	near = {"group:workbench"},
-})
-
-qts.register_craft({
-	ingredients = {"default:mahogany_wood_planks 4"},
-	results = {"default:crate_mahogany"},
-	near = {"group:workbench"},
-})
-
-qts.register_craft({
-	ingredients = {"default:coffee_wood_planks 4"},
-	results = {"default:crate_coffee"},
-	near = {"group:workbench"},
-})
-
-qts.register_craft({
-	ingredients = {"default:rosewood_wood_planks 4"},
-	results = {"default:crate_rosewood"},
-	near = {"group:workbench"},
-})
 
 
 --various other

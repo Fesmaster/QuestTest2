@@ -85,15 +85,3 @@ minetest.register_craftitem("default:book", {
     end,
 })
 
-local names = {"swamp", "rosewood", "pine", "oak", "mahogany", "lanternfruit", "coffee", "aspen", "apple", "rowan"}
-local defs = {"Swamp Wood", "Rosewood", "Pine", "Oak", "Mahopgany", "Lanternfruit Wood", "Coffee Wood", "Aspen", "Applewood", "Rowan"}
-
-for i, n in ipairs(names) do
-    minetest.register_node ("default:default_bookshelf_"..n, {
-    	description = defs[i] .. " Bookshelf",
-    	tiles = {{name = "default_"..n.."_wood.png", align_style = "node"}, {name = "default_"..n.."_wood.png", align_style = "node"}, "default_bookshelf_"..n..".png"},
-    	paramtype2 = "facedir",
-    	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, bookshelf=1},
-    	sounds = qtcore.node_sound_wood(),
-    })
-end

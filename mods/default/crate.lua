@@ -54,7 +54,7 @@ qts.register_chest("default:crate_mahogany", {
 	get_chest_formspec = qtcore.get_default_chest_formspec,
 })
 
-qts.register_chest("default:crate_laternfruit", {
+qts.register_chest("default:crate_lanternfruit", {
 	description = "Lantern Tree Wood Crate",
 	tiles = {"default_crate_lanternfruit.png"},
 	groups = {choppy = 2, oddly_breakable_by_hand = 2},
