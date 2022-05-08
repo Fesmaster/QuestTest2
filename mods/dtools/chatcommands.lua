@@ -14,15 +14,7 @@ minetest.register_chatcommand("natleaves", {
 	end
 })
 
-minetest.register_chatcommand("toys", {
-	params = "<text>",
-	description = "Get you some toys",
-	func = function(name, param)
-		local inv = minetest.get_player_by_name(name):get_inventory()
-		inv:add_item("main", "dtools:testingTool")
-		inv:add_item("main", "dtools:gauntlet")
-	end,
-})
+
 
 minetest.register_chatcommand("playground", {
 	params = "None",
@@ -164,5 +156,61 @@ minetest.register_chatcommand("checkhand", {
 			end
 		end
 		minetest.chat_send_player(name, "item failure")
+	end
+})
+
+
+local scme_current_schematic = nil
+local scme_path = minetest.get_modpath("qtcore") .. "/schems/"
+
+
+minetest.register_chatcommand("scme_load", {
+	params = "<filename>",
+	description = "Loads the schematic of the specified filename to edit",
+	func = function(name, param)
+		scme_current_schematic = minetest.read_schematic(scme_path..param, {write_yslice_prob = "all"})
+		minetest.log("Loaded File")
+	end
+})
+
+minetest.register_chatcommand("scme_dump", {
+	params = "none",
+	description = "dumps the luatable of the currently edited schematic to the log",
+	func = function(name, param)
+		minetest.log(dump(scme_current_schematic))
+	end
+})
+
+minetest.register_chatcommand("scme_write", {
+	params = "<newfilename>",
+	description = "writes the currently edited schematic to the supplied filename, in the world directory",
+	func = function(name, param)
+		if scme_current_schematic then
+			local serialzied = minetest.serialize_schematic(scme_current_schematic, "mts", {})
+			dtools.writeToFile("/" .. param, serialzied, true)
+			minetest.log("Tried to Save File")
+		end
+	end
+})
+
+minetest.register_chatcommand("scme_repair_alias", {
+	params = "None",
+	description = "repairs alias names in the currently edited schematic",
+	func = function(name, param)
+		if scme_current_schematic then
+			--minetest.registered_aliases
+			for i, blob  in ipairs(scme_current_schematic.data) do
+				local origName = blob.name
+				local tn = minetest.registered_aliases[blob.name]
+				while(tn) do
+					blob.name = tn
+					tn = minetest.registered_aliases[blob.name]
+				end
+				if (origName ~= blob.name) then
+					minetest.log("replaced [" ..origName .. "] with [" .. blob.name .. "]")
+				end
+			end
+			minetest.log("Alias repair completed.")
+		end
 	end
 })
