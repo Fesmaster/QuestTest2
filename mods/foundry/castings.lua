@@ -15,7 +15,7 @@ foundry.register_casting_type("anvil", {
 	block_tiles = {"foundry_anvil_mold.png"},
 })
 
-foundry.register_casting_recepie("anvil", {
+foundry.register_casting_recipe("anvil", {
 	metal = "steel",
 	result = "default:anvil 1",
 })

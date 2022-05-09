@@ -1,6 +1,6 @@
 
-foundry.registered_casting_recepies = {}
-local RCR = foundry.registered_casting_recepies
+foundry.registered_casting_recipes = {}
+local RCR = foundry.registered_casting_recipes
 
 
 --[[
@@ -15,8 +15,8 @@ def contains - {
 function foundry.register_casting_type(name, def)
 	def.name = name
 	
-	def.recepies = {}
-	RCR[name] = def
+	def.recipes = {}
+	
 	
 	minetest.register_node ("foundry:"..name.."_mold", {
 		description = def.description .. " Mold",
@@ -26,7 +26,7 @@ function foundry.register_casting_type(name, def)
 		sounds = qtcore.node_sound_stone(),
 		can_cast = function(pos, node, FD, caster)
 			if node.param2 == 0 and FD then
-				local Recp = RCR[name].recepies[FD.metalID]
+				local Recp = RCR[name].recipes[FD.metalID]
 				if Recp then
 					--FD:has_metal(1)
 					local metalVol = Recp.volume or RCR[name].volume or 1
@@ -43,7 +43,7 @@ function foundry.register_casting_type(name, def)
 			--minetest.log("Func Called")
 			if node.param2 == 0 and FD then
 				local meta = minetest.get_meta(pos)
-				local Recp = RCR[name].recepies[FD.metalID]
+				local Recp = RCR[name].recipes[FD.metalID]
 				if Recp then
 					--set metal type
 					meta:set_string("metalType", FD.metalID)
@@ -70,17 +70,19 @@ function foundry.register_casting_type(name, def)
 				--minetest.log("Meta: "..dump(metalID))
 				
 				if metalID ~= "" then
-					local Recp = RCR[name].recepies[metalID]
+					local Recp = RCR[name].recipes[metalID]
 					
 					if Recp then
 						minetest.handle_node_drops(pos, {ItemStack(Recp.result)}, digger)
 					end
 				end
 			end
-			minetest.node_dig(pos, node, digger)
-			return
+			return minetest.node_dig(pos, node, digger)
 		end,
 	})
+
+	def.block_name = "foundry:"..name.."_mold"
+	RCR[name] = def
 end
 
 
@@ -90,13 +92,31 @@ def = {
 	metal = "metal name",
 	volume = 1, --overrides the volume given in recepie type
 	result = "itemstring"
-	
 }
 ]]
-function foundry.register_casting_recepie(rtype, def)
+function foundry.register_casting_recipe(rtype, def)
 	if RCR[rtype] then
+
+		local ingotName = ""
+		local metalDef = foundry.registered_metals[def.metal]
+		if metalDef then
+			ingotName = metalDef.ingot
+		end
+		if def.result ~= ingotName then
+			qts.register_reference_craft({
+				ingredients = {ingotName .. " " .. (def.volume or RCR[rtype].volume or 1), RCR[rtype].block_name },
+				results = {def.result},
+				description = "Foundry Casting. Uses metal: " .. def.metal 
+			})
+		end
+
 		def.rtype = rtype
 		def.result = ItemStack(def.result):to_string()
-		RCR[rtype].recepies[def.metal] = def
+		RCR[rtype].recipes[def.metal] = def
 	end
+end
+
+function foundry.register_casting_recepie(a, b)
+	error("UNSUPPORTED FUNCTION. should be 'register_casting_recipe'")
+	return foundry.register_casting_recipe(a, b)
 end

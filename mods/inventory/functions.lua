@@ -142,51 +142,62 @@ inventory.get_craft_area = function(data, name, pos)
 				i = i+1;
 				if i > 4 then break end
 			end
-			--near items
-			i = 0
-			for item, v in pairs(recip.near) do
-				local name = ItemStack(item):get_name()
-				local count = ItemStack(item):get_count()
-				local desc = "ERROR-TYPE"
-				if minetest.registered_items[name] then
-					desc = minetest.registered_items[name].description
+
+			if recip.type ~= "reference" then
+				--near items
+				i = 0
+				for item, v in pairs(recip.near) do
+					local name = ItemStack(item):get_name()
+					local count = ItemStack(item):get_count()
+					local desc = "ERROR-TYPE"
+					if minetest.registered_items[name] then
+						desc = minetest.registered_items[name].description
+					end
+					if (qts.is_group(item)) then
+						name = qts.remove_modname_from_item(name)
+						cs = cs .."item_image["..P(i,4)..";1,1;".. (inventory.exemplar[name] or "inventory:groupItem") .. "]"..
+							"tooltip["..P(i,4)..";1,1;Group: ".. name .. " ("..count..")" .. "]"
+					else
+						cs = cs .."item_image["..P(i,4)..";1,1;" ..item.."]"..
+							"tooltip["..P(i,4)..";1,1;".. desc .. "]"
+					end
+					i = i+1;
+					if i > 4 then break end
 				end
-				if (qts.is_group(item)) then
-					name = qts.remove_modname_from_item(name)
-					cs = cs .."item_image["..P(i,4)..";1,1;".. (inventory.exemplar[name] or "inventory:groupItem") .. "]"..
-						"tooltip["..P(i,4)..";1,1;Group: ".. name .. " ("..count..")" .. "]"
-				else
-					cs = cs .."item_image["..P(i,4)..";1,1;" ..item.."]"..
-						"tooltip["..P(i,4)..";1,1;".. desc .. "]"
+				i = 0
+				--held items
+				for item, v in pairs(recip.held) do
+					local name = ItemStack(item):get_name()
+					local desc = "ERROR-TYPE"
+					if minetest.registered_items[name] then
+						desc = minetest.registered_items[name].description
+					end
+					if (qts.is_group(item)) then
+						name = qts.remove_modname_from_item(name)
+						cs = cs .."item_image["..P(i+5.5,4)..";1,1;".. (inventory.exemplar[name] or "inventory:groupItem") .. "]"..
+							"tooltip["..P(i+5.5,4)..";1,1;Group: ".. name .. "]"
+					else
+						cs = cs .."item_image["..P(i+5.5,4)..";1,1;" ..item.."]"..
+							"tooltip["..P(i+5.5,4)..";1,1;".. desc .. "]"
+					end
+					i = i+1;
+					if i > 4 then break end
 				end
-				i = i+1;
-				if i > 4 then break end
-			end
-			i = 0
-			--held items
-			for item, v in pairs(recip.held) do
-				local name = ItemStack(item):get_name()
-				local desc = "ERROR-TYPE"
-				if minetest.registered_items[name] then
-					desc = minetest.registered_items[name].description
+
+				if (qts.player_can_craft(recip, name)) then
+					cs = cs .. "image_button["..P(5,2.25)..";1,1;gui_one.png;craft_one;]" ..
+						"image_button["..P(6.5,2.25)..";1,1;gui_ten.png;craft_ten;]"..
+						"image_button["..P(8,2.25)..";1,1;gui_all.png;craft_all;]"
+					needs_craft_imgs = false
 				end
-				if (qts.is_group(item)) then
-					name = qts.remove_modname_from_item(name)
-					cs = cs .."item_image["..P(i+5.5,4)..";1,1;".. (inventory.exemplar[name] or "inventory:groupItem") .. "]"..
-						"tooltip["..P(i+5.5,4)..";1,1;Group: ".. name .. "]"
-				else
-					cs = cs .."item_image["..P(i+5.5,4)..";1,1;" ..item.."]"..
-						"tooltip["..P(i+5.5,4)..";1,1;".. desc .. "]"
-				end
-				i = i+1;
-				if i > 4 then break end
-			end
-			
-			if (qts.player_can_craft(recip, name)) then
-				cs = cs .. "image_button["..P(5,2.25)..";1,1;gui_one.png;craft_one;]" ..
-					"image_button["..P(6.5,2.25)..";1,1;gui_ten.png;craft_ten;]"..
-					"image_button["..P(8,2.25)..";1,1;gui_all.png;craft_all;]"
+				--add the labels back in
+				cs = "label["..P(0,3.9)..";Required Nearby Nodes:]"..
+					"label["..P(5.5,3.9)..";Required Held Items:]".. 
+					cs
+
+			else
 				needs_craft_imgs = false
+				cs = "label["..P(0,3.9)..";"..esc(recip.description).."]" .. cs
 			end
 		end
 	end
@@ -207,8 +218,6 @@ inventory.get_craft_area = function(data, name, pos)
 			"tooltip["..P(4.5,-0.25)..";1,1;Prev Recipe]"..
 		"image_button["..P(8.5, -0.25)..";1,1;rshift.png;craft_next;]"..
 			"tooltip["..P(8.5,-0.25)..";1,1;Next Recipe]"..
-		"label["..P(0,3.9)..";Required Nearby Nodes:]"..
-		"label["..P(5.5,3.9)..";Required Held Items:]"..
 		cs ..
 		"container_end[]"
 end

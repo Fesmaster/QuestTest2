@@ -228,8 +228,7 @@ minetest.register_node ("foundry:ingot_mold", {
 				end
 			end
 		end
-		minetest.node_dig(pos, node, digger)
-		return
+		return minetest.node_dig(pos, node, digger)
 	end,
 })
 
@@ -278,8 +277,7 @@ minetest.register_node ("foundry:block_mold", {
 				end
 			end
 		end
-		minetest.node_dig(pos, node, digger)
-		return
+		return minetest.node_dig(pos, node, digger)
 	end,
 })
 

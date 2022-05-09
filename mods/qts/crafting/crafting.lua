@@ -51,6 +51,10 @@ qts.create_craft_recipe = function(recip)
 	for k, v in ipairs(recip.results) do
 		t.results[v] = 1 
 	end
+	if t.type == "reference" then
+		--reference recipes are not actually craftable
+		t.description = recip.description or "Unknown Reference Recipe"
+	end
 	return t
 end
 
@@ -72,7 +76,10 @@ qts.register_craft = function(recip)
 	end
 end
 
-
+qts.register_reference_craft = function(recip)
+	recip.type = "reference"
+	qts.register_craft(recip)
+end
 
 --[[
 gets a list of crafting recipes that result in a particular item.
@@ -102,6 +109,8 @@ end
 Checks if the player can craft a specific recipe.
 --]]
 qts.player_can_craft = function(recipe, player)
+	--reference recipes are not craftable
+	if recipe.type == "reference" then return false end
 	if type(player) == "string" then
 		player = minetest.get_player_by_name(player)
 	end

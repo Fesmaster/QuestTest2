@@ -633,6 +633,13 @@ foundry.register_metal = function(name, def)
 		metal = def.name,
 		metal_ammount = 16,
 	})
+
+	
+	qts.register_reference_craft({
+		ingredients = {def.ingot .. " 16", "foundry:block_mold"},
+		results = {def.block},
+		description = "Foundry Casting. Uses metal: " .. name 
+	})
 	
 end
 
@@ -663,6 +670,19 @@ foundry.register_smeltable = function(def)
 		if not def.metal_ammount then 
 			def.metal_ammount = 1
 			minetest.log("warning", "Foundry: Declare a metal_ammount in register_smeltable if the type = melt")
+		end
+
+		local ingotName = ""
+		local metalDef = foundry.registered_metals[def.metal]
+		if metalDef then
+			ingotName = metalDef.ingot
+		end
+		if def.itemname ~= ingotName then
+			qts.register_reference_craft({
+				ingredients = {def.itemname},
+				results = {ingotName .. " " .. def.metal_ammount},
+				description = "Foundry Smelting. Becomes metal: " .. def.metal 
+			})
 		end
 	end
 	foundry.registered_smeltables[def.itemname] = def
