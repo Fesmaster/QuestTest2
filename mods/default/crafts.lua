@@ -132,6 +132,12 @@ qts.register_craft({
 })
 
 qts.register_craft({
+	ingredients = {"group:wood 4", "default:underbrush_item 4"},
+	results = {"default:sifter"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
 	ingredients = {"default:workbench", "default:iron_bar 4"},
 	results = {"default:workbench_heavy",},
 })
