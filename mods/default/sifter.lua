@@ -163,7 +163,7 @@ register_sifter({
 
 register_sifter({
     name = "gravel",
-    description = "Girt",
+    description = "Dirt",
     tiles = "default_gravel.png",
     node = "default:gravel",
     results = {"default:flint"}
