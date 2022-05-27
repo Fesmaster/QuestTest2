@@ -101,24 +101,24 @@ qts.register_craft({
 	near = {"group:workbench"},
 })
 
---doesnt work, wont let any wood craft it
+
 qts.register_craft({
 	ingredients = {"default:dishes_clay", "group:wood 3"},
 	results = {"default:food_table"},
 	near = {"group:workbench"},
 })
 
---not working because default:grain 4 undefined
+
 qts.register_craft({
-	ingredients = {"default:dishes_clay", "default:grain 4"},
+	ingredients = {"default:dishes_clay", "default:herb_grain 4"},
 	results = {"default:flour_bowl"},
 	near = {"default:food_table"},
 })
 
 --not working b/c default:bucket_water not defined
 qts.register_craft({
-	ingredients = {"default:dishes_clay", "default:bucket_water"},
-	results = {"default:water_cups", "default:bucket"},
+	ingredients = {"default:dishes_clay", "default:bucket_default_water"},
+	results = {"default:water_vessels", "default:bucket"},
 })
 
 qts.register_craft({
