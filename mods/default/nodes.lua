@@ -791,8 +791,29 @@ minetest.register_node("default:gold_shroom_spore", {
 	}
 })
 
+qts.register_shaped_node ("default:brown_mushroom_trunk", {
+	description = "Brown Mushroom Trunk",
+	tiles = {"default_mushroom_brown_top.png", "default_mushroom_brown_top.png", "default_mushroom_brown_side.png"},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2},
+	sounds = qtcore.node_sound_wood(),
+})
 
+qts.register_shaped_node ("default:brown_mushroom_cap", {
+	description = "Brown Mushroom Cap",
+	tiles = {"default_mushroom_gold_cap.png"},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2},
+	sounds = qtcore.node_sound_wood(),
+})
 
+qts.register_shaped_node ("default:brown_mushroom_cap", {
+	description = "Brown Mushroom Cap",
+	tiles = {"default_mushroom_brown_cap.png"},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2},
+	sounds = qtcore.node_sound_wood(),
+})
 
 
 --END shrooms
@@ -1353,6 +1374,7 @@ minetest.register_node("default:dishes_clay", {
 			"default_dishes_clay.png",
 		},
 	drawtype = "nodebox",
+	inventory_image = "default_dishes_clay_item.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3},
@@ -1385,6 +1407,7 @@ minetest.register_node("default:dishes_greenware", {
 			"default_dishes_greenware.png",
 		},
 	drawtype = "nodebox",
+	inventory_image = "default_dishes_greenware_item.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3},
@@ -1419,6 +1442,7 @@ minetest.register_node("default:water_vessels", {
 			"default_dishes_clay.png"
 		},
 	drawtype = "nodebox",
+	inventory_image = "default_water_vessel_item.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3},
@@ -1449,6 +1473,7 @@ minetest.register_node("default:flour_bowl", {
 			"default_flour_bowl_side.png"
 		},
 	drawtype = "nodebox",
+	inventory_image = "default_flour_bowl_item.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3},
