@@ -115,6 +115,11 @@ qts.register_craft({
 	near = {"default:food_table"},
 })
 
+qts.register_craft({
+	ingredients = {"default:flour_bowl"},
+	results = {"default:bread"},
+	near = {"default:food_table", "group:furnace"},
+})
 --not working b/c default:bucket_water not defined
 qts.register_craft({
 	ingredients = {"default:dishes_clay", "default:bucket_default_water"},

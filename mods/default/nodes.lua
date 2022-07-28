@@ -1489,7 +1489,31 @@ minetest.register_node("default:flour_bowl", {
 		{ -1/16, -4/16, -2/16, 2/16, -3/16, 1/16, },
 		},
 	},
-	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:bread", {
+	description = "Bread",
+	tiles = {
+			"default_bread_top.png",
+			"default_bread_top.png",
+			"default_bread_side.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_bread_item.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -3/16, -8/16, -5/16, 3/16, -6/16, 5/16, },
+		{ -3/16, -6/16, -3/16, 3/16, -5/16, 3/16, },
+		{ -2/16, -5/16, -2/16, 2/16, -4/16, 2/16, },
+		{ -5/16, -8/16, -3/16, 5/16, -6/16, 3/16, },
+		{ -4/16, -8/16, -4/16, 4/16, -6/16, 4/16, },
+		},
+	},
+	on_use = minetest.item_eat(4),
 })
 
 local names = {"swamp", "rosewood", "pine", "oak", "mahogany", "lanternfruit", "coffee", "aspen", "apple", "rowan"}
