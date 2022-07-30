@@ -127,6 +127,17 @@ register_farm_plant("milfoil", {
 	grow_timer_random = 30,
 })
 
+register_farm_plant("goard", {
+	description = "Goard",
+	seed_image = "default_seeds_milfoil_item.png",
+	seed_tiles = {"default_seeds_milfoil_top.png", "default_oak_wood.png", "default_seeds_milfoil_side.png"},
+	item_image = "default_herb_goard.png",
+	plant_levels = 5,
+	plant_tiles_list = {"default_plant_0.png", "default_herb_goard_1.png", "default_herb_goard_2.png", "default_herb_goard_3.png", "default_herb_goard_4.png"},
+	grow_timer = 90,
+	grow_timer_random = 30,
+})
+
 register_farm_plant("wolfshood", {
 	description = "Wolfshood",
 	seed_image = "default_seeds_wolfshood_item.png",
