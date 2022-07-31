@@ -216,16 +216,32 @@ qts.register_shaped_node ("default:brick", {
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
+--[[qtcore.register_artistic_nodes("default:brick",{
+	description = "Brick",
+	tiles = {"default_brick.png"},
+	groups = {cracky=3, stone=1, desert_stone=1},
+	sounds = qtcore.node_sound_stone(),
+	craft_group = "brick",
+})
+]]--
 
-qts.register_shaped_node ("default:brick_grey", {
-	description = "Grey Brick",
-	tiles = {"default_brick_grey.png"},
+qts.register_shaped_node ("default:brick_gray", {
+	description = "Gray Brick",
+	tiles = {"default_brick_gray.png"},
 	groups = {cracky=3, bricks=1, grey_stone=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
+--[[qtcore.register_artistic_nodes("default:brick_gray",{
+	description = "Gray Brick",
+	tiles = {"default_brick_gray.png"},
+	groups = {cracky=3, stone=1, desert_stone=1},
+	sounds = qtcore.node_sound_stone(),
+	craft_group = "brick_gray",
+})
+]]--
 --END brick
 --END stone
 
