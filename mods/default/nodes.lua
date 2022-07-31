@@ -216,16 +216,32 @@ qts.register_shaped_node ("default:brick", {
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
+--[[qtcore.register_artistic_nodes("default:brick",{
+	description = "Brick",
+	tiles = {"default_brick.png"},
+	groups = {cracky=3, stone=1, desert_stone=1},
+	sounds = qtcore.node_sound_stone(),
+	craft_group = "brick",
+})
+]]--
 
-qts.register_shaped_node ("default:brick_grey", {
-	description = "Grey Brick",
-	tiles = {"default_brick_grey.png"},
+qts.register_shaped_node ("default:brick_gray", {
+	description = "Gray Brick",
+	tiles = {"default_brick_gray.png"},
 	groups = {cracky=3, bricks=1, stone=1, grey_stone=1, generation_artificial=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
+--[[qtcore.register_artistic_nodes("default:brick_gray",{
+	description = "Gray Brick",
+	tiles = {"default_brick_gray.png"},
+	groups = {cracky=3, stone=1, desert_stone=1},
+	sounds = qtcore.node_sound_stone(),
+	craft_group = "brick_gray",
+})
+]]--
 --END brick
 --END stone
 
@@ -1493,7 +1509,7 @@ minetest.register_node("default:flour_bowl", {
 	},
 })
 
-minetest.register_node("default:bread", {
+--[[minetest.register_node("default:bread", {
 	description = "Bread",
 	tiles = {
 			"default_bread_top.png",
@@ -1516,7 +1532,7 @@ minetest.register_node("default:bread", {
 		},
 	},
 	on_use = minetest.item_eat(4),
-})
+})]]--
 
 local names = {"swamp", "rosewood", "pine", "oak", "mahogany", "lanternfruit", "coffee", "aspen", "apple", "rowan"}
 local defs = {"Swamp Wood", "Rosewood", "Pine", "Oak", "Mahopgany", "Lanternfruit Wood", "Coffee Wood", "Aspen", "Applewood", "Rowan"}

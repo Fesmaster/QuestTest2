@@ -270,3 +270,21 @@ qts.register_fencelike_node("default:desert_sandstone_cobble_wall", {
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
+qts.register_fencelike_node("default:brick_wall", {
+	description = "Brick Wall",
+	type = "wall",
+	tiles = {"default_brick.png"},
+	groups = {cracky=3, stone=1, grey_stone=1},
+	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
+qts.register_fencelike_node("default:brick_gray_wall", {
+	description = "Gray Brick Wall",
+	type = "wall",
+	tiles = {"default_brick_gray.png"},
+	groups = {cracky=3, stone=1, grey_stone=1},
+	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
