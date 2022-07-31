@@ -22,7 +22,73 @@ qts.register_torch(name, def)
 	no special things
 --]]
 
---BEGIN shaped node
+--[[
+Given a node name, try and guess the permutation type
+this may not work well for some nodes, particularly shaped nodes
+]]
+function qts.shaped_node_permutation(name)
+	if name:find("_stair") then
+		if name:find("_inner") then
+			return "stair_inner"
+		elseif name:find ("_outer") then
+			return "stair_outer"
+		else
+			return "stair"
+		end
+	elseif name:find("_slant") then
+		if name:find("_inner") then
+			return "slant_inner"
+		elseif name:find ("_outer") then
+			return "slant_outer"
+		else
+			return "slant"
+		end
+	elseif name:find("_slab") then
+		return "slab"
+	else
+		return "full"
+	end
+end
+
+local function purge_shape_perm_from_name(name)
+	name:gsub("_inner", "")
+	name:gsub("_outer", "")
+	name:gsub("_stair", "")
+	name:gsub("_slant", "")
+	name:gsub("_slab", "")
+	return name
+end
+
+--[[
+	Get the name of a permutation of a shaped node
+]]
+function qts.shaped_node_name(name, permutation)
+	name = purge_shape_perm_from_name(name)
+	if permutation == "full" then
+		return name	
+	elseif permutation == "stair" then
+		return name .. "_stair"
+	elseif permutation == "stair_inner" then
+		return name .. "_stair_inner"
+	elseif permutation == "stair_outer" then
+		return name .. "_stair_outer"
+	elseif permutation == "slant" then
+		return name .. "_slant"
+	elseif permutation == "slant_inner" then
+		return name .. "_slant_inner"
+	elseif permutation == "slant_outer" then
+		return name .. "_slant_outer"
+	elseif permutation == "slab" then
+		return name .. "_slab"
+	else
+		minetest.log("Incorrect permutation passed to qts.shaped_node_name: " .. permutation)
+		return name
+	end
+end
+
+--[[
+	Nothing special beyond minetest.register_node
+]]
 function qts.register_shaped_node(name, def)
 	--prep the data for node registration
 	if (def.drop == nil) then
@@ -229,10 +295,15 @@ function qts.register_shaped_node(name, def)
 	minetest.register_node(":"..name.."_slab", qts.table_deep_copy(def))
 	--TODO: implement more shapes
 end
---END shaped node
 
---BEGIN fence
+
+
 local fence_collision_extra = minetest.settings:get_bool("enable_fence_tall") and 3/8 or 0
+
+--[[
+besides the defaults from minetest.register_node, must contain:  
+	type = [fence, rail, wall, pane]
+]]
 function qts.register_fencelike_node(name, def)
 	if not def.type then minetest.log("qts.register_fencelike_node: the node def must contain type = [fence, rail, wall, pane]") end
 	if def.texture and not def.tiles then
@@ -484,7 +555,7 @@ function qts.register_fencelike_node(name, def)
 	minetest.register_node(":"..name, def)
 end
 
---BEGIN pane
+
 --this is almost entirely copied from xpanes, but contains a few tweaks
 local function is_pane(pos)
 	return minetest.get_item_group(minetest.get_node(pos).name, "pane") > 0
@@ -558,8 +629,7 @@ minetest.register_on_dignode(function(pos)
 		update_pane(vector.add(pos, dir))
 	end
 end)
---END pane
---END fence
+
 
 
 
@@ -636,6 +706,9 @@ local function register_bucket_full(bucketid, liquidid)
 	})
 end
 
+--[[
+	contains nothing beyond minetest:register_node
+]]
 function qts.register_liquid(name, def)
 	local defaults = {
 		waving = 3,
@@ -698,12 +771,13 @@ function qts.register_liquid(name, def)
 end
 
 --this func is MUCH more locked in than any of the other.
+
 --[[
-	def contains:
-		description
-		inventory_image
-		groups {bucket_level >= 1}
---]]
+def contains ONLY:  
+	description  
+	inventory_image  
+	groups {bucket_level >= 1}  
+]]
 function qts.register_bucket(name, def)
 	if not def.groups then def.groups = {} end
 	def.groups.tool = 1
@@ -767,9 +841,12 @@ function qts.register_bucket(name, def)
 		register_bucket_full(self_id, lq_id)
 	end
 end
---END liquid
 
---BEGIN ingot
+--[[
+besides the defaults from minetest:register_node, def can contain:  
+	levels = number  
+This is autocalculated from the nodeboxes list length if not supplied.
+]]
 function qts.register_ingot(name, def)
 	--group setup
 	local groups_item = qts.table_deep_copy(def.groups)
@@ -938,9 +1015,29 @@ function qts.register_ingot(name, def)
 		})
 	end
 end
---END ingot
 
---BEGIN torch
+--[[
+	Get the name of a particular torch permutation
+]]
+function qts.torch_name(name, permutation)
+	name:gsub("_ceiling", "")
+	name:gsub("_wall", "")
+	if permutation == "floor" or permutation == "normal" then
+		return name
+	elseif permutation == "wall" then
+		return name .. "_wall"
+	elseif permutation == "ceiling" then
+		return name .. "_ceiling"
+	else
+		minetest.log("Incorrect permutation passed to qts.torch_name: " .. permutation)
+		return name
+	end
+end
+
+--[[
+	def contains nothing besides the defaults from minetest:register_node  
+	drawtype should not be supplied, if it is, it will be overriden.
+]]
 function qts.register_torch(name, def)
 	local sound_flood = def.sound_flood
 	def.sound_flood = nil

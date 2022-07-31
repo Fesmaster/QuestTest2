@@ -162,20 +162,12 @@ end
 
 --[[
 
-qts.inv_contains_group(inv, groupString, [ignoreNames])
-	Search an inventory for items in a specific group
-	inv - inventory userdata
-	groupString - "group:groupname <count>"
-	ignoreNames - set of names to ignore {["name"]=1 ... }
-	
-qts.inv_take_group(inv, groupString, [ignoreNames])
-	Take items from inv that match group
-	Does not take any if there are not enough to remove
-	inv - inventory userdata
-	groupString - "group:groupname <count>"
-	ignoreNames - set of names to ignore {["name"]=1 ... }
+qts.inv_contains_group(inv, groupString, [ignoreNames])  
+	Search an inventory for items in a specific group  
+	inv - inventory userdata  
+	groupString - "group:groupname <count>"  
+	ignoreNames - set of names to ignore {["name"]=1 ... }  
 --]]
-
 function qts.inv_contains_group(inv, groupString, ignoreNames)
 	if not ignoreNames then ignoreNames = {} end
 	local groupStack = ItemStack(groupString)
@@ -201,7 +193,14 @@ function qts.inv_contains_group(inv, groupString, ignoreNames)
 	end
 	return true
 end
-
+--[[
+qts.inv_take_group(inv, groupString, [ignoreNames])  
+	Take items from inv that match group  
+	Does not take any if there are not enough to remove  
+	inv - inventory userdata  
+	groupString - "group:groupname <count>"  
+	ignoreNames - set of names to ignore {["name"]=1 ... }  
+]]
 function qts.inv_take_group(inv, groupString, ignoreNames)
 	if not ignoreNames then ignoreNames = {} end
 	local groupStack = ItemStack(groupString)
@@ -239,17 +238,16 @@ end
 
 
 --[[
-qts.objects_overlapping(objA, objB)
-	checks to see if the collisionbox of objA and objB are overlapping.
-	highly accurate Axis-Alligned Bounding Box overlapping
-	
-	Params: 
-	objA - objref, the first entity
-	objB - objref, the second entity
-	
-	Return: true or false
+qts.objects_overlapping(objA, objB)  
+	checks to see if the collisionbox of objA and objB are overlapping.  
+	highly accurate Axis-Alligned Bounding Box overlapping  
+	  
+	Params:   
+	objA - objref, the first entity  
+	objB - objref, the second entity  
+	  
+	Return: true or false  
 ]]
-
 function qts.objects_overlapping(objA, objB)
 	--get bounding boxes
 	local propsA = objA:get_properties()
@@ -417,3 +415,5 @@ function qts.nodePairs(tbl)
 		end
 	end
 end
+
+

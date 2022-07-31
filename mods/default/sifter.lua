@@ -41,7 +41,7 @@ minetest.register_node("default:sifter", {
 	use_texture_alpha = "clip",
 	drawtype = "nodebox",
 	paramtype = "light",
-	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, sifter=1},
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, sifter=1, generation_artificial=1},
 	node_box = {
 		type = "fixed",
 		fixed = {

@@ -10,7 +10,7 @@ qts.register_torch("default:torch", {
 	}},
 	walkable = false,
 	light_source = 12,
-	groups = {choppy=2, dig_immediate=3, flammable=1, attached_node=1},
+	groups = {choppy=2, dig_immediate=3, flammable=1, attached_node=1, generation_artificial=1},
 	sounds = qtcore.node_sound_wood(),
 })
 

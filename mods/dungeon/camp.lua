@@ -1,0 +1,380 @@
+--[[
+Bandit Camp generation
+
+--]]
+local MIN_CLASSES_PER_CHEST = 3
+local MAX_CLASSES_PER_CHEST = 8
+local MAX_ITEMS_PER_CLASS = 8
+local WATCH_TOWER_HEIGHT_MIN = 2
+local WATCH_TOWER_HEIGHT_MAX = 5
+local CAMP_FEATURES_MIN = 3
+local CAMP_FEATURES_MAX = 7
+local CAMP_SIZE = 7
+
+local woodtypes_plains = {"oak", "rowan", "apple", "aspen"}
+--[[
+Get a table of the materials needed to make a camp
+This can later be randomized, based off of biome
+--]]
+local function get_camp_materials_plains()
+    local wood = woodtypes_plains[math.random(#woodtypes_plains)]
+    return {
+        log = "default:"..wood.."_log",
+        wood = "default:"..wood.."_wood_planks",
+        fence = "default:"..wood.."_wood_fence",
+        crate = "default:crate_"..wood.."",
+
+        ladder = "default:ladder",
+        campfire = "default:campfire_lit",
+        torch = "default:torch",
+    }
+end
+
+local function get_camp_materials_prarie()
+    return {
+        log = "default:rosewood_log",
+        wood = "default:rosewood_wood_planks",
+        fence = "default:rosewood_wood_fence",
+        crate = "default:crate_rosewood",
+
+        ladder = "default:ladder",
+        campfire = "default:campfire_lit",
+        torch = "default:torch",
+    }
+end
+
+local cage_fence_area = {
+    vector.new(-1,0,-1), vector.new(-1,0,0), vector.new(-1,0,1),
+    vector.new(0,0,-1),                      vector.new(0,0,1),
+    vector.new(1,0,-1),  vector.new(1,0,0),  vector.new(1,0,1),
+
+    vector.new(-1,1,-1), vector.new(-1,1,0), vector.new(-1,1,1),
+    vector.new(0,1,-1),                      vector.new(0,1,1),
+    vector.new(1,1,-1),  vector.new(1,1,0),  vector.new(1,1,1),
+
+    vector.new(-1,2,-1), vector.new(-1,2,0), vector.new(-1,2,1),
+    vector.new(0,2,-1),  vector.new(0,2,0),  vector.new(0,2,1),
+    vector.new(1,2,-1),  vector.new(1,2,0),  vector.new(1,2,1),
+}
+local function build_cage(pos, materials)   
+    minetest.set_node(pos, {name="air"})
+    minetest.set_node(pos+ vector.new(0,1,0), {name="air"})
+    for k, v in ipairs(cage_fence_area) do
+        minetest.set_node(pos+ v, {name=materials.fence})
+    end
+end
+
+local campfire_offsets = {vector.new(0,-3,2), vector.new(2,-3,0), vector.new(0,-3,-2), vector.new(-2,-3,0)}
+local function build_fire_pit(pos, materials)
+    minetest.set_node(pos, {name=materials.campfire})
+    for k, v in ipairs(campfire_offsets) do
+        local p = pos + v
+        local foundGround = false
+        for off = 0,3 do
+            p.y = p.y + 1
+            local node = minetest.get_node_or_nil(p)
+            if node and node.name then
+                if node.name == "air" or minetest.get_item_group(node.name, "underbrush") ~= 0 then
+                    if foundGround then
+                        minetest.set_node(p, {name=qts.shaped_node_name(materials.wood, "stair"), param2 = k-1})
+                        break
+                    end
+                else
+                    foundGround = true
+                end
+            end
+        end
+    end
+end
+
+local banit_crate_items = {
+    "default:axe_bronze", "default:axe_copper", "default:axe_flint", 
+    "default:bread", "default:bronze_alloy", "default:bronze_bar", "default:bucket",
+    "default:charcoal", "default:coal", "default:clay_lump", "default:coconut",
+    "default:copper_bar", "default:dishes_clay", "default:flint", 
+    "default:herb_bloodbulb", "default:herb_flax", "default:herb_grain", "default:herb_milfoil",
+    "default:herb_potatoe", "default:herb_wolfshood", "default:hammer_stone",
+    "default:knife_flint",  "default:paper", "default:seed_bloodbulb", "default:seed_flax", 
+    "default:seed_grain", "default:seed_milfoil", "default:seed_potatoe", 
+    "default:seed_wolfshood", "default:shovel_bronze", "default:shovel_copper",
+    "default:sword_bronze", "default:sword_copper", "default:tinderbox", "default:tinder"
+}
+local function build_crate(pos, materials)
+    minetest.set_node(pos, {name=materials.crate})
+    --fill chest with stuff
+    local metaRef = minetest.get_meta(pos)
+    local invRef = metaRef:get_inventory()
+    local class_count = math.random(MIN_CLASSES_PER_CHEST,MAX_CLASSES_PER_CHEST)
+    for k = 1,class_count do
+        --get the item and count
+        local itemname = banit_crate_items[math.random(#banit_crate_items)]
+        local item = ItemStack(itemname)
+        local stack_max = minetest.registered_items[itemname].stack_max
+        if stack_max > 1 then
+            item:set_count(math.random(1,MAX_ITEMS_PER_CLASS))
+        end
+        --place into inventory scattered
+        local placed = false
+        while not placed do
+            local i = math.random(invRef:get_size("main"))
+            if invRef:get_stack("main", i):is_empty() then
+                invRef:set_stack("main", i, item)
+                placed = true;
+            end
+        end
+    end
+end
+
+local tower_offsets = {
+    {
+        -- +X
+        left = vector.new(0,0,1),
+        right = vector.new(0,0,-1),
+        forward = vector.new(1,0,0),
+        backward = vector.new(-1,0,0),
+        floor = 1,
+        ladder = 2,
+        f_roof = 3,
+        r_roof = 0,
+        l_roof = 2,
+        slab = 1,
+    },
+    {
+        -- -X
+        left = vector.new(0,0,-1),
+        right = vector.new(0,0,1),
+        forward = vector.new(-1,0,0),
+        backward = vector.new(1,0,0),
+        floor = 3,
+        ladder = 3,
+        f_roof = 1,
+        r_roof = 2,
+        l_roof = 0,
+        slab = 3,
+    },
+    {
+        -- +Z
+        left = vector.new(-1,0,0),
+        right = vector.new(1,0,0),
+        forward = vector.new(0,0,1),
+        backward = vector.new(0,0,-1),
+        floor = 0,
+        ladder = 4,
+        f_roof = 2,
+        r_roof = 3,
+        l_roof = 1,
+        slab = 0,
+    },
+    {
+        -- -Z
+        left = vector.new(1,0,0),
+        right = vector.new(-1,0,0),
+        forward = vector.new(0,0,-1),
+        backward = vector.new(0,0,1),
+        floor = 2,
+        ladder = 5,
+        f_roof = 0,
+        r_roof = 1,
+        l_roof = 3,
+        slab = 1,
+    },
+}
+local function build_watch_tower(pos, materials)
+    local height = math.random(WATCH_TOWER_HEIGHT_MIN, WATCH_TOWER_HEIGHT_MAX)
+    local rot = math.random(4)
+
+    local perm = tower_offsets[rot]
+    local fr = perm.forward
+    local bk = perm.backward
+    local rt = perm.right
+    local lf = perm.left
+
+    --make the columns
+    for y = 0, height do
+        for x = -1,1 do
+            for z = -1,1 do
+                if x ~= 0 and z ~= 0 then
+                    minetest.set_node(pos + vector.new(x,y,z), {name=materials.fence})
+                else
+                    minetest.set_node(pos + vector.new(x,y,z), {name="air"})
+                end
+            end
+        end
+        minetest.set_node(
+            pos + bk + bk + vector.new(0,y,0), 
+            {name=materials.ladder, param2 = tower_offsets[rot].ladder}
+        )
+    end
+    --vertical offset
+    local off = vector.new(0,height+1,0)
+
+    --make the platform
+    for x = -1,1 do
+        for z = -1,1 do
+            minetest.set_node(pos + vector.new(x,0,z) + off, {name=materials.wood, param2 = perm.floor})
+        end
+    end
+    minetest.set_node(
+        pos + bk + bk + off, 
+        {name=materials.ladder, param2 = perm.ladder}
+    )
+
+    --deal with the stuff above the platform
+    off.y = off.y + 1
+    for x = -1,1 do
+        for z = -1,1 do
+            local v = vector.new(x,0,z)
+            if not vector.equals(v, bk) and (x~=0 or z~=0) then
+                minetest.set_node(v+pos+off, {name=materials.fence})
+            end
+        end
+    end
+
+    off.y = off.y + 1
+    --is it open-top or closed-top?
+    if math.random() > 0.5 then
+        --open top - put torches on corners
+        for x = -1,1 do
+            for z = -1,1 do
+                if x ~= 0 and z ~= 0 then
+                    minetest.set_node(pos+off+vector.new(x,0,z), {name=materials.torch, param2=1})
+                end
+            end
+        end
+    else
+        --closed top
+
+        --add support pillars
+        for x = -1,1 do
+            for z = -1,1 do
+                if x ~= 0 and z ~= 0 then
+                    minetest.set_node(pos+off+vector.new(x,0,z), {name=materials.fence})
+                end
+            end
+        end
+
+        --add the roof
+        off.y=off.y+1
+        --right slope
+        minetest.set_node(pos+off+bk+rt, {name=qts.shaped_node_name(materials.wood, "stair"), param2 = perm.r_roof})
+        minetest.set_node(pos+off+rt, {name=qts.shaped_node_name(materials.wood, "stair"), param2 = perm.r_roof})
+        minetest.set_node(pos+off+fr+rt, {name=qts.shaped_node_name(materials.wood, "stair_outer"), param2 = perm.r_roof})
+        
+        --left slope
+        minetest.set_node(pos+off+bk+lf, {name=qts.shaped_node_name(materials.wood, "stair"), param2 = perm.l_roof})
+        minetest.set_node(pos+off+lf, {name=qts.shaped_node_name(materials.wood, "stair"), param2 = perm.l_roof})
+        minetest.set_node(pos+off+fr+lf, {name=qts.shaped_node_name(materials.wood, "stair_outer"), param2 = perm.f_roof})
+        
+        --front
+        minetest.set_node(pos+off+fr, {name=qts.shaped_node_name(materials.wood, "stair"), param2 = perm.f_roof})
+        
+        --torch
+        minetest.set_node(pos+off, {name=qts.torch_name(materials.torch, "ceiling")})
+
+        --ceiling
+        off.y=off.y+1
+        minetest.set_node(pos+off, {name=qts.shaped_node_name(materials.wood, "slab"), param2 = perm.slab})
+        minetest.set_node(pos+off+bk, {name=qts.shaped_node_name(materials.wood, "slab"), param2 = perm.slab})
+
+    end
+end
+
+local function trace_up(pos, delta)
+    local found_earth = false
+    for y= -delta, delta do
+        local node = minetest.get_node_or_nil(pos + vector.new(0,y,0))
+        if node and node.name then
+            if node.name == "air" or minetest.get_item_group(node.name, "underbrush") ~= 0 then
+                if found_earth then
+                    return pos + vector.new(0,y,0)
+                end
+            elseif minetest.get_item_group(node.name, "log") ~= 0 or 
+                    minetest.get_item_group(node.name, "leaves") ~= 0 or
+                    minetest.get_item_group(node.name, "liquid") ~= 0 then
+                return nil
+            else
+                found_earth = true
+            end
+        end
+    end
+end
+
+local features = {
+    build_cage,
+    build_crate,
+    build_fire_pit,
+    build_watch_tower,
+}
+local function build_camp(pos, materials)
+    local featureCount = math.random(CAMP_FEATURES_MIN, CAMP_FEATURES_MAX)
+    for i =1,featureCount do
+        --pick a random nearby point
+        local offset = vector.new(math.random(-CAMP_SIZE, CAMP_SIZE), 0, math.random(-CAMP_SIZE, CAMP_SIZE))
+        local vAdjust = trace_up(pos+offset, CAMP_SIZE)
+        if (vAdjust) then
+            --pick a random feature and build it
+            features[math.random(#features)](vAdjust, materials)
+        end
+    end
+end
+
+minetest.register_node ("dungeon:camp_generator_plains", {
+	description = "Camp Generator - Plains",
+	tiles = {"default.png"},
+	groups = DUNGEON_GENERATOR_GROUPS,
+	sounds = qtcore.node_sound_defaults(),
+	drop = "",
+	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
+		minetest.set_node(pos, {name="air"})
+		local materials = get_camp_materials_plains()
+        
+        build_camp(pos, materials)
+		return itemstack
+	end
+})
+
+if not qts.ISDEV then
+	minetest.register_lbm({
+		label = "Camp Generator - Plains",
+		name = "dungeon:camp_generator_plains_lbm",
+		nodenames = {"dungeon:camp_generator_plains"},
+		run_at_every_load = true,
+		action = function(pos, node)
+			minetest.set_node(pos, {name="air"})
+			local materials = get_camp_materials_plains()
+            build_camp(pos, materials)
+		end
+	})
+end
+
+
+
+
+minetest.register_node ("dungeon:camp_generator_prarie", {
+	description = "Camp Generator - Prarie",
+	tiles = {"default.png"},
+	groups = DUNGEON_GENERATOR_GROUPS,
+	sounds = qtcore.node_sound_defaults(),
+	drop = "",
+	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
+		minetest.set_node(pos, {name="air"})
+		local materials = get_camp_materials_prarie()
+        
+        build_camp(pos, materials)
+		return itemstack
+	end
+})
+
+if not qts.ISDEV then
+	minetest.register_lbm({
+		label = "Camp Generator - Prarie",
+		name = "dungeon:camp_generator_prarie_lbm",
+		nodenames = {"dungeon:camp_generator_prarie"},
+		run_at_every_load = true,
+		action = function(pos, node)
+			minetest.set_node(pos, {name="air"})
+			local materials = get_camp_materials_prarie()
+            build_camp(pos, materials)
+		end
+	})
+end

@@ -154,7 +154,7 @@ minetest.register_node("default:campfire", {
 		type = "fixed",
 		fixed = {{-0.375000, -0.5, -0.375000, 0.375000, -0.375000, 0.375000}}
 	},
-	groups = {oddly_breakable_by_hand=3, campfire=1},
+	groups = {oddly_breakable_by_hand=3, campfire=1, generation_artificial=1},
 	sounds = qtcore.node_sound_wood(),
 	
 	on_construct = function(pos)
@@ -201,7 +201,7 @@ minetest.register_node("default:campfire_lit", {
 		type = "fixed",
 		fixed = {{-0.375000, -0.5, -0.375000, 0.375000, -0.375000, 0.375000}}
 	},
-	groups = {oddly_breakable_by_hand=3, campfire=1, ambient=1, not_in_creative_inventory = 1},
+	groups = {oddly_breakable_by_hand=3, campfire=1, ambient=1, not_in_creative_inventory = 1, generation_artificial=1},
 	sounds = qtcore.node_sound_wood({
 		ambience = {
 			name = "campfire",

@@ -25,9 +25,11 @@ minetest.register_tool("dtools:testingTool", {
 	range = 10.0,
 	--liquids_pointable = true,
 	on_use = function(itemstack, user, pointed_thing)
-		minetest.log("QTS Testing Tool used")
-		
-		
+		--minetest.log("QTS Testing Tool used")
+		minetest.log(dump(minetest.registered_nodes["air"].groups))
+		if pointed_thing.under then
+			minetest.log("Node: " .. qts.classify_node(minetest.get_node_or_nil(pointed_thing.under)))
+		end
 		--[[
 		--explode
 		if pointed_thing.under then

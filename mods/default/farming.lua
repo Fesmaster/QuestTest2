@@ -31,7 +31,7 @@ local function register_farm_plant(name, def)
 		drawtype = "nodebox",
 		paramtype = "light",
 		paramtype2 = "facedir",
-		groups = {attached_node=1, seeds=1, oddly_breakable_by_hand=3, dig_immediate=1},
+		groups = {attached_node=1, seeds=1, oddly_breakable_by_hand=3, dig_immediate=1, generation_replacable=1},
 		sounds = qtcore.node_sound_defaults(),
 		node_box = qtcore.nb_dustpile(),
 		on_place = SeedPlace("default:herb_"..name.."_1"),

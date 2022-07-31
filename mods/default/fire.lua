@@ -80,7 +80,7 @@ minetest.register_node("default:fire", {
 	sunlight_propigates = true,
 	floodable = true,
 	
-	groups = {fire = 1, dig_immediate = 3, igniter = 2, ambient = 1},
+	groups = {fire = 1, dig_immediate = 3, igniter = 2, ambient = 1, generation_replacable=1},
 	drop = "",
 	
 	sounds = {

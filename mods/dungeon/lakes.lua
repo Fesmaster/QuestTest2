@@ -1,4 +1,6 @@
-
+--[[
+Lake Generation
+--]]
 
 local lakeSize = 24
 local halfLakeSize = lakeSize/2

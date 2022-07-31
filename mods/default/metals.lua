@@ -16,7 +16,7 @@ qts.register_ingot("default:tin_bar", {
 	description = "Tin Bar",
 	inventory_image = "default_tin_ingot.png",
 	tiles = {"default_tin_ingot_stack.png"},
-	groups = {cracky=3, iron = 1},
+	groups = {cracky=3, iron = 1, generation_artificial=1},
 	sounds = qtcore.node_sound_metal(),
 	nodeboxes = nodeboxes,
 	levels = 8,
@@ -25,14 +25,14 @@ qts.register_ingot("default:tin_bar", {
 qts.register_shaped_node("default:tin_block", {
 	description = "Tin Block",
 	tiles = {"default_tin_block.png"},
-	groups = {cracky=2},
+	groups = {cracky=2, generation_artificial=1},
 	sounds = qtcore.node_sound_metal(),
 })
 
 qts.register_shaped_node("default:stone_with_tin", {
 	description = "Tin Ore",
 	tiles = {"default_stone.png^default_stone_with_tin.png"},
-	groups = {cracky=3, stone=1, ore=1},
+	groups = {cracky=3, stone=1, ore=1, generation_ground=1},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -70,7 +70,7 @@ qts.register_ingot("default:copper_bar", {
 	description = "Copepr Bar",
 	inventory_image = "default_copper_ingot.png",
 	tiles = {"default_copper_ingot_stack.png"},
-	groups = {cracky=3, iron = 1},
+	groups = {cracky=3, iron = 1, generation_artificial=1},
 	sounds = qtcore.node_sound_metal(),
 	nodeboxes = nodeboxes,
 	levels = 8,
@@ -79,14 +79,14 @@ qts.register_ingot("default:copper_bar", {
 qts.register_shaped_node("default:copper_block", {
 	description = "Copper Block",
 	tiles = {"default_copper_block.png"},
-	groups = {cracky=2},
+	groups = {cracky=2, generation_artificial=1},
 	sounds = qtcore.node_sound_metal(),
 })
 
 qts.register_shaped_node("default:stone_with_copper", {
 	description = "Copper Ore",
 	tiles = {"default_stone.png^default_stone_with_copper.png"},
-	groups = {cracky=3, stone=1, ore=1},
+	groups = {cracky=3, stone=1, ore=1, generation_ground=1},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -96,7 +96,7 @@ qts.register_ingot("default:bronze_bar", {
 	description = "Bronze Bar",
 	inventory_image = "default_bronze_ingot.png",
 	tiles = {"default_bronze_ingot_stack.png"},
-	groups = {cracky=3, iron = 1},
+	groups = {cracky=3, iron = 1, generation_artificial=1},
 	sounds = qtcore.node_sound_metal(),
 	nodeboxes = nodeboxes,
 	levels = 8,
@@ -105,7 +105,7 @@ qts.register_ingot("default:bronze_bar", {
 qts.register_shaped_node("default:bronze_block", {
 	description = "Bronze Block",
 	tiles = {"default_bronze_block.png"},
-	groups = {cracky=2},
+	groups = {cracky=2, generation_artificial=1},
 	sounds = qtcore.node_sound_metal(),
 })
 
@@ -125,7 +125,7 @@ qts.register_ingot("default:iron_bar", {
 	description = "Iron Bar",
 	inventory_image = "default_iron_ingot.png",
 	tiles = {"default_iron_ingot_stack.png"},
-	groups = {cracky=3, iron = 1},
+	groups = {cracky=3, iron = 1, generation_artificial=1},
 	sounds = qtcore.node_sound_metal(),
 	nodeboxes = nodeboxes,
 	levels = 8,
@@ -134,14 +134,14 @@ qts.register_ingot("default:iron_bar", {
 qts.register_shaped_node("default:iron_block", {
 	description = "Iron Block",
 	tiles = {"default_iron_block.png"},
-	groups = {cracky=2},
+	groups = {cracky=2, generation_artificial=1},
 	sounds = qtcore.node_sound_metal(),
 })
 
 qts.register_shaped_node("default:stone_with_iron", {
 	description = "Iron Ore",
 	tiles = {"default_stone.png^default_stone_with_iron.png"},
-	groups = {cracky=3, stone=1, ore=1},
+	groups = {cracky=3, stone=1, ore=1, generation_ground=1},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -150,7 +150,7 @@ qts.register_ingot("default:steel_bar", {
 	description = "Steel Bar",
 	inventory_image = "default_steel_ingot.png",
 	tiles = {"default_steel_ingot_stack.png"},
-	groups = {cracky=3, iron = 1},
+	groups = {cracky=3, iron = 1, generation_artificial=1},
 	sounds = qtcore.node_sound_metal(),
 	nodeboxes = nodeboxes,
 	levels = 8,
@@ -159,7 +159,7 @@ qts.register_ingot("default:steel_bar", {
 qts.register_shaped_node("default:steel_block", {
 	description = "Steel Block",
 	tiles = {"default_steel_block.png"},
-	groups = {cracky=2},
+	groups = {cracky=2, generation_artificial=1},
 	sounds = qtcore.node_sound_metal(),
 })
 
@@ -212,7 +212,7 @@ qts.register_ingot("default:silver_bar", {
 	description = "Silver Bar",
 	inventory_image = "default_silver_ingot.png",
 	tiles = {"default_silver_ingot_stack.png"},
-	groups = {cracky=3, silver = 1},
+	groups = {cracky=3, silver = 1, generation_artificial=1},
 	sounds = qtcore.node_sound_metal(),
 	nodeboxes = nodeboxes,
 	levels = 8,
@@ -221,14 +221,14 @@ qts.register_ingot("default:silver_bar", {
 qts.register_shaped_node("default:silver_block", {
 	description = "Silver Block",
 	tiles = {"default_silver_block.png"},
-	groups = {cracky=2},
+	groups = {cracky=2, generation_artificial=1},
 	sounds = qtcore.node_sound_metal(),
 })
 
 qts.register_shaped_node("default:stone_with_silver", {
 	description = "Silver Ore",
 	tiles = {"default_stone.png^default_stone_with_silver.png"},
-	groups = {cracky=3, stone=1, ore=1},
+	groups = {cracky=3, stone=1, ore=1, generation_ground=1},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -237,7 +237,7 @@ qts.register_ingot("default:gold_bar", {
 	description = "Gold Bar",
 	inventory_image = "default_gold_ingot.png",
 	tiles = {"default_gold_ingot_stack.png"},
-	groups = {cracky=3, iron = 1},
+	groups = {cracky=3, gold = 1, generation_artificial=1},
 	sounds = qtcore.node_sound_metal(),
 	nodeboxes = nodeboxes,
 	levels = 8,
@@ -246,13 +246,13 @@ qts.register_ingot("default:gold_bar", {
 qts.register_shaped_node("default:gold_block", {
 	description = "Gold Block",
 	tiles = {"default_gold_block.png"},
-	groups = {cracky=2},
+	groups = {cracky=2, generation_artificial=1},
 	sounds = qtcore.node_sound_metal(),
 })
 
 qts.register_shaped_node("default:stone_with_gold", {
 	description = "Gold Ore",
 	tiles = {"default_stone.png^default_stone_with_gold.png"},
-	groups = {cracky=3, stone=1, ore=1},
+	groups = {cracky=3, stone=1, ore=1, generation_ground=1},
 	sounds = qtcore.node_sound_stone(),
 })

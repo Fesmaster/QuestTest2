@@ -47,7 +47,9 @@ minetest.register_node("default:default", {
 	sounds = qtcore.node_sound_defaults(),
 })
 
-
+minetest.override_item("air", {
+	groups={not_in_creative_inventory = 1, generation_replacable=1}
+})
 
 
 --[[

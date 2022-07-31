@@ -10,6 +10,7 @@ if not qts.ISDEV then
 end
 
 dofile(minetest.get_modpath("dungeon").."/lakes.lua")
+dofile(minetest.get_modpath("dungeon").."/camp.lua")
 
 
 dofile(minetest.get_modpath("dungeon").."/mapgen.lua")
