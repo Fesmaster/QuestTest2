@@ -1507,7 +1507,7 @@ minetest.register_node("default:flour_bowl", {
 	},
 })
 
-minetest.register_node("default:bread", {
+--[[minetest.register_node("default:bread", {
 	description = "Bread",
 	tiles = {
 			"default_bread_top.png",
@@ -1530,7 +1530,7 @@ minetest.register_node("default:bread", {
 		},
 	},
 	on_use = minetest.item_eat(4),
-})
+})]]--
 
 local names = {"swamp", "rosewood", "pine", "oak", "mahogany", "lanternfruit", "coffee", "aspen", "apple", "rowan"}
 local defs = {"Swamp Wood", "Rosewood", "Pine", "Oak", "Mahopgany", "Lanternfruit Wood", "Coffee Wood", "Aspen", "Applewood", "Rowan"}

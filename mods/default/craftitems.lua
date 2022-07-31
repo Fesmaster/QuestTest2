@@ -75,7 +75,15 @@ minetest.register_craftitem("default:mushroom_stew", {
 	on_use = minetest.item_eat(6),
 })
 
+minetest.register_craftitem("default:flask_glass", {
+	description = "Glass Flask",
+	inventory_image = "default_flask_glass.png",
+})
 
+minetest.register_craftitem("default:flask_glass_water", {
+	description = "Flask of Water",
+	inventory_image = "default_flask_glass_water.png",
+})
 
 --[[minetest.register_craftitem("default:water_vessels", {
 	description = "Vessels of Water",
