@@ -115,6 +115,12 @@ qts.register_craft({
 	near = {"default:food_table"},
 })
 
+
+qts.register_craft({
+	ingredients = {"default:herb_milfoil 2"},
+	results = {"default:poltice_milfoil"},
+})
+
 qts.register_craft({
 	ingredients = {"default:flour_bowl"},
 	results = {"default:bread"},

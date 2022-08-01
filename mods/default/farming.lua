@@ -110,7 +110,7 @@ register_farm_plant("bloodbulb", {
 	seed_tiles = {"default_seeds_bloodbulb_top.png", "default_oak_wood.png", "default_seeds_bloodbulb_side.png"},
 	item_image = "default_herb_bloodbulb.png",
 	plant_levels = 5,
-	plant_tiles_list = {"default_plant_0.png", "default_herb_bloodbulb_1.png", "default_herb_bloodbulb_2.png", "default_herb_bloodbulb_3.png", "default_herb_bloodbulb_4.png"},
+	plant_tiles_list = {"default_herb_0.png", "default_herb_bloodbulb_1.png", "default_herb_bloodbulb_2.png", "default_herb_bloodbulb_3.png", "default_herb_bloodbulb_4.png"},
 	grow_timer = 90,
 	grow_timer_random = 30,
 })
@@ -121,7 +121,7 @@ register_farm_plant("milfoil", {
 	seed_tiles = {"default_seeds_milfoil_top.png", "default_oak_wood.png", "default_seeds_milfoil_side.png"},
 	item_image = "default_herb_milfoil.png",
 	plant_levels = 8,
-	plant_tiles_list = {"default_plant_0.png", "default_herb_milfoil_1.png", "default_herb_milfoil_2.png", "default_herb_milfoil_3.png", "default_herb_milfoil_4.png",
+	plant_tiles_list = {"default_herb_0.png", "default_herb_milfoil_1.png", "default_herb_milfoil_2.png", "default_herb_milfoil_3.png", "default_herb_milfoil_4.png",
 	"default_herb_milfoil_5.png", "default_herb_milfoil_6.png", "default_herb_milfoil_7.png"},
 	grow_timer = 90,
 	grow_timer_random = 30,
@@ -129,11 +129,23 @@ register_farm_plant("milfoil", {
 
 register_farm_plant("goard", {
 	description = "Goard",
-	seed_image = "default_seeds_milfoil_item.png",
-	seed_tiles = {"default_seeds_milfoil_top.png", "default_oak_wood.png", "default_seeds_milfoil_side.png"},
+	seed_image = "default_seeds_goard_item.png",
+	seed_tiles = {"default_seeds_goard_top.png", "default_oak_wood.png", "default_seeds_goard_side.png"},
 	item_image = "default_herb_goard.png",
 	plant_levels = 5,
-	plant_tiles_list = {"default_plant_0.png", "default_herb_goard_1.png", "default_herb_goard_2.png", "default_herb_goard_3.png", "default_herb_goard_4.png"},
+	plant_tiles_list = {"default_herb_0.png", "default_herb_goard_1.png", "default_herb_goard_2.png", "default_herb_goard_3.png", "default_herb_goard_4.png"},
+	grow_timer = 90,
+	grow_timer_random = 30,
+})
+
+register_farm_plant("carrot", {
+	description = "Carrot",
+	seed_image = "default_seeds_carrot_item.png",
+	seed_tiles = {"default_seeds_carrot_top.png", "default_oak_wood.png", "default_seeds_carrot_side.png"},
+	item_image = "default_herb_carrot.png",
+	plant_levels = 7,
+	plant_tiles_list = {"default_herb_0.png", "default_herb_carrot_1.png", "default_herb_carrot_2.png", "default_herb_carrot_3.png",
+	"default_herb_carrot_5.png", "default_herb_carrot_6.png", "default_herb_carrot_6.png"},
 	grow_timer = 90,
 	grow_timer_random = 30,
 })
@@ -144,7 +156,7 @@ register_farm_plant("wolfshood", {
 	seed_tiles = {"default_seeds_wolfshood_top.png", "default_oak_wood.png", "default_seeds_wolfshood_side.png"},
 	item_image = "default_herb_wolfshood.png",
 	plant_levels = 5,
-	plant_tiles_list = {"default_plant_0.png", "default_herb_wolfshood_1.png", "default_herb_wolfshood_2.png", "default_herb_wolfshood_3.png", "default_herb_wolfshood_4.png"},
+	plant_tiles_list = {"default_herb_0.png", "default_herb_wolfshood_1.png", "default_herb_wolfshood_2.png", "default_herb_wolfshood_3.png", "default_herb_wolfshood_4.png"},
 	grow_timer = 90,
 	grow_timer_random = 30,
 })
@@ -153,10 +165,22 @@ register_farm_plant("grain", {
 	description = "Grain",
 	seed_image = "default_seeds_grain_item.png",
 	seed_tiles = {"default_seeds_grain_top.png", "default_oak_wood.png", "default_seeds_grain_side.png"},
-	item_image = "default_grain.png",
+	item_image = "default_herb_grain.png",
 	plant_levels = 9,
-	plant_tiles_list = {"default_plant_0.png", "default_grain_1.png", "default_grain_2.png", "default_grain_3.png", "default_grain_4.png",
-	"default_grain_5.png", "default_grain_6.png", "default_grain_7.png", "default_grain_8.png"},
+	plant_tiles_list = {"default_herb_0.png", "default_herb_grain_1.png", "default_herb_grain_2.png", "default_herb_grain_3.png", "default_herb_grain_4.png",
+	"default_herb_grain_5.png", "default_herb_grain_6.png", "default_herb_grain_7.png", "default_herb_grain_8.png"},
+	grow_timer = 90,
+	grow_timer_random = 30,
+})
+
+register_farm_plant("onion", {
+	description = "Onion",
+	seed_image = "default_seeds_onion_item.png",
+	seed_tiles = {"default_seeds_onion_top.png", "default_oak_wood.png", "default_seeds_onion_side.png"},
+	item_image = "default_herb_onion.png",
+	plant_levels = 9,
+	plant_tiles_list = {"default_herb_0.png", "default_herb_onion_1.png", "default_herb_onion_2.png", "default_herb_onion_3.png", "default_herb_onion_4.png",
+	"default_herb_onion_5.png", "default_herb_onion_6.png", "default_herb_onion_7.png", "default_herb_onion_8.png"},
 	grow_timer = 90,
 	grow_timer_random = 30,
 })
@@ -176,11 +200,11 @@ register_farm_plant("potatoe", {
 register_farm_plant("flax", {
 	description = "Flax",
 	seed_image = "default_seeds_flax_item.png",
-	seed_tiles = {"default_seeds_grain_top.png", "default_oak_wood.png", "default_seeds_grain_side.png"},
-	item_image = "default_flax.png",
+	seed_tiles = {"default_seeds_flax_top.png", "default_oak_wood.png", "default_seeds_flax_side.png"},
+	item_image = "default_herb_flax.png",
 	plant_levels = 7,
-	plant_tiles_list = {"default_plant_0.png", "default_flax_1.png", "default_flax_2.png", "default_flax_3.png", "default_flax_4.png",
-	"default_flax_5.png", "default_flax_6.png"},
+	plant_tiles_list = {"default_herb_0.png", "default_herb_flax_1.png", "default_herb_flax_2.png", "default_herb_flax_3.png", "default_herb_flax_4.png",
+	"default_herb_flax_5.png", "default_herb_flax_6.png"},
 	grow_timer = 90,
 	grow_timer_random = 30,
 })

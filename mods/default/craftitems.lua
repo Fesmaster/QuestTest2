@@ -85,6 +85,12 @@ minetest.register_craftitem("default:flask_glass_water", {
 	inventory_image = "default_flask_glass_water.png",
 })
 
+minetest.register_craftitem("default:poltice_milfoil", {
+	description = "Milfoil Poltice",
+	inventory_image = "default_poltice_milfoil.png",
+	on_use = minetest.item_eat(2),
+})
+
 --[[minetest.register_craftitem("default:water_vessels", {
 	description = "Vessels of Water",
 	inventory_image = "default_water_vessels.png",
