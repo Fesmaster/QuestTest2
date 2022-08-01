@@ -46,13 +46,13 @@ local function MakeLakeBasic(pos)
 				local must_destroy = false
 				local def = minetest.registered_nodes[node.name]
 				
-				if def and def.paramtype and def.paramtype ~= "light" then
-					must_destroy = true
-				end
-				if minetest.get_item_group(node.name, "shaped_node") ~= 0 then
-					must_destroy = true
-				end
-				if minetest.get_item_group(node.name, "underbrush") ~= 0 then
+				--if def and def.paramtype and def.paramtype ~= "light" then
+				--	must_destroy = true
+				--end
+				if minetest.get_item_group(node.name, "generation_ground") ~= 0 or
+					minetest.get_item_group(node.name, "generation_trees") ~= 0 or
+					minetest.get_item_group(node.name, "generation_replacable") ~= 0
+				then
 					must_destroy = true
 				end
 				

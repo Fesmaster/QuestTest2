@@ -11,6 +11,55 @@ local CAMP_FEATURES_MIN = 3
 local CAMP_FEATURES_MAX = 7
 local CAMP_SIZE = 7
 
+--[[
+    Generate a node, only replacing replacables
+]]
+local function generate_node(pos, node)
+    local n = minetest.get_node_or_nil(pos)
+    if n and n.name then
+        if minetest.get_item_group(n.name, "generation_replacable") ~= 0 then
+            minetest.set_node(pos, node)
+        end
+    else
+        minetest.set_node(pos, node)
+    end
+end
+
+local function generate_treereplace(pos, node)
+    local n = minetest.get_node_or_nil(pos)
+    if n and n.name then
+        if minetest.get_item_group(n.name, "generation_replacable") ~= 0 or
+                minetest.get_item_group(n.name, "generation_trees") ~= 0 then
+            minetest.set_node(pos, node)
+        end
+    else
+        minetest.set_node(pos, node)
+    end
+end
+
+--[[
+    Trace upwards to find the top of the ground  
+    will return null if no ground found
+]]
+local function trace_up(pos, delta)
+    local found_earth = false
+    for y= -delta, delta do
+        local node = minetest.get_node_or_nil(pos + vector.new(0,y,0))
+        if node and node.name then
+            if minetest.get_item_group(node.name, "generation_replacable") ~= 0 then
+                if found_earth then
+                    return pos + vector.new(0,y,0)
+                end
+            elseif minetest.get_item_group(node.name, "generation_trees") ~= 0 or 
+                    minetest.get_item_group(node.name, "generation_artificial") ~= 0 then
+                return nil
+            elseif minetest.get_item_group(node.name, "generation_ground") ~= 0 then
+                found_earth = true
+            end
+        end
+    end
+end
+
 local woodtypes_plains = {"oak", "rowan", "apple", "aspen"}
 --[[
 Get a table of the materials needed to make a camp
@@ -60,7 +109,7 @@ local function build_cage(pos, materials)
     minetest.set_node(pos, {name="air"})
     minetest.set_node(pos+ vector.new(0,1,0), {name="air"})
     for k, v in ipairs(cage_fence_area) do
-        minetest.set_node(pos+ v, {name=materials.fence})
+        generate_node(pos+ v, {name=materials.fence})
     end
 end
 
@@ -68,22 +117,27 @@ local campfire_offsets = {vector.new(0,-3,2), vector.new(2,-3,0), vector.new(0,-
 local function build_fire_pit(pos, materials)
     minetest.set_node(pos, {name=materials.campfire})
     for k, v in ipairs(campfire_offsets) do
-        local p = pos + v
-        local foundGround = false
-        for off = 0,3 do
+        local p = trace_up(pos + v, 1)
+        if p then
+            generate_node(p, {name=qts.shaped_node_name(materials.wood, "stair"), param2 = k-1})
+        end
+        --[[
+            local foundGround = false
+            for off = 0,3 do
             p.y = p.y + 1
             local node = minetest.get_node_or_nil(p)
             if node and node.name then
                 if node.name == "air" or minetest.get_item_group(node.name, "underbrush") ~= 0 then
                     if foundGround then
-                        minetest.set_node(p, {name=qts.shaped_node_name(materials.wood, "stair"), param2 = k-1})
+                        generate_node(p, {name=qts.shaped_node_name(materials.wood, "stair"), param2 = k-1})
                         break
                     end
                 else
                     foundGround = true
                 end
             end
-        end
+        end]]
+        
     end
 end
 
@@ -194,13 +248,13 @@ local function build_watch_tower(pos, materials)
         for x = -1,1 do
             for z = -1,1 do
                 if x ~= 0 and z ~= 0 then
-                    minetest.set_node(pos + vector.new(x,y,z), {name=materials.fence})
+                    generate_treereplace(pos + vector.new(x,y,z), {name=materials.fence})
                 else
-                    minetest.set_node(pos + vector.new(x,y,z), {name="air"})
+                    generate_treereplace(pos + vector.new(x,y,z), {name="air"})
                 end
             end
         end
-        minetest.set_node(
+        generate_treereplace(
             pos + bk + bk + vector.new(0,y,0), 
             {name=materials.ladder, param2 = tower_offsets[rot].ladder}
         )
@@ -211,10 +265,10 @@ local function build_watch_tower(pos, materials)
     --make the platform
     for x = -1,1 do
         for z = -1,1 do
-            minetest.set_node(pos + vector.new(x,0,z) + off, {name=materials.wood, param2 = perm.floor})
+            generate_treereplace(pos + vector.new(x,0,z) + off, {name=materials.wood, param2 = perm.floor})
         end
     end
-    minetest.set_node(
+    generate_treereplace(
         pos + bk + bk + off, 
         {name=materials.ladder, param2 = perm.ladder}
     )
@@ -225,7 +279,9 @@ local function build_watch_tower(pos, materials)
         for z = -1,1 do
             local v = vector.new(x,0,z)
             if not vector.equals(v, bk) and (x~=0 or z~=0) then
-                minetest.set_node(v+pos+off, {name=materials.fence})
+                generate_treereplace(v+pos+off, {name=materials.fence})
+            else
+                generate_treereplace(v+pos+off, {name="air"})
             end
         end
     end
@@ -237,7 +293,9 @@ local function build_watch_tower(pos, materials)
         for x = -1,1 do
             for z = -1,1 do
                 if x ~= 0 and z ~= 0 then
-                    minetest.set_node(pos+off+vector.new(x,0,z), {name=materials.torch, param2=1})
+                    generate_treereplace(pos+off+vector.new(x,0,z), {name=materials.torch, param2=1})
+                else
+                    generate_treereplace(pos+off+vector.new(x,0,z), {name="air"})
                 end
             end
         end
@@ -248,7 +306,9 @@ local function build_watch_tower(pos, materials)
         for x = -1,1 do
             for z = -1,1 do
                 if x ~= 0 and z ~= 0 then
-                    minetest.set_node(pos+off+vector.new(x,0,z), {name=materials.fence})
+                    generate_treereplace(pos+off+vector.new(x,0,z), {name=materials.fence})
+                else
+                    generate_treereplace(pos+off+vector.new(x,0,z), {name="air"})
                 end
             end
         end
@@ -256,48 +316,30 @@ local function build_watch_tower(pos, materials)
         --add the roof
         off.y=off.y+1
         --right slope
-        minetest.set_node(pos+off+bk+rt, {name=qts.shaped_node_name(materials.wood, "stair"), param2 = perm.r_roof})
-        minetest.set_node(pos+off+rt, {name=qts.shaped_node_name(materials.wood, "stair"), param2 = perm.r_roof})
-        minetest.set_node(pos+off+fr+rt, {name=qts.shaped_node_name(materials.wood, "stair_outer"), param2 = perm.r_roof})
+        generate_treereplace(pos+off+bk+rt, {name=qts.shaped_node_name(materials.wood, "stair"), param2 = perm.r_roof})
+        generate_treereplace(pos+off+rt, {name=qts.shaped_node_name(materials.wood, "stair"), param2 = perm.r_roof})
+        generate_treereplace(pos+off+fr+rt, {name=qts.shaped_node_name(materials.wood, "stair_outer"), param2 = perm.r_roof})
         
         --left slope
-        minetest.set_node(pos+off+bk+lf, {name=qts.shaped_node_name(materials.wood, "stair"), param2 = perm.l_roof})
-        minetest.set_node(pos+off+lf, {name=qts.shaped_node_name(materials.wood, "stair"), param2 = perm.l_roof})
-        minetest.set_node(pos+off+fr+lf, {name=qts.shaped_node_name(materials.wood, "stair_outer"), param2 = perm.f_roof})
+        generate_treereplace(pos+off+bk+lf, {name=qts.shaped_node_name(materials.wood, "stair"), param2 = perm.l_roof})
+        generate_treereplace(pos+off+lf, {name=qts.shaped_node_name(materials.wood, "stair"), param2 = perm.l_roof})
+        generate_treereplace(pos+off+fr+lf, {name=qts.shaped_node_name(materials.wood, "stair_outer"), param2 = perm.f_roof})
         
         --front
-        minetest.set_node(pos+off+fr, {name=qts.shaped_node_name(materials.wood, "stair"), param2 = perm.f_roof})
+        generate_treereplace(pos+off+fr, {name=qts.shaped_node_name(materials.wood, "stair"), param2 = perm.f_roof})
         
         --torch
-        minetest.set_node(pos+off, {name=qts.torch_name(materials.torch, "ceiling")})
+        generate_treereplace(pos+off, {name=qts.torch_name(materials.torch, "ceiling")})
 
         --ceiling
         off.y=off.y+1
-        minetest.set_node(pos+off, {name=qts.shaped_node_name(materials.wood, "slab"), param2 = perm.slab})
-        minetest.set_node(pos+off+bk, {name=qts.shaped_node_name(materials.wood, "slab"), param2 = perm.slab})
+        generate_treereplace(pos+off, {name=qts.shaped_node_name(materials.wood, "slab"), param2 = perm.slab})
+        generate_treereplace(pos+off+bk, {name=qts.shaped_node_name(materials.wood, "slab"), param2 = perm.slab})
 
     end
 end
 
-local function trace_up(pos, delta)
-    local found_earth = false
-    for y= -delta, delta do
-        local node = minetest.get_node_or_nil(pos + vector.new(0,y,0))
-        if node and node.name then
-            if node.name == "air" or minetest.get_item_group(node.name, "underbrush") ~= 0 then
-                if found_earth then
-                    return pos + vector.new(0,y,0)
-                end
-            elseif minetest.get_item_group(node.name, "log") ~= 0 or 
-                    minetest.get_item_group(node.name, "leaves") ~= 0 or
-                    minetest.get_item_group(node.name, "liquid") ~= 0 then
-                return nil
-            else
-                found_earth = true
-            end
-        end
-    end
-end
+
 
 local features = {
     build_cage,
