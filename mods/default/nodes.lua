@@ -814,6 +814,14 @@ qts.register_shaped_node ("default:gold_mushroom_slats", {
 	sounds = qtcore.node_sound_wood(),
 })
 
+qts.register_shaped_node ("default:gold_mushroom_plates", {
+	description = "Gold Mushroom Plates",
+	tiles = {"default_mushroom_gold_plates.png"},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, mushroom=1, generation_artificial=1},
+	sounds = qtcore.node_sound_wood(),
+})
+
 minetest.register_node("default:gold_shroom_spore", {
 	description = "Golden Mushroom Spore",
 	tiles = {"default_mushroom_gold_spore.png"},
@@ -839,15 +847,6 @@ qts.register_shaped_node ("default:brown_mushroom_trunk", {
 	sounds = qtcore.node_sound_wood(),
 })
 
---[[
-qts.register_shaped_node ("default:brown_mushroom_cap", {
-	description = "Brown Mushroom Cap",
-	tiles = {"default_mushroom_gold_cap.png"},
-	paramtype2 = "facedir",
-	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, mushroom=1},
-	sounds = qtcore.node_sound_wood(),
-})
---]]
 
 qts.register_shaped_node ("default:brown_mushroom_cap", {
 	description = "Brown Mushroom Cap",
@@ -857,6 +856,21 @@ qts.register_shaped_node ("default:brown_mushroom_cap", {
 	sounds = qtcore.node_sound_wood(),
 })
 
+qts.register_shaped_node ("default:brown_mushroom_slats", {
+	description = "Brown Mushroom Slats",
+	tiles = {"default_mushroom_brown_slats.png"},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, mushroom=1, generation_artificial=1},
+	sounds = qtcore.node_sound_wood(),
+})
+
+qts.register_shaped_node ("default:brown_mushroom_plates", {
+	description = "Brown Mushroom Plates",
+	tiles = {"default_mushroom_brown_plates.png"},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, mushroom=1, generation_artificial=1},
+	sounds = qtcore.node_sound_wood(),
+})
 
 --END shrooms
 
