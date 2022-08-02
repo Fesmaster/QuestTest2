@@ -102,11 +102,11 @@ qts.register_craft({
 })
 
 
-qts.register_craft({
+--[[qts.register_craft({
 	ingredients = {"default:dishes_clay", "group:wood 3"},
 	results = {"default:food_table"},
 	near = {"group:workbench"},
-})
+})]]--
 
 
 qts.register_craft({
