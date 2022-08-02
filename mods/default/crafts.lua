@@ -126,7 +126,7 @@ qts.register_craft({
 	results = {"default:bread"},
 	near = {"group:ttable", "group:dishes", "group:furnace"},
 })
---not working b/c default:bucket_water not defined
+
 qts.register_craft({
 	ingredients = {"default:dishes_clay", "default:bucket_default_water"},
 	results = {"default:water_vessels", "default:bucket"},
@@ -137,6 +137,17 @@ qts.register_craft({
 	results = {"default:torch 4",},
 })
 
+qts.register_craft({
+	ingredients = {"default:reeds 2"},
+	results = {"default:paper"},
+})
+
+qts.register_craft({
+	ingredients = {"default:paper 2"},
+	results = {"default:book"},
+})
+
+--BEGIN furniture
 qts.register_craft({
 	ingredients = {"group:wood 4"},
 	results = {"default:workbench",},
@@ -152,16 +163,130 @@ qts.register_craft({
 	ingredients = {"default:workbench", "default:iron_bar 4"},
 	results = {"default:workbench_heavy",},
 })
-
+--BEGIN tables(group:ttable)
 qts.register_craft({
-	ingredients = {"default:reeds 2"},
-	results = {"default:paper"},
+	ingredients = {"default:oak_wood_planks 2"},
+	results = {"default:table_oak"},
+	near = {"group:workbench"},
 })
 
 qts.register_craft({
-	ingredients = {"default:paper 2"},
-	results = {"default:book"},
+	ingredients = {"default:apple_wood_planks 2"},
+	results = {"default:table_apple"},
+	near = {"group:workbench"},
 })
+
+qts.register_craft({
+	ingredients = {"default:aspen_wood_planks 2"},
+	results = {"default:table_aspen"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:coffee_wood_planks 2"},
+	results = {"default:table_coffee"},
+	near = {"group:workbench"}
+})
+
+	qts.register_craft({
+	ingredients = {"default:lanternfruit_wood_planks 2"},
+	results = {"default:table_lanternfruit"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:swamp_wood_planks 2"},
+	results = {"default:table_swamp"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:rosewood_wood_planks 2"},
+	results = {"default:table_rosewood"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:mahogany_wood_planks 2"},
+	results = {"default:table_mahogany"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:pine_wood_planks 2"},
+	results = {"default:table_pine"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:rowan_wood_planks 2"},
+	results = {"default:table_rowan"},
+	near = {"group:workbench"},
+})
+--END tables
+--BEGIN Chairs
+qts.register_craft({
+	ingredients = {"default:oak_wood_planks 2"},
+	results = {"default:chair_oak"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:apple_wood_planks 2"},
+	results = {"default:chair_apple"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:aspen_wood_planks 2"},
+	results = {"default:chair_aspen"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:coffee_wood_planks 2"},
+	results = {"default:chair_coffee"},
+	near = {"group:workbench"}
+})
+
+	qts.register_craft({
+	ingredients = {"default:lanternfruit_wood_planks 2"},
+	results = {"default:chair_lanternfruit"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:swamp_wood_planks 2"},
+	results = {"default:chair_swamp"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:rosewood_wood_planks 2"},
+	results = {"default:chair_rosewood"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:mahogany_wood_planks 2"},
+	results = {"default:chair_mahogany"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:pine_wood_planks 2"},
+	results = {"default:chair_pine"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:rowan_wood_planks 2"},
+	results = {"default:chair_rowan"},
+	near = {"group:workbench"},
+})
+--END Chairs
+--END furnuture
+
 
 --weapons and tools
 
