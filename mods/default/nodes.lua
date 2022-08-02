@@ -1010,7 +1010,7 @@ minetest.register_node("default:mahogany_leaves", {
 	after_place_node = qtcore.after_place_leaves;
 })
 
-minetest.register_node("default:blackwood_leaves", {
+--[[minetest.register_node("default:blackwood_leaves", {
 	description = "Blackwood Leaves",
 	drawtype = "allfaces_optional",
 	waving = 1,
@@ -1026,7 +1026,7 @@ minetest.register_node("default:blackwood_leaves", {
 	sounds = qtcore.node_sound_grass(),
 	after_place_node = qtcore.after_place_leaves;
 })
-
+]]--
 
 minetest.register_node("default:rosewood_leaves", {
 	description = "Rosewood Leaves",
@@ -1278,12 +1278,13 @@ qts.register_shaped_node("default:ice", {
 --END glass
 
 --BEGIN furnature
-minetest.register_node("default:table", {
-	description = "Table",
+--BEGIN tables (group:ttable)
+minetest.register_node("default:table_oak", {
+	description = "Oak Table",
 	tiles = {"default_oak_wood.png"},
 	drawtype = "nodebox",
 	paramtype = "light",
-	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, ttable=1, generation_artificial=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -1300,6 +1301,299 @@ minetest.register_node("default:table", {
 	},
 	sounds = qtcore.node_sound_wood(),
 })
+
+minetest.register_node("default:table_pine", {
+	description = "Pine Table",
+	tiles = {"default_pine_wood.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, ttable=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -8/16, 7/16, -8/16, 8/16, 8/16, 8/16, },
+			{ -7/16, 5/16, -7/16, 7/16, 7/16, 7/16, },
+			{ 5/16, -8/16, -7/16, 7/16, 5/16, -5/16, },
+			{ -7/16, -8/16, 5/16, -5/16, 5/16, 7/16, },
+			{ 5/16, -8/16, 5/16, 7/16, 5/16, 7/16, },
+			{ -7/16, -8/16, -7/16, -5/16, 5/16, -5/16, },
+			{ -6/16, -3/16, -5/16, 6/16, -2/16, 6/16, },
+		}
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+--END tables
+
+--BEGIN Chairs
+minetest.register_node("default:chair_oak", {
+	description = "Oak Chair",
+	tiles = {"default_oak_wood.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ 3/16, -8/16, 3/16, 4/16, -2/16, 4/16, },
+			{ 3/16, -8/16, -4/16, 4/16, 10/16, -3/16, },
+			{ -4/16, -8/16, -4/16, -3/16, 10/16, -3/16, },
+			{ -3/16, 0/16, -4/16, -1/16, 2/16, -3/16, },
+			{ -3/16, 5/16, -4/16, -1/16, 7/16, -3/16, },
+			{ -4/16, -8/16, 3/16, -3/16, -2/16, 4/16, },
+			{ -4/16, -2/16, -4/16, 4/16, -1/16, 4/16, },
+			{ 1/16, 5/16, -4/16, 3/16, 7/16, -3/16, },
+			{ -1/16, 6/16, -4/16, 1/16, 8/16, -3/16, },
+			{ 1/16, 0/16, -4/16, 3/16, 2/16, -3/16, },
+			{ -1/16, 1/16, -4/16, 1/16, 3/16, -3/16, },
+			{ -4/16, 1/16, -3/16, -3/16, 2/16, 4/16, },
+			{ 3/16, 1/16, -3/16, 4/16, 2/16, 4/16, },
+			{ -4/16, -1/16, 2/16, -3/16, 1/16, 3/16, },
+			{ 3/16, -1/16, 2/16, 4/16, 1/16, 3/16, },
+		}
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+
+minetest.register_node("default:chair_pine", {
+	description = "Pine Chair",
+	tiles = {"default_pine_wood.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ 3/16, -8/16, 3/16, 4/16, -2/16, 4/16, },
+			{ 3/16, -8/16, -4/16, 4/16, 6/16, -3/16, },
+			{ -4/16, -8/16, -4/16, -3/16, 6/16, -3/16, },
+			{ -3/16, 0/16, -4/16, 3/16, 2/16, -3/16, },
+			{ -3/16, 3/16, -4/16, 3/16, 5/16, -3/16, },
+			{ -4/16, -8/16, 3/16, -3/16, -2/16, 4/16, },
+			{ -4/16, -2/16, -4/16, 4/16, -1/16, 4/16, },
+		}
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+
+minetest.register_node("default:chair_apple", {
+	description = "Apple Chair",
+	tiles = {"default_apple_wood.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ 3/16, -8/16, 3/16, 4/16, -2/16, 4/16, },
+			{ 3/16, -8/16, -4/16, 4/16, 1/16, -3/16, },
+			{ -4/16, -8/16, -4/16, -3/16, 1/16, -3/16, },
+			{ -4/16, 1/16, -4/16, 4/16, 2/16, -3/16, },
+			{ -4/16, -8/16, 3/16, -3/16, -2/16, 4/16, },
+			{ -4/16, -2/16, -4/16, 4/16, -1/16, 4/16, },
+			{ -4/16, 1/16, -3/16, -3/16, 2/16, 4/16, },
+			{ 3/16, 1/16, -3/16, 4/16, 2/16, 4/16, },
+			{ -4/16, -1/16, 2/16, -3/16, 1/16, 3/16, },
+			{ 3/16, -1/16, 2/16, 4/16, 1/16, 3/16, },
+		}
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+
+minetest.register_node("default:chair_swamp", {
+	description = "Swamp Chair",
+	tiles = {"default_swamp_wood.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ 3/16, -8/16, 3/16, 4/16, -2/16, 4/16, },
+			{ 3/16, -8/16, -4/16, 4/16, -2/16, -3/16, },
+			{ -4/16, -8/16, -4/16, -3/16, -2/16, -3/16, },
+			{ -4/16, -8/16, 3/16, -3/16, -2/16, 4/16, },
+			{ -4/16, -2/16, -4/16, 4/16, -1/16, 4/16, },
+			{ -4/16, -5/16, -3/16, -3/16, -4/16, 3/16, },
+			{ 3/16, -5/16, -3/16, 4/16, -4/16, 3/16, },
+			{ -3/16, -5/16, -4/16, 3/16, -4/16, -3/16, },
+			{ -3/16, -5/16, 3/16, 3/16, -4/16, 4/16, },
+		}
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+
+minetest.register_node("default:chair_rowan", {
+	description = "Rowan Chair",
+	tiles = {"default_rowan_wood.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ 3/16, -8/16, 3/16, 4/16, -2/16, 4/16, },
+			{ 3/16, -8/16, -4/16, 4/16, 9/16, -3/16, },
+			{ -4/16, -8/16, -4/16, -3/16, 9/16, -3/16, },
+			{ -4/16, -8/16, 3/16, -3/16, -2/16, 4/16, },
+			{ -4/16, -2/16, -4/16, 4/16, -1/16, 4/16, },
+			{ -4/16, -5/16, -3/16, -3/16, -4/16, 3/16, },
+			{ 3/16, -5/16, -3/16, 4/16, -4/16, 3/16, },
+			{ -3/16, -5/16, -4/16, 3/16, -4/16, -3/16, },
+			{ -3/16, -5/16, 3/16, 3/16, -4/16, 4/16, },
+			{ -1/16, -1/16, -4/16, 1/16, 11/16, -3/16, },
+			{ -3/16, 0/16, -4/16, 3/16, 2/16, -3/16, },
+			{ -3/16, 3/16, -4/16, 3/16, 5/16, -3/16, },
+			{ -3/16, 6/16, -4/16, 3/16, 8/16, -3/16, },
+		}
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+
+minetest.register_node("default:chair_lanternfruit", {
+	description = "Lanterfruit Chair",
+	tiles = {"default_lanternfruit_wood.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ 3/16, -8/16, 3/16, 4/16, 0/16, 4/16, },
+			{ 3/16, -8/16, -4/16, 4/16, 6/16, -3/16, },
+			{ -4/16, -8/16, -4/16, -3/16, 6/16, -3/16, },
+			{ -4/16, -8/16, 3/16, -3/16, 0/16, 4/16, },
+			{ -4/16, -2/16, -4/16, 4/16, -1/16, 4/16, },
+			{ -4/16, -5/16, -3/16, -3/16, -4/16, 3/16, },
+			{ 3/16, -5/16, -3/16, 4/16, -4/16, 3/16, },
+			{ -3/16, -5/16, -4/16, 3/16, -4/16, -3/16, },
+			{ -3/16, -5/16, 3/16, 3/16, -4/16, 4/16, },
+			{ -1/16, -1/16, -4/16, 1/16, 7/16, -3/16, },
+			{ -3/16, 0/16, -4/16, 3/16, 2/16, -3/16, },
+			{ -3/16, 3/16, -4/16, 3/16, 5/16, -3/16, },
+			{ -4/16, 0/16, -4/16, -3/16, 1/16, 4/16, },
+			{ 3/16, 0/16, -4/16, 4/16, 1/16, 4/16, },
+		},
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+
+minetest.register_node("default:chair_mahogany", {
+	description = "Mahogany Chair",
+	tiles = {"default_mahogany_wood.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ 3/16, -8/16, 3/16, 4/16, 0/16, 4/16, },
+			{ 3/16, -8/16, -4/16, 4/16, 9/16, -3/16, },
+			{ -4/16, -8/16, -4/16, -3/16, 9/16, -3/16, },
+			{ -4/16, -8/16, 3/16, -3/16, 0/16, 4/16, },
+			{ -4/16, -2/16, -4/16, 4/16, -1/16, 4/16, },
+			{ -1/16, -1/16, -4/16, 1/16, 7/16, -3/16, },
+			{ -3/16, 0/16, -4/16, 3/16, 2/16, -3/16, },
+			{ -3/16, 3/16, -4/16, 3/16, 5/16, -3/16, },
+			{ -4/16, 0/16, -4/16, -3/16, 1/16, 4/16, },
+			{ 3/16, 0/16, -4/16, 4/16, 1/16, 4/16, },
+			{ 2/16, 6/16, -4/16, 3/16, 8/16, -3/16, },
+			{ -3/16, 6/16, -4/16, -2/16, 8/16, -3/16, },
+			{ -2/16, 5/16, -4/16, -1/16, 7/16, -3/16, },
+			{ 1/16, 5/16, -4/16, 2/16, 7/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+
+minetest.register_node("default:chair_coffee", {
+	description = "Coffee Chair",
+	tiles = {"default_coffee_wood.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ 3/16, -8/16, 3/16, 4/16, 1/16, 4/16, },
+			{ 3/16, -8/16, -4/16, 4/16, 7/16, -3/16, },
+			{ -4/16, -8/16, -4/16, -3/16, 7/16, -3/16, },
+			{ -4/16, -8/16, 3/16, -3/16, 1/16, 4/16, },
+			{ -4/16, -2/16, -4/16, 4/16, -1/16, 4/16, },
+			{ 1/16, -1/16, -4/16, 2/16, 5/16, -3/16, },
+			{ -3/16, 2/16, -4/16, 3/16, 3/16, -3/16, },
+			{ -3/16, 4/16, -4/16, 3/16, 5/16, -3/16, },
+			{ -4/16, 1/16, -4/16, -3/16, 2/16, 4/16, },
+			{ 3/16, 1/16, -4/16, 4/16, 2/16, 4/16, },
+			{ -2/16, -1/16, -4/16, -1/16, 5/16, -3/16, },
+			{ -3/16, 0/16, -4/16, 3/16, 1/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+
+minetest.register_node("default:chair_rosewood", {
+	description = "Rosewood Chair",
+	tiles = {"default_rosewood_wood.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ 3/16, -8/16, 3/16, 4/16, 1/16, 4/16, },
+			{ 3/16, -8/16, -4/16, 4/16, 6/16, -3/16, },
+			{ -4/16, -8/16, -4/16, -3/16, 6/16, -3/16, },
+			{ -4/16, -8/16, 3/16, -3/16, 1/16, 4/16, },
+			{ -4/16, -2/16, -4/16, 4/16, -1/16, 4/16, },
+			{ 1/16, 3/16, -4/16, 3/16, 5/16, -3/16, },
+			{ -1/16, 1/16, -4/16, 1/16, 3/16, -3/16, },
+			{ -3/16, 3/16, -4/16, -1/16, 5/16, -3/16, },
+			{ -4/16, 1/16, -4/16, -3/16, 2/16, 4/16, },
+			{ 3/16, 1/16, -4/16, 4/16, 2/16, 4/16, },
+			{ -3/16, -1/16, -4/16, -1/16, 1/16, -3/16, },
+			{ 1/16, -1/16, -4/16, 3/16, 1/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+
+minetest.register_node("default:chair_aspen", {
+	description = "Aspen Chair",
+	tiles = {"default_aspen_wood.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ 3/16, -8/16, 3/16, 4/16, 1/16, 4/16, },
+			{ 3/16, -8/16, -4/16, 4/16, 6/16, -3/16, },
+			{ -4/16, -8/16, -4/16, -3/16, 6/16, -3/16, },
+			{ -4/16, -8/16, 3/16, -3/16, 1/16, 4/16, },
+			{ -4/16, -2/16, -4/16, 4/16, -1/16, 4/16, },
+			{ 1/16, 6/16, -4/16, 3/16, 7/16, -3/16, },
+			{ -1/16, 7/16, -4/16, 1/16, 8/16, -3/16, },
+			{ -3/16, 6/16, -4/16, -1/16, 7/16, -3/16, },
+			{ -4/16, 1/16, -4/16, -3/16, 2/16, 4/16, },
+			{ 3/16, 1/16, -4/16, 4/16, 2/16, 4/16, },
+			{ -2/16, -1/16, -4/16, -1/16, 6/16, -3/16, },
+			{ 1/16, -1/16, -4/16, 2/16, 6/16, -3/16, },
+			{ -3/16, 3/16, -4/16, 3/16, 4/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+--END chairs
 
 minetest.register_node("default:ladder", {
 	description = "Ladder",
@@ -1384,7 +1678,7 @@ minetest.register_node("default:food_table", {
 
 --END furnature
 
---Begin Stuff
+--Begin placeable items
 
 minetest.register_node("default:dishes_clay", {
 	description = "Clay Dishes",
@@ -1395,7 +1689,7 @@ minetest.register_node("default:dishes_clay", {
 	inventory_image = "default_dishes_clay_item.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
+	groups = {oddly_breakable_by_hand=3, dishes=1, generation_artificial=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -1508,31 +1802,7 @@ minetest.register_node("default:flour_bowl", {
 		},
 	},
 })
-
---[[minetest.register_node("default:bread", {
-	description = "Bread",
-	tiles = {
-			"default_bread_top.png",
-			"default_bread_top.png",
-			"default_bread_side.png"
-		},
-	drawtype = "nodebox",
-	inventory_image = "default_bread_item.png",
-	paramtype = "light",
-	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
-	node_box = {
-		type = "fixed",
-		fixed = {
-		{ -3/16, -8/16, -5/16, 3/16, -6/16, 5/16, },
-		{ -3/16, -6/16, -3/16, 3/16, -5/16, 3/16, },
-		{ -2/16, -5/16, -2/16, 2/16, -4/16, 2/16, },
-		{ -5/16, -8/16, -3/16, 5/16, -6/16, 3/16, },
-		{ -4/16, -8/16, -4/16, 4/16, -6/16, 4/16, },
-		},
-	},
-	on_use = minetest.item_eat(4),
-})]]--
+--END placable items
 
 local names = {"swamp", "rosewood", "pine", "oak", "mahogany", "lanternfruit", "coffee", "aspen", "apple", "rowan"}
 local defs = {"Swamp Wood", "Rosewood", "Pine", "Oak", "Mahopgany", "Lanternfruit Wood", "Coffee Wood", "Aspen", "Applewood", "Rowan"}
