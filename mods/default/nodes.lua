@@ -390,8 +390,9 @@ qts.register_shaped_node ("default:dirt_with_mushroom_grass", {
 				items = {"default:flint"},
 			},
 			{
-				items = {"default:dirt"}
+				items = {"default:dirt", "default:mycelium"}
 			}
+
 		}
 	}
 })
@@ -822,7 +823,7 @@ qts.register_shaped_node ("default:gold_mushroom_plates", {
 	sounds = qtcore.node_sound_wood(),
 })
 
-minetest.register_node("default:gold_shroom_spore", {
+minetest.register_node("default:gold_mushroom_spore", {
 	description = "Golden Mushroom Spore",
 	tiles = {"default_mushroom_gold_spore.png"},
 	drawtype = "nodebox",
@@ -1183,7 +1184,7 @@ qts.register_ingot("default:apple", {
 	description = "Apple",
 	inventory_image = "default_apple_fruit_item.png",
 	tiles = {"default_apple_fruit_top.png", "default_apple_fruit.png", "default_apple_fruit.png"},
-	groups = {cracky=3, fruit = 1, generation_artificial=1},
+	groups = {oddly_breakable_by_hand=3, fruit = 1, generation_artificial=1},
 	on_use = minetest.item_eat(2),
 	sunlight_propagates = true,
 	walkable = false,
@@ -1974,7 +1975,6 @@ minetest.register_node("default:alchemy_equipment_basic", {
 			"default_alchemy_equipment_basic_top.png",  "default_dishes_clay.png", "default_alchemy_equipment_basic_side.png",
 		},
 	drawtype = "nodebox",
-	--inventory_image = "default_dishes_clay_item.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1},

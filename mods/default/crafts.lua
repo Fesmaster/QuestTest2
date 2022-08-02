@@ -26,7 +26,36 @@ for i, n in ipairs(names) do
 		near = {"group:workbench"},
 	})
 end
+--mushroom derivatives
+qts.register_craft({
+	ingredients = {"default:mycelium", "default:blue_mushroom_cap"},
+	results = {"default:blue_mushroom_plates 2"},
+})
 
+qts.register_craft({
+	ingredients = {"default:blue_mushroom_trunk"},
+	results = {"default:blue_mushroom_slats 4"},
+})
+
+qts.register_craft({
+	ingredients = {"default:mycelium", "default:gold_mushroom_cap"},
+	results = {"default:gold_mushroom_plates 2"},
+})
+
+qts.register_craft({
+	ingredients = {"default:gold_mushroom_trunk"},
+	results = {"default:gold_mushroom_slats 4"},
+})
+
+qts.register_craft({
+	ingredients = {"default:mycelium", "default:brown_mushroom_cap"},
+	results = {"default:brown_mushroom_plates 2"},
+})
+
+qts.register_craft({
+	ingredients = {"default:brown_mushroom_trunk"},
+	results = {"default:brown_mushroom_slats 4"},
+})
 
 --knife recipies
 qts.register_craft({

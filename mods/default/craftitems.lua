@@ -90,3 +90,8 @@ minetest.register_craftitem("default:poltice_milfoil", {
 	inventory_image = "default_poltice_milfoil.png",
 	on_use = minetest.item_eat(2),
 })
+
+minetest.register_craftitem("default:mycelium", {
+	description = "Mycelium",
+	inventory_image = "default_mycelium.png",
+})

@@ -13,9 +13,9 @@ local underbrush_drops = {
 			tools = {"~:knife"},
 			chance=5,
 			items = {
-			{items = {"default:milfoil_herb"}, rarity = 16},
-			{items = {"default:bloodbulb_herb"}, rarity = 16},
-			{items = {"default:wolfshood_herb"}, rarity = 16},
+			{items = {"default:herb_milfoil"}, rarity = 16,},
+			{items = {"default:herb_bloodbulb"}, rarity = 16},
+			{items = {"default:herb_wolfshood"}, rarity = 16},
 			{items = {"default:tinder"}},
 			},
 		},
