@@ -88,6 +88,7 @@ qts.ai.register_behavior = function(name, def)
 	
 	if (not def.get_staticdata) or (type(def.get_staticdata) ~= "function") then
 		def.get_staticdata = function(self)
+			minetest.log("UNKNWON STATICDATA FUNCTION FOR ENTITY BEHAVIOR")
 			return ""
 		end
 	end
@@ -191,8 +192,8 @@ function qts.ai.register_creature(name, def)
 		end,
 		
 		get_staticdata = function(self)
-			if def.get_staticdata then	
-				return def.get_staticdata(self)
+			if self.behavior.get_staticdata then	
+				return self.behavior.get_staticdata(self)
 			end
 			return ""
 		end,

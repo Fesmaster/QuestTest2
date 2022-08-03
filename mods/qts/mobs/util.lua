@@ -312,7 +312,15 @@ function qts.humanoid_texture(entity, base)
 	local crown = nil
 	
 	--get the wielded item
-	local wield_name = entity:get_wielded_item():get_name()
+	local wield_name = ""
+	if entity:is_player() then
+		wield_name = entity:get_wielded_item():get_name()
+	else
+		local luaentity = entity:get_luaentity()
+		if luaentity.wielded_item then
+			wield_name = ItemStack(luaentity.wielded_item):get_name()
+		end
+	end
 	local itemdef = minetest.registered_items[wield_name]
 	if itemdef and wield_name ~= "" then
 		if (itemdef.type=="node" and cubic_drawtype[itemdef.drawtype]) then
