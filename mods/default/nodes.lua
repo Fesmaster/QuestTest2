@@ -2189,12 +2189,33 @@ local names = {"swamp", "rosewood", "pine", "oak", "mahogany", "lanternfruit", "
 local defs = {"Swamp Wood", "Rosewood", "Pine", "Oak", "Mahopgany", "Lanternfruit Wood", "Coffee Wood", "Aspen", "Applewood", "Rowan"}
 
 for i, n in ipairs(names) do
+	local woodname = "default_"..n.."_wood.png"
     minetest.register_node ("default:bookshelf_"..n, {
     	description = defs[i] .. " Bookshelf",
-    	tiles = {{name = "default_"..n.."_wood.png", align_style = "node"}, {name = "default_"..n.."_wood.png", align_style = "node"}, "default_bookshelf_"..n..".png"},
+    	drawtype="nodebox",
+		paramtype = "light",
+		tiles = {{name = woodname, align_style = "node"}, {name = woodname, align_style = "node"}, 
+		woodname, woodname, woodname.."^default_bookshelf.png", woodname.."^default_bookshelf.png"},
     	paramtype2 = "facedir",
     	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, bookshelf=1, generation_artificial=1},
     	sounds = qtcore.node_sound_wood(),
+		node_box = {
+			type = "fixed",
+			fixed = {
+				{ -8/16, -8/16, -8/16, 8/16, -7/16, 8/16, },
+				{ -8/16, 7/16, -8/16, 8/16, 8/16, 8/16, },
+				{ 7/16, -7/16, -8/16, 8/16, 7/16, 8/16, },
+				{ -8/16, -7/16, -8/16, -7/16, 7/16, 8/16, },
+				{ -7/16, -7/16, -6/16, 7/16, 7/16, 6/16, },
+				{ -7/16, -1/16, -8/16, 7/16, 1/16, 8/16, },
+			},
+		},
+		selection_box = {
+			type = "fixed",
+			fixed = {
+				{ -8/16, -8/16, -8/16, 8/16, 8/16, 8/16, },
+			}
+		},
     })
 end
 
