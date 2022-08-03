@@ -754,6 +754,28 @@ minetest.register_node("default:swamp_log", {
 		}
 	}
 })
+
+minetest.register_node("default:bamboo", {
+	description = "Bamboo",
+	tiles = {
+		"default_bamboo_log_top.png",
+		"default_bamboo_log_top.png",
+		"default_bamboo_log_side.png"
+	},
+	use_texture_alpha = "clip",
+	drawtype = "nodebox",
+	paramtype = "light",
+	groups = {choppy=2, oddly_breakable_by_hand=1, flammable=2, log=1, generation_trees=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -2/16, -8/16, -6/16, 0/16, 8/16, -4/16, },
+			{ -4/16, -8/16, 3/16, -1/16, 8/16, 6/16, },
+			{ 4/16, -8/16, 1/16, 6/16, 8/16, 3/16, },
+			{ 2/16, -8/16, -4/16, 5/16, 8/16, -1/16, },
+		}
+	}
+})
 --alias for worldgen purposes
 minetest.register_alias("default:swamp_tree", "default:swamp_log")
 --END wood

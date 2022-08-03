@@ -145,7 +145,7 @@ register_farm_plant("carrot", {
 	item_image = "default_herb_carrot.png",
 	plant_levels = 7,
 	plant_tiles_list = {"default_herb_0.png", "default_herb_carrot_1.png", "default_herb_carrot_2.png", "default_herb_carrot_3.png",
-	"default_herb_carrot_5.png", "default_herb_carrot_6.png", "default_herb_carrot_6.png"},
+	"default_herb_carrot_5.png", "default_herb_carrot_6.png"},
 	grow_timer = 90,
 	grow_timer_random = 30,
 })
