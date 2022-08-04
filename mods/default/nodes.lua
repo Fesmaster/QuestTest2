@@ -20,11 +20,11 @@ qts.register_shaped_node("default:cement", {
 
 
 
---BEGIN grey
+--BEGIN gray
 qts.register_shaped_node("default:stone", {
 	description = "Stone",
 	tiles = {"default_stone.png"},
-	groups = {cracky=3, stone=1, grey_stone=1, generation_ground=1},
+	groups = {cracky=3, stone=1, gray_stone=1, generation_ground=1},
 	sounds = qtcore.node_sound_stone(),
 	drop = "default:stone_cobble",
 	paramtype2 = "color",
@@ -33,20 +33,20 @@ qts.register_shaped_node("default:stone", {
 qtcore.register_artistic_nodes("default:stone",{
 	description = "Stone",
 	tiles = {"default_stone.png"},
-	groups = {cracky=3, stone=1, grey_stone=1, generation_artificial=1},
+	groups = {cracky=3, stone=1, gray_stone=1, generation_artificial=1},
 	sounds = qtcore.node_sound_stone(),
-	craft_group = "grey_stone",
+	craft_group = "gray_stone",
 })
 qts.register_shaped_node ("default:stone_cobble", {
 	description = "Cobblestone",
 	tiles = {"default_stone.png^qt_cobble_overlay.png"},
-	groups = {cracky=3, stone=1, grey_stone=1, generation_artificial=1},
+	groups = {cracky=3, stone=1, gray_stone=1, generation_artificial=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
 })
---END grey
+--END gray
 
 --BEGIN mossy
 qts.register_shaped_node ("default:moss_stone", {
@@ -228,7 +228,7 @@ qts.register_shaped_node ("default:brick", {
 qts.register_shaped_node ("default:brick_gray", {
 	description = "Gray Brick",
 	tiles = {"default_brick_gray.png"},
-	groups = {cracky=3, bricks=1, stone=1, grey_stone=1, generation_artificial=1},
+	groups = {cracky=3, bricks=1, stone=1, gray_stone=1, generation_artificial=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
 	paramtype2 = "color",

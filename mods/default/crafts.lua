@@ -160,6 +160,12 @@ qts.register_craft({
 })
 
 qts.register_craft({
+	ingredients = {"default:potatoe"},
+	results = {"default:seeds_potatoe"},
+	near = {"group:ttable", "group:dishes"},
+})
+
+qts.register_craft({
 	ingredients = {"default:dishes_clay", "default:herb_grain 4"},
 	results = {"default:flour_bowl"},
 	near = {"group:ttable", "group:dishes"},
@@ -443,6 +449,28 @@ qts.register_craft({
 	results = {"default:sword_steel"},
 	near = {"group:anvil", "group:furnace"},
 })
+
+--hoes
+qts.register_craft({
+	ingredients = {"group:wood", "default:copper_bar 3"},
+	results = {"default:hoe_copper"},
+	near = {"group:workbench"},
+})
+qts.register_craft({
+	ingredients = {"group:wood", "default:bronze_bar 3"},
+	results = {"default:hoe_bronze"},
+	near = {"group:workbench"},
+})
+qts.register_craft({
+	ingredients = {"group:wood", "default:iron_bar 3"},
+	results = {"default:hoe_iron"},
+	near = {"group:anvil", "group:furnace"},
+})
+qts.register_craft({
+	ingredients = {"group:wood", "default:steel_bar 3"},
+	results = {"default:hoe_steel"},
+	near = {"group:anvil", "group:furnace"},
+})
 --hammers
 qts.register_craft({
 	ingredients = {"group:wood", "group:stone 5"},
@@ -469,30 +497,30 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"default:brick_grey"},
-	results = {"default:furnace_brick_grey"},
+	ingredients = {"default:brick_gray"},
+	results = {"default:furnace_brick_gray"},
 	near = {"group:workbench_heavy"},
 })
 
---stone and stone walls
---grey stone
+--stone and stone walls (and bricks)
+--gray stone
 qts.register_craft({
-	ingredients = {"group:grey_stone"},
+	ingredients = {"group:gray_stone"},
 	results = {"default:stone"},
 	near = {"group:workbench_heavy"},
 })
 qts.register_craft({
-	ingredients = {"group:grey_stone"},
+	ingredients = {"group:gray_stone"},
 	results = {"default:stone_cobble"},
 	near = {"group:workbench_heavy"},
 })
 qts.register_craft({
-	ingredients = {"group:grey_stone"},
-	results = {"default:brick_grey"},
+	ingredients = {"group:gray_stone"},
+	results = {"default:brick_gray"},
 	near = {"group:workbench_heavy"},
 })
 qts.register_craft({
-	ingredients = {"group:grey_stone"},
+	ingredients = {"group:gray_stone"},
 	results = {"default:stone_cobble_wall"},
 	near = {"group:workbench_heavy"},
 })
@@ -583,7 +611,23 @@ qts.register_craft({
 	near = {"group:workbench_heavy"},
 })
 
+--brick
+qts.register_craft({
+	ingredients = {"group:brick"},
+	results = {"default:brick"},
+	near = {"group:workbench_heavy"},
+})
 
+qts.register_craft({
+	ingredients = {"default:brick"},
+	results = {"default:brick_wall"},
+	near = {"group:workbench_heavy"},
+})
+qts.register_craft({
+	ingredients = {"default:brick_gray"},
+	results = {"default:brick_gray_wall"},
+	near = {"group:workbench_heavy"},
+})
 
 
 --toolrepair
