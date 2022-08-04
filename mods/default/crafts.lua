@@ -178,8 +178,13 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"default:flour_bowl"},
-	results = {"default:bread"},
+	ingredients = {"default:herb_flax 6"},
+	results = {"default:textile_flax"},
+})
+
+qts.register_craft({
+	ingredients = {"default:flour_bowl", "default:water_vessels"},
+	results = {"default:bread", "default:dishes_clay 2"},
 	near = {"group:ttable", "group:dishes", "group:furnace"},
 })
 
@@ -680,6 +685,18 @@ minetest.register_craft({
 	type = "fuel",
 	recipe = "group:wood",
 	burntime = 8,
+})
+
+minetest.register_craft({
+	type = "fuel",
+	recipe = "default:bamboo",
+	burntime = 8,
+})
+
+minetest.register_craft({
+	type = "fuel",
+	recipe = "default:bamboo_slats",
+	burntime = 4,
 })
 
 minetest.register_craft({

@@ -2136,7 +2136,6 @@ minetest.register_node("default:alchemy_equipment_advanced", {
 			"default_alchemy_equipment_advanced_top.png",  "default_dishes_clay.png", "default_alchemy_equipment_advanced_side.png",
 		},
 	drawtype = "nodebox",
-	--inventory_image = "default_dishes_clay_item.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
@@ -2225,6 +2224,29 @@ minetest.register_node("default:dishes_greenware", {
 		{ 2/16, -7/16, -6/16, 6/16, -2/16, -5/16, },
 		{ 5/16, -7/16, -5/16, 6/16, -2/16, -3/16, },
 		{ 2/16, -7/16, -5/16, 3/16, -2/16, -3/16, },
+
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:textile_flax", {
+	description = "Flax Textiles",
+	tiles = {
+			"default_textile_flax_top.png", "default_textile_flax_bottom.png", "default_textile_flax_side.png",
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_textile_flax_item.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ 0/16, -8/16, -6/16, 6/16, 8/16, 0/16, },
+			{ 2/16, -8/16, 2/16, 6/16, 8/16, 6/16, },
+			{ -3/16, -8/16, 2/16, 0/16, 8/16, 5/16, },
+			{ -6/16, -8/16, -4/16, -2/16, 8/16, 0/16, },
 
 		},
 	},
