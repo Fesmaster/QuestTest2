@@ -769,13 +769,15 @@ minetest.register_node("default:bamboo", {
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{ -2/16, -8/16, -6/16, 0/16, 8/16, -4/16, },
-			{ -4/16, -8/16, 3/16, -1/16, 8/16, 6/16, },
+			{ -3/16, -8/16, -6/16, -1/16, 8/16, -4/16, },
+			{ -6/16, -8/16, 3/16, -3/16, 8/16, 6/16, },
 			{ 4/16, -8/16, 1/16, 6/16, 8/16, 3/16, },
-			{ 2/16, -8/16, -4/16, 5/16, 8/16, -1/16, },
+			{ 1/16, -8/16, -4/16, 4/16, 8/16, -1/16, },
 		}
 	}
 })
+
+
 --alias for worldgen purposes
 minetest.register_alias("default:swamp_tree", "default:swamp_log")
 --END wood
@@ -861,6 +863,7 @@ minetest.register_node("default:gold_mushroom_spore", {
 		}
 	}
 })
+minetest.register_alias("default:gold_shroom_spore", "default:gold_mushroom_spore")
 
 qts.register_shaped_node ("default:brown_mushroom_trunk", {
 	description = "Brown Mushroom Trunk",
@@ -1153,6 +1156,40 @@ minetest.register_node("default:swamp_leaves", {
 			{-0.625, -0.5, -0.625, 0.625, 0.6875, 0.625}, -- NodeBox12
 			{-0.0625, 0.125, 0.1875, 0.75, 0.9375, 0.875}, -- NodeBox13
 			{-0.9375, -0.75, -1, -0.125, 0, -0.125}, -- NodeBox14
+		}
+	}
+})
+
+minetest.register_node("default:bamboo_leaves", {
+	description = "Bamboo Leaves",
+	tiles = {
+			"default_bamboo_leaves_top.png", "default_bamboo_leaves_side.png",
+		},
+	use_texture_alpha = "clip",
+	drawtype = "nodebox",
+	waving = 1,
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1, generation_trees=1},
+	walkable = false,
+	climbable = true,
+	sounds = qtcore.node_sound_grass(),
+	after_place_node = qtcore.after_place_leaves;
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -3/16, -8/16, -6/16, -1/16, 8/16, -4/16, },
+			{ -6/16, -8/16, 3/16, -3/16, 8/16, 6/16, },
+			{ 4/16, -8/16, 1/16, 6/16, 8/16, 3/16, },
+			{ 1/16, -8/16, -4/16, 4/16, 8/16, -1/16, },
+			{ 6/16, -10/16, 6/16, 10/16, -6/16, 10/16, },
+			{ -1/16, -5/16, 7/16, 1/16, 7/16, 9/16, },
+			{ -9/16, -5/16, 6/16, -6/16, 3/16, 9/16, },
+			{ -9/16, -1/16, -1/16, -7/16, 5/16, 1/16, },
+			{ -10/16, 6/16, -10/16, -6/16, 10/16, -6/16, },
+			{ -1/16, 6/16, -10/16, 1/16, 10/16, 3/16, },
+			{ 6/16, -2/16, -10/16, 10/16, 2/16, -6/16, },
+			{ 0/16, -9/16, -1/16, 9/16, 2/16, 1/16, },
+			{ -8/16, -8/16, -8/16, 8/16, 8/16, 8/16, },
 		}
 	}
 })
