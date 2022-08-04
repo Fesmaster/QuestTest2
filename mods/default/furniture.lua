@@ -2,6 +2,26 @@
 
 --BEGIN Nodes
 
+
+--BEGIN benches
+--[[minetest.register_node("default:bench_oak", {
+	description = "Oak Bench",
+	tiles = {"default_oak_wood.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, ttable=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -2/16, -2/16, -2/16, 3/16, -1/16, 18/16, },
+		}
+	},
+	sounds = qtcore.node_sound_wood(),
+})]]--
+
+--END benches
+
 --BEGIN Tables
 minetest.register_node("default:table_oak", {
 	description = "Oak Table",
@@ -327,6 +347,85 @@ minetest.register_node("default:table_bamboo", {
 	},
 	sounds = qtcore.node_sound_wood(),
 })
+
+minetest.register_node("default:table_blue_mushroom", {
+	description = "Blue Mushroom Table",
+	tiles = {"default_mushroom_blue_slats.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, ttable=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -6/16, 6/16, -6/16, 6/16, 7/16, 6/16, },
+			{ -6/16, 6/16, -7/16, 6/16, 8/16, -6/16, },
+			{ -6/16, 6/16, 6/16, 6/16, 8/16, 7/16, },
+			{ 6/16, 6/16, -6/16, 7/16, 8/16, 6/16, },
+			{ -7/16, 6/16, -6/16, -6/16, 8/16, 6/16, },
+			{ 6/16, -8/16, -8/16, 8/16, 8/16, -6/16, },
+			{ -8/16, -8/16, 6/16, -6/16, 8/16, 8/16, },
+			{ 6/16, -8/16, 6/16, 8/16, 8/16, 8/16, },
+			{ -8/16, -8/16, -8/16, -6/16, 8/16, -6/16, },
+			{ -8/16, -2/16, -6/16, -7/16, 0/16, 6/16, },
+			{ 7/16, -2/16, -6/16, 8/16, 0/16, 6/16, },
+			{ -6/16, -2/16, 7/16, 6/16, 0/16, 8/16, },
+			{ -6/16, -2/16, -8/16, 6/16, 0/16, -7/16, },
+		},
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+
+minetest.register_node("default:table_brown_mushroom", {
+	description = "Brown Mushroom Table",
+	tiles = {"default_mushroom_brown_slats.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, ttable=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -6/16, 7/16, -6/16, 6/16, 8/16, 6/16, },
+			{ -6/16, 6/16, -7/16, 6/16, 8/16, -6/16, },
+			{ -6/16, 6/16, 6/16, 6/16, 8/16, 7/16, },
+			{ 6/16, 6/16, -6/16, 7/16, 8/16, 6/16, },
+			{ -7/16, 6/16, -6/16, -6/16, 8/16, 6/16, },
+			{ -2/16, -3/16, -2/16, 2/16, 7/16, 2/16, },
+			{ -4/16, -8/16, -4/16, 4/16, -6/16, 4/16, },
+			{ -3/16, -6/16, -3/16, 3/16, -3/16, 3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+
+minetest.register_node("default:table_gold_mushroom", {
+	description = "Gold Mushroom Table",
+	tiles = {"default_mushroom_gold_slats.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, ttable=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -8/16, 7/16, -8/16, 8/16, 8/16, 8/16, },
+			{ -2/16, -8/16, -8/16, 2/16, 7/16, -6/16, },
+			{ -8/16, 6/16, 7/16, -7/16, 9/16, 8/16, },
+			{ 7/16, 6/16, 7/16, 8/16, 9/16, 8/16, },
+			{ -8/16, 6/16, -8/16, -7/16, 9/16, -7/16, },
+			{ 7/16, 6/16, -8/16, 8/16, 9/16, -7/16, },
+			{ -2/16, -2/16, -6/16, 2/16, -1/16, 6/16, },
+			{ -2/16, -8/16, 6/16, 2/16, 7/16, 8/16, },
+			{ -2/16, 6/16, -6/16, 2/16, 7/16, 6/16, },
+			{ -8/16, -2/16, -2/16, 8/16, -1/16, 2/16, },
+			{ -8/16, -8/16, -2/16, -6/16, 7/16, 2/16, },
+			{ 6/16, -8/16, -2/16, 8/16, 7/16, 2/16, },
+			{ -8/16, 6/16, -2/16, 8/16, 7/16, 2/16, },
+		},
+	},
+	sounds = qtcore.node_sound_wood(),
+})
 --END tables
 
 --BEGIN Chairs
@@ -625,6 +724,91 @@ minetest.register_node("default:chair_bamboo", {
 	},
 	sounds = qtcore.node_sound_wood(),
 })
+
+minetest.register_node("default:chair_blue_mushroom", {
+	description = "Blue Mushroom Chair",
+	tiles = {"default_mushroom_blue_slats.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -4/16, -2/16, -4/16, 4/16, -1/16, 4/16, },
+			{ 3/16, -8/16, -4/16, 4/16, 7/16, -3/16, },
+			{ 3/16, -8/16, 3/16, 4/16, -2/16, 4/16, },
+			{ -4/16, -8/16, -4/16, -3/16, 7/16, -3/16, },
+			{ -4/16, -8/16, 3/16, -3/16, -2/16, 4/16, },
+			{ 3/16, -5/16, -3/16, 4/16, -4/16, 3/16, },
+			{ -3/16, -5/16, 3/16, 3/16, -4/16, 4/16, },
+			{ -3/16, -5/16, -4/16, 3/16, -4/16, -3/16, },
+			{ -4/16, -5/16, -3/16, -3/16, -4/16, 3/16, },
+			{ -2/16, 1/16, -4/16, 2/16, 5/16, -3/16, },
+			{ 1/16, 4/16, -4/16, 3/16, 6/16, -3/16, },
+			{ 1/16, 0/16, -4/16, 3/16, 2/16, -3/16, },
+			{ -3/16, 0/16, -4/16, -1/16, 2/16, -3/16, },
+			{ -3/16, 4/16, -4/16, -1/16, 6/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+
+minetest.register_node("default:chair_gold_mushroom", {
+	description = "Gold Mushroom Chair",
+	tiles = {"default_mushroom_gold_slats.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ 3/16, -8/16, -4/16, 4/16, 7/16, -3/16, },
+			{ 3/16, -8/16, 3/16, 4/16, -2/16, 4/16, },
+			{ -4/16, -8/16, -4/16, -3/16, 7/16, -3/16, },
+			{ -4/16, -8/16, 3/16, -3/16, -2/16, 4/16, },
+			{ 3/16, -5/16, -3/16, 4/16, -4/16, 3/16, },
+			{ -3/16, -5/16, 3/16, 3/16, -4/16, 4/16, },
+			{ -3/16, -5/16, -4/16, 3/16, -4/16, -3/16, },
+			{ -4/16, -5/16, -3/16, -3/16, -4/16, 3/16, },
+			{ -1/16, -1/16, -4/16, 1/16, 9/16, -3/16, },
+			{ 1/16, -1/16, -4/16, 3/16, 8/16, -3/16, },
+			{ -4/16, -2/16, -4/16, 4/16, -1/16, 4/16, },
+			{ -3/16, -1/16, -4/16, -1/16, 8/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+
+minetest.register_node("default:chair_brown_mushroom", {
+	description = "Brown Mushroom Chair",
+	tiles = {"default_mushroom_brown_slats.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+				{ 3/16, -8/16, -4/16, 4/16, -2/16, -3/16, },
+				{ 3/16, -8/16, 3/16, 4/16, -2/16, 4/16, },
+				{ -4/16, -8/16, -4/16, -3/16, -2/16, -3/16, },
+				{ -4/16, -8/16, 3/16, -3/16, -2/16, 4/16, },
+				{ 3/16, -5/16, -3/16, 4/16, -4/16, 3/16, },
+				{ -3/16, -5/16, 3/16, 3/16, -4/16, 4/16, },
+				{ -3/16, -5/16, -4/16, 3/16, -4/16, -3/16, },
+				{ -4/16, -5/16, -3/16, -3/16, -4/16, 3/16, },
+				{ -4/16, -2/16, -4/16, 4/16, -1/16, 4/16, },
+				{ -3/16, -1/16, -4/16, 3/16, 8/16, -3/16, },
+				{ -4/16, -1/16, -4/16, -3/16, 8/16, -2/16, },
+				{ 3/16, -1/16, -4/16, 4/16, 8/16, -2/16, },
+				{ 3/16, -1/16, -2/16, 4/16, 2/16, 4/16, },
+				{ -4/16, -1/16, -2/16, -3/16, 2/16, 4/16, },
+		},
+	},
+	sounds = qtcore.node_sound_wood(),
+})
 --END chairs
 
 --BEGIN ladders
@@ -779,6 +963,23 @@ qts.register_craft({
 	results = {"default:table_bamboo"},
 	near = {"group:workbench"},
 })
+qts.register_craft({
+	ingredients = {"default:mushroom_blue_slats"},
+	results = {"default:table_blue_mushroom"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:mushroom_brown_slats"},
+	results = {"default:table_brown_mushroom"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:mushroom_gold_slats"},
+	results = {"default:table_gold_mushroom"},
+	near = {"group:workbench"},
+})
 --END tables
 --BEGIN Chairs
 qts.register_craft({
@@ -844,6 +1045,24 @@ qts.register_craft({
 qts.register_craft({
 	ingredients = {"default:bamboo"},
 	results = {"default:chair_bamboo"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:mushroom_blue_slats"},
+	results = {"default:chair_blue_mushroom 2"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:mushroom_brown_slats"},
+	results = {"default:chair_brown_mushroom 2"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:mushroom_gold_slats"},
+	results = {"default:chair_gold_mushroom 2"},
 	near = {"group:workbench"},
 })
 --END Chairs

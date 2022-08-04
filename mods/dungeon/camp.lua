@@ -144,14 +144,14 @@ end
 local banit_crate_items = {
     "default:axe_bronze", "default:axe_copper", "default:axe_flint", 
     "default:bread", "default:bronze_alloy", "default:bronze_bar", "default:bucket",
-    "default:charcoal", "default:coal", "default:clay_lump", "default:coconut",
-    "default:copper_bar", "default:dishes_clay", "default:flint", 
+    "default:charcoal", "default:coal", "default:clay_lump", "default:coconut", "default:copper_bar", "default:dishes_clay",  
     "default:herb_bloodbulb", "default:herb_flax", "default:herb_grain", "default:herb_milfoil",
-    "default:herb_potatoe", "default:herb_wolfshood", "default:hammer_stone",
-    "default:knife_flint",  "default:paper", "default:seed_bloodbulb", "default:seed_flax", 
-    "default:seed_grain", "default:seed_milfoil", "default:seed_potatoe", 
-    "default:seed_wolfshood", "default:shovel_bronze", "default:shovel_copper",
-    "default:sword_bronze", "default:sword_copper", "default:tinderbox", "default:tinder"
+    "default:herb_potatoe", "default:herb_wolfshood", "default:herb_carrot", "default:herb_goard", "default:herb_onion",
+	"default:hammer_stone", "default:knife_flint",  "default:paper",
+	"default:seed_bloodbulb", "default:seed_flax", "default:seed_grain", "default:seed_milfoil", "default:seed_potatoe", 
+    "default:seed_wolfshood", "default:seed_carrot", "default:seed_goard", "default:seed_onion",
+	"default:shovel_bronze", "default:shovel_copper", "default:sword_bronze", "default:sword_copper",
+	"default:tinderbox", "default:flint", "default:tinder"
 }
 local function build_crate(pos, materials)
     minetest.set_node(pos, {name=materials.crate})

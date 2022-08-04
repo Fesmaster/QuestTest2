@@ -154,7 +154,7 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"default:potatoe"},
+	ingredients = {"default:herb_potatoe"},
 	results = {"default:seeds_potatoe"},
 	near = {"group:ttable", "group:dishes"},
 })
