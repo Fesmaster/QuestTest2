@@ -755,6 +755,14 @@ minetest.register_node("default:swamp_log", {
 	}
 })
 
+qts.register_shaped_node ("default:bamboo_slats", {
+	description = "Bamboo Slats",
+	tiles = {"default_bamboo_slats.png"},
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, mushroom=1, generation_artificial=1},
+	sounds = qtcore.node_sound_wood(),
+})
+
 minetest.register_node("default:bamboo", {
 	description = "Bamboo",
 	tiles = {
@@ -1171,7 +1179,7 @@ minetest.register_node("default:bamboo_leaves", {
 	paramtype = "light",
 	groups = {snappy = 3, flammable = 2, leaves = 1, generation_trees=1},
 	walkable = false,
-	climbable = true,
+	climbable = false,
 	sounds = qtcore.node_sound_grass(),
 	after_place_node = qtcore.after_place_leaves;
 	node_box = {
@@ -1669,6 +1677,38 @@ minetest.register_node("default:table_aspen", {
 	},
 	sounds = qtcore.node_sound_wood(),
 })
+
+minetest.register_node("default:table_bamboo", {
+	description = "Bamboo Table",
+	tiles = {
+			"default_bamboo_table_top.png",
+			"default_bamboo_table_top.png",
+			"default_bamboo_log_side.png"
+		},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, ttable=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -6/16, 7/16, -6/16, 6/16, 8/16, 6/16, },
+			{ -6/16, 6/16, -8/16, 6/16, 8/16, -6/16, },
+			{ -6/16, 6/16, 6/16, 6/16, 8/16, 8/16, },
+			{ 6/16, 6/16, -6/16, 8/16, 8/16, 6/16, },
+			{ -8/16, 6/16, -6/16, -6/16, 8/16, 6/16, },
+			{ 6/16, -8/16, -8/16, 8/16, 8/16, -6/16, },
+			{ -8/16, -8/16, 6/16, -6/16, 8/16, 8/16, },
+			{ 6/16, -8/16, 6/16, 8/16, 8/16, 8/16, },
+			{ -8/16, -8/16, -8/16, -6/16, 8/16, -6/16, },
+			{ -8/16, -3/16, -6/16, -6/16, -1/16, 6/16, },
+			{ 6/16, -3/16, -6/16, 8/16, -1/16, 6/16, },
+			{ -6/16, -3/16, 6/16, 6/16, -1/16, 8/16, },
+			{ -6/16, -3/16, -8/16, 6/16, -1/16, -6/16, },
+		},
+	},
+	sounds = qtcore.node_sound_wood(),
+})
 --END tables
 
 --BEGIN Chairs
@@ -1936,6 +1976,33 @@ minetest.register_node("default:chair_aspen", {
 			{ -2/16, -1/16, -4/16, -1/16, 6/16, -3/16, },
 			{ 1/16, -1/16, -4/16, 2/16, 6/16, -3/16, },
 			{ -3/16, 3/16, -4/16, 3/16, 4/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+
+minetest.register_node("default:chair_bamboo", {
+	description = "bamboo Chair",
+	tiles = {
+			"default_bamboo_chair_top.png",  "default_bamboo_chair_bottom.png", "default_bamboo_chair_side.png", "default_bamboo_chair_side.png", "default_bamboo_chair_front.png", "default_bamboo_chair_front.png"
+		},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -4/16, -2/16, -4/16, 4/16, -1/16, 4/16, },
+			{ 3/16, -8/16, -4/16, 4/16, 7/16, -3/16, },
+			{ 3/16, -8/16, 3/16, 4/16, -2/16, 4/16, },
+			{ -4/16, -8/16, -4/16, -3/16, 7/16, -3/16, },
+			{ -4/16, -8/16, 3/16, -3/16, -2/16, 4/16, },
+			{ 3/16, -5/16, -3/16, 4/16, -4/16, 3/16, },
+			{ -3/16, -5/16, 3/16, 3/16, -4/16, 4/16, },
+			--{ -3/16, -5/16, -4/16, 3/16, -4/16, -3/16, },
+			{ -4/16, -5/16, -3/16, -3/16, -4/16, 3/16, },
+			{ -3/16, -1/16, -4/16, 3/16, 6/16, -3/16, },
 		},
 	},
 	sounds = qtcore.node_sound_wood(),
@@ -2256,3 +2323,30 @@ for i, n in ipairs(names) do
     })
 end
 
+--[[local stew_types = {"apple", "carrot", "potatoe", "goard", "onion"}
+local stew_types_defs = {"Apple", "Carrot", "Potatoe", "Goard", "Onion"}
+
+for i, n in ipairs(stew_types) do
+	local stewname = "default_"..n.."_stew.png"
+    minetest.register_node ("default:stew_"..n, {
+    	description = stew_types_defs[i] .. " Stew",
+    	drawtype="nodebox",
+		paramtype = "light",
+		tiles = {{name = stewname, align_style = "node"}, {name = stewname, align_style = "node"}, 
+		stewname, stewname, stewname.."^default_stew.png", stewname.."^default_dishes_clay.png", stewname.."^default_dishes_clay.png"},
+    	paramtype2 = "facedir",
+    	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
+    	sounds = qtcore.node_sound_stone(),
+		node_box = {
+			type = "fixed",
+			fixed = {
+				{ -2/16, -8/16, -2/16, 2/16, -7/16, 2/16, },
+				{ -3/16, -7/16, -3/16, 3/16, -6/16, 3/16, },
+				{ -4/16, -6/16, -4/16, -3/16, -5/16, 4/16, },
+				{ 3/16, -6/16, -4/16, 4/16, -5/16, 4/16, },
+				{ -4/16, -6/16, 3/16, 4/16, -5/16, 4/16, },
+				{ -4/16, -6/16, -4/16, 4/16, -5/16, -3/16, },
+			},
+		},
+    })
+end]]--

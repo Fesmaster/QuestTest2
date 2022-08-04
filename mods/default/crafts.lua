@@ -26,6 +26,11 @@ for i, n in ipairs(names) do
 		near = {"group:workbench"},
 	})
 end
+
+qts.register_craft({
+	ingredients = {"default:bamboo"},
+	results = {"default:bamboo_slats 2"},
+})
 --mushroom derivatives
 qts.register_craft({
 	ingredients = {"default:mycelium", "default:blue_mushroom_cap"},
@@ -268,6 +273,12 @@ qts.register_craft({
 	results = {"default:table_rowan"},
 	near = {"group:workbench"},
 })
+
+qts.register_craft({
+	ingredients = {"default:bamboo 2"},
+	results = {"default:table_bamboo"},
+	near = {"group:workbench"},
+})
 --END tables
 --BEGIN Chairs
 qts.register_craft({
@@ -327,6 +338,12 @@ qts.register_craft({
 qts.register_craft({
 	ingredients = {"default:rowan_wood_planks"},
 	results = {"default:chair_rowan 2"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:bamboo"},
+	results = {"default:chair_bamboo"},
 	near = {"group:workbench"},
 })
 --END Chairs
