@@ -28,6 +28,7 @@ dofile(minetest.get_modpath("default").."/foliage.lua")
 dofile(minetest.get_modpath("default").."/farming.lua")
 dofile(minetest.get_modpath("default").."/book.lua")
 dofile(minetest.get_modpath("default").."/sifter.lua")
+dofile(minetest.get_modpath("default").."/furniture.lua")
 
 dofile(minetest.get_modpath("default").."/functions.lua")
 
