@@ -2,6 +2,46 @@
 	This file manages player specific data,
 	callbacks on nodes and items,
 	and ambient sounds
+
+
+#CALLBACKS
+
+on_walk = function(pos, player) -> nil
+	called when the player walks on top of a block
+
+on_walk_in = function(pos, player) -> nil
+	called when the player walks within a block
+
+on_walk_exit = function(pos, player) -> nil
+	called when the player leaves a block (from within it)
+	
+on_carry = function(itemstack, player) -> itemstack, nil
+	called every tick when the item is in the player's inventory
+	if nil is returned, then the itemstack is unmodified, otherwise, 
+	the return must be a new itemstack to replace the old one
+
+on_wield = function(itemstack, player) ->itemstack, nil
+	called every tick when the item is in the player's hand.
+	if nil is returned, then the itemstack is unmodified, otherwise, 
+	the return must be a new itemstack to replace the old one
+
+on_long_secondary_use = function(itemstack, player) ->itemstack, nil
+	called if you hold the rightclick button down for more than 1 second without changing item
+	used for things like eating, bows, etc.
+	if nil is returned, then the itemstack is unmodified, otherwise, 
+	the return must be a new itemstack to replace the old one
+
+long_secondary_use_time = number
+	how long to wait before calling on_long_secondary_use. Defaults to 1 if not specified.
+
+on_stop_secondary_use = function(wield, player, cause) -> itemstack, nil
+	called when you stop rightclicking an item, either by changing the wielded index or by releasing the button
+	`cause` will always be a string, either "unclicked", or "scrolled". 
+		"unclikced" means that the RMB was released.
+		"scrolled" meamd that the player changed their wield index
+	if nil is returned, then the itemstack is unmodified, otherwise, 
+	the return must be a new itemstack to replace the old one
+
 --]]
 
 local node_damage_timer = 0
@@ -10,12 +50,26 @@ local ambient_sound_cycles = 2
 local ambient_sound_timer = 0
 local ambient_sound_radius = 8
 
+local long_click_time = 1
+
+--[[
+	Is this currently a damage tick?
+]]
 function qts.is_damage_tick()
 	return node_damage_timer >= 1
 end
 
 qts.player_data = {}
 
+--[[
+	Set a player's special data fields   
+	player - the player. can be a player name  
+	category - mod-specific or use specific category. To prevent name clashing. Should at least contain the mod name  
+	field - the specific field  
+	data - the data to set 
+
+	This data is NOT maintained between sessions. 
+]]
 function qts.set_player_data(player, catagory, field, data)
 	if (type(player) ~= "string") then player = player:get_player_name() end
 	
@@ -34,6 +88,14 @@ function qts.set_player_data(player, catagory, field, data)
 	end
 end
 
+--[[
+	Get a player's special data fields   
+	player - the player. can be a player name  
+	category - mod-specific or use specific category. To prevent name clashing. Should at least contain the mod name  
+	field - the specific field  
+
+	This data is NOT maintained between sessions. 
+]]
 function qts.get_player_data(player, catagory, field)
 	if (type(player) ~= "string") then player = player:get_player_name() end
 	
@@ -57,6 +119,7 @@ end
 
 minetest.register_globalstep(function(dtime)
 	--damage tick update
+	--this is important, because at least one tick will have the timer >= 1 for the entire duration.
 	if node_damage_timer >= 1 then
 		node_damage_timer = 0
 	end
@@ -86,17 +149,21 @@ minetest.register_globalstep(function(dtime)
 			node_dat_under.on_walk(pos, player)
 		end
 
-		local node_in = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z})
-		local new = not (vector.equals(vector.round({x=pos.x, y=pos.y+1, z=pos.z}), vector.round(prevpos)))
-		
-		local node_dat_in = minetest.registered_nodes[node_in.name]
-		if node_dat_in and node_dat_in.on_walk_in then
-			node_dat_in.on_walk_in({x=pos.x, y=pos.y+1, z=pos.z}, player, new)
-		end
-		if new then
-			local old_node_dat_in = minetest.registered_nodes[minetest.get_node(prevpos).name]
-			if (old_node_dat_in and old_node_dat_in.on_walk_exit) then
-				old_node_dat_in.on_walk_exit(prevpos, player)
+		for offset_y = 0,1 do
+			local offset_v = vector.new(0,1+offset_y,0)
+			local offset_pos = pos + offset_v
+			local node_in = minetest.get_node(offset_pos)
+			local new = not (vector.equals(vector.round(offset_pos), vector.round(prevpos)))
+			
+			local node_dat_in = minetest.registered_nodes[node_in.name]
+			if node_dat_in and node_dat_in.on_walk_in then
+				node_dat_in.on_walk_in(offset_pos, player, new)
+			end
+			if new then
+				local old_node_dat_in = minetest.registered_nodes[minetest.get_node(prevpos+offset_v).name]
+				if (old_node_dat_in and old_node_dat_in.on_walk_exit) then
+					old_node_dat_in.on_walk_exit(prevpos+offset_v, player)
+				end
 			end
 		end
 		
@@ -104,7 +171,6 @@ minetest.register_globalstep(function(dtime)
 			Deal with the inventory callbacks
 		--]]
 		local inv = player:get_inventory()
-		local wield = player:get_wielded_item()
 		
 		local invlist = inv:get_list("main")
 		local invlist_n = {}
@@ -123,8 +189,81 @@ minetest.register_globalstep(function(dtime)
 		end
 		inv:set_list("main", invlist_n)
 		
+		local wield = player:get_wielded_item()
 		local wielddat = minetest.registered_items[wield:get_name()]
+		if wielddat then
+			local rmb_time = qts.get_player_data(name, "INTERNAL", "rmb_time") or 0
+			local wield_index_prev = qts.get_player_data(name, "INTERNAL", "wield_index") or 0
+			local wield_index = player:get_wield_index()
+			local controls = player:get_player_control()
+			local long_click_time_max = wielddat.long_secondary_use_time or long_click_time
+
+			local did_unclick = false
+			if wield_index == wield_index_prev then
+				if controls.RMB then
+					rmb_time = rmb_time + dtime
+					if rmb_time > long_click_time_max then
+						--run the long click function
+						if wielddat.on_long_secondary_use then
+							local wield_n = wielddat.on_long_secondary_use(wield, player)
+							if wield_n then
+								player:set_wielded_item(wield_n)
+							end
+						end
+
+						rmb_time = 0
+					end
+				else
+					if rmb_time > 0 then
+						--was clicking last frame
+						did_unclick = true
+					end
+					rmb_time = 0
+				end
+			else
+				if rmb_time > 0 then
+					--was clicking last frame
+					did_unclick = true
+				end 
+				rmb_time = 0
+			end
+			if did_unclick then
+				--run the unclick function
+				--make sure it is for the previous rightclicked item
+				local cause = "unclicked"
+				if (wield_index ~= wield_index_prev) then
+					cause = "scrolled"
+					inv = player:get_inventory()
+					local prev_wield = inv:get_stack(player:get_wield_list(), wield_index_prev)
+					if prev_wield then
+						wield = prev_wield
+						wielddat = minetest.registered_items[prev_wield:get_name()]
+					else
+						wielddat = nil
+					end
+				end
+
+				if wielddat.on_stop_secondary_use then
+					local wield_n = wielddat.on_stop_secondary_use(wield, player, cause)
+					if wield_n then
+						if (wield_index ~= wield_index_prev) then
+							inv:set_stack(player:get_wield_list(), wield_index_prev, wield_n)
+						else
+							player:set_wielded_item(wield_n)
+						end
+					end
+				end
+			end
+
+			qts.set_player_data(name, "INTERNAL", "rmb_time", rmb_time)
+			qts.set_player_data(name, "INTERNAL", "wield_index", wield_index)
+		end
+
+		--wielded item may have changed. Re-fetch it.
+		wield = player:get_wielded_item()
+		wielddat = minetest.registered_items[wield:get_name()]
 		if wielddat and wielddat.on_wield then
+			--run the one_wield function
 			local wield_n = wielddat.on_wield(wield, player)
 			if wield_n then
 				player:set_wielded_item(wield_n)
