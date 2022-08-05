@@ -51,7 +51,7 @@ qts.register_projectile("default:arrow_projectile", {
     radius = 0.25,
     selectable = false,
     gravity_scale = 0.5,
-    collectable = false, --TO CHANGE
+    collectable = "default:arrow 1", --TO CHANGE
     lifetime=60*5,
     speed = 20,
     damage_groups = {fleshy=8},
@@ -62,52 +62,185 @@ qts.register_projectile("default:arrow_projectile", {
     on_step = function(self, dtime) end,
 })
 
-minetest.register_tool("default:testing_bow", {
-	description = "Testing Bow",
-	inventory_image = "default_bow1.png",
-	--on_secondary_use = function(itemstack, user, pointed_thing)
-		--qts.projectile_launch_player("default:arrow_projectile", user, 0)
-
-    --end,
-    on_long_secondary_use = function(itemstack, user)
-        --minetest.log("LONG USE")
-        local next_stage = ItemStack("default:testing_bow_s2")
-        next_stage:set_wear(itemstack:get_wear())
-        return next_stage
-    end,
-    --on_stop_secondary_use = function(itemstack, user)
-    --    minetest.log("stopped secondary use")
-    --end,
+minetest.register_craftitem("default:arrow", {
+	description = "Arrow",
+	inventory_image = "default_arrow_item.png",
+	groups = {ammunition = 1, arrow=1,},
+    projectile = "default:arrow_projectile",
 })
 
-minetest.register_tool("default:testing_bow_s2", {
-	description = "Testing Bow",
-	inventory_image = "default_bow2.png",
-    groups = {not_in_creative_inventory=1},
-	on_long_secondary_use = function(itemstack, user)
-        --minetest.log("LONG USE")
-        local next_stage = ItemStack("default:testing_bow_s3")
-        next_stage:set_wear(itemstack:get_wear())
-        return next_stage
-    end,
-    on_stop_secondary_use = function(itemstack, user)
-        --minetest.log("stopped secondary use")
-        local next_stage = ItemStack("default:testing_bow")
-        next_stage:set_wear(itemstack:get_wear())
-        return next_stage
-    end,
+qts.register_projectile("default:arrow_gold_projectile", {
+    visual="mesh",
+    visual_size = vector.new(5,5,5),
+    textures = {"default_arrow_gold.png"},
+    use_texture_alpha=false,
+    mesh ="arrow.obj",
+    automatic_rotate=0,
+    automatic_face_movement_dir=1.0,
+    automatic_face_movement_max_rotation_per_sec=1.0,
+
+    radius = 0.25,
+    selectable = false,
+    gravity_scale = 0.5,
+    collectable = "default:arrow_gold 1", --TO CHANGE
+    lifetime=60*5,
+    speed = 20,
+    damage_groups = {fleshy=8},
+
+    on_strike_node = qts.projectile_default_struck_node,
+    on_strike_entity = qts.projectile_default_struck_entity,
+    on_timeout = qts.projectile_default_timeout,
+    on_step = function(self, dtime) end,
 })
 
-minetest.register_tool("default:testing_bow_s3", {
-	description = "Testing Bow",
-	inventory_image = "default_bow3.png",
-    groups = {not_in_creative_inventory=1},
-	
-    on_stop_secondary_use = function(itemstack, user)
-        --minetest.log("stopped secondary use")
-        qts.projectile_launch_player("default:arrow_projectile", user, 0)
-        local next_stage = ItemStack("default:testing_bow")
-        next_stage:set_wear(itemstack:get_wear())
-        return next_stage
-    end,
+minetest.register_craftitem("default:arrow_gold", {
+	description = "Gold Arrow",
+	inventory_image = "default_arrow_gold_item.png",
+	groups = {ammunition = 1, arrow=1,},
+    projectile = "default:arrow_gold_projectile",
+})
+
+
+
+local function register_bow(name, def)
+    local groups_2 = qts.table_deep_copy(def.groups)
+    groups_2.not_in_creative_inventory=1
+    
+    minetest.register_tool(name, {
+    	description = def.description,
+    	inventory_image = def.inventory_images[1],
+        groups = def.groups,
+        on_long_secondary_use = function(itemstack, user)
+            --get an arrow from the inventory
+            local inv = user:get_inventory()
+            local wield_index = user:get_wield_index()
+            local wield_list = user:get_wield_list()
+            local arrow_index = 0
+            local arrow_item = nil
+            if inv then
+                local list = inv:get_list(wield_list)
+                for i=wield_index+1,inv:get_size(wield_list) do
+                    local item = list[i]
+                    if minetest.get_item_group(item:get_name(), "arrow") ~= 0 then
+                        --we found our arrow
+                        arrow_index = i
+                        arrow_item = item
+                        break
+                    end
+                end
+                if (arrow_item) then
+                    local taken_arrow = arrow_item:take_item(1)
+                    inv:set_stack(wield_list, arrow_index, arrow_item)
+
+                    local next_stage = ItemStack(name .. "_s2")
+
+                    local meta = next_stage:get_meta()
+                    meta:set_string("current_arrow", taken_arrow:to_string() )
+                    --next_stage:set_meta(meta)
+
+                    next_stage:set_wear(itemstack:get_wear()) --wear pass-along
+
+                    return next_stage
+                end
+            end
+        end,
+        long_secondary_use_time=def.draw_time/2,
+    })
+
+    minetest.register_tool(name .. "_s2", {
+    	description = def.description,
+    	inventory_image = def.inventory_images[2],
+        groups = groups_2,
+    	on_long_secondary_use = function(itemstack, user)
+            local next_stage = ItemStack(name.."_s3")
+            next_stage:set_wear(itemstack:get_wear()) --wear pass-along
+            next_stage:get_meta():set_string("current_arrow", itemstack:get_meta():get_string("current_arrow")) --meta pass-along
+            return next_stage
+        end,
+        on_stop_secondary_use = function(itemstack, user)
+            local meta = itemstack:get_meta()
+            local arrow_item = ItemStack(meta:get_string("current_arrow"))
+            local inv = user:get_inventory()
+            if arrow_item and inv then
+                local leftover = inv:add_item("main",arrow_item)
+                if leftover then
+                    minetest.add_item(user:get_pos(), leftover)
+                end
+            end
+
+            local next_stage = ItemStack(name)
+            next_stage:set_wear(itemstack:get_wear()) --wear pass-along
+            return next_stage
+        end,
+        long_secondary_use_time=def.draw_time/2,
+        on_drop = function(itemstack, dropper, pos)
+            local meta = itemstack:get_meta()
+            local arrow_item = ItemStack(meta:get_string("current_arrow"))
+            local inv = dropper:get_inventory()
+            if arrow_item and inv then
+                local leftover = inv:add_item("main",arrow_item)
+                if leftover then
+                    minetest.add_item(dropper:get_pos(), leftover)
+                end
+            end
+            local next_stage = ItemStack(name)
+            next_stage:set_wear(itemstack:get_wear()) --wear pass-along
+            return minetest.item_drop(next_stage, dropper, pos)
+        end
+    })
+
+    minetest.register_tool(name.."_s3", {
+    	description = def.description,
+    	inventory_image = def.inventory_images[3],
+        groups = groups_2,
+        on_stop_secondary_use = function(itemstack, user, cause)
+            local launched = false
+            local meta = itemstack:get_meta()
+            local arrow_item = ItemStack(meta:get_string("current_arrow"))
+            if cause == "unclicked" then
+                if arrow_item then
+                    local arrow_def = minetest.registered_items[arrow_item:get_name()]
+                    if arrow_def and arrow_def.projectile then
+                        launched = true
+                        qts.projectile_launch_player(arrow_def.projectile, user, def.inaccuracy)
+                    end
+                end
+            end
+            if not launched then
+                local inv = user:get_inventory()
+                if arrow_item and inv then
+                    local leftover = inv:add_item("main",arrow_item)
+                    if leftover then
+                        minetest.add_item(user:get_pos(), leftover)
+                    end
+                end
+            end
+            local next_stage = ItemStack(name)
+            next_stage:set_wear(itemstack:get_wear())
+            return next_stage
+        end,
+        long_secondary_use_time=0.5,
+        on_drop = function(itemstack, dropper, pos)
+            local meta = itemstack:get_meta()
+            local arrow_item = ItemStack(meta:get_string("current_arrow"))
+            local inv = dropper:get_inventory()
+            if arrow_item and inv then
+                local leftover = inv:add_item("main",arrow_item)
+                if leftover then
+                    minetest.add_item(dropper:get_pos(), leftover)
+                end
+            end
+            local next_stage = ItemStack(name)
+            next_stage:set_wear(itemstack:get_wear()) --wear pass-along
+            return minetest.item_drop(next_stage, dropper, pos)
+        end
+    })
+end
+
+register_bow("default:bow", {
+    description = "Bow",
+    inventory_images = {"default_bow1.png", "default_bow2.png", "default_bow3.png"},
+    groups = {bow=1},
+    draw_time = 1.5,
+    inaccuracy = 0.5,
 })

@@ -31,8 +31,14 @@ on_long_secondary_use = function(itemstack, player) ->itemstack, nil
 	if nil is returned, then the itemstack is unmodified, otherwise, 
 	the return must be a new itemstack to replace the old one
 
-on_stop_secondary_use = function(wield, player) -> itemstack, nil
+long_secondary_use_time = number
+	how long to wait before calling on_long_secondary_use. Defaults to 1 if not specified.
+
+on_stop_secondary_use = function(wield, player, cause) -> itemstack, nil
 	called when you stop rightclicking an item, either by changing the wielded index or by releasing the button
+	`cause` will always be a string, either "unclicked", or "scrolled". 
+		"unclikced" means that the RMB was released.
+		"scrolled" meamd that the player changed their wield index
 	if nil is returned, then the itemstack is unmodified, otherwise, 
 	the return must be a new itemstack to replace the old one
 
@@ -190,12 +196,13 @@ minetest.register_globalstep(function(dtime)
 			local wield_index_prev = qts.get_player_data(name, "INTERNAL", "wield_index") or 0
 			local wield_index = player:get_wield_index()
 			local controls = player:get_player_control()
+			local long_click_time_max = wielddat.long_secondary_use_time or long_click_time
 
 			local did_unclick = false
 			if wield_index == wield_index_prev then
 				if controls.RMB then
 					rmb_time = rmb_time + dtime
-					if rmb_time > long_click_time then
+					if rmb_time > long_click_time_max then
 						--run the long click function
 						if wielddat.on_long_secondary_use then
 							local wield_n = wielddat.on_long_secondary_use(wield, player)
@@ -222,10 +229,28 @@ minetest.register_globalstep(function(dtime)
 			end
 			if did_unclick then
 				--run the unclick function
+				--make sure it is for the previous rightclicked item
+				local cause = "unclicked"
+				if (wield_index ~= wield_index_prev) then
+					cause = "scrolled"
+					inv = player:get_inventory()
+					local prev_wield = inv:get_stack(player:get_wield_list(), wield_index_prev)
+					if prev_wield then
+						wield = prev_wield
+						wielddat = minetest.registered_items[prev_wield:get_name()]
+					else
+						wielddat = nil
+					end
+				end
+
 				if wielddat.on_stop_secondary_use then
-					local wield_n = wielddat.on_stop_secondary_use(wield, player)
+					local wield_n = wielddat.on_stop_secondary_use(wield, player, cause)
 					if wield_n then
-						player:set_wielded_item(wield_n)
+						if (wield_index ~= wield_index_prev) then
+							inv:set_stack(player:get_wield_list(), wield_index_prev, wield_n)
+						else
+							player:set_wielded_item(wield_n)
+						end
 					end
 				end
 			end
