@@ -403,16 +403,16 @@ register_furnace("default:furnace_brick", {
 	}
 })
 
-register_furnace("default:furnace_brick_grey", {
+register_furnace("default:furnace_brick_gray", {
 	description = "Brick Furnace",
 	tiles_off = {
-		"default_furnace_brick_grey_top.png", "default_furnace_brick_grey_top.png",
-		"default_furnace_brick_grey_side.png", "default_furnace_brick_grey_side.png",
-		"default_furnace_brick_grey_side.png", "default_furnace_brick_grey_front.png"
+		"default_furnace_brick_gray_top.png", "default_furnace_brick_gray_top.png",
+		"default_furnace_brick_gray_side.png", "default_furnace_brick_gray_side.png",
+		"default_furnace_brick_gray_side.png", "default_furnace_brick_gray_front.png"
 	},
 	tiles_on = {
-		"default_furnace_brick_grey_top.png", "default_furnace_brick_grey_top.png",
-		"default_furnace_brick_grey_side.png", "default_furnace_brick_grey_side.png",
-		"default_furnace_brick_grey_side.png", "default_furnace_brick_grey_front_active.png"
+		"default_furnace_brick_gray_top.png", "default_furnace_brick_gray_top.png",
+		"default_furnace_brick_gray_side.png", "default_furnace_brick_gray_side.png",
+		"default_furnace_brick_gray_side.png", "default_furnace_brick_gray_front_active.png"
 	}
 })

@@ -144,7 +144,7 @@ register_farm_plant("carrot", {
 	seed_tiles = {"default_seeds_carrot_top.png", "default_oak_wood.png", "default_seeds_carrot_side.png"},
 	item_image = "default_herb_carrot.png",
 	plant_levels = 7,
-	plant_tiles_list = {"default_herb_0.png", "default_herb_carrot_1.png", "default_herb_carrot_2.png", "default_herb_carrot_3.png",
+	plant_tiles_list = {"default_herb_0.png", "default_herb_carrot_1.png", "default_herb_carrot_2.png", "default_herb_carrot_3.png", "default_herb_carrot_4.png",
 	"default_herb_carrot_5.png", "default_herb_carrot_6.png"},
 	grow_timer = 90,
 	grow_timer_random = 30,

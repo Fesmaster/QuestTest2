@@ -213,6 +213,16 @@ qts.worldgen.register_structure("tree_swamp", {
 	flags = qts.worldgen.centers(true, false, true),
 })
 
+qts.worldgen.register_structure("tree_bamboo", {
+	schematic = path .. "bamboo1.mts",
+	chance = 140,
+	biomes = {"swamp"},
+	nodes = {"default:dirt_with_swamp_grass"},
+	force_place = false,
+	rotate = true,
+	flags = qts.worldgen.centers(true, false, true),
+})
+
 qts.worldgen.register_structure("tree_small_blue_shroom", {
 	schematic = path .. "blue_shroom2.mts",
 	chance = 70,
