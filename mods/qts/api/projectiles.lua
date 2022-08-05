@@ -12,11 +12,13 @@ def is a table with values:
 	initial_sprite_basepos
 	backface_culling
 	glow
-	automatic_rotate
-	automatic_face_movement_dir
-	automatic_face_movement_max_rotation_per_sec
+	
+	REMOVED
+	--automatic_face_movement_dir
+	--automatic_face_movement_max_rotation_per_sec
 	
 	--custom
+	automatic_rotate = boolean
 	radius = radius of projectile
 	selectable = boolean can player select
 	gravity_scale = number - scale of the gravity. default: 1
@@ -78,14 +80,15 @@ function qts.register_projectile(name, def)
 			textures = def.textures,
 			use_texture_alpha = def.use_texture_alpha,
 			spritediv = def.spritediv,
+			mesh = def.mesh,
 			initial_sprite_basepos = def.initial_sprite_basepos,
 			backface_culling = def.backface_culling,
 			glow = def.glow,
 			
 			--effects
-			automatic_rotate = def.automatic_rotate,
-			automatic_face_movement_dir = def.automatic_face_movement_dir,
-			automatic_face_movement_max_rotation_per_sec = def.automatic_face_movement_max_rotation_per_sec,
+			--automatic_rotate = def.automatic_rotate,
+			--automatic_face_movement_dir = def.automatic_face_movement_dir,
+			--automatic_face_movement_max_rotation_per_sec = def.automatic_face_movement_max_rotation_per_sec,
 			
 			--builtin
 			hp_max = 1,
@@ -109,6 +112,8 @@ function qts.register_projectile(name, def)
 		damage_groups = def.damage_groups or {fleshy = 1},
 		
 		custom_step = def.on_step or nil,
+
+		automatic_rotate = def.automatic_rotate,
 		
 		--QuestTest stuff
 		qt_entity = true,
@@ -237,6 +242,18 @@ function qts.register_projectile(name, def)
 			if (self.lifetime <= 0) then
 				self:on_timeout()
 			end
+			
+			if self.automatic_rotate  and self.prevpos then
+				local dir = vector.direction(self.prevpos, pos)
+				if dir.x ~= 0 or dir.y ~=0 or dir.z ~= 0 then
+					if self.invert_direction then
+						dir = -dir
+					end
+					self.object:set_rotation(vector.dir_to_rotation(dir))
+				end
+			end
+			--minetest.log(dump(self.object:get_properties().automatic_face_movement_dir))
+			
 			--update the prevpos
 			self.prevpos = pos
 		end,
@@ -258,27 +275,28 @@ these are used if none are provided
 they are publicly accessable so that, if one wanted to, they could use them inside of their custom callback functions
 to get the default behavior along with the custom
 --]]
-qts.projectile_default_struck_node = function(luaentity, pos, node)
-	luaentity.object:set_velocity({x=0, y=0, z=0})
-	luaentity.object:set_acceleration({x=0, y=0, z=0})
-	if (luaentity.prevpos) then
-		luaentity.object:set_pos(luaentity.prevpos)
+qts.projectile_default_struck_node = function(self, pos, node)
+	self.object:set_velocity({x=0, y=0, z=0})
+	self.object:set_acceleration({x=0, y=0, z=0})
+	if (self.prevpos) then
+		self.object:set_pos(self.prevpos)
 	end
-	luaentity.active = false --deactivate the entity
+	self.invert_direction = true
+	self.active = false --deactivate the entity
 end
 
-qts.projectile_default_struck_entity = function(luaentity, obj_other)
-	obj_other:punch((luaentity.launcher or luaentity.object), 1, {
+qts.projectile_default_struck_entity = function(self, obj_other)
+	obj_other:punch((self.launcher or self.object), 1, {
 		full_punch_interval = 0.9,
 		max_drop_level = 0,
 		groupcaps = {},
-		damage_groups = luaentity.damage_groups or {fleshy = 1},
-	}, vector.direction(luaentity.object:get_pos(), obj_other:get_pos()))
-	luaentity.object:remove() --destroy the projectile
+		damage_groups = self.damage_groups or {fleshy = 1},
+	}, vector.direction(self.object:get_pos(), obj_other:get_pos()))
+	self.object:remove() --destroy the projectile
 end
 
-qts.projectile_default_timeout = function(luaentity)
-	luaentity.object:remove()
+qts.projectile_default_timeout = function(self)
+	self.object:remove()
 end
 
 
