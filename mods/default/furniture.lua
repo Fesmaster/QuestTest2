@@ -4,9 +4,9 @@
 
 
 --BEGIN benches
---[[minetest.register_node("default:bench_oak", {
-	description = "Oak Bench",
-	tiles = {"default_oak_wood.png"},
+minetest.register_node("default:bench_pine", {
+	description = "Pine Bench",
+	tiles = {"default_pine_wood.png"},
 	drawtype = "nodebox",
 	paramtype = "light",
 	paramtype2 = "facedir",
@@ -14,11 +14,17 @@
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{ -2/16, -2/16, -2/16, 3/16, -1/16, 18/16, },
+			{ -3/16, -2/16, -16/16, 4/16, -1/16, 16/16, },
+			{ 3/16, -8/16, 15/16, 4/16, 8/16, 16/16, },
+			{ -3/16, -8/16, 15/16, -2/16, -2/16, 16/16, },
+			{ -3/16, -8/16, -16/16, -2/16, -2/16, -15/16, },
+			{ 3/16, -8/16, -16/16, 4/16, 8/16, -15/16, },
+			{ 3/16, 5/16, -15/16, 4/16, 7/16, 15/16, },
+			{ 3/16, 1/16, -15/16, 4/16, 3/16, 15/16, },
 		}
 	},
 	sounds = qtcore.node_sound_wood(),
-})]]--
+})
 
 --END benches
 
