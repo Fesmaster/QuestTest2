@@ -347,12 +347,31 @@ qts.register_craft({
 	near = {"group:anvil", "group:furnace"},
 })
 
+
+--bucket
 qts.register_craft({
 	ingredients = {"group:wood 4"},
 	results = {"default:bucket"},
 	near = {"group:workbench"},
 })
 
+--bows
+
+qts.register_craft({
+	ingredients = {"group:wood", "default:flint 16", "default:underbrush_item 16"},
+	results = {"default:arrow 16"},
+	held = {"group:knife"},
+})
+
+qts.register_craft({
+	ingredients = {"group:wood", "default:underbrush_item 4"},
+	results = {"default:bow"},
+	near = {"group:workbench"},
+})
+
+
+
+--craftitems
 
 qts.register_craft({
 	ingredients = {"default:brick"},
