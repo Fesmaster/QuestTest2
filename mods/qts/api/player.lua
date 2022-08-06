@@ -243,7 +243,7 @@ minetest.register_globalstep(function(dtime)
 					end
 				end
 
-				if wielddat.on_stop_secondary_use then
+				if wielddat and wielddat.on_stop_secondary_use then
 					local wield_n = wielddat.on_stop_secondary_use(wield, player, cause)
 					if wield_n then
 						if (wield_index ~= wield_index_prev) then

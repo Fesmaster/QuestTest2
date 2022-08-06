@@ -101,8 +101,18 @@ minetest.register_craftitem("default:arrow_gold", {
 })
 
 
-
+--[[
+    Register a new bow  
+    def contains:  
+    description = "Bow",  
+    inventory_images = {"stage1", "stage2", "stage3"},  
+    groups = {},  
+    draw_time = 1.5,  -- the full draw time of the bow. each stage is half.  
+    inaccuracy = 0.5,  
+    uses = 100,  
+]]
 local function register_bow(name, def)
+    def.groups.bow = def.groups.bow or 1
     local groups_2 = qts.table_deep_copy(def.groups)
     groups_2.not_in_creative_inventory=1
     
@@ -130,7 +140,10 @@ local function register_bow(name, def)
                 end
                 if (arrow_item) then
                     local taken_arrow = arrow_item:take_item(1)
-                    inv:set_stack(wield_list, arrow_index, arrow_item)
+                    --don't actually set the stack back if the player is in creative
+                    if not qts.is_player_creative(user:get_player_name()) then
+                        inv:set_stack(wield_list, arrow_index, arrow_item)
+                    end
 
                     local next_stage = ItemStack(name .. "_s2")
 
@@ -161,7 +174,7 @@ local function register_bow(name, def)
             local meta = itemstack:get_meta()
             local arrow_item = ItemStack(meta:get_string("current_arrow"))
             local inv = user:get_inventory()
-            if arrow_item and inv then
+            if arrow_item and inv and not qts.is_player_creative(user:get_player_name()) then
                 local leftover = inv:add_item("main",arrow_item)
                 if leftover then
                     minetest.add_item(user:get_pos(), leftover)
@@ -177,7 +190,7 @@ local function register_bow(name, def)
             local meta = itemstack:get_meta()
             local arrow_item = ItemStack(meta:get_string("current_arrow"))
             local inv = dropper:get_inventory()
-            if arrow_item and inv then
+            if arrow_item and inv and not qts.is_player_creative(dropper:get_player_name()) then
                 local leftover = inv:add_item("main",arrow_item)
                 if leftover then
                     minetest.add_item(dropper:get_pos(), leftover)
@@ -197,18 +210,22 @@ local function register_bow(name, def)
             local launched = false
             local meta = itemstack:get_meta()
             local arrow_item = ItemStack(meta:get_string("current_arrow"))
+            local wear = itemstack:get_wear()
             if cause == "unclicked" then
                 if arrow_item then
                     local arrow_def = minetest.registered_items[arrow_item:get_name()]
                     if arrow_def and arrow_def.projectile then
                         launched = true
                         qts.projectile_launch_player(arrow_def.projectile, user, def.inaccuracy)
+                        if not qts.is_player_creative(user:get_player_name()) then
+                            wear = wear + (65535/def.uses)
+                        end
                     end
                 end
             end
             if not launched then
                 local inv = user:get_inventory()
-                if arrow_item and inv then
+                if arrow_item and inv and not qts.is_player_creative(user:get_player_name()) then
                     local leftover = inv:add_item("main",arrow_item)
                     if leftover then
                         minetest.add_item(user:get_pos(), leftover)
@@ -216,7 +233,11 @@ local function register_bow(name, def)
                 end
             end
             local next_stage = ItemStack(name)
-            next_stage:set_wear(itemstack:get_wear())
+            if wear >= 65535 then
+                next_stage:take_item(1)
+                return next_stage --the bow broke!
+            end
+            next_stage:set_wear(wear)
             return next_stage
         end,
         long_secondary_use_time=0.5,
@@ -224,7 +245,7 @@ local function register_bow(name, def)
             local meta = itemstack:get_meta()
             local arrow_item = ItemStack(meta:get_string("current_arrow"))
             local inv = dropper:get_inventory()
-            if arrow_item and inv then
+            if arrow_item and inv and not qts.is_player_creative(dropper:get_player_name()) then
                 local leftover = inv:add_item("main",arrow_item)
                 if leftover then
                     minetest.add_item(dropper:get_pos(), leftover)
@@ -240,7 +261,8 @@ end
 register_bow("default:bow", {
     description = "Bow",
     inventory_images = {"default_bow1.png", "default_bow2.png", "default_bow3.png"},
-    groups = {bow=1},
+    groups = {},
     draw_time = 1.5,
-    inaccuracy = 0.5,
+    inaccuracy = 5,
+    uses = 100,
 })
