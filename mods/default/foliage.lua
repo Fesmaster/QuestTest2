@@ -10,22 +10,25 @@ local underbrush_drops = {
 	max_items = 1,
 	items={
 		{
-			tools = {"~:knife"},
-			chance=5,
-			items = {
-			{items = {"default:herb_milfoil"}, rarity = 16,},
-			{items = {"default:herb_bloodbulb"}, rarity = 16},
-			{items = {"default:herb_wolfshood"}, rarity = 16},
-			{items = {"default:tinder"}},
-			},
+			tool_groups = {"knife"},
+			rarity=5,
+			items = {"default:herb_milfoil", "default:seed_milfoil"},
 		},
 		{
-			tools = {"~:axe"},
-			chance=1,
+			tool_groups = {"knife"},
+			rarity=4,
+			items = {"default:herb_bloodbulb", "default:seed_bloodbulb"},
+		},
+		{
+			tool_groups = {"knife"},
+			rarity=3,
+			items = {"default:herb_wolfshood", "default:seed_wolfshood"},
+		},
+		{
+			tool_groups = {"axe", "knife"},
 			items = {"default:tinder"}
 		},
 		{
-			chance=1,
 			items = {"default:underbrush_item"}
 		}
 	}

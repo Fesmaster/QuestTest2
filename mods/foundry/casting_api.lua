@@ -21,7 +21,7 @@ function foundry.register_casting_type(name, def)
 	minetest.register_node ("foundry:"..name.."_mold", {
 		description = def.description .. " Mold",
 		tiles =def.block_tiles,
-		groups = {cracky=3, foundry_mold=1},
+		groups = {cracky=3, oddly_breakable_by_hand=2, foundry_mold=1},
 		is_ground_content = false,
 		sounds = qtcore.node_sound_stone(),
 		can_cast = function(pos, node, FD, caster)

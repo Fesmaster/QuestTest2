@@ -854,9 +854,9 @@ minetest.register_node("default:ladder", {
 	on_place = function(itemstack, placer, pointed_thing)
 		if (pointed_thing.under ~= nil and minetest.get_node(pointed_thing.under).name == "default:ladder") then
 			--place with same rotation as under
-			minetest.item_place(itemstack, placer, pointed_thing, minetest.get_node(pointed_thing.under).param2)
+			return minetest.item_place(itemstack, placer, pointed_thing, minetest.get_node(pointed_thing.under).param2)
 		else
-			minetest.item_place(itemstack, placer, pointed_thing)
+			return minetest.item_place(itemstack, placer, pointed_thing)
 		end
 	end,
 })
