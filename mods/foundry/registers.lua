@@ -180,7 +180,7 @@ minetest.register_entity("foundry:casting_flow", {
 minetest.register_node ("foundry:ingot_mold", {
 	description = "Ingot Mold",
 	tiles = {"foundry_ingot_mold.png"},
-	groups = {cracky=3, foundry_mold=1},
+	groups = {cracky=3, oddly_breakable_by_hand=2, foundry_mold=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
 	can_cast = function(pos, node, FD, caster)
@@ -239,7 +239,7 @@ minetest.register_node ("foundry:ingot_mold", {
 minetest.register_node ("foundry:block_mold", {
 	description = "Block Mold",
 	tiles = {"foundry_block_mold.png"},
-	groups = {cracky=3, foundry_mold=1},
+	groups = {cracky=3, oddly_breakable_by_hand=2, foundry_mold=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
 	can_cast = function(pos, node, FD, caster)
