@@ -129,94 +129,19 @@ qts.register_craft({
 	near = {"group:workbench"},
 })
 
-
---[[qts.register_craft({
-	ingredients = {"default:dishes_clay", "group:wood 3"},
-	results = {"default:food_table"},
-	near = {"group:workbench"},
-})]]--
-
-qts.register_craft({
-	ingredients = {"default:dishes_clay 2"},
-	results = {"default:alchemy_equipment_basic"},
-})
-
-qts.register_craft({
-	ingredients = {"default:dishes_clay", "default:iron_bar"},
-	results = {"default:alchemy_equipment_advanced"},
-	near = {"group:workbench", "default:anvil"},
-})
-
-qts.register_craft({
-	ingredients = {"default:dishes_clay", "default:steel_bar"},
-	results = {"default:alchemy_equipment_advanced"},
-	near = {"group:workbench", "default:anvil"},
-})
-
-qts.register_craft({
-	ingredients = {"default:herb_potatoe"},
-	results = {"default:seeds_potatoe"},
-	near = {"group:ttable", "group:dishes"},
-})
-
-qts.register_craft({
-	ingredients = {"default:dishes_clay", "default:herb_grain 4"},
-	results = {"default:flour_bowl"},
-	near = {"group:ttable", "group:dishes"},
-})
-
-qts.register_craft({
-	ingredients = {"default:dishes_clay", "default:coconut 3"},
-	results = {"default:vessels_oil_coconut", "default:wax_coconut"},
-	near = {"group:ttable", "group:dishes", "group:furnace"},
-})
-
 qts.register_craft({
 	ingredients = {"default:herb_milfoil 2"},
 	results = {"default:poltice_milfoil"},
 })
 
-qts.register_craft({
-	ingredients = {"default:small_mushroom 2", "default:dishes_clay"},
-	results = {"default:mushroom_stew"},
-})
+
 
 qts.register_craft({
 	ingredients = {"default:herb_flax 6"},
 	results = {"default:textile_flax"},
 })
 
-qts.register_craft({
-	ingredients = {"default:flour_bowl", "default:vessels_water"},
-	results = {"default:bread", "default:dishes_clay 2"},
-	near = {"group:ttable", "group:dishes", "group:furnace"},
-})
 
-qts.register_craft({
-	ingredients = {"default:dishes_clay", "default:bucket_default_water"},
-	results = {"default:vessels_water", "default:bucket"},
-})
-
-qts.register_craft({
-	ingredients = {"default:dishes_clay", "default:bucket_default_river_water"},
-	results = {"default:vessels_water", "default:bucket"},
-})
-
-qts.register_craft({
-	ingredients = {"default:glass"},
-	results = {"default:flask_glass"},
-	near = {"group:furnace"}
-})
-
-qts.register_craft({
-	ingredients = {"default:flask_glass", "default:bucket_default_water"},
-	results = {"default:flask_glass_water", "default:bucket"},
-})
-
-qts.register_craft({
-	ingredients = {"default:flask_glass", "default:bucket_default_river_water"},
-	results = {"default:flask_glass_water", "default:bucket"},
-})
 
 qts.register_craft({
 	ingredients = {"group:wood", "group:coal"},
@@ -248,7 +173,111 @@ qts.register_craft({
 	ingredients = {"default:workbench", "default:iron_bar 4"},
 	results = {"default:workbench_heavy",},
 })
+--food and dishes crafts
 
+qts.register_craft({
+	ingredients = { "default:palm_log"},
+	results = {"default:wax_palm 4"},
+	near = {"group:ttable", "group:dishes", "group:furnace"},
+})
+
+--[[qts.register_craft({
+	ingredients = {"default:dishes_clay", "group:wood 3"},
+	results = {"default:food_table"},
+	near = {"group:workbench"},
+})]]--
+
+qts.register_craft({
+	ingredients = {"default:dishes_clay 2"},
+	results = {"default:alchemy_equipment_basic"},
+})
+
+qts.register_craft({
+	ingredients = {"default:bowl_clay", "default:cup_clay"},
+	results = {"default:dishes_clay"},
+})
+
+qts.register_craft({
+	ingredients ={"default:dishes_clay"}, 
+	results = {"default:bowl_clay", "default:cup_clay"},
+})
+
+qts.register_craft({
+	ingredients = {"default:dishes_clay", "default:iron_bar"},
+	results = {"default:alchemy_equipment_advanced"},
+	near = {"group:workbench", "default:anvil"},
+})
+
+qts.register_craft({
+	ingredients = {"default:dishes_clay", "default:steel_bar"},
+	results = {"default:alchemy_equipment_advanced"},
+	near = {"group:workbench", "default:anvil"},
+})
+
+qts.register_craft({
+	ingredients = {"default:herb_potatoe"},
+	results = {"default:seeds_potatoe"},
+})
+
+qts.register_craft({
+	ingredients = {"default:dishes_clay", "default:herb_grain 4"},
+	results = {"default:flour_bowl", "default:cup_clay"},
+	near = {"group:ttable", "group:dishes"},
+})
+
+qts.register_craft({
+	ingredients = {"default:bowl_clay", "default:herb_grain 4"},
+	results = {"default:flour_bowl"},
+	near = {"group:ttable", "group:dishes"},
+})
+
+qts.register_craft({
+	ingredients = {"default:dishes_clay", "default:coconut 3"},
+	results = {"default:vessels_oil_coconut"},
+	near = {"group:ttable", "group:dishes", "group:furnace"},
+})
+
+qts.register_craft({
+	ingredients = {"default:small_mushroom 2", "default:dishes_clay"},
+	results = {"default:mushroom_stew", "default:cup_clay"},
+})
+
+qts.register_craft({
+	ingredients = {"default:small_mushroom 2", "default:bowl_clay"},
+	results = {"default:mushroom_stew"},
+})
+
+qts.register_craft({
+	ingredients = {"default:flour_bowl", "default:vessels_water"},
+	results = {"default:bread", "default:dishes_clay", "default:bowl_clay"},
+	near = {"group:ttable", "group:dishes", "group:furnace"},
+})
+
+qts.register_craft({
+	ingredients = {"default:dishes_clay", "default:bucket_default_water"},
+	results = {"default:vessels_water", "default:bucket"},
+})
+
+qts.register_craft({
+	ingredients = {"default:dishes_clay", "default:bucket_default_river_water"},
+	results = {"default:vessels_water", "default:bucket"},
+})
+
+qts.register_craft({
+	ingredients = {"default:glass"},
+	results = {"default:flask_glass"},
+	near = {"group:furnace"}
+})
+
+qts.register_craft({
+	ingredients = {"default:flask_glass", "default:bucket_default_water"},
+	results = {"default:flask_glass_water", "default:bucket"},
+})
+
+qts.register_craft({
+	ingredients = {"default:flask_glass", "default:bucket_default_river_water"},
+	results = {"default:flask_glass_water", "default:bucket"},
+})
 
 
 --weapons and tools

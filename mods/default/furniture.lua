@@ -970,19 +970,19 @@ qts.register_craft({
 	near = {"group:workbench"},
 })
 qts.register_craft({
-	ingredients = {"default:mushroom_blue_slats"},
+	ingredients = {"default:blue_mushroom_slats"},
 	results = {"default:table_blue_mushroom"},
 	near = {"group:workbench"},
 })
 
 qts.register_craft({
-	ingredients = {"default:mushroom_brown_slats"},
+	ingredients = {"default:brown_mushroom_slats"},
 	results = {"default:table_brown_mushroom"},
 	near = {"group:workbench"},
 })
 
 qts.register_craft({
-	ingredients = {"default:mushroom_gold_slats"},
+	ingredients = {"default:gold_mushroom_slats"},
 	results = {"default:table_gold_mushroom"},
 	near = {"group:workbench"},
 })
@@ -1055,19 +1055,19 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"default:mushroom_blue_slats"},
+	ingredients = {"default:blue_mushroom_slats"},
 	results = {"default:chair_blue_mushroom 2"},
 	near = {"group:workbench"},
 })
 
 qts.register_craft({
-	ingredients = {"default:mushroom_brown_slats"},
+	ingredients = {"default:brown_mushroom_slats"},
 	results = {"default:chair_brown_mushroom 2"},
 	near = {"group:workbench"},
 })
 
 qts.register_craft({
-	ingredients = {"default:mushroom_gold_slats"},
+	ingredients = {"default:gold_mushroom_slats"},
 	results = {"default:chair_gold_mushroom 2"},
 	near = {"group:workbench"},
 })
