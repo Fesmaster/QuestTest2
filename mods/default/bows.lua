@@ -44,10 +44,8 @@ qts.register_projectile("default:arrow_projectile", {
     textures = {"default_arrow.png"},
     use_texture_alpha=false,
     mesh ="arrow.obj",
-    automatic_rotate=0,
-    automatic_face_movement_dir=1.0,
-    automatic_face_movement_max_rotation_per_sec=1.0,
-
+    automatic_rotate=true,
+    
     radius = 0.25,
     selectable = false,
     gravity_scale = 0.5,
@@ -75,10 +73,8 @@ qts.register_projectile("default:arrow_gold_projectile", {
     textures = {"default_arrow_gold.png"},
     use_texture_alpha=false,
     mesh ="arrow.obj",
-    automatic_rotate=0,
-    automatic_face_movement_dir=1.0,
-    automatic_face_movement_max_rotation_per_sec=1.0,
-
+    automatic_rotate=true,
+    
     radius = 0.25,
     selectable = false,
     gravity_scale = 0.5,
@@ -218,7 +214,7 @@ local function register_bow(name, def)
                         launched = true
                         qts.projectile_launch_player(arrow_def.projectile, user, def.inaccuracy)
                         if not qts.is_player_creative(user:get_player_name()) then
-                            wear = wear + (65535/def.uses)
+                            wear = wear + (qts.WEAR_MAX/def.uses)
                         end
                     end
                 end
@@ -233,7 +229,7 @@ local function register_bow(name, def)
                 end
             end
             local next_stage = ItemStack(name)
-            if wear >= 65535 then
+            if wear >= qts.WEAR_MAX then
                 next_stage:take_item(1)
                 return next_stage --the bow broke!
             end

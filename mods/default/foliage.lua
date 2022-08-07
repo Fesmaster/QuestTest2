@@ -299,6 +299,7 @@ local function reeds_rightclick(pos, node, clicker, itemstack, pointed_thing)
 			qts.apply_default_wear(node.name, itemstack)
 		end
 	end
+	return itemstack
 end
 
 minetest.register_node("default:reeds", {
@@ -363,3 +364,6 @@ for i = 2, 4 do
 end
 
 minetest.register_alias("default:reeds_1", "default:reeds")
+
+
+

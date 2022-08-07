@@ -12,6 +12,7 @@ def is a table with values:
 	initial_sprite_basepos
 	backface_culling
 	glow
+	mesh
 	
 	REMOVED
 	--automatic_face_movement_dir
@@ -113,7 +114,7 @@ function qts.register_projectile(name, def)
 		
 		custom_step = def.on_step or nil,
 
-		automatic_rotate = def.automatic_rotate,
+		auto_rotate = def.automatic_rotate,
 		
 		--QuestTest stuff
 		qt_entity = true,
@@ -243,7 +244,7 @@ function qts.register_projectile(name, def)
 				self:on_timeout()
 			end
 			
-			if self.automatic_rotate  and self.prevpos then
+			if self.auto_rotate  and self.prevpos then
 				local dir = vector.direction(self.prevpos, pos)
 				if dir.x ~= 0 or dir.y ~=0 or dir.z ~= 0 then
 					if self.invert_direction then

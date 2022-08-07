@@ -290,10 +290,21 @@ function qts.apply_default_wear(name, itemstack)
 	local hlvl = minetest.get_item_group(itemstack:get_name(), "level")
 	local mult = (hlvl-nlvl)^3
 	if mult == 0 then mult = 1 end
-	local wear = qts.WEAR_MAX / (minetest.registered_tools[itemstack:get_name()].max_uses * mult)
-	if not itemstack:set_wear(itemstack:get_wear() + wear) then
-		itemstack:take_item()
+	local def = minetest.registered_tools[itemstack:get_name()]
+	if def and def.tool_capabilities and def.tool_capabilities.groupcaps then
+		local uses = 0
+		local groupscount=0
+		for name, groupcap in pairs(def.tool_capabilities.groupcaps) do
+			uses = uses + groupcap.uses
+			groupscount = groupscount +1
+		end
+		uses = uses / groupscount
+		local wear = qts.WEAR_MAX / (uses * mult)
+		if not itemstack:set_wear(itemstack:get_wear() + wear) then
+			itemstack:take_item()
+		end
 	end
+	return itemstack
 end
 
 
