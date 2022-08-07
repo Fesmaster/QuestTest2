@@ -1548,15 +1548,15 @@ minetest.register_node("default:textile_flax", {
 	sounds = qtcore.node_sound_stone(),
 })
 
-minetest.register_node("default:water_vessels", {
+minetest.register_node("default:vessels_water", {
 	description = "Water Vessels",
 	tiles = {
-			"default_water_vessel_top.png",
+			"default_vessel_water_top.png",
 			"default_dishes_clay.png",
 			"default_dishes_clay.png"
 		},
 	drawtype = "nodebox",
-	inventory_image = "default_water_vessel_item.png",
+	inventory_image = "default_vessel_water_item.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
@@ -1577,6 +1577,57 @@ minetest.register_node("default:water_vessels", {
 		},
 	},
 	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:vessels_oil_coconut", {
+	description = "Coconut Oil Vessel",
+	tiles = {
+			"default_vessel_oil_coconut_top.png",
+			"default_dishes_clay.png",
+			"default_dishes_clay.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_vessel_oil_coconut_item.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+		{ -6/16, -7/16, 0/16, 0/16, -6/16, 6/16, },
+		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+		{ 2/16, -8/16, -6/16, 6/16, -3/16, -2/16, },
+		{ 2/16, -3/16, -3/16, 6/16, -2/16, -2/16, },
+		{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
+		{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
+		{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+qts.register_ingot("default:wax_coconut", {
+	description = "Coconut Wax",
+	inventory_image = "default_wax_coconut_item.png",
+	tiles = {
+			"default_wax_coconut_ingot.png"
+		},
+	groups = {oddly_breakable_by_hand=3},
+	nodeboxes = {
+			{ -6/16, -8/16, 1/16, -3/16, -6/16, 6/16, },
+			{ -2/16, -8/16, 1/16, 1/16, -6/16, 6/16, },
+			{ 2/16, -8/16, 1/16, 5/16, -6/16, 6/16, },
+			{ -6/16, -8/16, -6/16, -3/16, -6/16, -1/16, },
+			{ -2/16, -8/16, -6/16, 1/16, -6/16, -1/16, },
+			{ 2/16, -8/16, -6/16, 5/16, -6/16, -1/16, },
+			{ 0/16, -6/16, -2/16, 3/16, -4/16, 3/16, },
+			{ -4/16, -6/16, -3/16, -1/16, -4/16, 2/16, },
+			},
+	levels = 8,
 })
 
 minetest.register_node("default:flour_bowl", {

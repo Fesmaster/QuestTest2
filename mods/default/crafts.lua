@@ -165,10 +165,20 @@ qts.register_craft({
 	near = {"group:ttable", "group:dishes"},
 })
 
+qts.register_craft({
+	ingredients = {"default:dishes_clay", "default:coconut 3"},
+	results = {"default:vessels_oil_coconut", "default:wax_coconut"},
+	near = {"group:ttable", "group:dishes", "group:furnace"},
+})
 
 qts.register_craft({
 	ingredients = {"default:herb_milfoil 2"},
 	results = {"default:poltice_milfoil"},
+})
+
+qts.register_craft({
+	ingredients = {"default:small_mushroom 2", "default:dishes_clay"},
+	results = {"default:mushroom_stew"},
 })
 
 qts.register_craft({
@@ -177,14 +187,35 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"default:flour_bowl", "default:water_vessels"},
+	ingredients = {"default:flour_bowl", "default:vessels_water"},
 	results = {"default:bread", "default:dishes_clay 2"},
 	near = {"group:ttable", "group:dishes", "group:furnace"},
 })
 
 qts.register_craft({
 	ingredients = {"default:dishes_clay", "default:bucket_default_water"},
-	results = {"default:water_vessels", "default:bucket"},
+	results = {"default:vessels_water", "default:bucket"},
+})
+
+qts.register_craft({
+	ingredients = {"default:dishes_clay", "default:bucket_default_river_water"},
+	results = {"default:vessels_water", "default:bucket"},
+})
+
+qts.register_craft({
+	ingredients = {"default:glass"},
+	results = {"default:flask_glass"},
+	near = {"group:furnace"}
+})
+
+qts.register_craft({
+	ingredients = {"default:flask_glass", "default:bucket_default_water"},
+	results = {"default:flask_glass_water", "default:bucket"},
+})
+
+qts.register_craft({
+	ingredients = {"default:flask_glass", "default:bucket_default_river_water"},
+	results = {"default:flask_glass_water", "default:bucket"},
 })
 
 qts.register_craft({
