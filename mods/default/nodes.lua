@@ -1051,6 +1051,7 @@ minetest.register_node("default:coffeetree_leaves", {
 	drop = {
 		max_items = 1,
 		items = {
+			{items = {"default:coffee_beans 2"}, rarity = 8},
 			{items = {"default:coffeetree_sapling"}, rarity = 16},
 			{items = {"default:coffeetree_leaves"}},
 		}
@@ -1788,6 +1789,47 @@ minetest.register_node("default:cookware_copper", {
 	sounds = qtcore.node_sound_metal(),
 })
 
+minetest.register_node("default:coffee_grounds", {
+	description = "Coffee Grounds",
+	tiles = {
+			"default_coffee_grounds_top.png",
+			"default_oak_wood.png",
+			"default_coffee_grounds_side.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_coffee_grounds_item.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
+	node_box = qtcore.nb_dustpile(),
+})
+
+minetest.register_node("default:cup_clay_coffee_turkish", {
+	description = "Cup of Turkish Coffee",
+	tiles = {
+			"default_cup_clay_coffee_top.png",
+			"default_dishes_clay.png",
+			"default_dishes_clay.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_cup_clay_coffee_item.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -2/16, -8/16, -2/16, 2/16, -3/16, 2/16, },
+			{ -2/16, -3/16, -2/16, 2/16, -2/16, -1/16, },
+			{ -2/16, -3/16, 1/16, 2/16, -2/16, 2/16, },
+			{ 1/16, -3/16, -2/16, 2/16, -2/16, 2/16, },
+			{ -2/16, -3/16, -2/16, -1/16, -2/16, 2/16, },
+		},
+	},
+	on_use = qts.item_eat(4),
+	sounds = qtcore.node_sound_stone(),
+})
+
 
 --[[minetest.register_node("default:bowl_clay_water", {
 	description = "bowl of Water",
@@ -1815,30 +1857,7 @@ minetest.register_node("default:cookware_copper", {
 	sounds = qtcore.node_sound_stone(),
 })
 
-minetest.register_node("default:cup_clay_water", {
-	description = "Cup of Water",
-	tiles = {
-			"default_vessel_water_top.png",
-			"default_dishes_clay.png",
-			"default_dishes_clay.png"
-		},
-	drawtype = "nodebox",
-	inventory_image = "default_vessel_water_item.png",
-	paramtype = "light",
-	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{ -2/16, -8/16, -2/16, 2/16, -4/16, 2/16, },
-			{ -2/16, -4/16, -2/16, 2/16, -3/16, -1/16, },
-			{ -2/16, -4/16, 1/16, 2/16, -3/16, 2/16, },
-			{ -2/16, -4/16, -2/16, -1/16, -3/16, 2/16, },
-			{ 1/16, -4/16, -2/16, 2/16, -3/16, 2/16, },
-		},
-	},
-	sounds = qtcore.node_sound_stone(),
-})]]--
+]]--
 --END placable items
 
 --[[local stew_types = {"apple", "carrot", "potatoe", "goard", "onion"}

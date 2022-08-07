@@ -95,3 +95,8 @@ minetest.register_craftitem("default:mycelium", {
 	description = "Mycelium",
 	inventory_image = "default_mycelium.png",
 })
+
+minetest.register_craftitem("default:coffee_beans", {
+	description = "Coffee Beans",
+	inventory_image = "default_coffee_beans.png",
+})

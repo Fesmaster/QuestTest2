@@ -232,6 +232,24 @@ qts.register_craft({
 })
 
 qts.register_craft({
+	ingredients = {"default:coffee_beans"},
+	results = {"default:coffee_grounds 2"},
+	near = {"group:ttable", "group:dishes"},
+})
+
+qts.register_craft({
+	ingredients = {"default:coffee_grounds", "default:dishes_clay", "default:vessels_water"},
+	results = {"default:cup_coffee_turkish", "default:bowl_clay 2"},
+	near = {"group:ttable", "group:cookware", "group:furnace"},
+})
+
+qts.register_craft({
+	ingredients = {"default:coffee_grounds", "default:cup_clay", "default:vessels_water"},
+	results = {"default:cup_clay_coffee_turkish", "default:bowl_clay"},
+	near = {"group:ttable", "group:cookware", "group:furnace"},
+})
+
+qts.register_craft({
 	ingredients = {"default:dishes_clay", "default:coconut 3"},
 	results = {"default:vessels_oil_coconut"},
 	near = {"group:ttable", "group:cookware", "group:furnace"},
