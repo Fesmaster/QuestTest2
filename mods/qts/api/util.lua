@@ -427,4 +427,21 @@ function qts.nodePairs(tbl)
 	end
 end
 
-
+--[[
+	This function is desighed to be set as the value of the item `on_place` callback, to operate rightclickable items if pointing at them, or do the `on_secondary_use` callback if not.
+]]
+function qts.item_place_check_and_propigate(itemstack, placer, pointed_thing)
+	if pointed_thing.under then
+		local node = minetest.get_node_or_nil(pointed_thing.under)
+		if node then
+			local def = minetest.registered_nodes[node.name]
+			if def and def.on_rightclick then
+				return def.on_rightclick(pointed_thing.under, node, placer, itemstack, pointed_thing)
+			end 
+		end
+	end
+	local def = minetest.registered_items[itemstack:get_name()]
+	if def and def.on_secondary_use then
+		return def.on_secondary_use(itemstack, placer, pointed_thing)
+	end
+end

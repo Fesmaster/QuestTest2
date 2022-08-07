@@ -151,7 +151,7 @@ function qts.register_projectile(name, def)
 				local node = minetest.get_node_or_nil(pos)
 				if (node) then
 					local def = minetest.registered_nodes[node.name]
-					if (def.walkable) then
+					if (def and def.walkable) then
 						--struck a node
 						if (def.on_projectile_strike) then
 							def.on_projectile_strike(self.object, {type="node", under=vector.round(pos), above=vector.round(self.prevpos)})

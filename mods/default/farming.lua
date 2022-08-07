@@ -308,29 +308,11 @@ minetest.register_craftitem("default:herb_mureux_fruit", {
 			itemstack:take_item()
 		end
 		return itemstack
-	end
+	end,
+	on_place = qts.item_place_check_and_propigate,
 })
 
-qts.register_projectile("default:mureux_fruit_projectile", {
-    visual="wielditem",
-    visual_size = vector.new(0.25,0.25,0.25),
-    use_texture_alpha=true,
-    textures ={"default:herb_mureux_fruit"},
-    automatic_rotate=true,
-    
-    radius = 0.25,
-    selectable = false,
-    gravity_scale = 0.5,
-    collectable = "", --TO CHANGE
-    lifetime=60*1,
-    speed = 10,
-    damage_groups = {},
 
-    on_strike_node = qts.projectile_default_struck_node,
-    on_strike_entity = qts.projectile_default_struck_entity,
-    on_timeout = qts.projectile_default_timeout,
-    on_step = function(self, dtime) end,
-})
 
 minetest.register_node("default:mureux_goo", {
 	description = "Mureux Fruit Goo",
@@ -348,9 +330,10 @@ minetest.register_node("default:mureux_goo", {
 		disconnected_left = {-8/16, -8/16, -8/16, -7/16, 8/16, 8/16},
 		disconnected_right = {7/16, -8/16, -8/16, 8/16, 8/16, 8/16},
 	},
-	connects_to = {"default:mureux_goo", "group:underbrush", "group:generation_replacable"},
+	connects_to = {"default:mureux_goo", "group:underbrush", "group:generation_replacable", "group:liquid"},
 	sounds = qtcore.node_sound_wood(),
 	drop = "", --intentional no drop
+	floodable=true,
 	on_node_update = function(pos)
 		local has_solid = false
 		for i, p in ipairs({vector.new(-1,0,0),vector.new(1,0,0),vector.new(0,-1,0),vector.new(0,1,0),vector.new(0,0,-1),vector.new(0,0,1)}) do
@@ -373,3 +356,76 @@ minetest.register_node("default:mureux_goo", {
 	end,
 })
 
+local function scatter_goop(pos)
+	local nodes = qts.get_nodes_in_radius(pos, 2)
+	minetest.log("goup " .. dump(#nodes))
+	for i, dat in ipairs(nodes) do
+		if dat.noderef and dat.noderef.name and dat.noderef.name == "air" then
+			minetest.log("here: ")
+			minetest.place_node(dat.pos, {name="default:mureux_goo"})
+		end
+	end
+end
+
+-- function(self, pos, node)
+qts.register_projectile("default:mureux_fruit_projectile", {
+    visual="wielditem",
+    visual_size = vector.new(0.25,0.25,0.25),
+    use_texture_alpha=true,
+    textures ={"default:herb_mureux_fruit"},
+    automatic_rotate=true,
+    
+    radius = 0.25,
+    selectable = false,
+    gravity_scale = 0.5,
+    collectable = "", --TO CHANGE
+    lifetime=60*1,
+    speed = 10,
+    damage_groups = {},
+
+    on_strike_node = function(self, pos, node)
+		scatter_goop(pos)
+		
+		self.object:remove()
+	end,
+    on_strike_entity = qts.projectile_default_struck_entity,
+    on_timeout = qts.projectile_default_timeout,
+    on_step = function(self, dtime) end,
+})
+
+minetest.register_abm({
+	label = "Mureux Growing",
+	nodenames = {"default:herb_mureux"},
+	neightbors = {"group:dirt"},
+	interval = 60.0,
+	chance = 3,
+	action = function(pos, node, ac, acw)
+		local below_p = pos+vector.new(0,-1,0)
+		local below_n = minetest.get_node_or_nil(below_p)
+		if below_n and below_n.name and minetest.get_item_group(below_n.name, "dirt") then
+			minetest.swap_node(pos, {name="default:herb_mureux_ripe", param2 = 18})
+		end
+	end
+})
+
+minetest.register_abm({
+	label = "Mureux Goo Degrasion",
+	nodenames = {"default:mureux_goo"},
+	interval = 10,
+	chance = 30,
+	action = function(pos, node, ac, acw)
+		local below_p = pos+vector.new(0,-1,0)
+		local below_n = minetest.get_node_or_nil(below_p)
+		if below_n and below_n.name and minetest.get_item_group(below_n.name, "dirt") then
+			local chance = 20
+			if below_n.name == "default:dirt_with_rainforest_grass" then
+				chance = 5
+			end
+			if math.random(chance) == 1 then
+				minetest.set_node(pos, {name="default:herb_mureux", param2 = 18})
+				return
+			end
+		end
+		minetest.set_node(pos, {name="air"})
+	end
+})
