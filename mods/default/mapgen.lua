@@ -102,7 +102,7 @@ qts.worldgen.register_biome("rainforest", {
 	surface = {"default:dirt_with_rainforest_grass"},
 	fill = "default:dirt",
 	stone = "default:stone",
-	plant = {"default:underbrush_short","default:underbrush_tall"},
+	plant = {"default:underbrush_short","default:underbrush_tall","default:herb_mureux_ripe"},
 	plant_freq = 2,
 	surface_depth = 1,
 	fill_depth = 5,

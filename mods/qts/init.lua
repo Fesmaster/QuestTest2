@@ -26,6 +26,7 @@ dofile(qts.path.."/api/util.lua")
 
 dofile(qts.path.."/api/creative.lua")
 dofile(qts.path.."/api/player.lua")
+dofile(qts.path.."/api/nodeupdates.lua")
 dofile(qts.path.."/api/nodetypes.lua")
 dofile(qts.path.."/api/shapedNodes.lua")
 dofile(qts.path.."/api/screwdriver.lua")

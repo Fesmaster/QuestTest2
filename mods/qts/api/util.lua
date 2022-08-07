@@ -290,10 +290,21 @@ function qts.apply_default_wear(name, itemstack)
 	local hlvl = minetest.get_item_group(itemstack:get_name(), "level")
 	local mult = (hlvl-nlvl)^3
 	if mult == 0 then mult = 1 end
-	local wear = qts.WEAR_MAX / (minetest.registered_tools[itemstack:get_name()].max_uses * mult)
-	if not itemstack:set_wear(itemstack:get_wear() + wear) then
-		itemstack:take_item()
+	local def = minetest.registered_tools[itemstack:get_name()]
+	if def and def.tool_capabilities and def.tool_capabilities.groupcaps then
+		local uses = 0
+		local groupscount=0
+		for name, groupcap in pairs(def.tool_capabilities.groupcaps) do
+			uses = uses + groupcap.uses
+			groupscount = groupscount +1
+		end
+		uses = uses / groupscount
+		local wear = qts.WEAR_MAX / (uses * mult)
+		if not itemstack:set_wear(itemstack:get_wear() + wear) then
+			itemstack:take_item()
+		end
 	end
+	return itemstack
 end
 
 
@@ -416,4 +427,21 @@ function qts.nodePairs(tbl)
 	end
 end
 
-
+--[[
+	This function is desighed to be set as the value of the item `on_place` callback, to operate rightclickable items if pointing at them, or do the `on_secondary_use` callback if not.
+]]
+function qts.item_place_check_and_propigate(itemstack, placer, pointed_thing)
+	if pointed_thing.under then
+		local node = minetest.get_node_or_nil(pointed_thing.under)
+		if node then
+			local def = minetest.registered_nodes[node.name]
+			if def and def.on_rightclick then
+				return def.on_rightclick(pointed_thing.under, node, placer, itemstack, pointed_thing)
+			end 
+		end
+	end
+	local def = minetest.registered_items[itemstack:get_name()]
+	if def and def.on_secondary_use then
+		return def.on_secondary_use(itemstack, placer, pointed_thing)
+	end
+end
