@@ -63,12 +63,6 @@ minetest.register_craftitem("default:brick_item", {
 	inventory_image = "default_brick_item.png",
 })
 
-minetest.register_craftitem("default:coconut", {
-	description = "Coconut",
-	inventory_image = "default_coconut.png",
-	on_use = minetest.item_eat(2),
-})
-
 minetest.register_craftitem("default:mushroom_stew", {
 	description = "Mushroom Stew",
 	inventory_image = "default_mushroom_stew.png",
