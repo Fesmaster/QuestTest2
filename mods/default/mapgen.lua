@@ -120,7 +120,7 @@ qts.worldgen.register_biome("mushroom_forest", {
 	surface = {"default:dirt_with_mushroom_grass"},
 	fill = {"default:dirt"},
 	stone = {"default:stone"},
-	plant = {"default:small_shroom"},
+	plant = {"default:small_mushroom"},
 	plant_freq = 7,
 	surface_depth = 1,
 	fill_depth = 5,

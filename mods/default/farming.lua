@@ -216,6 +216,7 @@ local bread_nodeboxes = {
 	{ -5/16, -5/16, -2/16, 6/16, -2/16, 3/16, },
 }
 
+
 qts.register_ingot("default:bread", {
 	description = "Bread",
 	inventory_image = "default_bread.png",
@@ -371,3 +372,4 @@ minetest.register_node("default:mureux_goo", {
 		end
 	end,
 })
+

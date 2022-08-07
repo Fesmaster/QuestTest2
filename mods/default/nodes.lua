@@ -759,7 +759,7 @@ qts.register_shaped_node ("default:bamboo_slats", {
 	description = "Bamboo Slats",
 	tiles = {"default_bamboo_slats.png"},
 	paramtype2 = "facedir",
-	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, mushroom=1, generation_artificial=1},
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
 	sounds = qtcore.node_sound_wood(),
 })
 
@@ -1548,15 +1548,46 @@ minetest.register_node("default:textile_flax", {
 	sounds = qtcore.node_sound_stone(),
 })
 
-minetest.register_node("default:water_vessels", {
-	description = "Water Vessels",
+minetest.register_node("default:vessels_water", {
+	description = "Water Vessel",
 	tiles = {
-			"default_water_vessel_top.png",
+			"default_vessel_water_top.png",
 			"default_dishes_clay.png",
 			"default_dishes_clay.png"
 		},
 	drawtype = "nodebox",
-	inventory_image = "default_water_vessel_item.png",
+	inventory_image = "default_vessel_water_item.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+		{ -6/16, -7/16, 0/16, 0/16, -6/16, 6/16, },
+		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+		{ 2/16, -8/16, -6/16, 6/16, -3/16, -2/16, },
+		{ 2/16, -3/16, -3/16, 6/16, -2/16, -2/16, },
+		{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
+		{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
+		{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:vessels_oil_coconut", {
+	description = "Coconut Oil Vessel",
+	tiles = {
+			"default_vessel_oil_coconut_top.png",
+			"default_dishes_clay.png",
+			"default_dishes_clay.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_vessel_oil_coconut_item.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
@@ -1577,6 +1608,26 @@ minetest.register_node("default:water_vessels", {
 		},
 	},
 	sounds = qtcore.node_sound_stone(),
+})
+
+qts.register_ingot("default:wax_palm", {
+	description = "Palm Wax",
+	inventory_image = "default_wax_palm_item.png",
+	tiles = {
+			"default_wax_palm_ingot.png"
+		},
+	groups = {oddly_breakable_by_hand=3},
+	nodeboxes = {
+			{ -6/16, -8/16, 1/16, -3/16, -6/16, 6/16, },
+			{ -2/16, -8/16, 1/16, 1/16, -6/16, 6/16, },
+			{ 2/16, -8/16, 1/16, 5/16, -6/16, 6/16, },
+			{ -6/16, -8/16, -6/16, -3/16, -6/16, -1/16, },
+			{ -2/16, -8/16, -6/16, 1/16, -6/16, -1/16, },
+			{ 2/16, -8/16, -6/16, 5/16, -6/16, -1/16, },
+			{ 0/16, -6/16, -2/16, 3/16, -4/16, 3/16, },
+			{ -4/16, -6/16, -3/16, -1/16, -4/16, 2/16, },
+			},
+	levels = 8,
 })
 
 minetest.register_node("default:flour_bowl", {
@@ -1604,6 +1655,190 @@ minetest.register_node("default:flour_bowl", {
 		},
 	},
 })
+
+qts.register_ingot("default:bread", {
+	description = "Bread",
+	inventory_image = "default_bread.png",
+	tiles = {
+			"default_bread_top.png",
+			"default_bread_bottom.png",
+			"default_bread_side.png"
+		},
+	groups = {oddly_breakable_by_hand=3},
+	nodeboxes = bread_nodeboxes,
+	on_use = qts.item_eat(4),
+	levels = 3,
+})
+
+minetest.register_node("default:cup_clay", {
+	description = "Clay Cup",
+	tiles = {
+			"default_dishes_clay.png",
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_cup_clay_item.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -2/16, -8/16, -2/16, 2/16, -7/16, 2/16, },
+			{ -2/16, -8/16, 1/16, 2/16, -3/16, 2/16, },
+			{ -2/16, -8/16, -2/16, 2/16, -3/16, -1/16, },
+			{ -2/16, -8/16, -2/16, -1/16, -3/16, 2/16, },
+			{ 1/16, -8/16, -2/16, 2/16, -3/16, 2/16, },
+
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:bowl_clay", {
+	description = "Clay Bowl",
+	tiles = {
+			"default_dishes_clay.png",
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_bowl_clay_item.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -2/16, -8/16, -2/16, 2/16, -7/16, 2/16, },
+			{ -3/16, -7/16, -3/16, -2/16, -6/16, 3/16, },
+			{ 2/16, -7/16, -3/16, 3/16, -6/16, 3/16, },
+			{ -3/16, -7/16, -3/16, 3/16, -6/16, -2/16, },
+			{ -3/16, -7/16, 2/16, 3/16, -6/16, 3/16, },
+			{ -4/16, -6/16, 3/16, 4/16, -5/16, 4/16, },
+			{ -4/16, -6/16, -4/16, 4/16, -5/16, -3/16, },
+			{ 3/16, -6/16, -4/16, 4/16, -5/16, 4/16, },
+			{ -4/16, -6/16, -4/16, -3/16, -5/16, 4/16, },
+
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:cookware_iron", {
+	description = "Cast Iron Cookware",
+	tiles = {
+			"default_cookware_iron.png",
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_cookware_iron_item.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, cookware=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -5/16, -8/16, 2/16, -2/16, -7/16, 5/16, },
+			{ -2/16, -7/16, 1/16, -1/16, -6/16, 6/16, },
+			{ -6/16, -7/16, 1/16, -5/16, -6/16, 6/16, },
+			{ -6/16, -7/16, 5/16, -1/16, -6/16, 6/16, },
+			{ -6/16, -7/16, 1/16, -1/16, -6/16, 2/16, },
+			{ -4/16, -7/16, -3/16, -3/16, -6/16, 1/16, },
+			{ -5/16, -7/16, 0/16, -2/16, -6/16, 1/16, },
+			{ 1/16, -8/16, -5/16, 5/16, -7/16, -1/16, },
+			{ 0/16, -7/16, -1/16, 6/16, -2/16, 0/16, },
+			{ 0/16, -7/16, -6/16, 6/16, -2/16, -5/16, },
+			{ 5/16, -7/16, -6/16, 6/16, -2/16, 0/16, },
+			{ 0/16, -7/16, -6/16, 1/16, -2/16, 0/16, },
+			{ 2/16, -4/16, -1/16, 4/16, -3/16, 1/16, },
+			{ 2/16, -4/16, -7/16, 4/16, -3/16, -5/16, },
+
+		},
+	},
+	sounds = qtcore.node_sound_metal(),
+})
+
+minetest.register_node("default:cookware_copper", {
+	description = "Copper Cookware",
+	tiles = {
+			"default_cookware_copper.png",
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_cookware_copper_item.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, cookware=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -5/16, -8/16, 2/16, -2/16, -7/16, 5/16, },
+			{ -2/16, -7/16, 1/16, -1/16, -6/16, 6/16, },
+			{ -6/16, -7/16, 1/16, -5/16, -6/16, 6/16, },
+			{ -6/16, -7/16, 5/16, -1/16, -6/16, 6/16, },
+			{ -6/16, -7/16, 1/16, -1/16, -6/16, 2/16, },
+			{ -4/16, -7/16, -3/16, -3/16, -6/16, 1/16, },
+			{ -5/16, -7/16, 0/16, -2/16, -6/16, 1/16, },
+			{ 1/16, -8/16, -5/16, 5/16, -7/16, -1/16, },
+			{ 0/16, -7/16, -1/16, 6/16, -2/16, 0/16, },
+			{ 0/16, -7/16, -6/16, 6/16, -2/16, -5/16, },
+			{ 5/16, -7/16, -6/16, 6/16, -2/16, 0/16, },
+			{ 0/16, -7/16, -6/16, 1/16, -2/16, 0/16, },
+			{ 2/16, -4/16, -1/16, 4/16, -3/16, 1/16, },
+			{ 2/16, -4/16, -7/16, 4/16, -3/16, -5/16, },
+
+		},
+	},
+	sounds = qtcore.node_sound_metal(),
+})
+
+
+--[[minetest.register_node("default:bowl_clay_water", {
+	description = "bowl of Water",
+	tiles = {
+			"default_vessel_water_top.png",
+			"default_dishes_clay.png",
+			"default_dishes_clay.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_vessel_water_item.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -2/16, -8/16, -2/16, 2/16, -7/16, 2/16, },
+			{ -3/16, -7/16, -3/16, 3/16, -6/16, 3/16, },
+			{ -4/16, -6/16, 3/16, 4/16, -5/16, 4/16, },
+			{ -4/16, -6/16, -4/16, 4/16, -5/16, -3/16, },
+			{ 3/16, -6/16, -4/16, 4/16, -5/16, 4/16, },
+			{ -4/16, -6/16, -4/16, -3/16, -5/16, 4/16, },
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:cup_clay_water", {
+	description = "Cup of Water",
+	tiles = {
+			"default_vessel_water_top.png",
+			"default_dishes_clay.png",
+			"default_dishes_clay.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_vessel_water_item.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -2/16, -8/16, -2/16, 2/16, -4/16, 2/16, },
+			{ -2/16, -4/16, -2/16, 2/16, -3/16, -1/16, },
+			{ -2/16, -4/16, 1/16, 2/16, -3/16, 2/16, },
+			{ -2/16, -4/16, -2/16, -1/16, -3/16, 2/16, },
+			{ 1/16, -4/16, -2/16, 2/16, -3/16, 2/16, },
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})]]--
 --END placable items
 
 --[[local stew_types = {"apple", "carrot", "potatoe", "goard", "onion"}

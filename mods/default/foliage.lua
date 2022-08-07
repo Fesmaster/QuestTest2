@@ -62,9 +62,9 @@ minetest.register_node("default:swamp_plant", {
 	drop = underbrush_drops,
 })
 
-minetest.register_node("default:small_shroom", {
+minetest.register_node("default:small_mushroom", {
 	description = "A Small Mushroom",
-	tiles = {"default_small_shroom.png"},
+	tiles = {"default_small_mushroom.png"},
 	use_texture_alpha = "clip",
 	drawtype = "nodebox",
 	paramtype = "light",
