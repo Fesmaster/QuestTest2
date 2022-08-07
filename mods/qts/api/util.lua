@@ -1,4 +1,4 @@
-
+qts.item_eat = minetest.item_eat
 
 --deep copy func, that is from lua-users.org  https://lua-users.org/wiki/CopyTable
 function qts.table_deep_copy(orig, copies)
