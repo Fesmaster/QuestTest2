@@ -1656,6 +1656,20 @@ minetest.register_node("default:flour_bowl", {
 	},
 })
 
+qts.register_ingot("default:bread", {
+	description = "Bread",
+	inventory_image = "default_bread.png",
+	tiles = {
+			"default_bread_top.png",
+			"default_bread_bottom.png",
+			"default_bread_side.png"
+		},
+	groups = {oddly_breakable_by_hand=3},
+	nodeboxes = bread_nodeboxes,
+	on_use = qts.item_eat(4),
+	levels = 3,
+})
+
 minetest.register_node("default:cup_clay", {
 	description = "Clay Cup",
 	tiles = {
