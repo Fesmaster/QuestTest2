@@ -261,6 +261,35 @@ minetest.register_node("default:beach_grass", {
 	drop = underbrush_drops,
 	on_flood = floodFunc,
 })
+
+--natural coconut
+
+minetest.register_node("default:natural_coconut", {
+	description = "Natural Coconut",
+	tiles = {
+			"default_coconut_top.png",
+			"default_coconut_side.png",
+			"default_coconut_side.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_coconut.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=1, generation_trees=1, not_in_creative_inventory=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -2/16, 3/16, 3/16, 3/16, 8/16, 8/16, },
+		},
+	},
+	drop = {
+		items = {
+			{items = {"default:coconut"}},
+		}
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+
 --flowers
 minetest.register_node("default:kniphofia", {
 	description = "Kniphofia",

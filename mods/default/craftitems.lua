@@ -63,22 +63,6 @@ minetest.register_craftitem("default:brick_item", {
 	inventory_image = "default_brick_item.png",
 })
 
-minetest.register_craftitem("default:mushroom_stew", {
-	description = "Mushroom Stew",
-	inventory_image = "default_mushroom_stew.png",
-	on_use = minetest.item_eat(6),
-})
-
-minetest.register_craftitem("default:flask_glass", {
-	description = "Glass Flask",
-	inventory_image = "default_flask_glass.png",
-})
-
-minetest.register_craftitem("default:flask_glass_water", {
-	description = "Flask of Water",
-	inventory_image = "default_flask_glass_water.png",
-})
-
 minetest.register_craftitem("default:poltice_milfoil", {
 	description = "Milfoil Poltice",
 	inventory_image = "default_poltice_milfoil.png",
@@ -88,9 +72,4 @@ minetest.register_craftitem("default:poltice_milfoil", {
 minetest.register_craftitem("default:mycelium", {
 	description = "Mycelium",
 	inventory_image = "default_mycelium.png",
-})
-
-minetest.register_craftitem("default:coffee_beans", {
-	description = "Coffee Beans",
-	inventory_image = "default_coffee_beans.png",
 })
