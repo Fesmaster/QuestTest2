@@ -1884,6 +1884,409 @@ qts.register_ingot("default:coconut", {
 	levels = 14,
 })
 
+--BEGIN dyes
+minetest.register_node("default:dye_black", {
+	description = "Black Dye",
+	tiles = {
+			"default_dye_black_top.png",
+			"default_dishes_clay.png",
+			"default_dishes_clay.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_dye_black.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+		{ -6/16, -7/16, 0/16, 0/16, -6/16, 6/16, },
+		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+		{ 2/16, -8/16, -6/16, 6/16, -3/16, -2/16, },
+		{ 2/16, -3/16, -3/16, 6/16, -2/16, -2/16, },
+		{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
+		{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
+		{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:dye_blue", {
+	description = "Blue Dye",
+	tiles = {
+			"default_dye_blue_top.png",
+			"default_dishes_clay.png",
+			"default_dishes_clay.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_dye_blue.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+		{ -6/16, -7/16, 0/16, 0/16, -6/16, 6/16, },
+		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+		{ 2/16, -8/16, -6/16, 6/16, -3/16, -2/16, },
+		{ 2/16, -3/16, -3/16, 6/16, -2/16, -2/16, },
+		{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
+		{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
+		{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:dye_cyan", {
+	description = "Cyan Dye",
+	tiles = {
+			"default_dye_cyan_top.png",
+			"default_dishes_clay.png",
+			"default_dishes_clay.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_dye_cyan.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+		{ -6/16, -7/16, 0/16, 0/16, -6/16, 6/16, },
+		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+		{ 2/16, -8/16, -6/16, 6/16, -3/16, -2/16, },
+		{ 2/16, -3/16, -3/16, 6/16, -2/16, -2/16, },
+		{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
+		{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
+		{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:dye_dark_gray", {
+	description = "Dark Gray Dye",
+	tiles = {
+			"default_dye_dark_gray_top.png",
+			"default_dishes_clay.png",
+			"default_dishes_clay.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_dye_dark_gray.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+		{ -6/16, -7/16, 0/16, 0/16, -6/16, 6/16, },
+		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+		{ 2/16, -8/16, -6/16, 6/16, -3/16, -2/16, },
+		{ 2/16, -3/16, -3/16, 6/16, -2/16, -2/16, },
+		{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
+		{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
+		{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:dye_dark_green", {
+	description = "Dark Green Dye",
+	tiles = {
+			"default_dye_dark_green_top.png",
+			"default_dishes_clay.png",
+			"default_dishes_clay.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_dye_dark_green.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+		{ -6/16, -7/16, 0/16, 0/16, -6/16, 6/16, },
+		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+		{ 2/16, -8/16, -6/16, 6/16, -3/16, -2/16, },
+		{ 2/16, -3/16, -3/16, 6/16, -2/16, -2/16, },
+		{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
+		{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
+		{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:dye_gray", {
+	description = "Gray Dye",
+	tiles = {
+			"default_dye_gray_top.png",
+			"default_dishes_clay.png",
+			"default_dishes_clay.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_dye_gray.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+		{ -6/16, -7/16, 0/16, 0/16, -6/16, 6/16, },
+		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+		{ 2/16, -8/16, -6/16, 6/16, -3/16, -2/16, },
+		{ 2/16, -3/16, -3/16, 6/16, -2/16, -2/16, },
+		{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
+		{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
+		{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:dye_green", {
+	description = "Green Dye",
+	tiles = {
+			"default_dye_green_top.png",
+			"default_dishes_clay.png",
+			"default_dishes_clay.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_dye_green.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+		{ -6/16, -7/16, 0/16, 0/16, -6/16, 6/16, },
+		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+		{ 2/16, -8/16, -6/16, 6/16, -3/16, -2/16, },
+		{ 2/16, -3/16, -3/16, 6/16, -2/16, -2/16, },
+		{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
+		{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
+		{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:dye_magenta", {
+	description = "Magenta Dye",
+	tiles = {
+			"default_dye_magenta_top.png",
+			"default_dishes_clay.png",
+			"default_dishes_clay.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_dye_magenta.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+		{ -6/16, -7/16, 0/16, 0/16, -6/16, 6/16, },
+		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+		{ 2/16, -8/16, -6/16, 6/16, -3/16, -2/16, },
+		{ 2/16, -3/16, -3/16, 6/16, -2/16, -2/16, },
+		{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
+		{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
+		{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:dye_orange", {
+	description = "Orange Dye",
+	tiles = {
+			"default_dye_orange_top.png",
+			"default_dishes_clay.png",
+			"default_dishes_clay.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_dye_orange.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+		{ -6/16, -7/16, 0/16, 0/16, -6/16, 6/16, },
+		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+		{ 2/16, -8/16, -6/16, 6/16, -3/16, -2/16, },
+		{ 2/16, -3/16, -3/16, 6/16, -2/16, -2/16, },
+		{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
+		{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
+		{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:dye_purple", {
+	description = "Purple Dye",
+	tiles = {
+			"default_dye_purple_top.png",
+			"default_dishes_clay.png",
+			"default_dishes_clay.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_dye_purple.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+		{ -6/16, -7/16, 0/16, 0/16, -6/16, 6/16, },
+		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+		{ 2/16, -8/16, -6/16, 6/16, -3/16, -2/16, },
+		{ 2/16, -3/16, -3/16, 6/16, -2/16, -2/16, },
+		{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
+		{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
+		{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:dye_red", {
+	description = "Red Dye",
+	tiles = {
+			"default_dye_red_top.png",
+			"default_dishes_clay.png",
+			"default_dishes_clay.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_dye_red.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+		{ -6/16, -7/16, 0/16, 0/16, -6/16, 6/16, },
+		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+		{ 2/16, -8/16, -6/16, 6/16, -3/16, -2/16, },
+		{ 2/16, -3/16, -3/16, 6/16, -2/16, -2/16, },
+		{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
+		{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
+		{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:dye_white", {
+	description = "White Dye",
+	tiles = {
+			"default_dye_white_top.png",
+			"default_dishes_clay.png",
+			"default_dishes_clay.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_dye_white.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+		{ -6/16, -7/16, 0/16, 0/16, -6/16, 6/16, },
+		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+		{ 2/16, -8/16, -6/16, 6/16, -3/16, -2/16, },
+		{ 2/16, -3/16, -3/16, 6/16, -2/16, -2/16, },
+		{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
+		{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
+		{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
+
+minetest.register_node("default:dye_yellow", {
+	description = "Yellow Dye",
+	tiles = {
+			"default_dye_yellow_top.png",
+			"default_dishes_clay.png",
+			"default_dishes_clay.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_dye_yellow.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+		{ -6/16, -7/16, 0/16, 0/16, -6/16, 6/16, },
+		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+		{ 2/16, -8/16, -6/16, 6/16, -3/16, -2/16, },
+		{ 2/16, -3/16, -3/16, 6/16, -2/16, -2/16, },
+		{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
+		{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
+		{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
+		},
+	},
+	sounds = qtcore.node_sound_stone(),
+})
 
 --[[minetest.register_node("default:bowl_clay_water", {
 	description = "bowl of Water",

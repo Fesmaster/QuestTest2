@@ -1,4 +1,5 @@
 qts.item_eat = minetest.item_eat
+--this eventually will need a way to return cups and bowls to player after a food item with such a thing is eaten
 
 --deep copy func, that is from lua-users.org  https://lua-users.org/wiki/CopyTable
 function qts.table_deep_copy(orig, copies)
