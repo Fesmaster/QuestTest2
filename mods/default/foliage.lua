@@ -85,7 +85,7 @@ minetest.register_node("default:small_mushroom", {
 	sounds = qtcore.node_sound_defaults(),
 	on_flood = floodFunc,
 })
-
+minetest.register_alias("default:small_shroom", "default:small_mushroom")
 
 
 minetest.register_node("default:grass_short", {
@@ -261,8 +261,87 @@ minetest.register_node("default:beach_grass", {
 	drop = underbrush_drops,
 	on_flood = floodFunc,
 })
+--flowers
+minetest.register_node("default:kniphofia", {
+	description = "Kniphofia",
+	tiles ={"default_kniphofia.png"},
+	inventory_image = "default_kniphofia_item.png",
+	use_texture_alpha = "clip",
+	drawtype = "plantlike",
+	paramtype = "light",
+	paramtype2 = "meshoptions",
+	param2 = 0,
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	waving = 1,
+	buildable_to = true,
+	selection_box = qtcore.nb_level1(),
+	groups = {snappy=3, flammable = 2, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	on_flood = floodFunc,
+})
 
+minetest.register_node("default:iris", {
+	description = "White Iris",
+	tiles ={"default_iris.png"},
+	inventory_image = "default_iris_item.png",
+	use_texture_alpha = "clip",
+	drawtype = "plantlike",
+	paramtype = "light",
+	paramtype2 = "meshoptions",
+	param2 = 0,
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	waving = 1,
+	buildable_to = true,
+	selection_box = qtcore.nb_level1(),
+	groups = {snappy=3, flammable = 2, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	on_flood = floodFunc,
+})
 
+minetest.register_node("default:chicory", {
+	description = "Chicory",
+	tiles ={"default_chicory.png"},
+	inventory_image = "default_chicory_item.png",
+	use_texture_alpha = "clip",
+	drawtype = "plantlike",
+	paramtype = "light",
+	paramtype2 = "meshoptions",
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	waving = 1,
+	buildable_to = true,
+	selection_box = qtcore.nb_level1(),
+	groups = {snappy=3, flammable = 2, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	on_place = qtcore.place_random_plantlike,
+	on_flood = floodFunc,
+})
+
+minetest.register_node("default:violet", {
+	description = "Violet",
+	tiles ={"default_violet.png"},
+	inventory_image = "default_violet_item.png",
+	use_texture_alpha = "clip",
+	drawtype = "plantlike",
+	paramtype = "light",
+	paramtype2 = "meshoptions",
+	param2 = 0,
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	waving = 1,
+	buildable_to = true,
+	selection_box = qtcore.nb_level1(),
+	groups = {snappy=3, flammable = 2, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	on_place = qtcore.place_random_plantlike,
+	on_flood = floodFunc,
+})
 --[[
 --grow_timer = 1,
 	--grow_timer_random = 0,
