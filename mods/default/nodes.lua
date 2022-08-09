@@ -216,7 +216,7 @@ minetest.register_node("default:alchemy_equipment_advanced", {
 minetest.register_node("default:textile_flax", {
 	description = "Flax Textiles",
 	tiles = {
-			"default_textile_flax_top.png", "default_textile_flax_bottom.png", "default_textile_flax_side.png",
+			"default_textile_flax_top.png", "default_textile_flax_top.png", "default_textile_flax_side.png", "default_textile_flax_side.png",  "default_textile_flax_end.png",  
 		},
 	drawtype = "nodebox",
 	inventory_image = "default_textile_flax_item.png",
