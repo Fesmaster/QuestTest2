@@ -151,7 +151,8 @@ local banit_crate_items = {
 	"default:seed_bloodbulb", "default:seed_flax", "default:seed_grain", "default:seed_milfoil", "default:seed_potatoe", 
     "default:seed_wolfshood", "default:seed_carrot", "default:seed_goard", "default:seed_onion",
 	"default:shovel_bronze", "default:shovel_copper", "default:sword_bronze", "default:sword_copper",
-	"default:tinderbox", "default:flint", "default:tinder"
+	"default:tinderbox", "default:flint", "default:tinder", "default:axe_rusted", "default:knife_rusted", "default:knife_copper", 
+    "default:knife_bronze", "default:shovel_rusted", "default:sword_rusted", "default:hoe_rusted", "default:hoe_copper", "default:hoe_bronze"
 }
 local function build_crate(pos, materials)
     minetest.set_node(pos, {name=materials.crate})

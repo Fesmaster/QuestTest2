@@ -1,6 +1,5 @@
 --[[
-Special tools
-
+Knives
 --]]
 minetest.register_tool("default:knife_flint", {
 	description = "Flint Knife",
@@ -12,6 +11,21 @@ minetest.register_tool("default:knife_flint", {
 			snappy = {times={[1]=0.60, [2]=0.30, [3]=0.10}, uses=100, maxlevel=1},
 		},
 		damage_groups = {fleshy=7},
+	},
+	sound = qtcore.tool_sounds_default(),
+	groups = {knife = 1}
+})
+
+minetest.register_tool("default:knife_rusted", {
+	description = "Rusted Knife",
+	inventory_image = "default_knife_rusted.png",
+	tool_capabilities = {
+		full_punch_interval = 0.9,
+		max_drop_level=1,
+		groupcaps={
+			snappy = {times={[1]=0.50, [2]=0.25, [3]=0.10}, uses=150, maxlevel=1},
+		},
+		damage_groups = {fleshy=8},
 	},
 	sound = qtcore.tool_sounds_default(),
 	groups = {knife = 1}
@@ -194,6 +208,20 @@ minetest.register_tool("default:axe_flint", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {axe = 1}
 })
+minetest.register_tool("default:axe_rusted", {
+	description = "Rusted Axe",
+	inventory_image = "default_axe_rusted.png",
+	tool_capabilities = {
+		full_punch_interval = 1.0,
+		max_drop_level=1,
+		groupcaps={
+			choppy = {times={[2]=0.80, [3]=0.50}, uses=60, maxlevel=1},
+		},
+		damage_groups = {fleshy=5},
+	},
+	sound = qtcore.tool_sounds_default(),
+	groups = {axe = 1}
+})
 --copper
 minetest.register_tool("default:axe_copper", {
 	description = "Copper Axe",
@@ -258,6 +286,20 @@ minetest.register_tool("default:axe_steel", {
 --[[
 SHOVELS
 --]]
+minetest.register_tool("default:shovel_rusted", {
+	description = "Rusted Shovel",
+	inventory_image = "default_shovel_rusted.png",
+	tool_capabilities = {
+		full_punch_interval = 1.0,
+		max_drop_level=1,
+		groupcaps={
+			crumbly = {times={[2]=0.80, [3]=0.50}, uses=60, maxlevel=1},
+		},
+		damage_groups = {fleshy=3},
+	},
+	sound = qtcore.tool_sounds_default(),
+	groups = {shovel = 1}
+})
 --copper
 minetest.register_tool("default:shovel_copper", {
 	description = "Copper Shovel",
@@ -322,6 +364,20 @@ minetest.register_tool("default:shovel_steel", {
 --[[
 SWORDS
 --]]
+minetest.register_tool("default:sword_rusted", {
+	description = "Rusted Sword",
+	inventory_image = "default_sword_rusted.png",
+	tool_capabilities = {
+		full_punch_interval = 1.0,
+		max_drop_level=1,
+		groupcaps={
+			snappy = {times={[2]=0.60, [3]=0.30}, uses=60, maxlevel=1},
+		},
+		damage_groups = {fleshy=6},
+	},
+	sound = qtcore.tool_sounds_default(),
+	groups = {sword = 1}
+})
 --copper
 minetest.register_tool("default:sword_copper", {
 	description = "Copper Sword",
@@ -430,6 +486,15 @@ local function Hoe_Use(itemstack, user, pointed_thing)
 	end
 	return itemstack
 end
+
+minetest.register_tool("default:hoe_rusted", {
+	description = "Rusted Hoe",
+	inventory_image = "default_hoe_rusted.png",
+	sound = qtcore.tool_sounds_default(),
+	groups = {hoe = 1},
+	on_use = Hoe_Use,
+	max_uses = 50,
+})
 
 --copper
 
