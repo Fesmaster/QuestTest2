@@ -226,10 +226,12 @@ minetest.register_node("default:textile_flax", {
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{ 0/16, -8/16, -6/16, 6/16, 8/16, 0/16, },
-			{ 2/16, -8/16, 2/16, 6/16, 8/16, 6/16, },
-			{ -3/16, -8/16, 2/16, 0/16, 8/16, 5/16, },
-			{ -6/16, -8/16, -4/16, -2/16, 8/16, 0/16, },
+			{ -1/16, -8/16, -8/16, 6/16, -7/16, 8/16, },
+			{ -5/16, -7/16, -8/16, 0/16, -6/16, 8/16, },
+			{ -7/16, -8/16, -8/16, -3/16, -7/16, 8/16, },
+			{ 2/16, -7/16, -8/16, 7/16, -3/16, 8/16, },
+			{ 2/16, -8/16, -8/16, 6/16, -2/16, 8/16, },
+			{ 1/16, -7/16, -8/16, 6/16, -3/16, 8/16, },,
 
 		},
 	},
@@ -405,7 +407,7 @@ minetest.register_node("default:dye_green", {
 			"default_dye_green_side.png"
 		},
 	drawtype = "nodebox",
-	inventory_image = "default_dye_green.png",
+	--inventory_image = "default_dye_green.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, dye = 1, generation_artificial=1},

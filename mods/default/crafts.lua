@@ -723,25 +723,25 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"default:chicory 2", "default:vessels_water"},
+	ingredients = {"default:flower_chicory 2", "default:vessels_water"},
 	results = {"default:dye_blue"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
 qts.register_craft({
-	ingredients = {"default:kniphofia 2", "default:vessels_water"},
+	ingredients = {"default:flower_kniphofia 2", "default:vessels_water"},
 	results = {"default:dye_red"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
 qts.register_craft({
-	ingredients = {"default:iris 2", "default:vessels_water"},
+	ingredients = {"default:flower_iris 2", "default:vessels_water"},
 	results = {"default:dye_white"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
 qts.register_craft({
-	ingredients = {"default:violet 2", "default:vessels_water"},
+	ingredients = {"default:flower_violet 2", "default:vessels_water"},
 	results = {"default:dye_purple"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
