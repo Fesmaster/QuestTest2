@@ -718,43 +718,43 @@ minetest.register_craft({
 --DYES
 qts.register_craft({
 	ingredients = {"default:charcoal 2", "default:vessels_water"},
-	results = {"default:dye_black"},
+	results = {"default:dye_black", "default:dishes_clay"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
 qts.register_craft({
 	ingredients = {"default:flower_chicory 2", "default:vessels_water"},
-	results = {"default:dye_blue"},
+	results = {"default:dye_blue", "default:dishes_clay"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
 qts.register_craft({
 	ingredients = {"default:flower_kniphofia 2", "default:vessels_water"},
-	results = {"default:dye_red"},
+	results = {"default:dye_red", "default:dishes_clay"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
 qts.register_craft({
 	ingredients = {"default:flower_iris 2", "default:vessels_water"},
-	results = {"default:dye_white"},
+	results = {"default:dye_white", "default:dishes_clay"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
 qts.register_craft({
 	ingredients = {"default:flower_violet 2", "default:vessels_water"},
-	results = {"default:dye_purple"},
+	results = {"default:dye_purple", "default:dishes_clay"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
 qts.register_craft({
 	ingredients = {"group:leaves 2", "default:vessels_water"},
-	results = {"default:dye_green"},
+	results = {"default:dye_green", "default:dishes_clay"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
 qts.register_craft({
 	ingredients = {"default:dye_red", "default:dye_green"},
-	results = {"default:dye_yellow 2"},
+	results = {"default:dye_yellow 2", "default:dishes_clay"},
 	near = {"group:ttable"}
 })
 

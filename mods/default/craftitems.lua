@@ -46,17 +46,6 @@ minetest.register_craftitem("default:paper", {
 	inventory_image = "default_paper.png",
 })
 
-
-minetest.register_craftitem("default:shell_pieces", {
-	description = "Shell Pieces",
-	inventory_image = "default_shell_peices.png",
-})
-
-minetest.register_alias("default:calcium_oxide", "default:lime")
-minetest.register_craftitem("default:lime", {
-	description = "Lime",
-	inventory_image = "default_lime.png",
-})
 minetest.register_alias("default:brick_single", "default:brick_item")
 minetest.register_craftitem("default:brick_item", {
 	description = "Brick",

@@ -47,13 +47,18 @@ minetest.register_node("default:workbench", {
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{-0.5, 0.25, -0.5, 0.5, 0.4375, 0.5}, -- Top
+			{ -8/16, 5/16, -8/16, 8/16, 8/16, 8/16, },
+			{ -7/16, -8/16, -7/16, -4/16, 6/16, -4/16, },
+			{ 4/16, -8/16, -7/16, 7/16, 6/16, -4/16, },
+			{ 4/16, -8/16, 4/16, 7/16, 6/16, 7/16, },
+			{ -7/16, -8/16, 4/16, -4/16, 6/16, 7/16, },
+			--[[{-0.5, 0.25, -0.5, 0.5, 0.4375, 0.5}, -- Top
 			{-0.4375, -0.5, -0.4375, -0.25, 0.25, -0.25}, -- leg1
 			{0.25, -0.5, -0.4375, 0.4375, 0.25, -0.25}, -- leg2
 			{0.25, -0.5, 0.25, 0.4375, 0.25, 0.4375}, -- leg3
 			{-0.4375, -0.5, 0.25, -0.25, 0.25, 0.4375}, -- leg4
-			--{-0.3125, -0.25, -0.3125, 0.3125, -0.1875, 0.3125}, -- shelf
-		}
+			--{-0.3125, -0.25, -0.3125, 0.3125, -0.1875, 0.3125}, -- shelf]]
+		},
 	},
 	sounds = qtcore.node_sound_wood(),
 })
@@ -72,13 +77,18 @@ minetest.register_node("default:workbench_heavy", {
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{-0.5, 0.25, -0.5, 0.5, 0.4375, 0.5}, -- Top
+			{ -8/16, 5/16, -8/16, 8/16, 8/16, 8/16, },
+			{ -7/16, -8/16, -7/16, -4/16, 6/16, -4/16, },
+			{ 4/16, -8/16, -7/16, 7/16, 6/16, -4/16, },
+			{ 4/16, -8/16, 4/16, 7/16, 6/16, 7/16, },
+			{ -7/16, -8/16, 4/16, -4/16, 6/16, 7/16, },
+--[[			{-0.5, 0.25, -0.5, 0.5, 0.4375, 0.5}, -- Top
 			{-0.4375, -0.5, -0.4375, -0.25, 0.25, -0.25}, -- leg1
 			{0.25, -0.5, -0.4375, 0.4375, 0.25, -0.25}, -- leg2
 			{0.25, -0.5, 0.25, 0.4375, 0.25, 0.4375}, -- leg3
 			{-0.4375, -0.5, 0.25, -0.25, 0.25, 0.4375}, -- leg4
-			--{-0.3125, -0.25, -0.3125, 0.3125, -0.1875, 0.3125}, -- shelf
-		}
+			--{-0.3125, -0.25, -0.3125, 0.3125, -0.1875, 0.3125}, -- shelf--]]--
+		},
 	},
 	sounds = qtcore.node_sound_wood(),
 })
@@ -256,6 +266,37 @@ qts.register_ingot("default:wax_palm", {
 			{ -4/16, -6/16, -3/16, -1/16, -4/16, 2/16, },
 			},
 	levels = 8,
+})
+
+minetest.register_node("default:shell_pieces", {
+	description = "Shell Pieces",
+	tiles = {
+			"default_shell_pieces_top.png",
+			"default_oak_wood.png",
+			"default_shell_pieces_side.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_shell_pieces.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
+	node_box = qtcore.nb_dustpile(),
+})
+
+minetest.register_alias("default:calcium_oxide", "default:lime")
+minetest.register_node("default:lime", {
+	description = "Lime",
+	tiles = {
+			"default_lime_top.png",
+			"default_oak_wood.png",
+			"default_lime_side.png"
+		},
+	drawtype = "nodebox",
+	inventory_image = "default_lime.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
+	node_box = qtcore.nb_dustpile(),
 })
 
 --BEGIN dyes
