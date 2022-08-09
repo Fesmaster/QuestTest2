@@ -179,7 +179,7 @@ minetest.register_entity("foundry:casting_flow", {
 
 minetest.register_node ("foundry:ingot_mold", {
 	description = "Ingot Mold",
-	tiles = {"foundry_ingot_mold.png"},
+	tiles = {"foundry_mold_top.png", "foundry_ingot_mold.png"},
 	groups = {cracky=3, oddly_breakable_by_hand=2, foundry_mold=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
@@ -238,7 +238,7 @@ minetest.register_node ("foundry:ingot_mold", {
 
 minetest.register_node ("foundry:block_mold", {
 	description = "Block Mold",
-	tiles = {"foundry_block_mold.png"},
+	tiles = {"foundry_mold_top.png", "foundry_block_mold.png"},
 	groups = {cracky=3, oddly_breakable_by_hand=2, foundry_mold=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
@@ -308,27 +308,6 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"group:sand", "default:clay_lump"},
-	results = {"foundry:pick_mold",},
-})
-
-qts.register_craft({
-	ingredients = {"group:sand", "default:clay_lump"},
-	results = {"foundry:axe_mold",},
-})
-
-qts.register_craft({
-	ingredients = {"default:sand", "default:clay_lump"},
-	results = {"foundry:shovel_mold",},
-})
-
-qts.register_craft({
-	ingredients = {"group:sand", "default:clay_lump"},
-	results = {"foundry:sword_mold",},
-})
-
-
-qts.register_craft({
 	ingredients = {"foundry:casting_sand"},
 	results = {"foundry:block_mold",},
 })
@@ -337,27 +316,6 @@ qts.register_craft({
 	ingredients = {"foundry:casting_sand"},
 	results = {"foundry:ingot_mold",},
 })
-
-qts.register_craft({
-	ingredients = {"foundry:casting_sand"},
-	results = {"foundry:pick_mold",},
-})
-
-qts.register_craft({
-	ingredients = {"foundry:casting_sand"},
-	results = {"foundry:axe_mold",},
-})
-
-qts.register_craft({
-	ingredients = {"foundry:casting_sand"},
-	results = {"foundry:shovel_mold",},
-})
-
-qts.register_craft({
-	ingredients = {"foundry:casting_sand"},
-	results = {"foundry:sword_mold",},
-})
-
 
 qts.register_craft({
 	ingredients = {"default:brick 4", "default:cement"},
