@@ -754,7 +754,7 @@ qts.register_craft({
 
 qts.register_craft({
 	ingredients = {"default:dye_red", "default:dye_green"},
-	results = {"default:dye_yellow 2", "default:dishes_clay"},
+	results = {"default:dye_yellow 2"},
 	near = {"group:ttable"}
 })
 

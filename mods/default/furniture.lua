@@ -27,6 +27,70 @@ minetest.register_node("default:bench_pine", {
 })
 
 --END benches
+--BEGIN beds
+--highly experimental
+function qts.register_bed (node_name, node_desc, node_png_top, node_png_bottom, node_png_front)
+minetest.register_node(node_name, {
+	description = node_desc,
+	tiles = {
+		node_png_top, node_png_bottom, node_png_front 
+	},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, bed=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -7/16, -5/16, -2/16, 7/16, -4/16, 1/16, },
+			{ -7/16, -5/16, 5/16, 7/16, -4/16, 8/16, },
+			{ -7/16, -5/16, 12/16, 7/16, -4/16, 15/16, },
+			{ -7/16, -5/16, 19/16, 7/16, -4/16, 22/16, },
+			{ -8/16, -8/16, -8/16, -6/16, 7/16, -6/16, },
+			{ 6/16, -8/16, -8/16, 8/16, 7/16, -6/16, },
+			{ -8/16, -5/16, -8/16, 8/16, -1/16, -7/16, },
+			{ -8/16, 2/16, -8/16, 8/16, 5/16, -7/16, },
+			{ -6/16, -1/16, -5/16, 6/16, 1/16, 0/16, },
+			{ -6/16, -1/16, 0/16, 6/16, 0/16, 2/16, },
+			{ -7/16, -4/16, -7/16, 7/16, -1/16, 23/16, },
+			{ -7/16, -4/16, 23/16, 7/16, -1/16, 24/16, },
+			{ 6/16, -8/16, 22/16, 8/16, 5/16, 24/16, },
+			{ 7/16, -5/16, -8/16, 8/16, -1/16, 24/16, },
+			{ -8/16, -8/16, 22/16, -6/16, 5/16, 24/16, },
+			{ -8/16, -5/16, -8/16, -7/16, -1/16, 24/16, },
+			{ -7/16, 1/16, 23/16, 7/16, 4/16, 24/16, },
+		}
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+end
+
+qts.register_bed ("default:pine_bed", "Experimental Bed", "default_bed_pine_top.png", "default_oak_wood.png", "default_bed_pine_front.png")
+--END beds
+
+--BEGIN lights
+
+minetest.register_node("default:candle_palm", {
+	description = "Palm Wax Candle",
+	tiles = {
+		"default_candle_palm_side.png"
+	},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, ttable=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -1/16, -8/16, -1/16, 1/16, -4/16, 1/16, },
+			{ 0/16, -4/16, -1/16, 0/16, -3/16, 1/16, },
+			{ -1/16, -4/16, 0/16, 1/16, -3/16, 0/16, },
+		}
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+
+--end lights
 
 --BEGIN Tables
 minetest.register_node("default:table_oak", {
