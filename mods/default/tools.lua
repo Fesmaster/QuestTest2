@@ -17,6 +17,66 @@ minetest.register_tool("default:knife_flint", {
 	groups = {knife = 1}
 })
 
+minetest.register_tool("default:knife_copper", {
+	description = "Copper Knife",
+	inventory_image = "default_knife_copper.png",
+	tool_capabilities = {
+		full_punch_interval = 0.9,
+		max_drop_level=1,
+		groupcaps={
+			snappy = {times={[1]=0.50, [2]=0.25, [3]=0.10}, uses=150, maxlevel=1},
+		},
+		damage_groups = {fleshy=8},
+	},
+	sound = qtcore.tool_sounds_default(),
+	groups = {knife = 1}
+})
+
+minetest.register_tool("default:knife_bronze", {
+	description = "Bronze Knife",
+	inventory_image = "default_knife_bronze.png",
+	tool_capabilities = {
+		full_punch_interval = 0.9,
+		max_drop_level=1,
+		groupcaps={
+			snappy = {times={[1]=0.45, [2]=0.20, [3]=0.10}, uses=150, maxlevel=1},
+		},
+		damage_groups = {fleshy=9},
+	},
+	sound = qtcore.tool_sounds_default(),
+	groups = {knife = 1}
+})
+
+minetest.register_tool("default:knife_iron", {
+	description = "Iron Knife",
+	inventory_image = "default_knife_iron.png",
+	tool_capabilities = {
+		full_punch_interval = 0.8,
+		max_drop_level=1,
+		groupcaps={
+			snappy = {times={[1]=0.40, [2]=0.15, [3]=0.10}, uses=175, maxlevel=1},
+		},
+		damage_groups = {fleshy=10},
+	},
+	sound = qtcore.tool_sounds_default(),
+	groups = {knife = 1}
+})
+
+minetest.register_tool("default:knife_steel", {
+	description = "Steel Knife",
+	inventory_image = "default_knife_steel.png",
+	tool_capabilities = {
+		full_punch_interval = 0.8,
+		max_drop_level=1,
+		groupcaps={
+			snappy = {times={[1]=0.35, [2]=0.10, [3]=0.10}, uses=200, maxlevel=1},
+		},
+		damage_groups = {fleshy=11},
+	},
+	sound = qtcore.tool_sounds_default(),
+	groups = {knife = 1}
+})
+
 --[[
 Hammers
 --]]

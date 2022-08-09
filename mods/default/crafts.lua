@@ -63,10 +63,7 @@ qts.register_craft({
 })
 
 --knife recipies
-qts.register_craft({
-	ingredients = {"default:flint", "group:wood"},
-	results = {"default:knife_flint"},
-})
+
 
 qts.register_craft({
 	ingredients = {"group:wood"},
@@ -318,6 +315,36 @@ qts.register_craft({
 
 
 --weapons and tools
+
+--knives
+qts.register_craft({
+	ingredients = {"default:flint", "group:wood"},
+	results = {"default:knife_flint"},
+})
+
+qts.register_craft({
+	ingredients = {"default:copper_bar", "group:wood"},
+	results = {"default:knife_copper"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:bronze_bar", "group:wood"},
+	results = {"default:knife_bronze"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:iron_bar", "group:wood"},
+	results = {"default:knife_iron"},
+	near = {"group:anvil", "group:furnace"},
+})
+
+qts.register_craft({
+	ingredients = {"default:steel_bar", "group:wood"},
+	results = {"default:knife_steel"},
+	near = {"group:anvil", "group:furnace"},
+})
 
 --picks
 qts.register_craft({

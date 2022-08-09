@@ -11,6 +11,9 @@ unless it belongs to a specific system.
 default = {}
 
 dofile(minetest.get_modpath("default").."/nodes.lua")
+dofile(minetest.get_modpath("default").."/stone.lua")
+dofile(minetest.get_modpath("default").."/soil.lua")
+dofile(minetest.get_modpath("default").."/wood.lua")
 dofile(minetest.get_modpath("default").."/fence.lua")
 dofile(minetest.get_modpath("default").."/crate.lua")
 dofile(minetest.get_modpath("default").."/craftitems.lua")
