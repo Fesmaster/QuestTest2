@@ -291,7 +291,7 @@ minetest.register_node("default:natural_coconut", {
 })
 
 --flowers
-minetest.register_node("default:kniphofia", {
+minetest.register_node("default:flower_kniphofia", {
 	description = "Kniphofia",
 	tiles ={"default_kniphofia.png"},
 	inventory_image = "default_kniphofia_item.png",
@@ -311,7 +311,7 @@ minetest.register_node("default:kniphofia", {
 	on_flood = floodFunc,
 })
 
-minetest.register_node("default:iris", {
+minetest.register_node("default:flower_iris", {
 	description = "White Iris",
 	tiles ={"default_iris.png"},
 	inventory_image = "default_iris_item.png",
@@ -331,7 +331,7 @@ minetest.register_node("default:iris", {
 	on_flood = floodFunc,
 })
 
-minetest.register_node("default:chicory", {
+minetest.register_node("default:flower_chicory", {
 	description = "Chicory",
 	tiles ={"default_chicory.png"},
 	inventory_image = "default_chicory_item.png",
@@ -351,7 +351,7 @@ minetest.register_node("default:chicory", {
 	on_flood = floodFunc,
 })
 
-minetest.register_node("default:violet", {
+minetest.register_node("default:flower_violet", {
 	description = "Violet",
 	tiles ={"default_violet.png"},
 	inventory_image = "default_violet_item.png",

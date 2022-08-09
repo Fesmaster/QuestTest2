@@ -1476,6 +1476,7 @@ qts.register_ingot("default:wax_palm", {
 })
 
 --BEGIN dyes
+
 minetest.register_node("default:dye_black", {
 	description = "Black Dye",
 	tiles = {
@@ -1487,7 +1488,7 @@ minetest.register_node("default:dye_black", {
 	inventory_image = "default_dye_black.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	groups = {oddly_breakable_by_hand=3, dye=1, generation_artificial=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -1502,8 +1503,8 @@ minetest.register_node("default:dye_black", {
 		{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
 		{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
 		{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
+			},
 		},
-	},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -1518,7 +1519,7 @@ minetest.register_node("default:dye_blue", {
 	inventory_image = "default_dye_blue.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	groups = {oddly_breakable_by_hand=3, dye = 1, generation_artificial=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -1549,7 +1550,7 @@ minetest.register_node("default:dye_cyan", {
 	inventory_image = "default_dye_cyan.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	groups = {oddly_breakable_by_hand=3, dye = 1, generation_artificial=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -1580,7 +1581,7 @@ minetest.register_node("default:dye_dark_gray", {
 	inventory_image = "default_dye_dark_gray.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	groups = {oddly_breakable_by_hand=3, dye = 1, generation_artificial=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -1611,7 +1612,7 @@ minetest.register_node("default:dye_dark_green", {
 	inventory_image = "default_dye_dark_green.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	groups = {oddly_breakable_by_hand=3, dye = 1, generation_artificial=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -1642,7 +1643,7 @@ minetest.register_node("default:dye_gray", {
 	inventory_image = "default_dye_gray.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	groups = {oddly_breakable_by_hand=3, dye = 1, generation_artificial=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -1673,7 +1674,7 @@ minetest.register_node("default:dye_green", {
 	inventory_image = "default_dye_green.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	groups = {oddly_breakable_by_hand=3, dye = 1, generation_artificial=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -1704,7 +1705,7 @@ minetest.register_node("default:dye_magenta", {
 	inventory_image = "default_dye_magenta.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	groups = {oddly_breakable_by_hand=3, dye = 1, generation_artificial=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -1735,7 +1736,7 @@ minetest.register_node("default:dye_orange", {
 	inventory_image = "default_dye_orange.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	groups = {oddly_breakable_by_hand=3, dye = 1, generation_artificial=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -1766,7 +1767,7 @@ minetest.register_node("default:dye_purple", {
 	inventory_image = "default_dye_purple.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	groups = {oddly_breakable_by_hand=3, dye = 1, generation_artificial=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -1797,7 +1798,7 @@ minetest.register_node("default:dye_red", {
 	inventory_image = "default_dye_red.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	groups = {oddly_breakable_by_hand=3, dye = 1, generation_artificial=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -1828,7 +1829,7 @@ minetest.register_node("default:dye_white", {
 	inventory_image = "default_dye_white.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	groups = {oddly_breakable_by_hand=3, dye = 1, generation_artificial=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -1859,7 +1860,7 @@ minetest.register_node("default:dye_yellow", {
 	inventory_image = "default_dye_yellow.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+	groups = {oddly_breakable_by_hand=3, dye = 1, generation_artificial=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
