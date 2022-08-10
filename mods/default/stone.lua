@@ -184,6 +184,23 @@ qtcore.register_artistic_nodes("default:obsidian",{
 	craft_group = "obsidian",
 })
 
+-- Marble
+qts.register_shaped_node ("default:marble", {
+	description = "Marble",
+	tiles = {"default_marble.png"},
+	groups = {cracky=1, stone=1, marble=1, generation_ground=1},
+	sounds = qtcore.node_sound_stone(),
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
+qtcore.register_artistic_nodes("default:marble",{
+	description = "Marble",
+	tiles = {"default_marble.png"},
+	groups = {cracky=3, stone=1, marble=1, generation_artificial=1},
+	sounds = qtcore.node_sound_stone(),
+	craft_group = "marble",
+})
+
 
 --Bricks
 qts.register_shaped_node ("default:brick", {
