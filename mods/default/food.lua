@@ -2,6 +2,51 @@
 
 --BEGIN NODES
 
+--soups
+
+local ingredient={"apple", "goard", "grain", "carrot", "onion", "potatoe"}
+local soupname={"Apple", "Goard", "Grain", "Carrot", "Onion", "Potatoe"}
+
+for i, n in ipairs(ingredient) do
+	for j, k in ipairs(ingredient) do
+		for h, l in ipairs(ingredient)do
+			qts.register_chest("default:bowl_clay_soup_"..n.."_"..k.."_"..l, {
+				description = soupname[i].." and "..soupname[j].." and "..soupname[h],
+				tiles = {
+					"default_soup_"..ingredient[i].."_top.png^default_bowl_clay_soup_top_overlay.png^default_soup_overlay_"..ingredient[j]..".png^default_soup_overlay_"..ingredient[h]..".png",
+					"default_dishes_clay.png"
+					
+				},
+				groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
+				drawtype = "nodebox",
+				--inventory_image = soupimage[i].."^default_bowl_clay_soup_item_overlay.png",
+				paramtype = "light",
+				paramtype2 = "facedir",
+				node_box = {
+					type = "fixed",
+					fixed = {
+							{ -3/16, -8/16, -3/16, 3/16, -7/16, 3/16, },
+							{ -4/16, -7/16, -4/16, 4/16, -6/16, 4/16, },
+							{ 4/16, -6/16, -5/16, 5/16, -5/16, 5/16, },
+							{ -5/16, -6/16, -5/16, 5/16, -5/16, -4/16, },
+							{ -5/16, -6/16, 4/16, 5/16, -5/16, 5/16, },
+							{ -5/16, -6/16, -5/16, -4/16, -5/16, 5/16, },
+						},
+					},
+				sounds = qtcore.node_sound_stone(),
+			})
+			
+			qts.register_craft({
+				ingredients = {"default:herb_"..n, "default:herb_"..k, "default:herb_"..l, "default:vessels_water"},
+				results = {"default:bowl_clay_soup_"..n.."_"..k.."_"..l},
+				near = {"group:table", "group:furnace", "group:cookware"},
+			})
+		end
+	end
+end
+
+--end soups
+
 -- consumables
 qts.register_ingot("default:apple", {
 	description = "Apple",

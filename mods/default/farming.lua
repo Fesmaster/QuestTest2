@@ -189,10 +189,10 @@ register_farm_plant("potatoe", {
 	description = "Potatoe",
 	seed_image = "default_seeds_potatoe_item.png",
 	seed_tiles = {"default_seeds_potatoe_top.png", "default_oak_wood.png", "default_seeds_potatoe_side.png"},
-	item_image = "default_potatoe.png",
+	item_image = "default_herb_potatoe.png",
 	plant_levels = 6,
-	plant_tiles_list = {"default_potatoe_0.png", "default_potatoe_1.png", "default_potatoe_2.png", "default_potatoe_3.png", "default_potatoe_4.png",
-	"default_potatoe_5.png"},
+	plant_tiles_list = {"default_herb_potatoe_0.png", "default_herb_potatoe_1.png", "default_herb_potatoe_2.png", "default_herb_potatoe_3.png", "default_herb_potatoe_4.png",
+	"default_herb_potatoe_5.png"},
 	grow_timer = 90,
 	grow_timer_random = 30,
 })

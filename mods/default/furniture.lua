@@ -43,8 +43,8 @@ for i, n in ipairs(woodtypes) do
 				woodpng[i].."^default_chest_"..k.."_top_overlay.png",
 				woodpng[i].."^default_chest_"..k.."_side_overlay.png",
 				woodpng[i].."^default_chest_"..k.."_side_overlay.png",
-				woodpng[i].."^default_chest_"..k.."_front_overlay.png",
-				woodpng[i].."^default_chest_"..k.."_back_overlay.png"
+				woodpng[i].."^default_chest_"..k.."_back_overlay.png",
+				woodpng[i].."^default_chest_"..k.."_front_overlay.png"
 				
 			},
 			groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
@@ -65,7 +65,7 @@ for i, n in ipairs(woodtypes) do
 					{ -6/16, 2/16, -3/16, -4/16, 3/16, 3/16, },
 					{ -6/16, -8/16, -6/16, -4/16, 0/16, 6/16, },
 					{ 4/16, -8/16, -6/16, 6/16, 0/16, 6/16, },
-					{ -1/16, -4/16, 5/16, 1/16, -1/16, 6/16, },
+					{ -1/16, -4/16, -6/16, 1/16, -1/16, -5/16, },
 					},
 				},
 			is_ground_content = false,
