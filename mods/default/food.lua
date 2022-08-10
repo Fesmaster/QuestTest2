@@ -19,7 +19,7 @@ for i, n in ipairs(ingredient) do
 				},
 				groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
 				drawtype = "nodebox",
-				--inventory_image = soupimage[i].."^default_bowl_clay_soup_item_overlay.png",
+				inventory_image = "default_soup_"..ingredient[i].."_item.png^default_bowl_clay_soup_item_overlay.png",
 				paramtype = "light",
 				paramtype2 = "facedir",
 				node_box = {
