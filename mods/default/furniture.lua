@@ -75,11 +75,27 @@ for i, n in ipairs(woodtypes) do
 			get_chest_formspec = qtcore.get_default_chest_formspec,
 		})
 		
-		qts.register_craft({
-			ingredients = {"default:"..n.."_wood_planks", "default:"..k.."_bar 2"},
-			results = {"default:chest_"..n.."_"..k},
-			near = {"group:anvil", "group:furnace"},
-		})
+		
+		if k == "copper" then
+			qts.register_craft({
+				ingredients = {"default:"..n.."_wood_planks", "default:"..k.."_bar 2"},
+				results = {"default:chest_"..n.."_"..k},
+				near = {"group:workbench"},
+				})
+				
+		elseif k == "bronze" then
+			qts.register_craft({
+				ingredients = {"default:"..n.."_wood_planks", "default:"..k.."_bar 2"},
+				results = {"default:chest_"..n.."_"..k},
+				near = {"group:workbench"},
+				})
+		else
+			qts.register_craft({
+				ingredients = {"default:"..n.."_wood_planks", "default:"..k.."_bar 2"},
+				results = {"default:chest_"..n.."_"..k},
+				near = {"group:anvil", "group:furnace"},
+				})
+		end
 	end
 end
 
