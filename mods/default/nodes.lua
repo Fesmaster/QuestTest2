@@ -24,7 +24,7 @@ minetest.register_node("default:lantern_fruit", {
 	sunlight_propagates = true,
 	walkable = false,
 	groups = {snappy = 3, fruit = 1, generation_trees=1, generation_artificial=1},
-	sounds = qtcore.node_sound_stone(),
+	--sounds = qtcore.node_sound_stone(),
 	light_source = 12,
 })
 

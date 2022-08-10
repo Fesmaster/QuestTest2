@@ -27,45 +27,197 @@ minetest.register_node("default:bench_pine", {
 })
 
 --END benches
---BEGIN beds
---highly experimental
-function qts.register_bed (node_name, node_desc, node_png_top, node_png_bottom, node_png_front)
-minetest.register_node(node_name, {
-	description = node_desc,
+--BEGIN chests
+local woodpng={"default_oak_wood.png", "default_apple_wood.png", "default_aspen_wood.png", "default_coffee_wood.png", "default_mahogany_wood.png", "default_rosewood_wood.png", "default_pine_wood.png", "default_lanternfruit_wood.png", "default_swamp_wood.png",}
+local woodtypes={"oak", "apple", "aspen", "coffee", "mahogany", "rosewood", "pine", "lanternfruit", "swamp",}
+local woodnames={"Oak", "Apple", "Aspen", "Coffee", "Mahogany", "Rosewood", "Pine", "Lanternfruit", "Swamp Wood",}
+
+for i, n in ipairs(woodtypes) do
+qts.register_chest("default:chest_"..n.."_steel", {
+	description = woodnames[i].." and Steel Chest",
 	tiles = {
-		node_png_top, node_png_bottom, node_png_front 
+		woodpng[i].."^default_chest_steel_top_overlay.png",
+		woodpng[i].."^default_chest_steel_top_overlay.png",
+		woodpng[i].."^default_chest_steel_side_overlay.png",
+		woodpng[i].."^default_chest_steel_side_overlay.png",
+		woodpng[i].."^default_chest_steel_front_overlay.png",
+		woodpng[i].."^default_chest_steel_back_overlay.png"
+		
 	},
+	groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
 	drawtype = "nodebox",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, bed=1, generation_artificial=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{ -7/16, -5/16, -2/16, 7/16, -4/16, 1/16, },
-			{ -7/16, -5/16, 5/16, 7/16, -4/16, 8/16, },
-			{ -7/16, -5/16, 12/16, 7/16, -4/16, 15/16, },
-			{ -7/16, -5/16, 19/16, 7/16, -4/16, 22/16, },
-			{ -8/16, -8/16, -8/16, -6/16, 7/16, -6/16, },
-			{ 6/16, -8/16, -8/16, 8/16, 7/16, -6/16, },
-			{ -8/16, -5/16, -8/16, 8/16, -1/16, -7/16, },
-			{ -8/16, 2/16, -8/16, 8/16, 5/16, -7/16, },
-			{ -6/16, -1/16, -5/16, 6/16, 1/16, 0/16, },
-			{ -6/16, -1/16, 0/16, 6/16, 0/16, 2/16, },
-			{ -7/16, -4/16, -7/16, 7/16, -1/16, 23/16, },
-			{ -7/16, -4/16, 23/16, 7/16, -1/16, 24/16, },
-			{ 6/16, -8/16, 22/16, 8/16, 5/16, 24/16, },
-			{ 7/16, -5/16, -8/16, 8/16, -1/16, 24/16, },
-			{ -8/16, -8/16, 22/16, -6/16, 5/16, 24/16, },
-			{ -8/16, -5/16, -8/16, -7/16, -1/16, 24/16, },
-			{ -7/16, 1/16, 23/16, 7/16, 4/16, 24/16, },
-		}
-	},
+			{ -8/16, -8/16, -5/16, 8/16, 0/16, 5/16, },
+			{ -8/16, -8/16, -4/16, 8/16, 1/16, 4/16, },
+			{ -8/16, -8/16, -3/16, 8/16, 2/16, 3/16, },
+			{ -6/16, 1/16, -4/16, -4/16, 2/16, 4/16, },
+			{ 4/16, 1/16, -4/16, 6/16, 2/16, 4/16, },
+			{ 4/16, 0/16, -5/16, 6/16, 1/16, 5/16, },
+			{ -6/16, 0/16, -5/16, -4/16, 1/16, 5/16, },
+			{ 4/16, 2/16, -3/16, 6/16, 3/16, 3/16, },
+			{ -6/16, 2/16, -3/16, -4/16, 3/16, 3/16, },
+			{ -6/16, -8/16, -6/16, -4/16, 0/16, 6/16, },
+			{ 4/16, -8/16, -6/16, 6/16, 0/16, 6/16, },
+			{ -1/16, -4/16, 5/16, 1/16, -1/16, 6/16, },
+			},
+		},
+	is_ground_content = false,
 	sounds = qtcore.node_sound_wood(),
+	
+	invsize = 8*4,
+	get_chest_formspec = qtcore.get_default_chest_formspec,
+})
+
+qts.register_craft({
+	ingredients = {"default:"..n.."_wood_planks", "default:steel_bar 2"},
+	results = {"default:chest_"..n.."_steel"},
+	near = {"group:anvil", "group:furnace"},
+})
+
+qts.register_chest("default:chest_"..n.."_iron", {
+	description = woodnames[i].." and Iron Chest",
+	tiles = {
+		woodpng[i].."^default_chest_iron_top_overlay.png",
+		woodpng[i].."^default_chest_iron_top_overlay.png",
+		woodpng[i].."^default_chest_iron_side_overlay.png",
+		woodpng[i].."^default_chest_iron_side_overlay.png",
+		woodpng[i].."^default_chest_iron_front_overlay.png",
+		woodpng[i].."^default_chest_iron_back_overlay.png"
+		
+	},
+	groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -8/16, -8/16, -5/16, 8/16, 0/16, 5/16, },
+			{ -8/16, -8/16, -4/16, 8/16, 1/16, 4/16, },
+			{ -8/16, -8/16, -3/16, 8/16, 2/16, 3/16, },
+			{ -6/16, 1/16, -4/16, -4/16, 2/16, 4/16, },
+			{ 4/16, 1/16, -4/16, 6/16, 2/16, 4/16, },
+			{ 4/16, 0/16, -5/16, 6/16, 1/16, 5/16, },
+			{ -6/16, 0/16, -5/16, -4/16, 1/16, 5/16, },
+			{ 4/16, 2/16, -3/16, 6/16, 3/16, 3/16, },
+			{ -6/16, 2/16, -3/16, -4/16, 3/16, 3/16, },
+			{ -6/16, -8/16, -6/16, -4/16, 0/16, 6/16, },
+			{ 4/16, -8/16, -6/16, 6/16, 0/16, 6/16, },
+			{ -1/16, -4/16, 5/16, 1/16, -1/16, 6/16, },
+			},
+		},
+	is_ground_content = false,
+	sounds = qtcore.node_sound_wood(),
+	
+	invsize = 8*4,
+	get_chest_formspec = qtcore.get_default_chest_formspec,
+})
+
+qts.register_craft({
+	ingredients = {"default:"..n.."_wood_planks", "default:iron_bar 2"},
+	results = {"default:chest_"..n.."_iron"},
+	near = {"group:anvil", "group:furnace"},
+})
+
+qts.register_chest("default:chest_"..n.."_copper", {
+	description = woodnames[i].." and Copper Chest",
+	tiles = {
+		woodpng[i].."^default_chest_copper_top_overlay.png",
+		woodpng[i].."^default_chest_copper_top_overlay.png",
+		woodpng[i].."^default_chest_copper_side_overlay.png",
+		woodpng[i].."^default_chest_copper_side_overlay.png",
+		woodpng[i].."^default_chest_copper_front_overlay.png",
+		woodpng[i].."^default_chest_copper_back_overlay.png"
+		
+	},
+	groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -8/16, -8/16, -5/16, 8/16, 0/16, 5/16, },
+			{ -8/16, -8/16, -4/16, 8/16, 1/16, 4/16, },
+			{ -8/16, -8/16, -3/16, 8/16, 2/16, 3/16, },
+			{ -6/16, 1/16, -4/16, -4/16, 2/16, 4/16, },
+			{ 4/16, 1/16, -4/16, 6/16, 2/16, 4/16, },
+			{ 4/16, 0/16, -5/16, 6/16, 1/16, 5/16, },
+			{ -6/16, 0/16, -5/16, -4/16, 1/16, 5/16, },
+			{ 4/16, 2/16, -3/16, 6/16, 3/16, 3/16, },
+			{ -6/16, 2/16, -3/16, -4/16, 3/16, 3/16, },
+			{ -6/16, -8/16, -6/16, -4/16, 0/16, 6/16, },
+			{ 4/16, -8/16, -6/16, 6/16, 0/16, 6/16, },
+			{ -1/16, -4/16, 5/16, 1/16, -1/16, 6/16, },
+			},
+		},
+	is_ground_content = false,
+	sounds = qtcore.node_sound_wood(),
+	
+	invsize = 8*4,
+	get_chest_formspec = qtcore.get_default_chest_formspec,
+})
+
+qts.register_craft({
+	ingredients = {"default:"..n.."_wood_planks", "default:copper_bar 2"},
+	results = {"default:chest_"..n.."_copper"},
+	near = {"group:workbench"},
+})
+
+qts.register_chest("default:chest_"..n.."_bronze", {
+	description = woodnames[i].." and Bronze Chest",
+	tiles = {
+		woodpng[i].."^default_chest_bronze_top_overlay.png",
+		woodpng[i].."^default_chest_bronze_top_overlay.png",
+		woodpng[i].."^default_chest_bronze_side_overlay.png",
+		woodpng[i].."^default_chest_bronze_side_overlay.png",
+		woodpng[i].."^default_chest_bronze_front_overlay.png",
+		woodpng[i].."^default_chest_bronze_back_overlay.png"
+		
+	},
+	groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -8/16, -8/16, -5/16, 8/16, 0/16, 5/16, },
+			{ -8/16, -8/16, -4/16, 8/16, 1/16, 4/16, },
+			{ -8/16, -8/16, -3/16, 8/16, 2/16, 3/16, },
+			{ -6/16, 1/16, -4/16, -4/16, 2/16, 4/16, },
+			{ 4/16, 1/16, -4/16, 6/16, 2/16, 4/16, },
+			{ 4/16, 0/16, -5/16, 6/16, 1/16, 5/16, },
+			{ -6/16, 0/16, -5/16, -4/16, 1/16, 5/16, },
+			{ 4/16, 2/16, -3/16, 6/16, 3/16, 3/16, },
+			{ -6/16, 2/16, -3/16, -4/16, 3/16, 3/16, },
+			{ -6/16, -8/16, -6/16, -4/16, 0/16, 6/16, },
+			{ 4/16, -8/16, -6/16, 6/16, 0/16, 6/16, },
+			{ -1/16, -4/16, 5/16, 1/16, -1/16, 6/16, },
+			},
+		},
+	is_ground_content = false,
+	sounds = qtcore.node_sound_wood(),
+	
+	invsize = 8*4,
+	get_chest_formspec = qtcore.get_default_chest_formspec,
+})
+
+qts.register_craft({
+	ingredients = {"default:"..n.."_wood_planks", "default:bronze_bar 2"},
+	results = {"default:chest_"..n.."_bronze"},
+	near = {"group:workbench"},
 })
 end
 
-qts.register_bed ("default:pine_bed", "Experimental Bed", "default_bed_pine_top.png", "default_oak_wood.png", "default_bed_pine_front.png")
+--END chests
+
+--BEGIN beds
+--highly experimental
 
 minetest.register_node("default:bedroll_flax", {
 	description = "Flaxen Badroll",
@@ -111,7 +263,8 @@ minetest.register_node("default:candle_palm", {
 			{ -1/16, -4/16, 0/16, 1/16, -3/16, 0/16, },
 		}
 	},
-	sounds = qtcore.node_sound_wood(),
+	--sounds = qtcore.node_sound_wood(),
+	light_source = 12,
 })
 
 --end lights
