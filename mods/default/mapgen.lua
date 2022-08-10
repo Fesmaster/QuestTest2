@@ -294,6 +294,44 @@ minetest.register_ore({
 	},
 })
 
+minetest.register_ore({
+	ore_type        = "blob",
+	ore             = "default:obsidian",
+	wherein         = {"default:stone"},
+	clust_scarcity  = 24 * 24 * 24,
+	clust_size      = 6,
+	y_max           = 128,
+	y_min           = -512,
+	noise_threshold = 0.0,
+	noise_params    = {
+		offset = 0.5,
+		scale = 0.2,
+		spread = {x = 5, y = 5, z = 5},
+		seed = 789345,
+		octaves = 1,
+		persist = 0.0
+	},
+})
+
+minetest.register_ore({
+	ore_type        = "blob",
+	ore             = "default:marble",
+	wherein         = {"default:stone"},
+	clust_scarcity  = 24 * 24 * 24,
+	clust_size      = 6,
+	y_max           = 128,
+	y_min           = -512,
+	noise_threshold = 0.0,
+	noise_params    = {
+		offset = 0.5,
+		scale = 0.2,
+		spread = {x = 5, y = 5, z = 5},
+		seed = 9405687,
+		octaves = 1,
+		persist = 0.0
+	},
+})
+
 --Coal
 --[[
 minetest.register_ore({

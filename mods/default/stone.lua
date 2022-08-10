@@ -171,7 +171,7 @@ qts.register_shaped_node ("default:desert_sandstone_cobble", {
 qts.register_shaped_node ("default:obsidian", {
 	description = "Obsidian",
 	tiles = {"default_obsidian.png"},
-	groups = {cracky=1, stone=1, obsidian=1, generation_ground=1},
+	groups = {cracky=3, stone=1, obsidian=1, generation_ground=1},
 	sounds = qtcore.node_sound_stone(),
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
@@ -188,7 +188,7 @@ qtcore.register_artistic_nodes("default:obsidian",{
 qts.register_shaped_node ("default:marble", {
 	description = "Marble",
 	tiles = {"default_marble.png"},
-	groups = {cracky=1, stone=1, marble=1, generation_ground=1},
+	groups = {cracky=3, stone=1, marble=1, generation_ground=1},
 	sounds = qtcore.node_sound_stone(),
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
