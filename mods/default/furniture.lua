@@ -107,8 +107,13 @@ end
 minetest.register_node("default:bedroll_flax", {
 	description = "Flaxen Badroll",
 	tiles = {
-			"default_textile_flax_top.png", "default_textile_flax_top.png", "default_textile_flax_side.png", "default_textile_flax_side.png",  "default_textile_flax_end.png",  
-		},
+		"default_textile_flax_top.png", 
+		"default_textile_flax_top.png", 
+		"default_textile_flax_side.png", 
+		"default_textile_flax_side.png",  
+		"default_textile_flax_end.png",  
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	--inventory_image = "default_textile_flax_item.png",
 	paramtype = "light",
@@ -133,9 +138,8 @@ minetest.register_node("default:bedroll_flax", {
 
 minetest.register_node("default:candle_palm", {
 	description = "Palm Wax Candle",
-	tiles = {
-		"default_candle_palm_side.png"
-	},
+	tiles = {"default_candle_palm_side.png"},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	paramtype = "light",
 	paramtype2 = "facedir",

@@ -4,27 +4,88 @@
 
 --soups
 
+--list of ingredient names
 local ingredient={"apple", "goard", "grain", "carrot", "onion", "potatoe"}
-local soupname={"Apple", "Goard", "Grain", "Carrot", "Onion", "Potatoe"}
+--mapping of said name to the actual item used to craft it
+local ingredient_map = {
+	apple="default:apple",
+	goard = "default:herb_goard",
+	grain="default:herb_grain",
+	carrot="default:herb_carrot",
+	onion="default:herb_onion",
+	potatoe="default:herb_potatoe",
+}
 
-for i, n in ipairs(ingredient) do
-	for j, k in ipairs(ingredient) do
-		for h, l in ipairs(ingredient)do
-			qts.register_chest("default:bowl_clay_soup_"..n.."_"..k.."_"..l, {
-				description = soupname[i].." and "..soupname[j].." and "..soupname[h],
-				tiles = {
-					"default_soup_"..ingredient[i].."_top.png^default_bowl_clay_soup_top_overlay.png^default_soup_overlay_"..ingredient[j]..".png^default_soup_overlay_"..ingredient[h]..".png",
-					"default_dishes_clay.png"
+local comb_complete = {}
+
+--this function capitolizes the first letter of a string
+local function firstToUpper(str)
+    return (str:gsub("^%l", string.upper))
+end
+
+for i, herb_1 in ipairs(ingredient) do
+	for j, herb_2 in ipairs(ingredient) do
+		for k, herb_3 in ipairs(ingredient)do
+			
+			--this set will have a unique entry for every combination, not permutation
+			--so, if both herb_1 and herb_2 are "apple", then they are the same entry in the table, and not two different ones.
+			local comb_set = {[herb_1]=true, [herb_2]=true, [herb_3]=true}
+			--turn the set into a list
+			local comb_list = {}
+			for herbname,_ in pairs(comb_set)do
+				comb_list[#comb_list+1] = herbname
+			end
+			--sort the list alphabetically to make sure it stays unique to the combination, not permutation (pairs is not deterministic)
+			table.sort(comb_list)
+
+			--now, generate a unique string from this for the name
+			--also generate a description and node texture
+			local comb_name = ""
+			local comb_description = ""
+			local comb_textuereSet = "default_bowl_clay_soup_top_overlay.png^"
+			for l, name in ipairs(comb_list)do
+				comb_name = comb_name .. name
+				comb_description = comb_description .. firstToUpper(name)
+				if l == 1 then
+					comb_textuereSet = comb_textuereSet .. "default_soup_"..name.."_top.png^default_soup_overlay_"..name..".png"
+				else
+					comb_textuereSet = comb_textuereSet .. "default_soup_overlay_"..name..".png"
+				end
+				if l < #comb_list then
+					comb_name = comb_name .. "_"
+					comb_textuereSet = comb_textuereSet .. "^"
 					
-				},
-				groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
-				drawtype = "nodebox",
-				inventory_image = "default_soup_"..ingredient[i].."_item.png^default_bowl_clay_soup_item_overlay.png",
-				paramtype = "light",
-				paramtype2 = "facedir",
-				node_box = {
-					type = "fixed",
-					fixed = {
+					if #comb_list > 2 then
+						comb_description = comb_description .. ", "
+						if l+1 == #comb_list then
+							comb_description = comb_description .. "and "
+						end
+					else
+						comb_description = comb_description .. " and "
+					end
+				end
+			end
+
+			--don't repeat combinations
+			if not comb_complete[comb_name] then 
+				comb_complete[comb_name] = true
+				
+				
+				minetest.register_node("default:bowl_clay_soup_"..comb_name, {
+					description = comb_description .. " Soup",
+					tiles = {
+						comb_textuereSet,
+						"default_dishes_clay.png"	
+					},
+					inventory_image = "default_soup_"..ingredient[i].."_item.png^default_bowl_clay_soup_item_overlay.png",
+					use_texture_alpha="clip",
+					groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1, soup=1},
+					drawtype = "nodebox",
+					--inventory_image = soupimage[i].."^default_bowl_clay_soup_item_overlay.png",
+					paramtype = "light",
+					node_box = {
+						type = "fixed",
+						fixed = {
 							{ -3/16, -8/16, -3/16, 3/16, -7/16, 3/16, },
 							{ -4/16, -7/16, -4/16, 4/16, -6/16, 4/16, },
 							{ 4/16, -6/16, -5/16, 5/16, -5/16, 5/16, },
@@ -33,14 +94,23 @@ for i, n in ipairs(ingredient) do
 							{ -5/16, -6/16, -5/16, -4/16, -5/16, 5/16, },
 						},
 					},
-				sounds = qtcore.node_sound_stone(),
-			})
-			
-			qts.register_craft({
-				ingredients = {"default:herb_"..n, "default:herb_"..k, "default:herb_"..l, "default:vessels_water"},
-				results = {"default:bowl_clay_soup_"..n.."_"..k.."_"..l},
-				near = {"group:table", "group:furnace", "group:cookware"},
-			})
+					sounds = qtcore.node_sound_stone(),
+				})
+				
+				--build the ingredient list
+				local ig_List = {}
+				for l, name in ipairs(comb_list) do
+					ig_List[l] = ingredient_map[name]
+				end
+				ig_List[#ig_List+1] = "default:vessels_water"
+
+				qts.register_craft({
+					ingredients = ig_List,
+					results = {"default:bowl_clay_soup_"..comb_name},
+					near = {"group:table", "group:furnace", "group:cookware"},
+				})
+
+			end
 		end
 	end
 end
@@ -102,6 +172,7 @@ qts.register_ingot("default:coconut", {
 	description = "Coconut",
 	inventory_image = "default_coconut.png",
 	tiles = {"default_coconut_top.png", "default_coconut_side.png"},
+	use_texture_alpha="clip",
 	groups = {oddly_breakable_by_hand=3, fruit = 1, generation_artificial=1},
 	on_use = minetest.item_eat(2),
 	sunlight_propagates = true,
@@ -130,10 +201,11 @@ qts.register_ingot("default:coconut", {
 minetest.register_node("default:cup_clay_coffee_turkish", {
 	description = "Cup of Turkish Coffee",
 	tiles = {
-			"default_cup_clay_coffee_top.png",
-			"default_dishes_clay.png",
-			"default_dishes_clay.png"
-		},
+		"default_cup_clay_coffee_top.png",
+		"default_dishes_clay.png",
+		"default_dishes_clay.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	inventory_image = "default_cup_clay_coffee_item.png",
 	paramtype = "light",
@@ -157,9 +229,8 @@ minetest.register_node("default:cup_clay_coffee_turkish", {
 --Cooking items and stations
 minetest.register_node("default:dishes_clay", {
 	description = "Clay Dishes",
-	tiles = {
-			"default_dishes_clay.png",
-		},
+	tiles = {"default_dishes_clay.png",},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	inventory_image = "default_dishes_clay_item.png",
 	paramtype = "light",
@@ -190,9 +261,8 @@ minetest.register_node("default:dishes_clay", {
 
 minetest.register_node("default:dishes_greenware", {
 	description = "Greenware Dishes",
-	tiles = {
-			"default_dishes_greenware.png",
-		},
+	tiles = {"default_dishes_greenware.png",},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	inventory_image = "default_dishes_greenware_item.png",
 	paramtype = "light",
@@ -224,10 +294,11 @@ minetest.register_node("default:dishes_greenware", {
 minetest.register_node("default:vessels_water", {
 	description = "Water Vessel",
 	tiles = {
-			"default_vessel_water_top.png",
-			"default_dishes_clay.png",
-			"default_dishes_clay.png"
-		},
+		"default_vessel_water_top.png",
+		"default_dishes_clay.png",
+		"default_dishes_clay.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	inventory_image = "default_vessel_water_item.png",
 	paramtype = "light",
@@ -255,10 +326,11 @@ minetest.register_node("default:vessels_water", {
 minetest.register_node("default:vessels_oil_coconut", {
 	description = "Coconut Oil Vessel",
 	tiles = {
-			"default_vessel_oil_coconut_top.png",
-			"default_dishes_clay.png",
-			"default_dishes_clay.png"
-		},
+		"default_vessel_oil_coconut_top.png",
+		"default_dishes_clay.png",
+		"default_dishes_clay.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	inventory_image = "default_vessel_oil_coconut_item.png",
 	paramtype = "light",
@@ -286,10 +358,11 @@ minetest.register_node("default:vessels_oil_coconut", {
 minetest.register_node("default:flour_bowl", {
 	description = "Flour Bowl",
 	tiles = {
-			"default_flour_bowl_top.png",
-			"default_dishes_clay.png",
-			"default_flour_bowl_side.png"
-		},
+		"default_flour_bowl_top.png",
+		"default_dishes_clay.png",
+		"default_flour_bowl_side.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	inventory_image = "default_flour_bowl_item.png",
 	paramtype = "light",
@@ -311,9 +384,8 @@ minetest.register_node("default:flour_bowl", {
 
 minetest.register_node("default:cup_clay", {
 	description = "Clay Cup",
-	tiles = {
-			"default_dishes_clay.png",
-		},
+	tiles = {"default_dishes_clay.png",},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	inventory_image = "default_cup_clay_item.png",
 	paramtype = "light",
@@ -335,9 +407,8 @@ minetest.register_node("default:cup_clay", {
 
 minetest.register_node("default:bowl_clay", {
 	description = "Clay Bowl",
-	tiles = {
-			"default_dishes_clay.png",
-		},
+	tiles = {"default_dishes_clay.png",},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	inventory_image = "default_bowl_clay_item.png",
 	paramtype = "light",
@@ -363,9 +434,8 @@ minetest.register_node("default:bowl_clay", {
 
 minetest.register_node("default:cookware_iron", {
 	description = "Cast Iron Cookware",
-	tiles = {
-			"default_cookware_iron.png",
-		},
+	tiles = {"default_cookware_iron.png",},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	inventory_image = "default_cookware_iron_item.png",
 	paramtype = "light",
@@ -396,9 +466,8 @@ minetest.register_node("default:cookware_iron", {
 
 minetest.register_node("default:cookware_copper", {
 	description = "Copper Cookware",
-	tiles = {
-			"default_cookware_copper.png",
-		},
+	tiles = {"default_cookware_copper.png",},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	inventory_image = "default_cookware_copper_item.png",
 	paramtype = "light",
@@ -430,10 +499,11 @@ minetest.register_node("default:cookware_copper", {
 minetest.register_node("default:coffee_grounds", {
 	description = "Coffee Grounds",
 	tiles = {
-			"default_coffee_grounds_top.png",
-			"default_oak_wood.png",
-			"default_coffee_grounds_side.png"
-		},
+		"default_coffee_grounds_top.png",
+		"default_oak_wood.png",
+		"default_coffee_grounds_side.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	inventory_image = "default_coffee_grounds_item.png",
 	paramtype = "light",

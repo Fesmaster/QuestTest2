@@ -28,6 +28,7 @@ end
 minetest.register_node("default:rope", {
 	description = "Rope",
 	tiles = {"default_rope.png"},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	paramtype = "light",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1, rope=1},
@@ -72,6 +73,7 @@ end
 minetest.register_node("default:chain_copper", {
 	description = "Copper Chain",
 	tiles = {"default_copper_ingot_stack.png"},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	paramtype = "light",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1, rope=1},
@@ -86,6 +88,7 @@ minetest.register_node("default:chain_copper", {
 minetest.register_node("default:chain_bronze", {
 	description = "Bronze Chain",
 	tiles = {"default_bronze_ingot_stack.png"},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	paramtype = "light",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1, rope=1},
@@ -100,6 +103,7 @@ minetest.register_node("default:chain_bronze", {
 minetest.register_node("default:chain_iron", {
 	description = "Iron Chain",
 	tiles = {"default_iron_ingot_stack.png"},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	paramtype = "light",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1, rope=1},
@@ -114,6 +118,7 @@ minetest.register_node("default:chain_iron", {
 minetest.register_node("default:chain_steel", {
 	description = "Steel Chain",
 	tiles = {"default_steel_ingot_stack.png"},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	paramtype = "light",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1, rope=1},

@@ -157,8 +157,11 @@ qts.register_shaped_node("default:ice", {
 minetest.register_node("default:alchemy_equipment_basic", {
 	description = "Basic Alchemy Equipment",
 	tiles = {
-			"default_alchemy_equipment_basic_top.png",  "default_dishes_clay.png", "default_alchemy_equipment_basic_side.png",
-		},
+		"default_alchemy_equipment_basic_top.png",  
+		"default_dishes_clay.png", 
+		"default_alchemy_equipment_basic_side.png",
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	paramtype = "light",
 	paramtype2 = "facedir",
@@ -192,8 +195,11 @@ minetest.register_node("default:alchemy_equipment_basic", {
 minetest.register_node("default:alchemy_equipment_advanced", {
 	description = "Advanced Alchemy Equipment",
 	tiles = {
-			"default_alchemy_equipment_advanced_top.png",  "default_dishes_clay.png", "default_alchemy_equipment_advanced_side.png",
-		},
+		"default_alchemy_equipment_advanced_top.png",  
+		"default_dishes_clay.png", 
+		"default_alchemy_equipment_advanced_side.png",
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	paramtype = "light",
 	paramtype2 = "facedir",
@@ -226,10 +232,15 @@ minetest.register_node("default:alchemy_equipment_advanced", {
 minetest.register_node("default:textile_flax", {
 	description = "Flax Textiles",
 	tiles = {
-			"default_textile_flax_top.png", "default_textile_flax_top.png", "default_textile_flax_side.png", "default_textile_flax_side.png",  "default_textile_flax_end.png",  
-		},
+		"default_textile_flax_top.png", 
+		"default_textile_flax_top.png", 
+		"default_textile_flax_side.png", 
+		"default_textile_flax_side.png",  
+		"default_textile_flax_end.png",  
+	},
 	drawtype = "nodebox",
 	inventory_image = "default_textile_flax_item.png",
+	use_texture_alpha="clip",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
@@ -252,8 +263,9 @@ qts.register_ingot("default:wax_palm", {
 	description = "Palm Wax",
 	inventory_image = "default_wax_palm_item.png",
 	tiles = {
-			"default_wax_palm_ingot.png"
-		},
+		"default_wax_palm_ingot.png"
+	},
+	use_texture_alpha="clip",
 	groups = {oddly_breakable_by_hand=3},
 	nodeboxes = {
 			{ -6/16, -8/16, 1/16, -3/16, -6/16, 6/16, },
@@ -271,10 +283,11 @@ qts.register_ingot("default:wax_palm", {
 minetest.register_node("default:shell_pieces", {
 	description = "Shell Pieces",
 	tiles = {
-			"default_shell_pieces_top.png",
-			"default_oak_wood.png",
-			"default_shell_pieces_side.png"
-		},
+		"default_shell_pieces_top.png",
+		"default_oak_wood.png",
+		"default_shell_pieces_side.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	inventory_image = "default_shell_pieces.png",
 	paramtype = "light",
@@ -287,10 +300,11 @@ minetest.register_alias("default:calcium_oxide", "default:lime")
 minetest.register_node("default:lime", {
 	description = "Lime",
 	tiles = {
-			"default_lime_top.png",
-			"default_oak_wood.png",
-			"default_lime_side.png"
-		},
+		"default_lime_top.png",
+		"default_oak_wood.png",
+		"default_lime_side.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	inventory_image = "default_lime.png",
 	paramtype = "light",
@@ -304,10 +318,11 @@ minetest.register_node("default:lime", {
 minetest.register_node("default:dye_black", {
 	description = "Black Dye",
 	tiles = {
-			"default_dye_top.png",
-			"default_dye_black_bottom.png",
-			"default_dye_black_side.png"
-		},
+		"default_dye_top.png",
+		"default_dye_black_bottom.png",
+		"default_dye_black_side.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	--inventory_image = "default_dye_black.png",
 	paramtype = "light",
@@ -327,11 +342,11 @@ minetest.register_node("default:dye_black", {
 minetest.register_node("default:dye_blue", {
 	description = "Blue Dye",
 	tiles = {
-			"default_dye_top.png",
-			"default_dye_blue_bottom.png",
-			"default_dye_blue_side.png"
-			
-		},
+		"default_dye_top.png",
+		"default_dye_blue_bottom.png",
+		"default_dye_blue_side.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	--inventory_image = "default_dye_black.png",
 	paramtype = "light",
@@ -351,10 +366,11 @@ minetest.register_node("default:dye_blue", {
 minetest.register_node("default:dye_cyan", {
 	description = "Cyan Dye",
 	tiles = {
-			"default_dye_top.png",
-			"default_dye_cyan_bottom.png",
-			"default_dye_cyan_side.png"
-		},
+		"default_dye_top.png",
+		"default_dye_cyan_bottom.png",
+		"default_dye_cyan_side.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	--inventory_image = "default_dye_cyan.png",
 	paramtype = "light",
@@ -374,10 +390,11 @@ minetest.register_node("default:dye_cyan", {
 minetest.register_node("default:dye_dark_gray", {
 	description = "Dark Gray Dye",
 	tiles = {
-			"default_dye_top.png",
-			"default_dye_dark_gray_bottom.png",
-			"default_dye_dark_gray_side.png"
-		},
+		"default_dye_top.png",
+		"default_dye_dark_gray_bottom.png",
+		"default_dye_dark_gray_side.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	--inventory_image = "default_dye_dark_gray.png",
 	paramtype = "light",
@@ -397,10 +414,11 @@ minetest.register_node("default:dye_dark_gray", {
 minetest.register_node("default:dye_dark_green", {
 	description = "Dark Green Dye",
 	tiles = {
-			"default_dye_top.png",
-			"default_dye_dark_green_bottom.png",
-			"default_dye_dark_green_side.png"
-		},
+		"default_dye_top.png",
+		"default_dye_dark_green_bottom.png",
+		"default_dye_dark_green_side.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	--inventory_image = "default_dye_dark_green.png",
 	paramtype = "light",
@@ -420,10 +438,11 @@ minetest.register_node("default:dye_dark_green", {
 minetest.register_node("default:dye_gray", {
 	description = "Gray Dye",
 	tiles = {
-			"default_dye_top.png",
-			"default_dye_gray_bottom.png",
-			"default_dye_gray_side.png"
-		},
+		"default_dye_top.png",
+		"default_dye_gray_bottom.png",
+		"default_dye_gray_side.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	--inventory_image = "default_dye_gray.png",
 	paramtype = "light",
@@ -443,10 +462,11 @@ minetest.register_node("default:dye_gray", {
 minetest.register_node("default:dye_green", {
 	description = "Green Dye",
 	tiles = {
-			"default_dye_top.png",
-			"default_dye_green_bottom.png",
-			"default_dye_green_side.png"
-		},
+		"default_dye_top.png",
+		"default_dye_green_bottom.png",
+		"default_dye_green_side.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	--inventory_image = "default_dye_green.png",
 	paramtype = "light",
@@ -466,10 +486,11 @@ minetest.register_node("default:dye_green", {
 minetest.register_node("default:dye_magenta", {
 	description = "Magenta Dye",
 	tiles = {
-			"default_dye_top.png",
-			"default_dye_magenta_bottom.png",
-			"default_dye_magenta_side.png"
-		},
+		"default_dye_top.png",
+		"default_dye_magenta_bottom.png",
+		"default_dye_magenta_side.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	--inventory_image = "default_dye_magenta.png",
 	paramtype = "light",
@@ -489,10 +510,11 @@ minetest.register_node("default:dye_magenta", {
 minetest.register_node("default:dye_orange", {
 	description = "Orange Dye",
 	tiles = {
-			"default_dye_top.png",
-			"default_dye_orange_bottom.png",
-			"default_dye_orange_side.png"
-		},
+		"default_dye_top.png",
+		"default_dye_orange_bottom.png",
+		"default_dye_orange_side.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	--inventory_image = "default_dye_orange.png",
 	paramtype = "light",
@@ -512,10 +534,11 @@ minetest.register_node("default:dye_orange", {
 minetest.register_node("default:dye_purple", {
 	description = "Purple Dye",
 	tiles = {
-			"default_dye_top.png",
-			"default_dye_purple_bottom.png",
-			"default_dye_purple_side.png"
-		},
+		"default_dye_top.png",
+		"default_dye_purple_bottom.png",
+		"default_dye_purple_side.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	--inventory_image = "default_dye_purple.png",
 	paramtype = "light",
@@ -535,10 +558,11 @@ minetest.register_node("default:dye_purple", {
 minetest.register_node("default:dye_red", {
 	description = "Red Dye",
 	tiles = {
-			"default_dye_top.png",
-			"default_dye_red_bottom.png",
-			"default_dye_red_side.png"
-		},
+		"default_dye_top.png",
+		"default_dye_red_bottom.png",
+		"default_dye_red_side.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	--inventory_image = "default_dye_red.png",
 	paramtype = "light",
@@ -558,10 +582,11 @@ minetest.register_node("default:dye_red", {
 minetest.register_node("default:dye_white", {
 	description = "White Dye",
 	tiles = {
-			"default_dye_top.png",
-			"default_dye_white_bottom.png",
-			"default_dye_white_side.png"
-		},
+		"default_dye_top.png",
+		"default_dye_white_bottom.png",
+		"default_dye_white_side.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	--inventory_image = "default_dye_white.png",
 	paramtype = "light",
@@ -581,10 +606,11 @@ minetest.register_node("default:dye_white", {
 minetest.register_node("default:dye_yellow", {
 	description = "Yellow Dye",
 	tiles = {
-			"default_dye_top.png",
-			"default_dye_yellow_bottom.png",
-			"default_dye_yellow_side.png"
-		},
+		"default_dye_top.png",
+		"default_dye_yellow_bottom.png",
+		"default_dye_yellow_side.png"
+	},
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	--inventory_image = "default_dye_yellow.png",
 	paramtype = "light",

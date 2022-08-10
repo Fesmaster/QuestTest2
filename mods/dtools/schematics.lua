@@ -930,6 +930,7 @@ minetest.register_tool("dtools:schem_probtool", {
 minetest.register_node("dtools:schem_void", {
 	description = "Schematic Void",
 	tiles = { "dtools_schm_void.png" },
+	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	is_ground_content = false,
 	paramtype = "light",
