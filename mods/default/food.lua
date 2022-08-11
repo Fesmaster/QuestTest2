@@ -106,7 +106,7 @@ for i, herb_1 in ipairs(ingredient) do
 
 				qts.register_craft({
 					ingredients = ig_List,
-					results = {"default:bowl_clay_soup_"..comb_name},
+					results = {"default:bowl_clay_soup_"..comb_name, "default:cup_clay"},
 					near = {"group:table", "group:furnace", "group:cookware"},
 				})
 
