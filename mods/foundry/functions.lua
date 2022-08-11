@@ -463,6 +463,10 @@ function FoundryData(tbl)
 			return false
 		end
 	end
+
+	function tbl.get_metal_ammount(self)
+		return self.metalLVL
+	end
 	
 	function tbl.is_empty(self)
 		return self.metalLVL <= 0
