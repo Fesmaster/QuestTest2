@@ -1,4 +1,4 @@
-# Journal
+r# Journal
 Welcome, traveler, to this land. I leave this journal to you, for I have passed from this world long before, but know you will come. I cannot promise your journey will be smooth, but within these pages you will find my notes, may they help you survive, nay, conquer this world.
 ~ Darin Mysticus
 
@@ -42,7 +42,7 @@ When ready to take metal out, take the spout, and place it on the second level o
 
 ![Foundry Step 3](./images/Foundry_3.png)
 
-Then, rightclick the spout. Liquid metal should pour out into the mold. The ingot mold is special, it can hold four separate castings. This means you can pour metal into it four times. When, after rightclicking the spout, no metal flows, that means the mold is full. Breaking it will drop the mold and any ingots cast, from zero to four. The rest of the molds work in the same way, except they can only be cast into once before needing to be broken to get the results.
+Then, rightclick the spout. Liquid metal should pour out into the mold. The ingot mold is special, it can hold eight separate castings. This means you can pour metal into it eight times, if each pour is one ingot. It will fill with as many as it can, up to eight on any pour. When, after rightclicking the spout, no metal flows, that means the mold is full, or there is no metal. Breaking it will drop the mold and any ingots cast, from zero to eight. The rest of the molds work in the same way, except they can only be cast into once before needing to be broken to get the results.
 
 ### From Copper To Steel
 
@@ -56,4 +56,4 @@ With metal, particularly steel, now at your disposal, the world opens up to you.
 Another thing that has opened up is gardening. Seeds can be obtained from raiding bandit camps or from using a knife to break plants. Food seeds are only available from the camps, though. Even bandits need to eat! Hoes can be made from metal, and seeds can be planted on tilled earth to grow the crops. Be careful, as they do not all take the same amount of time to grow. If you only get seeds when broken, leave it to grow longer next time.
 
 ## Alchemy And Magic
-Coming from the *Mundus Mortalum*, or, the World of Mortals, you simply have no magic, like me. That should never stop you, for the world around you is full of it, it simply needs to be harnessed. 
+Coming from the *Mundus Mortalum*, or, the World of Mortals, you simply have no magic, like me. That sho uld never stop you, for the world around you is full of it, it simply needs to be harnessed. 

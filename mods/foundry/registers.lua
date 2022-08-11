@@ -184,7 +184,7 @@ minetest.register_node ("foundry:ingot_mold", {
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
 	can_cast = function(pos, node, FD, caster)
-		if node.param2 < 4 and FD then
+		if node.param2 < 8 and FD then
 			return FD:has_metal(1)
 		else
 			return false
@@ -192,7 +192,7 @@ minetest.register_node ("foundry:ingot_mold", {
 	end,
 	on_cast = function(pos, node, FD, caster)
 		--minetest.log("From Caster:\n"..dump(FD))
-		if node.param2 < 4 and FD then
+		if node.param2 < 8 and FD then
 			local meta = minetest.get_meta(pos)
 			if node.param2 == 0 then
 				--set metal type
@@ -205,10 +205,15 @@ minetest.register_node ("foundry:ingot_mold", {
 					return
 				end
 			end
-			if FD:take_metal(1) then
+
+			--get the maximum that can be added
+			local addable_ammount = math.min(8 - node.param2, FD:get_metal_ammount())
+			
+
+			if FD:take_metal(addable_ammount) then
 				FD:apply()
 				--node world stuff
-				node.param2 = node.param2 + 1
+				node.param2 = node.param2 + addable_ammount
 				minetest.swap_node(pos, node)
 			else
 				minetest.log("info","FOUNDRY: No Metal")
