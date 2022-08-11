@@ -812,3 +812,27 @@ qts.register_craft({
 	near = {"group:ttable"}
 })
 
+--Solas Blocks
+qts.register_craft({
+	ingredients = {"default:dye_blue", "default:glass", "default:herb_mureux_fruit"},
+	results = {"default:solas_block_blue"},
+	near = {"group:ttable", "default:alchemy_equipment_basic"}
+})
+
+qts.register_craft({
+	ingredients = {"default:dye_white", "default:glass", "default:herb_mureux_fruit"},
+	results = {"default:solas_block_white"},
+	near = {"group:ttable", "default:alchemy_equipment_basic"}
+})
+
+qts.register_craft({
+	ingredients = {"default:dye_red", "default:glass", "default:herb_mureux_fruit"},
+	results = {"default:solas_block_red"},
+	near = {"group:ttable", "default:alchemy_equipment_basic"}
+})
+
+qts.register_craft({
+	ingredients = {"default:dye_green", "default:glass", "default:herb_mureux_fruit"},
+	results = {"default:solas_block_green"},
+	near = {"group:ttable", "default:alchemy_equipment_basic"}
+})

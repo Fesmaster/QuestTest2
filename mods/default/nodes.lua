@@ -35,6 +35,36 @@ qts.register_shaped_node("default:solas_block_blue", {
 	--sounds = qtcore.node_sound_stone(),
 	light_source = 12,
 })
+
+qts.register_shaped_node("default:solas_block_green", {
+	description = "Green Solas Block",
+	tiles ={
+		"default_solas_block_green.png"
+		},
+	use_texture_alpha = "clip",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = false,
+	walkable = true,
+	groups = {cracky = 3, generation_artificial=1},
+	--sounds = qtcore.node_sound_stone(),
+	light_source = 12,
+})
+
+qts.register_shaped_node("default:solas_block_red", {
+	description = "Red Solas Block",
+	tiles ={
+		"default_solas_block_red.png"
+		},
+	use_texture_alpha = "clip",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = false,
+	walkable = true,
+	groups = {cracky = 3, generation_artificial=1},
+	--sounds = qtcore.node_sound_stone(),
+	light_source = 12,
+})
 --BEGIN fruit
 minetest.register_node("default:lantern_fruit", {
 	description = "Lantern Fruit",

@@ -153,7 +153,7 @@ minetest.register_node("default:candle_palm", {
 		}
 	},
 	--sounds = qtcore.node_sound_wood(),
-	light_source = 6,
+	light_source = 8,
 })
 
 --end lights
@@ -1216,6 +1216,13 @@ qts.register_craft({
 --BEGIN beds
 
 --END beds
+
+--BEGIN lights
+qts.register_craft({
+	ingredients = {"default:wax_palm", "default:herb_flax"},
+	results = {"default:candle_palm"},
+	near = {"group:workbench", "group:furnace"},
+})
 
 -- bookshelves crafting can be found in crafts.lua under "wood permutations"
 
