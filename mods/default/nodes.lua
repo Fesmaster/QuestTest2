@@ -5,8 +5,21 @@ INDEX
 
 
 ]]
-
-
+--BEGIN light blocks
+minetest.register_node("default:solas_block_white", {
+	description = "White Solas Block",
+	tiles ={
+		"default_solas_block_white.png"
+		},
+	use_texture_alpha = "clip",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = false,
+	walkable = true,
+	groups = {cracky = 3, generation_artificial=1},
+	--sounds = qtcore.node_sound_stone(),
+	light_source = 12,
+})
 
 --BEGIN fruit
 minetest.register_node("default:lantern_fruit", {
