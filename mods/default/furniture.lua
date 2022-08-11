@@ -153,7 +153,7 @@ minetest.register_node("default:candle_palm", {
 		}
 	},
 	--sounds = qtcore.node_sound_wood(),
-	light_source = 12,
+	light_source = 6,
 })
 
 --end lights
