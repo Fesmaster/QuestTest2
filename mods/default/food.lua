@@ -16,6 +16,16 @@ local ingredient_map = {
 	potatoe="default:herb_potatoe",
 }
 
+--how preferred each item is to be the base of the soup
+local brothiness = {
+	apple=0,
+	goard = 2,
+	grain=1,
+	carrot=3,
+	onion=4,
+	potatoe=5,
+}
+
 local comb_complete = {}
 
 --this function capitolizes the first letter of a string
@@ -23,10 +33,12 @@ local function firstToUpper(str)
     return (str:gsub("^%l", string.upper))
 end
 
-for i, herb_1 in ipairs(ingredient) do
-	for j, herb_2 in ipairs(ingredient) do
-		for k, herb_3 in ipairs(ingredient)do
-			
+for i=1, #ingredient do
+	for j=i, #ingredient do
+		for k=j, #ingredient do
+			local herb_1 = ingredient[i]
+			local herb_2 = ingredient[j]
+			local herb_3 = ingredient[k]
 			--this set will have a unique entry for every combination, not permutation
 			--so, if both herb_1 and herb_2 are "apple", then they are the same entry in the table, and not two different ones.
 			local comb_set = {[herb_1]=true, [herb_2]=true, [herb_3]=true}
@@ -38,16 +50,32 @@ for i, herb_1 in ipairs(ingredient) do
 			--sort the list alphabetically to make sure it stays unique to the combination, not permutation (pairs is not deterministic)
 			table.sort(comb_list)
 
-			--now, generate a unique string from this for the name
-			--also generate a description and node texture
+			
+			--
+			
 			local comb_name = ""
 			local comb_description = ""
-			local comb_textuereSet = "default_bowl_clay_soup_top_overlay.png^"
+			
+			--deal with brothiness
+			local max_brothiness_value = brothiness[comb_list[1]]
+			local max_brothiness_name = comb_list[1]
+			for l, name in ipairs(comb_list) do
+				if brothiness[name] > max_brothiness_value then
+					max_brothiness_value = brothiness[name]
+					max_brothiness_name = name
+				end		
+			end
+			
+			local comb_textuereSet = "default_bowl_clay_soup_top_overlay.png^default_soup_"..max_brothiness_name.."_top.png^"
+			local comb_invTextureSet = "default_soup_"..max_brothiness_name.."_item.png^default_bowl_clay_soup_item_overlay.png"
+			
+			--now, generate a unique string from this for the name
+			--also generate a description and node texture
 			for l, name in ipairs(comb_list)do
 				comb_name = comb_name .. name
 				comb_description = comb_description .. firstToUpper(name)
 				if l == 1 then
-					comb_textuereSet = comb_textuereSet .. "default_soup_"..name.."_top.png^default_soup_overlay_"..name..".png"
+					comb_textuereSet = comb_textuereSet .. "default_soup_overlay_"..name..".png"
 				else
 					comb_textuereSet = comb_textuereSet .. "default_soup_overlay_"..name..".png"
 				end
@@ -77,12 +105,13 @@ for i, herb_1 in ipairs(ingredient) do
 						comb_textuereSet,
 						"default_dishes_clay.png"	
 					},
-					inventory_image = "default_soup_"..ingredient[i].."_item.png^default_bowl_clay_soup_item_overlay.png",
+					inventory_image = comb_invTextureSet,
 					use_texture_alpha="clip",
 					groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1, soup=1},
 					drawtype = "nodebox",
 					--inventory_image = soupimage[i].."^default_bowl_clay_soup_item_overlay.png",
 					paramtype = "light",
+					on_use = qts.item_eat(6),
 					node_box = {
 						type = "fixed",
 						fixed = {
