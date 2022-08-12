@@ -65,6 +65,36 @@ qts.register_shaped_node("default:solas_block_red", {
 	--sounds = qtcore.node_sound_stone(),
 	light_source = 12,
 })
+
+qts.register_shaped_node("default:solas_block_purple", {
+	description = "Purple Solas Block",
+	tiles ={
+		"default_solas_block_purple.png"
+		},
+	use_texture_alpha = "clip",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = false,
+	walkable = true,
+	groups = {cracky = 3, generation_artificial=1},
+	--sounds = qtcore.node_sound_stone(),
+	light_source = 12,
+})
+
+qts.register_shaped_node("default:solas_block_orange", {
+	description = "Orange Solas Block",
+	tiles ={
+		"default_solas_block_orange.png"
+		},
+	use_texture_alpha = "clip",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = false,
+	walkable = true,
+	groups = {cracky = 3, generation_artificial=1},
+	--sounds = qtcore.node_sound_stone(),
+	light_source = 12,
+})
 --BEGIN fruit
 minetest.register_node("default:lantern_fruit", {
 	description = "Lantern Fruit",
@@ -419,6 +449,31 @@ minetest.register_node("default:dye_blue", {
 		},
 	sounds = qtcore.node_sound_glass(),
 })
+
+minetest.register_node("default:dye_brown", {
+	description = "Brown Dye",
+	tiles = {
+		"default_dye_top.png",
+		"default_dye_brown_bottom.png",
+		"default_dye_brown_side.png"
+	},
+	use_texture_alpha="clip",
+	drawtype = "nodebox",
+	--inventory_image = "default_dye_blrown.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, dye=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -3/16, -8/16, -3/16, 3/16, -2/16, 3/16, },
+			{ -1/16, -6/16, -1/16, 1/16, 1/16, 1/16, },
+			{ -2/16, -5/16, -2/16, 2/16, -1/16, 2/16, },
+			},
+		},
+	sounds = qtcore.node_sound_glass(),
+})
+
 
 minetest.register_node("default:dye_cyan", {
 	description = "Cyan Dye",

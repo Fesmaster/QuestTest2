@@ -741,13 +741,37 @@ qts.register_craft({
 })
 
 qts.register_craft({
+	ingredients = {"default:herb_bloodbulb 2", "default:vessels_water"},
+	results = {"default:dye_red", "default:dishes_clay"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
 	ingredients = {"default:flower_iris 2", "default:vessels_water"},
 	results = {"default:dye_white", "default:dishes_clay"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
 qts.register_craft({
+	ingredients = {"default:herb_milfoil 2", "default:vessels_water"},
+	results = {"default:dye_white", "default:dishes_clay"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
 	ingredients = {"default:flower_violet 2", "default:vessels_water"},
+	results = {"default:dye_purple", "default:dishes_clay"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"default:herb_wolfshood 2", "default:vessels_water"},
+	results = {"default:dye_purple", "default:dishes_clay"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"default:herb_mureux_fruit", "default:vessels_water"},
 	results = {"default:dye_purple", "default:dishes_clay"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
@@ -812,6 +836,12 @@ qts.register_craft({
 	near = {"group:ttable"}
 })
 
+qts.register_craft({
+	ingredients = {"default:dye_blue", "default:dye_red", "default:dye_green"},
+	results = {"default:dye_brown 3"},
+	near = {"group:ttable"}
+})
+
 --Solas Blocks
 qts.register_craft({
 	ingredients = {"default:dye_blue", "default:glass", "default:herb_mureux_fruit"},
@@ -834,5 +864,17 @@ qts.register_craft({
 qts.register_craft({
 	ingredients = {"default:dye_green", "default:glass", "default:herb_mureux_fruit"},
 	results = {"default:solas_block_green"},
+	near = {"group:ttable", "default:alchemy_equipment_basic"}
+})
+
+qts.register_craft({
+	ingredients = {"default:dye_purple", "default:glass", "default:herb_mureux_fruit"},
+	results = {"default:solas_block_purple"},
+	near = {"group:ttable", "default:alchemy_equipment_basic"}
+})
+
+qts.register_craft({
+	ingredients = {"default:dye_orange", "default:glass", "default:herb_mureux_fruit"},
+	results = {"default:solas_block_orange"},
 	near = {"group:ttable", "default:alchemy_equipment_basic"}
 })
