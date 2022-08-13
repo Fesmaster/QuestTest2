@@ -239,8 +239,8 @@ for nodeboxes
 single pixle color
 overlays needed for new things in dishes, 
 need item and top overlays (and sides for poweder bowl)]]--
-local dish_types = {"clay", "stoneware"}
-local dish_types_desc = {"Clay", "Stoneware"}
+local dish_types = {"clay", "stoneware", "gold", "silver"}
+local dish_types_desc = {"Clay", "Stoneware", "Gold", "Silver"}
 --main dish making for loop
 for i, types in ipairs(dish_types) do
 
