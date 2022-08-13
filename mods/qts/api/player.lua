@@ -306,6 +306,11 @@ minetest.register_on_joinplayer(function(player, last_login)
 			player:hud_set_flags({healthbar=false}) --make default health bar invisible
 		end
 	end, player:get_player_name())
+	
+	if qts.get_player_data(player,"COMBATSYSTEM", "HP") == nil then
+		qts.set_player_data(player, "COMBATSYSTEM", "HP", qts.DEFAULT_HP)
+		qts.set_player_data(player, "COMBATSYSTEM", "HP_MAX", qts.DEFAULT_HP)
+	end
 end)
 
 minetest.register_on_leaveplayer(function(player, timed_out)
