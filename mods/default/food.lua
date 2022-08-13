@@ -722,14 +722,14 @@ qts.register_craft({
 
 minetest.register_craft({
 	type = "cooking",
-	output = "default:dishes_clay"
+	output = "default:dishes_clay",
 	recipe = "default:dishes_clay_greenware",
 })
 
 
 minetest.register_craft({
 	type = "cooking",
-	output = "default:dishes_stoneware"
+	output = "default:dishes_stoneware",
 	recipe = "default:dishes_stoneware_greenware",
 })
 
