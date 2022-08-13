@@ -7,7 +7,6 @@ local HUDBAR_FULL_VALUE = 72
 
 
 function inventory.refresh_hud(player)
-    minetest.log("here")
     local pname =player:get_player_name() 
     if hud_ids[pname] == nil then
         hud_ids[pname] = {}
