@@ -176,3 +176,11 @@ register_sifter({
     node = "default:desert_sand",
     results = {"default:flint"}
 })
+
+register_sifter({
+    name = "clay",
+    description = "Clay",
+    tiles = "default_clay_block.png",
+    node = "default:clay",
+    results = {"default:refined_clay_lump"}
+})

@@ -276,6 +276,13 @@ local cup_fill_desc = {"Turkish Coffee", "Water"}
 		})
 	end
 	--cup crafting
+	
+	qts.register_craft({
+		ingredients = {"default:coffee_grounds", "default:dishes_"..types, "default:bucket_default_water"},
+		results = {"default:cup_clay_coffee_turkish", "default:bowl_"..types, "default:bucket"},
+		near = {"group:ttable", "group:cookware", "group:furnace"},
+	})
+
 	qts.register_craft({
 		ingredients = {"default:coffee_grounds", "default:dishes_"..types, "default:bucket_default_river_water"},
 		results = {"default:cup_"..types.."_coffee_turkish", "default:bowl_"..types, "default:bucket"},
@@ -283,14 +290,8 @@ local cup_fill_desc = {"Turkish Coffee", "Water"}
 	})
 	
 	qts.register_craft({
-		ingredients = {"default:coffee_grounds", "default:vessels_"..types.."_water"},
-		results = {"default:cup_"..types.."_coffee_turkish", "default:bowl_"..types},
-		near = {"group:ttable", "group:cookware", "group:furnace"},
-	})
-	
-	qts.register_craft({
-		ingredients = {"default:coffee_grounds", "default:cup_"..types, "default:vessels_"..types.."_water"},
-		results = {"default:cup_"..types.."_coffee_turkish", "default:dishes_"..types},
+		ingredients = {"default:coffee_grounds", "default:cup_"..types.."_water"},
+		results = {"default:cup_"..types.."_coffee_turkish"},
 		near = {"group:ttable", "group:cookware", "group:furnace"},
 	})
 	
@@ -301,7 +302,7 @@ local cup_fill_desc = {"Turkish Coffee", "Water"}
 	})
 	
 	qts.register_craft({
-		ingredients = {"default:coffee_grounds", "default:cup_clay", "default:bucket_default_river_water"},
+		ingredients = {"default:coffee_grounds", "default:cup_"..types, "default:bucket_default_river_water"},
 		results = {"default:cup_clay_coffee_turkish", "default:bucket"},
 		near = {"group:ttable", "group:cookware", "group:furnace"},
 	})
@@ -361,8 +362,8 @@ local cup_fill_desc = {"Turkish Coffee", "Water"}
 		sounds = qtcore.node_sound_stone(),
 	})
 --vessels
-local vessel_fill = {"oil_coconut", "water"}
-local vessel_fill_desc = {"Coconut oil", "Water"}
+local vessel_fill = {"oil_coconut"}
+local vessel_fill_desc = {"Coconut oil"}
 	for n, fill in ipairs(vessel_fill) do
 		minetest.register_node("default:vessels_"..types.."_"..fill, {
 			description = vessel_fill_desc[n].." Vessel",
@@ -397,7 +398,7 @@ local vessel_fill_desc = {"Coconut oil", "Water"}
 		})
 	end
 -- vessel crafting
-qts.register_craft({
+--[[qts.register_craft({
 	ingredients = {"default:dishes_"..types, "default:bucket_default_water"},
 	results = {"default:vessels_"..types.."_water", "default:bucket"},
 })
@@ -417,7 +418,7 @@ qts.register_craft({
 	ingredients = {"default:dishes_"..types},
 	results = {"default:vessels_"..types.."_water"},
 	near = {"default:river_water_source"}
-})
+})]]--
 
 qts.register_craft({
 	ingredients = {"default:dishes_"..types, "default:coconut 3"},
@@ -528,11 +529,6 @@ local bowl_fill_desc = {"Flour"}
 		results = {"default:bowl_"..types, "default:cup_"..types},
 	})
 -- related crafting
-	qts.register_craft({
-		ingredients = {"default:bowl_"..types.."_flour", "default:vessels_"..types.."_water"},
-		results = {"default:bread", "default:dishes_"..types, "default:bowl_"..types},
-		near = {"group:ttable", "group:dishes", "group:furnace"},
-	})
 	qts.register_craft({
 		ingredients = {"default:bowl_"..types.."_flour", "default:bucket_default_water"},
 		results = {"default:bread", "default:bowl_"..types, "default:bucket"},
@@ -689,7 +685,6 @@ minetest.register_craftitem("default:coffee_beans", {
 })
 
 --crafting
-
 qts.register_craft({
 	ingredients = {"default:herb_potatoe"},
 	results = {"default:seeds_potatoe"},
@@ -702,14 +697,6 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"default:coffee_grounds", "default:dishes_clay", "default:bucket_default_water"},
-	results = {"default:cup_clay_coffee_turkish", "default:bowl_clay", "default:bucket"},
-	near = {"group:ttable", "group:cookware", "group:furnace"},
-})
-
-
-
-qts.register_craft({
 	ingredients = {"default:small_mushroom 2", "default:dishes_clay"},
 	results = {"default:mushroom_stew", "default:cup_clay"},
 })
@@ -720,6 +707,30 @@ qts.register_craft({
 	near = {"group:furnace", "group:cookware"}
 })
 
+qts.register_craft({
+	ingredients = {"default:clay_lump"},
+	results = {"default:dishes_clay_greenware"},
+	near = {"group:workbench"},
+})
 
+qts.register_craft({
+	ingredients = {"default:refined_clay_lump"},
+	results = {"default:dishes_stoneware_greenware"},
+	near = {"group:workbench"},
+})
+
+
+minetest.register_craft({
+	type = "cooking",
+	output = "default:dishes_clay"
+	recipe = "default:dishes_clay_greenware",
+})
+
+
+minetest.register_craft({
+	type = "cooking",
+	output = "default:dishes_stoneware"
+	recipe = "default:dishes_stoneware_greenware",
+})
 
 
