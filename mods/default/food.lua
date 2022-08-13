@@ -136,7 +136,7 @@ for i=1, #ingredient do
 				qts.register_craft({
 					ingredients = ig_List,
 					results = {"default:bowl_clay_soup_"..comb_name, "default:cup_clay"},
-					near = {"group:table", "group:furnace", "group:cookware"},
+					near = {"group:ttable", "group:furnace", "group:cookware"},
 				})
 
 			end
@@ -562,4 +562,119 @@ minetest.register_craftitem("default:flask_glass_water", {
 minetest.register_craftitem("default:coffee_beans", {
 	description = "Coffee Beans",
 	inventory_image = "default_coffee_beans.png",
+})
+
+--crafting
+qts.register_craft({
+	ingredients = {"default:bowl_clay", "default:cup_clay"},
+	results = {"default:dishes_clay"},
+})
+
+qts.register_craft({
+	ingredients ={"default:dishes_clay"}, 
+	results = {"default:bowl_clay", "default:cup_clay"},
+})
+
+qts.register_craft({
+	ingredients = {"default:herb_potatoe"},
+	results = {"default:seeds_potatoe"},
+})
+
+qts.register_craft({
+	ingredients = {"default:dishes_clay", "default:herb_grain 4"},
+	results = {"default:flour_bowl", "default:cup_clay"},
+	near = {"group:ttable", "group:dishes"},
+})
+
+qts.register_craft({
+	ingredients = {"default:bowl_clay", "default:herb_grain 4"},
+	results = {"default:flour_bowl"},
+	near = {"group:ttable", "group:dishes"},
+})
+
+qts.register_craft({
+	ingredients = {"default:coffee_beans"},
+	results = {"default:coffee_grounds 2"},
+	near = {"group:ttable", "group:dishes"},
+})
+
+qts.register_craft({
+	ingredients = {"default:coffee_grounds", "default:dishes_clay", "default:bucket_default_water"},
+	results = {"default:cup_clay_coffee_turkish", "default:bowl_clay", "default:bucket"},
+	near = {"group:ttable", "group:cookware", "group:furnace"},
+})
+
+qts.register_craft({
+	ingredients = {"default:coffee_grounds", "default:dishes_clay", "default:bucket_default_river_water"},
+	results = {"default:cup_clay_coffee_turkish", "default:bowl_clay", "default:bucket"},
+	near = {"group:ttable", "group:cookware", "group:furnace"},
+})
+
+qts.register_craft({
+	ingredients = {"default:coffee_grounds", "default:vessels_water"},
+	results = {"default:cup_clay_coffee_turkish", "default:bowl_clay"},
+	near = {"group:ttable", "group:cookware", "group:furnace"},
+})
+
+qts.register_craft({
+	ingredients = {"default:coffee_grounds", "default:cup_clay", "default:vessels_water"},
+	results = {"default:cup_clay_coffee_turkish", "default:dishes_clay"},
+	near = {"group:ttable", "group:cookware", "group:furnace"},
+})
+
+qts.register_craft({
+	ingredients = {"default:coffee_grounds", "default:cup_clay", "default:bucket_default_water"},
+	results = {"default:cup_clay_coffee_turkish", "default:bucket"},
+	near = {"group:ttable", "group:cookware", "group:furnace"},
+})
+
+qts.register_craft({
+	ingredients = {"default:coffee_grounds", "default:cup_clay", "default:bucket_default_river_water"},
+	results = {"default:cup_clay_coffee_turkish", "default:bucket"},
+	near = {"group:ttable", "group:cookware", "group:furnace"},
+})
+
+qts.register_craft({
+	ingredients = {"default:dishes_clay", "default:coconut 3"},
+	results = {"default:vessels_oil_coconut"},
+	near = {"group:ttable", "group:cookware", "group:furnace"},
+})
+
+qts.register_craft({
+	ingredients = {"default:small_mushroom 2", "default:dishes_clay"},
+	results = {"default:mushroom_stew", "default:cup_clay"},
+})
+
+qts.register_craft({
+	ingredients = {"default:small_mushroom 2", "default:bowl_clay"},
+	results = {"default:mushroom_stew"},
+	near = {"group:furnace", "group:cookware"}
+})
+
+qts.register_craft({
+	ingredients = {"default:flour_bowl", "default:vessels_water"},
+	results = {"default:bread", "default:dishes_clay", "default:bowl_clay"},
+	near = {"group:ttable", "group:dishes", "group:furnace"},
+})
+
+qts.register_craft({
+	ingredients = {"default:flour_bowl", "default:bucket_default_water"},
+	results = {"default:bread", "default:bowl_clay", "default:bucket"},
+	near = {"group:ttable", "group:dishes", "group:furnace"},
+})
+
+qts.register_craft({
+	ingredients = {"default:flour_bowl", "default:bucket_default_river_water"},
+	results = {"default:bread", "default:bowl_clay", "default:bucket"},
+	near = {"group:ttable", "group:dishes", "group:furnace"},
+})
+
+qts.register_craft({
+	ingredients = {"default:dishes_clay", "default:bucket_default_water"},
+	results = {"default:vessels_water", "default:bucket"},
+})
+
+qts.register_craft({
+	ingredients = {"default:dishes_clay", "default:bucket_default_river_water"},
+	results = {"default:vessels_water", "default:bucket"},
 })

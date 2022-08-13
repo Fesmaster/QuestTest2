@@ -190,16 +190,6 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"default:bowl_clay", "default:cup_clay"},
-	results = {"default:dishes_clay"},
-})
-
-qts.register_craft({
-	ingredients ={"default:dishes_clay"}, 
-	results = {"default:bowl_clay", "default:cup_clay"},
-})
-
-qts.register_craft({
 	ingredients = {"default:dishes_clay", "default:iron_bar"},
 	results = {"default:alchemy_equipment_advanced"},
 	near = {"group:workbench", "default:anvil"},
@@ -211,73 +201,6 @@ qts.register_craft({
 	near = {"group:workbench", "default:anvil"},
 })
 
-qts.register_craft({
-	ingredients = {"default:herb_potatoe"},
-	results = {"default:seeds_potatoe"},
-})
-
-qts.register_craft({
-	ingredients = {"default:dishes_clay", "default:herb_grain 4"},
-	results = {"default:flour_bowl", "default:cup_clay"},
-	near = {"group:ttable", "group:dishes"},
-})
-
-qts.register_craft({
-	ingredients = {"default:bowl_clay", "default:herb_grain 4"},
-	results = {"default:flour_bowl"},
-	near = {"group:ttable", "group:dishes"},
-})
-
-qts.register_craft({
-	ingredients = {"default:coffee_beans"},
-	results = {"default:coffee_grounds 2"},
-	near = {"group:ttable", "group:dishes"},
-})
-
-qts.register_craft({
-	ingredients = {"default:coffee_grounds", "default:dishes_clay", "default:vessels_water"},
-	results = {"default:cup_coffee_turkish", "default:bowl_clay 2"},
-	near = {"group:ttable", "group:cookware", "group:furnace"},
-})
-
-qts.register_craft({
-	ingredients = {"default:coffee_grounds", "default:vessels_water"},
-	results = {"default:cup_clay_coffee_turkish", "default:bowl_clay"},
-	near = {"group:ttable", "group:cookware", "group:furnace"},
-})
-
-qts.register_craft({
-	ingredients = {"default:dishes_clay", "default:coconut 3"},
-	results = {"default:vessels_oil_coconut"},
-	near = {"group:ttable", "group:cookware", "group:furnace"},
-})
-
-qts.register_craft({
-	ingredients = {"default:small_mushroom 2", "default:dishes_clay"},
-	results = {"default:mushroom_stew", "default:cup_clay"},
-})
-
-qts.register_craft({
-	ingredients = {"default:small_mushroom 2", "default:bowl_clay"},
-	results = {"default:mushroom_stew"},
-	near = {"group:furnace", "group:cookware"}
-})
-
-qts.register_craft({
-	ingredients = {"default:flour_bowl", "default:vessels_water"},
-	results = {"default:bread", "default:dishes_clay", "default:bowl_clay"},
-	near = {"group:ttable", "group:dishes", "group:furnace"},
-})
-
-qts.register_craft({
-	ingredients = {"default:dishes_clay", "default:bucket_default_water"},
-	results = {"default:vessels_water", "default:bucket"},
-})
-
-qts.register_craft({
-	ingredients = {"default:dishes_clay", "default:bucket_default_river_water"},
-	results = {"default:vessels_water", "default:bucket"},
-})
 
 qts.register_craft({
 	ingredients = {"default:glass"},
@@ -729,8 +652,32 @@ qts.register_craft({
 })
 
 qts.register_craft({
+	ingredients = {"default:charcoal 2", "default:bucket_default_water"},
+	results = {"default:dye_black", "default:bucket"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"default:charcoal 2", "default:bucket_default_river_water"},
+	results = {"default:dye_black", "default:bucket"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
 	ingredients = {"default:flower_chicory 2", "default:vessels_water"},
 	results = {"default:dye_blue", "default:dishes_clay"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"default:flower_chicory 2", "default:bucket_default_water"},
+	results = {"default:dye_blue", "default:bucket"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"default:flower_chicory 2", "default:bucket_default_river_water"},
+	results = {"default:dye_blue", "default:bucket"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
@@ -741,8 +688,32 @@ qts.register_craft({
 })
 
 qts.register_craft({
+	ingredients = {"default:flower_kniphofia 2", "default:bucket_default_water"},
+	results = {"default:dye_red", "default:bucket"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"default:flower_kniphofia 2", "default:bucket_default_river_water"},
+	results = {"default:dye_red", "default:bucket"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
 	ingredients = {"default:herb_bloodbulb 2", "default:vessels_water"},
 	results = {"default:dye_red", "default:dishes_clay"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"default:herb_bloodbulb 2", "default:bucket_default_water"},
+	results = {"default:dye_red", "default:bucket"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"default:herb_bloodbulb 2", "default:bucket_default_river_water"},
+	results = {"default:dye_red", "default:bucket"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
@@ -753,8 +724,32 @@ qts.register_craft({
 })
 
 qts.register_craft({
+	ingredients = {"default:flower_iris 2", "default:bucket_default_water"},
+	results = {"default:dye_white", "default:bucket"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"default:flower_iris 2", "default:bucket_default_river_water"},
+	results = {"default:dye_white", "default:bucket"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
 	ingredients = {"default:herb_milfoil 2", "default:vessels_water"},
 	results = {"default:dye_white", "default:dishes_clay"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"default:herb_milfoil 2", "default:bucket_default_water"},
+	results = {"default:dye_white", "default:bucket"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"default:herb_milfoil 2", "default:bucket_default_river_water"},
+	results = {"default:dye_white", "default:bucket"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
@@ -765,8 +760,32 @@ qts.register_craft({
 })
 
 qts.register_craft({
+	ingredients = {"default:flower_violet 2", "default:bucket_default_water"},
+	results = {"default:dye_purple", "default:bucket"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"default:flower_violet 2", "default:bucket_default_river_water"},
+	results = {"default:dye_purple", "default:bucket"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
 	ingredients = {"default:herb_wolfshood 2", "default:vessels_water"},
 	results = {"default:dye_purple", "default:dishes_clay"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"default:flower_wolfshood 2", "default:bucket_default_water"},
+	results = {"default:dye_purple", "default:bucket"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"default:flower_wolfshood 2", "default:bucket_default_river_water"},
+	results = {"default:dye_purple", "default:bucket"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
@@ -777,8 +796,32 @@ qts.register_craft({
 })
 
 qts.register_craft({
+	ingredients = {"default:herb_mureux_fruit", "default:bucket_default_water"},
+	results = {"default:dye_purple", "default:bucket"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"default:herb_mureux_fruit", "default:bucket_default_river_water"},
+	results = {"default:dye_purple", "default:bucket"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
 	ingredients = {"group:leaves 2", "default:vessels_water"},
 	results = {"default:dye_green", "default:dishes_clay"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"group:leaves 2", "default:bucket_default_water"},
+	results = {"default:dye_green", "default:bucket"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"group:leaves 2", "default:bucket_default_river_water"},
+	results = {"default:dye_green", "default:bucket"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
