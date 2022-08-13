@@ -31,6 +31,12 @@ qts.register_craft({
 	ingredients = {"default:bamboo"},
 	results = {"default:bamboo_slats 2"},
 })
+
+qts.register_craft({
+		ingredients = {"default:bamboo_slats 2"},
+		results = {"default:bamboo_fence 4"},
+		near = {"group:workbench"},
+	})
 --mushroom derivatives
 qts.register_craft({
 	ingredients = {"default:mycelium", "default:blue_mushroom_cap"},
@@ -43,6 +49,12 @@ qts.register_craft({
 })
 
 qts.register_craft({
+		ingredients = {"default:blue_mushroom_slats 2"},
+		results = {"default:blue_mushroom_fence 4"},
+		near = {"group:workbench"},
+	})
+
+qts.register_craft({
 	ingredients = {"default:mycelium", "default:gold_mushroom_cap"},
 	results = {"default:gold_mushroom_plates 2"},
 })
@@ -53,6 +65,12 @@ qts.register_craft({
 })
 
 qts.register_craft({
+		ingredients = {"default:gold_mushroom_slats 2"},
+		results = {"default:gold_mushroom_fence 4"},
+		near = {"group:workbench"},
+	})
+
+qts.register_craft({
 	ingredients = {"default:mycelium", "default:brown_mushroom_cap"},
 	results = {"default:brown_mushroom_plates 2"},
 })
@@ -61,6 +79,12 @@ qts.register_craft({
 	ingredients = {"default:brown_mushroom_trunk"},
 	results = {"default:brown_mushroom_slats 4"},
 })
+
+qts.register_craft({
+		ingredients = {"default:brown_mushroom_slats 2"},
+		results = {"default:brown_mushroom_fence 4"},
+		near = {"group:workbench"},
+	})
 
 --knife recipies
 
@@ -880,7 +904,7 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"default:dye_blue", "default:dye_red", "default:dye_green"},
+	ingredients = {"default:dye_cyan", "default:dye_yello", "default:dye_magenta"},
 	results = {"default:dye_brown 3"},
 	near = {"group:ttable"}
 })

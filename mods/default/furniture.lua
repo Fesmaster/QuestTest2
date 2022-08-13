@@ -28,7 +28,6 @@ minetest.register_node("default:bench_pine", {
 
 --END benches
 --BEGIN chests
-local woodpng={"default_oak_wood.png", "default_apple_wood.png", "default_aspen_wood.png", "default_coffee_wood.png", "default_mahogany_wood.png", "default_rosewood_wood.png", "default_pine_wood.png", "default_lanternfruit_wood.png", "default_swamp_wood.png", "default_rowan_wood.png"}
 local woodtypes={"oak", "apple", "aspen", "coffee", "mahogany", "rosewood", "pine", "lanternfruit", "swamp", "rowan"}
 local woodnames={"Oak", "Apple", "Aspen", "Coffee", "Mahogany", "Rosewood", "Pine", "Lanternfruit", "Swamp Wood", "Rowan"}
 local metaltypes={"bronze", "copper", "iron", "steel"}
@@ -39,12 +38,12 @@ for i, n in ipairs(woodtypes) do
 		qts.register_chest("default:chest_"..n.."_"..k, {
 			description = woodnames[i].." and "..metalnames[j].." Chest",
 			tiles = {
-				woodpng[i].."^default_chest_"..k.."_top_overlay.png",
-				woodpng[i].."^default_chest_"..k.."_top_overlay.png",
-				woodpng[i].."^default_chest_"..k.."_side_overlay.png",
-				woodpng[i].."^default_chest_"..k.."_side_overlay.png",
-				woodpng[i].."^default_chest_"..k.."_back_overlay.png",
-				woodpng[i].."^default_chest_"..k.."_front_overlay.png"
+				"default_"..n.."_wood.png^default_chest_"..k.."_top_overlay.png",
+				"default_"..n.."_wood.png^^default_chest_"..k.."_top_overlay.png",
+				"default_"..n.."_wood.png^default_chest_"..k.."_side_overlay.png",
+				"default_"..n.."_wood.png^default_chest_"..k.."_side_overlay.png",
+				"default_"..n.."_wood.png^default_chest_"..k.."_back_overlay.png",
+				"default_"..n.."_wood.png^default_chest_"..k.."_front_overlay.png"
 				
 			},
 			groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
@@ -102,7 +101,7 @@ end
 --END chests
 
 --BEGIN beds
---highly experimental
+--[[highly experimental
 
 minetest.register_node("default:bedroll_flax", {
 	description = "Flaxen Badroll",
@@ -132,7 +131,7 @@ minetest.register_node("default:bedroll_flax", {
 	sounds = qtcore.node_sound_stone(),
 })
 
---END beds
+--END beds]]--
 
 --BEGIN lights
 

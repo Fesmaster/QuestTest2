@@ -212,7 +212,97 @@ qts.register_fencelike_node("default:pine_wood_rail", {
 	palette = "default_palette_paint_light.png",
 })
 
+qts.register_fencelike_node("default:bamboo_fence", {
+	description = "Bamboo Fence",
+	type = "fence",
+	tiles = {"default_bamboo_slats.png"},
+	groups = {choppy=3, oddly_breakable_by_hand=2, fence=1, generation_artificial=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:bamboo_rail", 
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
 
+qts.register_fencelike_node("default:bamboo_rail", {
+	description = "Bamboo Rail",
+	type = "rail",
+	tiles = {"default_bamboo_slats.png"},
+	groups = {choppy=3, oddly_breakable_by_hand=2, fence=1, not_in_creative_inventory=1, generation_artificial=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:bamboo_fence", 
+	drop = "default:bamboo_fence",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
+
+qts.register_fencelike_node("default:blue_mushroom_fence", {
+	description = "Blue Mushroom Fence",
+	type = "fence",
+	tiles = {"default_mushroom_blue_slats.png"},
+	groups = {choppy=3, oddly_breakable_by_hand=2, fence=1, generation_artificial=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:blue_mushroom_rail", 
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
+
+qts.register_fencelike_node("default:blue_mushroom_rail", {
+	description = "Blue Mushroom Rail",
+	type = "rail",
+	tiles = {"default_mushroom_blue_slats.png"},
+	groups = {choppy=3, oddly_breakable_by_hand=2, fence=1, not_in_creative_inventory=1, generation_artificial=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:blue_mushroom_fence", 
+	drop = "default:blue_mushroom_fence",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
+
+qts.register_fencelike_node("default:brown_mushroom_fence", {
+	description = "Brown Mushroom Fence",
+	type = "fence",
+	tiles = {"default_mushroom_brown_slats.png"},
+	groups = {choppy=3, oddly_breakable_by_hand=2, fence=1, generation_artificial=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:brown_mushroom_rail", 
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
+
+qts.register_fencelike_node("default:brown_mushroom_rail", {
+	description = "Brown Mushroom Rail",
+	type = "rail",
+	tiles = {"default_mushroom_brown_slats.png"},
+	groups = {choppy=3, oddly_breakable_by_hand=2, fence=1, not_in_creative_inventory=1, generation_artificial=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:brown_mushroom_fence", 
+	drop = "default:brown_mushroom_fence",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
+
+qts.register_fencelike_node("default:gold_mushroom_fence", {
+	description = "Gold Mushroom Fence",
+	type = "fence",
+	tiles = {"default_mushroom_gold_slats.png"},
+	groups = {choppy=3, oddly_breakable_by_hand=2, fence=1, generation_artificial=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:gold_mushroom_rail", 
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
+
+qts.register_fencelike_node("default:gold_mushroom_rail", {
+	description = "Gold Mushroom Rail",
+	type = "rail",
+	tiles = {"default_mushroom_gold_slats.png"},
+	groups = {choppy=3, oddly_breakable_by_hand=2, fence=1, not_in_creative_inventory=1, generation_artificial=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "default:gold_mushroom_fence", 
+	drop = "default:gold_mushroom_fence",
+	paramtype2 = "color",
+	palette = "default_palette_paint_light.png",
+})
 --stone walls
 
 
