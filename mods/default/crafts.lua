@@ -873,3 +873,4 @@ qts.register_craft({
 	results = {"default:solas_block_orange"},
 	near = {"group:ttable", "default:alchemy_equipment_basic"}
 })
+

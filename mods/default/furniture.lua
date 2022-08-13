@@ -98,6 +98,47 @@ for i, n in ipairs(woodtypes) do
 	end
 end
 
+qts.register_chest("default:storage_pot_clay", {
+	description = "Clay Storage Pot",
+	tiles = {
+		"default_clay_storage_pot.png",
+	},
+	groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -2/16, -8/16, -2/16, 2/16, -7/16, 2/16, },
+			{ -3/16, -7/16, -3/16, -2/16, -6/16, 3/16, },
+			{ 2/16, -7/16, -3/16, 3/16, -6/16, 3/16, },
+			{ -3/16, -7/16, -3/16, 3/16, -6/16, -2/16, },
+			{ -3/16, -7/16, 2/16, 3/16, -6/16, 3/16, },
+			{ -4/16, -6/16, -4/16, 4/16, -1/16, -3/16, },
+			{ 3/16, -6/16, -4/16, 4/16, -1/16, 4/16, },
+			{ -4/16, -6/16, 3/16, 4/16, -1/16, 4/16, },
+			{ -4/16, -6/16, -4/16, -3/16, -1/16, 4/16, },
+			{ -3/16, -1/16, 2/16, 3/16, 0/16, 3/16, },
+			{ -3/16, -1/16, -3/16, 3/16, 0/16, -2/16, },
+			{ 2/16, -1/16, -3/16, 3/16, 0/16, 3/16, },
+			{ -3/16, -1/16, -3/16, -2/16, 0/16, 3/16, },
+			{ -2/16, -1/16, -2/16, -1/16, 3/16, 2/16, },
+			{ 1/16, -1/16, -2/16, 2/16, 3/16, 2/16, },
+			{ -2/16, -1/16, -2/16, 2/16, 3/16, -1/16, },
+			{ -2/16, -1/16, 1/16, 2/16, 3/16, 2/16, },
+			{ -3/16, 3/16, -3/16, -1/16, 4/16, 3/16, },
+			{ 1/16, 3/16, -3/16, 3/16, 4/16, 3/16, },
+			{ -3/16, 3/16, -3/16, 3/16, 4/16, -1/16, },
+			{ -3/16, 3/16, 1/16, 3/16, 4/16, 3/16, },
+			},
+		},
+	is_ground_content = false,
+	sounds = qtcore.node_sound_wood(),
+	
+	invsize = 8*4,		get_chest_formspec = qtcore.get_default_chest_formspec,	
+})
+
 --END chests
 
 --BEGIN beds
@@ -1221,6 +1262,20 @@ qts.register_craft({
 	ingredients = {"default:wax_palm", "default:herb_flax"},
 	results = {"default:candle_palm"},
 	near = {"group:workbench", "group:furnace"},
+})
+
+--other various
+qts.register_craft({
+	ingredients = {"default:clay_lump 4"},
+	results = {"default:storage_pot_greenware"},
+	near = {"group:workbench"},
+})
+
+
+minetest.register_craft({
+	type = "cooking",
+	output = "storage_pot_clay",
+	recipe = "default:storage_pot_greenware",
 })
 
 -- bookshelves crafting can be found in crafts.lua under "wood permutations"

@@ -732,4 +732,27 @@ minetest.register_craft({
 	recipe = "default:dishes_stoneware_greenware",
 })
 
+qts.register_craft({
+	ingredients = {"default:gold_bar"},
+	results = {"default:cup_gold"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:gold_bar"},
+	results = {"default:bowl_gold"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:silver_bar"},
+	results = {"default:cup_silver"},
+	near = {"group:workbench"},
+})
+
+qts.register_craft({
+	ingredients = {"default:silver_bar"},
+	results = {"default:bowl_silver"},
+	near = {"group:workbench"},
+})
 
