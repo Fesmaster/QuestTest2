@@ -11,6 +11,7 @@ local esc = minetest.formspec_escape
 local P = function(x,y) return qts.gui.gui_makepos(x,y):get() end
 dofile(minetest.get_modpath("inventory") .."/functions.lua")
 dofile(minetest.get_modpath("inventory") .."/detached.lua")
+dofile(minetest.get_modpath("inventory") .."/hud.lua")
 --dofile(minetest.get_modpath("inventory") .."/exemplar.lua")
 
 
@@ -180,7 +181,7 @@ qts.gui.register_gui("inv_tab_equipment", {
 	owner = "inventory",
 	get = function(data, pos, name)
 		return inventory.get_player_main()..
-			inventory.get_button_grid(name, data.player_item_list_page, 
+			inventory.get_button_grid(name, data.player_item_list_page,
 				data.prev_search, data.cheat_mode_enabled)..
 			inventory.get_util_bar()
 	end,
@@ -196,7 +197,7 @@ qts.gui.register_gui("inv_tab_craft", {
 	get = function(data, pos, name)
 		return inventory.get_craft_area(data, name)..
 			inventory.get_player_main()..
-			inventory.get_button_grid(name, data.player_item_list_page, 
+			inventory.get_button_grid(name, data.player_item_list_page,
 				data.prev_search, data.cheat_mode_enabled)..
 			inventory.get_util_bar()
 	end,
@@ -254,5 +255,6 @@ minetest.register_on_joinplayer(function(player)
 	--set the inventory formspec
 	inventory.gen_item_list_for_player(name)
 	inventory.refresh_inv(player)
+	inventory.refresh_hud(player)
 end)
 

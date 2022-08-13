@@ -4,7 +4,6 @@ qts_internal = {}
 qts.path = minetest.get_modpath("qts")
 qts.LIGHT_MAX = 14
 qts.WEAR_MAX = 65535
-qts.LEAFDECAY_RADIUS = 4
 
 --default stack max changes.
 minetest.nodedef_default.stack_max = 999
@@ -16,6 +15,12 @@ dofile(qts.path.."/worldsettings.lua")
 qts.settings = qts.create_settings_clojure(minetest.get_modpath("qts") .. "/QT2Settings.conf")
 --setup some constants
 --qts.world_settings.
+qts.LEAFDECAY_RADIUS = qts.settings.get_num("LEAFDECAY_RADIUS") or 4
+qts.settings.set_num("LEAFDECAY_RADIUS", qts.LEAFDECAY_RADIUS)
+
+qts.DEFAULT_HP=qts.settings.get_num("DEFAULT_HP") or 20
+qts.settings.set_num("DEFAULT_HP", qts.DEFAULT_HP)
+
 qts.LEVEL_MULTIPLIER = qts.world_settings.get_num("LEVEL_MULTIPLIER") or 0.2 --five levels for 2x effect
 
 
@@ -26,7 +31,7 @@ dofile(qts.path.."/api/util.lua")
 
 dofile(qts.path.."/api/creative.lua")
 dofile(qts.path.."/api/player.lua")
-dofile(qts.path.."/api/nodeupdates.lua")
+dofile(qts.path.."/api/callbacks.lua")
 dofile(qts.path.."/api/nodetypes.lua")
 dofile(qts.path.."/api/shapedNodes.lua")
 dofile(qts.path.."/api/screwdriver.lua")

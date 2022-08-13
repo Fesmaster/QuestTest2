@@ -174,7 +174,7 @@ qts.ai.register_behavior("basic_humanoid_enemy", {
 
 qts.ai.register_creature("mobs:testing_humanoid", {
 	hp_max = 10,
-	armor_groups = {fleshy = 100},
+	armor_groups = {fleshy = 0},
 	level = 0,
 	collisionbox = {-0.3, 0.0, -0.3, 0.3, 1.7, 0.3},
 	selectionbox = {-0.3, 0.0, -0.3, 0.3, 1.7, 0.3},

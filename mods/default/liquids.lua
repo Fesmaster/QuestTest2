@@ -42,7 +42,9 @@ qts.register_liquid("default:lava", {
 	liquid_range = 2,
 	liquid_renewable = false,
 	light_source = 13,
+	damage_per_second=7,
 	--alpha = 255,
+	--[[
 	on_walk_in = function(pos, obj, entered)
 		if (qts.is_damage_tick()) then
 			obj:punch(obj, 1, {
@@ -51,6 +53,7 @@ qts.register_liquid("default:lava", {
 			}, nil)
 		end
 	end,
+	--]]
 	on_cool = function(pos, node)
 		minetest.sound_play("sounds_cooling_hiss", {gain = 1.0, pos = pos})
 		if (node.name == "default:lava_source") then

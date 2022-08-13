@@ -115,7 +115,12 @@ function qts.ai.register_creature(name, def)
 		minetest.log("Incorrect creature definition. Valid behavior must be supplied.")
 		return false
 	end
-	
+
+	--deal with the 1-offset in armor
+	for k, v in pairs(def.armor_groups) do
+		def.armor_groups[k] = v+1
+	end
+
 	local entity_def = {
 		initial_properties = {
 			--regular stuff
@@ -169,7 +174,7 @@ function qts.ai.register_creature(name, def)
 		--unsorted values
 		name = name,
 		timer = 0,
-		armor_groups_base = def.armor_groups or {fleshy = 100},
+		armor_groups_base = def.armor_groups or {fleshy = 1},
 		level_base = def.level or 0,
 		hp_max_base = def.hp_max or 1,
 		view_radius_base = def.view_radius,
@@ -206,7 +211,11 @@ function qts.ai.register_creature(name, def)
 		end,
 		
 		on_punch = function(self, puncher, time_from_last_punch, tool_capabilities, dir)
-			return self.behavior.on_punch(self, puncher, time_from_last_punch, tool_capabilities, dir)
+			if not self.behavior.on_punch(self, puncher, time_from_last_punch, tool_capabilities, dir) then
+				local damage = qts.calculate_damage(self.object, puncher, time_from_last_punch, tool_capabilities, dir)
+				self.object:set_hp(self.object:get_hp() - damage, "punch")
+			end
+			return true
 		end,
 		
 		on_rightclick = function(self, clicker)
