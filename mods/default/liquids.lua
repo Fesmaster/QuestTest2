@@ -7,7 +7,6 @@ qts.register_bucket("default:bucket", {
 	groups= {bucket_level = 1},
 })
 
-
 --liquid nodes
 qts.register_liquid("default:water", {
 	description = "Water",

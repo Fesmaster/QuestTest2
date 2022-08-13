@@ -66,7 +66,7 @@ for i=1, #ingredient do
 				end		
 			end
 			
-			local comb_textuereSet = "default_bowl_clay_soup_top_overlay.png^default_soup_"..max_brothiness_name.."_top.png^"
+			local comb_textuereSet = "default_bowl_clay_top_overlay.png^default_soup_"..max_brothiness_name.."_top.png^"
 			local comb_invTextureSet = "default_soup_"..max_brothiness_name.."_item.png^default_bowl_clay_soup_item_overlay.png"
 			
 			--now, generate a unique string from this for the name
@@ -131,7 +131,7 @@ for i=1, #ingredient do
 				for l, name in ipairs(comb_list) do
 					ig_List[l] = ingredient_map[name]
 				end
-				ig_List[#ig_List+1] = "default:vessels_water"
+				ig_List[#ig_List+1] = "default:vessels_clay_water"
 
 				qts.register_craft({
 					ingredients = ig_List,
@@ -227,239 +227,363 @@ qts.register_ingot("default:coconut", {
 	levels = 14,
 })
 
-minetest.register_node("default:cup_clay_coffee_turkish", {
-	description = "Cup of Turkish Coffee",
-	tiles = {
-		"default_cup_clay_coffee_top.png",
-		"default_dishes_clay.png",
-		"default_dishes_clay.png"
-	},
-	use_texture_alpha="clip",
-	drawtype = "nodebox",
-	inventory_image = "default_cup_clay_coffee_item.png",
-	paramtype = "light",
-	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{ -2/16, -8/16, -2/16, 2/16, -3/16, 2/16, },
-			{ -2/16, -3/16, -2/16, 2/16, -2/16, -1/16, },
-			{ -2/16, -3/16, 1/16, 2/16, -2/16, 2/16, },
-			{ 1/16, -3/16, -2/16, 2/16, -2/16, 2/16, },
-			{ -2/16, -3/16, -2/16, -1/16, -2/16, 2/16, },
-		},
-	},
-	on_use = qts.item_eat(4),
-	sounds = qtcore.node_sound_stone(),
-})
+
 --consumables
 
---Cooking items and stations
-minetest.register_node("default:dishes_clay", {
-	description = "Clay Dishes",
-	tiles = {"default_dishes_clay.png",},
-	use_texture_alpha="clip",
-	drawtype = "nodebox",
-	inventory_image = "default_dishes_clay_item.png",
-	paramtype = "light",
-	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, dishes=1, generation_artificial=1},
-	node_box = {
-		type = "fixed",
-		fixed = {
-		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
-		{ -6/16, -7/16, 1/16, -5/16, -6/16, 5/16, },
-		{ -1/16, -7/16, 1/16, 0/16, -6/16, 5/16, },
-		{ -6/16, -7/16, 0/16, 0/16, -6/16, 1/16, },
-		{ -6/16, -7/16, 5/16, 0/16, -6/16, 6/16, },
-		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
-		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
-		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
-		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
-		{ 2/16, -8/16, -6/16, 6/16, -7/16, -2/16, },
-		{ 2/16, -7/16, -3/16, 6/16, -2/16, -2/16, },
-		{ 2/16, -7/16, -6/16, 6/16, -2/16, -5/16, },
-		{ 5/16, -7/16, -5/16, 6/16, -2/16, -3/16, },
-		{ 2/16, -7/16, -5/16, 3/16, -2/16, -3/16, },
+--Things in dishes
 
+--[[Textures needed for dishes
+item images
+dishes, cup, bowl
+for nodeboxes
+single pixle color
+overlays needed for new things in dishes, 
+need item and top overlays (and sides for poweder bowl)]]--
+local dish_types = {"clay", "stoneware"}
+local dish_types_desc = {"Clay", "Stoneware"}
+--main dish making for loop
+for i, types in ipairs(dish_types) do
+
+--full cups
+	local cup_fill = {"coffee_turkish", "water"}
+local cup_fill_desc = {"Turkish Coffee", "Water"}
+	for n, fill in ipairs(cup_fill) do
+		minetest.register_node("default:cup_"..types.."_"..fill, {
+			description = "Cup of "..cup_fill_desc[n],
+			tiles = {
+				"default_dishes_"..types..".png^default_cup_"..fill.."_top_overlay.png",
+				"default_dishes_"..types..".png",
+				"default_dishes_"..types..".png"
+			},
+			use_texture_alpha="clip",
+			drawtype = "nodebox",
+			inventory_image = "default_cup_"..types.."_item.png^default_cup_"..fill.."_item_overlay.png",
+			paramtype = "light",
+			paramtype2 = "facedir",
+			groups = {oddly_breakable_by_hand=3, generation_artificial=1},
+			node_box = {
+				type = "fixed",
+				fixed = {
+					{ -2/16, -8/16, -2/16, 2/16, -3/16, 2/16, },
+					{ -2/16, -3/16, -2/16, 2/16, -2/16, -1/16, },
+					{ -2/16, -3/16, 1/16, 2/16, -2/16, 2/16, },
+					{ 1/16, -3/16, -2/16, 2/16, -2/16, 2/16, },
+					{ -2/16, -3/16, -2/16, -1/16, -2/16, 2/16, },
+				},
+			},
+			on_use = qts.item_eat(4),
+			sounds = qtcore.node_sound_stone(),
+		})
+	end
+	--cup crafting
+	qts.register_craft({
+		ingredients = {"default:coffee_grounds", "default:dishes_"..types, "default:bucket_default_river_water"},
+		results = {"default:cup_"..types.."_coffee_turkish", "default:bowl_"..types, "default:bucket"},
+		near = {"group:ttable", "group:cookware", "group:furnace"},
+	})
+	
+	qts.register_craft({
+		ingredients = {"default:coffee_grounds", "default:vessels_"..types.."_water"},
+		results = {"default:cup_"..types.."_coffee_turkish", "default:bowl_"..types},
+		near = {"group:ttable", "group:cookware", "group:furnace"},
+	})
+	
+	qts.register_craft({
+		ingredients = {"default:coffee_grounds", "default:cup_"..types, "default:vessels_"..types.."_water"},
+		results = {"default:cup_"..types.."_coffee_turkish", "default:dishes_"..types},
+		near = {"group:ttable", "group:cookware", "group:furnace"},
+	})
+	
+	qts.register_craft({
+		ingredients = {"default:coffee_grounds", "default:cup_"..types, "default:bucket_default_water"},
+		results = {"default:cup_"..types.."_coffee_turkish", "default:bucket"},
+		near = {"group:ttable", "group:cookware", "group:furnace"},
+	})
+	
+	qts.register_craft({
+		ingredients = {"default:coffee_grounds", "default:cup_clay", "default:bucket_default_river_water"},
+		results = {"default:cup_clay_coffee_turkish", "default:bucket"},
+		near = {"group:ttable", "group:cookware", "group:furnace"},
+	})
+	
+	qts.register_craft({
+	ingredients = {"default:cup_"..types, "default:bucket_default_water"},
+	results = {"default:cup_"..types.."_water", "default:bucket"},
+	})
+
+	qts.register_craft({
+		ingredients = {"default:cup_"..types, "default:bucket_default_river_water"},
+		results = {"default:cup_"..types.."_water", "default:bucket"},
+	})
+	
+	qts.register_craft({
+		ingredients = {"default:cup_"..types},
+		results = {"default:cup_"..types.."_water"},
+		near = {"default:water_source"}
+	})
+	
+	qts.register_craft({
+		ingredients = {"default:cup_"..types},
+		results = {"default:cup_"..types.."_water"},
+		near = {"default:river_water_source"}
+	})
+
+--dish nodes
+	minetest.register_node("default:dishes_"..types, {
+		description = dish_types_desc[i].." Dishes",
+		tiles = {"default_dishes_"..types..".png",},
+		use_texture_alpha="clip",
+		drawtype = "nodebox",
+		inventory_image = "default_dishes_"..types.."_item.png",
+		paramtype = "light",
+		paramtype2 = "facedir",
+		groups = {oddly_breakable_by_hand=3, dishes=1, generation_artificial=1},
+		node_box = {
+			type = "fixed",
+			fixed = {
+			{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+			{ -6/16, -7/16, 1/16, -5/16, -6/16, 5/16, },
+			{ -1/16, -7/16, 1/16, 0/16, -6/16, 5/16, },
+			{ -6/16, -7/16, 0/16, 0/16, -6/16, 1/16, },
+			{ -6/16, -7/16, 5/16, 0/16, -6/16, 6/16, },
+			{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+			{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+			{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+			{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+			{ 2/16, -8/16, -6/16, 6/16, -7/16, -2/16, },
+			{ 2/16, -7/16, -3/16, 6/16, -2/16, -2/16, },
+			{ 2/16, -7/16, -6/16, 6/16, -2/16, -5/16, },
+			{ 5/16, -7/16, -5/16, 6/16, -2/16, -3/16, },
+			{ 2/16, -7/16, -5/16, 3/16, -2/16, -3/16, },
+	
+			},
 		},
-	},
-	sounds = qtcore.node_sound_stone(),
+		sounds = qtcore.node_sound_stone(),
+	})
+--vessels
+local vessel_fill = {"oil_coconut", "water"}
+local vessel_fill_desc = {"Coconut oil", "Water"}
+	for n, fill in ipairs(vessel_fill) do
+		minetest.register_node("default:vessels_"..types.."_"..fill, {
+			description = vessel_fill_desc[n].." Vessel",
+			tiles = {
+				"default_dishes_"..types..".png^default_vessels_"..fill.."_top_overlay.png",
+				"default_dishes_"..types..".png",
+				"default_dishes_"..types..".png"
+			},
+			use_texture_alpha="clip",
+			drawtype = "nodebox",
+			inventory_image = "default_dishes_"..types.."_item.png^default_vessels_"..fill.."_item_overlay.png",
+			paramtype = "light",
+			paramtype2 = "facedir",
+			groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
+			node_box = {
+				type = "fixed",
+				fixed = {
+				{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+				{ -6/16, -7/16, 0/16, 0/16, -6/16, 6/16, },
+				{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+				{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+				{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+				{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+				{ 2/16, -8/16, -6/16, 6/16, -3/16, -2/16, },
+				{ 2/16, -3/16, -3/16, 6/16, -2/16, -2/16, },
+				{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
+				{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
+				{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
+				},
+			},
+			sounds = qtcore.node_sound_stone(),
+		})
+	end
+-- vessel crafting
+qts.register_craft({
+	ingredients = {"default:dishes_"..types, "default:bucket_default_water"},
+	results = {"default:vessels_"..types.."_water", "default:bucket"},
 })
 
-minetest.register_node("default:dishes_greenware", {
-	description = "Greenware Dishes",
-	tiles = {"default_dishes_greenware.png",},
-	use_texture_alpha="clip",
-	drawtype = "nodebox",
-	inventory_image = "default_dishes_greenware_item.png",
-	paramtype = "light",
-	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
-	node_box = {
-		type = "fixed",
-		fixed = {
-		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
-		{ -6/16, -7/16, 1/16, -5/16, -6/16, 5/16, },
-		{ -1/16, -7/16, 1/16, 0/16, -6/16, 5/16, },
-		{ -6/16, -7/16, 0/16, 0/16, -6/16, 1/16, },
-		{ -6/16, -7/16, 5/16, 0/16, -6/16, 6/16, },
-		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
-		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
-		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
-		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
-		{ 2/16, -8/16, -6/16, 6/16, -7/16, -2/16, },
-		{ 2/16, -7/16, -3/16, 6/16, -2/16, -2/16, },
-		{ 2/16, -7/16, -6/16, 6/16, -2/16, -5/16, },
-		{ 5/16, -7/16, -5/16, 6/16, -2/16, -3/16, },
-		{ 2/16, -7/16, -5/16, 3/16, -2/16, -3/16, },
-
-		},
-	},
-	sounds = qtcore.node_sound_stone(),
+qts.register_craft({
+	ingredients = {"default:dishes_"..types, "default:bucket_default_river_water"},
+	results = {"default:vessels_"..types.."_water", "default:bucket"},
 })
 
-minetest.register_node("default:vessels_water", {
-	description = "Water Vessel",
-	tiles = {
-		"default_vessel_water_top.png",
-		"default_dishes_clay.png",
-		"default_dishes_clay.png"
-	},
-	use_texture_alpha="clip",
-	drawtype = "nodebox",
-	inventory_image = "default_vessel_water_item.png",
-	paramtype = "light",
-	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
-	node_box = {
-		type = "fixed",
-		fixed = {
-		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
-		{ -6/16, -7/16, 0/16, 0/16, -6/16, 6/16, },
-		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
-		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
-		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
-		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
-		{ 2/16, -8/16, -6/16, 6/16, -3/16, -2/16, },
-		{ 2/16, -3/16, -3/16, 6/16, -2/16, -2/16, },
-		{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
-		{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
-		{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
-		},
-	},
-	sounds = qtcore.node_sound_stone(),
+qts.register_craft({
+	ingredients = {"default:dishes_"..types},
+	results = {"default:vessels_"..types.."_water"},
+	near = {"default:water_source"}
 })
 
-minetest.register_node("default:vessels_oil_coconut", {
-	description = "Coconut Oil Vessel",
-	tiles = {
-		"default_vessel_oil_coconut_top.png",
-		"default_dishes_clay.png",
-		"default_dishes_clay.png"
-	},
-	use_texture_alpha="clip",
-	drawtype = "nodebox",
-	inventory_image = "default_vessel_oil_coconut_item.png",
-	paramtype = "light",
-	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
-	node_box = {
-		type = "fixed",
-		fixed = {
-		{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
-		{ -6/16, -7/16, 0/16, 0/16, -6/16, 6/16, },
-		{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
-		{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
-		{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
-		{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
-		{ 2/16, -8/16, -6/16, 6/16, -3/16, -2/16, },
-		{ 2/16, -3/16, -3/16, 6/16, -2/16, -2/16, },
-		{ 2/16, -3/16, -6/16, 6/16, -2/16, -5/16, },
-		{ 5/16, -3/16, -5/16, 6/16, -2/16, -3/16, },
-		{ 2/16, -3/16, -5/16, 3/16, -2/16, -3/16, },
-		},
-	},
-	sounds = qtcore.node_sound_stone(),
+qts.register_craft({
+	ingredients = {"default:dishes_"..types},
+	results = {"default:vessels_"..types.."_water"},
+	near = {"default:river_water_source"}
 })
 
-minetest.register_node("default:flour_bowl", {
-	description = "Flour Bowl",
-	tiles = {
-		"default_flour_bowl_top.png",
-		"default_dishes_clay.png",
-		"default_flour_bowl_side.png"
-	},
-	use_texture_alpha="clip",
-	drawtype = "nodebox",
-	inventory_image = "default_flour_bowl_item.png",
-	paramtype = "light",
-	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
-	node_box = {
-		type = "fixed",
-		fixed = {
-		{ -3/16, -7/16, -4/16, 4/16, -5/16, 3/16, },
-		{ -4/16, -6/16, -4/16, -3/16, -5/16, 3/16, },
-		{ 4/16, -6/16, -4/16, 5/16, -5/16, 3/16, },
-		{ -4/16, -6/16, 3/16, 5/16, -5/16, 4/16, },
-		{ -4/16, -6/16, -5/16, 5/16, -5/16, -4/16, },
-		{ -2/16, -8/16, -3/16, 3/16, -4/16, 2/16, },
-		{ -1/16, -4/16, -2/16, 2/16, -3/16, 1/16, },
-		},
-	},
+qts.register_craft({
+	ingredients = {"default:dishes_"..types, "default:coconut 3"},
+	results = {"default:vessels_"..types.."_oil_coconut"},
+	near = {"group:ttable", "group:cookware", "group:furnace"},
 })
 
-minetest.register_node("default:cup_clay", {
-	description = "Clay Cup",
-	tiles = {"default_dishes_clay.png",},
-	use_texture_alpha="clip",
-	drawtype = "nodebox",
-	inventory_image = "default_cup_clay_item.png",
-	paramtype = "light",
-	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{ -2/16, -8/16, -2/16, 2/16, -7/16, 2/16, },
-			{ -2/16, -8/16, 1/16, 2/16, -3/16, 2/16, },
-			{ -2/16, -8/16, -2/16, 2/16, -3/16, -1/16, },
-			{ -2/16, -8/16, -2/16, -1/16, -3/16, 2/16, },
-			{ 1/16, -8/16, -2/16, 2/16, -3/16, 2/16, },
+--powder bowls
+local bowl_fill = {"flour"}
+local bowl_fill_desc = {"Flour"}
+	for n, fill in ipairs(bowl_fill) do
+		minetest.register_node("default:bowl_"..types.."_"..fill, {
+			description = bowl_fill_desc[n].." Bowl",
+			tiles = {
+				"default_dishes_"..types..".png^default_bowl_powder_"..fill.."_top_overlay.png",
+				"default_dishes_"..types..".png",
+				"default_dishes_"..types..".png^default_bowl_powder_"..fill.."_side_overlay.png"
+			},
+			use_texture_alpha="clip",
+			drawtype = "nodebox",
+			inventory_image = "default_bowl_"..types.."_item.png^default_bowl_powder_"..fill.."_item_overlay.png",
+			paramtype = "light",
+			paramtype2 = "facedir",
+			groups = {oddly_breakable_by_hand=3, generation_artificial=1},
+			node_box = {
+				type = "fixed",
+				fixed = {
+				{ -5/16, -6/16, -5/16, 5/16, -5/16, 5/16, },
+				{ -4/16, -7/16, -4/16, 4/16, -5/16, 4/16, },
+				{ -3/16, -8/16, -3/16, 3/16, -4/16, 3/16, },
+				{ -2/16, -8/16, -2/16, 2/16, -3/16, 2/16, },
+				},
+			},
+		})
+	end
+	--powder bowl crafting
+			qts.register_craft({
+			ingredients = {"default:dishes_"..types, "default:herb_grain 4"},
+			results = {"default:bowl_"..types.."_flour", "default:cup_"..types},
+			near = {"group:ttable", "group:dishes"},
+		})
+		
+		qts.register_craft({
+			ingredients = {"default:bowl_"..types, "default:herb_grain 4"},
+			results = {"default:bowl_"..types.."_flour"},
+			near = {"group:ttable", "group:dishes"},
+		})
 
+--individual empty cup and bowl
+	minetest.register_node("default:cup_"..types, {
+		description = dish_types_desc[i].." Cup",
+		tiles = {"default_dishes_"..types..".png",},
+		use_texture_alpha="clip",
+		drawtype = "nodebox",
+		inventory_image = "default_cup_"..types.."_item.png",
+		paramtype = "light",
+		paramtype2 = "facedir",
+		groups = {oddly_breakable_by_hand=3, generation_artificial=1},
+		node_box = {
+			type = "fixed",
+			fixed = {
+				{ -2/16, -8/16, -2/16, 2/16, -7/16, 2/16, },
+				{ -2/16, -8/16, 1/16, 2/16, -3/16, 2/16, },
+				{ -2/16, -8/16, -2/16, 2/16, -3/16, -1/16, },
+				{ -2/16, -8/16, -2/16, -1/16, -3/16, 2/16, },
+				{ 1/16, -8/16, -2/16, 2/16, -3/16, 2/16, },
+	
+			},
 		},
-	},
-	sounds = qtcore.node_sound_stone(),
-})
-
-minetest.register_node("default:bowl_clay", {
-	description = "Clay Bowl",
-	tiles = {"default_dishes_clay.png",},
-	use_texture_alpha="clip",
-	drawtype = "nodebox",
-	inventory_image = "default_bowl_clay_item.png",
-	paramtype = "light",
-	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{ -2/16, -8/16, -2/16, 2/16, -7/16, 2/16, },
-			{ -3/16, -7/16, -3/16, -2/16, -6/16, 3/16, },
-			{ 2/16, -7/16, -3/16, 3/16, -6/16, 3/16, },
-			{ -3/16, -7/16, -3/16, 3/16, -6/16, -2/16, },
-			{ -3/16, -7/16, 2/16, 3/16, -6/16, 3/16, },
-			{ -4/16, -6/16, 3/16, 4/16, -5/16, 4/16, },
-			{ -4/16, -6/16, -4/16, 4/16, -5/16, -3/16, },
-			{ 3/16, -6/16, -4/16, 4/16, -5/16, 4/16, },
-			{ -4/16, -6/16, -4/16, -3/16, -5/16, 4/16, },
-
+		sounds = qtcore.node_sound_stone(),
+	})
+	
+	minetest.register_node("default:bowl_"..types, {
+		description = dish_types_desc[i].." Bowl",
+		tiles = {"default_dishes_"..types..".png",},
+		use_texture_alpha="clip",
+		drawtype = "nodebox",
+		inventory_image = "default_bowl_"..types.."_item.png",
+		paramtype = "light",
+		paramtype2 = "facedir",
+		groups = {oddly_breakable_by_hand=3, generation_artificial=1},
+		node_box = {
+			type = "fixed",
+			fixed = {
+				{ -2/16, -8/16, -2/16, 2/16, -7/16, 2/16, },
+				{ -3/16, -7/16, -3/16, -2/16, -6/16, 3/16, },
+				{ 2/16, -7/16, -3/16, 3/16, -6/16, 3/16, },
+				{ -3/16, -7/16, -3/16, 3/16, -6/16, -2/16, },
+				{ -3/16, -7/16, 2/16, 3/16, -6/16, 3/16, },
+				{ -4/16, -6/16, 3/16, 4/16, -5/16, 4/16, },
+				{ -4/16, -6/16, -4/16, 4/16, -5/16, -3/16, },
+				{ 3/16, -6/16, -4/16, 4/16, -5/16, 4/16, },
+				{ -4/16, -6/16, -4/16, -3/16, -5/16, 4/16, },
+	
+			},
 		},
-	},
-	sounds = qtcore.node_sound_stone(),
-})
+		sounds = qtcore.node_sound_stone(),
+	})
+	
+	--individual crafting
+	qts.register_craft({
+		ingredients = {"default:bowl_"..types, "default:cup_"..types},
+		results = {"default:dishes_"..types},
+	})
+	
+	qts.register_craft({
+		ingredients ={"default:dishes_"..types}, 
+		results = {"default:bowl_"..types, "default:cup_"..types},
+	})
+-- related crafting
+	qts.register_craft({
+		ingredients = {"default:bowl_"..types.."_flour", "default:vessels_"..types.."_water"},
+		results = {"default:bread", "default:dishes_"..types, "default:bowl_"..types},
+		near = {"group:ttable", "group:dishes", "group:furnace"},
+	})
+	qts.register_craft({
+		ingredients = {"default:bowl_"..types.."_flour", "default:bucket_default_water"},
+		results = {"default:bread", "default:bowl_"..types, "default:bucket"},
+		near = {"group:ttable", "group:dishes", "group:furnace"},
+	})
+	
+	qts.register_craft({
+		ingredients = {"default:bowl_"..types.."_flour", "default:bucket_default_river_water"},
+		results = {"default:bread", "default:bowl_"..types, "default:bucket"},
+		near = {"group:ttable", "group:dishes", "group:furnace"},
+	})
+end
+--end things in dishes
+
+--greenwares
+local greenware_types = {"clay", "stoneware"}
+local greenware_types_desc = {"Clay","Stoneware"}
+for i, types in ipairs(greenware_types) do
+	minetest.register_node("default:dishes_"..types.."_greenware", {
+		description = greenware_types_desc[i].." Greenware Dishes",
+		tiles = {"default_dishes_"..types.."_greenware.png",},
+		use_texture_alpha="clip",
+		drawtype = "nodebox",
+		inventory_image = "default_dishes_"..types.."_greenware_item.png",
+		paramtype = "light",
+		paramtype2 = "facedir",
+		groups = {oddly_breakable_by_hand=3, generation_artificial=1},
+		node_box = {
+			type = "fixed",
+			fixed = {
+			{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
+			{ -6/16, -7/16, 1/16, -5/16, -6/16, 5/16, },
+			{ -1/16, -7/16, 1/16, 0/16, -6/16, 5/16, },
+			{ -6/16, -7/16, 0/16, 0/16, -6/16, 1/16, },
+			{ -6/16, -7/16, 5/16, 0/16, -6/16, 6/16, },
+			{ -6/16, -6/16, 6/16, 0/16, -5/16, 7/16, },
+			{ -6/16, -6/16, -1/16, 0/16, -5/16, 0/16, },
+			{ 0/16, -6/16, -1/16, 1/16, -5/16, 7/16, },
+			{ -7/16, -6/16, -1/16, -6/16, -5/16, 7/16, },
+			{ 2/16, -8/16, -6/16, 6/16, -7/16, -2/16, },
+			{ 2/16, -7/16, -3/16, 6/16, -2/16, -2/16, },
+			{ 2/16, -7/16, -6/16, 6/16, -2/16, -5/16, },
+			{ 5/16, -7/16, -5/16, 6/16, -2/16, -3/16, },
+			{ 2/16, -7/16, -5/16, 3/16, -2/16, -3/16, },
+	
+			},
+		},
+		sounds = qtcore.node_sound_stone(),
+	})
+end 
+--end greenwares
 
 minetest.register_node("default:cookware_iron", {
 	description = "Cast Iron Cookware",
@@ -565,31 +689,10 @@ minetest.register_craftitem("default:coffee_beans", {
 })
 
 --crafting
-qts.register_craft({
-	ingredients = {"default:bowl_clay", "default:cup_clay"},
-	results = {"default:dishes_clay"},
-})
-
-qts.register_craft({
-	ingredients ={"default:dishes_clay"}, 
-	results = {"default:bowl_clay", "default:cup_clay"},
-})
 
 qts.register_craft({
 	ingredients = {"default:herb_potatoe"},
 	results = {"default:seeds_potatoe"},
-})
-
-qts.register_craft({
-	ingredients = {"default:dishes_clay", "default:herb_grain 4"},
-	results = {"default:flour_bowl", "default:cup_clay"},
-	near = {"group:ttable", "group:dishes"},
-})
-
-qts.register_craft({
-	ingredients = {"default:bowl_clay", "default:herb_grain 4"},
-	results = {"default:flour_bowl"},
-	near = {"group:ttable", "group:dishes"},
 })
 
 qts.register_craft({
@@ -604,41 +707,7 @@ qts.register_craft({
 	near = {"group:ttable", "group:cookware", "group:furnace"},
 })
 
-qts.register_craft({
-	ingredients = {"default:coffee_grounds", "default:dishes_clay", "default:bucket_default_river_water"},
-	results = {"default:cup_clay_coffee_turkish", "default:bowl_clay", "default:bucket"},
-	near = {"group:ttable", "group:cookware", "group:furnace"},
-})
 
-qts.register_craft({
-	ingredients = {"default:coffee_grounds", "default:vessels_water"},
-	results = {"default:cup_clay_coffee_turkish", "default:bowl_clay"},
-	near = {"group:ttable", "group:cookware", "group:furnace"},
-})
-
-qts.register_craft({
-	ingredients = {"default:coffee_grounds", "default:cup_clay", "default:vessels_water"},
-	results = {"default:cup_clay_coffee_turkish", "default:dishes_clay"},
-	near = {"group:ttable", "group:cookware", "group:furnace"},
-})
-
-qts.register_craft({
-	ingredients = {"default:coffee_grounds", "default:cup_clay", "default:bucket_default_water"},
-	results = {"default:cup_clay_coffee_turkish", "default:bucket"},
-	near = {"group:ttable", "group:cookware", "group:furnace"},
-})
-
-qts.register_craft({
-	ingredients = {"default:coffee_grounds", "default:cup_clay", "default:bucket_default_river_water"},
-	results = {"default:cup_clay_coffee_turkish", "default:bucket"},
-	near = {"group:ttable", "group:cookware", "group:furnace"},
-})
-
-qts.register_craft({
-	ingredients = {"default:dishes_clay", "default:coconut 3"},
-	results = {"default:vessels_oil_coconut"},
-	near = {"group:ttable", "group:cookware", "group:furnace"},
-})
 
 qts.register_craft({
 	ingredients = {"default:small_mushroom 2", "default:dishes_clay"},
@@ -651,30 +720,6 @@ qts.register_craft({
 	near = {"group:furnace", "group:cookware"}
 })
 
-qts.register_craft({
-	ingredients = {"default:flour_bowl", "default:vessels_water"},
-	results = {"default:bread", "default:dishes_clay", "default:bowl_clay"},
-	near = {"group:ttable", "group:dishes", "group:furnace"},
-})
 
-qts.register_craft({
-	ingredients = {"default:flour_bowl", "default:bucket_default_water"},
-	results = {"default:bread", "default:bowl_clay", "default:bucket"},
-	near = {"group:ttable", "group:dishes", "group:furnace"},
-})
 
-qts.register_craft({
-	ingredients = {"default:flour_bowl", "default:bucket_default_river_water"},
-	results = {"default:bread", "default:bowl_clay", "default:bucket"},
-	near = {"group:ttable", "group:dishes", "group:furnace"},
-})
 
-qts.register_craft({
-	ingredients = {"default:dishes_clay", "default:bucket_default_water"},
-	results = {"default:vessels_water", "default:bucket"},
-})
-
-qts.register_craft({
-	ingredients = {"default:dishes_clay", "default:bucket_default_river_water"},
-	results = {"default:vessels_water", "default:bucket"},
-})

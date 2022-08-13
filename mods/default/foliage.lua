@@ -275,7 +275,7 @@ minetest.register_node("default:natural_coconut", {
 	inventory_image = "default_coconut.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=1, generation_trees=1, not_in_creative_inventory=1},
+	groups = {oddly_breakable_by_hand=1, choppy = 2, generation_trees=1, not_in_creative_inventory=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
