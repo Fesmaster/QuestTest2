@@ -1,5 +1,5 @@
-qts.item_eat = minetest.item_eat
---this eventually will need a way to return cups and bowls to player after a food item with such a thing is eaten
+
+
 
 --deep copy func, that is from lua-users.org  https://lua-users.org/wiki/CopyTable
 function qts.table_deep_copy(orig, copies)
@@ -446,3 +446,38 @@ function qts.item_place_check_and_propigate(itemstack, placer, pointed_thing)
 		return def.on_secondary_use(itemstack, placer, pointed_thing)
 	end
 end
+
+--Item Eating
+
+function qts.item_eat(hpchange, replace_with_item)
+	return function(itemstack, user, pointed_thing)
+		return qts.do_item_eat(hpchange, replace_with_item, itemstack, user, pointed_thing)
+	end
+end
+--register_on_item_eat
+function qts.do_item_eat(hpchange, replace_with_item, itemstack, user, pointed_thing)
+	if user:is_player() then
+		local playerHP = qts.get_player_hp(user)
+		local playerHPMax = qts.get_player_hp_max(user)
+		if playerHP < playerHPMax then
+			if minetest.registered_on_item_eat then
+				for _, func in ipairs(minetest.registered_on_item_eat) do
+					local rval = func(hpchange, replace_with_item, itemstack, user, pointed_thing)
+					--assume rval is an itemstack
+					if rval then
+						return rval
+					end
+				end
+			end
+			--do health increas
+			itemstack:take_item(1)
+			local inv = user:get_inventory()
+			inv:add_item("main", ItemStack(replace_with_item))
+			qts.set_player_hp(user, playerHP+hpchange, "set_hp")
+		end
+	end
+	return itemstack
+end
+--backcompatability
+minetest.do_item_eat = qts.do_item_eat
+minetest.item_eat = qts.item_eat
