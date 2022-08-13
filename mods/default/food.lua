@@ -131,7 +131,7 @@ for i=1, #ingredient do
 				for l, name in ipairs(comb_list) do
 					ig_List[l] = ingredient_map[name]
 				end
-				ig_List[#ig_List+1] = "default:vessels_clay_water"
+				ig_List[#ig_List+1] = "default:dishes_clay"
 
 				qts.register_craft({
 					ingredients = ig_List,
@@ -725,7 +725,6 @@ minetest.register_craft({
 	output = "default:dishes_clay",
 	recipe = "default:dishes_clay_greenware",
 })
-
 
 minetest.register_craft({
 	type = "cooking",
