@@ -30,6 +30,18 @@ minetest.register_node("dtools:white_BG_node", {
 	paramtype = "light"
 })
 
+qts.register_door("dtools:testing_door", {
+	description = "Testing Door",
+	tiles = {"door_prototype.png"},
+	groups = {oddly_breakable_by_hand=3},
+})
+
+qts.register_trapdoor("dtools:testing_trapdoor", {
+	description = "Testing Trapdoor",
+	tiles = {"trapdoor_prototype.png"},
+	groups = {oddly_breakable_by_hand=3},
+})
+
 --[[
 minetest.register_node("dtools:torch", {
 	description = "Testing Torch",

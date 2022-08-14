@@ -3,7 +3,7 @@
 --licensed under lgpl (see the license for QT2 in general)
 
 qts.hammer = {}
-function qts.rotate_and_place(itemstack, placer, pointed_thing)
+function qts.rotate_and_place(itemstack, placer, pointed_thing, dont_place)
 	local p0 = pointed_thing.under
 	local p1 = pointed_thing.above
 	local param2 = 0
@@ -27,7 +27,11 @@ function qts.rotate_and_place(itemstack, placer, pointed_thing)
 			end
 		end
 	end
-	return minetest.item_place(itemstack, placer, pointed_thing, param2)
+	if not dont_place then
+		return minetest.item_place(itemstack, placer, pointed_thing, param2)
+	else
+		return param2
+	end
 end
 
 function qts.hammer.rotate_and_set(placer, pointed_thing, node)

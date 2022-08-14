@@ -1115,3 +1115,33 @@ function qts.register_torch(name, def)
 
 end
 --END torch
+
+
+
+
+
+--[[
+	A few nodes for utility purposes. 
+	
+qts:void
+	used to fill nodes from placement, particularly when they are
+	graphically occupied by other nodes, such as the top half of doors, beds, etc
+	does not block player movement 
+--]]
+
+minetest.register_node("qts:void", {
+	description = "Passible void block",
+	drawtype = "airlike",
+	inventory_image = "void.png",
+	wield_image = "void.png",
+	use_texture_alpha = "clip",
+	paramtype = "light",
+	is_ground_content = false,
+	sunlight_propagates = true,
+	walkable = false,
+	pointable = false,
+	diggable = false,
+	climbable = false,
+	buildable_to=false,
+	groups = {utility_node=1, not_in_creative_inventory=1}
+})
