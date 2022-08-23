@@ -39,7 +39,7 @@ for i, n in ipairs(woodtypes) do
 			description = woodnames[i].." and "..metalnames[j].." Chest",
 			tiles = {
 				"default_"..n.."_wood.png^default_chest_"..k.."_top_overlay.png",
-				"default_"..n.."_wood.png^^default_chest_"..k.."_top_overlay.png",
+				"default_"..n.."_wood.png^default_chest_"..k.."_top_overlay.png",
 				"default_"..n.."_wood.png^default_chest_"..k.."_side_overlay.png",
 				"default_"..n.."_wood.png^default_chest_"..k.."_side_overlay.png",
 				"default_"..n.."_wood.png^default_chest_"..k.."_back_overlay.png",

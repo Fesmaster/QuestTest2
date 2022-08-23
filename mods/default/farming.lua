@@ -111,7 +111,7 @@ register_farm_plant("bloodbulb", {
 	item_image = "default_herb_bloodbulb.png",
 	plant_levels = 5,
 	plant_tiles_list = {"default_herb_0.png", "default_herb_bloodbulb_1.png", "default_herb_bloodbulb_2.png", "default_herb_bloodbulb_3.png", "default_herb_bloodbulb_4.png"},
-	grow_timer = 90,
+	grow_timer = 190,
 	grow_timer_random = 30,
 })
 
@@ -123,7 +123,7 @@ register_farm_plant("milfoil", {
 	plant_levels = 8,
 	plant_tiles_list = {"default_herb_0.png", "default_herb_milfoil_1.png", "default_herb_milfoil_2.png", "default_herb_milfoil_3.png", "default_herb_milfoil_4.png",
 	"default_herb_milfoil_5.png", "default_herb_milfoil_6.png", "default_herb_milfoil_7.png"},
-	grow_timer = 90,
+	grow_timer = 190,
 	grow_timer_random = 30,
 })
 
@@ -134,7 +134,7 @@ register_farm_plant("goard", {
 	item_image = "default_herb_goard.png",
 	plant_levels = 5,
 	plant_tiles_list = {"default_herb_0.png", "default_herb_goard_1.png", "default_herb_goard_2.png", "default_herb_goard_3.png", "default_herb_goard_4.png"},
-	grow_timer = 90,
+	grow_timer = 190,
 	grow_timer_random = 30,
 })
 
@@ -146,7 +146,7 @@ register_farm_plant("carrot", {
 	plant_levels = 7,
 	plant_tiles_list = {"default_herb_0.png", "default_herb_carrot_1.png", "default_herb_carrot_2.png", "default_herb_carrot_3.png", "default_herb_carrot_4.png",
 	"default_herb_carrot_5.png", "default_herb_carrot_6.png"},
-	grow_timer = 90,
+	grow_timer = 190,
 	grow_timer_random = 30,
 })
 
@@ -157,7 +157,7 @@ register_farm_plant("wolfshood", {
 	item_image = "default_herb_wolfshood.png",
 	plant_levels = 5,
 	plant_tiles_list = {"default_herb_0.png", "default_herb_wolfshood_1.png", "default_herb_wolfshood_2.png", "default_herb_wolfshood_3.png", "default_herb_wolfshood_4.png"},
-	grow_timer = 90,
+	grow_timer = 190,
 	grow_timer_random = 30,
 })
 
@@ -169,7 +169,7 @@ register_farm_plant("grain", {
 	plant_levels = 9,
 	plant_tiles_list = {"default_herb_0.png", "default_herb_grain_1.png", "default_herb_grain_2.png", "default_herb_grain_3.png", "default_herb_grain_4.png",
 	"default_herb_grain_5.png", "default_herb_grain_6.png", "default_herb_grain_7.png", "default_herb_grain_8.png"},
-	grow_timer = 90,
+	grow_timer = 190,
 	grow_timer_random = 30,
 })
 
@@ -181,7 +181,7 @@ register_farm_plant("onion", {
 	plant_levels = 9,
 	plant_tiles_list = {"default_herb_0.png", "default_herb_onion_1.png", "default_herb_onion_2.png", "default_herb_onion_3.png", "default_herb_onion_4.png",
 	"default_herb_onion_5.png", "default_herb_onion_6.png", "default_herb_onion_7.png", "default_herb_onion_8.png"},
-	grow_timer = 90,
+	grow_timer = 190,
 	grow_timer_random = 30,
 })
 
@@ -193,7 +193,7 @@ register_farm_plant("potatoe", {
 	plant_levels = 6,
 	plant_tiles_list = {"default_herb_potatoe_0.png", "default_herb_potatoe_1.png", "default_herb_potatoe_2.png", "default_herb_potatoe_3.png", "default_herb_potatoe_4.png",
 	"default_herb_potatoe_5.png"},
-	grow_timer = 90,
+	grow_timer = 190,
 	grow_timer_random = 30,
 })
 
@@ -205,7 +205,7 @@ register_farm_plant("flax", {
 	plant_levels = 7,
 	plant_tiles_list = {"default_herb_0.png", "default_herb_flax_1.png", "default_herb_flax_2.png", "default_herb_flax_3.png", "default_herb_flax_4.png",
 	"default_herb_flax_5.png", "default_herb_flax_6.png"},
-	grow_timer = 90,
+	grow_timer = 190,
 	grow_timer_random = 30,
 })
 
