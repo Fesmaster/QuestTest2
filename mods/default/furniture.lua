@@ -97,6 +97,75 @@ for i, n in ipairs(woodtypes) do
 		end
 	end
 end
+local woodtypes={"mushroom_blue", "mushroom_gold", "mushroom_brown", "bamboo"}
+local woodnames={"Blue Mushroom", "Gold Mushroom", "Brown Mushroom", "Bamboo"}
+local metaltypes={"bronze", "copper", "iron", "steel"}
+local metalnames={"Bronze", "Copper", "Iron", "Steel"}
+
+for i, n in ipairs(woodtypes) do
+	for j, k in ipairs(metaltypes) do
+		qts.register_chest("default:chest_"..n.."_"..k, {
+			description = woodnames[i].." and "..metalnames[j].." Chest",
+			tiles = {
+				"default_"..n.."_slats.png^default_chest_"..k.."_top_overlay.png",
+				"default_"..n.."_slats.png^default_chest_"..k.."_top_overlay.png",
+				"default_"..n.."_slats.png^default_chest_"..k.."_side_overlay.png",
+				"default_"..n.."_slats.png^default_chest_"..k.."_side_overlay.png",
+				"default_"..n.."_slats.png^default_chest_"..k.."_back_overlay.png",
+				"default_"..n.."_slats.png^default_chest_"..k.."_front_overlay.png"
+				
+			},
+			groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
+			drawtype = "nodebox",
+			paramtype = "light",
+			paramtype2 = "facedir",
+			node_box = {
+				type = "fixed",
+				fixed = {
+					{ -8/16, -8/16, -5/16, 8/16, 0/16, 5/16, },
+					{ -8/16, -8/16, -4/16, 8/16, 1/16, 4/16, },
+					{ -8/16, -8/16, -3/16, 8/16, 2/16, 3/16, },
+					{ -6/16, 1/16, -4/16, -4/16, 2/16, 4/16, },
+					{ 4/16, 1/16, -4/16, 6/16, 2/16, 4/16, },
+					{ 4/16, 0/16, -5/16, 6/16, 1/16, 5/16, },
+					{ -6/16, 0/16, -5/16, -4/16, 1/16, 5/16, },
+					{ 4/16, 2/16, -3/16, 6/16, 3/16, 3/16, },
+					{ -6/16, 2/16, -3/16, -4/16, 3/16, 3/16, },
+					{ -6/16, -8/16, -6/16, -4/16, 0/16, 6/16, },
+					{ 4/16, -8/16, -6/16, 6/16, 0/16, 6/16, },
+					{ -1/16, -4/16, -6/16, 1/16, -1/16, -5/16, },
+					},
+				},
+			is_ground_content = false,
+			sounds = qtcore.node_sound_wood(),
+			
+			invsize = 8*4,
+			get_chest_formspec = qtcore.get_default_chest_formspec,
+		})
+		
+		
+		if k == "copper" then
+			qts.register_craft({
+				ingredients = {"default:"..n.."_slats", "default:"..k.."_bar 2"},
+				results = {"default:chest_"..n.."_"..k},
+				near = {"group:workbench"},
+				})
+				
+		elseif k == "bronze" then
+			qts.register_craft({
+				ingredients = {"default:"..n.."_slats", "default:"..k.."_bar 2"},
+				results = {"default:chest_"..n.."_"..k},
+				near = {"group:workbench"},
+				})
+		else
+			qts.register_craft({
+				ingredients = {"default:"..n.."_slats", "default:"..k.."_bar 2"},
+				results = {"default:chest_"..n.."_"..k},
+				near = {"group:anvil", "group:furnace"},
+				})
+		end
+	end
+end
 
 qts.register_chest("default:storage_pot_clay", {
 	description = "Clay Storage Pot",
@@ -197,6 +266,92 @@ minetest.register_node("default:candle_palm", {
 })
 
 --end lights
+
+--begin doors
+--[[qts.register_door("default:door_oak", {
+	description = "Oak Door",
+	tiles = {"default_door_oak.png"},
+	groups = {oddly_breakable_by_hand=3},
+})]]--
+
+local woodtypes={"oak", "apple", "aspen", "coffee", "mahogany", "rosewood", "pine", "lanternfruit", "swamp", "rowan"}
+local woodnames={"Oak", "Apple", "Aspen", "Coffee", "Mahogany", "Rosewood", "Pine", "Lanternfruit", "Swamp Wood", "Rowan"}
+local metaltypes={"bronze", "copper", "iron", "steel"}
+local metalnames={"Bronze", "Copper", "Iron", "Steel"}
+
+for i, wood in ipairs(woodtypes) do
+	for j, metal in ipairs(metaltypes) do
+		qts.register_door("default:door_"..wood.."_"..metal, {
+			description = woodnames[i].." and "..metalnames[j].." Door",
+			tiles = {
+				"default_door_"..wood..".png^default_door_"..metal.."_top_overlay.png",
+			},
+			groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
+			sounds = qtcore.node_sound_wood(),
+		})
+		
+		if k == "copper" then
+			qts.register_craft({
+				ingredients = {"default:"..wood.."_wood_planks", "default:"..metal.."_bar 2"},
+				results = {"default:door_"..wood.."_"..metal},
+				near = {"group:workbench"},
+				})
+				
+		elseif k == "bronze" then
+			qts.register_craft({
+				ingredients = {"default:"..wood.."_wood_planks", "default:"..k.."_bar 2"},
+				results = {"default:door_"..wood.."_"..metal},
+				near = {"group:workbench"},
+				})
+		else
+			qts.register_craft({
+				ingredients = {"default:"..wood.."_wood_planks", "default:"..metal.."_bar 2"},
+				results = {"default:door_"..wood.."_"..metal},
+				near = {"group:anvil", "group:furnace"},
+				})
+		end
+	end
+end
+
+local woodtypes={"mushroom_blue", "mushroom_gold", "mushroom_brown", "bamboo"}
+local woodnames={"Blue Mushroom", "Gold Mushroom", "Brown Mushroom", "Bamboo"}
+local metaltypes={"bronze", "copper", "iron", "steel"}
+local metalnames={"Bronze", "Copper", "Iron", "Steel"}
+
+for i, wood in ipairs(woodtypes) do
+	for j, metal in ipairs(metaltypes) do
+		qts.register_door("default:door_"..wood.."_"..metal, {
+			description = woodnames[i].." and "..metalnames[j].." Door",
+			tiles = {
+				"default_door_"..wood..".png^default_door_"..metal.."_top_overlay.png",
+			},
+			groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
+			sounds = qtcore.node_sound_wood(),
+		})
+		
+		if k == "copper" then
+			qts.register_craft({
+				ingredients = {"default:"..wood.."_slats", "default:"..metal.."_bar 2"},
+				results = {"default:door_"..wood.."_"..metal},
+				near = {"group:workbench"},
+				})
+				
+		elseif k == "bronze" then
+			qts.register_craft({
+				ingredients = {"default:"..wood.."_slats", "default:"..k.."_bar 2"},
+				results = {"default:door_"..wood.."_"..metal},
+				near = {"group:workbench"},
+				})
+		else
+			qts.register_craft({
+				ingredients = {"default:"..wood.."_slats", "default:"..metal.."_bar 2"},
+				results = {"default:door_"..wood.."_"..metal},
+				near = {"group:anvil", "group:furnace"},
+				})
+		end
+	end
+end
+--end doors
 
 --BEGIN Tables
 minetest.register_node("default:table_oak", {

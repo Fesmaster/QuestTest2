@@ -778,11 +778,7 @@ minetest.register_node("default:dye_yellow", {
 
 --doors
 
-qts.register_door("default:door_oak", {
-	description = "Oak Door",
-	tiles = {"default_door_oak.png"},
-	groups = {oddly_breakable_by_hand=3},
-})
+
 --[[
 qts.register_trapdoor("dtools:testing_trapdoor", {
 	description = "Testing Trapdoor",
