@@ -284,7 +284,7 @@ for i, wood in ipairs(woodtypes) do
 		qts.register_door("default:door_"..wood.."_"..metal, {
 			description = woodnames[i].." and "..metalnames[j].." Door",
 			tiles = {
-				"default_door_"..wood..".png^default_door_"..metal.."_top_overlay.png",
+				"default_door_"..wood..".png^default_door_"..metal.."_overlay.png",
 			},
 			groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
 			sounds = qtcore.node_sound_wood(),
@@ -323,7 +323,7 @@ for i, wood in ipairs(woodtypes) do
 		qts.register_door("default:door_"..wood.."_"..metal, {
 			description = woodnames[i].." and "..metalnames[j].." Door",
 			tiles = {
-				"default_door_"..wood..".png^default_door_"..metal.."_top_overlay.png",
+				"default_door_"..wood..".png^default_door_"..metal.."_overlay.png",
 			},
 			groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
 			sounds = qtcore.node_sound_wood(),
@@ -352,6 +352,86 @@ for i, wood in ipairs(woodtypes) do
 	end
 end
 --end doors
+
+--begin trapdoors
+local woodtypes={"oak", "apple", "aspen", "coffee", "mahogany", "rosewood", "pine", "lanternfruit", "swamp", "rowan"}
+local woodnames={"Oak", "Apple", "Aspen", "Coffee", "Mahogany", "Rosewood", "Pine", "Lanternfruit", "Swamp Wood", "Rowan"}
+local metaltypes={"bronze", "copper", "iron", "steel"}
+local metalnames={"Bronze", "Copper", "Iron", "Steel"}
+
+for i, wood in ipairs(woodtypes) do
+	for j, metal in ipairs(metaltypes) do
+		qts.register_trapdoor("default:trapdoor_"..wood.."_"..metal, {
+			description = woodnames[i].." and "..metalnames[j].." Door",
+			tiles = {
+				"default_"..wood.."_wood.png^default_trapdoor_"..metal.."_overlay.png",
+			},
+			groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
+			sounds = qtcore.node_sound_wood(),
+		})
+		
+		if k == "copper" then
+			qts.register_craft({
+				ingredients = {"default:"..wood.."_wood_planks", "default:"..metal.."_bar"},
+				results = {"default:trapdoor_"..wood.."_"..metal},
+				near = {"group:workbench"},
+				})
+				
+		elseif k == "bronze" then
+			qts.register_craft({
+				ingredients = {"default:"..wood.."_wood_planks", "default:"..k.."_bar"},
+				results = {"default:trapdoor_"..wood.."_"..metal},
+				near = {"group:workbench"},
+				})
+		else
+			qts.register_craft({
+				ingredients = {"default:"..wood.."_wood_planks", "default:"..metal.."_bar"},
+				results = {"default:trapdoor_"..wood.."_"..metal},
+				near = {"group:anvil", "group:furnace"},
+				})
+		end
+	end
+end
+
+local woodtypes={"mushroom_blue", "mushroom_gold", "mushroom_brown", "bamboo"}
+local woodnames={"Blue Mushroom", "Gold Mushroom", "Brown Mushroom", "Bamboo"}
+local metaltypes={"bronze", "copper", "iron", "steel"}
+local metalnames={"Bronze", "Copper", "Iron", "Steel"}
+
+for i, wood in ipairs(woodtypes) do
+	for j, metal in ipairs(metaltypes) do
+		qts.register_trapdoor("default:trapdoor_"..wood.."_"..metal, {
+			description = woodnames[i].." and "..metalnames[j].." Door",
+			tiles = {
+				"default_"..wood.."_slats.png^default_trapdoor_"..metal.."_overlay.png",
+			},
+			groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
+			sounds = qtcore.node_sound_wood(),
+		})
+		
+		if k == "copper" then
+			qts.register_craft({
+				ingredients = {"default:"..wood.."_slats", "default:"..metal.."_bar"},
+				results = {"default:trapdoor_"..wood.."_"..metal},
+				near = {"group:workbench"},
+				})
+				
+		elseif k == "bronze" then
+			qts.register_craft({
+				ingredients = {"default:"..wood.."_slats", "default:"..k.."_bar"},
+				results = {"default:trapdoor_"..wood.."_"..metal},
+				near = {"group:workbench"},
+				})
+		else
+			qts.register_craft({
+				ingredients = {"default:"..wood.."_slats", "default:"..metal.."_bar"},
+				results = {"default:trapdoor_"..wood.."_"..metal},
+				near = {"group:anvil", "group:furnace"},
+				})
+		end
+	end
+end
+--end trapdoors
 
 --BEGIN Tables
 minetest.register_node("default:table_oak", {
