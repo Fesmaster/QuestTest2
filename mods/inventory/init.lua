@@ -18,19 +18,13 @@ dofile(minetest.get_modpath("inventory") .."/hud.lua")
 --register util buttons
 --TODO: make more util buttons
 
-inventory.register_util_btn("Test", function(playername)
-	minetest.log(playername.." has pressed the test button")
-end)
 --minetest.set_timeofday(val)
 inventory.register_util_btn("Morning!", function(playername)
 	minetest.set_timeofday(0.25)
 end)
 
-inventory.register_util_btn("Wood Group remove", function(playername)
-	minetest.log("Removing 1 wood group item!")
-	local inv = minetest.get_player_by_name(playername):get_inventory()
-	local rval = qts.inv_take_group(inv, "group:wood 1")
-	minetest.log(dump(rval))
+inventory.register_util_btn("Night!", function(playername)
+	minetest.set_timeofday(0.85)
 end)
 
 
@@ -181,9 +175,11 @@ qts.gui.register_gui("inv_tab_equipment", {
 	owner = "inventory",
 	get = function(data, pos, name)
 		return inventory.get_player_main()..
+			inventory.get_player_equipment(name)..
 			inventory.get_button_grid(name, data.player_item_list_page,
 				data.prev_search, data.cheat_mode_enabled)..
-			inventory.get_util_bar()
+			inventory.get_util_bar()..
+			"listring[current_player;main]listring[current_player;equipment]"
 	end,
 	handle = function(data, pos, name, fields)
 		return false
@@ -223,38 +219,114 @@ qts.gui.register_gui("inv_tab_test", {
 
 
 minetest.register_on_joinplayer(function(player)
-	local formspec = [[
-			bgcolor[#080808BB;true]
-			listcolors[#00000069;#5A5A5A;#141318;#30434C;#FFF] 
-			style_type[button,button_exit,image_button,item_image_button;
-				bgimg=gui_button.png;
-				bgimg_hovered=gui_button_hovered.png;
-				bgimg_pressed=gui_button_clicked.png;
-				bgimg_middle=8;
-				border=false]
-		]]
-	local name = player:get_player_name()
-	local info = minetest.get_player_information(name)
-	if info.formspec_version > 1 then
-		formspec = formspec .. "background9[5,5;1,1;gui_formbg.png;true;10]"
-	else
-		formspec = formspec .. "background[5,5;1,1;gui_formbg.png;true]"
-	end
-	player:set_formspec_prepend(formspec)
-
-	-- Set hotbar textures
-	player:hud_set_hotbar_image("gui_hotbar.png")
-	player:hud_set_hotbar_selected_image("gui_hotbar_selected.png")
-	player:hud_set_hotbar_itemcount(10) --10 slot HUD
-	
-	--set the inventory properties
-	local inv = player:get_inventory()
-	inv:set_size("main", 40) -- 10*4
-	
-	
-	--set the inventory formspec
-	inventory.gen_item_list_for_player(name)
-	inventory.refresh_inv(player)
-	inventory.refresh_hud(player)
+	inventory.init_inventory(player)
+	inventory.init_hud(player)
 end)
 
+
+
+minetest.register_allow_player_inventory_action(function(player, action, inv, inventory_info)
+	local handle_equipment = nil
+	local returnval = 0
+	if action=="move" then
+		local stack = inv:get_stack(inventory_info.from_list, inventory_info.from_index)
+		if inventory_info.to_list == "equipment" then
+			--equipment move!
+			handle_equipment = {
+				stack = stack,
+				receive_stack = inv:get_stack(inventory_info.to_list, inventory_info.to_index),
+				index = inventory_info.to_index,
+			}
+		else
+			returnval = stack:get_count()
+		end
+	elseif action == "put" then
+		if inventory_info.listname == "equipment" then
+			--equipment put
+			handle_equipment = {
+				stack = inventory_info.stack,
+				receive_stack = inv:get_stack(inventory_info.listname, inventory_info.index),
+				index = inventory_info.index,
+			}
+		else
+			returnval = inventory_info.stack:get_count()
+		end
+	elseif action == "take" then
+		returnval = inventory_info.stack:get_count()
+	end
+
+	--handle equipment actions
+	if handle_equipment then
+		if 	inventory.check_equiped_item_add(handle_equipment.index, handle_equipment.stack) and 
+			handle_equipment.index <= inventory.equipment_slots_general_count+#inventory.special_equipment_slots 
+		then
+			returnval =  handle_equipment.stack:get_count()
+		else
+			returnval =  0
+		end
+	end
+
+	return returnval
+end)
+
+minetest.register_on_player_inventory_action(function(player, action, inv, inventory_info)
+	local refresh_data = nil
+	if action=="move" then
+		--no need to refresh if its an internal move (armor should never be equipable, or this will break)
+		if inventory_info.to_index ~= inventory_info.from_list then
+			if inventory_info.to_list == "equipment" then
+				refresh_data={
+					stack = inv:get_stack(inventory_info.to_list, inventory_info.to_index),
+					is_add = true,
+					list = "equipment",
+					index = inventory_info.to_index,
+				}
+			elseif inventory_info.from_list == "equipment" then
+				refresh_data={
+					stack = inv:get_stack(inventory_info.to_list, inventory_info.to_index),
+					is_add = false,
+					list = inventory_info.to_list,
+					index = inventory_info.to_index,
+				}
+			end
+		end
+	elseif action == "put" or action == "take" then
+		if inventory_info.listname == "equipment" then
+			refresh_data={
+				stack = inventory_info.stack,
+				is_add = action=="put",
+				list = inventory_info.listname,
+				index = inventory_info.index,
+			}
+		end
+	end
+
+	if refresh_data then
+		--call callbacks for equipping items
+		local itemname = refresh_data.stack:get_name()
+		local itemdef = minetest.registered_items[itemname]
+		if itemdef then
+			if refresh_data.is_add then
+				if itemdef.on_equip then
+					local replace_stack = itemdef.on_equip(player, refresh_data.stack)
+					if replace_stack then
+						inv:set_stack(refresh_data.list, refresh_data.index, replace_stack)
+					end
+				end
+			else
+				if itemdef.on_unequip then
+					local replace_stack = itemdef.on_unequip(player, refresh_data.stack)
+					if replace_stack then
+						inv:set_stack(refresh_data.list, refresh_data.index, replace_stack)
+					end
+				end
+			end
+		end
+		
+		--recalculate armor and player image
+		--player depends on inventory, so this function is not created yet!
+		Player_API.set_textures(player, {qts.humanoid_texture(player, "player_base.png")}) --hardcoded base image
+		qts.recalculate_player_armor(player)
+		inventory.refresh_inv(player,1)
+	end
+end)

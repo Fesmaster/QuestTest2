@@ -366,3 +366,74 @@ minetest.register_tool("dtools:paintbrush", {
 		end
 	end,
 })
+
+
+minetest.register_craftitem("dtools:equipment_item", {
+	description = "Generic Equipment item",
+	inventory_image = "dtools_detector_blue.png",
+	groups = {equipment=1},
+	stack_max=1,
+	crown_image = "dtools_horns.png",
+	on_equip = function(player, itemstack)
+		minetest.log("Fake Equipment Added")
+	end,
+	on_unequip = function(player, itemstack)
+		minetest.log("Fake Equipment Removed")
+	end,
+})
+
+--gloves=1,shield=1,cuirass=1,cloak=1,boots=1
+
+minetest.register_craftitem("dtools:basic_helmet", {
+	description = "Basic Helmet",
+	inventory_image = "dtools_helmet_item.png",
+	armor_image = "dtools_helmet.png",
+	groups = {helmet=1,},
+	stack_max=1,
+	armor_groups = {fleshy=5},
+})
+
+minetest.register_craftitem("dtools:basic_cuirass", {
+	description = "Basic Cuirass",
+	inventory_image = "dtools_cuirass_item.png",
+	armor_image = "dtools_cuirass.png",
+	groups = {cuirass=1,},
+	stack_max=1,
+	armor_groups = {fleshy=15},
+})
+
+minetest.register_craftitem("dtools:basic_gloves", {
+	description = "Basic Gloves",
+	inventory_image = "dtools_gloves_item.png",
+	armor_image = "dtools_gloves.png",
+	groups = {gloves=1,},
+	stack_max=1,
+	armor_groups = {fleshy=2},
+})
+
+minetest.register_craftitem("dtools:basic_boots", {
+	description = "Basic Boots",
+	inventory_image = "dtools_boots_item.png",
+	armor_image = "dtools_boots.png",
+	groups = {boots=1,},
+	stack_max=1,
+	armor_groups = {fleshy=2},
+})
+
+minetest.register_craftitem("dtools:basic_shield", {
+	description = "Basic Shield",
+	inventory_image = "dtools_shield_item.png",
+	armor_image = "dtools_shield.png",
+	groups = {shield=1,},
+	stack_max=1,
+	armor_groups = {fleshy=15},
+})
+
+minetest.register_craftitem("dtools:basic_cloak", {
+	description = "Basic Cloak",
+	inventory_image = "dtools_cape_item.png",
+	skin_image = "dtools_cape.png",
+	groups = {cloak=1,},
+	stack_max=1,
+	armor_groups = {fleshy=1},
+})

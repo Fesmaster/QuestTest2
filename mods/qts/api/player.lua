@@ -1,12 +1,21 @@
 --[[
 	This file manages player specific data,
 
+
+QuestTest Damge Groups:
+	fleshy = melee attacks
+	stabby = ranged attacks
+	psycic = magic attacks
+	enviromental = node damage, fall damage, drowning damage, poison, etc.
 --]]
 
 local playerDataPath = minetest.get_worldpath().."/QT2PlayerData"
 minetest.mkdir(playerDataPath)
 
 qts.player_data = {}
+
+local playerdata_profile_start, playerdata_profile_stop = qts.profile("Player Data Access", "ms")
+local damage_profile_start, damage_profile_stop = qts.profile("Player Damage", "ms")
 
 --[[
 	Set a player's special data fields   
@@ -18,6 +27,7 @@ qts.player_data = {}
 	This data is maintained between sessions. 
 ]]
 function qts.set_player_data(player, catagory, field, data)
+	playerdata_profile_start()
 	if (type(player) ~= "string") then player = player:get_player_name() end
 	
 	if (qts.player_data[player] == nil) then
@@ -33,6 +43,7 @@ function qts.set_player_data(player, catagory, field, data)
 	else
 		qts.player_data[player][catagory][field] = data
 	end
+	playerdata_profile_stop()
 end
 
 --[[
@@ -44,6 +55,7 @@ end
 	This data is maintained between sessions. 
 ]]
 function qts.get_player_data(player, catagory, field)
+	playerdata_profile_start()
 	if (type(player) ~= "string") then player = player:get_player_name() end
 	
 	if (qts.player_data[player] == nil) then
@@ -61,12 +73,13 @@ function qts.get_player_data(player, catagory, field)
 	else
 		return qts.player_data[player][catagory][field]
 	end
+	playerdata_profile_stop()
 end
 
 local IS_DAMAGE_ENABLED = minetest.settings:get_bool("enable_damage")
 
 --[[
-	actual armor calculations
+	QuestTest armor calculations function
 --]]
 local function apply_armor(damage, armor)
 	if not armor then return 0 end --nil armor value means no damage at all from that.
@@ -102,7 +115,9 @@ function qts.apply_armor_to_damage(victim, damage, customArmorField)
 	return apply_armor(damage, armor)
 end
 
-
+--[[
+	clamp a value between a min and max
+]]
 local function clamp(a, min, max)
 	return math.max(math.min(a, max),min)
 end
@@ -138,8 +153,40 @@ function qts.calculate_damage(victim, hitter, time_from_last_punch, tool_capabil
 	return dmg
 end
 
+--[[
+	This function should be overriden to return the equipment list for the player  
+	These entries should be itemstacks, and the list should be packed.
+]]
+function qts.get_player_equipment_list(player)
+	return {}
+end
+
+--[[
+	Recalculate the player armor, based off of their equipment list
+]]
 function qts.recalculate_player_armor(player)
-	player:set_armor_groups({fleshy=1})
+	local armor_groups = {fleshy=1, stabby=1, psycic=1, enviromental=1} --DEFUALT ARMOR GROUPS
+
+	
+	for index,stack in ipairs(qts.get_player_equipment_list(player)) do
+		if not stack:is_empty() then
+			local name = stack:get_name()
+			local def = minetest.registered_items[name]
+			if def and def.armor_groups then
+				for k, v in pairs(def.armor_groups) do
+					if armor_groups[k] then
+						armor_groups[k] = armor_groups[k]+v
+					else
+						armor_groups[k] = v+1 --this deals with the off-by-one error
+					end
+				end
+			end
+		end
+	end
+
+	--minetest.log("Armor Groups Recalculated: ".. dump(armor_groups))
+
+	player:set_armor_groups(armor_groups)
 end
 
 local old_register_on_puchplayer = minetest.register_on_punchplayer
@@ -148,6 +195,9 @@ local registered_puchplayers = {}
 local registered_hpchanges_mod = {}
 local registered_hpchanges_nomod = {}
 
+--[[
+	Get the player current HP
+]]
 function qts.get_player_hp(player)
 	if IS_DAMAGE_ENABLED then
 		return qts.get_player_data(player, "COMBATSYSTEM", "HP")
@@ -156,10 +206,17 @@ function qts.get_player_hp(player)
 	end
 end
 
+--[[
+	Get the player's max HP
+]]
 function qts.get_player_hp_max(player)
 	return qts.get_player_data(player, "COMBATSYSTEM", "HP_MAX")
 end
 
+--[[
+	Set the player's max HP  
+	optionally, also fill their health to this value
+]]
 function qts.set_player_hp_max(player, max, fillHealth)
 	qts.set_player_data(player, "COMBATSYSTEM", "HP_MAX", max)
 	if fillHealth then
@@ -167,6 +224,9 @@ function qts.set_player_hp_max(player, max, fillHealth)
 	end
 end
 
+--[[
+	Set the player's HP
+]]
 function qts.set_player_hp(player, hp, reason)
 	if IS_DAMAGE_ENABLED then
 		local oldhp = qts.get_player_data(player, "COMBATSYSTEM", "HP")
@@ -195,13 +255,16 @@ function qts.set_player_hp(player, hp, reason)
 end
 
 old_register_on_puchplayer(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
+	damage_profile_start()
 	if IS_DAMAGE_ENABLED then
 		qts.set_player_hp(player, qts.get_player_hp(player)-qts.calculate_damage(player, hitter, time_from_last_punch, tool_capabilities, dir), "punch")
 	end
+	damage_profile_stop()
 	return true
 end)
 
 old_register_on_player_hpchange(function(player, hp_change, reason)
+	damage_profile_start()
 	if IS_DAMAGE_ENABLED then
 		--minetest.log("Starting default HP change override. Value: " .. dump(hp_change) .. " Reason: " .. dump(reason))
 		local unsafe_reasons = {fall=true, node_damage=true,drown=true}
@@ -210,7 +273,8 @@ old_register_on_player_hpchange(function(player, hp_change, reason)
 			--these need armor applied
 			--minetest.log("unsafe")
 			if hp_change < 0 then
-				internal_hp_change = -qts.apply_armor_to_damage(player, -hp_change) --this function expects damage to be positive, but here, damage is negative. 
+				--this function expects damage to be positive, but here, damage is negative.
+				internal_hp_change = -qts.apply_armor_to_damage(player, -hp_change, "enviromental")
 			else
 				internal_hp_change = hp_change
 			end
@@ -229,6 +293,7 @@ old_register_on_player_hpchange(function(player, hp_change, reason)
 		if reason.type == "respawn" then
 			--minetest.log("RESPANW HEALTH FIX: " .. dump(hp_change))
 			qts.set_player_data(player, "COMBATSYSTEM", "HP", qts.get_player_data(player, "COMBATSYSTEM", "HP_MAX"))
+			damage_profile_stop()
 			return hp_change
 		end
 		--minetest.log("HP CHANGE post funcs: " .. dump(internal_hp_change))
@@ -250,8 +315,10 @@ old_register_on_player_hpchange(function(player, hp_change, reason)
 			func(player, internal_hp_change, reason)
 		end
 		--minetest.log("Final setting of health: " .. dump(player_hp_current) .. " with external change: " .. dump(external_hp_change))
+		damage_profile_stop()
 		return external_hp_change
 	else
+		damage_profile_stop()
 		return hp_change
 	end
 end, true)

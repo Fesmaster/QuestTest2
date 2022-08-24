@@ -246,7 +246,7 @@ local function insert_backslash(s)
 end
 
 function qts.make_humanoid_texture(base, armor_list, item, node, crown)
-	local s = "[combine:64x96:0,0=" .. base ..  "\\^[resize\\:64x32"
+	local s = "[combine:64x96:0,0=" .. insert_backslash(base) ..  "\\^[resize\\:64x32"
 	if (armor_list and #armor_list > 0) then
 		s=s..":0,32=("..armor_list[1]
 		for i = 2,#armor_list do
@@ -332,11 +332,43 @@ function qts.humanoid_texture(entity, base)
 		end
 	end
 	
+	local base_modified = base
+	
+	
+	if entity:is_player() then
+		for index, stack in ipairs(qts.get_player_equipment_list(entity)) do
+			if not stack:is_empty() then
+				local itemname = stack:get_name()
+				local itemdef = minetest.registered_items[itemname]
+				if itemdef then
+					--skin overrides
+					if itemdef.skin_image then
+						base_modified = base_modified .. "^" .. itemdef.skin_image
+					end
+
+					--armor
+					if itemdef.armor_image then
+						table.insert(armor_list, itemdef.armor_image)
+					end
+
+					--crown
+					if itemdef.crown_image then
+						if crown then
+							crown = crown .. "^" .. itemdef.crown_image
+						else
+							crown = itemdef.crown_image
+						end
+					end
+
+				end
+			end
+		end
+	end
 	--get armor
 	
 	--get crown
 	
-	return qts.make_humanoid_texture(base, armor_list, item, node, crown)
+	return qts.make_humanoid_texture(base_modified, armor_list, item, node, crown)
 end
 
 function qts.modify_value_by_level(value, level)

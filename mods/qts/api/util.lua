@@ -481,3 +481,23 @@ end
 --backcompatability
 minetest.do_item_eat = qts.do_item_eat
 minetest.item_eat = qts.item_eat
+
+
+
+--prevent all functions registered by minetest.register_allow_player_inventory_action from collobering each other.
+
+local old_register_allow_player_inventory_action = minetest.register_allow_player_inventory_action
+local registered_allowed_inventory_move_funcs = {}
+minetest.register_allow_player_inventory_action = function(func)
+    table.insert(registered_allowed_inventory_move_funcs, func)
+end
+old_register_allow_player_inventory_action(function(player, action, inventory, inventory_info)
+	local min
+	for k, v in ipairs(registered_allowed_inventory_move_funcs) do
+		local val = v(player, action, inventory, inventory_info)
+		if val and (not min or val < min) then
+			min = val
+		end
+	end
+	return min or 0
+end)

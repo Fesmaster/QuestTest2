@@ -5,11 +5,11 @@ local trash = minetest.create_detached_inventory("trash", {
 	-- This allows the creative inventory to restore the stack
 	allow_put = function(inv, listname, index, stack, player)
 		if type(player) ~= "string" then player = player:get_player_name() end
-		if qts.is_player_creative(player) then
+		--if qts.is_player_creative(player) then
 			return stack:get_count()
-		else
-			return 0
-		end
+		--else
+			--return 0
+		--end
 	end,
 	on_put = function(inv, listname)
 		inv:set_list(listname, {})

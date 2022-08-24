@@ -70,9 +70,12 @@ minetest.register_on_mods_loaded(function()
 	--minetest.register_alias("mapgen_singlenode", "air")
 end)
 
+local profile_start, profile_stop = qts.profile("WORLDGEN", "ms")
+
 ---[[
 minetest.register_on_generated(function(minp, maxp, blockseed)
 	--minetest.log("WORLDGEN 1")
+	profile_start()
 	local columnID = 1
 	local heightmap = minetest.get_mapgen_object("heightmap")
 	local heatmap = minetest.get_mapgen_object("heatmap")
@@ -416,7 +419,7 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 	VM:calc_lighting()
 	VM:write_to_map()
 	
-	
+	profile_stop()
 end)
 --]]
 

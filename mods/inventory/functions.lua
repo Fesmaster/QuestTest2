@@ -1,18 +1,31 @@
 
+
 local esc = minetest.formspec_escape
 
-local P = function(x,y) return qts.gui.gui_makepos(x,y):get() end
-local S = function(x,y) return qts.gui.gui_makesize(x,y):get() end
+local function P(x,y) return qts.gui.gui_makepos(x,y):get() end
+local function S(x,y) return qts.gui.gui_makesize(x,y):get() end
+
+
+inventory.special_equipment_slots = {
+	{group="helmet",  template="inv_helmet.png",  pos=P(2.5,0)},
+	{group="gloves",  template="inv_gloves.png",  pos=P(  2,1)},
+	{group="shield",  template="inv_shield.png",  pos=P(  3,1)},
+	{group="cuirass", template="inv_cuirass.png", pos=P(  2,2)},
+	{group="cloak",   template="inv_cloak.png",   pos=P(  3,2)},
+	{group="boots",   template="inv_boots.png",   pos=P(2.5,3)},
+}
+inventory.equipment_slots_general_count = 12
+
 
 --default inventory form getter functions
-inventory.get_player_main = function(pos, showTrash)
+function inventory.get_player_main(pos, showTrash)
 	--pos = inventory.convert_pos(pos)
 	--local x, y = pos.x, pos.y
 	if showTrash == nil then showTrash = true end
 	if not pos then pos = qts.gui.gui_makepos(0, 5.1) end
 	local str =  "container["..pos:get().."]" --.. 
 		--"background9[0,0;"..S(9.5,3.5)..";gui_buttonareabg.png;false;16]"
-	for i = 0,7 do
+	for i = 0,10 do
 		str = str .. "image["..P(i,0)..";1,1;gui_hb_bg.png]"
 	end
 	str = str .."list[current_player;main;"..P(0,0)..";10,1;]"..
@@ -26,7 +39,60 @@ inventory.get_player_main = function(pos, showTrash)
 	return str
 end
 
-inventory.get_button_grid = function(playername, current_page, prev_search, cheat_mode, pos)
+function inventory.get_player_equipment(playername, pos)
+	if not pos then pos = qts.gui.gui_makepos(0,0) end
+	local str = "container["..pos:get().."]"
+		for k, t in ipairs(inventory.special_equipment_slots) do
+			str = str .. 
+			"image["..t.pos..";1,1;".. t.template .. "]" .. 
+			"list[current_player;equipment;"..t.pos..";1,1;"..tostring(k-1).."]"
+		end
+		str = str .. "list[current_player;equipment;" .. P(4.5,0)..";3,4;"..
+			#inventory.special_equipment_slots.."]"
+
+
+		if playername then
+			--minetest.log("Equipment Inventory player name:" .. dump(playername))
+			local player = minetest.get_player_by_name(playername)
+			local armor_groups = player:get_armor_groups()
+			local hp = qts.get_player_hp(player)
+			local hpmax = qts.get_player_hp_max(player)
+			--display the player model (currently breaks after inv. change in any way?)
+			str = str .. "background9["..P(0,0)..";2,5;gui_buttonareabg.png;false;16]".. 
+				"container["..P(0,0).."]"..
+				"model[0,0;2,4;player_display;character.x;"..esc(qts.humanoid_texture(player, "player_base.png"))..";0,180;false;true;0,79;30]" ..
+				"container_end[]"..
+				"image["..P(0,4)..";1,1;inv_health_icon.png]" ..
+				"tooltip["..P(0,4)..";1,1;Health/Max]"..
+				"hypertext["..P(0.8,4)..";3,1;health_label;<global valign=middle halign=left><bigger><b>" .. tostring(hp) .. "/" .. tostring(hpmax) .."</b></bigger>]"
+			
+			if armor_groups.fleshy then
+				str = str .. "image["..P(3,4)..";1,1;inv_fleshy_icon.png]" ..
+					"tooltip["..P(3,4)..";1,1;Melee (fleshy) Armor]"..
+					"hypertext["..P(3.8,4)..";2,1;health_label;<global valign=middle halign=left><bigger><b>" .. tostring(armor_groups.fleshy-1) .."</b></bigger>]"
+			end
+			if armor_groups.stabby then
+				str = str .. "image["..P(5,4)..";1,1;inv_stabby_icon.png]" ..
+					"tooltip["..P(5,4)..";1,1;Projectile (stabby) Armor]"..
+					"hypertext["..P(5.8,4)..";2,1;health_label;<global valign=middle halign=left><bigger><b>" .. tostring(armor_groups.stabby-1) .."</b></bigger>]"
+			end
+			if armor_groups.psycic then
+				str = str .. "image["..P(7,4)..";1,1;inv_psycic_icon.png]" ..
+					"tooltip["..P(7,4)..";1,1;Magic (psycic) Armor]"..
+					"hypertext["..P(7.8,4)..";2,1;health_label;<global valign=middle halign=left><bigger><b>" .. tostring(armor_groups.psycic-1) .."</b></bigger>]"
+			end
+			if armor_groups.enviromental then
+				str = str .. "image["..P(9,4)..";1,1;inv_enviromental_icon.png]" ..
+					"tooltip["..P(9,4)..";1,1;Enviromental Armor]"..
+					"hypertext["..P(9.8,4)..";2,1;health_label;<global valign=middle halign=left><bigger><b>" .. tostring(armor_groups.enviromental-1) .."</b></bigger>]"
+			end
+		end
+		str = str .."container_end[]"
+		
+	return str
+end
+
+function inventory.get_button_grid(playername, current_page, prev_search, cheat_mode, pos)
 	if not current_page then current_page = 1 end
 	if not prev_search then prev_search = "" end
 	if not pos then pos = qts.gui.gui_makepos(11.5, 0) end
@@ -74,7 +140,7 @@ inventory.get_button_grid = function(playername, current_page, prev_search, chea
 	return str
 end
 
-inventory.get_util_bar = function(pos)
+function inventory.get_util_bar(pos)
 	if not pos then pos = qts.gui.gui_makepos(0, 9.5) end
 	local str = "container["..pos:get().."]"
 	
@@ -93,7 +159,7 @@ minetest.register_craftitem("inventory:groupItem", {
 	groups = {not_in_creative_inventory = 1,},
 })
 
-inventory.get_craft_area = function(data, name, pos)
+function inventory.get_craft_area(data, name, pos)
 	if not pos then pos = qts.gui.gui_makepos(0, 0) end
 	local cs = ""
 	local needs_craft_imgs = true
@@ -222,13 +288,13 @@ inventory.get_craft_area = function(data, name, pos)
 		"container_end[]"
 end
 
-inventory.get_default_size = function()
+function inventory.get_default_size()
 	--return "size[18,10.5]"
 	return "size["..qts.gui.gui_makesize(18, 10.5):get().."]real_coordinates[true]"
 end
 
 --registration stuff
-inventory.register_util_btn = function(label, on_click)
+function inventory.register_util_btn(label, on_click)
 	if label and on_click then
 		inventory.utils[#inventory.utils + 1] = {
 			label = label,
@@ -237,7 +303,7 @@ inventory.register_util_btn = function(label, on_click)
 	end
 end
 
-inventory.register_exemplar_item =function(group, item)
+function inventory.register_exemplar_item(group, item)
 	if (minetest.registered_items[item]) then
 		inventory.exemplar[group] = item
 		minetest.log("verbose", "Inventory: exemplar item for " .. group .. " added: " .. item)
@@ -247,7 +313,7 @@ inventory.register_exemplar_item =function(group, item)
 end
 
 --item list stuff
-inventory.init_item_list = function()
+function inventory.init_item_list()
 	if #inventory.list_items ~= 0 then return end --in case this is called twice
 	local count = 0
 	for name, def in pairs(minetest.registered_items) do
@@ -273,7 +339,7 @@ local function match(s, filter)
 	return nil
 end
 
-inventory.gen_item_list_for_player = function(playername, filter)
+function inventory.gen_item_list_for_player(playername, filter)
 	if not filter then filter = "" end
 	if inventory.itemlist_player[playername] and #inventory.itemlist_player[playername] ~= 0 then 
 		for id, name in ipairs(inventory.itemlist_player[playername]) do
@@ -300,11 +366,66 @@ inventory.gen_item_list_for_player = function(playername, filter)
 	inventory.listdata_player[playername].pages = math.ceil(#inventory.itemlist_player[playername] / (8*6))
 end
 
+function inventory.init_inventory(player)
+
+	local formspec = [[
+		bgcolor[#080808BB;true]
+		listcolors[#00000069;#5A5A5A;#141318;#30434C;#FFF] 
+		style_type[button,button_exit,image_button,item_image_button;
+			bgimg=gui_button.png;
+			bgimg_hovered=gui_button_hovered.png;
+			bgimg_pressed=gui_button_clicked.png;
+			bgimg_middle=8;
+			border=false]
+	]]
+
+	local name = player:get_player_name()
+	local info = minetest.get_player_information(name)
+	if info.formspec_version > 1 then
+		formspec = formspec .. "background9[5,5;1,1;gui_formbg.png;true;10]"
+	else
+		formspec = formspec .. "background[5,5;1,1;gui_formbg.png;true]"
+	end
+	player:set_formspec_prepend(formspec)
+
+	--set the inventory properties
+	local inv = player:get_inventory()
+	inv:set_size("main", 40) -- 10*4
+	inv:set_size("equipment", 40) --10*4
+
+	inventory.gen_item_list_for_player(name)
+	inventory.refresh_inv(player)
+end
+
 --refreshing the player inv
-inventory.refresh_inv = function(player, tab)
+function inventory.refresh_inv(player, tab)
 	if type(player) == "string" then
 		player = minetest.get_player_by_name(player)
 	end
 	if not tab then tab = 1 end
-	player:set_inventory_formspec(qts.gui.show_gui(player:get_pos(), player, "inventory", tab, false)[2]) 
+	local formspec_code = qts.gui.show_gui(player:get_pos(), player, "inventory", tab, false)[2]
+	player:set_inventory_formspec(formspec_code) 
+end
+
+function inventory.check_equiped_item_add(slot, itemstack)
+	local item_name = itemstack:get_name()
+	if slot > #inventory.special_equipment_slots then
+		return  minetest.get_item_group(item_name,"equipment") ~= 0
+	else
+		return minetest.get_item_group(item_name,inventory.special_equipment_slots[slot].group)  ~= 0
+	end
+end
+
+
+--FUNCTION OVERRIDE
+function qts.get_player_equipment_list(player)
+	local retval = {}
+
+	local inv = player:get_inventory()
+	for index = 1,#inventory.special_equipment_slots+inventory.equipment_slots_general_count do
+		local stack = inv:get_stack("equipment", index)
+		table.insert(retval, stack)
+	end
+
+	return retval
 end

@@ -5,6 +5,13 @@
 local hud_ids = {}
 local HUDBAR_FULL_VALUE = 72
 
+function inventory.init_hud(player)
+    --hud bar of items
+    player:hud_set_hotbar_image("gui_hotbar.png")
+    player:hud_set_hotbar_selected_image("gui_hotbar_selected.png")
+    player:hud_set_hotbar_itemcount(10) --10 slot HUD
+    inventory.refresh_hud(player)
+end
 
 function inventory.refresh_hud(player)
     local pname =player:get_player_name() 
@@ -13,6 +20,8 @@ function inventory.refresh_hud(player)
     end
     local hud_table = hud_ids[pname]
     
+    
+    --healthbar
     if hud_table.healthbar then
         player:hud_change(hud_table.healthbar, "number", qts.get_player_hp(player)/qts.get_player_hp_max(player) * HUDBAR_FULL_VALUE)    
     else
