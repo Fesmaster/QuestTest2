@@ -1,4 +1,4 @@
-local TREE_TIME = 90
+local TREE_TIME = 390
 local TREE_VAR = 30
 
 qts.register_growable_node("default:oak_sapling", {
