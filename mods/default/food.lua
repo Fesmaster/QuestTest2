@@ -756,3 +756,8 @@ qts.register_craft({
 	near = {"group:workbench"},
 })
 
+qts.register_craft({
+	ingredients = { "default:palm_log"},
+	results = {"default:wax_palm 4"},
+	near = {"group:ttable", "group:dishes", "group:furnace"},
+})

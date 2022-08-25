@@ -1526,4 +1526,10 @@ minetest.register_node("default:food_table", {
 	},
 	sounds = qtcore.node_sound_wood(),
 })
+
+qts.register_craft({
+	ingredients = {"default:dishes_clay", "group:wood 3"},
+	results = {"default:food_table"},
+	near = {"group:workbench"},
+})
 ]]--

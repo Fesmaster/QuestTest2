@@ -193,19 +193,6 @@ qts.register_craft({
 	ingredients = {"default:workbench", "default:iron_bar 4"},
 	results = {"default:workbench_heavy",},
 })
---food and dishes crafts
-
-qts.register_craft({
-	ingredients = { "default:palm_log"},
-	results = {"default:wax_palm 4"},
-	near = {"group:ttable", "group:dishes", "group:furnace"},
-})
-
---[[qts.register_craft({
-	ingredients = {"default:dishes_clay", "group:wood 3"},
-	results = {"default:food_table"},
-	near = {"group:workbench"},
-})]]--
 
 qts.register_craft({
 	ingredients = {"default:dishes_clay 2"},
@@ -628,6 +615,11 @@ minetest.register_craft({
 	recipe = "group:leaves",
 })
 
+minetest.register_craft({
+	type = "cooking",
+	output = "default:potash",
+	recipe = "group:underbrush",
+})
 --fuel
 minetest.register_craft({
 	type = "fuel",

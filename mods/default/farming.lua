@@ -127,6 +127,30 @@ register_farm_plant("milfoil", {
 	grow_timer_random = 30,
 })
 
+register_farm_plant("kingscrown", {
+	description = "Kingscrown",
+	seed_image = "default_seeds_kingscrown_item.png",
+	seed_tiles = {"default_seeds_kingscrown_top.png", "default_oak_wood.png", "default_seeds_kingscrown_side.png"},
+	item_image = "default_herb_kingscrown.png",
+	plant_levels = 7,
+	plant_tiles_list = {"default_herb_0.png", "default_herb_kingscrown_1.png", "default_herb_kingscrown_2.png", "default_herb_kingscrown_3.png", "default_herb_kingscrown_4.png",
+	"default_herb_kingscrown_5.png", "default_herb_kingscrown_6.png"},
+	grow_timer = 190,
+	grow_timer_random = 30,
+})
+
+register_farm_plant("sapweed", {
+	description = "Sapweed",
+	seed_image = "default_seeds_sapweed_item.png",
+	seed_tiles = {"default_seeds_sapweed_top.png", "default_oak_wood.png", "default_seeds_sapweed_side.png"},
+	item_image = "default_herb_sapweed.png",
+	plant_levels = 7,
+	plant_tiles_list = {"default_herb_0.png", "default_herb_sapweed_1.png", "default_herb_sapweed_2.png", "default_herb_sapweed_3.png", "default_herb_sapweed_4.png",
+	"default_herb_sapweed_5.png", "default_herb_sapweed_6.png"},
+	grow_timer = 190,
+	grow_timer_random = 30,
+})
+
 register_farm_plant("goard", {
 	description = "Goard",
 	seed_image = "default_seeds_goard_item.png",
