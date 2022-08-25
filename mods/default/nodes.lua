@@ -437,6 +437,22 @@ minetest.register_node("default:lime", {
 	node_box = qtcore.nb_dustpile(),
 })
 
+minetest.register_node("default:potash", {
+	description = "Potash",
+	tiles = {
+		"default_potash_top.png",
+		"default_oak_wood.png",
+		"default_potash_side.png"
+	},
+	use_texture_alpha="clip",
+	drawtype = "nodebox",
+	inventory_image = "default_potash.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
+	node_box = qtcore.nb_dustpile(),
+})
+
 --BEGIN dyes
 
 minetest.register_node("default:dye_black", {
