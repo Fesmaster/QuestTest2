@@ -228,17 +228,17 @@ qts.register_ingot("default:coconut", {
 })
 
 
---consumables
+--end (regular) consumables
 
 --Things in dishes
 
 --[[Textures needed for dishes
-item images
-dishes, cup, bowl
+item images (dishes, cup, bowl)
 for nodeboxes
-single pixle color
+-single pixle color
+
 overlays needed for new things in dishes, 
-need item and top overlays (and sides for poweder bowl)]]--
+need item and nodebox top overlays (and sides for poweder bowl)]]--
 local dish_types = {"clay", "stoneware", "gold", "silver"}
 local dish_types_desc = {"Clay", "Stoneware", "Gold", "Silver"}
 --main dish making for loop

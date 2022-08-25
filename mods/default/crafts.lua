@@ -5,6 +5,11 @@ for i, n in ipairs(names) do
 	--planks
 	qts.register_craft({
 		ingredients = {"default:"..n.."_log 1"},
+		results = {"default:"..n.."_wood_planks 4", "default:bark_"..n.." 4"},
+	})
+	
+	qts.register_craft({
+		ingredients = {"default:stripped_"..n.."_log 1"},
 		results = {"default:"..n.."_wood_planks 4"},
 	})
 	--fences
@@ -617,6 +622,12 @@ minetest.register_craft({
 	recipe = "default:clay_lump",
 })
 
+minetest.register_craft({
+	type = "cooking",
+	output = "default:potash",
+	recipe = "group:leaves",
+})
+
 --fuel
 minetest.register_craft({
 	type = "fuel",
@@ -874,3 +885,15 @@ qts.register_craft({
 	near = {"group:ttable", "default:alchemy_equipment_basic"}
 })
 
+--bark crafting (temp)
+local woodtypes={"oak", "apple", "aspen", "coffee", "mahogany", "rosewood", "pine", "lanternfruit", "rowan"}
+local woodnames={"Oak", "Apple", "Aspen", "Coffee", "Mahogany", "Rosewood", "Pine", "Lanternfruit", "Rowan"}
+
+for i, wood in ipairs(woodtypes) do
+	qts.register_craft({
+		ingredients = {"default:"..wood.."_log"},
+		results = {"default:stripped_"..wood.."_log", "default:bark_"..wood.. " 4"},
+		near = {"group:workbench"},
+--		held = {"group:knife"},
+	})
+end

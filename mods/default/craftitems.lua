@@ -67,3 +67,16 @@ minetest.register_craftitem("default:mycelium", {
 	description = "Mycelium",
 	inventory_image = "default_mycelium.png",
 })
+
+--barks
+local woodtypes={"oak", "apple", "aspen", "coffee", "mahogany", "rosewood", "pine", "lanternfruit", "rowan"}
+local woodnames={"Oak", "Apple", "Aspen", "Coffee", "Mahogany", "Rosewood", "Pine", "Lanternfruit", "Rowan"}
+
+for i, wood in ipairs(woodtypes) do
+		minetest.register_craftitem("default:bark_"..wood, {
+			description = woodnames[i].." Bark",
+			inventory_image = "default_bark_"..wood..".png",
+			groups = {bark = 1,},
+			sounds = qtcore.node_sound_wood(),
+		})
+end
