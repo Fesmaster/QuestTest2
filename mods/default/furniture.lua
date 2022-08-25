@@ -290,16 +290,9 @@ for i, wood in ipairs(woodtypes) do
 			sounds = qtcore.node_sound_wood(),
 		})
 		
-		if k == "copper" then
+		if metal == "copper" or metal == "bronze" then
 			qts.register_craft({
 				ingredients = {"default:"..wood.."_wood_planks", "default:"..metal.."_bar 2"},
-				results = {"default:door_"..wood.."_"..metal},
-				near = {"group:workbench"},
-				})
-				
-		elseif k == "bronze" then
-			qts.register_craft({
-				ingredients = {"default:"..wood.."_wood_planks", "default:"..k.."_bar 2"},
 				results = {"default:door_"..wood.."_"..metal},
 				near = {"group:workbench"},
 				})
@@ -329,16 +322,9 @@ for i, wood in ipairs(woodtypes) do
 			sounds = qtcore.node_sound_wood(),
 		})
 		
-		if k == "copper" then
+		if metal == "copper" or metal == "bronze" then
 			qts.register_craft({
 				ingredients = {"default:"..wood.."_slats", "default:"..metal.."_bar 2"},
-				results = {"default:door_"..wood.."_"..metal},
-				near = {"group:workbench"},
-				})
-				
-		elseif k == "bronze" then
-			qts.register_craft({
-				ingredients = {"default:"..wood.."_slats", "default:"..k.."_bar 2"},
 				results = {"default:door_"..wood.."_"..metal},
 				near = {"group:workbench"},
 				})
@@ -370,16 +356,9 @@ for i, wood in ipairs(woodtypes) do
 			sounds = qtcore.node_sound_wood(),
 		})
 		
-		if k == "copper" then
+		if metal == "copper" or metal == "bronze" then
 			qts.register_craft({
 				ingredients = {"default:"..wood.."_wood_planks", "default:"..metal.."_bar"},
-				results = {"default:trapdoor_"..wood.."_"..metal},
-				near = {"group:workbench"},
-				})
-				
-		elseif k == "bronze" then
-			qts.register_craft({
-				ingredients = {"default:"..wood.."_wood_planks", "default:"..k.."_bar"},
 				results = {"default:trapdoor_"..wood.."_"..metal},
 				near = {"group:workbench"},
 				})
@@ -409,16 +388,9 @@ for i, wood in ipairs(woodtypes) do
 			sounds = qtcore.node_sound_wood(),
 		})
 		
-		if k == "copper" then
+		if metal == "copper" or metal == "bronze" then
 			qts.register_craft({
 				ingredients = {"default:"..wood.."_slats", "default:"..metal.."_bar"},
-				results = {"default:trapdoor_"..wood.."_"..metal},
-				near = {"group:workbench"},
-				})
-				
-		elseif k == "bronze" then
-			qts.register_craft({
-				ingredients = {"default:"..wood.."_slats", "default:"..k.."_bar"},
 				results = {"default:trapdoor_"..wood.."_"..metal},
 				near = {"group:workbench"},
 				})
