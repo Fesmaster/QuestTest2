@@ -258,7 +258,7 @@ minetest.register_allow_player_inventory_action(function(player, action, inv, in
 	--handle equipment actions
 	if handle_equipment then
 		if 	inventory.check_equiped_item_add(handle_equipment.index, handle_equipment.stack) and 
-			handle_equipment.index <= inventory.equipment_slots_general_count+#inventory.special_equipment_slots 
+			handle_equipment.index <= inventory.equipment_slots_general_count + #inventory.special_equipment_slots + (qts.get_player_bonus_equipment_slots(player) or 0)
 		then
 			returnval =  handle_equipment.stack:get_count()
 		else
@@ -273,7 +273,7 @@ minetest.register_on_player_inventory_action(function(player, action, inv, inven
 	local refresh_data = nil
 	if action=="move" then
 		--no need to refresh if its an internal move (armor should never be equipable, or this will break)
-		if inventory_info.to_index ~= inventory_info.from_list then
+		if inventory_info.to_list ~= inventory_info.from_list then
 			if inventory_info.to_list == "equipment" then
 				refresh_data={
 					stack = inv:get_stack(inventory_info.to_list, inventory_info.to_index),

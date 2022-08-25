@@ -92,24 +92,32 @@ local function update_node(pos, node)
     end
 end
 
+local ustart, ustop = qts.profile("qts node update callbacks", "ms")
+
 function qts.update_node(pos)
+	ustart()
     local set = get_nearby_set({}, pos)
     for s, dat in pairs(set) do
         update_node(dat.pos, dat.node)
     end
+	ustop()
 end
 
 function qts.update_node_list(pos_list)
-    local set = {}
+    ustart()
+	local set = {}
     for k, pos in ipairs(pos_list) do
         get_nearby_set(set, pos)
     end
     for s, dat in pairs(set) do
         update_node(dat.pos, dat.node)
     end
+	ustop()
 end
 
+local start, stop = qts.profile("qts nod callback globalstep", "ms")
 minetest.register_globalstep(function(dtime)
+	start()
 	--damage tick update
 	--this is important, because at least one tick will have the timer >= 1 for the entire duration.
 	if node_damage_timer >= 1 then
@@ -384,8 +392,10 @@ minetest.register_globalstep(function(dtime)
 		qts.set_player_data(name, "INTERNAL", "prevpos", player:get_pos())
 	end
 	
-	
+	stop()
 end)
+
+
 
 minetest.register_on_placenode(function(pos, newnode, placer, oldnode, itemstack, pointed_thing)
     qts.update_node(pointed_thing.under)

@@ -12,10 +12,11 @@ minetest.settings:set_bool("always_fly_fast", true)
 
 Player_API.SPRINT_MODE = 1
 Player_API.SPRINT_INCREASE = 0.01
-Player_API.SPRINT_MULT = 2.5
-Player_API.SNEAK_MULT = 0.75
 Player_API.DOUBLECLICK_TIME = 0.50
 Player_API.SPRINT_MIN_SPEED = 0.75
+--these two were moved to player modifier system
+--Player_API.SPRINT_MULT = 2.5
+--Player_API.SNEAK_MULT = 0.75
 
 --"player_armor.png"
 Player_API.register_model("character.x", {

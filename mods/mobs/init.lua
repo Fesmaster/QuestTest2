@@ -41,14 +41,17 @@ qts.ai.register_behavior("basic_humanoid_enemy", {
 		if (#objs > 1) then
 			for i, obj in ipairs(objs) do
 				--pcall(function()
-				--check for nearby players
-				if obj:is_player() and not self.target_creature then
+				--find nearest player
+				if 
+				not self.target_creature and --not detecting anyting else
+					obj:is_player() and --is a player
+					qts.ai.does_detect_player(self.object, obj, self.view_radius/2, self.view_radius) --can actually see that player 
+				then					
 					local dist = vector.distancesq(pos, obj:get_pos())
 					if (dist < mindist) then
-						minetest.log("here")
 						mindist = dist
 						self.target_creature = obj
-						--minetest.log("target found")
+						minetest.log("target player found")
 					end
 				end
 

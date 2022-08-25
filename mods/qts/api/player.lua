@@ -14,6 +14,7 @@ minetest.mkdir(playerDataPath)
 
 qts.player_data = {}
 
+
 local playerdata_profile_start, playerdata_profile_stop = qts.profile("Player Data Access", "ms")
 local damage_profile_start, damage_profile_stop = qts.profile("Player Damage", "ms")
 
@@ -22,7 +23,7 @@ local damage_profile_start, damage_profile_stop = qts.profile("Player Damage", "
 	player - the player. can be a player name  
 	category - mod-specific or use specific category. To prevent name clashing. Should at least contain the mod name  
 	field - the specific field  
-	data - the data to set 
+	data - the data to set (if ommited, then field is the data - useful when setting a table, as its keys can be fields for future gets)
 
 	This data is maintained between sessions. 
 ]]
@@ -60,20 +61,23 @@ function qts.get_player_data(player, catagory, field)
 	
 	if (qts.player_data[player] == nil) then
 		qts.player_data[player] = {}
+		playerdata_profile_stop()
 		return nil
 	end
 	if (qts.player_data[player][catagory] == nil) then
 		if (field ~= nil) then
 			qts.player_data[player][catagory] = {}
 		end
+		playerdata_profile_stop()
 		return nil
 	end
 	if (field == nil) then
+		playerdata_profile_stop()
 		return qts.player_data[player][catagory]
 	else
+		playerdata_profile_stop()
 		return qts.player_data[player][catagory][field]
 	end
-	playerdata_profile_stop()
 end
 
 local IS_DAMAGE_ENABLED = minetest.settings:get_bool("enable_damage")
@@ -95,7 +99,7 @@ end
 --[[
 	Apply armor to a damage value
 	player or entity agnostic
---]]
+]]
 function qts.apply_armor_to_damage(victim, damage, customArmorField)
 	local armor = victim:get_armor_groups()
 	--default to fleshy, if available
@@ -122,10 +126,35 @@ local function clamp(a, min, max)
 	return math.max(math.min(a, max),min)
 end
 
+local registered_playerpunches = {}
+--[[
+	Register a function to be run when the player attacks an entity or another player.
+	If there is a return value, then it is taken as the new tool_capabilities
+	This is applied before armor calculations, including checking if the victim is immortal
+	function(victim, hitter, time_from_last_punch, tool_capabilities, dir)
+]]
+function qts.register_on_player_attack(func)
+	registered_playerpunches[#registered_playerpunches+1] = func 
+end
+
+
+
+
 --[[
 	calculate the damage that should be delivered for a specific hit. victim and hitter are any objref, not just players or luaentities
 ]]
 function qts.calculate_damage(victim, hitter, time_from_last_punch, tool_capabilities, dir)
+	
+	if hitter:is_player() then
+		for k, func in ipairs(registered_playerpunches) do
+			local tbl = func(victim, hitter, time_from_last_punch, tool_capabilities, dir)
+			if tbl and type(tbl) == "table" then
+				tool_capabilities = tbl
+			end
+		end
+	end
+
+
 	local armor_groups = victim:get_armor_groups()
 	--deal with immortal creatures
 	--deal with tools that cannot cause damage
@@ -136,18 +165,11 @@ function qts.calculate_damage(victim, hitter, time_from_last_punch, tool_capabil
 	local dmg = 0
 	for cap, val in pairs(tool_capabilities.damage_groups) do
 		local clamping = clamp((time_from_last_punch or 1)/(tool_capabilities.full_punch_interval or 1), 0.0, 1.0)
-		local prearmor = val * clamping
-		local armor = armor_groups[cap]-1
-		local postarmor = apply_armor(prearmor, armor)
-		dmg = dmg + postarmor
-		--minetest.log("Damgae debug: \n\tgroup: " .. dump(cap)..
-		--	"\n\tval: "..dump(val)..
-		--	"\n\tclamping: "..dump(clamping) .. 
-		--	"\n\tprearmor: "..dump(prearmor)..
-		--	"\n\tarmor: "..dump(armor)..
-		--	"\n\tpostarmor: " ..dump(postarmor)
-		--)
-
+		local bonus = 0
+		if hitter:is_player() then
+			bonus = qts.get_player_data(hitter, "MODIFIERS", "ADD_damgae_bonus_" .. cap) or 0
+		end
+		dmg = dmg + apply_armor((val * clamping) + bonus, armor_groups[cap]-1)
 	end
 	--minetest.log("Calculating damage using new function: " .. dump(dmg))
 	return dmg
@@ -224,6 +246,35 @@ function qts.set_player_hp_max(player, max, fillHealth)
 	end
 end
 
+
+
+
+local function clamp_player_hp(player,hp)
+	return math.min(hp, qts.get_player_data(player, "COMBATSYSTEM", "HP_MAX") + (qts.get_player_data(player, "MODIFIERS", "ADD_health_bonus") or 0))
+end
+
+--[[
+	refresh the player HP, in case the max dropped
+]]
+function qts.refresh_player_hp(player)
+	local oldhp = qts.get_player_data(player, "COMBATSYSTEM", "HP")
+	local newhp = clamp_player_hp(player, oldhp)
+	local should_run_funcs = newhp ~= oldhp
+	qts.set_player_data(player, "COMBATSYSTEM", "HP", newhp)
+	if should_run_funcs then
+		for i, func in ipairs(registered_hpchanges_nomod) do
+			func(player, oldhp-newhp, "set_hp")
+		end
+	end
+end
+
+--[[
+	Add a value to the player hp (or remove if negative)
+]]
+function qts.add_player_hp(player, hp, reason)
+	qts.set_player_hp(player, qts.get_player_data(player, "COMBATSYSTEM", "HP")+hp, reason)
+end
+
 --[[
 	Set the player's HP
 ]]
@@ -237,7 +288,7 @@ function qts.set_player_hp(player, hp, reason)
 		end
 		
 
-		local newhp = math.min(oldhp +hpchange, qts.get_player_data(player, "COMBATSYSTEM", "HP_MAX"))
+		local newhp = clamp_player_hp(player, oldhp + hpchange)
 		--minetest.log("setting player HP to " .. dump(newhp))
 		if newhp <= 0 then
 			newhp = 0
@@ -299,7 +350,7 @@ old_register_on_player_hpchange(function(player, hp_change, reason)
 		--minetest.log("HP CHANGE post funcs: " .. dump(internal_hp_change))
 		local player_hp_current = qts.get_player_data(player, "COMBATSYSTEM", "HP")
 		--minetest.log("CURRENT: " .. dump(player_hp_current))
-		player_hp_current = math.min(player_hp_current + internal_hp_change, qts.get_player_data(player, "COMBATSYSTEM", "HP_MAX"))
+		player_hp_current = clamp_player_hp(player, player_hp_current + internal_hp_change)
 		--minetest.log("MOD: " .. dump(player_hp_current))
 		if player_hp_current <= 0 then
 			player_hp_current = 0 --this one should never be less than 0, for respawn reasons
@@ -370,6 +421,7 @@ minetest.register_on_joinplayer(function(player, last_login)
 		local player = minetest.get_player_by_name(playername)
 		if player then
 			qts.recalculate_player_armor(player)
+			qts.update_player_modifiers(player)
 			player:hud_set_flags({healthbar=false}) --make default health bar invisible
 		end
 	end, player:get_player_name())
@@ -380,22 +432,37 @@ minetest.register_on_joinplayer(function(player, last_login)
 	end
 end)
 
-minetest.register_on_leaveplayer(function(player, timed_out)
-	minetest.log("Saving custom data for ".. player:get_player_name())
-	local file = qts.create_settings_clojure(playerDataPath.."/"..player:get_player_name()..".conf")
-	file.set_str("datatable", minetest.serialize(qts.player_data[player:get_player_name()]))
+
+--clean player data that should not be saved
+local function clean_player_data(playername)
+	if qts.player_data[playername] then
+		for _, v in ipairs({"MODIFIERS"}) do	
+			qts.player_data[playername][v] = nil
+		end
+	end
+end
+
+--save player data
+local function save_player_data(playername, nullify)
+	clean_player_data(playername)
+	minetest.log("Saving custom data for ".. playername)
+	local file = qts.create_settings_clojure(playerDataPath.."/"..playername..".conf")
+	file.set_str("datatable", minetest.serialize(qts.player_data[playername]))
 	file.save()
-	qts.player_data[player:get_player_name()] = nil
+	if nullify or nullify == nil then
+		qts.player_data[playername] = nil
+	end
+end
+
+minetest.register_on_leaveplayer(function(player, timed_out)
+	local name = player:get_player_name()
+	save_player_data(name)
 end)
 
 minetest.register_on_shutdown(function()
 	--any remaining players should have their data saved
 	for playername, data in pairs(qts.player_data) do
-		minetest.log("Saving custom data for ".. playername)
-		local file = qts.create_settings_clojure(playerDataPath.."/"..playername..".conf")
-		file.set_str("datatable", minetest.serialize(data))
-		file.save()
-		--qts.player_data[playername] = nil
+		save_player_data(playername, false)
 	end
 
 	qts.world_settings.set_bool("QT_DEV_WORLD", qts.ISDEV)

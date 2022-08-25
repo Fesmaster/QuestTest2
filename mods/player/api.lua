@@ -28,7 +28,7 @@ local player_attached = Player_API.player_attached
 
 --TODO: change some values here
 function Player_API.new_player(player)
-	qts.set_player_modifier(player, "CONTROL_INTERNAL", {}) --empty list, just making a default one exist
+	qts.add_player_modifier(player, {}, "CONTROL_INTERNAL") --empty list, just making a default one exist
 	local name = player:get_player_name()
 	player_data[name] = {
 		model = nil,
@@ -156,23 +156,44 @@ function Player_API.sprint(player, on)
 	if dat.sneak and on then
 		return
 	end
-	if on and dat.sprint == false then
+	if on then
 		local mods = qts.get_player_modifier(player, "CONTROL_INTERNAL")
 		--Player_API.SPRINT_INCREASE
+		local sprint_max = qts.get_player_sprint_multipliers(player)
+		--TODO: pick which field to use
+		local playerpos = player:get_pos()
+		local node = minetest.get_node_or_nil(playerpos)
+		if node and node.name then
+			local def = minetest.registered_nodes[node.name]
+			if def then
+				if def.drawtype == "liquid" or def.drawtype == "flowingliquid" then
+					sprint_max = sprint_max.liquid
+				elseif def.climbable then
+					sprint_max = sprint_max.climbable
+				else
+					sprint_max = sprint_max.normal
+				end
+			else
+				sprint_max = sprint_max.normal
+			end
+		else
+			sprint_max = sprint_max.normal
+		end
+
 		if not mods then
-			qts.set_player_modifier(player, "CONTROL_INTERNAL", {speed = Player_API.SPRINT_MULT})
+			qts.override_player_modifer(player, "CONTROL_INTERNAL", {speed = sprint_max})
 			dat.sprint = true
 			return
 		end
-		mods.speed = mods.speed + Player_API.SPRINT_INCREASE
-		if mods.speed > dat.sprint_speed then
-			qts.set_player_modifier(player, "CONTROL_INTERNAL", {speed = Player_API.SPRINT_MULT})
+		mods.speed = (mods.speed or 1) + Player_API.SPRINT_INCREASE
+		if mods.speed > sprint_max then
+			qts.override_player_modifer(player, "CONTROL_INTERNAL", {speed = sprint_max})
 			dat.sprint = true
 		else
-			qts.set_player_modifier(player, "CONTROL_INTERNAL", {speed = mods.speed})
+			qts.override_player_modifer(player, "CONTROL_INTERNAL", {speed = mods.speed})
 		end
-	elseif on == false then
-		qts.set_player_modifier(player, "CONTROL_INTERNAL", {speed = 1})
+	elseif on == false and dat.sprint == true then
+		qts.override_player_modifer(player, "CONTROL_INTERNAL", {speed = 1})
 		dat.sprint = false
 
 	end
@@ -185,12 +206,12 @@ function Player_API.sneak(player, on)
 	end
 	if on and dat.sneak == false then
 		player:set_eye_offset({x=0,y=-1.5,z=0}, {x=0,y=0,z=0})
-		qts.set_player_modifier(player, "CONTROL_INTERNAL", {speed = Player_API.SNEAK_MULT})
+		qts.override_player_modifer(player, "CONTROL_INTERNAL", {speed = qts.get_player_sneak_multiplier(player) })
 		player:set_properties({collisionbox = {-0.3, 0.0, -0.3, 0.3, 1.3, 0.3},})
 		dat.sneak = true
 	elseif on == false and dat.sneak then
 		player:set_eye_offset({x=0,y=0,z=0}, {x=0,y=0,z=0})
-		qts.set_player_modifier(player, "CONTROL_INTERNAL", {speed = 1})
+		qts.override_player_modifer(player, "CONTROL_INTERNAL", {speed = 1})
 		player:set_properties({collisionbox = {-0.3, 0.0, -0.3, 0.3, 1.7, 0.3},})
 		dat.sneak = false
 	end
@@ -237,8 +258,9 @@ local player_data = Player_API.player_data
 local player_set_animation = Player_API.set_animation
 local player_attached = Player_API.player_attached
 ]]
-
+local start, stop = qts.profile("player mod globalstep", "ms")
 minetest.register_globalstep(function(dtime)
+	start()
 	for _, player in ipairs(minetest.get_connected_players()) do
 		local name = player:get_player_name()
 		local ctrl = player:get_player_control() --current boolean control state
@@ -362,6 +384,7 @@ minetest.register_globalstep(function(dtime)
 		end
 
 	end
+	stop()
 end)
 
 

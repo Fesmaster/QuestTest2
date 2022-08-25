@@ -376,9 +376,27 @@ minetest.register_craftitem("dtools:equipment_item", {
 	crown_image = "dtools_horns.png",
 	on_equip = function(player, itemstack)
 		minetest.log("Fake Equipment Added")
+		local handle = qts.add_player_modifier(player, {
+			--sprint_multiplier_liquid = 10,
+			sneak_multiplier = 1.5,
+			ADD_health_bonus = 5,
+			ADD_damgae_bonus_fleshy = 10,
+			detection_range = 0.5,
+			detection_range_sneak = 0.1,
+		})
+		qts.set_player_hp(player, qts.get_player_hp(player) + 5)
+		local meta = itemstack:get_meta()
+		meta:set_string("handle", handle)
+		return itemstack
 	end,
 	on_unequip = function(player, itemstack)
 		minetest.log("Fake Equipment Removed")
+		local meta = itemstack:get_meta()
+		local handle = meta:get_string("handle")
+		meta:set_string("handle", "")
+		qts.remove_player_modifier(player, handle)
+		qts.refresh_player_hp(player)
+		return itemstack
 	end,
 })
 
@@ -437,3 +455,9 @@ minetest.register_craftitem("dtools:basic_cloak", {
 	stack_max=1,
 	armor_groups = {fleshy=1},
 })
+
+--[[
+qts.register_on_player_attack(function(victim, hitter, time_from_last_punch, tool_capabilities, dir)
+	minetest.log("player punched something!")
+end)
+]]

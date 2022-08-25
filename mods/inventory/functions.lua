@@ -47,8 +47,16 @@ function inventory.get_player_equipment(playername, pos)
 			"image["..t.pos..";1,1;".. t.template .. "]" .. 
 			"list[current_player;equipment;"..t.pos..";1,1;"..tostring(k-1).."]"
 		end
-		str = str .. "list[current_player;equipment;" .. P(4.5,0)..";3,4;"..
-			#inventory.special_equipment_slots.."]"
+		local totalSlots = inventory.equipment_slots_general_count + (qts.get_player_bonus_equipment_slots(playername) or 0)
+		local width = math.floor(totalSlots / 4)
+		local extras = totalSlots % 4
+
+		for k = 1,width do
+			str = str .. "list[current_player;equipment;" .. P(4.5+(k-1),0)..";1,4;"..
+			tostring(#inventory.special_equipment_slots + ((k-1)*4)).."]"
+		end 
+		str = str .."list[current_player;equipment;" .. P(4.5+width,0)..";1,"..tostring(extras)..";"..
+			tostring(#inventory.special_equipment_slots+(width*4)).."]"
 
 
 		if playername then
@@ -390,9 +398,25 @@ function inventory.init_inventory(player)
 
 	--set the inventory properties
 	local inv = player:get_inventory()
-	inv:set_size("main", 40) -- 10*4
-	inv:set_size("equipment", 40) --10*4
+	inv:set_size("main", 10*4)
+	inv:set_size("equipment", 6*5)
 
+	--refresh all items in equipment list
+	for index =1,6*5 do
+		local stack = inv:get_stack("equipment", index)
+		if not stack:is_empty() then
+			local itemname = stack:get_name()
+			local itemdef = minetest.registered_items[itemname]
+			if itemdef and itemdef.on_equip then
+				local replace_stack = itemdef.on_equip(player, stack)
+				if replace_stack then
+					inv:set_stack("equipment", index, replace_stack)
+				end
+			end
+		end
+	end
+
+	--generate item lists and refresh inventory
 	inventory.gen_item_list_for_player(name)
 	inventory.refresh_inv(player)
 end
@@ -429,3 +453,4 @@ function qts.get_player_equipment_list(player)
 
 	return retval
 end
+
