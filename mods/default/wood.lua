@@ -665,3 +665,39 @@ minetest.register_node("default:pine_leaves", {
 	after_place_node = qtcore.after_place_leaves;
 })
 
+--stripped logs
+local woodtypes={"oak", "apple", "aspen", "coffee", "mahogany", "rosewood", "pine", "lanternfruit", "rowan"}
+local woodnames={"Oak", "Apple", "Aspen", "Coffee", "Mahogany", "Rosewood", "Pine", "Lanternfruit", "Rowan"}
+
+for i, wood in ipairs(woodtypes) do
+		qts.register_shaped_node("default:stripped_"..wood.."_log", {
+			description = "Stripped "..woodnames[i].." Log",
+			tiles = {
+				"default_stripped_"..wood.."_top.png",
+				"default_stripped_"..wood.."_top.png",
+				"default_stripped_"..wood.."_side.png",
+			},
+			groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1, log = 1,},
+			sounds = qtcore.node_sound_wood(),
+		})
+end
+
+minetest.register_node("default:stripped_swamp_log", {
+	description = "Stripped Swamp Log",
+	tiles = {
+		"default_swamp_log_top.png",
+		"default_swamp_log_top.png",
+		"default_stripped_swamp_side.png"
+	},
+	use_texture_alpha = "clip",
+	drawtype = "nodebox",
+	paramtype = "light",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1, generation_trees=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.3125, -0.5, -0.375, 0, 0.5, -0.0625}, -- NodeBox10
+			{0.0625, -0.5, 0, 0.4375, 0.9375, 0.375}, -- NodeBox11
+		}
+	}
+})

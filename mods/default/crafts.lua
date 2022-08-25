@@ -595,25 +595,25 @@ minetest.register_craft({
 
 minetest.register_craft({
 	type = "cooking",
-	output = "default:charcoal",
+	output = "default:charcoal", "default:potash",
 	recipe = "group:wood",
 })
 
 minetest.register_craft({
 	type = "cooking",
-	output = "default:lime",
+	output = "default:lime", "default:potash",
 	recipe = "default:shell_pieces",
 })
 
 minetest.register_craft({
 	type = "cooking",
-	output = "default:lime 16",
+	output = "default:lime 16", "default:potash",
 	recipe = "default:marble",
 })
 
 minetest.register_craft({
 	type = "cooking",
-	output = "default:brick_item",
+	output = "default:brick_item", "default:potash",
 	recipe = "default:clay_lump",
 })
 
