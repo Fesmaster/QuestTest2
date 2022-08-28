@@ -83,12 +83,20 @@ qts.gui.register_gui("inventory", {
 			inventory.refresh_inv(name, data.activeTab)
 			return
 		end
-		--search button
-		if fields.btn_search or fields.key_enter_field then
+		
+		--things that modify the item list
+		if fields.btn_search or fields.key_enter_field or fields.craftonly_toggle then
 			page = 1
 			data.player_item_list_page = page
 			data.prev_search = fields.search_bar
-			inventory.gen_item_list_for_player (name, fields.search_bar)
+			
+			if (fields.craftonly_toggle) then
+				--craftable only visiblity
+				qts.gui.click(name)
+				data.craftonly_mode_enabled = not data.craftonly_mode_enabled
+			end
+			
+			inventory.gen_item_list_for_player (name, fields.search_bar, data.craftonly_mode_enabled)
 			inventory.refresh_inv(name, data.activeTab)
 			return
 		end
@@ -161,6 +169,8 @@ qts.gui.register_gui("inventory", {
 			data.cheat_mode_enabled = not data.cheat_mode_enabled
 			inventory.refresh_inv(name, data.activeTab)
 		end
+
+		
 	end,
 	tab_update = function(data, pos, name, fields, tabnumber) --only used for inventory
 		inventory.refresh_inv(name, tabnumber)
@@ -177,7 +187,7 @@ qts.gui.register_gui("inv_tab_equipment", {
 		return inventory.get_player_main()..
 			inventory.get_player_equipment(name)..
 			inventory.get_button_grid(name, data.player_item_list_page,
-				data.prev_search, data.cheat_mode_enabled)..
+				data.prev_search, data.cheat_mode_enabled, data.craftonly_mode_enabled)..
 			inventory.get_util_bar()..
 			"listring[current_player;main]listring[current_player;equipment]"
 	end,
@@ -194,7 +204,7 @@ qts.gui.register_gui("inv_tab_craft", {
 		return inventory.get_craft_area(data, name)..
 			inventory.get_player_main()..
 			inventory.get_button_grid(name, data.player_item_list_page,
-				data.prev_search, data.cheat_mode_enabled)..
+				data.prev_search, data.cheat_mode_enabled, data.craftonly_mode_enabled)..
 			inventory.get_util_bar()
 	end,
 	handle = function(data, pos, name, fields)
@@ -209,7 +219,7 @@ qts.gui.register_gui("inv_tab_test", {
 	get = function(data, pos, name)
 		return --inventory.get_player_main()..
 			inventory.get_button_grid(name, data.player_item_list_page, 
-				data.prev_search, data.cheat_mode_enabled)
+				data.prev_search, data.cheat_mode_enabled, data.craftonly_mode_enabled)
 			--inventory.get_util_bar()
 	end,
 	handle = function(data, pos, name, fields)
