@@ -1,13 +1,13 @@
 --[[
 
+Craft Recipe post-register format
 {
-	ingredients = {[ItemString] = 1, [ItemString] = 1...},
-	near = {["nodename"] = 1, ['nodename"] = 1 ...},
-	held = {["item"] = 1, ["item"] = 1 ...},
-	results = {[ItemString] = 1 ([ItemString] = 1 ...)},
-	type = "type",
-	
-	on_craft = function(crafter, results) return results end
+	ingredients = {[ItemString] = 1, [ItemString] = 1...}, 		--set of ingredients
+	near = {["nodename"] = 1, ['nodename"] = 1 ...},			--set of nodes that must be nearby
+	held = {["item"] = 1, ["item"] = 1 ...},					--set of items that must be heald
+	results = {[ItemString] = 1 ([ItemString] = 1 ...)},		--set of results
+	type = "type",												--they type
+	on_craft = function(crafter, results) -> results_override	--callback function, returns new results
 }
 
 qts.register_craft({
@@ -23,9 +23,39 @@ qts.register_craft({
 qts.crafts = {}
 
 --[[
-creating an arbitrary craft recipe
+	creating an arbitrary craft recipe, and return it
+	This can be used for dynamic crafting, or other on-demand recipes.
+	For regular craft recipes, use qts.register_craft(...)
+
+	Params: 
+		recip - a crafting recipe definition
+
+	Returns: a craft recipe in post-register format
+
+	Craft Recipe Definition
+	Table
+	{
+		ingredients - array of itemstrings that are consumed by the craft
+		near_nodes OR near - (may be nil) array of node names that must be near the player for the craft to be available (can take groups)
+		held_items OR held - (may be nil) array of itemstrings that must be in the player's inventory for the crafft ot be available (can take groups)
+		results - array of resulting itemstrings
+		type = string, the type of recipe. used to sort them. special type "reference" is never craftable
+		on_craft(crafter, results) -> results_override - function executed when the craft takes place, overrides the results
+		description - when type == "reference", this is displayed instead of ingredients. Used for displaying non-normal manners of getting items (such as drops)
+	}
+
+	Craft Recipe post-register format
+	{
+		ingredients = {[ItemString] = 1, [ItemString] = 1...}, 		--set of ingredients
+		near = {["nodename"] = 1, ['nodename"] = 1 ...},			--set of nodes that must be nearby
+		held = {["item"] = 1, ["item"] = 1 ...},					--set of items that must be heald
+		results = {[ItemString] = 1 ([ItemString] = 1 ...)},		--set of results
+		type = "type",												--they type
+		on_craft = function(crafter, results) -> results_override	--callback function, returns new results
+		description													--only present if a reference recipe
+	}
 --]]
-qts.create_craft_recipe = function(recip)
+function qts.create_craft_recipe(recip)
 	local t = {}
 	t.ingredients = {}
 	t.near = {}
@@ -61,8 +91,23 @@ end
 
 --[[
 Registers a crafting recipe.
+
+	Params: 
+		recip - a crafting recipe definition
+
+	Craft Recipe Definition
+	Table
+	{
+		ingredients - array of itemstrings that are consumed by the craft
+		near_nodes OR near - (may be nil) array of node names that must be near the player for the craft to be available (can take groups)
+		held_items OR held - (may be nil) array of itemstrings that must be in the player's inventory for the crafft ot be available (can take groups)
+		results - array of resulting itemstrings
+		type = string, the type of recipe. used to sort them. special type "reference" is never craftable
+		on_craft(crafter, results) -> results_override - function executed when the craft takes place, overrides the results
+		description - when type == "reference", this is displayed instead of ingredients. Used for displaying non-normal manners of getting items (such as drops)
+	}
 --]]
-qts.register_craft = function(recip)
+function qts.register_craft(recip)
 	--minetest.log("CRAFT REGISTRATION BEGIN: " .. dump(recip))
 	local t = qts.create_craft_recipe(recip)
 	--minetest.log("recip data: " .. dump(t))
@@ -76,15 +121,49 @@ qts.register_craft = function(recip)
 	end
 end
 
-qts.register_reference_craft = function(recip)
+--[[
+	Register a reference craft recipe. This is basically a wrapper around qts.register_craft
+
+	Params: 
+		recip - a crafting recipe definition
+
+	Craft Recipe Definition
+	Table
+	{
+		ingredients - array of itemstrings that are consumed by the craft
+		near_nodes OR near - (may be nil) array of node names that must be near the player for the craft to be available (can take groups)
+		held_items OR held - (may be nil) array of itemstrings that must be in the player's inventory for the crafft ot be available (can take groups)
+		results - array of resulting itemstrings
+		type = for this function specifically, forced to be "reference"
+		on_craft(crafter, results) -> results_override - function executed when the craft takes place, overrides the results
+		description - when type == "reference", this is displayed instead of ingredients. Used for displaying non-normal manners of getting items (such as drops)
+	}
+]]
+function qts.register_reference_craft(recip)
 	recip.type = "reference"
 	qts.register_craft(recip)
 end
 
 --[[
-gets a list of crafting recipes that result in a particular item.
+	gets a list of crafting recipes that result in a particular item.
+
+	Params:
+		item - an item name (no count)
+
+	Returns:
+		an array of crafing recipes (in the post-registered format)
+
+	Craft Recipe post-register format
+	{
+		ingredients = {[ItemString] = 1, [ItemString] = 1...},      --set of ingredients
+		near = {["nodename"] = 1, ["nodename"] = 1 ...},            --set of nodes that must be nearby
+		held = {["item"] = 1, ["item"] = 1 ...},                    --set of items that must be heald
+		results = {[ItemString] = 1 ([ItemString] = 1 ...)},        --set of results
+		type = "type",                                              --they type
+		on_craft = function(crafter, results) -> results_override   --callback function, returns new results
+	}
 --]]
-qts.get_craft_recipes = function(item)
+function qts.get_craft_recipes(item)
 	if (qts.crafts[item]) then
 		return qts.table_deep_copy(qts.crafts[item])
 	else
@@ -93,9 +172,26 @@ qts.get_craft_recipes = function(item)
 end
 
 --[[
-checks if the player can craft an item. If they can, returns recipe. If not, returns nil.
+	checks if the player can craft an item. If they can, returns recipe. If not, returns nil.
+
+	Params: 
+		item - the item name
+		player - the player
+
+	Returns:
+		the first recipe found in post-register format, or nil
+
+	Craft Recipe post-register format
+	{
+		ingredients = {[ItemString] = 1, [ItemString] = 1...},      --set of ingredients
+		near = {["nodename"] = 1, ["nodename"] = 1 ...},            --set of nodes that must be nearby
+		held = {["item"] = 1, ["item"] = 1 ...},                    --set of items that must be heald
+		results = {[ItemString] = 1 ([ItemString] = 1 ...)},        --set of results
+		type = "type",                                              --they type
+		on_craft = function(crafter, results) -> results_override   --callback function, returns new results
+	}
 --]]
-qts.player_can_craft_item = function(item, player)
+function qts.player_can_craft_item(item, player)
 	local r = qts.get_craft_recipes(item)
 	for k, recip in ipairs(r) do
 		if qts.player_can_craft(recip, player) then
@@ -106,9 +202,26 @@ qts.player_can_craft_item = function(item, player)
 end
 
 --[[
-Checks if the player can craft a specific recipe.
+	Checks if the player can craft a specific recipe.
+
+	Params:
+		recipe - a recipe in post-register format
+		player - the player
+
+	Returns
+		boolean true or false
+
+	Craft Recipe post-register format
+	{
+		ingredients = {[ItemString] = 1, [ItemString] = 1...},      --set of ingredients
+		near = {["nodename"] = 1, ["nodename"] = 1 ...},            --set of nodes that must be nearby
+		held = {["item"] = 1, ["item"] = 1 ...},                    --set of items that must be heald
+		results = {[ItemString] = 1 ([ItemString] = 1 ...)},        --set of results
+		type = "type",                                              --they type
+		on_craft = function(crafter, results) -> results_override   --callback function, returns new results
+	}
 --]]
-qts.player_can_craft = function(recipe, player)
+function qts.player_can_craft(recipe, player)
 	--reference recipes are not craftable
 	if recipe.type == "reference" then return false end
 	if type(player) == "string" then
@@ -117,7 +230,7 @@ qts.player_can_craft = function(recipe, player)
 	local inv = player:get_inventory()
 	for item, v in pairs(recipe.ingredients) do
 		if (qts.is_group(item)) then
-			if not qts.inv_contains_group(inv, item, recipe.results) then
+			if not qts.inventory_contains_group(inv, "main", item, recipe.results) then
 				return false
 			end
 		else
@@ -128,7 +241,7 @@ qts.player_can_craft = function(recipe, player)
 	end
 	for item, v in pairs(recipe.held) do
 		if (qts.is_group(item)) then
-			if not qts.inv_contains_group(inv, item) then
+			if not qts.inventory_contains_group(inv, "main", item) then
 				return false
 			end
 		else
@@ -147,9 +260,28 @@ qts.player_can_craft = function(recipe, player)
 end
 
 --[[
-executes a craft for a player
+	executes a craft for a player. 
+	Ingredients are taken from inventory,
+	Results are added.
+
+	Params:
+		recipe - the recipe in post-register format
+		player - the player
+
+	Returns:
+		boolean true or false
+
+	Craft Recipe post-register format
+	{
+		ingredients = {[ItemString] = 1, [ItemString] = 1...},      --set of ingredients
+		near = {["nodename"] = 1, ["nodename"] = 1 ...},            --set of nodes that must be nearby
+		held = {["item"] = 1, ["item"] = 1 ...},                    --set of items that must be heald
+		results = {[ItemString] = 1 ([ItemString] = 1 ...)},        --set of results
+		type = "type",                                              --they type
+		on_craft = function(crafter, results) -> results_override   --callback function, returns new results
+	}
 --]]
-qts.execute_craft = function(recipe, player)
+function qts.execute_craft(recipe, player)
 	if type(player) == "string" then
 		player = minetest.get_player_by_name(player)
 	end
@@ -170,7 +302,7 @@ qts.execute_craft = function(recipe, player)
 	
 	for item, v in pairs(recipe.ingredients) do
 		if (qts.is_group(item)) then
-			qts.inv_take_group(inv, item, recipe.results)
+			qts.inventory_take_group(inv, "main", item, recipe.results)
 		else
 			inv:remove_item('main', item)
 		end
@@ -184,6 +316,19 @@ qts.execute_craft = function(recipe, player)
 	end
 	return true
 end
+
+--sort the recipes, with reference always being at the end
+local function craft_sorter(a, b)
+	if a.type == "reference" then return false end
+	return string.lower(a.type) < string.lower(b.type)
+end
+
+--recipes need to be sorted by type
+minetest.register_on_mods_loaded(function()
+	for item, subtable in pairs(qts.crafts) do
+		table.sort(subtable, craft_sorter)
+	end
+end)
 
 --Execute fallback.lua
 --this is where minetest-style crafts are re-registered

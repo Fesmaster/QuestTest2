@@ -1,5 +1,9 @@
 # QuestTestSystem (QTS) API documentation
 
+THIS FILE IS OUT OF DATE
+For the latest documentation, look at the comments above
+the functions themselves
+
 # Globals
 
 ## Settings Variables

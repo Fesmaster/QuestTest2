@@ -1,3 +1,7 @@
+--[[
+    This file is responsible for door registration functions
+]]
+
 local door_boxes = {
     main_closed = {
 		type = "fixed",
@@ -52,6 +56,9 @@ local trapdoor_boxes = {
 	}
 }
 
+--[[
+    The coor register door function, not publicly exposed
+]]
 local function register_doorlike_internal(name, def, doorOpts)
     def.drawtype = "mesh"
     def.paramtype='light'
@@ -75,7 +82,7 @@ local function register_doorlike_internal(name, def, doorOpts)
 
     local main_closed = qts.table_deep_copy(def)
     def.groups.not_in_creative_inventory=1
-    def.drop = name
+    def.drop = def.drop or name
     --do these after to get them to propigate to all the non-normal ones
     local main_open = qts.table_deep_copy(def)
     local alt_closed = qts.table_deep_copy(def)
@@ -111,6 +118,32 @@ local param2_to_leftvector = {
     vector.new(0,0,-1)
 }
 
+--[[
+    Register a new door  
+
+    Params:  
+        name - the node name  
+        def - the node definition table  
+
+    Definition Table Additions:  
+        [None]  
+    
+    Definition Table Not Allowed:  
+        drawtype  
+        paramtype  
+        paramtype2  
+        mesh  
+        selection_box  
+        collision_box  
+        on_place(...)    
+        on_rightclick(...)  
+        on_destruct(...)  
+        on_blast(...)  
+
+    Default Groups:  
+        door=1  
+        not_in_creative_inventory=1 (For Alternate Forms Only)  
+]]
 function qts.register_door(name, def)
 
     if def.groups then
@@ -203,9 +236,33 @@ function qts.register_door(name, def)
     register_doorlike_internal(name, def, doorOpts)
 end
 
+--[[
+        Register a new door  
+
+    Params:  
+        name - the node name  
+        def - the node definition table  
+
+    Definition Table Additions:  
+        [None]  
+    
+    Definition Table Not Allowed:  
+        drawtype  
+        paramtype  
+        paramtype2  
+        mesh  
+        selection_box  
+        collision_box  
+        on_place(...)    
+        on_rightclick(...)  
+
+    Default Groups:  
+        trapdoor=1  
+        not_in_creative_inventory=1 (For Alternate Forms Only)  
+]]
 function qts.register_trapdoor(name, def)
     if def.groups then
-        def.groups.door = 1
+        def.groups.trapdoor = 1
     else
         def.groups = {trapdoor=1}
     end

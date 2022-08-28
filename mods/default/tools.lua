@@ -468,7 +468,7 @@ local function Hoe_Use(itemstack, user, pointed_thing)
 				minetest.swap_node(pos, {name = "default:dirt_tilled", param2=param2})
 				
 				if not (qts.is_player_creative(user)) then
-					qts.apply_default_wear(node.name, itemstack)
+					qts.apply_default_wear(itemstack, node.name)
 					--local nlvl = minetest.get_item_group(node.name, "level")
 					--local hlvl = minetest.get_item_group(itemstack:get_name(), "level")
 					--local mult = (hlvl-nlvl)^3

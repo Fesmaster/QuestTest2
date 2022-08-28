@@ -5,43 +5,47 @@ able to be plugged together, to create more complex behaviors
 
 For an example of this, see the Navigational Movement functions, they combine the Facing Functions and the Simple Movement Functions
 
+Simple Facing Functions
+	qts.ai.face(object, facing_pos, yaw_only, dont_set)
+	qts.ai.rotate_to(object, facing_pos, max_rotation, yaw_only, dont_set)
+
+Simple movement functions, that depend on the current direction of the object
+	qts.ai.walk(object, speed, dont_set)
+	qts.ai.fly(object, speed, dont_set)
+	qts.ai.fly_pitch(object, speed, pitch, dont_set)
+	qts.ai.straife(object, speed, dont_set)
+	qts.ai.jump(object, height, forward_ammount, dont_set)
+	qts.ai.freeze(object, ignore_vertical, dont_set)
+	
+Basic Navigational Functions
+	None Yet!
+
+Basic Navigational Movement
+	qts.ai.walk_to(object, dest_pos, speed, can_jump, jump_height, dont_set)
+	qts.ai.fly_to(object, dest_pos, speed, yaw_turn_only, turning_max, dont_set)
+	qts.ai.straife_around(object, target_pos, speed, spiral, can_jump, jump_height, dont_set)
+	
+Pathfinding Movement
+	None Yet!
 
 --]]
 
+--FACING
 
 --[[
-Simple Facing Functions
-
-
-qts.ai.face(object, facing_pos, yaw_only, dont_set)
 	Sets the object to face the given position. 
 	This can be called once and it will immedately be facing the target.
 	It also can be called every frame to keep the object facing the target pos with no turn delay
 	
-	params:
-	object - the luaentity to effect
-	facing_pos - where it sould be looking
-	yaw_only - if true or nil, does not set the pitch
-	dont_set - does not actually set the value, but does claculate and return it
+	Params:
+		object - the luaentity to effect
+		facing_pos - where it sould be looking
+		yaw_only - if true or nil, does not set the pitch
+		dont_set - does not actually set the value, but does claculate and return it
 	
-	return - the new rotation (as a vector)
-
-qts.ai.rotate_to(object, facing_pos, max_rotation, yaw_only, dont_set)
-	--WARNING: THIS FUNCTION IS SUPER BUGGY
-	Performs one step in the movement of an object to face a directon, rotating no more than max_rotation
-	This should be called every frame while rotating to face something, but it will have turn delay.
-	
-	params:
-	object - the luaentity to effect
-	facing_pos - where it sould be looking
-	max_rotation - the max angle (in radains) to turn this step. usually constant
-	yaw_only - if true or nil, does not set the pitch
-	dont_set - does not actually set the value, but does claculate and return it
-	
-	return - the new rotation (as a vector)
-
---]]
-
+	Returns: 
+		the new rotation (as a vector)
+]]
 function qts.ai.face(object, facing_pos, yaw_only, dont_set)
 	if (yaw_only == nil) then yaw_only = true end
 	if object and facing_pos then
@@ -64,7 +68,22 @@ function qts.ai.face(object, facing_pos, yaw_only, dont_set)
 		return rotation
 	end
 end
---WARNING: THIS FUNCTION IS SUPER BUGGY
+
+--[[
+	Performs one step in the movement of an object to face a directon, rotating no more than max_rotation
+	This should be called every frame while rotating to face something, but it will have turn delay.
+	WARNING: THIS FUNCTION IS SUPER BUGGY
+
+	Params:
+		object - the luaentity to effect
+		facing_pos - where it sould be looking
+		max_rotation - the max angle (in radains) to turn this step. usually constant
+		yaw_only - if true or nil, does not set the pitch
+		dont_set - does not actually set the value, but does claculate and return it
+	
+	Returns:
+		the new rotation (as a vector)
+]]
 function qts.ai.rotate_to(object, facing_pos, max_rotation, yaw_only, dont_set)
 	if (yaw_only == nil) then yaw_only = true end
 	if (not max_rotation) then max_rotation = 0.01 end
@@ -101,77 +120,19 @@ function qts.ai.rotate_to(object, facing_pos, max_rotation, yaw_only, dont_set)
 	end
 end
 
---[[
-Simple movement functions, that depend on the current direction of the object
+--MOVEMENT
 
-qts.ai.walk(object, speed, dont_set)
+--[[
 	walks the object along its forward vector, in 2d space (top down) at speed speed
 	
-	params:
-	object - the luaentity being told to walk
-	speed - the speed it should walk at
-	dont_set - if true, the value is calculated, but not set. It is still returned
-	
-	return: - the new velocity of the object
-
-
-qts.ai.fly(object, speed, dont_set)
-	Flys the object along its forward vector, in 3d space, at speed speed
-	
-	params:
-	object - the luaentity being told to walk
-	speed - the speed it should walk at
-	dont_set - if true, the value is calculated, but not set. It is still returned
-	
-	return: - the new velocity of the object
-
-
-qts.ai.fly_pitch(object, speed, pitch, dont_set)
-	Flys the object along its forward vector, but using a given pitch, in 3d space, at speed speed
-	
-	params:
-	object - the luaentity being told to walk
-	speed - the speed it should walk at
-	pitch - the pitch to use instead of the object's Range: -PI/2 to PI/2
-	dont_set - if true, the value is calculated, but not set. It is still returned
-	
-	return: - the new velocity of the object
-
-
-qts.ai.straife(object, speed, dont_set)
-	straifes the object to its right in 2d space (top down) at speed speed.
-	Use a negative speed for straifing to the left.
-	
-	params:
-	object - the luaentity being told to walk
-	speed - the speed it should walk at
-	dont_set - if true, the value is calculated, but not set. It is still returned
-	
-	return: - the new velocity of the object
-
-
-qts.ai.jump(object, height, forward_ammount, dont_set)
-	Causes the object to attempt to jump up height
-	
 	Params:
-	object - the luaentity begin told to jump
-	height - how high to jump
-	forward_ammount - the speed to jump forward
-	dont_set - if true, the value is calculated, but not set. It is still returned
-
-	Return: - the new velocity of the object
-
-qts.ai.freeze(object, ignore_vertical, dont_set)
-	Causes the object to freeze in place
-	Params:
-	object - the luaentity begin told to jump
-	ignore_vertical - ignore vertical motion
-	dont_set - if true, the value is calculated, but not set. It is still returned
-
-	Return: - the new velocity of the object
+		object - the luaentity being told to walk
+		speed - the speed it should walk at
+		dont_set - if true, the value is calculated, but not set. It is still returned
 	
---]]
-
+	Returns:
+		the new velocity of the object
+]]
 function qts.ai.walk(object, speed, dont_set)
 	local dir
 	if object and speed then
@@ -192,6 +153,17 @@ function qts.ai.walk(object, speed, dont_set)
 	end
 end
 
+--[[
+	Flys the object along its forward vector, in 3d space, at speed speed
+	
+	Params:
+		object - the luaentity being told to walk
+		speed - the speed it should walk at
+		dont_set - if true, the value is calculated, but not set. It is still returned
+	
+	Returns:
+		the new velocity of the object
+]]
 function qts.ai.fly(object, speed, dont_set)
 	local dir
 	if object and speed then
@@ -213,6 +185,18 @@ function qts.ai.fly(object, speed, dont_set)
 	return dir
 end
 
+--[[
+	Flys the object along its forward vector, but using a given pitch, in 3d space, at speed speed
+	
+	Params:
+		object - the luaentity being told to walk
+		speed - the speed it should walk at
+		pitch - the pitch to use instead of the object's Range: -PI/2 to PI/2
+		dont_set - if true, the value is calculated, but not set. It is still returned
+	
+	Returns:
+		the new velocity of the object
+]]
 function qts.ai.fly_pitch(object, speed, pitch, dont_set)
 	local dir
 	if object and speed then
@@ -234,6 +218,18 @@ function qts.ai.fly_pitch(object, speed, pitch, dont_set)
 	return dir
 end
 
+--[[
+	straifes the object to its right in 2d space (top down) at speed speed.
+	Use a negative speed for straifing to the left.
+	
+	Params:
+		object - the luaentity being told to walk
+		speed - the speed it should walk at
+		dont_set - if true, the value is calculated, but not set. It is still returned
+	
+	Returns:
+		the new velocity of the object
+]]
 function qts.ai.straife(object, speed, dont_set)
 	local dir
 	if object and speed then
@@ -254,6 +250,18 @@ function qts.ai.straife(object, speed, dont_set)
 	return dir
 end
 
+--[[
+	Causes the object to attempt to jump up height
+	
+	Params:
+		object - the luaentity begin told to jump
+		height - how high to jump
+		forward_ammount - the speed to jump forward
+		dont_set - if true, the value is calculated, but not set. It is still returned
+
+	Returns:
+		the new velocity of the object
+]]
 function qts.ai.jump(object, height, forward_ammount, dont_set)
 	local dir = object:get_velocity()
 	if dir.y == 0 then
@@ -275,6 +283,17 @@ function qts.ai.jump(object, height, forward_ammount, dont_set)
 	end
 end
 
+--[[
+	Causes the object to freeze in place
+
+	Params:
+		object - the luaentity begin told to jump
+		ignore_vertical - ignore vertical motion
+		dont_set - if true, the value is calculated, but not set. It is still returned
+
+	Returns:
+		the new velocity of the object
+]]
 function qts.ai.freeze(object, ignore_vertical, dont_set)
 	local v = object:get_velocity()
 	if v.x == 0 and v.z == 0 and (v.y == 0 or ignore_vertical) then
@@ -292,72 +311,26 @@ function qts.ai.freeze(object, ignore_vertical, dont_set)
 	end
 end
 
---[[
-Basic Navigational Functions
 
-
-
-
-
-
-
---]]
-
-
+--NAVIGATIONAL MOVEMENT
 
 --[[
-Basic Navigational Movement
-
-qts.ai.walk_to(object, dest_pos, speed, can_jump, jump_height, dont_set)
 	Causes the entity to walk to a destination, jumping over obstacles if they can.
 	The entity will face the dest_pos 
 	
 	Params:
-	object - the luaentity
-	dest_pos - vector - the destination to walk to
-	speed - number - the speed of the eneity
-	can_jump - boolean - can the entity jump?
-	jump_height - number - the height the entity can jump. 
-		Should not be 0 if can_jump is true, 
-		can be nil if can_jump is false
-	dont_set - if true, the value is calculated, but not set. It is still returned
+		object - the luaentity
+		dest_pos - vector - the destination to walk to
+		speed - number - the speed of the eneity
+		can_jump - boolean - can the entity jump?
+		jump_height - number - the height the entity can jump. 
+			Should not be 0 if can_jump is true, 
+			can be nil if can_jump is false
+		dont_set - if true, the value is calculated, but not set. It is still returned
 	
-	Return - vector - the new velocity
-
-qts.ai.fly_to(object, dest_pos, speed, yaw_turn_only, turning_max, dont_set)
-	Causes the entity to fly (as if it had wings, like a bird) to the target pos, 
-	but it always screeches past, circles around, and makes another pass (if left running)
-	This is ment to immitate a bird or other winged creature in flight
-	
-	Params:
-	object - the luaentity
-	dest_pos - vector - the destination to fly to
-	speed - number - the entity's speed
-	yaw_turn_only - should the entity only have its yaw changed, or its pitch as well? 	
-	turning_max - the max ammount to turn in one frame. 0.01 is a good number
-	dont_set - if true, the value is calculated, but not set. It is still returned
-	
-	Return - vector - the new velocity
-
-
-qts.ai.straife_around(object, target_pos, speed, spiral, can_jump, jump_height, dont_set)
-	Causes the entity to walk in circles around the target pos
-	
-	Params:
-	object - the luaentity
-	target_pos - vector - the destination to circle
-	speed - number - the entity's speed
-	spiral - how much to tigten the circle (pos) or loosen (neg) 	
-	can_jump - boolean - can the entity jump?
-	jump_height - number - the height the entity can jump. 
-		Should not be 0 if can_jump is true, 
-		can be nil if can_jump is false
-	dont_set - if true, the value is calculated, but not set. It is still returned
-	
-	Return - vector - the new velocity
-
---]]
-
+	Returns:
+		vector - the new velocity
+]]
 function qts.ai.walk_to(object, dest_pos, speed, can_jump, jump_height, dont_set)
 	if object and dest_pos and speed then
 		qts.ai.face(object, dest_pos, true, dont_set)
@@ -377,7 +350,22 @@ function qts.ai.walk_to(object, dest_pos, speed, can_jump, jump_height, dont_set
 	end
 end
 
-
+--[[
+	Causes the entity to fly (as if it had wings, like a bird) to the target pos, 
+	but it always screeches past, circles around, and makes another pass (if left running)
+	This is ment to immitate a bird or other winged creature in flight
+	
+	Params:
+		object - the luaentity
+		dest_pos - vector - the destination to fly to
+		speed - number - the entity's speed
+		yaw_turn_only - should the entity only have its yaw changed, or its pitch as well? 	
+		turning_max - the max ammount to turn in one frame. 0.01 is a good number
+		dont_set - if true, the value is calculated, but not set. It is still returned
+	
+	Returns:
+		vector - the new velocity
+]]
 function qts.ai.fly_to(object, dest_pos, speed, yaw_turn_only, turning_max, dont_set)
 	if object and dest_pos and speed then
 		qts.ai.rotate_to(object, dest_pos, turning_max, yaw_turn_only,  dont_set)
@@ -406,7 +394,23 @@ function qts.ai.fly_to(object, dest_pos, speed, yaw_turn_only, turning_max, dont
 	end
 end
 
-
+--[[
+	Causes the entity to walk in circles around the target pos
+	
+	Params:
+		object - the luaentity
+		target_pos - vector - the destination to circle
+		speed - number - the entity's speed
+		spiral - how much to tigten  (positive) or loosen (negative) the circle  	
+		can_jump - boolean - can the entity jump?
+		jump_height - number - the height the entity can jump. 
+			Should not be 0 if can_jump is true, 
+			can be nil if can_jump is false
+		dont_set - if true, the value is calculated, but not set. It is still returned
+	
+	Returns:
+		vector - the new velocity
+]]
 function qts.ai.straife_around(object, target_pos, speed, spiral, can_jump, jump_height, dont_set)
 	if object and target_pos and speed and spiral then
 		qts.ai.face(object, target_pos, dont_set)
@@ -440,8 +444,3 @@ function qts.ai.straife_around(object, target_pos, speed, spiral, can_jump, jump
 	end
 end
 
---[[
-Pathfinding Movement
-
-
---]]

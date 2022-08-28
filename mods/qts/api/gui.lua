@@ -1,6 +1,13 @@
---gui code
+--[[
+	QuestTest2 Gui system
+	This is a wrapper for formspec, to make it a bit easier to use, and so that you never have to
+	regiter a on_player_receive_fields function.
+]]
 
---the gui namespace. made because there are horificly large numbers of functions
+--[[
+	QTS gui namespace
+	Functions under this are for GUI use.
+]]
 qts.gui = {}
 
 
@@ -10,11 +17,23 @@ local formContext = {} --stores the context of open forms, to see if a player ha
 local inventoryFormName = nil
 
 
---convert from old to new pos and size types
+--[[
+	Conversion values for converting from old to new pos and size types
+]]
 qts.gui.gui_conv = {
 	padding = 3/8,
 	spaceing = 5/4,
 }
+
+--[[
+	Make a GUI positon string (new format), using old (or new) position types.  
+	Usually, this is aliased to a local P()  
+
+	Params:  
+		x - number - the x position  
+		y - number - the y position  
+		new - boolean or nil. True if the input positions are in the new position format.  
+]]
 qts.gui.gui_makepos = function(x, y, new)
 	local get = function(self)
 		return tostring(self.x)..","..tostring(self.y)
@@ -33,6 +52,15 @@ qts.gui.gui_makepos = function(x, y, new)
 	}
 	end
 end
+--[[
+	Make a GUI size string (new format), using old (or new) size types.  
+	Usually, this is aliased to a local S()  
+
+	Params:  
+		x - number - the x size  
+		y - number - the y size  
+		new - boolean or nil. True if the input positions are in the new position format.  
+]]
 qts.gui.gui_makesize = function(x, y, new)
 	local get = function(self)
 		return tostring(self.x)..","..tostring(self.y)
@@ -52,6 +80,15 @@ qts.gui.gui_makesize = function(x, y, new)
 	end
 end
 
+--[[
+	get the name of the currently open gui.  
+
+	Params:  
+		player - the player or player name  
+
+	Returns:  
+		string of the name, or  empty string if no gui is open.  
+]]
 function qts.gui.get_open_gui(player)
 	if type(player) ~= "string" then
 		player = player:get_player_name()
@@ -63,6 +100,16 @@ function qts.gui.get_open_gui(player)
 	return ""
 end
 
+--[[
+	Push some random data to the currently open gui, iof one is present  
+
+	Params:  
+		player - the player or playername  
+		data - table of the data. it is shallow copied into the form's data.  
+
+	Returns:  
+		boolean, true if there is an open form and the data is pushed, false otherwise.  
+]]
 function qts.gui.push_to_form(player, data)
 	if type(player) ~= "string" then
 		player = player:get_player_name()
@@ -76,11 +123,34 @@ function qts.gui.push_to_form(player, data)
 	return false
 end
 
+--[[
+	make a gui click sound (for buttons)  
+
+	Params:  
+		name - the player name (name only!).  
+]]
 function qts.gui.click(name)
 	minetest.sound_play("gui_button", {gain = 0.5, to_player = name})
 end
 
+--[[
+	register a new GUI  
 
+	Params:  
+		name - the GUI name, used later for displaying it later.  
+		def - a GUI definition table  
+
+	GUI Definition Table:
+	{  
+		get(data, pos, playername, ...) - function that returns a formspec string, to display the GUI.  
+		handle(data, pos, playername, fields) - function that handles the fields received from this GUI.  
+		tab_update(data, pos, playername, fields, tab) - function that handls fields for tabs received by the GUI  
+			- this is called for the Tab Owner, not the tab!
+		tab - boolean, true if the GUI is a tab in another  
+		owner - if tab is true, then this must be an already registered gui that owns this tab.  
+		tab_owner - boolean, true if the GUI can hold tabs. Ignored if the GUI is a tab. You cannot be both a tab and a tab owner.  
+	}  
+]]
 function qts.gui.register_gui(name, def)
 	--minetest.log("form registered")
 	def.name = name
@@ -109,7 +179,14 @@ function qts.gui.register_gui(name, def)
 	qts.gui.forms[name] = def
 end
 
-function qts.gui.generate_tabs(current, formname)
+--[[
+	generate the tab formspec string for the tabs of a named GUI.  
+	
+	Params:  
+		current - the current tab, either the tab name or the tab number  
+		formname - the registered GUI name  
+]]
+local function generate_tabs(current, formname)
 	local returnval = "tabheader[0,0;tabs;"
 	for i, f in pairs(qts.gui.forms[formname].tabs) do
 		if f.tab ~= false and f.caption then
@@ -124,8 +201,16 @@ function qts.gui.generate_tabs(current, formname)
 	return returnval
 end
 
+--[[
+	Handle tab switching, when fields are recieved  
 
-function qts.gui.handle_tabs(pos, playername, formname, fields)
+	Params:  
+		pos - the position in question
+		playername - the player name  
+		formname - the registered GUI name  
+		fields - the response fields  
+]]
+local function handle_tabs(pos, playername, formname, fields)
 	local tab = tonumber(fields.tabs)
 	if tab and qts.gui.forms[formname].tab_owner and qts.gui.forms[formname].tabs[tab] then
 		
@@ -133,7 +218,16 @@ function qts.gui.handle_tabs(pos, playername, formname, fields)
 	end
 end
 
-function qts.gui.pass_tabs(pos, playername, formname, fields)
+--[[
+	Handle passing along of tab_update to the tab owner
+
+	Params:
+		pos - the position in question
+		playername - the player name
+		formname - the registered gui name
+		fields - the fields
+]]
+local function pass_tabs(pos, playername, formname, fields)
 	local tab = tonumber(fields.tabs)
 	if tab and qts.gui.forms[formname].tab_owner and qts.gui.forms[formname].tabs[tab] then
 		--(data, pos, name, fields, tabnumber)
@@ -141,6 +235,23 @@ function qts.gui.pass_tabs(pos, playername, formname, fields)
 	end
 end
 
+--[[
+	Show a registered GUI to a player  
+
+	Params:  
+		pos - the position in question. If the GUI is from a node, its that node's position,   
+			otherwise, its often the player position. It could be any position, though.  
+		player - the player or playername to show the GUI to  
+		formname - the name of the registered GUI to show.  
+		tabindex - the index of tab to show.  
+			Tab indices come from the order in which tabs are registered for that particualr Owner.  
+		show = true - bool, set to false to have this function return the formspec strings  
+		... - any other params you want to pass to the get() function of the GUI  
+	
+	Returns:  
+		when show is default or true:  nil
+		when show is false: {guiname, forpsecstring}
+]]
 function qts.gui.show_gui(pos, player, formname, tabindex, show, ...)
 	--minetest.log(""..formname.." attemting to load (1)")
 	if qts.gui.forms[formname] then --does the form name exist?
@@ -161,7 +272,7 @@ function qts.gui.show_gui(pos, player, formname, tabindex, show, ...)
 		local formstr = qts.gui.forms[formname].get(qts.gui.formData[pname], pos, pname, ...)
 		if qts.gui.forms[formname].tab_owner and qts.gui.forms[formname].tabs and #qts.gui.forms[formname].tabs > 0 then
 			if qts.gui.forms[formname].tabs[tabindex] == nil then minetest.log("error", "Tab does not exist! Index: "..tostring(tabindex)) end
-			formstr =  formstr .. qts.gui.generate_tabs(tabindex, formname) .. 
+			formstr =  formstr .. generate_tabs(tabindex, formname) .. 
 				qts.gui.forms[formname].tabs[tabindex].get(qts.gui.formData[pname], pos, pname, ...)
 		elseif  qts.gui.forms[formname].tab then
 			for i, tab in ipairs(qts.gui.forms[qts.gui.forms[formname].owner].tabs) do
@@ -170,7 +281,7 @@ function qts.gui.show_gui(pos, player, formname, tabindex, show, ...)
 				end
 			end
 			formstr = qts.gui.forms[qts.gui.forms[formname].owner].get(qts.gui.formData[pname], pos, pname, ...)
-				..qts.gui.generate_tabs(tabindex, qts.gui.forms[formname].owner) ..formstr
+				..generate_tabs(tabindex, qts.gui.forms[formname].owner) ..formstr
 			local oldformname = formname
 			formname = qts.gui.forms[formname].owner
 		end
@@ -207,11 +318,11 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			if inv then
 				if qts.gui.forms[formname[2]].tab_update then
 					--qts.gui.forms[formname[2]].tab_update(qts.gui.formData[pname], formContext[pname], pname, fields)
-					qts.gui.pass_tabs(formContext[pname].pos, pname, formname[2], fields)
+					pass_tabs(formContext[pname].pos, pname, formname[2], fields)
 				end
 			else
 				--else, handle them
-				qts.gui.handle_tabs(formContext[pname].pos, pname, formname[2], fields)
+				handle_tabs(formContext[pname].pos, pname, formname[2], fields)
 			end
 			if handle_func then
 				--minetest.log("handle function should be called")
@@ -235,10 +346,27 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	end
 end)
 
+--[[
+	Set an internal reference for the GUI to be used for the Inventory.  
+	Does Not call `player:set_inventory_formspec(formspec_string)`  
+	To actually set the inventory, call:  
+	```  
+	local formspec_code = qts.gui.show_gui(player:get_pos(), player, qts.gui.get_inventory_gui_name(), <0 or whatever tab you want>, false)[2]  
+	player:set_inventory_formspec(formspec_code)  
+	```  
 
-function qts.gui.set_inventory_qui_name(name)
+	Params:  
+		name - the registered GUI name   
+]]
+function qts.gui.set_inventory_gui_name(name)
 	inventoryFormName = name
 end
-function qts.gui.get_inventory_qui_name()
+--[[
+	Get the internal reference to the GUI to be used for the Inventory.  
+
+	Returns:  
+		the registered GUI name.  
+]]
+function qts.gui.get_inventory_gui_name()
 	return inventoryFormName
 end

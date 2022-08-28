@@ -1,3 +1,11 @@
+--[[
+	This file is responsible for creating explotions.
+	Boom!
+
+	Explosions in QuestTest2 are ray-based, meaning nodes can have density and protect other nodes behind them.
+	This makes them rather expensive.
+]]
+
 qts.EXPLOSION_MAX_STEPS = qts.settings.get_num('EXPLOSION_MAX_STEPS') or 1000
 --qts.EXPLOSION_DEFAULT_STEP_SIZE = 0.9
 
@@ -120,6 +128,13 @@ local function eject_drops(drops, pos, radius, speed_multiplier)
 	end
 end
 
+--[[
+	Create the sound of an explotion.  
+
+	Params:  
+		pos - the position of the sound's origin.  
+		distance - the maximum hearing distance of the sound.  
+]]
 function qts.explode_sound(pos, distance)
 	minetest.sound_play("explosion",
 	{
@@ -130,6 +145,14 @@ function qts.explode_sound(pos, distance)
 	})
 end
 
+--[[
+	Create the particle effect of an explotion.  
+
+	Params:  
+		pos - the origin of the effect.  
+		radius - the distance the particles should travel (roughly)  
+		mult - a multipler to the number of particles.  
+]]
 function qts.explode_particles(pos, radius, mult)
 	mult = mult or 1
 	local particleSpeed = 30
@@ -205,6 +228,27 @@ local function blast_objects(objectList, pos, power, properties)
 	end
 end
 
+--[[
+	Create a single ray of an explotion.  
+
+	Params:  
+		pos - the origin of the ray  
+		slopeVector - a unit vector giving the direction of the ray  
+		stepSize - the size (in blocks) that the ray should move each step.  
+		power - the power of the ray. Determines how far it moves.  
+		returnFound - boolean, true if the found blocks should be returned in a table instead of destroyed.  
+			Useful if firing several rays for the same effect, so they do not interfere with each other.  
+		excludeDrops - a table of stringified positions to nodes that should not have their drops calculated.  
+			(possibly because they were found by a different ray already)  
+
+	Return:  
+		{  
+			found = list of nodes, key is string position (perfect for the excludeDrops of the next ray...)  
+			drops = array of drops  
+			objects = array of effected objects  
+		}  
+		This table is returned no matter what. If returnFound is true, then it is returned without doing anything to any of these.  
+]]
 function qts.explode_ray(pos, slopeVector, stepSize, power, returnFound, excludeDrops)
 	slopeVector = vector.multiply(vector.normalize(slopeVector), stepSize)
 	excludeDrops = excludeDrops or {}
@@ -335,6 +379,26 @@ local explotion_ray_multiplier = {
 	20, 100
 }
 
+--[[
+	create a normal explotion  
+
+	Params:  
+		pos - the position of the explotion.  
+		power - the power of the explotion. It will travel sqrt(power) blocks in empty air.  
+		properties = {  				- the explotion properties. Can be nil for default values.  
+			destroy_nodes = true, 		- true if the explotion should destroy nodes.  
+			make_drops = true, 			- true if the destroyed nodes should drop their drops.  
+			drop_speed_multiplier = 1, 	- the multiplier for how fast drops are launched.  
+			make_sound = true, 			- true if the explotion should make a sound.  
+			make_particles = true, 		- true if the explotion should make a particle effect  
+			particle_multiplier = 1,	- particle speed multiplier  
+			damage_entities = true,		- true if the explotion should damage entities  
+			push_entities = true,		- true if the explotion should push entities away from its origin.  
+			damage_player = true,		- true if the explotion should damage the player.  
+			damage_type = "fleshy",		- damge type of the explotion  
+			exploder = nil				- the entity responsible for the explotion, for punching.  
+		}  
+]]
 function qts.explode(pos, power, properties)
 	if (properties == nil or type(properties) ~= "table") then
 		properties = {

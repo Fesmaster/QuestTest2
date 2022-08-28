@@ -1,159 +1,103 @@
 --[[
 Extentions to Vector Library
-See AI section for more
 
+vector.readonly(x,y,z)
+vector.unit.X
+vector.unit.Y
+vector.unit.Z
 vector.fill(number)
-	creates a vector with number in X, Y, and Z
+vector.lengthsq(vector)
+vector.distancesq(p1, p2)
+vector.nearly_equal(a, b, degree)
+vector.nearly_equal_xz(a, b, degree)
+vector.rotate_yaw(vec, angle)
+vector.flat_dist(pos1, pos2
+vector.get_rot(vec)
+vector.get_forward_vector([rot] [yaw, (pitch)])
+vector.get_right_vector([rot] [yaw, (pitch)])
+vector.get_up_vector([rot] [yaw, (pitch)])
+vector.lerp(vec1, vec2, alpha)
+vector.slerp(rot1, rot2, alpha)
+
+--]]
+
+--[[
+	create a read-only vector, that operates as a normal vector
+
 	Params:
-	number - the number to fill
+		exactly like vector.new()
+
+	Returns:
+		a read-only vector
+]]
+function vector.readonly(x,y,z)
+	local upvec = vector.new(x,y,z)
+	local vector_metatable_copy = qts.table_deep_copy(vector.metatable)
+	vector_metatable_copy.__index = function(t,k)
+		if upvec[k] then 
+			return upvec[k]
+		else
+			return vector[k]
+		end
+	end
+	vector_metatable_copy.__newindex = function(table, key, value)
+		error("Attempted to modify a read-only vector")
+	end
+	vector_metatable_copy.__metatable = false
+
+	return setmetatable({}, vector_metatable_copy)
+end
+
+--[[
+	Basis Vectors  
+	vector.unit.X - unit X vector  
+	vector.unit.Y - unit Y vector  
+	vector.unit.Z - unit Z vector  
+]]
+vector.unit = qts.readonly_table({
+	X = vector.readonly(1,0,0),
+	Y = vector.readonly(0,1,0),
+	Z = vector.readonly(0,0,1),
+})
+
+--[[
+	creates a vector with number in X, Y, and Z
+	
+	Params:
+		number - the number to fill
 	
 	Return:
-	vector of {x=num, y=num, z=num}
-	
-vector.lengthsq(vector)
+		vector of {x=num, y=num, z=num}
+]]
+function vector.fill(x)
+	return vector.new(x, x, x)
+end
+
+--[[
 	gets the sqared length of the vector. Faster than the actual length
+	
 	Params:
-	vector - vector, of which the square lenght is calculated
+		vector - vector, of which the square lenght is calculated
 	
-	Return: number, the square length
-	
-vector.distancesq(p1, p2)
+	Return: 
+		number, the square length
+]]
+function vector.lengthsq(v)
+	return v.x*v.x+v.y*v.y+v.z*v.z
+end
+
+--[[
 	gets the squared distance between two vectors. 
 	Does not call other functions. 
 	Equivilent to vector.lengthsq(vector.sub(p2, p1))
 	
 	Params:
-	p1 - vector, the first pos
-	p2 - vector, the second pos
-	
-	Return: number, the distance squared
-	
-vector.nearly_equal(a, b, degree)
-	Checks if a and b are nearly equal, within degree distance
-	Params:
-	a - vector, the first vector
-	b - vector, the second vector
-	degree - number, degree of equality. defaults to 0.001
-	
-	Return: true or false
+		p1 - vector, the first pos
+		p2 - vector, the second pos
 
-vector.nearly_equal_xz(a, b, degree)
-	Checks if a and b are nearly equal, within degree distance, but ignoring height difference.
-	Params:
-	a - vector, the first vector
-	b - vector, the second vector
-	degree - number, degree of equality. defaults to 0.001
-	
-	Return: true or false
-
-vector.rotate_yaw(vec, angle)
-	rotates the vector by a angle around the vertical axis
-	Params:
-	vec - vector, to rotate
-	angle - the angle to rotate in radians
-	
-	Return: vector, the rotated vector
-
-vector.unit()
-	Returns a unit vector, pointing to z+
-	
-	Params: None
-	
-	Return: {x=0, y=0, z=1}
-
-
-vector.flat_dist(pos1, pos2)
-	Gets the distance between two points, ignoring height distance
-	
-	Params:
-	pos1 = vector, first position
-	pos2 = vector, second position
-	
-	Return: the distance 
-	
-
-vector.get_rot(vec)
-	Gets the rotation of a directional vector
-	
-	Params:
-	vec - a vector (as a direction / offset)
-	
-	Return: rot - a vector (as a euler rotation)
-	
-
-vector.get_forward_vector([rot] [yaw, (pitch)])
-	Gets the forward vector of a rotation
-	
-	Params:
-	rot - a vector, as rotation
-	--OR--
-	yaw - the yaw or the rotation
-	pitch (optional) - the pitch of the rotation
-	
-	Return: vector, as direction
-
-
-vector.get_right_vector([rot] [yaw, (pitch)])
-	Gets the right vector of a rotation
-	
-	Params:
-	rot - a vector, as rotation
-	--OR--
-	yaw - the yaw or the rotation
-	pitch (optional) - the pitch of the rotation
-	
-	Return: vector, as direction
-
-vector.get_up_vector([rot] [yaw, (pitch)])
-	gets the up vector of a rotation
-	
-	Params:
-	rot - a vector, as rotation
-	--OR--
-	yaw - the yaw or the rotation
-	pitch (optional) - the pitch of the rotation. If nil, assumed to be 0
-	
-	Return: vector, as direction
-
-vector.lerp(vec1, vec2, alpha)
-	Linear Iterpalation between two points / directions
-	
-	Params:
-	vec1 - vector, the origin
-	vec2 - vector, the end
-	alpha - 0 to 1 value, where in between you are
-	
-	Return: vector - the interpalated value
-
-vector.slerp(rot1, rot2, alpha)
-	Sphereical Iterpalation between two rotations
-	
-	Params:
-	rot1 - vector, as rotation, the origin
-	rot2 - vector, as rotation, the end
-	alpha - 0 to 1 valeu, where in between you are
-	
-	Return: vector, as rotation - the interpalated value
-
-vector.
-	
-	
-	Params:
-	
-	
-	Return:
-
---]]
-
-
-function vector.fill(x)
-	return vector.new(x, x, x)
-end
-
-function vector.lengthsq(v)
-	return v.x*v.x+v.y*v.y+v.z*v.z
-end
-
+	Return: 
+		number, the distance squared
+]]
 function vector.distancesq(p1, p2)
 	local x = p2.x-p1.x
 	local y = p2.y-p1.y
@@ -161,38 +105,77 @@ function vector.distancesq(p1, p2)
 	return x*x+y*y+z*z
 end
 
+
+--[[
+	Checks if a and b are nearly equal, within degree distance
+	
+	Params:
+		a - vector, the first vector
+		b - vector, the second vector
+		degree - number, degree of equality. defaults to 0.001
+	
+	Return: 
+		boolean true or false
+]]
 function vector.nearly_equal(a, b, degree)
 	if not degree then degree = 0.001 end
 	return (qts.nearly_equal(a.x, b.x, degree) and qts.nearly_equal(a.y, b.y, degree) and qts.nearly_equal(a.z, b.z, degree))
 end
 
-
+--[[
+	Checks if a and b are nearly equal, within degree distance, but ignoring height difference.
+	
+	Params:
+		a - vector, the first vector
+		b - vector, the second vector
+		degree - number, degree of equality. defaults to 0.001
+	
+	Return: 
+		boolean true or false
+]]
 function vector.nearly_equal_xz(a, b, degree)
 	if not degree then degree = 0.001 end
 	return (qts.nearly_equal(a.x, b.x, degree) and qts.nearly_equal(a.z, b.z, degree))
 end
 
-
+--[[
+	rotates the vector by a angle around the vertical axis
+	
+	Params:
+		vec - vector, to rotate
+		angle - the angle to rotate in radians
+	
+	Return: 
+		vector, the rotated vector
+]]
 function vector.rotate_yaw(vec, angle)
 	return vector.new((vec.x * math.cos(angle) - vec.z * math.sin(angle)), vec.y, (vec.x * math.sin(angle) + vec.z * math.cos(angle)))
 end
 
-function vector.unit()
-	return vector.new(0, 0, 1)
-end
 
+--[[
+	Gets the distance between two points, ignoring height distance
+	
+	Params:
+		pos1 = vector, first position
+		pos2 = vector, second position
+	
+	Return: 
+		number - the distance 
+]]
 function vector.flat_dist(pos1, pos2)
 	return vector.distance(vector.new(pos1.x, 0, pos1.z), vector.new(pos2.x, 0, pos2.z))
 end
 
-function vector.get_yaw(vec)
-	error("DEPRECIATED: Use vector.get_rot(vec).y instead")
-end
+--[[
+	Gets the rotation of a directional vector
+	
+	Params:
+		vec - a vector (as a direction / offset)
 
-function vector.get_pitch(vec)
-	error("DEPRECIATED: Use vector.get_rot(vec).x instead")
-end
-
+	Return: 
+		rot - a vector (as a euler rotation)
+]]
 function vector.get_rot(vec)
 	local rot = vector.new(0, 0, 0)
 	
@@ -225,6 +208,18 @@ local function get_forward_vector(yaw, pitch)
 	return dir
 end
 
+--[[
+	Gets the forward vector of a rotation
+	
+	Params:
+		rot - a vector, as euler rotation
+	--OR--
+		yaw - the yaw or the rotation
+		pitch (optional) - the pitch of the rotation
+	
+	Return: 
+		unit vector, as direction
+]]
 function vector.get_forward_vector(yaw, pitch)
 	if (type(yaw) == "table") and yaw.x ~= nil and yaw.y ~= nil then
 		return get_forward_vector(yaw.y, yaw.x)
@@ -233,6 +228,18 @@ function vector.get_forward_vector(yaw, pitch)
 	end
 end
 
+--[[
+	Gets the right vector of a rotation
+	
+	Params:
+		rot - a vector, as euler rotation
+	--OR--
+		yaw - the yaw or the rotation
+		pitch (optional) - the pitch of the rotation
+	
+	Return: 
+		unit vector, as direction
+]]
 function vector.get_right_vector(yaw, pitch)
 	if (type(yaw) == "table") and yaw.x and yaw.y then
 		return get_forward_vector(yaw.y+(math.pi/2), yaw.z)
@@ -241,6 +248,18 @@ function vector.get_right_vector(yaw, pitch)
 	end
 end
 
+--[[
+	gets the up vector of a rotation
+	
+	Params:
+		rot - a vector, as euler rotation
+	--OR--
+		yaw - the yaw or the rotation
+		pitch (optional) - the pitch of the rotation. If nil, assumed to be 0
+	
+	Return: 
+		unit vector, as direction
+]]
 function vector.get_up_vector(yaw, pitch)
 	if (type(yaw) == "table") and yaw.x and yaw.y then
 		return get_forward_vector(yaw.y, yaw.z+(math.pi/2))
@@ -249,6 +268,17 @@ function vector.get_up_vector(yaw, pitch)
 	end
 end
 
+--[[
+	Linear Iterpalation between two points / directions
+	
+	Params:
+		vec1 - vector, the origin
+		vec2 - vector, the end
+		alpha - 0 to 1 value, where in between you are
+	
+	Return: 
+		vector - the interpalated value
+]]
 function vector.lerp(vec1, vec2, alpha)
 	local result = vector.new()
 	for k, v in pairs(vec1) do
@@ -257,7 +287,18 @@ function vector.lerp(vec1, vec2, alpha)
 	return vector.copy(result)
 end
 
---THIS FUNCTION IS INTENDED FOR ROTATIONS EXPRESSED IN RADIANS
+
+--[[
+	Sphereical Iterpalation between two rotations
+	WANRING: This function does NOT currently work
+
+	Params:
+	rot1 - vector, as euler rotation in radians, the origin
+	rot2 - vector, as euler rotation in radians, the end
+	alpha - 0 to 1 valeu, where in between you are
+	
+	Return: vector, as euler rotation in radians - the interpalated value
+]]
 function vector.slerp(rot1, rot2, alpha)
 	local result = vector.new()
 	for k, v in pairs(rot1) do
@@ -275,6 +316,4 @@ function vector.slerp(rot1, rot2, alpha)
 	end
 	return result
 end
-
-
 

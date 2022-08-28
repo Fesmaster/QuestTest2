@@ -9,9 +9,8 @@ because they are used for much more than the AI and Mob system
 --[[
 	Generates a new entity id number  
 	
-	Params: none  
-	
-	Return - the new ID number  
+	Returns:
+		the new ID number  
 ]]
 qts.gen_entity_id = Counter()
 
@@ -20,9 +19,10 @@ qts.gen_entity_id = Counter()
 	or the player name  
 
 	Params:  
-	obj - the objectref (player or luaentity)  
+		obj - the objectref (player or luaentity)  
 
-	Return: the QTID or player name  
+	Returns: 
+		the QTID or player name  
 ]]
 function qts.get_object_id(obj)
 	if obj:is_player() then
@@ -43,9 +43,10 @@ end
 	or the player name  
 
 	Params:  
-	obj - the objectref (player or luaentity)  
+		obj - the objectref (player or luaentity)  
 
-	Return: the obj name  
+	Returns: 
+		the obj name  
 ]]
 function qts.object_name(obj)
 	if (obj:is_player()) then
@@ -60,11 +61,12 @@ end
 	This does not deal with vectors  
 	
 	Params: 
-	start - the start value in radians  
-	finish - the end value in radians  
-	alpla - 0  to 1 value telling where in between you are  
+		start - the start value in radians  
+		finish - the end value in radians  
+		alpla - 0  to 1 value telling where in between you are  
 	
-	Return - the interpalated value, in radians  
+	Returns:
+		the interpalated value, in radians  
 ]]
 function qts.slerp(start, finish, alpha)
 	local diff = math.abs(finish - start)
@@ -83,9 +85,10 @@ end
 	of the given object  
 	
 	Params:   
-	object - the Luaentity  
+		object - the Luaentity  
 	
-	Return: the speed  
+	Returns: 
+		the speed  
 ]]
 function qts.ai.get_current_speed(object)
 	local v = object:get_velocity()
@@ -96,10 +99,11 @@ end
 	Get if the given pos is in front of the given object  
 	
 	Params:  
-	object - the luaentity  
-	pos - the pos  
+		object - the luaentity  
+		pos - the pos  
 	
-	Return: boolean, true if pos is in front of Object  
+	Returns: 
+		boolean, true if pos is in front of Object  
 ]]
 function qts.ai.is_point_in_front_of(object, pos)
 	local dir = vector.get_forward_vector(object:get_yaw())
@@ -120,13 +124,14 @@ end
 	Get if the object should see the player, based off of facing directions, player sneak, and player overiden attributes  
 
 	Params:  
-	object - the object in question (ObjRef)    
-	player - the player in question (player ObjRef)  
-	detection_radius - facing indepentant detection radius of the mob  
-	facing_detection_radius - facing dependant detection radius of the mob.   
-		IE, the mob has to be facing the player to see the player within this radius, no matter the distance.  
+		object - the object in question (ObjRef)    
+		player - the player in question (player ObjRef)  
+		detection_radius - facing indepentant detection radius of the mob  
+		facing_detection_radius - facing dependant detection radius of the mob.   
+			IE, the mob has to be facing the player to see the player within this radius, no matter the distance.  
 	
-	Return: boolean, true if the object detects the player.  
+	Return: 
+		boolean, true if the object detects the player.  
 ]]
 function qts.ai.does_detect_player(object, player, detection_radius, facing_detection_radius)
 	--first, modify the detection radii
@@ -183,25 +188,24 @@ qts.ai.get_random_navagatable_point_in_radius(pos, radius, query, shape)
 	Description: gets a point in radius around pos that matches query and shape.  
 	
 	Paramaters:  
-	pos - vector as position  
-	radius - float  
-	query - {  
-		One or more of the following:  
-			airlike - boolean - search for standard airlike nodes  
-			group - string as item group - search for nodes with this group  
-			name - string as item name - search for nodes of this name  
-		if wanted:  
-			check_ground = boolean - if the node below the possible position should be not matching query.  
-	} - choose one of these, make the rest nil  
-	height - the height of the column.  
+		pos - vector as position  
+		radius - float  
+		query - {  
+			One or more of the following:  
+				airlike - boolean - search for standard airlike nodes  
+				group - string as item group - search for nodes with this group  
+				name - string as item name - search for nodes of this name  
+			if wanted:  
+				check_ground = boolean - if the node below the possible position should be not matching query.  
+		} - choose one of these, make the rest nil  
+		height - the height of the column.  
+		shape - {  
+			size - float - the x and z size in nodes to check  
+			height float - the y height in nodes to check  
+		} - a person would be {size = 1, height = 2}  
 	
-	shape - {  
-		size - float - the x and z size in nodes to check  
-		height float - the y height in nodes to check  
-	} - a person would be {size = 1, height = 2}  
-	
-	Return:  
-	pos - vector as position - if found, the pos of the found spot. nil if no spots found.  
+	Returns:  
+		pos - vector as position - if found, the pos of the found spot. nil if no spots found.  
 --]]
 function qts.ai.get_random_navagatable_point_in_radius(pos, radius, query, height)
 	pos = vector.round(pos)
@@ -266,16 +270,20 @@ local function insert_backslash(s)
 	return s
 end
 --[[
-Generate a humanoid texture from a texture list  
-final result is a 16*4 by 16*6 texture  
-	base: 64 by 32 image  
-	armor_list: list of 64 by 32 images  
-	item: image texture for the held item  
-	node: { ... } image list for the held node  
-		1 item = all sides the same  
-		3 items = +Y, -Y, sides  
-		6 items = +Y, -Y, +X, -X, +Z, -Z  
-	crown: image texture for teh held crown 
+	Generate a humanoid texture from a texture list  
+	final result is a 16*4 by 16*6 texture  
+
+	Params:
+		base: 64 by 32 image  
+		armor_list: list of 64 by 32 images  
+		item: image texture for the held item  
+		node: { ... } image list for the held node  
+			1 item = all sides the same  
+			3 items = +Y, -Y, sides  
+			6 items = +Y, -Y, +X, -X, +Z, -Z  
+		crown: image texture for teh held crown 
+
+	Return a massive texture string
 ]]
 function qts.make_humanoid_texture(base, armor_list, item, node, crown)
 	local s = "[combine:64x96:0,0=" .. insert_backslash(base) ..  "\\^[resize\\:64x32"
@@ -339,6 +347,10 @@ local cubic_drawtype = {
 }
 --[[
 	Generate a humanoid texture for a player or mob  
+
+	Params:
+		entity - the entity
+		base - base texture, 64 by 32 image
 ]]
 function qts.humanoid_texture(entity, base)
 	local armor_list = {}
@@ -408,6 +420,13 @@ end
 
 --[[
 	Modify a value by a level.
+
+	Params:
+		value - the value (a number)
+		level - the level (a number)
+
+	Reurns:
+		the modified value
 ]]
 function qts.modify_value_by_level(value, level)
 	return value*((level*qts.LEVEL_MULTIPLIER)+1)

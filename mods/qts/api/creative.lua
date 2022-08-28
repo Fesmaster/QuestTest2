@@ -1,4 +1,6 @@
-
+--[[
+	This file is responsible for creative mode changes and checking if the player is in creative.
+]]
 
 minetest.register_privilege("creative", {
 	description = "Creative Mode (as a priv!)",
@@ -8,7 +10,15 @@ minetest.register_privilege("creative", {
 
 local creative_mode_cache = minetest.settings:get_bool("creative_mode")
 
---actual get creative api
+--[[
+	Check if a player is in creative  
+
+	Params:  
+		playername - the player or the player name  
+	
+	Return:
+		boolean, true if the player is in creative, false otherwise.  
+]]
 function qts.is_player_creative(playername)
 	return creative_mode_cache or minetest.check_player_privs(playername, {creative = true})
 end

@@ -20,12 +20,14 @@ local damage_profile_start, damage_profile_stop = qts.profile("Player Damage", "
 
 --[[
 	Set a player's special data fields   
-	player - the player. can be a player name  
-	category - mod-specific or use specific category. To prevent name clashing. Should at least contain the mod name  
-	field - the specific field  
-	data - the data to set (if ommited, then field is the data - useful when setting a table, as its keys can be fields for future gets)
-
 	This data is maintained between sessions. 
+
+	Params:
+		player - the player. can be a player name  
+		category - mod-specific or use specific category. To prevent name clashing. Should at least contain the mod name  
+		field - the specific field  
+		data - the data to set (if ommited, then field is the data - useful when setting a table, as its keys can be fields for future gets)
+
 ]]
 function qts.set_player_data(player, catagory, field, data)
 	playerdata_profile_start()
@@ -49,11 +51,17 @@ end
 
 --[[
 	Get a player's special data fields   
-	player - the player. can be a player name  
-	category - mod-specific or use specific category. To prevent name clashing. Should at least contain the mod name  
-	field - the specific field  
-
 	This data is maintained between sessions. 
+	
+	Params:
+		player - the player. can be a player name  
+		category - mod-specific or use specific category. To prevent name clashing. Should at least contain the mod name  
+		field - the specific field  
+
+	Returns:
+		the data field
+
+	
 ]]
 function qts.get_player_data(player, catagory, field)
 	playerdata_profile_start()
@@ -99,13 +107,18 @@ end
 --[[
 	Apply armor to a damage value
 	player or entity agnostic
+
+	Params:
+		victim - the victim entity
+		damage - the ammount of damage
+		damage_group - the type of damage
 ]]
-function qts.apply_armor_to_damage(victim, damage, customArmorField)
+function qts.apply_armor_to_damage(victim, damage, damage_group)
 	local armor = victim:get_armor_groups()
 	--default to fleshy, if available
-	customArmorField = customArmorField or "fleshy"
-	if armor[customArmorField] then
-		armor = (armor[customArmorField] or 1)-1
+	damage_group = damage_group or "fleshy"
+	if armor[damage_group] then
+		armor = (armor[damage_group] or 1)-1
 	else
 		local armor_tmp = 0
 		local count = 0
@@ -131,17 +144,28 @@ local registered_playerpunches = {}
 	Register a function to be run when the player attacks an entity or another player.
 	If there is a return value, then it is taken as the new tool_capabilities
 	This is applied before armor calculations, including checking if the victim is immortal
-	function(victim, hitter, time_from_last_punch, tool_capabilities, dir)
+
+	Params:
+		function(victim, hitter, time_from_last_punch, tool_capabilities, dir)
 ]]
 function qts.register_on_player_attack(func)
 	registered_playerpunches[#registered_playerpunches+1] = func 
 end
 
-
-
-
 --[[
 	calculate the damage that should be delivered for a specific hit. victim and hitter are any objref, not just players or luaentities
+
+	Params:
+		victim - the victim entity
+		hitter - the hitting entity
+		time_from_last_punch - the time since the last punch delivered by hitter to anyone
+		tool_capabilities - the tool capabilities, including damage types
+		dir - the direction the damage came from (usually from hitter to victim)
+	
+	Returns:
+		the damage value, correctly calculated for armor, bonuses, etc
+
+	TODO: this needs to take Item Modifiers into account. See itemModifiers.lua
 ]]
 function qts.calculate_damage(victim, hitter, time_from_last_punch, tool_capabilities, dir)
 	
@@ -176,8 +200,15 @@ function qts.calculate_damage(victim, hitter, time_from_last_punch, tool_capabil
 end
 
 --[[
+	Get the list of armor for the player
 	This function should be overriden to return the equipment list for the player  
-	These entries should be itemstacks, and the list should be packed.
+	These entries should be itemstacks, and the list should be packed. 
+
+	Params:  
+		player - the player
+
+	Returns:
+		table - an array of **item names**, not ItemStacks, item strings, or item stables
 ]]
 function qts.get_player_equipment_list(player)
 	return {}
@@ -185,6 +216,12 @@ end
 
 --[[
 	Recalculate the player armor, based off of their equipment list
+
+	Params:
+		player - the player
+
+	Returns:
+		nothing
 ]]
 function qts.recalculate_player_armor(player)
 	local armor_groups = {fleshy=1, stabby=1, psycic=1, enviromental=1} --DEFUALT ARMOR GROUPS
@@ -219,6 +256,12 @@ local registered_hpchanges_nomod = {}
 
 --[[
 	Get the player current HP
+
+	Params:
+		player - the player
+
+	Returns:
+		the player health
 ]]
 function qts.get_player_hp(player)
 	if IS_DAMAGE_ENABLED then
@@ -230,6 +273,12 @@ end
 
 --[[
 	Get the player's max HP
+	
+	Params:
+		player - the player
+
+	Returns:
+		the plaeyr's max health (unboosted)
 ]]
 function qts.get_player_hp_max(player)
 	return qts.get_player_data(player, "COMBATSYSTEM", "HP_MAX")
@@ -238,16 +287,21 @@ end
 --[[
 	Set the player's max HP  
 	optionally, also fill their health to this value
+
+	Params
+		player - the player
+		max - the new max health
+		fillHealth = true - boolean, if true, then fill the currrent health to the max
+
+	Returns:
+		nothing
 ]]
 function qts.set_player_hp_max(player, max, fillHealth)
 	qts.set_player_data(player, "COMBATSYSTEM", "HP_MAX", max)
-	if fillHealth then
+	if fillHealth or fillHealth == nil then
 		qts.set_player_hp(player, max, "set_hp")
 	end
 end
-
-
-
 
 local function clamp_player_hp(player,hp)
 	return math.min(hp, qts.get_player_data(player, "COMBATSYSTEM", "HP_MAX") + (qts.get_player_data(player, "MODIFIERS", "ADD_health_bonus") or 0))
@@ -255,6 +309,10 @@ end
 
 --[[
 	refresh the player HP, in case the max dropped
+	This just clamps what is currently there.
+
+	Params:
+		player - the player
 ]]
 function qts.refresh_player_hp(player)
 	local oldhp = qts.get_player_data(player, "COMBATSYSTEM", "HP")
@@ -270,18 +328,29 @@ end
 
 --[[
 	Add a value to the player hp (or remove if negative)
+
+	Params:
+		player - the player
+		hp - the change in health
+		reason - if negative, then the reason for the HP change. defaults to "set_hp"
 ]]
 function qts.add_player_hp(player, hp, reason)
-	qts.set_player_hp(player, qts.get_player_data(player, "COMBATSYSTEM", "HP")+hp, reason)
+	qts.set_player_hp(player, qts.get_player_data(player, "COMBATSYSTEM", "HP")+hp, reason or "set_hp")
 end
 
 --[[
 	Set the player's HP
+
+	Params:
+		player - the player
+		hp - the change in health
+		reason - if negative, then the reason for the HP change. defaults to "set_hp"
 ]]
 function qts.set_player_hp(player, hp, reason)
 	if IS_DAMAGE_ENABLED then
 		local oldhp = qts.get_player_data(player, "COMBATSYSTEM", "HP")
 		local hpchange = hp - oldhp
+		if not reason then reason = "set_hp" end
 
 		for i, func in ipairs(registered_hpchanges_mod) do
 			hpchange = func(player, hpchange, reason)

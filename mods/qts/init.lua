@@ -23,12 +23,11 @@ qts.settings.set_num("DEFAULT_HP", qts.DEFAULT_HP)
 
 qts.LEVEL_MULTIPLIER = qts.world_settings.get_num("LEVEL_MULTIPLIER") or 0.2 --five levels for 2x effect
 
-
 dofile(qts.path.."/benchmark.lua")
 
 dofile(qts.path.."/api/maths.lua") --non-vector math
-dofile(qts.path.."/api/vector.lua") --vector math
 dofile(qts.path.."/api/util.lua")
+dofile(qts.path.."/api/vector.lua") --vector math
 
 dofile(qts.path.."/api/creative.lua")
 dofile(qts.path.."/api/player.lua")

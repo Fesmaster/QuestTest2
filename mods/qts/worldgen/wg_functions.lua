@@ -4,6 +4,14 @@ local CID = qts.worldgen.CID
 local ORE = qts.worldgen.ORE
 --qts.worldgen.mpagen_aliases
 
+--[[
+	Set the default nodes for map generation
+
+	Params:
+		stone = the name of the stone node
+		water = the name of the water node
+		river = the name of the river water node
+]]
 qts.worldgen.set_mapgen_defaults = function(stone, water, river)
 	if not stone then stone = "air" end
 	if not water then water = "air" end
@@ -15,6 +23,17 @@ qts.worldgen.set_mapgen_defaults = function(stone, water, river)
 	}
 end
 
+--[[
+	Add an item name to the worldgen CID (content ID)
+	cache
+	Since getting the CID cannot be done at the time LUA files are run,
+	this makes an internal set of names that need CIDs,
+	then generates them when it can.
+	Once generated, they are found in qts.worldgen.CID[name]
+
+	Params:
+		name - the node name to add
+]]
 qts.worldgen.add_to_CID = function(name)
 	qts.worldgen.CID_source[name] = true
 end
@@ -40,34 +59,45 @@ minetest.register_ore = function(def)
 	register_ore_internal(def)
 end
 
+--qts.worldgen.registered_biomes
+
+
 --[[
-biome registration
-keys in def:
-	#where it will spawn
-	heat_point = number
-	humidity_point = number
-	min_ground_height = number --unlike regular biomes, this is NOT the node Y height, it is the ground default height
-	max_ground_height	^^
-	min_air - #of air blocks above that must exist
-	min_light - min day light level
-	
-	#what it spawns
-	dust = "nodename"    -|
-	surface = "nodename"  |
-	fill = "nodename"     |- these SHOULD be able to be tables to get a random one, too
-	stone = "nodename"    |
-	plant = "nodename"   -|
-	
-	#how much does it spawn
-	surface_depth = number
-	fill_depth = number
-	stone_depth = number
-	
-	#special spawn chance
-	plant_freq 1 in x chance 
+	biome registration
+
+	Params:
+		name - string name of the biome
+		def - teh Biome Definition Table
+
+	Biome Definition Table
+	{
+	Where the biome will spawn
+		heat_point = number, 0 to 100
+		humidity_point = number, 0 to 100
+		min_ground_height = number --unlike regular biomes, this is NOT the node Y height, it is the ground default height
+		max_ground_height = number --unlike regular biomes, this is NOT the node Y height, it is the ground default height
+		min_air - number of air blocks above that must exist
+		min_light - min day light level
+
+	What nodes are spawned
+		dust                 -|
+		surface               |
+		fill                  |- nodenames, or arrays of nodenames for random picking
+		stone                 |- These are the node categories
+		underwater            |
+		surface_water         |
+		plant                -|
+
+	How much of what does it spawn:
+		surface_depth = number
+		fill_depth = number
+		stone_depth = number
+
+	special spawn chance
+		plant_freq 1 in x chance 
+	}
 	
 --]]
---qts.worldgen.registered_biomes
 qts.worldgen.register_biome = function(name, def)
 	--add to worldgen CID system
 	for i, t in ipairs{"dust", "surface", "fill", "stone", "plant", "surface_water", "underwater"} do
@@ -92,12 +122,22 @@ qts.worldgen.register_biome = function(name, def)
 	qts.worldgen.registered_biomes[name] = def
 end
 
---name = biome name
---ntype = "dust", "surface", "fill", "stone", "plant"
-qts.worldgen.get_biome_node = function(name, ntype, asCID)
+
+--[[
+	Get a biome node, from the type provided
+
+	Params:
+		name - the biome name
+		ntype - category, one of "dust", "surface", "fill", "stone", "plant", "underwater", "surface_water"
+		asCID - boolean, if true, then return teh CID instead of the name
+
+	Returns:
+		name or CID of oen of the nodes if found, otherwise nil
+]]
+qts.worldgen.get_biome_node = function(name, category, asCID)
 	if asCID == nil then asCID = true end
-	if qts.worldgen.registered_biomes[name] and qts.worldgen.registered_biomes[name][ntype] then
-		local nodelist = qts.worldgen.registered_biomes[name][ntype]
+	if qts.worldgen.registered_biomes[name] and qts.worldgen.registered_biomes[name][category] then
+		local nodelist = qts.worldgen.registered_biomes[name][category]
 		local found = nil
 		while (found == nil) do
 			local nodename = nodelist[math.random(#nodelist)]
@@ -115,24 +155,40 @@ qts.worldgen.get_biome_node = function(name, ntype, asCID)
 	return nil
 end
 
+--[[
+	check if a CID is part of a particular biome
+
+	Params:
+		cid - the node's CID
+		biome - the biome name
+		group - the array of categories to check, and defaults to the full list
+				values can be: "dust", "surface", "fill", "stone", "plant", "underwater", "surface_water"
+		solidOnly - only check  "solid" groups, IE, ignoring "plant" and  "dust"
+
+	Returns:
+		boolean true or false
+]]
 qts.worldgen.is_biome_node = function(cid, biome, group, solidOnly)
 	if solidOnly == nil then solidOnly = true end
 	local check = {"dust", "surface", "fill", "stone", "plant", "underwater", "surface_water"}
 	if group then
 		check = group
 	end
+	local ignore_keys = {}
 	if solidOnly then
-		check.dust = nil
-		check.plant = nil
+		ignore_keys.dust = true
+		ignore_keys.plant = true
 	end
 	local biomeDef =  qts.worldgen.registered_biomes[biome]
 	if biomeDef then
 		for i, t in ipairs(check) do
-			local nodelist = biomeDef[t]
-			if nodelist then
-				for i, node in ipairs(nodelist) do
-					if cid == CID[node] then 
-						return true
+			if not ignore_keys[t] then
+				local nodelist = biomeDef[t]
+				if nodelist then
+					for j, node in ipairs(nodelist) do
+						if cid == CID[node] then 
+							return true
+						end
 					end
 				end
 			end
@@ -169,6 +225,13 @@ qts.worldgen.dist_funcs = {
 }
 local select_dist_func = "euclidian"
 
+--[[
+	Set the distance function used to select biomes
+	The default function is "euclidian"
+
+	Params:
+		fname - the function name, one of: "euclidian", "manhatten", "less", "greatest", "average"
+]]
 qts.worldgen.set_dist_func = function(fname)
 	if qts.worldgen.dist_funcs[fname] then
 		qts.worldgen.select_dist_func = fname
@@ -179,6 +242,17 @@ end
 
 --[[
 	this function gets the biome name based off of heat and humidity values
+
+	Params:
+		heat - the heat point (from a heat map)
+		humidity - the humidity point (from a humidity map)
+		height - the map height (from a height map)
+
+	Returns:
+		a biome name
+
+	Errors:
+		if it cannot find a biome, it will raise an error
 --]]
 qts.worldgen.get_biome_name = function(heat, humidity, height)
 	local nearest_name = nil
@@ -222,19 +296,23 @@ end
 --qts.worldgen.registered_structures
 
 --[[
-def contains:
+	Register a structure to spawn
 
-{
+	Params:
+		name - the structure name
+		def - the Structure Definition Table
 
-	schematic = "path to schematic.mts"	--must contain ".mts", it is not added for you!!
-	chance = number						--one in chance of placing. math: math.random(chance) == 1
-	biomes = {} or "name"				--the biome names (converted to table in register)
-	nodes = {} or "name"				--the below node names (converted to table in register)
-	force_place = boolean [false]		--should the placement be forced?
-	rotate = boolen [true]				--should the placed rotation be random?
-	offset = vector or nil				--offset to placement
-	flags = string [""]					--minetest schematic placement flags
-}
+	Structure Definition Table
+		{
+			schematic = "path to schematic.mts" --must contain ".mts", it is not added for you!!
+			chance = number                     --one in chance of placing. math: math.random(chance) == 1
+			biomes = {} or "name"               --the biome names (converted to table in register)
+			nodes = {} or "name"                --the below node names (converted to table in register)
+			force_place = boolean [false]       --should the placement be forced?
+			rotate = boolen [true]              --should the placed rotation be random?
+			offset = vector or nil              --offset to placement
+			flags = string [""]                 --minetest schematic placement flags
+		}
 
 --]]
 qts.worldgen.register_structure = function(name, def)
@@ -260,6 +338,17 @@ qts.worldgen.register_structure = function(name, def)
 	qts.worldgen.registered_structures[name] = def
 end
 
+--[[
+	Check if a structure can be placed in a biome and at a specific block
+
+	Params:
+		name - the structure name
+		biome - the biome name
+		cid - the block CID
+	
+	Returns:
+		boolean true or false
+]]
 qts.worldgen.check_structure = function(name, biome, cid)
 	local strucDef = qts.worldgen.registered_structures[name]
 	if strucDef then
@@ -275,6 +364,17 @@ qts.worldgen.check_structure = function(name, biome, cid)
 end
 
 --used to get the flag string for centering a schmatic
+--[[
+	Get a shematic center string from a bool vector
+
+	Params:
+		x = bool - should center on X
+		y = bool - should center on Y
+		z = bool - should center on Z
+
+	Return:
+		a string compatible with schematic placing functions
+]]
 qts.worldgen.centers = function(x, y, z)
 	local str = ""
 	if x then str = str .. "place_center_x," end
@@ -284,20 +384,24 @@ qts.worldgen.centers = function(x, y, z)
 end
 
 --[[
-def contains:
+	register a node to be scattered over a biome in world generation
 
-{
+	Params:
+		name - the scatter name
+		def - the Scatter Definition Table
 
-	nodes = {} or string			--list of possible nodename
-	replace = {} or nil or string	--list of nodes that can be replaced, nil or {} to ignore
-	above = {} or nil or string		--list of nodes that must be above, nil or {} to ignore
-	below = {} or nil or string 	--list of nodes that must be below, nil or {} to ignore
-	beside = {} or nil or string	--list of nodes that must be next to, nil or {} to ignore
-	biomes = {} or nil or string	--list of the allowed biomes. nil or {} to ignore
-	beside_count = 1-4 [1]			--how many of the beside nodes must be in the category. defaults to 1
-	chance = number [100]			--one in x chance of placing this node. defaults to 100.
-	stage = one of: ("pre-structre", "post-structure", "post-plant", "post-ore")
-}
+	Scatter Definition Table
+		{
+			nodes = {} or string			--list of possible nodename
+			replace = {} or nil or string	--list of nodes that can be replaced, nil or {} to ignore
+			above = {} or nil or string		--list of nodes that must be above, nil or {} to ignore
+			below = {} or nil or string 	--list of nodes that must be below, nil or {} to ignore
+			beside = {} or nil or string	--list of nodes that must be next to, nil or {} to ignore
+			biomes = {} or nil or string	--list of the allowed biomes. nil or {} to ignore
+			beside_count = 1-4 [1]			--how many of the beside nodes must be in the category. defaults to 1
+			chance = number [100]			--one in x chance of placing this node. defaults to 100.
+			stage = one of: ("pre-structre", "post-structure", "post-plant", "post-ore")
+		}
 
 --]]
 qts.worldgen.register_scatter = function (name, def)
@@ -356,17 +460,17 @@ qts.worldgen.register_scatter = function (name, def)
 end
 
 --[[
-Check if a particular position should have a scatter node put into it
+	Check if a particular position should have a scatter node put into it
 
-def - the scatter def
+	Params:
+		def - the scatter def
+		x, y, z - the position
+		Area - the VoxelArea ref
+		Data - the node data
+		biomeID - the biome name. one of ("pre-structure", "post-structure", "post-plant", "post-ore")
 
-x, y, z - the position
-Area - the VoxelArea ref
-
-Data - the node data
-
-biomeID - the biome name. one of ("pre-structure", "post-structure", "post-plant", "post-ore")
-
+	Returns:
+		boolean true or false
 --]]
 qts.worldgen.check_scatter = function(def, x, y, z, Area, Data, biomeID)
 	local allowed = false
@@ -428,18 +532,17 @@ qts.worldgen.check_scatter = function(def, x, y, z, Area, Data, biomeID)
 end
 
 --[[
-run a stage of the scatter process
+	run a stage of the scatter process
 
-Area - the VoxelArea reference
+	Params:
+		Area - the VoxelArea reference
+		Data - the CID data
+		BiomeBuffer - the biome buffer
+		minp, maxp - the min and max positions as vectors
+		stageName - the stage name, as string. One of: ("pre-structure", "post-structure", "post-plant", "post-ore")
 
-Data - the CID data
-
-BiomeBuffer - the biome buffer
-
-minp, maxp - the min and max positions as vectors
-
-stageName - the stage name, as string. One of: ("pre-structure", "post-structure", "post-plant", "post-ore")
-
+	Returns:
+		Data
 --]]
 qts.worldgen.process_scatter_stage = function(Area, Data, BiomeBuffer, minp, maxp, stageName)
 	if qts.worldgen.scatters_stage_marker[stageName] == nil then return Data end

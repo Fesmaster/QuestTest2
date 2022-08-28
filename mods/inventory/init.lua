@@ -166,7 +166,7 @@ qts.gui.register_gui("inventory", {
 		inventory.refresh_inv(name, tabnumber)
 	end,
 })
-qts.gui.set_inventory_qui_name("inventory") --set it to the main inventory
+qts.gui.set_inventory_gui_name("inventory") --set it to the main inventory
 
 
 qts.gui.register_gui("inv_tab_equipment", {

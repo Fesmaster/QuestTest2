@@ -14,16 +14,32 @@ all element data is saved to qts.registered_element, but is not read from it
 
 --]]
 
-qts.registered_elements = {}
+local registered_elements = {}
 
+--[[
+	Register a new element.  
+	Elements are a type of defaulted block-to-block interaction, using groups, ABMs, and functions.  
 
+	Params:  
+		name - the element name, a string. This is important later.  
+		default_func(pos, node, active_object_count, active_object_count_wider)
+			- The default function this element should apply when it is triggered, if not overriden by a block's definition.
+			this function is called on blocks that receive the elemental effect.  
+
+	How to use:  
+		Nodes can be effected by or cause an elemental effect by groups.  
+		* If the node has the "<name>ing" group, it causes the elemental effect in other nodes.  
+		* If the node has the "<name>able" group, it can have the effect caused to it.  
+		* If the receiving group has a function `on_<name>(pos, node, active_object_count, active_object_count_wider)` then
+		it uses this function to reply instead of the default function.  
+]]
 function qts.register_element(name, default_func)
 	local function_name = "on_"..name
 	local cause_group_name = name.."ing"
 	local effect_group_name = name.."able"
 	
 	--store this info
-	qts.registered_elements[name] = {
+	registered_elements[name] = {
 		name = name,
 		function_name = function_name,
 		cause_group_name = cause_group_name,

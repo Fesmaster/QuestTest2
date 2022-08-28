@@ -1,4 +1,8 @@
-qts.open_chests = {}
+--[[
+	This file is responsible for the functions to register chests, and to use them.
+]]
+
+local open_chests = {}
 
 qts.gui.register_gui("qt_chest", {
 	get = function(data, pos, name)
@@ -16,7 +20,7 @@ qts.gui.register_gui("qt_chest", {
 			return
 		end
 		
-		if not qts.open_chests[name] then
+		if not open_chests[name] then
 			return
 		end
 		qts.close_chest(name)
@@ -24,7 +28,15 @@ qts.gui.register_gui("qt_chest", {
 	end,
 })
 
+--[[
+	Check if a chest lid is obstructed (and thus the chest cannot be opened)  
 
+	Params:  
+		pos - the vector position of the node to check  
+
+	Return:  
+		boolean true if obstructed, false otherwise.  
+]]
 qts.is_chest_lid_obstructed = function(pos)
 	local above = pos+vector.new(0,1,0)
 	local def = minetest.registered_nodes[minetest.get_node(above).name]
@@ -39,6 +51,17 @@ qts.is_chest_lid_obstructed = function(pos)
 	return true
 end
 
+--[[
+	Get the drops from a node's inventory  
+
+	Params:  
+		pos - the position of the node  
+		inventory - the string name of the inventory  
+		drops - an (optional) table to append the drops to  
+
+	Return:
+		table (same table as drops if drops is provided) that contains the dropped items.  
+]]
 qts.get_node_inventory_drops = function(pos, inventory, drops)
 	if not drops then drops = {} end --basic table
 	local inv = minetest.get_meta(pos):get_inventory()
@@ -53,15 +76,24 @@ qts.get_node_inventory_drops = function(pos, inventory, drops)
 	return drops
 end
 
+--[[
+	Close a chest by player name  
+
+	Params:  
+		pname - the player name  
+	
+	Returns: 
+		nil   
+]]
 qts.close_chest = function(pname)
 	--get a ref to the data
-	local info = qts.open_chests[pname]
+	local info = open_chests[pname]
 	
 	--remove the ref in the table
-	qts.open_chests[pname] = nil
+	open_chests[pname] = nil
 	--search the table for others
 	local is_closed = true
-	for pname, check in pairs(qts.open_chests) do
+	for pname, check in pairs(open_chests) do
 		if check.pos.x == info.pos.x and check.pos.y == info.pos.y and check.pos.y == info.pos.y then
 			is_closed = false
 			break
@@ -88,25 +120,42 @@ end
 
 minetest.register_on_leaveplayer(function(player)
 	local pname = player:get_player_name()
-	if qts.open_chests[pname] then
+	if open_chests[pname] then
 		qts.close_chest(pname)
 	end
 end)
 
 
 --[[
-custom params that are needed
-invsize = number
-get_chest_formspec(pos, pname)
-sound_open  = sound setup
-sound_close = sound setup
+	Register a new chest.  
 
+	Params:  
+		name - the node name  
+		def - the node definition table  
 
-chest callbacks:
-on_chest_open(pos, node, opener, is_already_open)
-on_chest_close(pos, node, closer, is_final_close)
+	Definition Table Custom Values:  
+		invsize = number, the inventory size  
+		get_chest_formspec = function(pos, pname) -> forspec string   
+		sound_open  = sound setup  
+		sound_close = sound setup  
+		on_chest_open(pos, node, opener, is_already_open) - Optional, called when chest is opened.  
+		on_chest_close(pos, node, closer, is_final_close) - Optional, called when chest is closed.  
 
---]]
+	Definition Table Options with Default Values  
+		(You probably don't want to override these unless you know what you are doing)  
+		can_dig(pos, player)  
+		on_blast(pos)    
+		on_metadata_inventory_move(...)  
+		on_metadata_inventory_put(...)  
+		on_metadata_inventory_take(...)  
+	
+	Definition Table disalowed Values:
+		on_construct(pos)  
+		on_rightclick(pos, node, clicker)
+		
+	Default Groups:  
+		chest = 1  
+]]
 qts.register_chest = function(name, def)
 	--this does not show a difference from the chest being open or closed
 	--local formsize = def.formsize or {x=8,y=8}
@@ -152,7 +201,7 @@ qts.register_chest = function(name, def)
 		
 		--is the chest already open? (multiplayer)
 		local is_already_open = false
-		for pname, check in pairs(qts.open_chests) do
+		for pname, check in pairs(open_chests) do
 			if check.pos.x == pos.x and check.pos.y == pos.y and check.pos.y == pos.y then
 				is_already_open = true
 				break
@@ -160,7 +209,7 @@ qts.register_chest = function(name, def)
 		end
 		
 		--add this opening instance to the list
-		qts.open_chests[clicker:get_player_name()] = {
+		open_chests[clicker:get_player_name()] = {
 			pos = pos,
 			sound_close = sound_close
 		}
