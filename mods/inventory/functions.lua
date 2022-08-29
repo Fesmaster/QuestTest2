@@ -100,7 +100,7 @@ function inventory.get_player_equipment(playername, pos)
 	return str
 end
 
-function inventory.get_button_grid(playername, current_page, prev_search, cheat_mode, pos)
+function inventory.get_button_grid(playername, current_page, prev_search, cheat_mode, craftonly_mode, pos)
 	if not current_page then current_page = 1 end
 	if not prev_search then prev_search = "" end
 	if not pos then pos = qts.gui.gui_makepos(11.5, 0) end
@@ -128,6 +128,10 @@ function inventory.get_button_grid(playername, current_page, prev_search, cheat_
 	end
 	local cheat_img = "gui_toggle_off.png"
 	if (cheat_mode) then cheat_img = "gui_toggle_on.png" end
+
+	local craftonly_img = "gui_toggle_off.png"
+	if (craftonly_mode) then craftonly_img = "gui_toggle_on.png" end
+	
 	str = str .. "container_end[]"..
 		"container["..P(0,8.5).."]"..
 		"image_button["..P(0,0)..";1,1;lshift.png;btn_page_back;]"..
@@ -141,6 +145,13 @@ function inventory.get_button_grid(playername, current_page, prev_search, cheat_
 			"bgimg_middle=0;border=false]"..
 		"image_button["..P(5,1)..";1,0.5;"..cheat_img..";cheat_toggle;]"..
 		"tooltip[cheat_toggle;Toggle Cheat Mode]"..
+		--craftonly toggle button
+		"style[craftonly_toggle;bgimg=Transparent.png;"..
+			"bgimg_hovered=Transparent.png;bgimg_pressed=Transparent.png;"..
+			"bgimg_middle=0;border=false]"..
+		"image_button["..P(0,1)..";1,0.5;"..craftonly_img..";craftonly_toggle;]"..
+		"tooltip[craftonly_toggle;Toggle Craftable Only Mode]"..
+		
 		
 		"container_end[]"..
 		"container_end[]"
@@ -347,8 +358,9 @@ local function match(s, filter)
 	return nil
 end
 
-function inventory.gen_item_list_for_player(playername, filter)
+function inventory.gen_item_list_for_player(playername, filter, craftonly)
 	if not filter then filter = "" end
+	--if craftonly == nil then craftonly = false end --nil is false
 	if inventory.itemlist_player[playername] and #inventory.itemlist_player[playername] ~= 0 then 
 		for id, name in ipairs(inventory.itemlist_player[playername]) do
 			inventory.itemlist_player[playername][id] = nil --clear the list
@@ -362,7 +374,12 @@ function inventory.gen_item_list_for_player(playername, filter)
 		local m = match(minetest.registered_items[name].description, filter) or match(name, filter)
 		if not m then
 			m = minetest.get_item_group(name, filter)
-			if m ==0 then m = nil end
+			if m == 0 then m = nil end
+		end
+		if m and craftonly then
+			if not qts.player_can_craft_item(name, playername) then
+				m = nil
+			end
 		end
 		if m then
 			inventory.itemlist_player[playername][#inventory.itemlist_player[playername]+1] = name

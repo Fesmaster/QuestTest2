@@ -1,6 +1,3 @@
-
-
-qts.registered_item_modifiers = {}
 --[[
 An Item modifier is a set of functions attached to a spedific name
 They get called from default minetest callbacks, when an item bearing that name in its meta tags
@@ -29,6 +26,30 @@ minetest.register_on_dieplayer(function(ObjectRef, reason))
 minetest.register_on_item_eat(function(hp_change, replace_with_item, itemstack, user, pointed_thing))
 --]]
 
+qts.registered_item_modifiers = {}
+
+--[[
+	Register an item modifier (enchantment)  
+
+	Params:  
+		name - the modifier name  
+		def - the modifier defintition table  
+
+	Item Modifier Definition Table  
+		description - human-readable plesant description                                        - will be appended to any item with this modifier  
+		maxlevel - the level of the modifier                                                    - currently no effect   
+		on_place(pos, newnode, placer, oldnode, itemstack, pointed_thing)                       - only actually gets called for nodes that can be placed  
+		on_dignode(pos, node, digger)                                                           - used to break a node   
+		on_punch_node(pos, node, puncher, pointed_thing)                                        - used to punch a node  
+		on_punch_player(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)   - used to punch player. Hitter is the one holding the item  
+		                                                                                            if on_punch_player == nil and on_punch_entity ~= nil then  
+		                                                                                            on_punch_entity will be called by player.  
+		on_punch_entity(objref, hitter, time_from_last_punch, tool_capabilities, dir, damage)   - used to punch an entity THAT CALLS IT (TODO - Integrate to new damage system!)  
+		on_dieplayer(player, reason)                                                            - the player with this in his inv dies  
+		on_item_eat(hp_change, replace_with_item, itemstack, user, pointed_thing)               - the item is eaten (return true to prevent HPChange)  
+		inventory_can_act(player, action, inventory, inventory_info)                            - used to check if some inventory operation can be done to the item  
+		inventory_on_act(player, action, inventory, inventory_info)                             - called when an inventory operation is done on the item  
+]]
 function qts.register_item_modifier(name, def)
 	if not def.maxlevel then def.maxlevel = 1 end
 	def.name = name
@@ -36,10 +57,22 @@ function qts.register_item_modifier(name, def)
 	qts.registered_item_modifiers[name] = def
 end
 
+--[[
+	Apply an item modifier to an item  
+	CURRENTLY DOES NOT CHECK FOR MAX LEVEL  
 
+	Params:  
+		itemstack - the ItemStack to apply the item to. Must actually be an ItemStack, not an item string or item table  
+		name - the name of the item modifier, as registered.  
+		level = 1 - Optional. the level to apply it at.  
+
+	Returns:  
+		boolean, true if applied, false otherwise.  
+]]
 function qts.apply_item_modifier(itemstack, name, level)
 	local def = qts.registered_item_modifiers[name]
 	if not def then return false end
+	if not level then level = 1 end
 	local meta = itemstack:get_meta()
 	
 	--handle the item description
@@ -75,6 +108,7 @@ function qts.apply_item_modifier(itemstack, name, level)
 	mods[name] = level
 	modstr = minetest.serialize(mods)
 	meta:set_string("qt_item_modifers", modstr)
+	return true
 end
 
 

@@ -1,64 +1,29 @@
 --[[
 qts.ai.register_behavior(name, def)
+	
+	
+qts.ai.register_creature(name, def)
+	
+--]]
+
+
+--[[
 	Registers a new AI behavior
 
 	Params:
-	name =  the name of the behavior
-	def = {
-		on_step = function(self, dtime),
-		on_punch = function(self, puncher, time_from_last_punch, tool_capabilities, dir),
-		on_rightclick = function(self, clicker),
-		on_activate = function(self, staticdata, dtime_s),
-		get_staticdata = function(self) - return "string"
-	}
-	
-qts.ai.register_creature(name, def)
-	Registers a new Creature
-	
-	Params:
-	name = the name of the creature
-	def = {
-		hp_max,
-		weight,
+		name -  the name of the behavior
+		def - the Behavior definition table
 		
-		collisionbox = {},
-		selectionbox = {},
-		visual = "mesh" / "wielditem" / ... ,
-		textures = {},
-		mesh = "mesh",
-		visual_size = {},
-		colors = {},
-		makes_footsteps_sounds = true,
-		
-		use_texture_alpha,
-		spritediv,
-		initial_sprite_basepos,
-		backface_culling,
-		glow,
-		
-		automatic_rotate,
-		automatic_face_movement_dir,
-		automatic_face_movement_max_rotation_per_sec,
-		
-		behavior = "behavor name",
-		speed = number,
-		view_radius = number,
-		gravity_scale = number,
-		armor_groups = {fleshy = 0},
-		level = 0,
-		
-		spawnegg = {
-			description = "Description",
-			color1 = "colorstring",
-			color2 = "colorstring",
-			pattern = "spots",
-		}
-		--if you don't want a spawnegg, leave this nil
-		
-		--custom_key = cusom_val
-	}
---]]
 
+	Behavior Definition Table
+		{
+			on_step = function(self, dtime),
+			on_punch = function(self, puncher, time_from_last_punch, tool_capabilities, dir),
+			on_rightclick = function(self, clicker),
+			on_activate = function(self, staticdata, dtime_s),
+			get_staticdata = function(self) - return "string"
+		}
+]]
 qts.ai.register_behavior = function(name, def)
 	def.name = name
 	
@@ -110,6 +75,55 @@ local dont_propigate = {
 
 local behavior_propigate={on_activate=true,get_staticdata=true,on_step=true,on_punch=true,on_rightclick=true}
 
+
+--[[
+	Registers a new Creature
+	
+	Params:
+		name = the name of the creature
+		def = the Creature Definition Table
+	
+	Creature Definition Table
+		{
+		Entries from regular entities
+			hp_max-1, - the max HP
+			weight=1, - the entity weight
+
+			collisionbox = {-0.5, -0.5, -0.5, 0.5, 0.5, 0.5},
+			selectionbox = {-0.5, -0.5, -0.5, 0.5, 0.5, 0.5},
+			visual = "mesh" / "wielditem" / ... ,
+			textures = {},
+			mesh = "mesh",
+			visual_size = {},
+			colors = {},
+			makes_footsteps_sounds = true,
+			use_texture_alpha,
+			spritediv,
+			initial_sprite_basepos,
+			backface_culling,
+			glow,
+			automatic_rotate,
+			automatic_face_movement_dir,
+			automatic_face_movement_max_rotation_per_sec,
+
+		Custom Entries
+			behavior = "behavor name", - the name of a registered behavior
+			speed = number, - the walking speed
+			view_radius = number, - the view radius
+			gravity_scale = number, - the gravity scale
+			armor_groups = {fleshy = 0}, - the armor of the entity (should have entries for fleshy, stabby, psycic, and enviromental)
+			level = 0, - the level fo the entity
+
+			spawnegg = {   - Spawnegg information, if you don't want a spawnegg, leave this nil
+				description = "Description",
+				color1 = "colorstring",
+				color2 = "colorstring",
+				pattern = "spots", -current patterns are limited to "spots"
+			}
+			
+			--custom_key = cusom_val - whatever you want!
+		}
+]]
 function qts.ai.register_creature(name, def)
 	if (not(def.behavior) or not(qts.registered_behaviors[def.behavior])) then
 		minetest.log("Incorrect creature definition. Valid behavior must be supplied.")

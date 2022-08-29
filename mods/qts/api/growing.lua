@@ -1,4 +1,13 @@
+--[[
+Growing of plants and stuff
+]]
 
+--[[
+	Start the growth of a plant at pos  
+
+	Params:  
+		pos - the location of the plant to start.  
+]]
 function qts.start_node_growth(pos)
 	local node = minetest.get_node_or_nil(pos)
 	if node == nil then return end
@@ -43,6 +52,12 @@ function qts.start_node_growth(pos)
 	end
 end
 
+--[[
+	Half the remaining grow time on a plant  
+
+	Params:  
+		pos - the location of the plant.  
+]]
 function qts.fertalize_node(pos)
 	local node = minetest.get_node_or_nil(pos)
 	if node and minetest.get_item_group(node.name, "growable") > 0 then
@@ -51,6 +66,13 @@ function qts.fertalize_node(pos)
 	end
 end
 
+--[[
+	Start the growth of all plants between two positions.  
+
+	Params:  
+		pos1 - the lower corner of the area.  
+		pos2 - the upper corner of the area.  
+]]
 function qts.start_area_growth(pos1, pos2)
 	pos1, pos2 = vector.sort(pos1, pos2)
 	for z = pos1.z, pos2.z do
@@ -66,8 +88,26 @@ function qts.start_area_growth(pos1, pos2)
 	end
 end
 
+--[[
+	Register growable node  
+
+	Params:  
+		name - the name of the node.  
+		def - the node definition table.  
+
+	Definitions Table Additions:  
+		required_light_level = 0 - number, the minimum required light for the node to grow.
+		on_grow(pos) - a function for when the node grows 
+
+	Definition Table Options with Default Values  
+		(You probably don't want to override these unless you know what you are doing)  
+		on_timer(...)   
+		on_construct(...)  
+
+	Default Groups:  
+		growable = 1
+]]
 function qts.register_growable_node(name, def)
-	
 	local defualts = {
 		on_timer = function(pos, elapsed)
 			local node = minetest.get_node_or_nil(pos)
@@ -129,7 +169,6 @@ function qts.register_growable_node(name, def)
 	end
 	
 	def.groups.growable = 1
-	
 	
 	minetest.register_node(name, def)
 end

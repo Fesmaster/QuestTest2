@@ -1,60 +1,58 @@
-
 --[[
---register_projectile(name, def)
-def is a table with values:
-{
-	--from regular entities
-	visual
-	visual_size
-	textures
-	use_texture_alpha
-	spritediv
-	initial_sprite_basepos
-	backface_culling
-	glow
-	mesh
-	
-	REMOVED
-	--automatic_face_movement_dir
-	--automatic_face_movement_max_rotation_per_sec
-	
-	--custom
-	automatic_rotate = boolean
-	radius = radius of projectile
-	selectable = boolean can player select
-	gravity_scale = number - scale of the gravity. default: 1
-	collectable = itemstring given to player when walked over an inactive one
-	lifetime = how long (seconds) the projectile should live
-	speed = number - how fast the projectile goes
-	damage_groups = {damagetype = value}
-	
-	--callbacks
-	on_strike_node = function(self, pos, node) - called when striking a node
-	on_strike_entity = function(self, objref) - called when striking an entity
-	on_timeout = function(self) - called when timed out
-	on_step = function(self, dtime) - called every frame. does not override builtin on_step function, but runs inside of it
-	
-}
+Projectile code for shooty things
+]]
 
---special projectile functions:
-projectile:get_lauentity():launch(dir = vector)
-	launches the projectile in dir with builtin speed, etc.
-
---projectile node callbacks
-
-on_projectile_strike(projectile, pointed_thing) returns nil
-	called before projectile's on_strike_node()
-
-on_projectile_enter(projectile, pos) returns nil
-	called when a projectile first enters a node. Not called when a projectile strikes the node
- 
-on_projectile_exit(projectile, pos) returns nil
-	called when a projectile leaves a node
-
---]]
 qts.registered_projectiles = {}
 
+--[[
+	Register a new projectile
 
+	Params: 
+		name - the projectile name
+		def - the Projectile Definition table
+
+	Projectile Definition Table:
+		From Regular Entities
+			visual
+			visual_size
+			textures
+			use_texture_alpha
+			spritediv
+			initial_sprite_basepos
+			backface_culling
+			glow
+			mesh
+
+		Custom
+			automatic_rotate = boolean - true if the projectile automatically turns to face its movement direction
+			radius = number -  radius of projectile
+			selectable = boolean - can player select
+			gravity_scale = number - scale of the gravity. default: 1
+			collectable = itemstring - item given to player when walked over an inactive one
+			lifetime = number - how long (seconds) the projectile should live
+			speed = number - how fast the projectile goes
+			damage_groups = {damagetype = value}
+
+		Callbacks - Builtin versions available.
+			on_strike_node(self, pos, node) - called when striking a node
+											Defaults to `qts.projectile_default_struck_node(...)`
+			on_strike_entity(self, objref) - called when striking an entity
+											Defaults to `qts.projectile_default_struck_entity(...)`
+			on_timeout(self) - called when timed out
+											Defaults to `qts.projectile_default_timeout(...)`
+			on_step(self, dtime) - called every frame. does not override builtin on_step function, but runs inside of it
+
+
+	Functions inside of LuaEntity:
+		projectile:get_lauentity():launch(dir = vector, objref = launcher) - launches the projectile in dir with builtin speed, etc.
+
+	Callbacks for Nodes
+		on_projectile_strike(projectile, pointed_thing) -> nil - called before projectile's on_strike_node()
+		on_projectile_enter(projectile, pos) -> nil - called when a projectile first enters a node. 
+														Not called when a projectile strikes the node
+		on_projectile_exit(projectile, pos) -> nil - called when a projectile leaves a node
+
+--]]
 function qts.register_projectile(name, def)
 	--log the new projectile
 	def.name = name
@@ -131,6 +129,9 @@ function qts.register_projectile(name, def)
 		
 		launch = function(self, direction, launcher)
 			if (launcher) then
+				if type(launcher) ~= "string" and launcher:is_player() then
+					launcher = launcher:get_player_name()
+				end
 				self.launcher = launcher
 			end
 			self.active = true
@@ -276,6 +277,23 @@ these are used if none are provided
 they are publicly accessable so that, if one wanted to, they could use them inside of their custom callback functions
 to get the default behavior along with the custom
 --]]
+
+--[[
+	Default function for when a projectile strikes a node.
+
+	Params:
+		self - the LuaEntity
+		pos - the node position
+		node - the node reference
+
+	Returns:
+		nil
+
+	Effect:
+		sets the speed to 0, moves projectile to previous position
+		flips its automatic movement direction so it does not get turned by the above
+		and sets itself inactive
+]]
 qts.projectile_default_struck_node = function(self, pos, node)
 	self.object:set_velocity({x=0, y=0, z=0})
 	self.object:set_acceleration({x=0, y=0, z=0})
@@ -286,7 +304,25 @@ qts.projectile_default_struck_node = function(self, pos, node)
 	self.active = false --deactivate the entity
 end
 
+--[[
+	Default function for when a projectile strikes an entity.
+
+	Params:
+		self - the LuaEntity
+		obj_other - the struck entity, ObjRef
+
+	Returns:
+		nil
+
+	Effect:
+		puches the other object, with the launcher as the hitter if there is a launcher, else itself,
+		uses passe damage groups
+		removes self.
+]]
 qts.projectile_default_struck_entity = function(self, obj_other)
+	if self.launcher and type(self.launcher) == "string" then
+		self.launcher = minetest.get_player_by_name(self.launcher)
+	end
 	obj_other:punch((self.launcher or self.object), 1, {
 		full_punch_interval = 0.9,
 		max_drop_level = 0,
@@ -296,6 +332,18 @@ qts.projectile_default_struck_entity = function(self, obj_other)
 	self.object:remove() --destroy the projectile
 end
 
+--[[
+	Default function for when a projectile times out.
+
+	Params:
+		self - the LuaEntity
+		
+	Returns:
+		nil
+
+	Effect:
+		removes self.
+]]
 qts.projectile_default_timeout = function(self)
 	self.object:remove()
 end
@@ -303,11 +351,16 @@ end
 
 --[[
 Launching Functions
-
-
-
 --]]
 
+--[[
+	Have a player launch a projectile. 
+
+	Params:
+		projectile = the registered projectile name
+		player - the player objref
+		inacuracy = 0 - the amount of variation in blocks at a range of 100 blocks. 
+]]
 function qts.projectile_launch_player(projectile, player, inacuracy)
 	local pos = player:get_pos()
 	if (not inacuracy) then inacuracy = 0 end
@@ -330,6 +383,17 @@ function qts.projectile_launch_player(projectile, player, inacuracy)
 	end
 end
 
+--[[
+	Launch a projectile from origin to target
+	due to gravity, there is no guarantee this will hit!
+
+	Params:
+		projectile = the registered projectile name
+		origin - the position to launch from
+		target - launch directly at this position
+		launcher - the ObjRef that launched it
+		inacuracy = 0 - the amount of variation in blocks at a range of 100 blocks. 
+]]
 function qts.projetile_launch_to(projectile, origin, target, launcher, inacuracy)
 	local dir = vector.direction(origin, target)
 	if (not inacuracy) then inacuracy = 0 end
@@ -347,7 +411,16 @@ function qts.projetile_launch_to(projectile, origin, target, launcher, inacuracy
 	end
 end
 
+--[[
+	Launch a projectile in a specific direction
 
+	Params:
+		projectile = the registered projectile name
+		origin - the position the projectile launches from
+		dir - the direction of the launch
+		launcher - the ObjRef that luanched it
+		inacuracy = 0 - the amount of variation in blocks at a range of 100 blocks. 
+]]
 function qts.projetile_launch_dir(projectile, origin, dir, launcher, inacuracy)
 	dir = vector.normalize(dir)
 	if (not inacuracy) then inacuracy = 0 end

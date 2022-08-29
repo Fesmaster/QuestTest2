@@ -414,7 +414,7 @@ local function reeds_rightclick(pos, node, clicker, itemstack, pointed_thing)
 		
 		--wear
 		if not (qts.is_player_creative(clicker)) then
-			qts.apply_default_wear(node.name, itemstack)
+			qts.apply_default_wear(itemstack, node.name)
 		end
 	end
 	return itemstack

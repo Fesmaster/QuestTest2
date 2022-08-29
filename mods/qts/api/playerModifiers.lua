@@ -45,7 +45,10 @@ local player_modifer_lists = {}
 local handle_counter = Counter()
 
 --[[
-update the player modifiers effect on the player
+	update the player modifiers effect on the player
+
+	Params:
+		player - the player
 ]]
 function qts.update_player_modifiers(player)
 	local name = player:get_player_name()
@@ -114,11 +117,26 @@ end
 
 --[[
 	Add a set of player modifiers to the list.  
-	Returns a handle to reference them later.
-	optionally, pass a handle as a value
-	optionally, pass a boolean for if the final value should be set. 
-	If the 3rd param is a bool and the fourth is nil, the third is this set value.
-	if set is nil, then it is assumed true
+	
+	Params:
+		player - the player
+		modifier_table - the modifier table
+		handle - (Optional) a handle to use.
+		set =true - (Optional) if false, don't call `qts.update_player_modifiers(...)`
+					can still send this (boolean!) if no handle set. IE: 
+					`handle = qts.add_player_modifier(player, {...}, false)`
+
+		Modifier Table:
+			a series of string keys and numberic or boolean values.
+			normally, numbers are multiplied together, and booleans are or'ed together
+			This can be overriden, if the string starts with ADD, then, if numbers, they are added together.
+			if the string starts with AND, then, if boolean, they are and'ed togeher.
+			See qts/api/playerModifiers.lua for a list of defaultly detected keys.
+
+	Returns:
+		the actual handle. If Handle is passed, then it is also returned.
+		you need this handle to do anything with the created modifier layer.
+
 ]]
 function qts.add_player_modifier(player, modifer_table, handle, set)
 	local name = player:get_player_name()
@@ -158,8 +176,13 @@ end
 
 --[[
 	Overrides an existing player modifer.  
-	returns true/false for sucess.  
 	does not ever add a new modifier if handle is not valid.  
+
+	Params:	
+		player - the player
+		handle - the handle given when calling `qts.add_player_modifier(...)`
+		modifier_table - the new modifier table
+		set = true- (Optional) if false, then don't call `qts.update_player_modifiers(...)`
 ]]
 function qts.override_player_modifer(player, handle, modifer_table, set)
 	local name = player:get_player_name()
@@ -183,9 +206,16 @@ function qts.override_player_modifer(player, handle, modifer_table, set)
 end
 
 --[[
-	Get the player modifer table at this handle.  
+	Get the player modifer table at this handle.
 	WARNING: this is a volatile reference, meaning, you can change it,  
-	and it will not come into effect untill something calls qts.update_player_modifiers()  
+	and it will not come into effect until something calls qts.update_player_modifiers()
+	
+	Params:	
+		player - the player
+		handle - the handle from `qts.add_player_modifier(...)`
+
+	Returns:
+		the modifier layer, as a reference
 ]]
 function qts.get_player_modifier(player, handle)
 	local name = player:get_player_name()
@@ -202,7 +232,14 @@ end
 
 --[[
 	Remove a modifier from the player by handle  
-	returns true or false for sucess.  
+	
+	Params:
+		player - the player
+		handle - the handle from `qts.add_player_modifier(...)`
+		set = true- (Optional) if false, then don't call `qts.update_player_modifiers(...)`
+
+	Returns:
+		boolean true or false for sucess.  
 ]]
 function qts.remove_player_modifier(player, handle, set)
 	local name = player:get_player_name()
@@ -224,115 +261,90 @@ end
 
 --[[
 	Get the player's sprint mulplipliers
+
+	Params:
+		player - the player
+
+	Returns:
+		the multipliers for the three situations
+		{
+			normal = number
+			liquid = number
+			climbable = number
+		}
 ]]
 function qts.get_player_sprint_multipliers(player)
 	return {
-		normal = qts.get_player_data(player, "MODIFIERS", "sprint_multiplier"),
-		liquid = qts.get_player_data(player, "MODIFIERS", "sprint_multiplier_liquid"),
-		climbable = qts.get_player_data(player, "MODIFIERS", "sprint_multiplier_climbable"),
+		normal = qts.get_player_data(player, "MODIFIERS", "sprint_multiplier") or 1,
+		liquid = qts.get_player_data(player, "MODIFIERS", "sprint_multiplier_liquid") or 1,
+		climbable = qts.get_player_data(player, "MODIFIERS", "sprint_multiplier_climbable") or 1,
 	}
 end
 --[[
 	Get the player's sneak speed multipliers
+
+	Params:
+		player - the player
+
+	Returns:
+		number - the sneak multiplier
 ]]
 function qts.get_player_sneak_multiplier(player)
-	return qts.get_player_data(player, "MODIFIERS", "sneak_multiplier")
+	return qts.get_player_data(player, "MODIFIERS", "sneak_multiplier") or 1
 end
 
 --[[
 	get the player's mob detection range multipliers
+
+	Params:
+		player - the player
+
+	Returns:
+		the multipliers for the two situations
+		{
+			normal - number
+			sneak = number
+		}
 ]]
 function qts.get_playe_detection_rage_multiplier(player)
 	return {
-		normal = qts.get_player_data(player, "MODIFIERS", "detection_range"),
-		sneak = qts.get_player_data(player, "MODIFIERS", "detection_range_sneak"),
+		normal = qts.get_player_data(player, "MODIFIERS", "detection_range") or 1,
+		sneak = qts.get_player_data(player, "MODIFIERS", "detection_range_sneak") or 1,
 	}
 end
 
 --[[
 	get the player's number of bonus equipment slots
+
+	Params:
+		player - the player
+
+	Returns:
+		number - the number of extra slots (this is not nesecarily the number the inventory gives you! there is likely a max)
 ]]
 function qts.get_player_bonus_equipment_slots(player)
-	return qts.get_player_data(player, "MODIFIERS", "ADD_extra_equpment_slots")
+	return qts.get_player_data(player, "MODIFIERS", "ADD_extra_equpment_slots") or 0
 end
 
 --[[
 	Get the player's bonus damage ammounts
+
+	Params:
+		player - the player
+
+	Returns:
+		the damage bonuses for the three normal damages:
+		{
+			fleshy = number
+			stabby = number
+			psycic = number
+		}
 ]]
 function qts.get_player_bonus_damages(player)
 	return {
-		fleshy = qts.get_player_data(player, "MODIFIERS", "ADD_damgae_bonus_fleshy"),
-		stabby = qts.get_player_data(player, "MODIFIERS", "ADD_damgae_bonus_stabby"),
-		psycic = qts.get_player_data(player, "MODIFIERS", "ADD_damgae_bonus_psycic"),
+		fleshy = qts.get_player_data(player, "MODIFIERS", "ADD_damgae_bonus_fleshy") or 0,
+		stabby = qts.get_player_data(player, "MODIFIERS", "ADD_damgae_bonus_stabby") or 0,
+		psycic = qts.get_player_data(player, "MODIFIERS", "ADD_damgae_bonus_psycic") or 0,
 	}
 end
 
-
---[[
-function qts.update_player_modifiers(player)
-	if type(player) == "string" then
-		player = minetest.get_player_by_name(player)
-	end
-	local name = player:get_player_name()
-	
-	local mods = qts.player_modifer_lists[name]
-	if mods then
-		local speed = 1
-		local jump = 1
-		local gravity = 1
-		for id, mod in pairs(mods) do
-			speed = speed * mod.speed
-			jump = jump * mod.jump
-			gravity = gravity * mod.gravity
-		end
-		player:set_physics_override({
-			speed = speed,
-			jump = jump,
-			gravity = gravity,
-			sneak = true,
-			sneak_glitch = true,
-			new_move = true
-		})
-	end
-end
-
-
-function qts.set_player_modifier(player, id, modifiers, do_not_set)
-	error("is this running?")
-	if do_not_set == nil then do_not_set = false end
-	if type(player) == "string" then
-		player = minetest.get_player_by_name(player)
-	end
-	local name = player:get_player_name()
-	if not qts.player_modifer_lists[name] then
-		qts.player_modifer_lists[name] = {}
-	end
-	
-	qts.player_modifer_lists[name][id] = {
-		speed = modifiers.speed or 1.0,
-		jump = modifiers.jump or 1.0,
-		gravity = modifiers.gravity or 1.0,
-	}
-	if not do_not_set then
-		--apply the modifier stack
-		qts.update_player_modifiers(player)
-	end
-end
-
-function qts.get_player_modifier(player, id)
-	if type(player) ~= "string" then
-		player = player:get_player_name()
-	end
-	if qts.player_modifer_lists[player] and qts.player_modifer_lists[player][id] then
-		local mod = qts.player_modifer_lists[player][id]
-		return{ --copy these three values ONLY
-			speed = mod.speed,
-			jump = mod.jump,
-			gravity = mod.gravity
-		}
-	else
-		minetest.log("PlayerEffects Info Unavalable")
-		return nil
-	end
-end
---]]

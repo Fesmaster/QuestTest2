@@ -43,6 +43,26 @@ on_stop_secondary_use = function(wield, player, cause) -> itemstack, nil
 
 on_node_update = function(pos)
 	called whenever a node receives and update
+
+	
+Ambient Sounds	
+	inside of a register_node, under [sounds] = {}, 
+	ambience = {
+		name = "name"
+		spec = simple_sound_spec
+		chance = 1 in value
+		playtime = number
+		positional = boolean
+		
+		--if playtime is nil, the sound is killed every sound cycle (default: 3 seconds)
+	}
+	
+	in player data, a table of {
+		nodename = {
+			timer = time_left
+			handle = sound_handle
+		}
+	}
 ]]
 
 local node_damage_timer = 0
@@ -54,7 +74,7 @@ local ambient_sound_radius = 8
 local long_click_time = 1
 
 --[[
-	Is this currently a damage tick?
+	Retuns true once per second
 ]]
 function qts.is_damage_tick()
 	return node_damage_timer >= 1
@@ -94,6 +114,9 @@ end
 
 local ustart, ustop = qts.profile("qts node update callbacks", "ms")
 
+--[[
+	Notify that a single node is updated in some way by the player
+]]
 function qts.update_node(pos)
 	ustart()
     local set = get_nearby_set({}, pos)
@@ -103,6 +126,9 @@ function qts.update_node(pos)
 	ustop()
 end
 
+--[[
+	Notify that a group of nodes are updated in some way by the player
+]]
 function qts.update_node_list(pos_list)
     ustart()
 	local set = {}
@@ -115,7 +141,7 @@ function qts.update_node_list(pos_list)
 	ustop()
 end
 
-local start, stop = qts.profile("qts nod callback globalstep", "ms")
+local start, stop = qts.profile("qts mod callback globalstep", "ms")
 minetest.register_globalstep(function(dtime)
 	start()
 	--damage tick update

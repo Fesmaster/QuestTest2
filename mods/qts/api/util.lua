@@ -1,7 +1,19 @@
 
 
 
---deep copy func, that is from lua-users.org  https://lua-users.org/wiki/CopyTable
+--
+--[[
+	recursive deep copy func, that can deal with repeated subtables and metatables
+	Note that the metatable is also copied.
+	from lua-users.org  https://lua-users.org/wiki/CopyTable
+
+	Params:
+		orig - the table to copy
+		copies - a param for the recursive system. DO NOT PASS ANYTHING HERE
+
+	Returns:
+		a true deep copy of the table.
+]]
 function qts.table_deep_copy(orig, copies)
     copies = copies or {}
     local orig_type = type(orig)
@@ -23,13 +35,51 @@ function qts.table_deep_copy(orig, copies)
     return copy
 end
 
+--[[
+	make a read only table from the passed table
+	from http://lua-users.org/wiki/ReadOnlyTables
+	See that location for caviats and problems (IE, ipairs and pairs not working)
+	the new table is not a true copy, but uses the original for its data.
+	the original is kept as an upvalue, so feel free to let it go out of scope or be overriden
+	any change to it will change the resulting readonly table!
+
+	Params;
+		tbl - the table to make a readonly copy of
+
+	Returns:
+		read-only table
+]]
+function qts.readonly_table(tbl)
+	return setmetatable({}, {
+		__index = tbl,
+		__newindex = function(table, key, value)
+			error("Attempted to modify a read-only table")
+		end,
+		__metatable = false
+	})
+end
+
+--[[
+	Get a list of all the nodes in a sphere
+
+	Params:
+		pos - the center of the sphere
+		radius - the radius of the sphere
+
+	Returns:
+		array of:
+		{
+			pos - the vector position 
+			noderef - the node reference
+		}
+]]
 function qts.get_nodes_in_radius(pos, radius)
 	if pos ~= nil and radius ~= nil then
 		local ntable = {}
 		local counter = 1
-		for x = -radius, radius do
-		for y = -radius, radius do
 		for z = -radius, radius do
+		for y = -radius, radius do 
+		for x = -radius, radius do
 			local dist = ((x^2)+(y^2)+(z^2))^0.5
 			if qts.nearly_equal(dist, radius, 0.5) or dist <= radius then
 				local npos = {x=pos.x+x,y=pos.y+y,z=pos.z+z}
@@ -48,13 +98,27 @@ function qts.get_nodes_in_radius(pos, radius)
 	end
 end
 
+--[[
+	Get a list of all the nodes on the surface of a sphere
+
+	Params:
+		pos - the center of the sphere
+		radius - the radius of the sphere
+
+	Returns:
+		array of:
+		{
+			pos - the vector position 
+			noderef - the node reference
+		}
+]]
 function qts.get_nodes_on_radius(pos, radius)
 	if pos ~= nil and radius ~= nil then
 		local ntable = {}
 		local counter = 1
-		for x = -radius, radius do
-		for y = -radius, radius do
 		for z = -radius, radius do
+		for y = -radius, radius do 
+		for x = -radius, radius do
 			local dist = ((x^2)+(y^2)+(z^2))^0.5
 			if qts.nearly_equal(dist, radius, 0.5) then
 				local npos = {x=pos.x+x,y=pos.y+y,z=pos.z+z}
@@ -74,12 +138,18 @@ function qts.get_nodes_on_radius(pos, radius)
 end
 
 --[[
-	Finds if a nodename or a node of group group:name is in a radius around pos.
+	Finds if a nodename or a node of group group:name in a sphere
 	If it finds one, then it returns the position.
-	
-	for groups, using
-	"group:wood 4"
-	means that the node must have group wood equal to 4 or greater
+
+	Params:
+		pos - the center of the sphere
+		radius - the radius of the sphere
+		nodename - the name of a registered node, or a group
+			if a group, use the format "group:groupname <minlevel>"
+			IE, "group:wood 4" means find a node of group:wood that its group is at least 4
+
+	Returns:
+		the position of the node, or nil
 	
 	TODO: Possible change so that it prioritizes the closest node that matches the criteria
 --]]
@@ -92,9 +162,9 @@ function qts.is_node_in_radius(pos, radius, nodename)
 	if (isGroup) then
 		nodename = qts.remove_modname_from_item(nodename)
 	end
-	for x = -radius, radius do
-	for y = -radius, radius do
 	for z = -radius, radius do
+	for y = -radius, radius do 
+	for x = -radius, radius do
 		local dist = ((x^2)+(y^2)+(z^2))^0.5
 		if qts.nearly_equal(dist, radius, 0.5) or dist <= radius then
 			local npos = {x=pos.x+x,y=pos.y+y,z=pos.z+z}
@@ -116,7 +186,19 @@ function qts.is_node_in_radius(pos, radius, nodename)
 	return nil
 end
 
---get an even distribution of # of points on a sphere. sphere's radius is 1
+
+--[[
+	get an even distribution of a number of points on a sphere. 
+	Since it returns unit vectors, this sphere has a radius of 1,
+	any vector returned can be multiplied by the radius of the sphere you
+	really want to distribute the points on, for the true point
+
+	Params:
+		point_count - the number of points to distribute
+
+	Returns:
+		array of points as unit vectors
+]]
 function qts.distribute_points_on_sphere(point_count)
 	local points = {}
 	
@@ -137,6 +219,12 @@ function qts.distribute_points_on_sphere(point_count)
 	return points
 end
 
+--[[
+	Play the pickup sound to a player
+
+	Params:
+		player - the player or playername
+]]
 function qts.pickup_sound(player)
 	if (type(player) ~= "string") then player = player:get_player_name() end
 	minetest.sound_play("pickup", {
@@ -145,37 +233,98 @@ function qts.pickup_sound(player)
 	})
 end
 
+--[[
+	Start a fire at a position
+
+	Params:
+		pos - the position to start the fire at
+
+	NOTE: this function should be implemented in whatever mod actually adds fire
+		This is to keep fire lighting abstract and not dependant on that mod.
+]]
 function qts.ignite(pos)
 	minetest.log("qts.ignite should be implemented in default mod")
 end
 
+--[[
+	Get the mod name from an item name
+
+	Params:
+		itemname - the item name (string)
+
+	Return:
+		string, just the modname 
+		For example, if the param is "default:wood", it returns "default"
+]]
 function qts.get_modname_from_item(itemname)
 	return string.match(itemname, '([%w_]*):')
 end
 
+--[[
+	Remove the modname from an itemname
+
+	Params:
+		itemname - the item name (string)
+
+	Return:
+		string, everything but the mod name and colon
+		For example, if the param is "default:wood 4", it returns "wood 4"
+]]
 function qts.remove_modname_from_item(itemname)
 	return string.match(itemname, ':([%w_]*)')
 end
 
+--[[
+	Check if an itemname is actually a group
+
+	Params:
+		itemname - the item name (string)
+	
+	Returns:
+		boolean, true if the itemname is a group in the form "group:<groupname>"
+]]
 function qts.is_group(itemname)
-	return (qts.get_modname_from_item(itemname) == "group")
+	return (string.match(itemname, '([%w_]*):') == "group")
+end
+
+
+--[[
+	DEPRICATED
+	use qts.inventory_contains_group() instead
+]]
+function qts.inv_contains_group(inv, groupString, ignoreNames)
+	error("ERROR: qts.inv_contains_group is depricated. Use qts.inventory_contains_group() instead")
+	return qts.inventory_contains_group(inv, "main", groupString, ignoreNames)
 end
 
 --[[
+	DEPRICATED
+	use qts.inventory_take_group()
+]]
+function qts.inv_take_group(inv, groupString, ignoreNames)
+	error("ERROR: qts.inv_take_group is depricated. Use qts.inventory_take_group() instead")
+	return qts.inventory_take_group(inv, "main", groupString, ignoreNames)
+end
 
-qts.inv_contains_group(inv, groupString, [ignoreNames])  
-	Search an inventory for items in a specific group  
-	inv - inventory userdata  
-	groupString - "group:groupname <count>"  
-	ignoreNames - set of names to ignore {["name"]=1 ... }  
+--[[
+	Check if any items in an inventory ref contain a group
+
+	Params:
+		inventory - the inventory reference
+		listname - the list to check
+		groupString - the group to check, in the form "group:<groupname> <count to find>"
+		ignoreNames - (Optional) set of names to ignore in the search, ie {name1=true, name2=true ... }
+
+	Returns:
+		boolean, true if found, false otherwise
 --]]
-function qts.inv_contains_group(inv, groupString, ignoreNames)
+function qts.inventory_contains_group(inventory, listname, groupString, ignoreNames)
 	if not ignoreNames then ignoreNames = {} end
 	local groupStack = ItemStack(groupString)
 	--local minlevel = groupStack:get_count()
 	if (qts.get_modname_from_item(groupStack:get_name()) ~= "group") then return nil end --not a group.
 	local groupname = qts.remove_modname_from_item(groupStack:get_name())
-	local itemList = inv:get_list("main")
+	local itemList = inventory:get_list(listname)
 	local count = groupStack:get_count()
 	for k, v in ipairs(itemList) do
 		local groupValue = minetest.get_item_group(v:get_name(), groupname)
@@ -195,20 +344,25 @@ function qts.inv_contains_group(inv, groupString, ignoreNames)
 	return true
 end
 --[[
-qts.inv_take_group(inv, groupString, [ignoreNames])  
-	Take items from inv that match group  
-	Does not take any if there are not enough to remove  
-	inv - inventory userdata  
-	groupString - "group:groupname <count>"  
-	ignoreNames - set of names to ignore {["name"]=1 ... }  
-]]
-function qts.inv_take_group(inv, groupString, ignoreNames)
+	Take items in an inventory ref contain a group
+	if there are not enough, none are taken
+
+	Params:
+		inventory - the inventory reference
+		listname - the list to check
+		groupString - the group to check, in the form "group:<groupname> <count to find>"
+		ignoreNames - (Optional) set of names to ignore in the search, ie {name1=true, name2=true ... }
+
+	Returns:
+		array of remved ItemStacks
+--]]
+function qts.inventory_take_group(inventory, listname, groupString, ignoreNames)
 	if not ignoreNames then ignoreNames = {} end
 	local groupStack = ItemStack(groupString)
 	--local minlevel = groupStack:get_count()
 	if (qts.get_modname_from_item(groupStack:get_name()) ~= "group") then return nil end --not a group.
 	local groupname = qts.remove_modname_from_item(groupStack:get_name())
-	local itemList = inv:get_list("main")
+	local itemList = inventory:get_list(listname)
 	local removeList = {}
 	local count = groupStack:get_count()
 	for k, v in ipairs(itemList) do
@@ -233,21 +387,21 @@ function qts.inv_take_group(inv, groupString, ignoreNames)
 	if (count > 0) then
 		return nil
 	end
-	inv:set_list("main", itemList)
+	inventory:set_list(listname, itemList)
 	return removeList
 end
 
 
 --[[
-qts.objects_overlapping(objA, objB)  
 	checks to see if the collisionbox of objA and objB are overlapping.  
 	highly accurate Axis-Alligned Bounding Box overlapping  
 	  
 	Params:   
-	objA - objref, the first entity  
-	objB - objref, the second entity  
+		objA - ObjRef, the first entity  
+		objB - ObjRef, the second entity  
 	  
-	Return: true or false  
+	Return: 
+		boolean true or false  
 ]]
 function qts.objects_overlapping(objA, objB)
 	--get bounding boxes
@@ -255,39 +409,33 @@ function qts.objects_overlapping(objA, objB)
 	local propsB = objB:get_properties()
 	local posA = objA:get_pos()
 	local posB = objB:get_pos()
-	
-	local minA = {
-		x= posA.x + propsA.collisionbox[1],
-		y= posA.y + propsA.collisionbox[2],
-		z= posA.z + propsA.collisionbox[3],
-	}
-	local maxA = {
-		x= posA.x + propsA.collisionbox[4],
-		y= posA.y + propsA.collisionbox[5],
-		z= posA.z + propsA.collisionbox[6],
-	}
-	local minB = {
-		x= posB.x + propsB.collisionbox[1],
-		y= posB.y + propsB.collisionbox[2],
-		z= posB.z + propsB.collisionbox[3],
-	}
-	local maxB = {
-		x= posB.x + propsB.collisionbox[4],
-		y= posB.y + propsB.collisionbox[5],
-		z= posB.z + propsB.collisionbox[6],
-	}
 	--check for collision
 	return (
-		(minA.x < maxB.x and  maxA.x >= minB.x) and
-		(minA.y < maxB.y and  maxA.y >= minB.y) and
-		(minA.z < maxB.z and  maxA.z >= minB.z)
+		posA.x + propsA.collisionbox[1] <  posB.x + propsB.collisionbox[4] and
+		posA.x + propsA.collisionbox[4] >= posB.x + propsB.collisionbox[1] and
+		posA.y + propsA.collisionbox[2] <  posB.y + propsB.collisionbox[5] and
+		posA.y + propsA.collisionbox[5] >= posB.y + propsB.collisionbox[2] and
+		posA.z + propsA.collisionbox[3] <  posB.z + propsB.collisionbox[6] and
+		posA.z + propsA.collisionbox[6] >= posB.z + propsB.collisionbox[3]
 	)
 end
 
 
+--[[
+	Apply the default wear to a tool itemstack
 
-function qts.apply_default_wear(name, itemstack)
-	local nlvl = minetest.get_item_group(name, "level")
+	Params:
+		itemstack - the item to remove the wear from.
+		itemname - an item used to compare level
+		
+	Returns:
+		itemstack - the modified itemstack
+]]
+function qts.apply_default_wear(itemstack,itemname)
+	local nlvl = 0
+	if itemname then
+		nlvl = minetest.get_item_group(itemname, "level")
+	end
 	local hlvl = minetest.get_item_group(itemstack:get_name(), "level")
 	local mult = (hlvl-nlvl)^3
 	if mult == 0 then mult = 1 end
@@ -310,9 +458,9 @@ end
 
 
 local function rect_iter(pos1, pos2)
-	for x = pos1.x, pos2.x, (pos1.x < pos2.x) and 1 or -1  do
+	for z = pos1.z, pos2.z, (pos1.z < pos2.z) and 1 or -1 do
 		for y = pos1.y, pos2.y, (pos1.y < pos2.y) and 1 or -1 do
-			for z = pos1.z, pos2.z, (pos1.z < pos2.z) and 1 or -1 do
+			for x = pos1.x, pos2.x, (pos1.x < pos2.x) and 1 or -1  do
 				coroutine.yield(vector.new(x,y,z))
 			end
 		end
@@ -321,8 +469,8 @@ local function rect_iter(pos1, pos2)
 end
 
 local function columns_iter(pos1, pos2)
-	for x = pos1.x, pos2.x, (pos1.x < pos2.x) and 1 or -1  do
-		for z = pos1.z, pos2.z, (pos1.z < pos2.z) and 1 or -1 do
+	for z = pos1.z, pos2.z, (pos1.z < pos2.z) and 1 or -1 do
+		for x = pos1.x, pos2.x, (pos1.x < pos2.x) and 1 or -1  do
 			for y = pos1.y, pos2.y, (pos1.y < pos2.y) and 1 or -1 do
 				coroutine.yield(vector.new(x,y,z))
 			end
@@ -331,9 +479,20 @@ local function columns_iter(pos1, pos2)
 	return nil
 end
 
+--[[
+	Rectangle iter function from pos1 to pos2
+
+	Params:
+		pos1 - the lower position
+		pos2 - the upper position
+	
+	Usage: 
+		for pos in qts.rectangle(p1, p2) do ... end
+
+	uses z-y-x ordering for max efficenty
+]]
 function qts.rectangle(pos1, pos2)
 	local co = coroutine.create(rect_iter)
-	
 	return function()
 		local state, value = coroutine.resume(co, pos1, pos2)
 		if state then 
@@ -344,9 +503,20 @@ function qts.rectangle(pos1, pos2)
 	end
 end
 
+--[[
+	Column-based iter function from pos1 to pos2
+	
+		Params:
+		pos1 - the lower position
+		pos2 - the upper position
+	
+	Usage: 
+		for pos in qts.columns(p1, p2) do ... end
+
+	uses z-x-y ordering to do it by columns
+]]
 function qts.columns(pos1, pos2)
 	local co = coroutine.create(columns_iter)
-	
 	return function()
 		local state, value = coroutine.resume(co, pos1, pos2)
 		if state then 
@@ -357,6 +527,20 @@ function qts.columns(pos1, pos2)
 	end
 end
 
+--[[
+	given a 3 dimentional array, insert an item into a position as a vector.
+	if the index is nonexistant, it will create it.
+	vector should be INT VECTORS and will not be rounded.
+	This may create unreadable data if its not an int vector
+
+	Params:
+		t - the 3d Array table (can be nil and it will make one)
+		pos - the vector
+		item - the thing to insert
+
+	Returns:
+		t
+]]
 function qts.insert3(t, pos, item)
 	t = t or {}
 	t[pos.x] = t[pos.x] or {}
@@ -365,12 +549,34 @@ function qts.insert3(t, pos, item)
 	return t
 end
 
+--[[
+	given a 3-dimentional array, read a location from it using a vector
+	vector should be INT VECTORS and will not be rounded.
+
+	Params:
+		t - the 3D aray table (will not make if nil)
+		pos - the position to read
+
+	Returns:
+		value at that position or nil if no value present
+]]
 function qts.read3(t, pos)
 	if not t[pos.x] then return nil end
 	if not t[pos.x][pos.y] then return nil end
 	return t[pos.x][pos.y][pos.z]
 end
 
+--[[
+	read all the nodes into a 3D aray from pos1 to pos2
+	The indecies in the list will be 1-based, not starting at the values of pos1
+
+	Params:
+		pos1 - the lower corner
+		pos2 - the upper corner
+	
+	Returns:
+		3D array of node references
+]]
 function qts.readNodes(pos1, pos2)
 	local t = {}
 	pos1, pos2 = vector.sort(pos1, pos2)
@@ -380,6 +586,16 @@ function qts.readNodes(pos1, pos2)
 	return t
 end
 
+--[[
+	write an area of nodes to the map from a 3D array
+
+	Params:
+		pos1 - the lower position On the Map
+		pos2 - the upper position On the Map
+		tbl - the 3D array of nodes
+
+	Returns - nothing
+]]
 function qts.writeNodes(pos1, pos2, tbl)
 	pos1, pos2 = vector.sort(pos1, pos2)
 	for p in qts.rectangle(pos1, pos2) do
@@ -405,9 +621,9 @@ end
 
 
 local function nodePairs_iter(tbl)
-	for x, t2 in zpairs(tbl) do
+	for z, t2 in zpairs(tbl) do
 		for y, t3 in zpairs(t2) do
-			for z, node in zpairs(t3) do
+			for x, node in zpairs(t3) do
 				coroutine.yield(vector.new(x,y,z), node)
 			end
 		end
@@ -415,6 +631,17 @@ local function nodePairs_iter(tbl)
 	return nil
 end
 
+--[[
+	iterate through all the positions in a 3D array of nodes
+
+	Params:
+		tbl - the 3D array
+
+	Usage:
+		for pos, node in qts.nodePairs(array) do ... end
+
+	uses z-y-x ordering
+]]
 function qts.nodePairs(tbl)
 	local co = coroutine.create(nodePairs_iter)
 	
@@ -429,7 +656,19 @@ function qts.nodePairs(tbl)
 end
 
 --[[
-	This function is desighed to be set as the value of the item `on_place` callback, to operate rightclickable items if pointing at them, or do the `on_secondary_use` callback if not.
+	This function is desighed to be set as the value of the item `on_place` callback, 
+	to operate rightclickable items if pointing at them, or do the `on_secondary_use` callback if not.
+
+	Params:
+		same as item callback `on_place(...)`
+
+	Usage:
+		in an Item Def Table:
+		...
+		on_place = qts.item_place_check_and_propigate,
+		...
+		on_secondary_use = <your custom function>
+
 ]]
 function qts.item_place_check_and_propigate(itemstack, placer, pointed_thing)
 	if pointed_thing.under then
@@ -448,13 +687,39 @@ function qts.item_place_check_and_propigate(itemstack, placer, pointed_thing)
 end
 
 --Item Eating
+--[[
+	Eat an item function, for a passed HP
 
+	Params:
+		hpchange - how much to change the HP by
+		replace_with_item - (optional) - the new item
+
+	Usage:
+		in Item Definition Table:
+		...
+		on_use = qts.item_eat(<hpgain>, [<replace item>])
+		...
+	
+	Returns:
+		a function compatable with Item Definition Table's `on_use(...)` callback
+]]
 function qts.item_eat(hpchange, replace_with_item)
 	return function(itemstack, user, pointed_thing)
 		return qts.do_item_eat(hpchange, replace_with_item, itemstack, user, pointed_thing)
 	end
 end
---register_on_item_eat
+
+--[[
+	used to actually eat an item.
+	does all the HP calculations, calls on_item_eat callbacks, etc, etc.
+
+	Params:
+		hpchange - how much to change the HP by
+		replace_with_item - what to replace the eaten item with
+		itemstack - the current itemstack you are eating
+		user - who is doing the eating
+		pointed_thing - what you are pointing at
+]]
 function qts.do_item_eat(hpchange, replace_with_item, itemstack, user, pointed_thing)
 	if user:is_player() then
 		local playerHP = qts.get_player_hp(user)

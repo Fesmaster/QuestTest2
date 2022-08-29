@@ -290,7 +290,7 @@ minetest.register_node("default:herb_mureux_ripe", {
 			end
 			minetest.set_node(pos, {name="default:herb_mureux", param2 = 18})
 			if not (qts.is_player_creative(clicker)) then
-				qts.apply_default_wear(node.name, itemstack)
+				qts.apply_default_wear(itemstack, node.name)
 			end
 		end
 		return itemstack
