@@ -25,6 +25,16 @@ local underbrush_drops = {
 			items = {"default:herb_wolfshood", "default:seed_wolfshood"},
 		},
 		{
+			tool_groups = {"knife"},
+			rarity=4,
+			items = {"default:herb_sapweed", "default:seed_sapweed"},
+		},
+		{
+			tool_groups = {"knife"},
+			rarity=3,
+			items = {"default:herb_kingscrown", "default:seed_kingscrown"},
+		},
+		{
 			tool_groups = {"axe", "knife"},
 			items = {"default:tinder"}
 		},
