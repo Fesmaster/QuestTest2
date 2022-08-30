@@ -5,7 +5,7 @@ for i, n in ipairs(names) do
 	--planks
 	qts.register_craft({
 		ingredients = {"default:"..n.."_log 1"},
-		results = {"default:"..n.."_wood_planks 4", "default:bark_"..n.." 4"},
+		results = {"default:"..n.."_wood_planks 4"},
 	})
 	
 	qts.register_craft({
@@ -415,7 +415,7 @@ qts.register_craft({
 --bows
 
 qts.register_craft({
-	ingredients = {"group:wood", "default:flint 16", "default:underbrush_item 16"},
+	ingredients = {"group:wood", "default:flint 16", "group:bark 16"},
 	results = {"default:arrow 16"},
 	held = {"group:knife"},
 })
@@ -787,6 +787,18 @@ qts.register_craft({
 })
 
 qts.register_craft({
+	ingredients = {"default:herb_kingscrown", "default:bucket_default_water"},
+	results = {"default:dye_yellow", "default:bucket"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"default:herb_kingscrown", "default:bucket_default_river_water"},
+	results = {"default:dye_yellow", "default:bucket"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
 	ingredients = {"default:dye_blue", "default:dye_green"},
 	results = {"default:dye_cyan 2"},
 	near = {"group:ttable"}
@@ -796,6 +808,18 @@ qts.register_craft({
 	ingredients = {"default:dye_blue", "default:dye_red"},
 	results = {"default:dye_magenta 2"},
 	near = {"group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"default:herb_sapweed", "default:bucket_default_water"},
+	results = {"default:dye_magenta", "default:bucket"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
+})
+
+qts.register_craft({
+	ingredients = {"default:herb_sapweed", "default:bucket_default_river_water"},
+	results = {"default:dye_magenta", "default:bucket"},
+	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
 qts.register_craft({

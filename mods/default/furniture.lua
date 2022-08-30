@@ -1481,7 +1481,7 @@ qts.register_craft({
 
 minetest.register_craft({
 	type = "cooking",
-	output = "storage_pot_clay",
+	output = "default:storage_pot_clay",
 	recipe = "default:storage_pot_greenware",
 })
 
