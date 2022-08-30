@@ -207,7 +207,7 @@ qts.register_hammer = function(name, def)
 				if user:get_player_control().sneak then
 					qts.screwdriver.apply(pointed_thing, user, qts.screwdriver.ROTATE_FACE)
 				else
-					qts.hammer_apply(pointed_thing, user, qts.hammer.CHANGE_TYPE)
+					qts.hammer_apply(pointed_thing, user, qts.HAMMER_FUNCTION.CHANGE_TYPE)
 				end
 				--apply wear
 				if not (qts.is_player_creative(user)) then
@@ -232,7 +232,7 @@ qts.register_hammer = function(name, def)
 				if user:get_player_control().sneak then
 					qts.screwdriver.apply(pointed_thing, user, qts.screwdriver.ROTATE_AXIS)
 				else
-					qts.hammer_apply(pointed_thing, user, qts.hammer.CHANGE_STYLE)
+					qts.hammer_apply(pointed_thing, user, qts.HAMMER_FUNCTION.CHANGE_STYLE)
 				end
 				--apply wear
 				if not (qts.is_player_creative(user)) then
