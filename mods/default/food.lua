@@ -426,6 +426,18 @@ qts.register_craft({
 	near = {"group:ttable", "group:cookware", "group:furnace"},
 })
 
+--[[qts.register_craft({
+	ingredients = {"default:vessels_"..types.."_oil_coconut", "default:potash", "default:lime"},
+	results = {"default:soap"},
+	near = {"group:ttable", "group:dishes"},
+})]]--
+
+qts.register_craft({
+	ingredients = {"default:vessels_"..types.."_oil_coconut", "default:lye"},
+	results = {"default:soap"},
+	near = {"group:ttable", "group:dishes"},
+})
+
 --powder bowls
 local bowl_fill = {"flour"}
 local bowl_fill_desc = {"Flour"}
@@ -540,6 +552,7 @@ local bowl_fill_desc = {"Flour"}
 		results = {"default:bread", "default:bowl_"..types, "default:bucket"},
 		near = {"group:ttable", "group:dishes", "group:furnace"},
 	})
+
 end
 --end things in dishes
 
@@ -759,5 +772,17 @@ qts.register_craft({
 qts.register_craft({
 	ingredients = { "default:palm_log"},
 	results = {"default:wax_palm 4"},
+	near = {"group:ttable", "group:dishes", "group:furnace"},
+})
+
+--[[qts.register_craft({
+	ingredients = { "default:wax_palm", "default:potash", "default:lime"},
+	results = {"default:soap"},
+	near = {"group:ttable", "group:dishes", "group:furnace"},
+})]]--
+
+qts.register_craft({
+	ingredients = { "default:wax_palm", "default:lye"},
+	results = {"default:soap"},
 	near = {"group:ttable", "group:dishes", "group:furnace"},
 })

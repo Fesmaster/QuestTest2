@@ -442,6 +442,41 @@ qts.register_craft({
 	near = {"group:workbench_heavy"},
 })
 
+qts.register_craft({
+	ingredients = {"default:lime", "default:potash", "default:bucket_default_water"},
+	results = {"default:lye", "default:bucket"},
+	near = {"group:dishes", "group:ttable", "group:furnace"},
+})
+qts.register_craft({
+	ingredients = {"default:lime 4", "default:potash 4", "default:bucket_default_water"},
+	results = {"default:lye 4", "default:bucket"},
+	near = {"group:dishes"},
+})
+
+qts.register_craft({
+	ingredients = {"default:lime 16", "default:potash 16", "default:bucket_default_water"},
+	results = {"default:lye 16", "default:bucket"},
+	near = {"group:dishes"},
+})
+
+qts.register_craft({
+	ingredients = {"default:lime", "default:potash", "default:bucket_default_river_water"},
+	results = {"default:lye", "default:bucket"},
+	near = {"group:dishes"},
+})
+
+qts.register_craft({
+	ingredients = {"default:lime 4", "default:potash 4", "default:bucket_default_river_water"},
+	results = {"default:lye 4", "default:bucket"},
+	near = {"group:dishes"},
+})
+
+qts.register_craft({
+	ingredients = {"default:lime 16", "default:potash 16", "default:bucket_default_river_water"},
+	results = {"default:lye 16", "default:bucket"},
+	near = {"group:dishes"},
+})
+
 --stone and stone walls (and bricks)
 --gray stone
 qts.register_craft({
