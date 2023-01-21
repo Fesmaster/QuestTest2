@@ -26,6 +26,11 @@ minetest.register_craftitem("default:charcoal", {
 	groups = {coal = 1,},
 })
 
+minetest.register_craftitem("default:peat_chunk", {
+	description = "Peat Chunk",
+	inventory_image = "default_peat_item.png",
+})
+
 minetest.register_craftitem("default:clay_lump", {
 	description = "Clay",
 	inventory_image = "default_clay_lump.png",

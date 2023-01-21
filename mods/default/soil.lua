@@ -104,6 +104,28 @@ minetest.override_item("default:dirt_with_swamp_grass", {
 			tileable_vertical = false}},
 })
 
+qts.register_shaped_node ("default:peat", {
+	description = "Peat",
+	tiles = {"default_peat.png"},
+	groups = {crumbly = 3, soil=1},
+	sounds = qtcore.node_sound_dirt(),
+	drop = "default:peat_chunk 4"
+})
+
+qts.register_shaped_node ("default:dirt_swamp", {
+	description = "You Shouldn't Have This",
+	tiles = {"default_dirt.png"},
+	groups = {crumbly = 3, soil=1, generation_ground=1, not_in_creative_inventory = 1},
+	sounds = qtcore.node_sound_dirt(),
+	drop = {
+		max_items = 1,
+		items = {
+			{items = {"default:flint"},rarity = 32},
+			{items = {"default:dirt"}}
+		}
+	}
+})
+
 qts.register_shaped_node ("default:dirt_with_prarie_grass", {
 	description = "Dirt with Prarie Grass",
 	tiles = {"default_prarie_grass.png"},

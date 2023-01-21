@@ -604,6 +604,12 @@ minetest.register_craft({
 	burntime = 128,
 })
 
+minetest.register_craft({
+	type = "fuel",
+	recipe = "default:peat",
+	burntime = 32,
+})
+
 --Other Crafting
 
 --DYES
