@@ -194,59 +194,6 @@ qts.register_craft({
 	results = {"default:workbench_heavy",},
 })
 
-qts.register_craft({
-	ingredients = {"default:dishes_clay 2"},
-	results = {"default:alchemy_equipment_basic"},
-})
-
-qts.register_craft({
-	ingredients = {"default:dishes_clay", "default:iron_bar"},
-	results = {"default:alchemy_equipment_advanced"},
-	near = {"group:workbench", "default:anvil"},
-})
-
-qts.register_craft({
-	ingredients = {"default:dishes_clay", "default:steel_bar"},
-	results = {"default:alchemy_equipment_advanced"},
-	near = {"group:workbench", "default:anvil"},
-})
-
-
-qts.register_craft({
-	ingredients = {"default:glass"},
-	results = {"default:flask_glass"},
-	near = {"group:furnace"}
-})
-
-qts.register_craft({
-	ingredients = {"default:flask_glass", "default:bucket_default_water"},
-	results = {"default:flask_glass_water", "default:bucket"},
-})
-
-qts.register_craft({
-	ingredients = {"default:flask_glass", "default:bucket_default_river_water"},
-	results = {"default:flask_glass_water", "default:bucket"},
-})
-
-qts.register_craft({
-	ingredients = {"default:steel_bar 3"},
-	results = {"default:cookware_iron"},
-	near = {"group:furnace", "default:anvil"},
-})
-
-qts.register_craft({
-	ingredients = {"default:iron_bar 3"},
-	results = {"default:cookware_iron"},
-	near = {"group:furnace", "default:anvil"},
-})
-
-qts.register_craft({
-	ingredients = {"default:copper_bar 3"},
-	results = {"default:cookware_copper"},
-	near = {"group:furnace", "group:workbench"},
-})
-
-
 --weapons and tools
 
 --knives
@@ -655,6 +602,12 @@ minetest.register_craft({
 	type = "fuel",
 	recipe = "group:coal",
 	burntime = 128,
+})
+
+minetest.register_craft({
+	type = "fuel",
+	recipe = "default:peat",
+	burntime = 32,
 })
 
 --Other Crafting

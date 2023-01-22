@@ -234,124 +234,7 @@ qts.register_shaped_node("default:ice", {
 })
 --END glass
 
---BEGIN furnature
---BEGIN tables (group:ttable)
-
---END furnature
-
 --Begin placeable items
-
-minetest.register_node("default:storage_pot_greenware", {
-	description = "Greenware Storage Pot",
-	tiles = {
-		"default_dishes_clay_greenware.png",
-	},
-	groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
-	drawtype = "nodebox",
-	paramtype = "light",
-	paramtype2 = "facedir",
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{ -2/16, -8/16, -2/16, 2/16, -7/16, 2/16, },
-			{ -3/16, -7/16, -3/16, -2/16, -6/16, 3/16, },
-			{ 2/16, -7/16, -3/16, 3/16, -6/16, 3/16, },
-			{ -3/16, -7/16, -3/16, 3/16, -6/16, -2/16, },
-			{ -3/16, -7/16, 2/16, 3/16, -6/16, 3/16, },
-			{ -4/16, -6/16, -4/16, 4/16, -1/16, -3/16, },
-			{ 3/16, -6/16, -4/16, 4/16, -1/16, 4/16, },
-			{ -4/16, -6/16, 3/16, 4/16, -1/16, 4/16, },
-			{ -4/16, -6/16, -4/16, -3/16, -1/16, 4/16, },
-			{ -3/16, -1/16, 2/16, 3/16, 0/16, 3/16, },
-			{ -3/16, -1/16, -3/16, 3/16, 0/16, -2/16, },
-			{ 2/16, -1/16, -3/16, 3/16, 0/16, 3/16, },
-			{ -3/16, -1/16, -3/16, -2/16, 0/16, 3/16, },
-			{ -2/16, -1/16, -2/16, -1/16, 3/16, 2/16, },
-			{ 1/16, -1/16, -2/16, 2/16, 3/16, 2/16, },
-			{ -2/16, -1/16, -2/16, 2/16, 3/16, -1/16, },
-			{ -2/16, -1/16, 1/16, 2/16, 3/16, 2/16, },
-			{ -3/16, 3/16, -3/16, -1/16, 4/16, 3/16, },
-			{ 1/16, 3/16, -3/16, 3/16, 4/16, 3/16, },
-			{ -3/16, 3/16, -3/16, 3/16, 4/16, -1/16, },
-			{ -3/16, 3/16, 1/16, 3/16, 4/16, 3/16, },
-			},
-		},
-})
-
-minetest.register_node("default:alchemy_equipment_basic", {
-	description = "Basic Alchemy Equipment",
-	tiles = {
-		"default_alchemy_equipment_basic_top.png",  
-		"default_dishes_clay.png", 
-		"default_alchemy_equipment_basic_side.png",
-	},
-	use_texture_alpha="clip",
-	drawtype = "nodebox",
-	paramtype = "light",
-	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{ -5/16, -8/16, -4/16, -2/16, -3/16, -1/16, },
-			{ -4/16, -3/16, -3/16, -3/16, -2/16, -2/16, },
-			{ -5/16, -8/16, 1/16, -1/16, -7/16, 5/16, },
-			{ -5/16, -8/16, 1/16, -1/16, -3/16, 2/16, },
-			{ -5/16, -8/16, 4/16, -1/16, -3/16, 5/16, },
-			{ -2/16, -8/16, 1/16, -1/16, -3/16, 5/16, },
-			{ -5/16, -8/16, 1/16, -4/16, -3/16, 5/16, },
-			{ 1/16, -8/16, -4/16, 3/16, -7/16, -2/16, },
-			{ 0/16, -7/16, -2/16, 4/16, -6/16, -1/16, },
-			{ 0/16, -7/16, -5/16, 4/16, -6/16, -4/16, },
-			{ 0/16, -7/16, -5/16, 1/16, -6/16, -1/16, },
-			{ 3/16, -7/16, -5/16, 4/16, -6/16, -1/16, },
-			{ 4/16, -6/16, -6/16, 5/16, -5/16, 0/16, },
-			{ -1/16, -6/16, -6/16, 0/16, -5/16, 0/16, },
-			{ -1/16, -6/16, -1/16, 5/16, -5/16, 0/16, },
-			{ -1/16, -6/16, -6/16, 5/16, -5/16, -5/16, },
-			{ 6/16, -8/16, -1/16, 7/16, -7/16, 2/16, },
-
-		},
-	},
-	sounds = qtcore.node_sound_stone(),
-})
-
-minetest.register_node("default:alchemy_equipment_advanced", {
-	description = "Advanced Alchemy Equipment",
-	tiles = {
-		"default_alchemy_equipment_advanced_top.png",  
-		"default_dishes_clay.png", 
-		"default_alchemy_equipment_advanced_side.png",
-	},
-	use_texture_alpha="clip",
-	drawtype = "nodebox",
-	paramtype = "light",
-	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{ -3/16, -8/16, 2/16, -2/16, -4/16, 3/16, },
-			{ -2/16, -8/16, 1/16, -1/16, -3/16, 2/16, },
-			{ -2/16, -8/16, 3/16, -1/16, -3/16, 4/16, },
-			{ -4/16, -8/16, 3/16, -3/16, -3/16, 4/16, },
-			{ -4/16, -8/16, 1/16, -3/16, -3/16, 2/16, },
-			{ -4/16, -3/16, 1/16, -1/16, -2/16, 4/16, },
-			{ -4/16, -8/16, 1/16, -1/16, -6/16, 4/16, },
-			{ -4/16, -2/16, 0/16, -1/16, -1/16, 1/16, },
-			{ -4/16, -2/16, 4/16, -1/16, -1/16, 5/16, },
-			{ -1/16, -2/16, 1/16, 0/16, -1/16, 4/16, },
-			{ -5/16, -2/16, 1/16, -4/16, -1/16, 4/16, },
-			{ -4/16, -8/16, -5/16, -2/16, -7/16, -3/16, },
-			{ -4/16, -7/16, -6/16, -2/16, -6/16, -5/16, },
-			{ -4/16, -7/16, -3/16, -2/16, -6/16, -2/16, },
-			{ -2/16, -7/16, -5/16, -1/16, -6/16, -3/16, },
-			{ -5/16, -7/16, -5/16, -4/16, -6/16, -3/16, },
-
-		},
-	},
-	sounds = qtcore.node_sound_stone(),
-})
 
 minetest.register_node("default:textile_flax", {
 	description = "Flax Textiles",
@@ -383,27 +266,6 @@ minetest.register_node("default:textile_flax", {
 	sounds = qtcore.node_sound_stone(),
 })
 
-qts.register_ingot("default:wax_palm", {
-	description = "Palm Wax",
-	inventory_image = "default_wax_palm_item.png",
-	tiles = {
-		"default_wax_palm_ingot.png"
-	},
-	use_texture_alpha="clip",
-	groups = {oddly_breakable_by_hand=3},
-	nodeboxes = {
-			{ -6/16, -8/16, 1/16, -3/16, -6/16, 6/16, },
-			{ -2/16, -8/16, 1/16, 1/16, -6/16, 6/16, },
-			{ 2/16, -8/16, 1/16, 5/16, -6/16, 6/16, },
-			{ -6/16, -8/16, -6/16, -3/16, -6/16, -1/16, },
-			{ -2/16, -8/16, -6/16, 1/16, -6/16, -1/16, },
-			{ 2/16, -8/16, -6/16, 5/16, -6/16, -1/16, },
-			{ 0/16, -6/16, -2/16, 3/16, -4/16, 3/16, },
-			{ -4/16, -6/16, -3/16, -1/16, -4/16, 2/16, },
-			},
-	levels = 8,
-})
-
 minetest.register_node("default:shell_pieces", {
 	description = "Shell Pieces",
 	tiles = {
@@ -431,22 +293,6 @@ minetest.register_node("default:lime", {
 	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	inventory_image = "default_lime.png",
-	paramtype = "light",
-	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
-	node_box = qtcore.nb_dustpile(),
-})
-
-minetest.register_node("default:potash", {
-	description = "Potash",
-	tiles = {
-		"default_potash_top.png",
-		"default_oak_wood.png",
-		"default_potash_side.png"
-	},
-	use_texture_alpha="clip",
-	drawtype = "nodebox",
-	inventory_image = "default_potash.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1},

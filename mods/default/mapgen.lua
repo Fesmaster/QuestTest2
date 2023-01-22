@@ -82,7 +82,7 @@ qts.worldgen.register_biome("swamp", {
 	min_air = 50,
 	dust = nil,
 	surface = {"default:dirt_with_swamp_grass"},
-	fill = {"default:dirt"}, --TODO: add peat?
+	fill = {"default:dirt_swamp"}, --TODO: add peat?
 	stone = {"default:stone"},
 	plant = {"default:swamp_plant", "default:flower_iris"},
 	plant_freq = 10,
@@ -292,6 +292,36 @@ minetest.register_ore({
 		octaves = 1,
 		persist = 0.0
 	},
+})
+
+minetest.register_ore({
+	ore_type        = "blob",
+	ore             = "default:peat",
+	wherein         = {"default:dirt_swamp"},
+	clust_scarcity  = 7 * 7 * 7,
+	clust_size      = 5,
+	y_max           = 20,
+	y_min           = -15,
+	noise_threshold = 0.0,
+	noise_params    = {
+		offset = 0.5,
+		scale = 0.2,
+		spread = {x = 5, y = 5, z = 5},
+		seed = -316,
+		octaves = 1,
+		persist = 0.0
+	},
+})
+
+minetest.register_ore({
+	ore_type       = "scatter",
+	ore            = "default:river_water_source",
+	wherein        = "default:dirt_swamp",
+	clust_scarcity = 10 * 10 * 10,
+	clust_num_ores = 8,
+	clust_size     = 5,
+	y_max          = 20,
+	y_min          = -15,
 })
 
 minetest.register_ore({

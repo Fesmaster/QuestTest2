@@ -426,6 +426,18 @@ qts.register_craft({
 	near = {"group:ttable", "group:cookware", "group:furnace"},
 })
 
+--[[qts.register_craft({
+	ingredients = {"default:vessels_"..types.."_oil_coconut", "default:potash", "default:lime"},
+	results = {"default:soap"},
+	near = {"group:ttable", "group:dishes"},
+})]]--
+
+qts.register_craft({
+	ingredients = {"default:vessels_"..types.."_oil_coconut", "default:lye"},
+	results = {"default:soap"},
+	near = {"group:ttable", "group:dishes"},
+})
+
 --powder bowls
 local bowl_fill = {"flour"}
 local bowl_fill_desc = {"Flour"}
@@ -540,6 +552,7 @@ local bowl_fill_desc = {"Flour"}
 		results = {"default:bread", "default:bowl_"..types, "default:bucket"},
 		near = {"group:ttable", "group:dishes", "group:furnace"},
 	})
+
 end
 --end things in dishes
 
@@ -669,16 +682,6 @@ minetest.register_craftitem("default:mushroom_stew", {
 	on_use = minetest.item_eat(6),
 })
 
-minetest.register_craftitem("default:flask_glass", {
-	description = "Glass Flask",
-	inventory_image = "default_flask_glass.png",
-})
-
-minetest.register_craftitem("default:flask_glass_water", {
-	description = "Flask of Water",
-	inventory_image = "default_flask_glass_water.png",
-})
-
 minetest.register_craftitem("default:coffee_beans", {
 	description = "Coffee Beans",
 	inventory_image = "default_coffee_beans.png",
@@ -757,7 +760,19 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = { "default:palm_log"},
-	results = {"default:wax_palm 4"},
-	near = {"group:ttable", "group:dishes", "group:furnace"},
+	ingredients = {"default:steel_bar 3"},
+	results = {"default:cookware_iron"},
+	near = {"group:furnace", "default:anvil"},
+})
+
+qts.register_craft({
+	ingredients = {"default:iron_bar 3"},
+	results = {"default:cookware_iron"},
+	near = {"group:furnace", "default:anvil"},
+})
+
+qts.register_craft({
+	ingredients = {"default:copper_bar 3"},
+	results = {"default:cookware_copper"},
+	near = {"group:furnace", "group:workbench"},
 })
