@@ -16,6 +16,7 @@ qts.register_liquid("default:water", {
 	post_effect_color = {a = 103, r = 30, g = 60, b = 90},
 	groups = {water = 3, liquid = 3, cooling = 1},
 	sounds = qtcore.node_sound_water(),
+	liquid_renewable = false,
 })
 
 qts.register_liquid("default:river_water", {
@@ -26,7 +27,7 @@ qts.register_liquid("default:river_water", {
 	post_effect_color = {a = 103, r = 57, g = 149, b = 213},
 	groups = {water = 3, liquid = 3, cooling = 1},
 	sounds = qtcore.node_sound_water(),
-	liquid_range = 4,
+	liquid_range = 6,
 	liquid_renewable = false,
 })
 
