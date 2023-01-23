@@ -316,7 +316,7 @@ minetest.register_ore({
 minetest.register_ore({
 	ore_type       = "scatter",
 	ore            = "default:river_water_source",
-	wherein        = "default:dirt_swamp",
+	wherein        = {"default:dirt_swamp", "default:peat"},
 	clust_scarcity = 10 * 10 * 10,
 	clust_num_ores = 8,
 	clust_size     = 5,
