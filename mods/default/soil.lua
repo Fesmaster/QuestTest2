@@ -9,7 +9,7 @@
 qts.register_shaped_node ("default:dirt", {
 	description = "Dirt",
 	tiles = {"default_dirt.png"},
-	groups = {crumbly = 3, soil=1, generation_ground=1},
+	groups = {crumbly = 3, soil=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_dirt(),
 	drop = {
 		max_items = 1,
@@ -24,7 +24,7 @@ minetest.register_node ("default:dirt_tilled", {
 	description = "Dirt",
 	drawtype = "nodebox",
 	tiles = {"default_dirt_tilled.png", "default_dirt.png","default_dirt.png"},
-	groups = {crumbly = 3, soil=1, farmland=1, generation_artificial=1},
+	groups = {crumbly = 3, soil=1, farmland=1, erodeable=1, generation_artificial=1},
 	sounds = qtcore.node_sound_dirt(),
 	paramtype2 = "facedir",
 	paramtype = 'light',
@@ -57,7 +57,7 @@ minetest.register_node ("default:dirt_tilled", {
 qts.register_shaped_node ("default:dirt_with_grass", {
 	description = "Dirt with Grass",
 	tiles = {"default_grass.png"},
-	groups = {crumbly = 3, soil=1, spreading_dirt_type=1, generation_ground=1},
+	groups = {crumbly = 3, soil=1, spreading_dirt_type=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_grass(),
 	drop = {
 		max_items = 1,
@@ -83,7 +83,7 @@ minetest.override_item("default:dirt_with_grass", {
 qts.register_shaped_node ("default:dirt_with_swamp_grass", {
 	description = "Dirt with Swamp Grass",
 	tiles = {"default_swamp_grass.png"},
-	groups = {crumbly = 3, soil=1, spreading_dirt_type=1, generation_ground=1},
+	groups = {crumbly = 3, soil=1, spreading_dirt_type=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_dirt(),
 	drop = {
 		max_items = 1,
@@ -129,7 +129,7 @@ qts.register_shaped_node ("default:dirt_swamp", {
 qts.register_shaped_node ("default:dirt_with_prarie_grass", {
 	description = "Dirt with Prarie Grass",
 	tiles = {"default_prarie_grass.png"},
-	groups = {crumbly = 3, soil=1, spreading_dirt_type=1, generation_ground=1},
+	groups = {crumbly = 3, soil=1, spreading_dirt_type=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_grass(),
 	drop = {
 		max_items = 1,
@@ -153,7 +153,7 @@ minetest.override_item("default:dirt_with_prarie_grass", {
 qts.register_shaped_node ("default:dirt_with_mushroom_grass", {
 	description = "Dirt with Mycelium",
 	tiles = {"default_mushroom_grass.png"},
-	groups = {crumbly = 3, soil=1, spreading_dirt_type=1, generation_ground=1},
+	groups = {crumbly = 3, soil=1, spreading_dirt_type=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_grass(),
 	drop = {
 		max_items = 1,
@@ -178,7 +178,7 @@ minetest.override_item("default:dirt_with_mushroom_grass", {
 qts.register_shaped_node ("default:dirt_with_rainforest_grass", {
 	description = "Dirt with Rainforest Grass",
 	tiles = {"default_rainforest_grass.png"},
-	groups = {crumbly = 3, soil=1, spreading_dirt_type=1, generation_ground=1},
+	groups = {crumbly = 3, soil=1, spreading_dirt_type=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_grass(),
 	drop = {
 		max_items = 1,
@@ -202,7 +202,7 @@ minetest.override_item("default:dirt_with_rainforest_grass", {
 qts.register_shaped_node ("default:dirt_with_snow", {
 	description = "Dirt with Snow",
 	tiles = {"default_snow.png"},
-	groups = {crumbly = 3, soil=1, generation_ground=1},
+	groups = {crumbly = 3, soil=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_grass(),
 	drop = {
 		max_items = 1,
@@ -228,7 +228,7 @@ minetest.override_item("default:dirt_with_snow", {
 qts.register_shaped_node ("default:sand", {
 	description = "Sand",
 	tiles = {"default_sand.png"},
-	groups = {oddly_breakable_by_hand = 3, crumbly = 3, falling_node=1, sand=1, generation_ground=1},
+	groups = {oddly_breakable_by_hand = 3, crumbly = 3, falling_node=1, sand=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_sand(),
 	drop = {
 		max_items = 1,
@@ -247,7 +247,7 @@ qts.register_shaped_node ("default:sand", {
 qts.register_shaped_node ("default:desert_sand", {
 	description = "Desert Sand",
 	tiles = {"default_desert_sand.png"},
-	groups = {crumbly = 3, falling_node=1, sand=1, generation_ground=1},
+	groups = {crumbly = 3, falling_node=1, sand=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_sand(),
 	drop = {
 		max_items = 1,
@@ -267,7 +267,7 @@ qts.register_shaped_node ("default:desert_sand", {
 qts.register_shaped_node ("default:gravel", {
 	description = "Gravel",
 	tiles = {"default_gravel.png"},
-	groups = {oddly_breakable_by_hand = 2, crumbly = 2, falling_node=1, gravel=1, generation_ground=1},
+	groups = {oddly_breakable_by_hand = 2, crumbly = 2, falling_node=1, gravel=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_sand(),
 	drop = {
 		max_items = 1,
@@ -290,7 +290,7 @@ minetest.register_node("default:snow", {
 	tiles ={"default_snow.png"},
 	inventory_image = "default_snowball.png",
 	wield_image = "default_snowball.png",
-	groups = {crumbly=3, snow=1, falling_node=1, cooling = 1, generation_replacable=1},
+	groups = {crumbly=3, snow=1, falling_node=1, cooling = 1, erodeable=1, generation_replacable=1},
 	drawtype = "nodebox",
 	node_box = {
 		type = "leveled",

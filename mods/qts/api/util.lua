@@ -756,6 +756,7 @@ local registered_allowed_inventory_move_funcs = {}
 minetest.register_allow_player_inventory_action = function(func)
     table.insert(registered_allowed_inventory_move_funcs, func)
 end
+
 old_register_allow_player_inventory_action(function(player, action, inventory, inventory_info)
 	local min
 	for k, v in ipairs(registered_allowed_inventory_move_funcs) do

@@ -44,6 +44,7 @@ dofile(qts.path.."/api/playerModifiers.lua")
 dofile(qts.path.."/api/explosion.lua")
 dofile(qts.path.."/api/projectiles.lua")
 dofile(qts.path.."/api/elements.lua")
+dofile(qts.path.."/api/erosion.lua")
 --any other code here 
 dofile(qts.path.."/crafting/crafting.lua")
 

@@ -455,6 +455,7 @@ function qts.register_liquid(name, def)
 		drowning = 1,
 		liquid_alternative_flowing = name.."_flowing",
 		liquid_alternative_source = name.."_source",
+		liquid_renewable = false,
 		liquid_viscosity = 1,
 		post_effect_color = {a = 103, r = 30, g = 60, b = 90},
 		groups = {},
