@@ -390,20 +390,35 @@ function qts.humanoid_texture(entity, base)
 				if itemdef then
 					--skin overrides
 					if itemdef.skin_image then
-						base_modified = base_modified .. "^" .. itemdef.skin_image
+						if type(itemdef.skin_image) == "string" then
+							base_modified = base_modified .. "^" .. itemdef.skin_image
+						elseif type(itemdef.skin_image) == "function" then
+							base_modified = base_modified .. "^" .. itemdef.skin_image(entity, stack)
+						end
 					end
 
 					--armor
 					if itemdef.armor_image then
-						table.insert(armor_list, itemdef.armor_image)
+						if type(itemdef.armor_image) == "string" then
+							table.insert(armor_list, itemdef.armor_image)
+						elseif type(itemdef.armor_image) == "function" then
+							table.insert(armor_list, itemdef.armor_image(entity, stack))
+						end
 					end
 
 					--crown
 					if itemdef.crown_image then
+						local newcrown;
+						if type(itemdef.crown_image) == "string" then
+							newcrown = itemdef.crown_image
+						elseif type(itemdef.crown_image) == "function" then
+							newcrown =  itemdef.crown_image(entity, stack)
+						end
+
 						if crown then
-							crown = crown .. "^" .. itemdef.crown_image
+							crown = crown .. "^" .. newcrown
 						else
-							crown = itemdef.crown_image
+							crown = newcrown
 						end
 					end
 
