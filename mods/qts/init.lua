@@ -10,11 +10,12 @@ minetest.nodedef_default.stack_max = 999
 minetest.craftitemdef_default.stack_max = 999
 minetest.noneitemdef_default.stack_max = 999
 
+dofile(qts.path.."/customversions.lua")
 dofile(qts.path.."/worldsettings.lua")
 --load the QT2 Settings File
 qts.settings = qts.create_settings_clojure(minetest.get_modpath("qts") .. "/QT2Settings.conf")
 --setup some constants
---qts.world_settings.
+--qts.world_settings. 
 qts.LEAFDECAY_RADIUS = qts.settings.get_num("LEAFDECAY_RADIUS") or 4
 qts.settings.set_num("LEAFDECAY_RADIUS", qts.LEAFDECAY_RADIUS)
 

@@ -68,7 +68,7 @@ function inventory.get_player_equipment(playername, pos)
 			--display the player model (currently breaks after inv. change in any way?)
 			str = str .. "background9["..P(0,0)..";2,5;gui_buttonareabg.png;false;16]".. 
 				"container["..P(0,0).."]"..
-				"model[0,0;2,4;player_display;character.x;"..esc(qts.humanoid_texture(player, "player_base.png"))..";0,180;false;true;0,79;30]" ..
+				"model[0,0;2,4;player_display;character.x;"..esc(qts.humanoid_texture(player, "player_base.png"))..";0,180;false;true;0,79;30".. qts.select(ENGINE_VERSION_FORMSPEC_MODEL_FIX, ";0,10,0;", "") .. "]" ..
 				"container_end[]"..
 				"image["..P(0,4)..";1,1;inv_health_icon.png]" ..
 				"tooltip["..P(0,4)..";1,1;Health/Max]"..

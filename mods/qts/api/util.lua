@@ -767,3 +767,29 @@ old_register_allow_player_inventory_action(function(player, action, inventory, i
 	end
 	return min or 0
 end)
+
+--[[
+	selects opt1 if check is true, otherwise selects opt2. 
+	if the opts are functions, then they are called, their return value is returned, and any variable args are passed to them.
+
+	Params:
+		check - the boolean to check
+		opt1 - the option to return when check is true
+		opt2 - the option to return when check is false
+		... - variable args passed to opt1 or opt2 in the case they are functions.
+]]
+function qts.select(check, opt1, opt2, ...)
+    if (check) then
+        if type(opt1) == "function" then
+            return opt1(...)
+        else
+            return opt1
+        end
+    else
+        if type(opt2) == "function" then
+            return opt2(...)
+        else
+            return opt2
+        end
+    end
+end
