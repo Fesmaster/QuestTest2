@@ -25,19 +25,14 @@ local function armor_place(itemstack, placer, pointed_thing)
 		local node = minetest.get_node_or_nil(pointed_thing.under)
 		if (node and minetest.get_item_group(node.name, "dye") ~= 0) then
 			--its a dye node
-			minetest.log("warning", "Applying dye to a piece of armor")
 			local color = colorstring_from_dye_node_name[node.name]
 			local meta = itemstack:get_meta()
 			meta:set_string("colorstring", color)
 			meta:set_string("description", itemstack:get_short_description() .. "\n" .. color)
 			meta:set_string("color", qtcore.colors[color])
-		else
-			minetest.log("warning", "armor not clicked against dye")
+			minetest.log("action", "Player dyed a piece of armor. Item: " .. itemstack:to_string())
 		end
-	else
-		minetest.log("warning", "armor not clicked valid pointed_thing")
 	end
-	minetest.log("warning", "armor meta: " ..dump(itemstack:get_meta():to_table()))
 	return itemstack
 end
 
