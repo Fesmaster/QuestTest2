@@ -58,6 +58,41 @@ Two examples: Most basic crafting requires a crafting or advanced crafting table
 
 The second example is the smelting of metal. Foundries, not to be confused with the single-node Furnaces, are large structures, at a minimum, 3x2x3 blocks, but going up to 3x4x3 blocks. The height difference is a major difference, a full-sized foundry holds 3x as much metal as a minimal one. They require significant investment to make, and are limited in what they can smelt simultaneously, encouraging the player to make a number of them. 
 
+### Conquest
+
+This game is not about defending one's territory, no, it is about conquering the world. The monsters, the dark, exist, and you must go find them.
+
+There are several reasons for this. 
+
+1. It allows you to not fight when you don't want to (mostly).
+2. It encourages exploration, particularly when you want to fight or need materials.
+3. It fits more with the nature of the gameplay.
+
+If the enemies are not hunting the player, not coming after the player, then the player gets the choice to fight or not to fight at any given time. This is preferred for the pacing of the game, allowing the player large stretches of time to focus on other tasks, such as building, without the threat of an attack. To this end, enemies will only spawn at specific locations in the world, clustered around camps, dungeons, and similar structures. This allows them to be clearly identified, so they can be avoided or hunted.
+
+If the enemies exist in specific locations in the world, then the player must explore to find them. If they drop or are guarding materials unique to that location or unique to them, then there is reason to hunt them down. This re-enforces the exploration pillar.
+
+The nature of the gameplay, as a voxel world, is that the player can change the world intelligently, but the ability of creatures to do so is heavily limited. Thus, it makes sense th at the player is the alpha predator of this world. Either way, this will happen; the player will find a way to dominate the world, the spawn mechanics, and dominate. The idea is to assume this as the default, encourage it, and make the game revolve around it. Each new enemy, each new area, presents new challenges to conquer it, not to survive within it.
+
+Hand in hand with this goes the progression of the game. The game should be able to estimate the level of the player based off of what materials they have acquired, what armor they wield, what tier of tools they carry. This level should effect what types of enemies spawn at a particular location, what gear they have, and thus how dangerous they are to the player. 
+
+Just because the game is centered around a conquest mentality, the enemies should not be easy. To this end, dodging was added, though its still a bit broken. Enemy attacks should not be just "run up and hit!", but be far more varied and intelligent. They should flee when nearly dead. Attack at range, use the environment, and use special abilities. They should be able to pick up and use the same items the player can, from weapons to armor to magic staves. 
+
+### Resource Management
+
+The pillar of resource management includes crafting, storage, and sourcing materials.
+
+Crafting should be both simple and engaging. For this purpose, we removed the crafting table that required people to learn or search recipes, replacing it with a system to search recipes, click buttons to craft, but also require things placed in the world or in the inventory but not consumed. This allows us to also have craft recipes that have multiple outputs, and "virtual" recipes that cannot be crafted but detail where certain items can be found.
+
+Crafting more complex things should involve some interaction with the world. Foundries, for turning ore into metal, are an excellent example. These are large structures that require maintenance to work, and have several different points with with to interact to use them. A smaller example is dying cloth armor: you have to rightclick the armor on a bottle of dye. 
+
+Storage is a common problem. One thing we want to avoid is an ugly wall of chests. To facilitate this, chests themselves are designed more as detail pieces, with crates being storage that takes a full block. Then, other pieces of furniture have storage attached, and this can be expanded. This further encourages the building pillar, particularly in the area of making a nice looking base. 
+A specific effort to alleviate the storage issue is to increase the stack max size from 99 to 999 for nearly everything. This facilitates building, too, as it allows you to make less trips to refresh material stores when constructing something.
+
+Sourcing materials is intended to be a major challenge in the game, controlling progression. This is not the same thing as making the game have a large material grind. Materials should be plentiful, just restricted in access. For example, to get to metals, you have to get underground, have a pickaxe, and have built a foundry. But to get to gold and gemstones needed for magic, you need to go much deeper. 
+
+Similarly for other materials, you have to get to where the material is found, but once there, its no grind to get the amount you need, not only to progress, but also to do more optional things.
+
 ## Art
 
 It is essential to have a consistent art style, a consistent visual feel for the game. 
