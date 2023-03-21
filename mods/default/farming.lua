@@ -430,3 +430,9 @@ minetest.register_abm({
 		minetest.set_node(pos, {name="air"})
 	end
 })
+
+--misc items
+minetest.register_craftitem("default:herb_bonewort", {
+	description = "Bonewort",
+	inventory_image = "default_herb_bonewort.png",
+})

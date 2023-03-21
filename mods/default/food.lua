@@ -362,8 +362,8 @@ local cup_fill_desc = {"Turkish Coffee", "Water"}
 		sounds = qtcore.node_sound_stone(),
 	})
 --vessels
-local vessel_fill = {"oil_coconut"}
-local vessel_fill_desc = {"Coconut oil"}
+local vessel_fill = {"oil_coconut", "oil_seeds"}
+local vessel_fill_desc = {"Coconut Oil", "Seed Oil"}
 	for n, fill in ipairs(vessel_fill) do
 		minetest.register_node("default:vessels_"..types.."_"..fill, {
 			description = vessel_fill_desc[n].." Vessel",
@@ -424,6 +424,12 @@ qts.register_craft({
 	ingredients = {"default:dishes_"..types, "default:coconut 3"},
 	results = {"default:vessels_"..types.."_oil_coconut"},
 	near = {"group:ttable", "group:cookware", "group:furnace"},
+})
+
+qts.register_craft({
+	ingredients = {"default:dishes_"..types, "group:seeds 8"},
+	results = {"default:vessels_"..types.."_oil_seeds"},
+	near = {"group:press"},
 })
 
 --[[qts.register_craft({
@@ -658,6 +664,42 @@ minetest.register_node("default:cookware_copper", {
 	sounds = qtcore.node_sound_metal(),
 })
 
+local woodtypes={"oak", "apple", "aspen", "coffee", "mahogany", "rosewood", "pine", "lanternfruit", "swamp", "rowan"}
+local woodnames={"Oak", "Apple", "Aspen", "Coffee", "Mahogany", "Rosewood", "Pine", "Lanternfruit", "Swamp Wood", "Rowan"}
+for i, wood in ipairs(woodtypes) do
+	minetest.register_node("default:press_"..wood, {
+		description = woodnames[i].." Press",
+		tiles = {"default_"..wood.."_wood.png",},
+		use_texture_alpha="clip",
+		drawtype = "nodebox",
+		paramtype = "light",
+		paramtype2 = "facedir",
+		groups = {oddly_breakable_by_hand=3, press=1, generation_artificial=1},
+		node_box = {
+			type = "fixed",
+			fixed = {
+				{ -6/16, -8/16, -6/16, 6/16, -7/16, 6/16, },
+				{ -5/16, -7/16, -5/16, 5/16, -6/16, 5/16, },
+				{ -4/16, -7/16, -4/16, 4/16, 1/16, -3/16, },
+				{ -4/16, -7/16, 3/16, 4/16, 1/16, 4/16, },
+				{ -4/16, -7/16, -4/16, -3/16, 1/16, 4/16, },
+				{ 3/16, -7/16, -4/16, 4/16, 1/16, 4/16, },
+				{ -1/16, -7/16, -1/16, 1/16, 4/16, 1/16, },
+				{ -4/16, 3/16, -1/16, 4/16, 4/16, 1/16, },
+				{ -3/16, -6/16, -3/16, 3/16, -5/16, 3/16, },
+			},
+		},
+		sounds = qtcore.node_sound_metal(),
+})
+
+	qts.register_craft({
+		ingredients = {"default:"..wood.."_wood_planks 2"},
+		results = {"default:press_"..wood},
+		near = {"group:workbench"},
+		})
+	
+end
+
 minetest.register_node("default:coffee_grounds", {
 	description = "Coffee Grounds",
 	tiles = {
@@ -668,6 +710,22 @@ minetest.register_node("default:coffee_grounds", {
 	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	inventory_image = "default_coffee_grounds_item.png",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
+	node_box = qtcore.nb_dustpile(),
+})
+
+minetest.register_node("default:sugar", {
+	description = "Sugar",
+	tiles = {
+		"default_sugar_top.png",
+		"default_oak_wood.png",
+		"default_sugar_side.png"
+	},
+	use_texture_alpha="clip",
+	drawtype = "nodebox",
+	inventory_image = "default_sugar_item.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
@@ -697,6 +755,12 @@ qts.register_craft({
 	ingredients = {"default:coffee_beans"},
 	results = {"default:coffee_grounds 2"},
 	near = {"group:ttable", "group:dishes"},
+})
+
+qts.register_craft({
+	ingredients = {"default:reeds 2"},
+	results = {"default:sugar"},
+	near = {"group:ttable", "group:dishes", "group:furnace"},
 })
 
 qts.register_craft({

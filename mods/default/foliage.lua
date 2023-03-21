@@ -300,6 +300,27 @@ minetest.register_node("default:natural_coconut", {
 	sounds = qtcore.node_sound_wood(),
 })
 
+
+minetest.register_node("default:bonewort", {
+	description = "Bonewort",
+	tiles ={"default_bonewort.png"},
+	use_texture_alpha = "clip",
+	drawtype = "plantlike",
+	paramtype = "light",
+	paramtype2 = "meshoptions",
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	waving = 1,
+	buildable_to = true,
+	selection_box = qtcore.nb_level1(),
+	groups = {snappy=3, flammable = 2, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	on_place = qtcore.place_random_plantlike,
+	drop = "default:herb_bonewort",
+	on_flood = floodFunc,
+})
+
 --flowers
 minetest.register_node("default:flower_kniphofia", {
 	description = "Kniphofia",
