@@ -689,7 +689,7 @@ for i, wood in ipairs(woodtypes) do
 				{ -3/16, -6/16, -3/16, 3/16, -5/16, 3/16, },
 			},
 		},
-		sounds = qtcore.node_sound_metal(),
+		sounds = qtcore.node_sound_wood(),
 })
 
 	qts.register_craft({
