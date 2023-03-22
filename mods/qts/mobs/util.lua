@@ -49,6 +49,13 @@ end
 		the obj name  
 ]]
 function qts.object_name(obj)
+	if obj == nil then
+		return "UNKNOWN NAME"
+	end
+	--protection from calling this on self in entities
+	if obj.is_player == nil and obj.object ~= nil and obj.name ~= nil then
+		return obj.name
+	end
 	if (obj:is_player()) then
 		return obj:get_player_name()
 	else

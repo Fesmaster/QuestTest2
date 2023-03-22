@@ -30,9 +30,9 @@ dofile(qts.path.."/api/maths.lua") --non-vector math
 dofile(qts.path.."/api/util.lua")
 dofile(qts.path.."/api/vector.lua") --vector math
 
+dofile(qts.path.."/api/callbacks.lua")
 dofile(qts.path.."/api/creative.lua")
 dofile(qts.path.."/api/player.lua")
-dofile(qts.path.."/api/callbacks.lua")
 dofile(qts.path.."/api/nodetypes.lua")
 dofile(qts.path.."/api/shapedNodes.lua")
 dofile(qts.path.."/api/screwdriver.lua")

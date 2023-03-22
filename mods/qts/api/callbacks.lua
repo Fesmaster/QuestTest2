@@ -438,3 +438,35 @@ end)
 minetest.register_on_liquid_transformed(function(pos_list, node_list)
     qts.update_node_list(pos_list)
 end)
+
+
+
+--[[
+	add rightclicking back to entities
+]]
+--[[
+local old_item_secondary_use = core.item_secondary_use
+core.item_secondary_use = function(itemstack, clicker, pointed_thing)
+	minetest.log("questtest overriden item secondary use: " .. dump(pointed_thing))
+	if pointed_thing.type == "object" then
+		local luaenttiy = pointed_thing.ref:get_luaentity()
+		if (luaenttiy) then
+			return luaenttiy:on_rightclick(itemstack, clicker, pointed_thing)
+		end
+	end
+	return old_item_secondary_use(itemstack, clicker, pointed_thing)
+end
+--]]
+
+--[[
+	Hook into item registration!!!!
+]]
+--[[
+local old_register_item = core.register_item
+function core.register_item(name, itemdef)
+	if (itemdef.on_secondary_use == nil) then
+		--itemdef.on_secondary_use = redef_wrapper(core, 'item_secondary_use')
+	end
+	return old_register_item(name, itemdef)
+end
+]]

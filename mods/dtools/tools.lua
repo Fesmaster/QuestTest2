@@ -461,3 +461,38 @@ qts.register_on_player_attack(function(victim, hitter, time_from_last_punch, too
 	minetest.log("player punched something!")
 end)
 ]]
+
+minetest.register_tool("dtools:entity_analyzer", {
+	description = "Entity Analizer",
+	inventory_image = "dtools_green_wand.png",
+	range = 10.0,
+	--liquids_pointable = true,
+	--on_use = function(itemstack, user, pointed_thing)
+	--end,
+	on_secondary_use = function(itemstack, user, pointed_thing)
+		if pointed_thing ~= nil and pointed_thing.ref ~= nil then
+			local obj = pointed_thing.ref
+			local name = qts.object_name(obj)
+			local luaentity = obj:get_luaentity()
+			minetest.log("ENTITY DEBUG LOG: \n" .. 
+				"Name: " .. dump(name) .. "\n"..
+				"ID: " .. dump(qts.get_object_id(obj)) .. "\n"..
+				"Pos: " .. dump(obj:get_pos()) .. "\n"..
+				"Velocity: " .. dump(obj:get_velocity()) .. "\n"..
+				"Acceleration: " .. dump(obj:get_acceleration()) .. "\n"..
+				"Rotation: " .. dump(obj:get_rotation()) .. "\n"..
+				"Yaw: " .. dump(obj:get_yaw()) .. "\n"..
+				"Texture Modifier: " .. dump(obj:get_texture_mod()) .. "\n"..
+				"HP: " .. dump(obj:get_hp()) .. "\n"..
+				"Armor Groups: " .. dump(obj:get_armor_groups()) .. "\n"..
+				--"\tAnimation: " .. dump(obj:get_animation()) .. "\n"..
+				"Attached: " .. dump(obj:get_attach()) .. "\n"..
+				"Num of Children: " .. dump(#(obj:get_children())) .. "\n"..
+				"Properties: " .. dump(obj:get_properties()) .. "\n"..
+				"Nametag: " .. dump(obj:get_nametag_attributes()) .. "\n"..
+				"Lua Entity Table: " .. dump(obj:get_luaentity()) .. "\n"..
+				""
+			)
+		end
+	end
+})
