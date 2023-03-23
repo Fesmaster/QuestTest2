@@ -55,18 +55,18 @@ function qtcore.armor_cloth_textures(basecolor, shadowstrength)
 end
 
 qtcore.colors = {
-	red = "#a40000",
-	orange = "#a45200",
-	yellow = "#c6a900",
-	green = "#3fa400",
-	cyan = "#00a4a4",
-	blue = "#0000a4",
-	purple = "#5200a4",
-	magenta = "#a400a4",
-	white = "#e4e4e4",
-	gray = "#6d6d6d",
-	dark_gray = "#363636",
+	red = "#a40000",--"#ff0000", --
+	orange = "#ff7f00", --"#a45200",--
+	yellow = "#ffff00", --"#c6a900",--
+	green = "#3fa400",--"#00ff00", --
+	cyan = "#00a4a4",--"#00ffff", --
+	blue = "#0000ff", --"#0000a4",--
+	purple = "#5200a4",--"#7f00ff", --
+	magenta = "#a400a4",--"#ff00ff", --
+	white = "#e4e4e4",--"#ffffff", --
+	gray = "#6d6d6d",--"#aaaaaa", --
+	dark_gray = "#363636",--"#545454", --
 	black = "#1f1f1f",
-	dark_green = "#005200",
-	brown = "#443200",
+	dark_green = "#005200",--"#007f00", --
+	brown = "#443200",--"#332704", --
 }
