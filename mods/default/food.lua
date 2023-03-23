@@ -666,7 +666,7 @@ for i, types in ipairs(greenware_types) do
 	})
 
 	minetest.register_node("default:vessels_"..types.."_greenware", {
-		description = greenware_types_desc[i].." Greenware Dishes",
+		description = greenware_types_desc[i].." Greenware Vessel",
 		tiles = {"default_dishes_"..types.."_greenware.png",},
 		use_texture_alpha="clip",
 		drawtype = "nodebox",
@@ -947,13 +947,13 @@ qts.register_craft({
 
 minetest.register_craft({
 	type = "cooking",
-	output = "default:vessels_clay",
+	output = "default:vessel_empty_clay",
 	recipe = "default:vessels_clay_greenware",
 })
 
 minetest.register_craft({
 	type = "cooking",
-	output = "default:vessles_stoneware",
+	output = "default:vessel_empty_stoneware",
 	recipe = "default:vessels_stoneware_greenware",
 })
 
