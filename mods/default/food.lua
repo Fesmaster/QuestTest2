@@ -274,9 +274,10 @@ local cup_fill_desc = {"Turkish Coffee", "Water"}
 			on_use = qts.item_eat(4),
 			sounds = qtcore.node_sound_stone(),
 		})
+
 	end
+
 	--cup crafting
-	
 	qts.register_craft({
 		ingredients = {"default:coffee_grounds", "default:dishes_"..types, "default:bucket_default_water"},
 		results = {"default:cup_clay_coffee_turkish", "default:bowl_"..types, "default:bucket"},
@@ -362,7 +363,7 @@ local cup_fill_desc = {"Turkish Coffee", "Water"}
 		sounds = qtcore.node_sound_stone(),
 	})
 
-	minetest.register_node("default:vessel_empty_"..types, {
+	minetest.register_node("default:vessels_empty_"..types, {
 		description = dish_types_desc[i].." Vessel",
 		tiles = {"default_dishes_"..types..".png",},
 		use_texture_alpha="clip",
@@ -457,6 +458,7 @@ local vessel_fill_desc = {"Coconut Oil", "Seed Oil"}
 			},
 			sounds = qtcore.node_sound_stone(),
 		})
+
 	end
 -- vessel crafting
 --[[qts.register_craft({
@@ -482,13 +484,13 @@ qts.register_craft({
 })]]--
 
 qts.register_craft({
-	ingredients = {"default:vessel_empty_"..types, "default:coconut 4"},
+	ingredients = {"default:vessels_empty_"..types, "default:coconut 4"},
 	results = {"default:vessels_"..types.."_oil_coconut"},
 	near = {"group:ttable", "group:cookware", "group:furnace"},
 })
 
 qts.register_craft({
-	ingredients = {"default:vessel_empty_"..types, "group:seeds 12"},
+	ingredients = {"default:vessels_empty_"..types, "group:seeds 12"},
 	results = {"default:vessels_"..types.."_oil_seeds"},
 	near = {"group:press"},
 })
@@ -947,25 +949,25 @@ qts.register_craft({
 
 minetest.register_craft({
 	type = "cooking",
-	output = "default:vessel_empty_clay",
+	output = "default:vessels_empty_clay",
 	recipe = "default:vessels_clay_greenware",
 })
 
 minetest.register_craft({
 	type = "cooking",
-	output = "default:vessel_empty_stoneware",
+	output = "default:vessels_empty_stoneware",
 	recipe = "default:vessels_stoneware_greenware",
 })
 
 qts.register_craft({
 	ingredients = {"default:gold_bar 3"},
-	results = {"default:vessels_gold"},
+	results = {"default:vessels_empty_gold"},
 	near = {"group:workbench"},
 })
 
 qts.register_craft({
 	ingredients = {"default:silver_bar 3"},
-	results = {"default:vessels_silver"},
+	results = {"default:vessels_empty_silver"},
 	near = {"group:workbench"},
 })
 
