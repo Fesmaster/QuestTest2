@@ -423,23 +423,20 @@ qts.register_craft({
 
 --vessel cup interchangability
 local cup_fill = {"coffee_turkish", "water", "oil_coconut", "oil_seeds"}
-local dish_1 = {"clay", "stoneware", "gold", "silver" } -- 
-local dish_2 = {"clay", "stoneware", "gold", "silver" } -- 
+local dish_2 = {"clay", "stoneware", "gold", "silver" }
 for h, fill in ipairs(cup_fill) do
-	for w, types1 in ipairs(dish_1) do
 		for r, types2 in ipairs(dish_2) do
 				qts.register_craft({
-				ingredients = {"default:vessels_"..types1.."_"..fill, "default:cup_"..types2.." 8" },
-				results = {"default:cup_"..types2.."_"..fill.." 8", "default:vessels_empty_"..types1},
+				ingredients = {"default:vessels_"..types.."_"..fill, "default:cup_"..types2.." 8" },
+				results = {"default:cup_"..types2.."_"..fill.." 8", "default:vessels_empty_"..types},
 			})
 
 			qts.register_craft({
-				ingredients = {"default:vessels_empty_"..types1, "default:cup_"..types2.."_"..fill.." 8"},
-				results = { "default:cup_"..types2.." 8", "default:vessels_"..types1.."_"..fill},
+				ingredients = {"default:vessels_empty_"..types, "default:cup_"..types2.."_"..fill.." 8"},
+				results = { "default:cup_"..types2.." 8", "default:vessels_"..types.."_"..fill},
 			})
 		end
 	end
-end
 
 --dish nodes (and empty vessels)
 	minetest.register_node("default:dishes_"..types, {
