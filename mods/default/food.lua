@@ -397,34 +397,34 @@ end
 	end
 		
 
-qts.register_craft({
-	ingredients = {"default:vessels_empty_"..types, "default:coconut 4"},
-	results = {"default:vessels_"..types.."_oil_coconut"},
-	near = {"group:ttable", "group:cookware", "group:furnace"},
-})
+	qts.register_craft({
+		ingredients = {"default:vessels_empty_"..types, "default:coconut 4"},
+		results = {"default:vessels_"..types.."_oil_coconut"},
+		near = {"group:ttable", "group:cookware", "group:furnace"},
+	})
 
-qts.register_craft({
-	ingredients = {"default:vessels_empty_"..types, "group:seeds 12"},
-	results = {"default:vessels_"..types.."_oil_seeds"},
-	near = {"group:press"},
-})
+	qts.register_craft({
+		ingredients = {"default:vessels_empty_"..types, "group:seeds 12"},
+		results = {"default:vessels_"..types.."_oil_seeds"},
+		near = {"group:press"},
+	})
 
-qts.register_craft({
-	ingredients = {"default:vessels_"..types.."_oil_coconut", "default:lye"},
-	results = {"default:soap"},
-	near = {"group:ttable", "default:vessel_empty_"..types},
-})
+	qts.register_craft({
+		ingredients = {"default:vessels_"..types.."_oil_coconut", "default:lye"},
+		results = {"default:soap"},
+		near = {"group:ttable", "default:vessel_empty_"..types},
+	})
 
-qts.register_craft({
-	ingredients = {"default:vessels_"..types.."_oil_seeds", "default:lye"},
-	results = {"default:soap"},
-	near = {"group:ttable", "default:vessel_empty_"..types},
-})
+	qts.register_craft({
+		ingredients = {"default:vessels_"..types.."_oil_seeds", "default:lye"},
+		results = {"default:soap"},
+		near = {"group:ttable", "default:vessel_empty_"..types},
+	})
 
---vessel cup interchangability
-local cup_fill = {"coffee_turkish", "water", "oil_coconut", "oil_seeds"}
-local dish_2 = {"clay", "stoneware", "gold", "silver" }
-for h, fill in ipairs(cup_fill) do
+	--vessel cup interchangability
+	local cup_fill = {"coffee_turkish", "water", "oil_coconut", "oil_seeds"}
+	local dish_2 = {"clay", "stoneware", "gold", "silver" }
+	for h, fill in ipairs(cup_fill) do
 		for r, types2 in ipairs(dish_2) do
 				qts.register_craft({
 				ingredients = {"default:vessels_"..types.."_"..fill, "default:cup_"..types2.." 8" },
@@ -438,7 +438,7 @@ for h, fill in ipairs(cup_fill) do
 		end
 	end
 
---dish nodes (and empty vessels)
+	--dish nodes (and empty vessels)
 	minetest.register_node("default:dishes_"..types, {
 		description = dish_types_desc[i].." Dishes",
 		tiles = {"default_dishes_"..types..".png",},
