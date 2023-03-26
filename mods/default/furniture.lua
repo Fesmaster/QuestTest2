@@ -4,13 +4,13 @@
 
 
 --BEGIN benches
-minetest.register_node("default:bench_pine", {
+--[[minetest.register_node("default:bench_pine", {
 	description = "Pine Bench",
 	tiles = {"default_pine_wood.png"},
 	drawtype = "nodebox",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, ttable=1, generation_artificial=1},
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -24,7 +24,48 @@ minetest.register_node("default:bench_pine", {
 		}
 	},
 	sounds = qtcore.node_sound_wood(),
+})]]--
+
+minetest.register_node("default:bench_pine_left", {
+	description = "Pine Bench",
+	tiles = {"default_pine_wood.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -7/16, -8/16, -6/16, -5/16, 8/16, -4/16, },
+			{ -7/16, -8/16, 2/16, -5/16, -1/16, 4/16, },
+			{ -7/16, -1/16, -6/16, 8/16, 0/16, 4/16, },
+			{ -7/16, 5/16, -6/16, 8/16, 7/16, -5/16, },
+			{ -7/16, 1/16, -6/16, 8/16, 3/16, -5/16, },
+		}
+	},
+	sounds = qtcore.node_sound_wood(),
 })
+
+minetest.register_node("default:bench_pine_right", {
+	description = "Pine Bench",
+	tiles = {"default_pine_wood.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ 5/16, -8/16, -6/16, 7/16, 8/16, -4/16, },
+			{ 5/16, -8/16, 2/16, 7/16, -1/16, 4/16, },
+			{ -8/16, -1/16, -6/16, 7/16, 0/16, 4/16, },
+			{ -8/16, 5/16, -6/16, 7/16, 7/16, -5/16, },
+			{ -8/16, 1/16, -6/16, 7/16, 3/16, -5/16, },
+		}
+	},
+	sounds = qtcore.node_sound_wood(),
+})
+
 
 --END benches
 --BEGIN chests
