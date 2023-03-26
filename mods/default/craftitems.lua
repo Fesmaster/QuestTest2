@@ -5,7 +5,7 @@ qts.register_ingot("default:stick", {
 	description = "Stick",
 	inventory_image = "default_stick.png",
 	tiles = {"default_oak_wood.png"},
-	groups = {cracky=3, stick = 1},
+	groups = {stick = 1, oddly_breakable_by_hand = 3},
 	sounds = qtcore.node_sound_wood(),
 	nodeboxes = {
 		{-0.5, -0.5, -0.4375, 0.5, -0.375, -0.3125}, -- NodeBox1
