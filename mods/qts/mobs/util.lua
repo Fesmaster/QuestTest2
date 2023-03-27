@@ -191,7 +191,7 @@ local function check_pos_for_target(pos, query)
 end
 
 --[[
-qts.ai.get_random_navagatable_point_in_radius(pos, radius, query, shape)  
+qts.ai.get_random_navagatable_point_in_radius(pos, radius, query, height)
 	Description: gets a point in radius around pos that matches query and shape.  
 	
 	Paramaters:  
@@ -205,8 +205,10 @@ qts.ai.get_random_navagatable_point_in_radius(pos, radius, query, shape)
 			if wanted:  
 				check_ground = boolean - if the node below the possible position should be not matching query.  
 		} - choose one of these, make the rest nil  
+		
 		height - the height of the column.  
-		shape - {  
+		
+		shape - {  --NOT USED
 			size - float - the x and z size in nodes to check  
 			height float - the y height in nodes to check  
 		} - a person would be {size = 1, height = 2}  

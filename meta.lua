@@ -92,6 +92,9 @@
 ---@field set_nametag_attributes function(attributes)
 
 ---@class Vector
+---@field x number
+---@field y number
+---@field z number
 ---@operator add(Vector): Vector
 ---@operator sub(Vector): Vector
 ---@operator mul(number): Vector
@@ -263,15 +266,13 @@ vector ={
 ---Makes a luaobject into a human-readable string
 ---@param obj any
 ---@param name string defaults to "_"
----@param dumped table, defaults to {}. Used for recursion.
 ---@return string
-function dump2(obj, name, dumped) end
+function dump2(obj, name) end
 
 ---Makes a luaobject into a human-readable string
 ---@param obj any
----@param dumped table, defaults to {}. Used for recursion.
 ---@return string
-function dump(obj, dumped) end
+function dump(obj) end
 
 ---Get the hypotenuse of a right triangle with leg lengths x, y
 ---@param x number the first leg

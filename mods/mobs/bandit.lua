@@ -55,9 +55,15 @@ qts.ai.register_creature("mobs:basic_bandit", {
 	},
 	
 	spawnegg = {
-		description = "Testing Humanoid",
+		description = "Bandit",
 		color1 = "#FFB973",
 		color2 = "#B35900",
 		pattern = "spots",
+        spawner_config = "mobs:spawnconfig_bandit",
 	}
+})
+
+
+qts.ai.register_spawner_config("mobs:spawnconfig_bandit", {
+    entity_name = "mobs:basic_bandit"
 })

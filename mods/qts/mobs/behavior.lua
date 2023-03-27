@@ -110,6 +110,7 @@ local properties_to_propigate = {
 				color1 = "colorstring",
 				color2 = "colorstring",
 				pattern = "spots", -current patterns are limited to "spots"
+				spawner_config = "string" -- the spawner config to apply to a spawner when you rightclick one with the egg
 			}
 
 	special fields in initial_properties:
@@ -542,13 +543,30 @@ function qts.ai.register_creature(name, def)
 				".png^[multiply:"..
 				def.spawnegg.color2..")",
 			groups = {spawnegg = 1,},
+			spawn_entity_name = name,
+			default_spawner_config = def.spawnegg.spawner_config,
 			on_place = function(itemstack, placer, pointed_thing)
+				local itemdef = minetest.registered_items[itemstack:get_name()]
+				if not itemdef or not itemdef.spawn_entity_name then return end
+
 				if pointed_thing.above then
-					local obj = minetest.add_entity(pointed_thing.above, name)
+					if itemdef.default_spawner_config then
+						local below_node = minetest.get_node_or_nil(pointed_thing.under)
+						if below_node and minetest.get_item_group(below_node.name, "spawner") ~= 0 then
+							--clicked on a spawner
+							qts.ai.apply_spawner_config(pointed_thing.under, itemdef.default_spawner_config)
+							if not qts.is_player_creative(placer) then
+								itemstack:take_item(1)
+							end
+							return itemstack;
+						end
+					end
+
+					local obj = minetest.add_entity(pointed_thing.above, itemdef.spawn_entity_name)
 					if obj and not qts.is_player_creative(placer) then
 						itemstack:take_item(1)
-						return itemstack;
 					end
+					return itemstack;
 				end
 			end
 		})

@@ -20,14 +20,14 @@ qts.registered_creatures = {}
 --list of modules that have been registered
 qts.registered_modules = {}
 
---**DEPRICATED** list of registered behaviors
-qts.registered_behaviors = {}
+---list of registered spawn configurations
+qts.registered_spawner_configs = {}
 
 --[[
 DOFILES
 -]]
 dofile(qts.path.."/mobs/util.lua")
 dofile(qts.path.."/mobs/movement.lua")
+dofile(qts.path.."/mobs/spawner.lua")
 dofile(qts.path.."/mobs/behavior.lua")
-
 
