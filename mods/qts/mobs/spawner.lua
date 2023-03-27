@@ -284,8 +284,4 @@ minetest.register_node("qts:spawner", {
         local timer = minetest.get_node_timer(pos)
         timer:start(qts.ai.SPAWNER_SPAWN_DELAY_TIME + math.random(-qts.ai.SPAWNER_SPAWN_DELAY_DEVIATION_TIME, qts.ai.SPAWNER_SPAWN_DELAY_DEVIATION_TIME))
     end,
-
-
-
-
 })
