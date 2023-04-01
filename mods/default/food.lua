@@ -323,40 +323,9 @@ local cup_fill_desc = {"Turkish Coffee", "Water", "Oil Coconut", "Oil_Seeds"}
 			sounds = qtcore.node_sound_stone(),
 		})
 
-end
+	end
 
-	-- vessel crafting 
-	--[[
-		qts.register_craft({
-		ingredients = {"default:coffee_grounds", "default:dishes_"..types, "default:bucket_default_water"},
-		results = {"default:cup_clay_coffee_turkish", "default:bowl_"..types, "default:bucket"},
-		near = {"group:ttable", "group:cookware", "group:furnace"},
-	})
-
-	qts.register_craft({
-		ingredients = {"default:coffee_grounds", "default:dishes_"..types, "default:bucket_default_river_water"},
-		results = {"default:cup_"..types.."_coffee_turkish", "default:bowl_"..types, "default:bucket"},
-		near = {"group:ttable", "group:cookware", "group:furnace"},
-	})
-	
-	qts.register_craft({
-		ingredients = {"default:coffee_grounds", "default:cup_"..types.."_water"},
-		results = {"default:cup_"..types.."_coffee_turkish"},
-		near = {"group:ttable", "group:cookware", "group:furnace"},
-	})
-	
-	qts.register_craft({
-		ingredients = {"default:coffee_grounds", "default:cup_"..types, "default:bucket_default_water"},
-		results = {"default:cup_"..types.."_coffee_turkish", "default:bucket"},
-		near = {"group:ttable", "group:cookware", "group:furnace"},
-	})
-	
-	qts.register_craft({
-		ingredients = {"default:coffee_grounds", "default:cup_"..types, "default:bucket_default_river_water"},
-		results = {"default:cup_clay_coffee_turkish", "default:bucket"},
-		near = {"group:ttable", "group:cookware", "group:furnace"},
-	})
-	]]--
+	-- vessel and cup crafting 
 
 	--water included crafting
 	local cup_craft = {"water", "river_water"}
@@ -791,14 +760,15 @@ for i, wood in ipairs(woodtypes) do
 		node_box = {
 			type = "fixed",
 			fixed = {
-				{ -6/16, -8/16, -6/16, 6/16, -7/16, 6/16, },
-				{ -5/16, -7/16, -5/16, 5/16, -6/16, 5/16, },
-				{ -4/16, -7/16, -4/16, 4/16, 1/16, -3/16, },
-				{ -4/16, -7/16, 3/16, 4/16, 1/16, 4/16, },
-				{ -4/16, -7/16, -4/16, -3/16, 1/16, 4/16, },
-				{ 3/16, -7/16, -4/16, 4/16, 1/16, 4/16, },
-				{ -1/16, -7/16, -1/16, 1/16, 4/16, 1/16, },
+				{ -7/16, -8/16, -7/16, 7/16, -7/16, 7/16, },
+				{ -6/16, -7/16, -6/16, 6/16, -6/16, 6/16, },
+				{ -4/16, -6/16, -4/16, -3/16, 1/16, 4/16, },
+				{ -4/16, -6/16, -4/16, 4/16, 1/16, -3/16, },
+				{ -4/16, -6/16, 3/16, 4/16, 1/16, 4/16, },
+				{ 3/16, -6/16, -4/16, 4/16, 1/16, 4/16, },
+				{ -4/16, 0/16, -1/16, 4/16, 1/16, 1/16, },
 				{ -4/16, 3/16, -1/16, 4/16, 4/16, 1/16, },
+				{ -1/16, -6/16, -1/16, 1/16, 4/16, 1/16, },
 				{ -3/16, -6/16, -3/16, 3/16, -5/16, 3/16, },
 			},
 		},
