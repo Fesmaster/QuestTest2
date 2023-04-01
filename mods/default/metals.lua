@@ -116,8 +116,8 @@ minetest.register_craftitem("default:bronze_alloy", {
 })
 
 qts.register_craft({
-	ingredients = {"default:copper_bar", "default:tin_bar"},
-	results = {"default:bronze_alloy 2"},
+	ingredients = {"default:copper_bar 3", "default:tin_bar 1"},
+	results = {"default:bronze_alloy 4"},
 })
 
 --IRON
@@ -171,7 +171,7 @@ minetest.register_craftitem("default:steel_alloy", {
 
 qts.register_craft({
 	ingredients = {"default:iron_bar", "default:coal"},
-	results = {"default:steel_alloy 2"},
+	results = {"default:steel_alloy"},
 })
 
 --[[ WEALTH METALS ]]
