@@ -67,3 +67,31 @@ qts.ai.register_creature("mobs:basic_bandit", {
 qts.ai.register_spawner_config("mobs:spawnconfig_bandit", {
     entity_name = "mobs:basic_bandit"
 })
+
+--list of items that bandists can spawn holding, when using the weapon spawnconfig
+local bandit_weapons = {
+    "default:knife_flint",
+    "default:knife_rusted",
+    "default:knife_copper",
+    "default:knife_bronze",
+    "default:axe_flint",
+    "default:axe_rusted",
+    "default:axe_copper",
+    "default:axe_bronze",
+    "default:sword_rusted",
+    "default:sword_copper",
+    "default:sword_bronze",
+}
+
+qts.ai.register_spawner_config("mobs:spawnconfig_bandit_weapons", {
+    entity_name = "mobs:basic_bandit",
+    ---On Spawn callback
+    ---@param spawnerpos Vector
+    ---@param objref LuaEntity
+    on_spawn = function(spawnerpos, objref)
+        local luaentity = objref:get_luaentity();
+        if luaentity.wielded_item == nil or luaentity.wielded_item=="" then
+            luaentity.wielded_item = bandit_weapons[math.random(#bandit_weapons)]
+        end
+    end
+})

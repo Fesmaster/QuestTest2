@@ -10,6 +10,8 @@
 ---@field gain number Sound Gain
 ---@field pitch number Sound Pitch
 
+---@alias ColorSpec string format: "#RRGGBB[AA]"
+
 ---@alias ParamType
 ---| "light" node contains light data. IE, a node with translucency and not a full block
 ---| "none" node contains no specific data, and is thus usable by modding
@@ -90,6 +92,151 @@
 ---@field is_player function() returns true for players, false otherwise
 ---@field get_nametag_attributes function()
 ---@field set_nametag_attributes function(attributes)
+
+---@class LuaObject : ObjectRef
+---@field remove function() - remove the object
+---@field set_velocity function(vel) - set the object's velocity
+---@field set_acceleration function(acc) - sets the object's acceleraton
+---@field get_acceleration function() - gets the object's acceleraton
+---@field set_rotation function(rot) - sets the object's rotation via rotation vector in radians
+---@field get_rotation function() - gets the object's rotation as a rotation vector in radians
+---@field set_yaw function(yaw) - sets the object's yaw in radians
+---@field get_yaw function() - gets the object's yaw in radians
+---@field set_texture_mod function(mod) - set the texture modifier for when entity takes damage
+---@field get_texture_mod function() - get the texture modifier for when the entity takes damage
+---@field set_sprite function(start_frame, num_frames, framelength, select_x_by_camera) - set the entity sprite animations.
+---@field get_entity_name function() - **DEPRICATED** get the entity's name
+---@field get_luaentity function() - get the luatable that the entity is using (the event callback func, custom stuff, etc.)
+
+---@class Player : ObjectRef
+---@field get_player_name function() - gets the player name or "" if not a player
+---@field get_look_dir function() - get camera direction as unit vector
+---@field get_look_vertical function() - camera pitch in radians
+---@field get_look_horizontal function() - camera yaw in radians 
+---@field set_look_vertical function(radians) - set camera pitch
+---@field set_look_horizontal function(radians) - set camera yaw
+---@field get_breath function() - get the player breath value. 0=drowning, 
+---@field set_breath function(value) - set the player's breath value
+---@field set_fov function(fov, is_multiplier, transition_time) - set the player FOV. 
+---@field get_fov function() - get the FOV, 0 for no override.
+---@field get_meta function() - retuns a PlayerMetaRef
+---@field set_inventory_formspec function(formspec_string) - set the inventory formspec
+---@field get_inventory_formspec function() - returns inventory formspec string
+---@field set_formspec_prepend function(formspec_string) - set the prepend formspec string
+---@field get_formspec_prepend function() - gets th prepend formspec string
+---@field get_player_control function() - retuns a table with the pressed keys. {up, down, left, right, jump, aux1, sneak, dig, place, zoom}
+---@field get_player_control_bits function() - retusn a packed int with the bits set for controls.
+---@field set_physics_override function(override_table) - set the player physics override. Prefer QuestTest functions for this.
+---@field get_physics_override function() - get the current physics override
+---@field hud_add function(hud_def) - add a hud element to the player screen. Retuns an ID handle on success
+---@field hud_remove function(ID) - remove an added HUD by its ID.
+---@field hud_change function(ID, stat, value) - change a value of previously added HUD element by ID
+---@field hud_get function(ID) - get the HUD definition by ID
+---@field hud_set_flags function(flags) - set default HUD elements via flags Flags is table with boolean keys: {hotbar, healthbar, crosshair, wielditem, breathbar, minimap, minimap_radar, basic_debug}
+---@field hud_get_flags function() - returns a flag table
+---@field hud_set_hotbar_itemcount function(count) - set the number of elements in the hotbar
+---@field hud_get_hotbar_itemcount function() - get the number of elements in the hotbar
+---@field hud_set_hotbar_image function(texturename) - set the background image for the hotbar
+---@field hud_get_hotbar_image function() - get the background image for the hotbar
+---@field hud_set_hotbar_selected_image function(texturename) - set the selector image for the hotbar
+---@field hud_get_hotbar_selected_image function() - get the selector image for the hotbar
+---@field set_minimap_modes function({mode, mode, mode ...}, selected_mode) - set the minimap mode. Supply list of modes and the index of selected mode. mode is MinimapMode
+---@field get_sky function(as_table) - get the sky. Boolean should be true, otherwise a depricated format will be returned. Very foolish, yes.
+---@field set_sun function(SunParams) - set the sun format.
+---@field get_sun function() - returns the current SunParams
+---@field set_moon function(MoonParams) - set the moon format
+---@field get_moon function() - get the current moon params
+---@field set_stars function(StarParams) - 
+---@field get_stars function() - get the current star params
+---@field set_clouds function(CloudParams) - set the current clouds
+---@field get_clouds function() - get the current cloud def
+---@field override_day_night_ratio function(number|nil) - if not nil, use a 0-1 value to set the day to night ratio
+---@field get_day_night_ratio function() - get the current day to night ratio override.
+---@field set_local_animation function(idle, walk, dig, walk_while_dig, frame_speed) - set current animation frames. Each animation is a table in the formatL {x=start_frame, y=end_frame}.
+---@field get_local_animation function() - the the current animations
+---@field set_eye_offset function({firstperson, thirdperson}) - set eye offsets for the camera.
+---@field get_eye_offset function() - get the camera eye offsets
+---@field send_mapblock function(blockpos) - send a server-loaded mapblock to the player (devide node pos by 16 for mapblock coord). VERY SLOW USE WITH CAUTION
+---@field set_lighting function({shadow={intensity=number,0 to 1}}) - set the shadow intensity. 0=no shadows, 1=blackness.
+---@field get_lighting function() - get the lighting table (shadows only)
+
+---@class CloudParams type used in the Player:set_clouds() function
+---@field density number|nil alpha value of cloud density. 0=no clouds, 1=overcast. Default=0.4
+---@field color ColorSpec|nil Cloud color with alpha. Default: "#fff0f0e5"
+---@field ambient ColorSpec|nil Cloud minimum color, for glow at night effect. No Alpha. Default: #000000
+---@field height number|nil Cloud height. Default from Config, usually 120
+---@field thickness number|nil Could thickness in nodes. Default: 16
+---@field speed Vector|nil Cloud speed, in nodes per second. Default: {x=0,z=-2}
+
+---@class StarParams type used in the Player:set_stars() function
+---@field visible boolean|nil true to make the stars visible. Default: true
+---@field count integer|nil number of stars in "regular" and "skybox" skies. Default: 1000
+---@field star_color ColorSpec|nil the color of the stars. Alpa is used to set star brightness. Default: #ebebff69
+---@field scale number|nil control the star scale. Default is 1.
+
+---@class MoonParams type used in Player:set_moon() function
+---@field visible boolean|nil true to make the moon visible. Default:true
+---@field texture string|nil texture name for the moon, or "" to re-enable the moon mesh. Default: "moon.png" if it exists. Will be rotated 180 degrees from Sun texture. use "^[transformR180" to undo this.
+---@field tonemap string|nil a 512x1 texture contianing the tonemap for the moon. Default: "moon_tonemap.png"
+---@field scale number|nil Control the overall sun size. Default: 1
+
+---@class SunParams type used in Player:set_sun() function
+---@field visible boolean|nil true to make the sun visible. Default:true
+---@field texture string|nil texture name for the sun, or "" to re-enable the sun mesh. Default: "sun.png" if it exists
+---@field tonemap string|nil a 512x1 texture contianing the tonemap for the sun. Default: "sun_tonemap.png"
+---@field sunrise string|nil a regular texture for sunrise and sunset. Default: "sunrise.png"
+---@field sunrise_visible boolean|nil boolean for if the sunrise texture is visible. Default: true
+---@field scale number|nil Control the overall sun size. Default: 1
+
+---@class SkyParams type used for Player:set_sky() function
+---@field base_color ColorSpec|nil Color for non "regular" types
+---@field type SkyType|nil defaults to "regular"
+---@field textures table|nil {top(Y+), bottom(Y-), west(X-), east(X+), north(Z+), south(Z-)}
+---@field clouds boolean|nil if clouds should appear. Defaults to true
+---@field sky_color SkyColorType|nil table used for "regular" sky type
+
+---@class SkyColorType
+---@field day_sky ColorSpec|nil Top half of sky during day. Default is "#61b5f5"
+---@field day_horizon ColorSpec|nil Bottom half of sky during day. Default is "#90d3f6"
+---@field dawn_sky ColorSpec|nil Top half of sky during dawn/sunset. Color is darkened. Default is "#b4bafa"
+---@field dawn_horizon ColorSpec|nil Bottom half of sky during dawn/sunset. Color is darkened. Default is "#bac1f0"
+---@field night_sky ColorSpec|nil Top half of sky during night. Color is darkened Default is "#006bff"
+---@field night_horizon ColorSpec|nil Bottom half of sky during night. Color is darkened Default is "#4090ff"
+---@field indoors ColorSpec|nil Sky color when indoors or underground. Default is "#646464"
+---@field fog_sun_tint ColorSpec|nil Fog tint from sun at sunrise/sunset. Default is "#f47d1d"
+---@field fog_moon_tint ColorSpec|nil Fog tint from moon at sunrise/sunset (?moonrise/moonset?). Default is "#7f99cc"
+---@field fog_tint_type FogTintType|nil Fog tint type
+
+---@alias FogTintType
+---|"default" - use default minetest tonemaps
+---|"custom" - uses fog_sun_tint and fog_moon_tint
+
+---@alias SkyType
+---|"regular" - 0 textures, base_color is ignored
+---|"skybox" - 6 textures, base_color is fog
+---|"plain" - 0 textures, base_color is fog and sky color
+
+
+---@class MinimapMode type used for Player:set_minimap_modes() function
+---@field type MinimapModeType type of minimap
+---@field label string|nil Label for the minimap
+---@field texture string|nil when type="texture", this is texture to use
+---@field scale string|nil when type="texture", this is nodes per pixel
+
+---@alias MinimapModeType
+---|"off" no minimap
+---|"surface" regular surface minimap
+---|"radar" underground radar minimap
+---|"texture" texture displayed around 0,0
+
+---@alias HUDStats
+---|'position' 
+---|'name'
+---|'scale'
+---|'text'
+---|'number'
+---|'item'
+---|'dir'
 
 ---@class Vector
 ---@field x number

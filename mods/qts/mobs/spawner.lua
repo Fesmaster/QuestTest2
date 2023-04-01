@@ -100,7 +100,7 @@ end
         count_to_spawn_each_step = number how many entities to spawn each step
         spawn_radius = number the radius to spawn entities in
         spawn_set_table = table fields that are set to the luaentity table after spawning the creature table. Will override values, but NOT functions, so as to not break things.
-        on_spawn = function|nil optional string for a table of registered spanw funcs. This will be run on all newly spawned entities, AFTER the spawn_set_table is handled.
+        on_spawn = function(spawnerpos, objref)|nil optional string for a table of registered spanw funcs. This will be run on all newly spawned entities, AFTER the spawn_set_table is handled.
         delay_time = number|nil NOT YET IMPLEMENTED how long to delay before spawning again (null will use global)
         delay_time_variation = number|nil NOT YET IMPLEMENTED random variation +- opf the delay time (null will use global)
         name = string|nil the SpawnerConfig name. This is set automatically.
@@ -129,6 +129,20 @@ function qts.ai.apply_spawner_config(pos, config_name)
         meta:set_string("spawner_entity_name", config.entity_name)
         meta:set_string("spawner_spawn_def", minetest.serialize(spawn_config_to_spawn_def_table(config)))
     end
+end
+
+---Create a new spawner node from a given config
+---@param pos Vector the spawner position
+---@param config_name string the spawner config name
+function qts.ai.create_spawner_from_config(pos, config_name)
+    local config = qts.registered_spawner_configs[config_name]
+    if not config then return end --also early out
+    minetest.set_node(pos, {name="qts:spawner"})
+    --dealing with a spawner!
+    local meta = minetest.get_meta(pos)
+    meta:set_string("infotext", "Spawner: ".. config.entity_name)
+    meta:set_string("spawner_entity_name", config.entity_name)
+    meta:set_string("spawner_spawn_def", minetest.serialize(spawn_config_to_spawn_def_table(config)))
 end
 
 --common all-mob spawner

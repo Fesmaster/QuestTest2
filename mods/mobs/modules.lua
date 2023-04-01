@@ -5,6 +5,19 @@
 mobs.modules = {}
 local modules = mobs.modules
 
+local mobs_actually_target_player = true
+if qts.ISDEV then
+	minetest.register_chatcommand("set_mob_target_player", {
+		params = "<yes/no>",
+		description = "toggles common mobs from targeting player.",
+		func = function(name, param)
+			mobs_actually_target_player = minetest.is_yes(param)
+			return true
+		end
+	})
+
+end
+
 
 ---@alias TargetType
 ---| "none" No Target
@@ -385,6 +398,7 @@ modules.target_tracking = qts.ai.register_module("mobs:target_tracking", {
 modules.target_player_only = qts.ai.register_module("mobs:target_player_only", {
 	reqired_properties = {
 		can_target = function(self, object)
+			if (not mobs_actually_target_player) then return 0 end
 			--return the inverse distance to the object. This makes it target the nearest object
 			if object:is_player() and qts.ai.does_detect_player(self.object, object, self.view_radius_small, self.view_radius) then
 				return self.view_radius*self.view_radius - vector.distancesq(self.object:get_pos(), object:get_pos())
@@ -484,6 +498,7 @@ modules.target_player = qts.ai.register_module("mobs:target_player", {
 	},
 	on_activate = function(self, data, dtime_s)
 		self:add_targeting_func(function(self, object)
+			if (not mobs_actually_target_player) then return 0 end
 			--return the inverse distance to the object. This makes it target the nearest object
 			if object:is_player() and qts.ai.does_detect_player(self.object, object, self.view_radius_small, self.view_radius) then
 				return (self.view_radius*self.view_radius - vector.distancesq(self.object:get_pos(), object:get_pos())) * self.target_player_priority_mult

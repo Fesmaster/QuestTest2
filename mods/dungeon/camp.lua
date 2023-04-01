@@ -41,6 +41,10 @@ end
     Trace upwards to find the top of the ground  
     will return null if no ground found
 ]]
+---Trace upwards to find the ground
+---@param pos Vector
+---@param delta number
+---@return Vector|nil
 local function trace_up(pos, delta)
     local found_earth = false
     for y= -delta, delta do
@@ -348,6 +352,9 @@ local features = {
     build_fire_pit,
     build_watch_tower,
 }
+---Build a Camp
+---@param pos Vector
+---@param materials table
 local function build_camp(pos, materials)
     local featureCount = math.random(CAMP_FEATURES_MIN, CAMP_FEATURES_MAX)
     for i =1,featureCount do
@@ -357,6 +364,18 @@ local function build_camp(pos, materials)
         if (vAdjust) then
             --pick a random feature and build it
             features[math.random(#features)](vAdjust, materials)
+        end
+    end
+    --make the spawner
+    local needs_spawner = true
+    local attempt_count = 0
+    while(needs_spawner and attempt_count < 10) do
+        local spawner_offset = trace_up(pos + vector.new(math.random(-CAMP_SIZE/2, CAMP_SIZE/2), 0, math.random(-CAMP_SIZE/2, CAMP_SIZE/2)), CAMP_SIZE)
+        if spawner_offset then
+            qts.ai.create_spawner_from_config(spawner_offset+vector.new(0,math.random(2,4),0), "mobs:spawnconfig_bandit_weapons") 
+            needs_spawner=false
+        else
+            attempt_count=attempt_count+1
         end
     end
 end
