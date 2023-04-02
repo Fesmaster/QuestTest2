@@ -104,3 +104,14 @@ Inventory and Wielditem only textures should be 32x32 for the higher detail.
 Pixel shading is important. Due to the nature of the graphics, it is desirable to lean into the stylized astetic.
 
 Warm colors are preferred. Blue lighting and highlights are to be avoided, it feels too cold.
+
+## Branching Strategy
+
+The primary release branch is master and should never be pushed to.
+The primary development branch is Development and should never be pushed to.
+
+Feature branches (which should start with Feature_ or Bugfix_ but do not have to) are branched off of Development, and then merged back when done via a PR (Pull Request) All pull requests should have at least one person assigned as a Reviewer, preferably Fesmaster. The feature is then Squashed and Merged back into development.
+
+When a release is ready, Development is branched to a new branch, `RC_<releaseversion>`. This branch is the Release Candidate, and should be thoroughly bug tested (decent play through of much content.) Once ready, it is Squashed and Merged back into Development as a Bugfix, (if necessary) and Squashed and Merged into master as the release number. This release is then Tagged.
+
+Hotfixes are branched from master and merged to master and development.
