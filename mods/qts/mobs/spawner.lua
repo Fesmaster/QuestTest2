@@ -26,6 +26,7 @@ end
 ---@field nearby_only_check_this_entity boolean true to only consider nearby entities for max if they have this specific entity name.
 ---@field count_to_spawn_each_step number how many entities to spawn each step
 ---@field spawn_radius number the radius to spawn entities in
+---@field random_yaw boolean if the entity should spawn with random yaw
 ---@field spawn_set_table table fields that are set to the luaentity table after spawning the creature table. Will override values, but NOT functions, so as to not break things.
 ---@field registered_spawn_func string|nil optional string for a table of registered spanw funcs. This will be run on all newly spawned entities, AFTER the spawn_set_table is handled.
 ---@field delay_time number|nil NOT YET IMPLEMENTED how long to delay before spawning again (null will use global)
@@ -37,9 +38,9 @@ local default_spawn_def_table = {
     nearby_only_check_this_entity = false,
     count_to_spawn_each_step = 1,
     spawn_radius=7,
+    random_yaw = true,
     spawn_set_table = {},
     registered_spawn_func = nil,
-    
     --NOT YET IMPLEMENTED
     --TODO
     delay_time=nil,
@@ -65,6 +66,7 @@ end
 ---@field nearby_only_check_this_entity boolean true to only consider nearby entities for max if they have this specific entity name.
 ---@field count_to_spawn_each_step number how many entities to spawn each step
 ---@field spawn_radius number the radius to spawn entities in
+---@field random_yaw boolean if the entity should have random yaw when spawning
 ---@field spawn_set_table table fields that are set to the luaentity table after spawning the creature table. Will override values, but NOT functions, so as to not break things.
 ---@field on_spawn function|nil optional string for a table of registered spanw funcs. This will be run on all newly spawned entities, AFTER the spawn_set_table is handled.
 ---@field delay_time number|nil NOT YET IMPLEMENTED how long to delay before spawning again (null will use global)
@@ -82,6 +84,7 @@ local function spawn_config_to_spawn_def_table(spawn_config)
         nearby_only_check_this_entity   = qts.select(spawn_config.nearby_only_check_this_entity~=nil,   spawn_config.nearby_only_check_this_entity,     default_spawn_def_table.nearby_only_check_this_entity),
         count_to_spawn_each_step        = qts.select(spawn_config.count_to_spawn_each_step~=nil,        spawn_config.count_to_spawn_each_step,          default_spawn_def_table.count_to_spawn_each_step),
         spawn_radius                    = qts.select(spawn_config.spawn_radius~=nil,                    spawn_config.spawn_radius,                      default_spawn_def_table.spawn_radius),
+        random_yaw                      = qts.select(spawn_config.random_yaw~=nil,                      spawn_config.random_yaw,                        default_spawn_def_table.random_yaw),
         spawn_set_table                 = qts.select(spawn_config.spawn_set_table~=nil,                 spawn_config.spawn_set_table,                   default_spawn_def_table.spawn_set_table),
         registered_spawn_func           = qts.select(spawn_config.name~=nil,                            spawn_config.name,                              default_spawn_def_table.registered_spawn_func),
         delay_time                      = qts.select(spawn_config.delay_time~=nil,                      spawn_config.delay_time,                        default_spawn_def_table.delay_time),
@@ -241,6 +244,7 @@ minetest.register_node("qts:spawner", {
                     --try and get a random pos. might fail!
                     local spawnpos = qts.ai.get_random_navagatable_point_in_radius(pos, spawn_def.spawn_radius, {airlike=true,check_ground=true}, 2) --TOD: this needs to be generalized to the mob!!!
                     if spawnpos then
+                        ---@type LuaEntity
                         local spawned = minetest.add_entity(spawnpos, entity_name)
 					    if spawned then
                             --the creature is spawned
@@ -254,6 +258,11 @@ minetest.register_node("qts:spawner", {
                                         luaentity[k] = table.copy(v) --minetest deep copy
                                     end
                                 end
+                            end
+
+                            --deal with random yaw
+                            if spawn_def.random_yaw then
+                                spawned:set_yaw(math.random(0, math.pi*2))
                             end
 
                             --deal with the spawn func

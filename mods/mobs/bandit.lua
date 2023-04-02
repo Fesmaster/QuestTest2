@@ -1,5 +1,50 @@
 --[[
-    An actual bandi
+    This file creates the first real enemy in QuestTest2: the Bandit!
+]]
+
+local bandit_wanter_module = qts.ai.register_module("mobs:bandit_patrole_target", {
+    depends_properties={
+		target_id = false,
+        target_pos = false,
+        target_objref = false,
+        target_type = "none",
+        view_radius = 16,
+        
+        time_since_last_patrole = 0,
+        max_patrole_interval = 15,
+
+        reset_target = function(self)
+			self.target_id = false
+			self.target_pos = false
+			self.target_objref = false
+			self.target_type = "none"
+		end
+    },
+	required_modules ={
+		
+	},
+	on_step = function (self, dtime, moveresult)
+        if (self.time_since_last_patrole > self.max_patrole_interval) then
+            if (self.target_type == "none" or self.target_type == "node") then
+                local near_points = qts.get_nodes_in_radius(self.object:get_pos(), self.view_radius_far, {"group:bandit_waypoint"})
+                if near_points then
+                    local ref = near_points[math.random(#near_points)]
+                    if (ref and ref.pos) then
+                        ---@type TargetType
+                        self.target_type="node"
+                        self.target_pos = ref.pos + vector.new(math.random(-1,1), 0, math.random(-1,1))
+                        self.time_since_last_patrole = 0
+                    end
+                end
+            end
+        else
+            self.time_since_last_patrole = self.time_since_last_patrole + dtime
+        end
+    end
+})
+
+--[[
+    An actual bandit
 ]]
 qts.ai.register_creature("mobs:basic_bandit", {
 	initial_properties = {
@@ -41,6 +86,7 @@ qts.ai.register_creature("mobs:basic_bandit", {
 
 		target_item_priority_mult=100, -- make dropped items WAY more interesting
 		check_target_every_frame = true, --force check target every frame, so AI can be distracted
+        target_items_only_if_weapon = false,
 	},
 
 	modules = {
@@ -48,10 +94,65 @@ qts.ai.register_creature("mobs:basic_bandit", {
 		qts.ai.module.gravity,
 		mobs.modules.target_player, --set the player as the target
 		mobs.modules.target_item, --set a dropped item as the target
-		mobs.modules.target_tracking, --constantly update the target position
+        bandit_wanter_module, --bandits wander between certain nodes, like chests and fires.
 		mobs.modules.move_to_target, --actually cause it to move to the target
+		mobs.modules.target_tracking, --constantly update the target position
 		mobs.modules.punch_target,  --cause the creature to punch its target
 		mobs.modules.pickup_item, -- causes the creature to pickup targeted dropped items
+		mobs.modules.target_attacker, -- causes the creature to target whatever attacks it
+        
+        --inline module! cause you can do that!!!
+        qts.ai.register_module("mobs:bandit_goldenfingers", {
+            depends_properties ={
+                wielded_item = "",
+                view_radius_far=32,
+                flee_speed = 4,
+            },
+            reqired_properties = {
+                get_item_score = function(self, itemstack)
+                    if minetest.get_item_group(itemstack:get_name(), "gold") ~= 0 then 
+                        return 2
+                    end
+                    return 1
+                end
+            },
+            on_step = function (self, dtime, moveresult)
+                if minetest.get_item_group(ItemStack(self.wielded_item):get_name(), "gold") ~= 0 then 
+                    --RUN AWAY
+                    ---@type ObjectRef[]
+                    local objs = minetest.get_objects_inside_radius(self.object:get_pos(), self.view_radius_far)
+                    local nearest_index = 0
+                    local nearest_dist = (self.view_radius_far*self.view_radius_far)+1
+                    for i, obj in ipairs(objs) do
+                        if  obj:is_player() then
+                            ---@cast obj Player
+                            local dist = vector.distancesq(self.object:get_pos(), obj:get_pos())
+                            if dist < nearest_dist then
+                                nearest_dist = dist
+                                nearest_index = i
+                            end
+                        end
+                    end
+                    if nearest_index ~= 0 then
+                        ---@type Vector
+                        local direction = self.object:get_pos() - objs[nearest_index]:get_pos();
+                        ---@type Vector
+                        local targetpos = self.object:get_pos() + vector.normalize(direction)*self.view_radius_far
+                        ---@type Vector
+                        local foundTargetPos = qts.ai.get_random_navagatable_point_in_radius(targetpos, self.view_radius_small, {airlike=true}, 2)
+                        if foundTargetPos then
+                            self.target_pos = foundTargetPos
+                            ---@type TargetType
+                            self.target_type = "point"
+                            self.allow_multarget_targeting = false
+                            
+                            self.normal_speed = self.speed
+                            self.speed = self.flee_speed
+                        end
+                    end
+                end
+            end
+        })
 	},
 	
 	spawnegg = {

@@ -1,8 +1,28 @@
+--[[
+	Crates
+]]
 
+local woods = {"oak", "apple", "coffee", "aspen", "mahogany", "lanternfruit", "pine", "rosewood", "rowan", "swamp"}
+local wood_names = {"Oak", "Apple", "Coffee", "Aspen", "Mahogany", "Lantern Tree", "Pine", "Rosewood", "Rowan", "Swamp"}
+
+
+for i, name in ipairs(woods) do
+	qts.register_chest("default:crate_"..name, {
+		description = wood_names[i].." Wood Crate",
+		tiles = {"default_crate_"..name..".png"},
+		groups = {choppy = 2, oddly_breakable_by_hand = 2, generation_artificial=1, bandit_waypoint=1},
+		is_ground_content = false,
+		sounds = qtcore.node_sound_wood(),	
+		invsize = 8*4,
+		get_chest_formspec = qtcore.get_default_chest_formspec,
+	})	
+end
+
+--[[
 qts.register_chest("default:crate_oak", {
 	description = "Oak Wood Crate",
 	tiles = {"default_crate_oak.png"},
-	groups = {choppy = 2, oddly_breakable_by_hand = 2, generation_artificial=1},
+	groups = {choppy = 2, oddly_breakable_by_hand = 2, generation_artificial=1, bandit_waypoint=1},
 	is_ground_content = false,
 	sounds = qtcore.node_sound_wood(),
 	
@@ -108,6 +128,8 @@ qts.register_chest("default:crate_swamp", {
 	invsize = 8*4,
 	get_chest_formspec = qtcore.get_default_chest_formspec,
 })
+]]
+
 --[[
 --A Test chest to see how well different inv sizes would work
 --

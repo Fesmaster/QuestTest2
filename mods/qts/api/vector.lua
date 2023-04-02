@@ -60,6 +60,16 @@ vector.unit = qts.readonly_table({
 	Z = vector.readonly(0,0,1),
 })
 
+---Fix up any NaN or Inf in a vector. Operates in-place
+---@param v Vector
+---@return Vector
+function vector.verify(v)
+	if ((v.x ~= v.x) or (v.x == 1/0)) then v.x = 0 end
+	if ((v.y ~= v.y) or (v.y == 1/0)) then v.y = 0 end
+	if ((v.z ~= v.z) or (v.z == 1/0)) then v.y = 0 end
+	return v
+end
+
 --[[
 	creates a vector with number in X, Y, and Z
 	

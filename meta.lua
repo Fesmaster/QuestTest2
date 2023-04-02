@@ -238,6 +238,11 @@
 ---|'item'
 ---|'dir'
 
+---@class NodeRef
+---@field name string the node name
+---@field param1 number|nil the first param value
+---@field param2 number|nil the second param value
+
 ---@class Vector
 ---@field x number
 ---@field y number
