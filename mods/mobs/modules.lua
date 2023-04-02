@@ -26,6 +26,33 @@ local function get_item_score_func(self, itemname)
 	return 1
 end
 
+mobs.static_target_types = {
+    node = true,
+	point = true,
+}
+
+---Check if a given target type is a mobile object
+---@param target_type TargetType
+---@return boolean
+function mobs.get_is_target_type_static(target_type)
+	return qts.select(mobs.static_target_types[target_type], true, false) 
+end
+
+local function reset_target_func(self)
+	self.target_id = false
+	self.target_pos = false
+	self.target_objref = false
+	self.target_type = "none"
+end
+
+---Dummy function to get an item's score
+---@param self table
+---@param itemname ItemStack
+---@return number
+local function get_item_score_func(self, itemname)
+	return 1
+end
+
 --[[
 	Module that gives the creature the Punch ability. It can punch.
 ]]
@@ -254,7 +281,6 @@ modules.move_to_target = qts.ai.register_module("mobs:move_to_target", {
 	depends_properties = {
 		move_to_priority = qts.ai.priority.MED,
 		speed = 1,
-
 		view_radius_small = 8, -- the radius at which new targets are tracked, if they cannot be seen
 		view_radius = 16, -- the radius at which new targets are tracked
 		view_radius_far = 32, --the radius at which tracked targets are untracked
