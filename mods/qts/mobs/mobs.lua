@@ -9,7 +9,8 @@
 qts.ai = {}
 
 --the distance a mob can be from a player to enact melee damage
-qts.ai.MELEE_RADIUS = qts.settings.get_num("MELEE_RADIUS") or 1.5
+--special config Must be a number, so its loadtime only.
+qts.ai.MELEE_RADIUS = qts.config("MELEE_RADIUS", 1.5, "mob melee radius", {loadtime=true}).get()
 
 --the distance a mob can be from a player to enact melee damage, squared, for faster checks without sqrt
 qts.ai.MELEE_RADIUS_SQ = qts.ai.MELEE_RADIUS * qts.ai.MELEE_RADIUS

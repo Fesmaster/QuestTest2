@@ -341,8 +341,8 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		if fields.quit then
 			formContext[pname].name = nil
 		end
-	else
-		minetest.log("qts gui system: unknown form: "..dump(formname))
+	--else
+		--minetest.log("qts gui system: unknown form: "..dump(formname))
 	end
 end)
 

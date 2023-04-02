@@ -3,13 +3,13 @@ This file is for ABMs and LBMs, and the like
 --]]
 
 minetest.register_abm({
-	label = "Tilled Regression",
+	label = "Covered Soild Regression to Dirt",
 	nodenames = {"default:dirt_tilled", "group:spreading_dirt_type"},
-	interval = 1.0,
+	interval = 1.0, --give this a bit more time between instances as it is a expensive ABM
 	chance = 1,
 	catch_up = true,
 	action = function(pos, node, active_object_count, active_object_count_wider)
-		local node_above =  minetest.get_node_or_nil(pos + vector.new(0,1,0))
+		local node_above =  minetest.get_node_or_nil(vector.new(pos.x,pos.y+1,pos.z)) --non-ideal version, but maybe faster?
 		if node_above and node_above.name ~= "air" then
 			local nodeDef = minetest.registered_nodes[node_above.name]
 			if not (nodeDef and nodeDef.paramtype and nodeDef.paramtype == "light") then
@@ -121,7 +121,7 @@ minetest.register_abm({
 	action = function(pos, node, active_object_count, active_object_count_wider)
 		--minetest.log("here")
 		if node.param2 ~= 0 then return end
-		local r = minetest.find_node_near(pos, qts.LEAFDECAY_RADIUS, {"group:log"}, false)
+		local r = minetest.find_node_near(pos, qts.LEAFDECAY_RADIUS.get(), {"group:log"}, false)
 		if r == nil then
 			minetest.set_node(pos, {name="air"})
 			if math.random(16) == 1 then

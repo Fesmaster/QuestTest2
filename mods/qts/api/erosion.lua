@@ -3,10 +3,11 @@ Attempt at a fluid and erosion system.
 
 ]]
 
-local FEATURE_VOLUMETRIC_FLUIDS = false
+local FEATURE_VOLUMETRIC_FLUIDS = qts.config("FEATURE_VOLUMETRIC_FLUIDS", false, "Use the Volumetric Fluid Simulation", {loadtime=true})
+local FEATURE_AQUATIC_EROSION = qts.config("FEATURE_AQUATIC_EROSION", false, "When using Volumetric Fluid Simlation, should water erode blocks?", {loadtime=true})
+local LIQUID_FALL_TRACE_DISTANCE = qts.config("LIQUID_FALL_TRACE_DISTANCE", 128, "How far to trace liquid flowing down", {})
 
-if FEATURE_VOLUMETRIC_FLUIDS then
-    local LIQUID_FALL_TRACE_DISTANCE = 128
+if FEATURE_VOLUMETRIC_FLUIDS.get() then
 
     local function IsNodeLiquidSource(node)
         if node and node.name then
@@ -74,7 +75,7 @@ if FEATURE_VOLUMETRIC_FLUIDS then
                 --water falling
                 --trace down to find lowest non flowing node
                 local low_y = pos.y
-                for y = pos.y-1, pos.y - LIQUID_FALL_TRACE_DISTANCE, -1 do
+                for y = pos.y-1, pos.y - LIQUID_FALL_TRACE_DISTANCE.get(), -1 do
                     if not IsPosLiquidFlowing(vector.new(pos.x, y, pos.z)) then
                         low_y = y + 1 --hop back up one level
                         break
@@ -82,7 +83,7 @@ if FEATURE_VOLUMETRIC_FLUIDS then
                 end
                 if low_y < pos.y then
                     --trace upwards and move all liquid sources down.
-                    for y = pos.y, pos.y + LIQUID_FALL_TRACE_DISTANCE do
+                    for y = pos.y, pos.y + LIQUID_FALL_TRACE_DISTANCE.get() do
                         local nodeTraced = minetest.get_node_or_nil(vector.new(pos.x, y, pos.z))
                         if IsNodeLiquidSource(nodeTraced) then --implicit nill check too
                             minetest.set_node(vector.new(pos.x, low_y, pos.z), {name=nodeTraced.name})
@@ -112,57 +113,57 @@ if FEATURE_VOLUMETRIC_FLUIDS then
 
     ]]
 
-    --[[
-    minetest.register_abm({
-        label = "Fluid Eroding",
-        nodenames = {"group:erodeable"},
-        neighbors = {"group:liquid"},
-        interval = 0.25,
-        chance = 1,
-        catch_up = true,
-        action = function(pos, node, AOC, AOCW)
-            local above = minetest.get_node_or_nil(vector.new(pos.x, pos.y+1, pos.z))
-            if IsNodeLiquidSource(above) or IsNodeLiquidFlowing(above) then
-                local count_sides = 0
-                local count_corners = 0
+    if FEATURE_AQUATIC_EROSION.get() then
+        minetest.register_abm({
+            label = "Fluid Eroding",
+            nodenames = {"group:erodeable"},
+            neighbors = {"group:liquid"},
+            interval = 0.25,
+            chance = 1,
+            catch_up = true,
+            action = function(pos, node, AOC, AOCW)
+                local above = minetest.get_node_or_nil(vector.new(pos.x, pos.y+1, pos.z))
+                if IsNodeLiquidSource(above) or IsNodeLiquidFlowing(above) then
+                    local count_sides = 0
+                    local count_corners = 0
 
-                local offsets_sides = {
-                    vector.new(-1, 0, 0),
-                    vector.new( 1, 0, 0),
-                    vector.new( 0, 0,-1),
-                    vector.new( 0, 0, 1)
-                }
+                    local offsets_sides = {
+                        vector.new(-1, 0, 0),
+                        vector.new( 1, 0, 0),
+                        vector.new( 0, 0,-1),
+                        vector.new( 0, 0, 1)
+                    }
 
-                for k, offset in ipairs(offsets_sides) do
-                    --want to count flowing waters here
-                    if IsPosLiquidFlowing(pos + offset) then
-                        count_sides = count_sides + 1
+                    for k, offset in ipairs(offsets_sides) do
+                        --want to count flowing waters here
+                        if IsPosLiquidFlowing(pos + offset) then
+                            count_sides = count_sides + 1
+                        end
+                    end
+
+                    local offsets_corners = {
+                        vector.new(-1, 0,-1),
+                        vector.new( 1, 0,-1),
+                        vector.new(-1, 0, 1),
+                        vector.new( 1, 0, 1)
+                    }
+
+                    for k, offset in ipairs(offsets_corners) do
+                        --want to count non-waters here
+                        if not (IsPosLiquidFlowing(pos + offset) or IsPosLiquidSource(pos + offset))then
+                            count_corners = count_corners + 1
+                        end
+                    end
+
+                    --calculate the chance
+                    local chance = 4 - count_corners + count_sides
+                    if count_sides > 0 and math.random(2 + math.pow(chance, 3)) == 1 then
+                        minetest.set_node(pos, {name="air"})
                     end
                 end
-
-                local offsets_corners = {
-                    vector.new(-1, 0,-1),
-                    vector.new( 1, 0,-1),
-                    vector.new(-1, 0, 1),
-                    vector.new( 1, 0, 1)
-                }
-
-                for k, offset in ipairs(offsets_corners) do
-                    --want to count non-waters here
-                    if not (IsPosLiquidFlowing(pos + offset) or IsPosLiquidSource(pos + offset))then
-                        count_corners = count_corners + 1
-                    end
-                end
-
-                --calculate the chance
-                local chance = 4 - count_corners + count_sides
-                if count_sides > 0 and math.random(2 + math.pow(chance, 3)) == 1 then
-                    minetest.set_node(pos, {name="air"})
-                end
+            
             end
-        
-        end
-    })
-    --]]
+        })
+    end
 
 end

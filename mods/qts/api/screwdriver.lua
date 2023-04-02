@@ -1,7 +1,7 @@
 --screwdriver functionality
 --this has been copied from the screwdriver mod from minetest_game
 --and brought under the qts namespace
---license lgpl (see QT2's license)
+--license for this file alone: lgpl
 
 qts.screwdriver = {}
 qts.screwdriver.ROTATE_FACE = 1

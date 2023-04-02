@@ -1,6 +1,5 @@
 --shaped Nodes API
---some of this code is heavily based on the stairs mod in minetest_game
---licensed under lgpl (see the license for QT2 in general)
+
 
 --[[
 	Rotate and place a stair or slab
@@ -16,6 +15,10 @@
 	Returns:
 		if dont_place is false or nil, returns the return value of minetest.item_place
 		otherwise, returns the param2 of the node.
+
+	
+	some of the code in this function is heavily based on the stairs mod in minetest_game
+	license for this function is lgpl
 ]]
 function qts.rotate_and_place(itemstack, placer, pointed_thing, dont_place)
 	local p0 = pointed_thing.under
