@@ -1,7 +1,7 @@
 --[[
 	Profiling tools for QuestTest
 
-	Call qts.profile to create a profiler. use the returned start() and stop() functions to styart and stop the profiling.
+	Call qts.profile to create a profiler. use the returned start() and stop() functions to start and stop the profiling.
 ]]
 
 local PROFILE_ABMS = qts.config("PROFILE_ABMS", false, "Include auto-profiling of registered AMBs", {loadtime=true})

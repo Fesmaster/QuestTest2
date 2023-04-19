@@ -230,10 +230,6 @@ minetest.register_node("qts:spawner", {
                 break
             end
         end
-        if can_spawn then
-            minetest.log("Able to spawn a creature")
-        end
-        minetest.log("Try to spawn a creature - no player!")
 
         --check that the entity exists
         if can_spawn and entity_name and minetest.registered_entities[entity_name] then

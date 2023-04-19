@@ -2,7 +2,8 @@
     This file creates the first real enemy in QuestTest2: the Bandit!
 ]]
 
-local bandit_wanter_module = qts.ai.register_module("mobs:bandit_patrole_target", {
+local module_bandit_wander = qts.ai.register_module("mobs:bandit_patrole_target", {
+    ---@class CreatureLuaEntity_Implements_ModuleBanditWander : CreatureLuaEntity
     depends_properties={
 		target_id = false,
         target_pos = false,
@@ -20,10 +21,12 @@ local bandit_wanter_module = qts.ai.register_module("mobs:bandit_patrole_target"
 			self.target_type = "none"
 		end
     },
-	required_modules ={
-		
-	},
-	on_step = function (self, dtime, moveresult)
+
+    ---module on_step
+    ---@param self CreatureLuaEntity_Implements_ModuleBanditWander
+    ---@param dtime number
+    ---@param moveresult table
+    on_step = function (self, dtime, moveresult)
         if (self.time_since_last_patrole > self.max_patrole_interval) then
             if (self.target_type == "none" or self.target_type == "node") then
                 local near_points = qts.get_nodes_in_radius(self.object:get_pos(), self.view_radius_far, {"group:bandit_waypoint"})
@@ -39,6 +42,85 @@ local bandit_wanter_module = qts.ai.register_module("mobs:bandit_patrole_target"
             end
         else
             self.time_since_last_patrole = self.time_since_last_patrole + dtime
+        end
+    end
+})
+
+local module_bandit_goldenfinger = qts.ai.register_module("mobs:bandit_goldenfingers", {
+    ---@class CreatureLuaEntity_Implements_ModuleBanditGoldenfinger_Part : CreatureLuaEntity_Implements_TargetItem
+    depends_properties ={
+        flee_speed = 4,
+        ticks_between_target_flee_selection = 8,
+        ticks_offset_target_flee_selection=2
+    },
+    
+    ---@class CreatureLuaEntity_Implements_ModuleBanditGoldenfinger : CreatureLuaEntity_Implements_ModuleBanditGoldenfinger_Part
+    reqired_properties = {
+        ---Get the score of an item
+        ---@param self CreatureLuaEntity_Implements_ModuleBanditGoldenfinger
+        ---@param itemstack ItemStack
+        ---@param itemdef table
+        ---@return integer
+        get_item_score = function(self, itemstack, itemdef)
+            if minetest.get_item_group(itemstack:get_name(), "gold") ~= 0 then 
+                return 2
+            end
+            --don't target weapons
+            if (itemdef.tool_capabilities and 
+				itemdef.tool_capabilities.damage_groups and 
+				itemdef.tool_capabilities.damage_groups.fleshy and
+				itemdef.tool_capabilities.damage_groups.fleshy ~= 0)
+            then
+                return 1
+            end 
+            --everything else
+            return 0
+        end
+    },
+
+    required_modules={
+        mobs.modules.target_item
+    },
+    
+    ---module on_step
+    ---@param self CreatureLuaEntity_Implements_ModuleBanditGoldenfinger
+    ---@param dtime number
+    ---@param moveresult table
+    on_step = function (self, dtime, moveresult)
+        if (self.TICK_COUNT % self.ticks_between_target_flee_selection == self.ticks_offset_target_flee_selection and
+            minetest.get_item_group(ItemStack(self.wielded_item):get_name(), "gold") ~= 0)
+        then 
+            --RUN AWAY
+            ---@type ObjectRef[]
+            local objs = minetest.get_objects_inside_radius(self.object:get_pos(), self.view_radius_far)
+            local nearest_index = 0
+            local nearest_dist = (self.view_radius_far*self.view_radius_far)+1
+            for i, obj in ipairs(objs) do
+                if  obj:is_player() then
+                    ---@cast obj Player
+                    local dist = vector.distancesq(self.object:get_pos(), obj:get_pos())
+                    if dist < nearest_dist then
+                        nearest_dist = dist
+                        nearest_index = i
+                    end
+                end
+            end
+            if nearest_index ~= 0 then
+                ---@type Vector
+                local direction = self.object:get_pos() - objs[nearest_index]:get_pos();
+                ---@type Vector
+                local targetpos = self.object:get_pos() + vector.normalize(direction)*self.view_radius_far
+                ---@type Vector
+                local foundTargetPos = qts.ai.get_random_navagatable_point_in_radius(targetpos, self.view_radius_small, {airlike=true}, 2)
+                if foundTargetPos then
+                    self.target_pos = foundTargetPos
+                    self.target_type = "point"
+                    self.allow_multarget_targeting = false
+                    
+                    self.normal_speed = self.speed
+                    self.speed = self.flee_speed
+                end
+            end
         end
     end
 })
@@ -94,65 +176,12 @@ qts.ai.register_creature("mobs:basic_bandit", {
 		qts.ai.module.gravity,
 		mobs.modules.target_player, --set the player as the target
 		mobs.modules.target_item, --set a dropped item as the target
-        bandit_wanter_module, --bandits wander between certain nodes, like chests and fires.
+        module_bandit_wander, --bandits wander between certain nodes, like chests and fires.
 		mobs.modules.move_to_target, --actually cause it to move to the target
-		mobs.modules.target_tracking, --constantly update the target position
 		mobs.modules.punch_target,  --cause the creature to punch its target
 		mobs.modules.pickup_item, -- causes the creature to pickup targeted dropped items
 		mobs.modules.target_attacker, -- causes the creature to target whatever attacks it
-        
-        --inline module! cause you can do that!!!
-        qts.ai.register_module("mobs:bandit_goldenfingers", {
-            depends_properties ={
-                wielded_item = "",
-                view_radius_far=32,
-                flee_speed = 4,
-            },
-            reqired_properties = {
-                get_item_score = function(self, itemstack)
-                    if minetest.get_item_group(itemstack:get_name(), "gold") ~= 0 then 
-                        return 2
-                    end
-                    return 1
-                end
-            },
-            on_step = function (self, dtime, moveresult)
-                if minetest.get_item_group(ItemStack(self.wielded_item):get_name(), "gold") ~= 0 then 
-                    --RUN AWAY
-                    ---@type ObjectRef[]
-                    local objs = minetest.get_objects_inside_radius(self.object:get_pos(), self.view_radius_far)
-                    local nearest_index = 0
-                    local nearest_dist = (self.view_radius_far*self.view_radius_far)+1
-                    for i, obj in ipairs(objs) do
-                        if  obj:is_player() then
-                            ---@cast obj Player
-                            local dist = vector.distancesq(self.object:get_pos(), obj:get_pos())
-                            if dist < nearest_dist then
-                                nearest_dist = dist
-                                nearest_index = i
-                            end
-                        end
-                    end
-                    if nearest_index ~= 0 then
-                        ---@type Vector
-                        local direction = self.object:get_pos() - objs[nearest_index]:get_pos();
-                        ---@type Vector
-                        local targetpos = self.object:get_pos() + vector.normalize(direction)*self.view_radius_far
-                        ---@type Vector
-                        local foundTargetPos = qts.ai.get_random_navagatable_point_in_radius(targetpos, self.view_radius_small, {airlike=true}, 2)
-                        if foundTargetPos then
-                            self.target_pos = foundTargetPos
-                            ---@type TargetType
-                            self.target_type = "point"
-                            self.allow_multarget_targeting = false
-                            
-                            self.normal_speed = self.speed
-                            self.speed = self.flee_speed
-                        end
-                    end
-                end
-            end
-        })
+        module_bandit_goldenfinger, --causes the bandit to target gold and weapons, as well as run when gold is aquired.
 	},
 	
 	spawnegg = {
@@ -188,7 +217,7 @@ qts.ai.register_spawner_config("mobs:spawnconfig_bandit_weapons", {
     entity_name = "mobs:basic_bandit",
     ---On Spawn callback
     ---@param spawnerpos Vector
-    ---@param objref LuaEntity
+    ---@param objref LuaObject
     on_spawn = function(spawnerpos, objref)
         local luaentity = objref:get_luaentity();
         if luaentity.wielded_item == nil or luaentity.wielded_item=="" then

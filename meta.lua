@@ -673,7 +673,7 @@ local LuaEntity_Base = {
 
 ---@class LuaEntity : LuaEntity_Base
 local LuaEntity = {
-    ---@type ObjectRef the object this luaentity is dealing with
+    ---@type LuaObject the object this luaentity is dealing with
     object=nil,
     ---@type string the entity name
     name="unnamed entity",
