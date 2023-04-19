@@ -1,10 +1,7 @@
 --shaped Nodes API
 
-
 --[[
-	Rotate and place a stair or slab
-	modified from the stair mod of minetest_game
-	license of this is the GNU LGPL v 2.1
+	Rotate and place a stair, slant, or slab
 
 	Params:
 		itemstack - the itemstack to place
@@ -21,21 +18,35 @@
 	license for this function is lgpl
 ]]
 function qts.rotate_and_place(itemstack, placer, pointed_thing, dont_place)
-	local p0 = pointed_thing.under
-	local p1 = pointed_thing.above
 	local param2 = 0
 	
-	if placer then
-		local placer_pos = placer:get_pos()
-		if placer_pos then
-			param2 = minetest.dir_to_facedir(vector.subtract(p1, placer_pos))
+	if placer and pointed_thing and pointed_thing.under then
+		local finepos = vector.subtract(minetest.pointed_thing_to_face_pos(placer, pointed_thing), pointed_thing.under)
+
+		if (pointed_thing.under.y == pointed_thing.above.y) then
+			param2 = minetest.dir_to_facedir(vector.subtract(pointed_thing.above, placer:get_pos()))
+		else
+			--if on top or on bottom, then use the edge hit for the direction
+			minetest.log("Here: " ..dump(vector.to_string(finepos)))
+			if math.abs(finepos.x) > math.abs(finepos.z) then
+				if finepos.x < 0 then
+					param2 = 1
+				else
+					param2 = 3
+				end
+			else
+				if finepos.z < 0 then
+					param2 = 0
+				else
+					param2 = 2
+				end
+			end
 		end
 		
-		local finepos = minetest.pointed_thing_to_face_pos(placer, pointed_thing)
-		local fpos = finepos.y % 1
-		
-		if p0.y - 1 == p1.y or (fpos > 0 and fpos < 0.5)
-				or (fpos < -0.5 and fpos > -0.999999999999) then
+		--handle vertical flip
+		if (pointed_thing.under.y - 1 == pointed_thing.above.y) or (finepos.y < 0)
+		then
+			--flip the node upside down.
 			param2 = param2 + 20
 			if param2 == 21 then
 				param2 = 23
@@ -53,8 +64,6 @@ end
 
 --[[
 	Rotate and set a node, for hammers
-	modified from the stair mod of minetest_game
-	license of this is the GNU LGPL v 2.1
 
 	Params:
 		placer - the PlayerRef engagint in the operation
@@ -65,31 +74,9 @@ end
 		results of minetest.swap_node()
 ]]
 function qts.hammer_rotate_and_set(placer, pointed_thing, node)
-	local p0 = pointed_thing.under
-	local p1 = pointed_thing.above
-	local param2 = 0
-	local other = node.param2 - node.param2 % 32 --everything but the first five bits
-	
-	if placer then
-		local placer_pos = placer:get_pos()
-		if placer_pos then
-			param2 = minetest.dir_to_facedir(vector.subtract(p1, placer_pos))
-		end
-		
-		local finepos = minetest.pointed_thing_to_face_pos(placer, pointed_thing)
-		local fpos = finepos.y - math.floor(p0.y)
-		--minetest.log("Face pos:"..tostring(fpos))
-		
-		if p0.y - 1 == p1.y or (fpos > -1 and fpos < 0 and not(placer:get_pos().y+1 > p0.y))then
-			param2 = param2 + 20
-			if param2 == 21 then
-				param2 = 23
-			elseif param2 == 23 then
-				param2 = 21
-			end
-		end
-	end
-	return minetest.swap_node(p0, {name = node.name, param1 = node.param1, param2 = param2+other}) --last bit of param2 data added back in
+	local other = node.param2 - node.param2 % 32 --everything but the first five bits - to preserve color!
+	local param2 = qts.rotate_and_place(nil, placer, pointed_thing, true) --get the number instead of placing
+	return minetest.swap_node(pointed_thing.under, {name = node.name, param1 = node.param1, param2 = param2+other}) --last bit of param2 data added back in
 end
 
 
