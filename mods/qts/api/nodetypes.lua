@@ -27,8 +27,8 @@ this may not work well for some nodes, particularly shaped nodes
 
 
 
-
-local fence_collision_extra = minetest.settings:get_bool("enable_fence_tall") and 3/8 or 0
+local enable_fence_tall = qts.config("enable_fence_tall", false, "enable tall fences that cannot be jumped over", {loadtime=true})
+local fence_collision_extra = enable_fence_tall and 3/8 or 0
 
 --[[
 besides the defaults from minetest.register_node, must contain:  

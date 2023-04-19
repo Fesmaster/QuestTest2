@@ -453,5 +453,5 @@ end
 		the modified value
 ]]
 function qts.modify_value_by_level(value, level)
-	return value*((level*qts.LEVEL_MULTIPLIER)+1)
+	return value*((level*qts.LEVEL_MULTIPLIER.get())+1)
 end

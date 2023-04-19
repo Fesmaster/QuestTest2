@@ -466,8 +466,8 @@ end
 minetest.register_on_newplayer(function(player)
 	minetest.log("New player, creating custom data for " .. player:get_player_name())
 	qts.player_data[player:get_player_name()] = {}
-	qts.set_player_data(player, "COMBATSYSTEM", "HP", qts.DEFAULT_HP)
-	qts.set_player_data(player, "COMBATSYSTEM", "HP_MAX", qts.DEFAULT_HP)
+	qts.set_player_data(player, "COMBATSYSTEM", "HP", qts.DEFAULT_HP.get())
+	qts.set_player_data(player, "COMBATSYSTEM", "HP_MAX", qts.DEFAULT_HP.get())
 	--player:set_armor_groups({fleshy=0})
 end)
 
@@ -496,8 +496,8 @@ minetest.register_on_joinplayer(function(player, last_login)
 	end, player:get_player_name())
 	
 	if qts.get_player_data(player,"COMBATSYSTEM", "HP") == nil then
-		qts.set_player_data(player, "COMBATSYSTEM", "HP", qts.DEFAULT_HP)
-		qts.set_player_data(player, "COMBATSYSTEM", "HP_MAX", qts.DEFAULT_HP)
+		qts.set_player_data(player, "COMBATSYSTEM", "HP", qts.DEFAULT_HP.get())
+		qts.set_player_data(player, "COMBATSYSTEM", "HP_MAX", qts.DEFAULT_HP.get())
 	end
 end)
 

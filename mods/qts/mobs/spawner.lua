@@ -4,20 +4,18 @@ This file creats the default spawner and related functions
 
 local drawtype="airlike"
 local pointable=false
+---@type number|nil
+local not_in_creative_inventory=1
 
---[[
-    Time between instances of spawning creatures from a spawner.
-]]
-qts.ai.SPAWNER_SPAWN_DELAY_TIME = qts.settings.get_num("SPAWNER_SPAWN_DELAY_TIME") or 15
-
---[[
-    Random variation of +- this value on delay between spawner spawning creatures
-]]
-qts.ai.SPAWNER_SPAWN_DELAY_DEVIATION_TIME = qts.settings.get_num("SPAWNER_SPAWN_DELAY_DEVIATION_TIME") or 5
+qts.ai.SPAWNER_SPAWN_DELAY_TIME = qts.config("SPAWNER_SPAWN_DELAY_TIME", 15, "how long spawners should delay between spawning creatures")
+qts.ai.SPAWNER_SPAWN_DELAY_DEVIATION_TIME = qts.config("SPAWNER_SPAWN_DELAY_DEVIATION_TIME", 5, "variation in how long spawners should delay between spawning creatures")
+qts.ai.SPAWNER_DEFAULT_MAX_NEARBY_CREATURES = qts.config("SPAWNER_DEFAULT_MAX_NEARBY_CREATURES", 8, "how many creatures can be nearby a spawner for it to stop spawning")
+qts.ai.SPAWNER_REQUIRED_MIN_PLAYER_DIST = qts.config("SPAWNER_REQUIRED_MIN_PLAYER_DIST", 16, "required minimum distance for a player to the spawner for it to spawn")
 
 if qts.ISDEV then
 	drawtype="normal"
 	pointable=true
+    not_in_creative_inventory=nil
 end
 
 ---@class SpawnDefTable
@@ -33,7 +31,7 @@ end
 ---@field delay_time_variation number|nil NOT YET IMPLEMENTED random variation +- opf the delay time (null will use global)
 ---@type SpawnDefTable
 local default_spawn_def_table = {
-    max_creatures_nearby = 10,
+    max_creatures_nearby = qts.ai.SPAWNER_DEFAULT_MAX_NEARBY_CREATURES.get(),
     nearby_radius=15,
     nearby_only_check_this_entity = false,
     count_to_spawn_each_step = 1,
@@ -79,7 +77,7 @@ end
 local function spawn_config_to_spawn_def_table(spawn_config)
     ---@type SpawnDefTable
     return {
-        max_creatures_nearby            = qts.select(spawn_config.max_creatures_nearby~=nil,            spawn_config.max_creatures_nearby,              default_spawn_def_table.max_creatures_nearby),
+        max_creatures_nearby            = qts.select(spawn_config.max_creatures_nearby~=nil,            spawn_config.max_creatures_nearby,              qts.ai.SPAWNER_DEFAULT_MAX_NEARBY_CREATURES.get()), --use the config
         nearby_radius                   = qts.select(spawn_config.nearby_radius~=nil,                   spawn_config.nearby_radius,                     default_spawn_def_table.nearby_radius),
         nearby_only_check_this_entity   = qts.select(spawn_config.nearby_only_check_this_entity~=nil,   spawn_config.nearby_only_check_this_entity,     default_spawn_def_table.nearby_only_check_this_entity),
         count_to_spawn_each_step        = qts.select(spawn_config.count_to_spawn_each_step~=nil,        spawn_config.count_to_spawn_each_step,          default_spawn_def_table.count_to_spawn_each_step),
@@ -161,13 +159,13 @@ minetest.register_node("qts:spawner", {
 	climbable=false,
 	floodable=true,
 	
-	groups={spawner=1, oddly_breakable_by_hand=1, not_in_creative_inventory=qts.select(qts.ISDEV, nil, 1)},
+	groups={spawner=1, oddly_breakable_by_hand=1, not_in_creative_inventory=not_in_creative_inventory},
 	
     on_construct=function (pos)
         --start the node timer
         local timer = minetest.get_node_timer(pos)
         if (not timer:is_started()) then
-            timer:start(qts.ai.SPAWNER_SPAWN_DELAY_TIME + math.random(-qts.ai.SPAWNER_SPAWN_DELAY_DEVIATION_TIME, qts.ai.SPAWNER_SPAWN_DELAY_DEVIATION_TIME) )
+            timer:start(qts.ai.SPAWNER_SPAWN_DELAY_TIME.get() + math.random(-qts.ai.SPAWNER_SPAWN_DELAY_DEVIATION_TIME.get(), qts.ai.SPAWNER_SPAWN_DELAY_DEVIATION_TIME.get()) )
         end
         
         --set the infotext to show what it spawns
@@ -221,9 +219,20 @@ minetest.register_node("qts:spawner", {
                 spawn_def[key] = val
             end
         end
-        
+
+        local can_spawn=false
+        local players = minetest.get_connected_players()
+        local minplayerdistsq = qts.ai.SPAWNER_REQUIRED_MIN_PLAYER_DIST.get()
+        minplayerdistsq=minplayerdistsq*minplayerdistsq
+        for i, player in ipairs(players) do
+            if minplayerdistsq > vector.distancesq(pos, player:get_pos()) then
+                can_spawn=true
+                break
+            end
+        end
+
         --check that the entity exists
-        if entity_name and minetest.registered_entities[entity_name] then
+        if can_spawn and entity_name and minetest.registered_entities[entity_name] then
             
             --count nearby entities to see if we can spawn
             local objlist = minetest.get_objects_inside_radius(pos, spawn_def.nearby_radius)
@@ -282,10 +291,6 @@ minetest.register_node("qts:spawner", {
         end
         --reset the timer
         local timer = minetest.get_node_timer(pos)
-        timer:start(qts.ai.SPAWNER_SPAWN_DELAY_TIME + math.random(-qts.ai.SPAWNER_SPAWN_DELAY_DEVIATION_TIME, qts.ai.SPAWNER_SPAWN_DELAY_DEVIATION_TIME))
+        timer:start(qts.ai.SPAWNER_SPAWN_DELAY_TIME.get() + math.random(-qts.ai.SPAWNER_SPAWN_DELAY_DEVIATION_TIME.get(), qts.ai.SPAWNER_SPAWN_DELAY_DEVIATION_TIME.get()))
     end,
-
-
-
-
 })

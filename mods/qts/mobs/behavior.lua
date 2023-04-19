@@ -17,6 +17,8 @@ the table of depends attributes are only set if they are not yet set. They do no
 
 --]]
 
+qts.ai.CREATURE_DESPAWN_DISTANCE = qts.config("CREATURE_DESPAWN_DISTANCE", 64, "how far a creature must be from the player to despawn, if its distance_despawn field is true")
+
 ---Register a Creature Module
 ---@param name string "modname:name" format
 ---@param def table module definition table
@@ -97,6 +99,59 @@ local properties_to_propigate = {
 	shaded = true,
 	show_on_minimap = true,
 }
+
+---@alias TargetType
+---| "none" No Target
+---| "player" A PlayerRef
+---| "item" A __builtin:item
+---| "creature" A QTS Creature
+---| "entity" An arbitrary entity, that may or may not be tracked by QTS
+---| "node" A node
+---| "point" A arbitrary point
+
+---Get the target type of a ObjRef
+---@param object ObjectRef
+---@return TargetType 
+function qts.ai.get_object_target_type(object)
+	if object:is_player() then
+		return "player"
+	end
+	local name = qts.object_name(object)
+	if name == "__builtin:item" then
+		return "item"
+	elseif qts.registered_creatures[name] then
+		return "creature"
+	end
+	return "entity"
+end
+
+---@type {[TargetType]:true}
+local mobile_target_types = {
+    creature = true,
+	entity = true,
+	item = true,
+	player = true
+}
+
+---Check if a given target type is a mobile object
+---@param target_type TargetType
+---@return boolean
+function qts.ai.get_is_target_type_mobile(target_type)
+	return qts.select(mobile_target_types[target_type], true, false) 
+end
+
+---@type {[TargetType]:true}
+local static_target_types = {
+    node = true,
+	point = true,
+}
+
+---Check if a given target type is a mobile object
+---@param target_type TargetType
+---@return boolean
+function qts.ai.get_is_target_type_static(target_type)
+	return qts.select(static_target_types[target_type], true, false) 
+end
 
 ---Registeres a new creature
 ---@param name string "modname:name" format
@@ -196,9 +251,25 @@ function qts.ai.register_creature(name, def)
 	--add the modules list to the initial properties
 	properties.modules = modules
 
+	---@class CreatureLuaEntity : LuaEntity
+	---@field modules string[] list of module names
+	---@field module_function_step function[]
+	---@field module_function_punch function[]
+	---@field module_function_rightclick function[]
+	---@field queued_events {handle: string, timer: number, func: function}[]
+	---@field current_task_priority number
+	---@field current_task function(self, dtime, moveresult)
+	---@field TICK_COUNT integer
+	---@field bisincurrenttask boolean
+	---@field distance_despawn boolean despawn from distance. default to true
+	---@field nearest_player_objref ObjectRef|nil only valid in on_step(...)
 	local entity_def = {
 		initial_properties = {},
 
+		---Entity on_activate function
+		---@param self CreatureLuaEntity
+		---@param staticdata string
+		---@param dtime_s number
 		on_activate = function(self, staticdata, dtime_s)
 			self.QTID = qts.gen_entity_id()
 			self.queued_events = {}
@@ -265,6 +336,9 @@ function qts.ai.register_creature(name, def)
 			
 		end,
 
+		---Entity get_staticdata function
+		---@param self CreatureLuaEntity
+		---@return string
 		get_staticdata = function(self)
 			local data = {}
 			for i, modulename in ipairs(self.modules) do
@@ -284,6 +358,10 @@ function qts.ai.register_creature(name, def)
 			return minetest.serialize(data)
 		end,
 
+		---Entity on_step function
+		---@param self CreatureLuaEntity
+		---@param dtime number
+		---@param moveresult table
 		on_step = function(self, dtime, moveresult)
 			if self.TICK_COUNT == nil then 
 				self.TICK_COUNT = 1 
@@ -291,7 +369,33 @@ function qts.ai.register_creature(name, def)
 				self.TICK_COUNT = self.TICK_COUNT + 1
 			end
 
-			
+			-- get nearest player to check for death
+			local players = minetest.get_connected_players()
+			if #players == 1 then
+				--fast singleplayer case
+				self.nearest_player_objref = players[1]
+			elseif #players > 1 then
+				local nearest_player_index = nil
+				local nearest_player_dist_sq = nil
+				for i, obj in ipairs(players) do
+					local dist_sq = vector.distancesq(self.object:get_pos(), obj:get_pos())
+					if nearest_player_index == nil or dist_sq < nearest_player_dist_sq  then
+						nearest_player_dist_sq = dist_sq
+						nearest_player_index = i
+					end
+				end
+				self.nearest_player_objref = players[nearest_player_index]
+			end
+			if (self.distance_despawn == nil or self.distance_despawn) then
+				local maxdistsq = qts.ai.CREATURE_DESPAWN_DISTANCE.get()
+				maxdistsq = maxdistsq * maxdistsq
+				local dist_sq = vector.distancesq(self.object:get_pos(), self.nearest_player_objref:get_pos())
+				if dist_sq > maxdistsq then
+					minetest.log("Removing entity " .. self:id_string() .. " due to distance from players")
+					self.object:remove()
+					return
+				end
+			end
 
 			-- first, run all module on_step functions
 			for i, module_step_func in ipairs(self.module_function_step) do
@@ -321,8 +425,19 @@ function qts.ai.register_creature(name, def)
 				self.current_task(self, dtime, moveresult)
 				self.bisincurrenttask = false
 			end
+
+			--ALWAYS reset the objectref at the end.
+			self.target_objref = false
+			self.nearest_player_objref = nil
 		end,
 
+		---Entity on_punch function
+		---@param self CreatureLuaEntity
+		---@param puncher ObjectRef
+		---@param time_from_last_punch number
+		---@param tool_capabilities table
+		---@param dir Vector
+		---@return boolean
 		on_punch = function(self, puncher, time_from_last_punch, tool_capabilities, dir)
 			minetest.log("Punch called on entity " .. self:id_string() .. " by " ..qts.object_name(puncher))
 			-- run all module on_punch functions
@@ -333,6 +448,9 @@ function qts.ai.register_creature(name, def)
 			
 		end,
 
+		---Entity on_rightclick function
+		---@param self CreatureLuaEntity
+		---@param clicker ObjectRef
 		on_rightclick = function(self, clicker)
 			minetest.log("Rightclick called on entity " .. self:id_string() .. " by " .. qts.object_name(clicker))
 			for i, module_rightclick_func in ipairs(self.module_function_rightclick) do
@@ -342,6 +460,10 @@ function qts.ai.register_creature(name, def)
 
 		-- add a module
 
+		---Check if a module is in this creature
+		---@param self CreatureLuaEntity
+		---@param modulename string the module name
+		---@return boolean true if module is present
 		contains_module = function(self, modulename)
 			for i, existingmodulename in ipairs(self.modules) do
 				if existingmodulename == modulename then
@@ -351,6 +473,10 @@ function qts.ai.register_creature(name, def)
 			return false
 		end,
 
+		---Add a module
+		---@param self CreatureLuaEntity
+		---@param modulename string the module name
+		---@param run_activate boolean true to run the activation func of the module
 		add_module = function(self, modulename, run_activate)
 			if self:contains_module(modulename) then
 				minetest.log("warning", "you cannot add two of the same module. Entity: ".. self:id_string())
@@ -386,6 +512,9 @@ function qts.ai.register_creature(name, def)
 			end
 		end,
 
+		---Remove a module
+		---@param self CreatureLuaEntity
+		---@param modulename string
 		remove_module = function(self, modulename)
 			local containsmodule = false
 			local module = qts.registered_modules[modulename]
@@ -436,6 +565,11 @@ function qts.ai.register_creature(name, def)
 
 		-- Tasks (or, the state machine)
 
+		---Run a task on the current creature
+		---@param self CreatureLuaEntity
+		---@param priority number the tasks's priority
+		---@param func function(self, dtime, moveresult) the task.
+		---@return boolean result true if this this task will run (unless it is superceeded)
 		run_task = function (self, priority, func)
 			if self.current_task_priority == nil then self.current_task_priority = 0 end
 			if priority > self.current_task_priority and type(func) == "function" then
@@ -446,6 +580,10 @@ function qts.ai.register_creature(name, def)
 			return false
 		end,
 
+		---Set the current task priority. Can only be called from a task
+		---@param self CreatureLuaEntity
+		---@param priority number the new priority
+		---@param allow_from_anywhere boolean? default to false
 		set_current_task_priority = function(self, priority, allow_from_anywhere)
 			if (self:is_in_task() or allow_from_anywhere) then
 				self.current_task_priority = priority
@@ -454,6 +592,9 @@ function qts.ai.register_creature(name, def)
 			end
 		end,
 
+		---Clear the current task. Can only be called from a task
+		---@param self CreatureLuaEntity
+		---@param allow_from_anywhere boolean? default to false
 		clear_current_task = function(self, allow_from_anywhere)
 			if (self:is_in_task() or allow_from_anywhere) then
 				self.current_task_priority = qts.ai.PRIORITY_NONE
@@ -463,14 +604,21 @@ function qts.ai.register_creature(name, def)
 			end
 		end,
 
+		---Check if the currently running func is part of a task
+		---@param self CreatureLuaEntity
+		---@return boolean result true if in a current task
 		is_in_task = function(self)
 			return qts.select(self.bisincurrenttask==nil, false, self.bisincurrenttask)
 		end,
+
 		--[[
 			Play an animation
 
 			anim_name - a name into an animation table self.animations
 		]]
+		---Play an animation by name
+		---@param self CreatureLuaEntity
+		---@param anim_name string
 		play_animation = function(self, anim_name)
 			if self.current_animation ~= nil and self.current_animation == anim_name then
 				return
@@ -483,6 +631,11 @@ function qts.ai.register_creature(name, def)
 
 		-- Event Queues
 
+		---Enqueue an event to happen later on the entity
+		---@param self CreatureLuaEntity
+		---@param handle string the event handle
+		---@param time number the time till the event happens
+		---@param func function the actual event
 		enqueue_event = function(self, handle, time, func)
 			if self.queued_events == nil then
 				self.queued_events = {}
@@ -494,6 +647,9 @@ function qts.ai.register_creature(name, def)
 			}
 		end,
 
+		---Kill an enqueued event by its handle
+		---@param self CreatureLuaEntity
+		---@param handle string the handle
 		kill_event = function(self, handle)
 			if self.queued_events then
 				local index_to_remove = {}
@@ -509,9 +665,30 @@ function qts.ai.register_creature(name, def)
 			end
 		end,
 
+		---Get the entity's unique ID string
+		---@param self CreatureLuaEntity
+		---@return string
 		id_string = function(self)
 			return (qts.select(self.name ~= nil, dump(self.name), "UNNAMED ENTITY") .. "(" .. dump(self.QTID) .. ")")
-		end
+		end,
+
+		---Reset the current target
+		---@param self CreatureLuaEntity
+		reset_target = function(self)
+			self.target_id = false
+			self.target_pos = false
+			self.target_objref = false
+			self.target_type = "none"
+		end,
+
+		---@type false|QTID the target QTID
+		target_id = false,
+		---@type false|Vector the target position
+		target_pos = false,
+		---@type false|ObjectRef the target objectref. should be set to false at end of step.
+		target_objref = false,
+        ---@type TargetType the target type
+		target_type =  "none",
 	}
 
 	for key, value in pairs(properties) do
