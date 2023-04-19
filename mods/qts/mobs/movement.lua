@@ -63,7 +63,7 @@ function qts.ai.face(object, facing_pos, yaw_only, dont_set)
 			rotation.y = rotation.y+(math.pi/2)
 		end
 		if (not dont_set) then
-			object:set_rotation(rotation)
+			object:set_rotation(vector.verify(rotation))
 		end
 		return rotation
 	end
@@ -113,7 +113,7 @@ function qts.ai.rotate_to(object, facing_pos, max_rotation, yaw_only, dont_set)
 				rot = vector.slerp(oldrot, rot, 1/steps)
 			end
 			if (not dont_set) then
-				object:set_rotation(rot)
+				object:set_rotation(vector.verify(rot))
 			end
 		end
 		return rot

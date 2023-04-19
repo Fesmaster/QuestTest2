@@ -110,6 +110,7 @@ local properties_to_propigate = {
 				color1 = "colorstring",
 				color2 = "colorstring",
 				pattern = "spots", -current patterns are limited to "spots"
+				spawner_config = "string" -- the spawner config to apply to a spawner when you rightclick one with the egg
 			}
 
 	special fields in initial_properties:
@@ -239,31 +240,23 @@ function qts.ai.register_creature(name, def)
 				self.modules[index] = modulename
 			end
 
-			minetest.log("Activating entiy: ".. self:id_string() .. "! Modules: ")
 			for i, modulename in ipairs(self.modules) do
 				local module = qts.registered_modules[modulename]
 				if module ~= nil then
-					local modulesstr = "\t"..modulename.." "
-					--minetest.log("\t"..dump(modulename))
 					--load up the module
 					if module.on_activate and type(module.on_activate) == "function" then
 						module.on_activate(self, data, dtime_s)
-						modulesstr = modulesstr .. "ACTIVATE "
 					end
 					--add existing attributes to the queues
 					if module.on_step and type(module.on_step) == "function" then
 						self.module_function_step[#self.module_function_step+1] = module.on_step
-						modulesstr = modulesstr .. "STEP "
 					end
 					if module.on_punch and type(module.on_punch) == "function" then
 						self.module_function_punch[#self.module_function_punch+1] = module.on_punch
-						modulesstr = modulesstr .. "PUNCH "
 					end
 					if module.on_rightclick and type(module.on_rightclick) == "function" then
 						self.module_function_rightclick[#self.module_function_rightclick+1] = module.on_rightclick
-						modulesstr = modulesstr .. "RIGHTCLICK "
 					end
-					minetest.log(modulesstr)
 				else
 					minetest.log("error", "tried to create a creature with an unknown module list. Entity: ".. self:id_string())
 				end
@@ -312,7 +305,6 @@ function qts.ai.register_creature(name, def)
 					event.timer = event.timer - dtime
 					if event.timer <= 0 then
 						event.func(self)
-						minetest.log("executed queued event "..dump(event.handle).."in entity: ".. self:id_string())
 						table.insert(index_to_remove, 1, i)
 					end
 				end
@@ -367,6 +359,14 @@ function qts.ai.register_creature(name, def)
 			local module = qts.registered_modules[modulename]
 			if module ~= nil then
 				self.modules[#self.modules+1] = modulename
+
+				--load dependant meodules!
+				for i, depends_modulename in ipairs(module.required_modules) do
+					if not self:contains_module(depends_modulename) then
+						self:add_module(depends_modulename, run_activate)
+					end
+				end
+
 				if (run_activate and module.on_activate ~= nil and type(module.on_activate) == "function") then
 					module.on_activate(self, {}, 0)
 				end
@@ -441,7 +441,6 @@ function qts.ai.register_creature(name, def)
 			if priority > self.current_task_priority and type(func) == "function" then
 				self.current_task_priority = priority
 				self.current_task = func
-				minetest.log("new task selected for entity: ".. self:id_string())
 				return true
 			end
 			return false
@@ -486,7 +485,6 @@ function qts.ai.register_creature(name, def)
 
 		enqueue_event = function(self, handle, time, func)
 			if self.queued_events == nil then
-				minetest.log("Creating event queue for entity: " .. self:id_string())
 				self.queued_events = {}
 			end
 			self.queued_events[#self.queued_events+1] = {
@@ -494,8 +492,6 @@ function qts.ai.register_creature(name, def)
 				timer = time,
 				func = func
 			}
-			minetest.log("Enqueued event " .. dump(handle) .. " in entity: ".. self:id_string() .. " for " .. dump(time) .. " second from now")
-			minetest.log("Full Event Queue: " .. dump(self.queued_events))
 		end,
 
 		kill_event = function(self, handle)
@@ -510,8 +506,6 @@ function qts.ai.register_creature(name, def)
 				for i = #index_to_remove, 0, -1 do
 					table.remove(self.queued_events, index_to_remove[i])
 				end
-
-				minetest.log("killed "..dump(#index_to_remove).." queued events of handle "..dump(handle).." in entity.")
 			end
 		end,
 
@@ -542,13 +536,30 @@ function qts.ai.register_creature(name, def)
 				".png^[multiply:"..
 				def.spawnegg.color2..")",
 			groups = {spawnegg = 1,},
+			spawn_entity_name = name,
+			default_spawner_config = def.spawnegg.spawner_config,
 			on_place = function(itemstack, placer, pointed_thing)
+				local itemdef = minetest.registered_items[itemstack:get_name()]
+				if not itemdef or not itemdef.spawn_entity_name then return end
+
 				if pointed_thing.above then
-					local obj = minetest.add_entity(pointed_thing.above, name)
+					if itemdef.default_spawner_config then
+						local below_node = minetest.get_node_or_nil(pointed_thing.under)
+						if below_node and minetest.get_item_group(below_node.name, "spawner") ~= 0 then
+							--clicked on a spawner
+							qts.ai.apply_spawner_config(pointed_thing.under, itemdef.default_spawner_config)
+							if not qts.is_player_creative(placer) then
+								itemstack:take_item(1)
+							end
+							return itemstack;
+						end
+					end
+
+					local obj = minetest.add_entity(pointed_thing.above, itemdef.spawn_entity_name)
 					if obj and not qts.is_player_creative(placer) then
 						itemstack:take_item(1)
-						return itemstack;
 					end
+					return itemstack;
 				end
 			end
 		})

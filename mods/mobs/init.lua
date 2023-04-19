@@ -8,12 +8,12 @@ mobs = {}
 
 dofile(minetest.get_modpath("mobs").."/modules.lua")
 
---dofile(minetest.get_modpath("mobs").."/bandit.lua")
+dofile(minetest.get_modpath("mobs").."/bandit.lua")
 
 
 
 
-
+if qts.ISDEV then
 
 qts.ai.register_creature("mobs:testing_humanoid", {
 	initial_properties = {
@@ -75,3 +75,5 @@ qts.ai.register_creature("mobs:testing_humanoid", {
 		pattern = "spots",
 	}
 })
+
+end

@@ -59,12 +59,33 @@ function qts.readonly_table(tbl)
 	})
 end
 
+---group-based matching function
+---@param pos Vector
+---@param node NodeRef
+---@param matching_table table
+local function group_matching_func(pos, node, matching_table)
+	local nodename = node.name
+	for i, match in ipairs(matching_table) do
+		if qts.is_group(match) then
+			if minetest.get_item_group(node.name, qts.remove_modname_from_item(match)) ~= 0 then
+				return true
+			end
+		else
+			if node.name == match then return true end
+		end
+	end
+	return false
+end
+
+local function always_match(pos, node) return true end
+
 --[[
 	Get a list of all the nodes in a sphere
 
 	Params:
 		pos - the center of the sphere
 		radius - the radius of the sphere
+		matching - either a function that takes (pos, node) and returns a bool, or a list of "group:groupname" or "modname:nodename"
 
 	Returns:
 		array of:
@@ -73,7 +94,20 @@ end
 			noderef - the node reference
 		}
 ]]
-function qts.get_nodes_in_radius(pos, radius)
+---Get a list of all the nodes in a sphere
+---@param pos Vector
+---@param radius number
+---@param matching nil|table|function
+---@return table
+function qts.get_nodes_in_radius(pos, radius, matching)
+	local matching_func = always_match
+	local matching_table = nil
+	if type(matching) == "function" then
+		matching_func = matching
+	elseif type(matching) == "table" then
+		matching_table = matching
+		matching_func = group_matching_func
+	end
 	if pos ~= nil and radius ~= nil then
 		local ntable = {}
 		local counter = 1
@@ -84,10 +118,12 @@ function qts.get_nodes_in_radius(pos, radius)
 			if qts.nearly_equal(dist, radius, 0.5) or dist <= radius then
 				local npos = {x=pos.x+x,y=pos.y+y,z=pos.z+z}
 				local nref = minetest.get_node(npos)
-				ntable[counter]={}
-				ntable[counter].pos = npos
-				ntable[counter].noderef = nref
-				counter = counter+1
+				if (matching_func(npos, nref, matching_table)) then
+					ntable[counter]={}
+					ntable[counter].pos = npos
+					ntable[counter].noderef = nref
+					counter = counter+1
+				end
 			end
 		end
 		end
@@ -112,7 +148,20 @@ end
 			noderef - the node reference
 		}
 ]]
-function qts.get_nodes_on_radius(pos, radius)
+---Get a list of all the nodes on the surface of a sphere
+---@param pos Vector
+---@param radius number
+---@param matching nil|function|table
+---@return table
+function qts.get_nodes_on_radius(pos, radius, matching)
+	local matching_func = always_match
+	local matching_table = nil
+	if type(matching) == "function" then
+		matching_func = matching
+	elseif type(matching) == "table" then
+		matching_table = matching
+		matching_func = group_matching_func	
+	end
 	if pos ~= nil and radius ~= nil then
 		local ntable = {}
 		local counter = 1
@@ -123,10 +172,12 @@ function qts.get_nodes_on_radius(pos, radius)
 			if qts.nearly_equal(dist, radius, 0.5) then
 				local npos = {x=pos.x+x,y=pos.y+y,z=pos.z+z}
 				local nref = minetest.get_node(npos)
-				ntable[counter]={}
-				ntable[counter].pos = npos
-				ntable[counter].noderef = nref
-				counter = counter+1
+				if (matching_func(npos, nref, matching_table)) then
+					ntable[counter]={}
+					ntable[counter].pos = npos
+					ntable[counter].noderef = nref
+					counter = counter+1
+				end
 			end
 		end
 		end
