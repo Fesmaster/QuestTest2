@@ -28,7 +28,7 @@ minetest.register_tool("dtools:testingTool", {
 		--minetest.log("QTS Testing Tool used")
 		minetest.log(dump(minetest.registered_nodes["air"].groups))
 		if pointed_thing.under then
-			minetest.log("Node: " .. qts.classify_node(minetest.get_node_or_nil(pointed_thing.under)))
+			--minetest.log("Node: " .. qts.classify_node(minetest.get_node_or_nil(pointed_thing.under)))
 		end
 		--[[
 		--explode
@@ -294,6 +294,184 @@ minetest.register_tool("dtools:biome_check_tools", {
 		end
 	end,
 
+})
+--[[
+	BIT OP KEY
+	counted from least significant to greatest
+	Bit	| Binary	|decimal| hex number
+	0	| 0000 0001	| 1		| 0x01
+	1	| 0000 0010	| 2		| 0x02
+	2	| 0000 0100	| 4		| 0x04
+	3	| 0000 1000	| 8		| 0x08
+	4	| 0001 0000	| 16	| 0x10
+	5	| 0010 0000	| 32	| 0x20
+	6	| 0100 0000	| 64	| 0x40
+	7	| 1000 0000	| 128	| 0x80
+]]
+local wallmounted_dir_string_map = {
+	[0]="y+","y-","x+","x-","z+","z-"
+}
+local facedir_dir_string_map = {
+	[0]="y+","z+","z-","x+","x-","y-"
+}
+local meshoption_shape_map = {
+	[0] = "an 'x' shape plant (default)",
+	"a '+' shape plant (just rotated 45 degrees)",
+	"a '*' shape plant with three faces instead of two",
+	"a '#' shape plant with four faces instead of two",
+	"a '#' shape plant with four faces instead of two but they lean out",
+	"shape code reserved for future use",
+	"shape code reserved for future use",
+	"shape code reserved for future use",
+}
+local paramtype2_parse_funcs = {
+	none = function(param)
+		minetest.log("Param2: " .. dump(param) .. " : Type: none")
+	end,
+	flowingliquid = function (param)
+		local liquidlevel = 	 param%0x08 		  -- bits 0,1,2,3
+		local is_flowing_down = math.floor(param/0x08)%0x02 > 0 -- bit 4
+		minetest.log("Param2: " .. dump(param) .. " : Type: flowingliquid\nLiquid Level: " 
+			.. dump(liquidlevel) .. "\nIs Flowing Down: " .. dump(is_flowing_down))
+	end,
+	wallmounted = function(param)
+		local dircode = param%0x8 -- bits 0,1,2,3
+		local dir_string = wallmounted_dir_string_map[dircode]
+		minetest.log("Param2: " .. dump(param) .. " : Type: wallmounted\nDirection: " 
+			.. dump(dir_string) .. " (" .. dump(dircode) .. ")"
+		)
+	end,
+	facedir = function(param)
+		local count_rotate = param%0x04 	  -- bits 0,1
+		local dirID = 		math.floor(param/0x04)%0x08 -- bits 2,3,4,5
+		local dir_string = facedir_dir_string_map[dirID]
+		minetest.log("Param2: " .. dump(param) .. " : Type: facedir\nDirection:" 
+		.. dump(dir_string) .. " (" .. dump(dirID) .. ")\nRotations: "
+		.. dump(count_rotate) .. " (" .. dump(count_rotate*90) .. " degrees)"
+	)
+	end,
+	["4dir"] = function(param)
+		local count_rotate = param%0x04 --bits 0,1
+		minetest.log("Param2: " .. dump(param) .. " : Type: 4dir\nRotations: "
+				.. dump(count_rotate) .. " (" .. dump(count_rotate*90) .. " degrees)"
+			)
+	end,
+	wallmounteleveledd = function(param)
+		minetest.log("Param2: " .. dump(param) .. " : Type: leveled")
+	end,
+	degrotate = function(param)
+		minetest.log("Param2: " .. dump(param) .. " : Type: degrotate\nRotation: " 
+			.. dump(param%240) .. "steps (" .. dump((param%240) * 1.5) .. " Degrees)"
+		)
+	end,
+	meshoptions = function(param)
+		local optID = 			 param%0x08			   -- bits 0,1,2
+		local vary_horizontal = math.floor(param/0x08)%0x02 == 1 -- bit 3
+		local make_larger = 	math.floor(param/0x10)%0x02 == 1 -- bit 4
+		local vary_face_height =math.floor(param/0x20)%0x02 == 1 -- bit 5
+		local reserved_1 = 		math.floor(param/0x40)%0x02 == 1 -- bit 6
+		local reserved_2 = 		math.floor(param/0x80)%0x02 == 1 -- bit 7
+		minetest.log("Param2: " .. dump(param) .. " : Type: meshoptions\nShape:"
+			.. dump(meshoption_shape_map[optID]) .. " Code: " .. dump(optID)
+			.. "\nVary Horizontal: " .. dump(vary_horizontal)
+			.. "\nMake Larger: " .. dump(make_larger)
+			.. "\nVary Face Height: " .. dump(vary_face_height)
+			.. "\nReserved 1: " .. dump(reserved_1)
+			.. "\nReserved 2: " .. dump(reserved_2)
+		)
+	end,
+	color = function(param)
+		minetest.log("Param2: " .. dump(param) .. " : Type: color")
+	end,
+	colorfacedir = function(param)
+		local count_rotate = param%0x04 	  --bits 0, 1
+		local dirID = 		math.floor(param/0x04)%0x08 --bits 2,3,4
+		local colorid = 	math.floor(param/0x20)%0x08 --bits 5,6,7
+		local dir_string = facedir_dir_string_map[dirID]
+		minetest.log("Param2: " .. dump(param) .. " : Type: colorfacedir\nDirection:" 
+		.. dump(dir_string) .. " (" .. dump(dirID) .. ")\nRotations: "
+		.. dump(count_rotate) .. " (" .. dump(count_rotate*90) .. " degrees)\nColor Index: "
+		.. dump(colorid)
+		)
+	end,
+	color4dir = function(param)
+		local count_rotate = param%0x04 	  --bits 0,1
+		local colorid = 	math.floor(param/0x04)%0x40 --bits 2,3,4,5,6,7
+		minetest.log("Param2: " .. dump(param) .. " : Type: color4dir\nRotations: "
+			.. dump(count_rotate) .. " (" .. dump(count_rotate*90) .. " degrees)\nColor Index: "
+			.. dump(colorid)
+		)
+	end,
+	colorwallmounted = function(param)
+		local dircode =  param%0x08 	  -- bits 0,1,2
+		local colorid = math.floor(param/0x08)%0x20 -- bits 3,4,5,6,7
+		local dir_string = wallmounted_dir_string_map[dircode]
+		minetest.log("Param2: " .. dump(param) .. " : Type: colorwallmounted\nDirection: " 
+			.. dump(dir_string) .. " (" .. dump(dircode) .. ")\nColor Index: "
+			.. dump(colorid)
+		)
+		
+	end,
+	glasslikeliquidlevel = function(param)
+		local liquidlevel =   param%0x40	  -- bits 0,1,2,3,4,5
+		local connect_vert = math.floor(param/0x40)%0x2 -- bit 6
+		local connect_horz = math.floor(param/0x80)%0x2 -- bit 7
+		minetest.log("Param2: " .. dump(param) .. " : Type: glasslikeliquidlevel\nLiquid Level: "
+			.. dump(liquidlevel) .. "\nConnect to nodes Vertically: "
+			.. dump(connect_vert) .. "\nConnect to nodes Horizontally: "
+			.. dump(connect_horz)
+		)
+	end,
+	colordegrotate = function(param)
+		local degbits = param%0x20		-- bots 0,1,2,3,4
+		local colorid =math.floor(param/0x20)%0x8	-- bits 5,6,7
+		minetest.log("Param2: " .. dump(param) .. " : Type: colordegrotate\nDegree Rotate: "
+			.. dump(degbits%24) .. " steps (" .. dump((degbits%24)*15) .. " degrees)\nColor Index: "
+			.. dump(colorid)
+		)
+	end,
+}
+
+minetest.register_tool("dtools:param_scanner", {
+	description = "Node Param Scanner.\nRightclick:Param1\nLeftclick:Param2",
+	inventory_image = "dtools_green_wand.png",
+	range = 10.0,
+	--liquids_pointable = true,
+	on_use = function(itemstack, user, pointed_thing)
+		if pointed_thing.under then
+			local node = minetest.get_node_or_nil(pointed_thing.under)
+			if node then
+				---@type integer
+				local param2 = node.param2
+				local paramtype2 = "none"
+				local node_def = minetest.registered_nodes[node.name]
+				if node_def and node_def.paramtype2 then
+					paramtype2 = node_def.paramtype2
+				end
+				if paramtype2_parse_funcs[paramtype2] then
+					paramtype2_parse_funcs[paramtype2](param2)
+				else
+					minetest.log("Param2: " .. dump(param2) .. " : Type: " .. dump(paramtype2))
+				end
+			else
+				minetest.log("No node clicked. Try again.")
+			end
+		else
+			minetest.log("No node clicked. Try again.")
+		end
+	end,
+	on_place = function(itemstack, user, pointed_thing)
+		if pointed_thing.under then
+			local node = minetest.get_node_or_nil(pointed_thing.under)
+			if node then
+				
+			else
+				minetest.log("No node clicked. Try again.")
+			end
+		else
+			minetest.log("No node clicked. Try again.")
+		end
+	end
 })
 
 

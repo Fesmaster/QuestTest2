@@ -1,4 +1,5 @@
-minetest.log("info", "QTS loading!")
+minetest.log("QTS loading!")
+minetest.log("Loading lua version: " .. _VERSION)
 qts = {}
 qts_internal = {}
 qts.path = minetest.get_modpath("qts")
@@ -36,7 +37,6 @@ dofile(qts.path.."/api/creative.lua")
 dofile(qts.path.."/api/player.lua")
 dofile(qts.path.."/api/nodetypes.lua")
 dofile(qts.path.."/api/shapedNodes.lua")
-dofile(qts.path.."/api/screwdriver.lua")
 dofile(qts.path.."/api/doors.lua")
 dofile(qts.path.."/api/gui.lua")
 dofile(qts.path.."/api/growing.lua")
