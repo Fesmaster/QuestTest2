@@ -663,3 +663,18 @@ function qts.register_shaped_node(name, def)
 
 	minetest.register_node(":"..name.."_slab", qts.table_deep_copy(def))
 end
+
+---Register an alias for a shaped node. Automatically registers all needed aliases for all shapes
+---@param alias ItemName
+---@param base ItemName
+function qts.register_shapeed_alias(alias, base)
+	minetest.register_alias(alias, 					base)
+	minetest.register_alias(alias.."_stair", 		base.."_stair")
+	minetest.register_alias(alias.."_stair_inner", 	base.."_stair_inner")
+	minetest.register_alias(alias.."_stair_outer", 	base.."_stair_outer")
+	minetest.register_alias(alias.."_slant", 		base.."_slant")
+	minetest.register_alias(alias.."_slant_inner", 	base.."_slant_inner")
+	minetest.register_alias(alias.."_slant_outer", 	base.."_slant_oute")
+	minetest.register_alias(alias.."_slab", 		base.."_slab")
+	minetest.register_alias(alias.."_slab", 		base.."_slab")
+end

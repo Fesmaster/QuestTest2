@@ -80,7 +80,7 @@ local function campfire_rightclick(pos, node, clicker, itemstack, pointed_thing)
 		kill_campfire_item(pos)
 	end
 	
-	if (itemstack:get_name() == "default:clay" and not itemstack:is_empty() and node.name ~= "default:campfire") then
+	if (itemstack:get_name() == "overworld:clay" and not itemstack:is_empty() and node.name ~= "default:campfire") then
 		itemstack:take_item()
 		minetest.set_node(pos, {name = "default:furnace"})
 		return itemstack

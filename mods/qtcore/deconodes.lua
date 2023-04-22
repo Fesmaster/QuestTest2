@@ -33,8 +33,70 @@ qtcore.register_artistic_nodes = function(name, def)
 			def.tiles[i] = def.tiles[3] or def.tiles[1]
 		end
 	end
-	local craft_group = def.craft_group
-	def.craft_group = nil
+
+	if not def.no_base then
+		local groups = table.copy(def.groups)
+		if not def.no_generation_ground_for_base then
+			if groups.generation_artificial then
+				groups.generation_artificial = nil
+			end
+			groups.generation_ground=1
+		end
+		qts.register_shaped_node (name, {
+			description = def.description,
+			tiles = {
+				def.tiles[1],
+				def.tiles[2],
+				def.tiles[3],
+				def.tiles[4],
+				def.tiles[5],
+				def.tiles[6],
+			},
+			groups = groups,
+			is_ground_content = false,
+			sounds = def.sounds,
+			paramtype2 = "color",
+			palette = "default_palette_paint_light.png",
+		})
+	end
+
+	if not def.no_cobble then
+		qts.register_shaped_node (name.."_cobble", {
+            description = def.cobble_desc,
+			tiles = {
+				def.tiles[1].."^qt_cobble_overlay.png",
+				def.tiles[2].."^qt_cobble_overlay.png",
+				def.tiles[3].."^qt_cobble_overlay.png",
+				def.tiles[4].."^qt_cobble_overlay.png",
+				def.tiles[5].."^qt_cobble_overlay.png",
+				def.tiles[6].."^qt_cobble_overlay.png",
+			},
+            groups = def.groups,
+            is_ground_content = false,
+            sounds = def.sounds,
+            paramtype2 = "color",
+            palette = "default_palette_paint_light.png",
+        })
+
+		qts.register_fencelike_node(name.."_cobble_wall", {
+			description = def.description.." Cobblestone Wall",
+			type = "wall",
+			tiles = {
+				def.tiles[1].."^qt_cobble_overlay.png",
+				def.tiles[2].."^qt_cobble_overlay.png",
+				def.tiles[3].."^qt_cobble_overlay.png",
+				def.tiles[4].."^qt_cobble_overlay.png",
+				def.tiles[5].."^qt_cobble_overlay.png",
+				def.tiles[6].."^qt_cobble_overlay.png",
+			},
+			groups = def.groups,
+			sounds = def.sounds,
+			paramtype2 = "color",
+			palette = "default_palette_paint_light.png",
+		})
+	end
+
+	
 	qts.register_shaped_node (name .. "_brick", {
 		description = def.description.." Brick",
 		tiles = {
@@ -263,12 +325,12 @@ qtcore.register_artistic_nodes = function(name, def)
 		palette = "default_palette_paint_light.png",
 	})
 	
-	if craft_group then
+	if def.craft_group then
 		local names = {"_brick", "_block", "_border", "_border2", "_cross", "_enigma", 
 			"_french", "_knot", "_pillar", "_pillar2", "_weave", "_wall","_brick_wall", "_target"}
 		for k, v in ipairs(names) do
 			qts.register_craft({
-				ingredients = {"group:" .. craft_group},
+				ingredients = {"group:" .. def.craft_group},
 				results = {name..v},
 				near = {"group:workbench_heavy"},
 			})

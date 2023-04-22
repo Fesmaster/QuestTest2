@@ -1124,7 +1124,7 @@ minetest = {
     
     ---Turn a vector into a string
     ---@param pos Vector|table
-    ---@param decimal_places number decimel place to round to
+    ---@param decimal_places? number decimel place to round to
     ---@return string "(X, Y, Z)"
     pos_to_string = function(pos, decimal_places) end,
     

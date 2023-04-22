@@ -62,8 +62,8 @@ local function MakeLakeBasic(pos)
 			elseif pos.y > -waterHeight then
 				node.name="default:river_water_source"
 			elseif pos.y > -waterHeight*3 then
-				node.name = "default:gravel"
-				--qts.insert3(nodes, p_off, {name="default:gravel"})
+				node.name = "overworld:gravel"
+				--qts.insert3(nodes, p_off, {name="overworld:gravel"})
 			end
 		end
 	end
@@ -81,14 +81,14 @@ local function MakeLakeBasic(pos)
 				end
 			end
 			if needsWall then
-				node.name="default:gravel"
+				node.name="overworld:gravel"
 				
 				--propigate down
 				for y = p_off.y, 0, -1 do
 					local pv = vector.new(p_off.x, y, p_off.z)
 					local nearNode = qts.read3(nodes, pv)
 					if nearNode and nearNode.name and nearNode.name == "air" then
-						nearNode.name = "default:gravel"
+						nearNode.name = "overworld:gravel"
 					end
 				end
 			else

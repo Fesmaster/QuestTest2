@@ -419,7 +419,7 @@ minetest.register_abm({
 		local below_n = minetest.get_node_or_nil(below_p)
 		if below_n and below_n.name and minetest.get_item_group(below_n.name, "dirt") then
 			local chance = 20
-			if below_n.name == "default:dirt_with_rainforest_grass" then
+			if below_n.name == "overworld:dirt_with_rainforest_grass" then
 				chance = 5
 			end
 			if math.random(chance) == 1 then

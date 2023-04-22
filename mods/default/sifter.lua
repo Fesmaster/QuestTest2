@@ -149,7 +149,7 @@ register_sifter({
     name = "sand",
     description = "Sand",
     tiles = "default_sand.png",
-    node = "default:sand",
+    node = "overworld:sand",
     results = {"default:shell_pieces"}
 })
 
@@ -157,7 +157,7 @@ register_sifter({
     name = "dirt",
     description = "Dirt",
     tiles = "default_dirt.png",
-    node = "default:dirt",
+    node = "overworld:dirt",
     results = {"default:flint"}
 })
 
@@ -165,7 +165,7 @@ register_sifter({
     name = "gravel",
     description = "Dirt",
     tiles = "default_gravel.png",
-    node = "default:gravel",
+    node = "overworld:gravel",
     results = {"default:flint"}
 })
 
@@ -173,7 +173,7 @@ register_sifter({
     name = "desert_sand",
     description = "Desert Sand",
     tiles = "default_desert_sand.png",
-    node = "default:desert_sand",
+    node = "overworld:desert_sand",
     results = {"default:flint"}
 })
 
@@ -181,6 +181,6 @@ register_sifter({
     name = "clay",
     description = "Clay",
     tiles = "default_clay_block.png",
-    node = "default:clay",
+    node = "overworld:clay",
     results = {"default:refined_clay_lump"}
 })

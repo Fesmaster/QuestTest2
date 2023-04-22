@@ -72,8 +72,8 @@ This can later be randomized, based off of biome
 local function get_camp_materials_plains()
     local wood = woodtypes_plains[math.random(#woodtypes_plains)]
     return {
-        log = "default:"..wood.."_log",
-        wood = "default:"..wood.."_wood_planks",
+        log = "overworld:"..wood.."_log",
+        wood = "overworld:"..wood.."_wood_planks",
         fence = "default:"..wood.."_wood_fence",
         crate = "default:crate_"..wood.."",
 

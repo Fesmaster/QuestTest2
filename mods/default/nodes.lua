@@ -95,29 +95,6 @@ qts.register_shaped_node("default:solas_block_orange", {
 	--sounds = qtcore.node_sound_stone(),
 	light_source = 12,
 })
---BEGIN fruit
-minetest.register_node("default:lantern_fruit", {
-	description = "Lantern Fruit",
-	tiles ={
-		"default_lantern_fruit_top.png", 
-		"default_lantern_fruit_bottom.png",
-		"default_lantern_fruit_side.png"
-	},
-	use_texture_alpha = "clip",
-	drawtype = "nodebox",
-	node_box = qtcore.nb_lantern_fruit(),
-	paramtype = "light",
-	paramtype2 = "facedir",
-	sunlight_propagates = true,
-	walkable = false,
-	groups = {snappy = 3, fruit = 1, generation_trees=1, generation_artificial=1},
-	--sounds = qtcore.node_sound_stone(),
-	light_source = 12,
-})
-
-
---END fruit
-
 
 --BEGIN crafting
 minetest.register_node("default:workbench", {

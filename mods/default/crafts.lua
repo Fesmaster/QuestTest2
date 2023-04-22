@@ -141,11 +141,11 @@ qts.register_craft({
 
 qts.register_craft({
 	ingredients = {"default:clay_lump 4"},
-	results = {"default:clay"},
+	results = {"overworld:clay"},
 })
 
 qts.register_craft({
-	ingredients = {"default:clay"},
+	ingredients = {"overworld:clay"},
 	results = {"default:clay_lump 4"},
 })
 
@@ -606,7 +606,7 @@ minetest.register_craft({
 
 minetest.register_craft({
 	type = "fuel",
-	recipe = "default:peat",
+	recipe = "overworld:peat",
 	burntime = 32,
 })
 

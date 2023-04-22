@@ -5,7 +5,7 @@
 local function rope_place(itemstack, placer, pointed_thing)
     local node = minetest.get_node_or_nil(pointed_thing.under)
     if node and minetest.get_item_group(node.name, "rope") ~= 0 then
-        local p = vector.copy(pointed_thing.under)
+        local p = vector.new(pointed_thing.under)
         while true do
             p.y = p.y-1
             local n = minetest.get_node_or_nil(p)
