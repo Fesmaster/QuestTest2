@@ -58,6 +58,11 @@ qtcore.register_artistic_nodes = function(name, def)
 			paramtype2 = "color",
 			palette = "default_palette_paint_light.png",
 		})
+		qts.register_craft({
+			ingredients = {"group:" .. def.craft_group},
+			results = {name},
+			near = {"group:workbench_heavy"},
+		})
 	end
 
 	if not def.no_cobble then
@@ -77,6 +82,11 @@ qtcore.register_artistic_nodes = function(name, def)
             paramtype2 = "color",
             palette = "default_palette_paint_light.png",
         })
+		qts.register_craft({
+			ingredients = {"group:" .. def.craft_group},
+			results = {name.."_cobble"},
+			near = {"group:workbench_heavy"},
+		})
 
 		qts.register_fencelike_node(name.."_cobble_wall", {
 			description = def.description.." Cobblestone Wall",
@@ -93,6 +103,11 @@ qtcore.register_artistic_nodes = function(name, def)
 			sounds = def.sounds,
 			paramtype2 = "color",
 			palette = "default_palette_paint_light.png",
+		})
+		qts.register_craft({
+			ingredients = {"group:" .. def.craft_group},
+			results = {name.."_cobble_wall"},
+			near = {"group:workbench_heavy"},
 		})
 	end
 

@@ -1,27 +1,7 @@
-qts.register_ingot("overworld:stick", {
-	description = "Stick",
-	inventory_image = "default_stick.png",
-	tiles = {"default_oak_wood.png"},
-	groups = {stick = 1, oddly_breakable_by_hand = 3},
-	sounds = qtcore.node_sound_wood(),
-	nodeboxes = {
-		{-0.5, -0.5, -0.4375, 0.5, -0.375, -0.3125}, -- NodeBox1
-		{-0.5, -0.5, -0.25, 0.5, -0.375, -0.125}, -- NodeBox2
-		{-0.5, -0.5, -0.0625, 0.5, -0.375, 0.0625001}, -- NodeBox3
-		{-0.5, -0.5, 0.125, 0.5, -0.375, 0.25}, -- NodeBox4
-		{-0.5, -0.5, 0.3125, 0.5, -0.375, 0.4375}, -- NodeBox5
-		{-0.5, -0.375, -0.375, 0.5, -0.25, -0.25}, -- NodeBox6
-		{-0.5, -0.375, -0.125, 0.5, -0.25, -1.11759e-008}, -- NodeBox7
-		{-0.5, -0.375, 0.1875, 0.5, -0.25, 0.3125}, -- NodeBox8
-	},
-	levels = 8,
-})
-
-minetest.register_craftitem("overworld:charcoal", {
-	description = "Charcoal Lump",
-	inventory_image = "default_charcoal.png",
-	groups = {coal = 1,},
-})
+--[[
+	Craftitems
+	These should drop or be directly related to overworld spawning nodes
+]]
 
 minetest.register_craftitem("overworld:peat_chunk", {
 	description = "Peat Chunk",
@@ -37,7 +17,6 @@ minetest.register_craftitem("overworld:flint", {
 	description = "Flint",
 	inventory_image = "default_flint.png",
 })
-
 
 minetest.register_craftitem("overworld:mycelium", {
 	description = "Mycelium",

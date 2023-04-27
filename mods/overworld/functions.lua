@@ -4,7 +4,7 @@ This file is for ABMs and LBMs, and the like
 
 minetest.register_abm({
 	label = "Covered Soild Regression to Dirt",
-	nodenames = {"default:dirt_tilled", "group:spreading_dirt_type"},
+	nodenames = {"overworld:dirt_tilled", "group:spreading_dirt_type"},
 	interval = 1.0, --give this a bit more time between instances as it is a expensive ABM
 	chance = 1,
 	catch_up = true,
@@ -13,7 +13,7 @@ minetest.register_abm({
 		if node_above and node_above.name ~= "air" then
 			local nodeDef = minetest.registered_nodes[node_above.name]
 			if not (nodeDef and nodeDef.paramtype and nodeDef.paramtype == "light") then
-				minetest.set_node(pos, {name="default:dirt"})
+				minetest.set_node(pos, {name="overworld:dirt"})
 			end
 		end
 	end
@@ -21,7 +21,7 @@ minetest.register_abm({
 
 minetest.register_abm({
 	label = "Grass Spreading",
-	nodenames = {"default:dirt"},
+	nodenames = {"overworld:dirt"},
 	neighbors = {"group:spreading_dirt_type"},
 	interval = 6.0,
 	chance = 15,
@@ -108,7 +108,7 @@ minetest.register_abm({
 			return
 		end
 		
-		minetest.swap_node(pos, {name = "default:reeds_" .. (level+1) })
+		minetest.swap_node(pos, {name = "overworld:reeds_" .. (level+1) })
 	end
 })
 

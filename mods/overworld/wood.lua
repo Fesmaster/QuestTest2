@@ -13,14 +13,14 @@ local TREE_VAR = qts.config("TREE_GROWTH_TIME_VARIANCE", 30, "The variance in ti
 --common wood types
 ---@type {name:string, desc:string, grow_func:function}[]
 local woods = {
-	{name="oak",  			desc="Oak",  			grow_func=qtcore.grow_oak_tree,},
+	{name="oak",  			desc="Oak",  		grow_func=qtcore.grow_oak_tree,},
 	{name="apple",  		desc="Apple",  		grow_func=qtcore.grow_apple_tree,},
 	{name="aspen",  		desc="Aspen",  		grow_func=qtcore.grow_aspen_tree,},
-	{name="coffee",  		desc="Coffee",  		grow_func=qtcore.grow_coffee_tree,},
+	{name="coffee",  		desc="Coffee",  	grow_func=qtcore.grow_coffee_tree,},
 	{name="mahogany",  		desc="Mahogany",  	grow_func=qtcore.grow_mahogany_tree,},
 	{name="rosewood",  		desc="Rosewood",  	grow_func=qtcore.grow_rosewood_tree,},
 	{name="pine",  			desc="Pine",  		grow_func=qtcore.grow_pine_tree,},
-	{name="lanternfruit", 	desc="Lanternfruit", 	grow_func=qtcore.grow_lantern_tree,},
+	{name="lanternfruit", 	desc="Lanternfruit",grow_func=qtcore.grow_lantern_tree,},
 	{name="rowan", 			desc="Rowan", 		grow_func=qtcore.grow_rowan_tree,},
 }
 
@@ -147,6 +147,22 @@ for i, wood in ipairs(woods) do
 	--default aliases for tree backcompatablility
 	qts.register_shapeed_alias("default:"..wood.name.."_log", "overworld:"..wood.name.."_log")
 	minetest.register_alias("default:"..wood.name.."_sapling", 			"overworld:"..wood.name.."_sapling")
+	minetest.register_alias("default:"..wood.name.."_leaves", 			"overworld:"..wood.name.."_leaves")
+
+
+	qtcore.register_material("wood", {
+		name=wood.name,
+		desc = wood.desc,
+		planks="overworld:"..wood.name.."_wood_planks",
+		log="overworld:"..wood.name.."_log",
+		log_stripped="overworld:stripped_"..wood.name.."_log",
+		bark="overworld:bark_"..wood.name,
+		leaves="overworld:"..wood.name.."_leaves",
+		sapling="overworld:"..wood.name.."_sapling",
+		fence="overworld:"..wood.name.."_wood_fence",
+		rail="overworld:"..wood.name.."_wood_rail",
+	})
+
 end
 
 --lanternfruit early misspelling fix for tree backcompatablility
@@ -171,6 +187,30 @@ minetest.register_node("overworld:lantern_fruit", {
 	--sounds = qtcore.node_sound_stone(),
 	light_source = 12,
 })
+
+--fruit-bearing apple leaves:
+minetest.register_node("overworld:apple_leaves_fruit", {
+	description = "Apple Leaves with Apples",
+	drawtype = "allfaces_optional",
+	waving = 1,
+	tiles = {"default_apple_leaves_fruit.png"},
+	use_texture_alpha = "clip",
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1, generation_trees=1},
+	drop = {
+		max_items = 2,
+		items = {
+			{items = {"default:apple"}},
+			{items = {"overworld:apple_leaves"}},
+		}
+	},
+	walkable = false,
+	climbable = true,
+	sounds = qtcore.node_sound_grass(),
+	after_place_node = qtcore.after_place_leaves;
+})
+--worldgen alias
+minetest.register_alias("default:apple_leaves_fruit", 			"overworld:apple_leaves_fruit")
 
 --palm, swamp, and bamboo are a bit special.
 
@@ -226,6 +266,13 @@ qts.register_growable_node("overworld:palm_sapling", {
 	end,
 })
 
+qtcore.register_material("wood", {
+	name="palm",
+	desc="Palm",
+	log="overworld:palm_log",
+	leaves="overworld:palm_leaves",
+	sapling="overworld:palm_sapling",
+})
 
 --swamp wood. has a nodebox for the log and leaves
 qts.register_shaped_node ("overworld:swamp_wood_planks", {
@@ -299,13 +346,22 @@ minetest.register_node("overworld:swamp_leaves", {
 	}
 })
 
+qtcore.register_material("wood", {
+	name="swamp",
+	desc = "Swamp",
+	planks="overworld:swamp_wood_planks",
+	log="overworld:swamp_log",
+	log_stripped="overworld:stripped_swamp_log",
+	leaves="overworld:swamp_leaves",
+--	sapling="overworld:palm_sapling",
+})
 
 --bamboo has a nodebox for trunk and leaves, and also no stripped version
 qts.register_shaped_node ("overworld:bamboo_planks", {
 	description = "Bamboo Slats",
 	tiles = {"default_bamboo_slats.png"},
 	paramtype2 = "facedir",
-	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1, generation_artificial=1},
 	sounds = qtcore.node_sound_wood(),
 })
 
@@ -388,6 +444,14 @@ qts.register_fencelike_node("overworld:bamboo_rail", {
 	palette = "default_palette_paint_light.png",
 })
 
+qtcore.register_material("wood", {
+	planks="overworld:bamboo_planks",
+	log="overworld:bamboo",
+	leaves="overworld:bamboo_leaves",
+	fence="overworld:bamboo_fence",
+	rail="overworld:bamboo_rail",
+})
+
 --Mushrooms
 local mushroom_names = {"blue", "gold", "brown"}
 local mushroom_descs = {"Blue", "Gold", "Brown"}
@@ -430,6 +494,7 @@ for i, name in ipairs(mushroom_names) do
 		sounds = qtcore.node_sound_wood(),
 	})
 
+	--fence
 	qts.register_fencelike_node("overworld:"..name.."_mushroom_fence", {
 		description = desc.." Mushroom Fence",
 		type = "fence",
@@ -441,7 +506,8 @@ for i, name in ipairs(mushroom_names) do
 		palette = "default_palette_paint_light.png",
 	})
 	
-	qts.register_fencelike_node("overworld:"..name.."_wood_rail", {
+	--rail
+	qts.register_fencelike_node("overworld:"..name.."_mushroom_rail", {
 		description = desc.." Wood Rail",
 		type = "rail",
 		tiles = {"default_mushroom_"..name.."_slats.png"},
@@ -451,6 +517,22 @@ for i, name in ipairs(mushroom_names) do
 		drop = "overworld:"..name.."_mushroom_fence",
 		paramtype2 = "color",
 		palette = "default_palette_paint_light.png",
+	})
+
+	--worldgen aliases
+	qts.register_shapeed_alias("default:"..name.."_mushroom_trunk", "overworld:"..name.."_mushroom_trunk")
+	qts.register_shapeed_alias("default:"..name.."_mushroom_cap", "overworld:"..name.."_mushroom_cap")
+
+	qtcore.register_material("wood", {
+		name = name,
+		desc = desc,
+		is_mushroom=true, --mushrooms are a bit different sometimes
+		planks="overworld:"..name.."_mushroom_slats",
+		log="overworld:"..name.."_mushroom_trunk",
+		plates="overworld:"..name.."_mushroom_plates",
+		leaves="overworld:"..name.."_mushroom_cap",
+		fence="overworld:"..name.."_mushroom_fence",
+		rail="overworld:"..name.."_mushroom_rail",
 	})
 end
 
@@ -475,6 +557,51 @@ minetest.register_node("overworld:gold_mushroom_spore", {
 minetest.register_alias("default:gold_shroom_spore", "overworld:gold_mushroom_spore")
 
 
+--do this for every wood, including ones registered in other mods
+qtcore.for_all_materials("wood", function(fields)
+	--logs to planks
+	if fields.log and fields.planks then
+		qts.register_craft({
+			ingredients = {fields.log.." 1"},
+			results = {fields.planks.." 4"},
+		})
+	end
+
+	--stripped logs to planks
+	if fields.log_stripped and fields.planks then
+		qts.register_craft({
+			ingredients = {fields.log_stripped.." 1"},
+			results = {fields.planks.." 4"},
+		})
+	end
+
+	--logs to stripped logs
+	if fields.log and fields.log_stripped then
+		qts.register_craft({
+			ingredients = {fields.log},
+			results = {fields.log_stripped, qts.select(fields.bark~=nil, function() return fields.bark .. " 4" end, nil)},
+			near = {"group:workbench"},
+	--		held = {"group:knife"},
+		})
+	end
+
+	--fences
+	if fields.planks and fields.fence then
+		qts.register_craft({
+			ingredients = {fields.planks.." 2"},
+			results = {fields.fence.." 4"},
+			near = {"group:workbench"},
+		})
+	end
+
+	--mushroom plates
+	if fields.is_mushroom and fields.plates and fields.leaves then
+		qts.register_craft({
+			ingredients = {"default:mycelium", fields.leaves},
+			results = {fields.plates.." 2"},
+		})
+	end
+end)
 
 --Old individual registrations
 --[[
@@ -1230,5 +1357,329 @@ qts.register_fencelike_node("default:gold_mushroom_rail", {
 	drop = "default:gold_mushroom_fence",
 	paramtype2 = "color",
 	palette = "default_palette_paint_light.png",
+})
+]]
+
+--[[
+--bark crafting (temp)
+local woodtypes={"oak", "apple", "aspen", "coffee", "mahogany", "rosewood", "pine", "lanternfruit", "rowan"}
+local woodnames={"Oak", "Apple", "Aspen", "Coffee", "Mahogany", "Rosewood", "Pine", "Lanternfruit", "Rowan"}
+
+for i, wood in ipairs(woodtypes) do
+	qts.register_craft({
+		ingredients = {"default:"..wood.."_log"},
+		results = {"default:stripped_"..wood.."_log", "default:bark_"..wood.. " 4"},
+		near = {"group:workbench"},
+--		held = {"group:knife"},
+	})
+end
+]]
+
+--[[
+qts.register_craft({
+	ingredients = {"default:bamboo"},
+	results = {"default:bamboo_slats 2"},
+})
+
+qts.register_craft({
+		ingredients = {"default:bamboo_slats 2"},
+		results = {"default:bamboo_fence 4"},
+		near = {"group:workbench"},
+	})
+
+--mushroom derivatives
+qts.register_craft({
+	ingredients = {"default:mycelium", "default:blue_mushroom_cap"},
+	results = {"default:blue_mushroom_plates 2"},
+})
+
+qts.register_craft({
+	ingredients = {"default:blue_mushroom_trunk"},
+	results = {"default:blue_mushroom_slats 4"},
+})
+
+qts.register_craft({
+		ingredients = {"default:blue_mushroom_slats 2"},
+		results = {"default:blue_mushroom_fence 4"},
+		near = {"group:workbench"},
+	})
+
+qts.register_craft({
+	ingredients = {"default:mycelium", "default:gold_mushroom_cap"},
+	results = {"default:gold_mushroom_plates 2"},
+})
+
+qts.register_craft({
+	ingredients = {"default:gold_mushroom_trunk"},
+	results = {"default:gold_mushroom_slats 4"},
+})
+
+qts.register_craft({
+		ingredients = {"default:gold_mushroom_slats 2"},
+		results = {"default:gold_mushroom_fence 4"},
+		near = {"group:workbench"},
+	})
+
+qts.register_craft({
+	ingredients = {"default:mycelium", "default:brown_mushroom_cap"},
+	results = {"default:brown_mushroom_plates 2"},
+})
+
+qts.register_craft({
+	ingredients = {"default:brown_mushroom_trunk"},
+	results = {"default:brown_mushroom_slats 4"},
+})
+
+qts.register_craft({
+		ingredients = {"default:brow_mushroom_slats 2"},
+		results = {"default:brown_mushroom_fence 4"},
+		near = {"group:workbench"},
+	})
+]]
+--[[
+	--planks
+	qts.register_craft({
+		ingredients = {"default:"..n.."_log 1"},
+		results = {"default:"..n.."_wood_planks 4"},
+	})
+	
+	qts.register_craft({
+		ingredients = {"default:stripped_"..n.."_log 1"},
+		results = {"default:"..n.."_wood_planks 4"},
+	})
+	--fences
+	qts.register_craft({
+		ingredients = {"default:"..n.."_wood_planks 2"},
+		results = {"default:"..n.."_wood_fence 4"},
+		near = {"group:workbench"},
+	})
+	]]
+
+	--[[
+local TREE_TIME = 390
+local TREE_VAR = 30
+
+qts.register_growable_node("default:oak_sapling", {
+	description = "Oak Sapling",
+	tiles ={"default_oak_leaves.png", "default_oak_leaves.png", 
+		"default_oak_leaves.png^[lowpart:37:default_oak_side.png"},
+	use_texture_alpha = "clip",
+	groups = {snappy=3, flammable=2, sapling=1, generation_replacable=1},
+	sounds = qtcore.node_sound_stone(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = qtcore.nb_sapling(),
+	paramtype2 = "facedir",
+	
+	growable_nodes = {"group:soil"},
+	grow_timer = TREE_TIME,
+	grow_timer_random = TREE_VAR,
+	on_grow = function(pos)
+		minetest.log("info","An Oak tree has grown at "..minetest.pos_to_string(pos))
+		minetest.set_node(pos, {name = "air"})
+		qtcore.grow_oak_tree(pos)
+	end,
+})
+
+qts.register_growable_node("default:aspen_sapling", {
+	description = "Aspen Sapling",
+	tiles ={"default_aspen_leaves.png", "default_aspen_leaves.png", 
+		"default_aspen_leaves.png^[lowpart:37:default_aspen_side.png"},
+	use_texture_alpha = "clip",
+	groups = {snappy=3, flammable=2, sapling=1, generation_replacable=1},
+	sounds = qtcore.node_sound_stone(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = qtcore.nb_sapling(),
+	paramtype2 = "facedir",
+	
+	growable_nodes = {"group:soil"},
+	grow_timer = TREE_TIME,
+	grow_timer_random = TREE_VAR,
+	on_grow = function(pos)
+		minetest.log("info","An Aspen tree has grown at "..minetest.pos_to_string(pos))
+		minetest.set_node(pos, {name = "air"})
+		qtcore.grow_aspen_tree(pos)
+	end,
+})
+
+qts.register_growable_node("default:apple_sapling", {
+	description = "Apple Sapling",
+	tiles ={"default_apple_leaves.png", "default_apple_leaves.png", 
+		"default_apple_leaves.png^[lowpart:37:default_apple_side.png"},
+	use_texture_alpha = "clip",
+	groups = {snappy=3, flammable=2, sapling=1, generation_replacable=1},
+	sounds = qtcore.node_sound_stone(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = qtcore.nb_sapling(),
+	paramtype2 = "facedir",
+	
+	growable_nodes = {"group:soil"},
+	grow_timer = TREE_TIME,
+	grow_timer_random = TREE_VAR,
+	on_grow = function(pos)
+		minetest.log("info","An Apple tree has grown at "..minetest.pos_to_string(pos))
+		minetest.set_node(pos, {name = "air"})
+		qtcore.grow_apple_tree(pos)
+	end,
+})
+
+
+
+qts.register_growable_node("default:rowan_sapling", {
+	description = "Rowan Sapling",
+	tiles ={"default_rowan_leaves.png", "default_rowan_leaves.png", 
+		"default_rowan_leaves.png^[lowpart:37:default_rowan_side.png"},
+	use_texture_alpha = "clip",
+	groups = {snappy=3, flammable=2, sapling=1, generation_replacable=1},
+	sounds = qtcore.node_sound_stone(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = qtcore.nb_sapling(),
+	paramtype2 = "facedir",
+	
+	growable_nodes = {"group:soil"},
+	grow_timer = TREE_TIME,
+	grow_timer_random = TREE_VAR,
+	on_grow = function(pos)
+		minetest.log("info","An Rowan tree has grown at "..minetest.pos_to_string(pos))
+		minetest.set_node(pos, {name = "air"})
+		qtcore.grow_rowan_tree(pos)
+	end,
+})
+
+qts.register_growable_node("default:lanternfruit_sapling", {
+	description = "Lanternfruit Sapling",
+	tiles ={"default_lanternfruit_leaves.png", "default_lanternfruit_leaves.png", 
+		"default_lanternfruit_leaves.png^[lowpart:37:default_lanternfruit_side.png"},
+	use_texture_alpha = "clip",
+	groups = {snappy=3, flammable=2, sapling=1, generation_replacable=1},
+	sounds = qtcore.node_sound_stone(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = qtcore.nb_sapling(),
+	paramtype2 = "facedir",
+	
+	growable_nodes = {"group:soil"},
+	grow_timer = TREE_TIME,
+	grow_timer_random = TREE_VAR,
+	on_grow = function(pos)
+		minetest.log("info","An Lanternfruit tree has grown at "..minetest.pos_to_string(pos))
+		minetest.set_node(pos, {name = "air"})
+		qtcore.grow_lantern_tree(pos)
+	end,
+})
+
+qts.register_growable_node("default:coffeetree_sapling", {
+	description = "Coffeetree Sapling",
+	tiles ={"default_coffee_leaves.png", "default_coffee_leaves.png", 
+		"default_coffee_leaves.png^[lowpart:37:default_coffee_side.png"},
+	use_texture_alpha = "clip",
+	groups = {snappy=3, flammable=2, sapling=1, generation_replacable=1},
+	sounds = qtcore.node_sound_stone(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = qtcore.nb_sapling(),
+	paramtype2 = "facedir",
+	
+	growable_nodes = {"group:soil"},
+	grow_timer = TREE_TIME,
+	grow_timer_random = TREE_VAR,
+	on_grow = function(pos)
+		minetest.log("info","An Coffeetree has grown at "..minetest.pos_to_string(pos))
+		minetest.set_node(pos, {name = "air"})
+		qtcore.grow_coffee_tree(pos)
+	end,
+})
+
+qts.register_growable_node("default:mahogany_sapling", {
+	description = "Mahogany Sapling",
+	tiles ={"default_mahogany_leaves.png", "default_mahogany_leaves.png", 
+		"default_mahogany_leaves.png^[lowpart:37:default_mahogany_side.png"},
+	use_texture_alpha = "clip",
+	groups = {snappy=3, flammable=2, sapling=1, generation_replacable=1},
+	sounds = qtcore.node_sound_stone(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = qtcore.nb_sapling(),
+	paramtype2 = "facedir",
+	
+	growable_nodes = {"group:soil"},
+	grow_timer = TREE_TIME,
+	grow_timer_random = TREE_VAR,
+	on_grow = function(pos)
+		minetest.log("info","An Mahogany tree has grown at "..minetest.pos_to_string(pos))
+		minetest.set_node(pos, {name = "air"})
+		qtcore.grow_mahogany_tree(pos)
+	end,
+})
+
+
+
+qts.register_growable_node("default:rosewood_sapling", {
+	description = "Rosewood Sapling",
+	tiles ={"default_rosewood_leaves.png", "default_rosewood_leaves.png", 
+		"default_rosewood_leaves.png^[lowpart:37:default_rosewood_side.png"},
+	use_texture_alpha = "clip",
+	groups = {snappy=3, flammable=2, sapling=1, generation_replacable=1},
+	sounds = qtcore.node_sound_stone(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = qtcore.nb_sapling(),
+	paramtype2 = "facedir",
+	
+	growable_nodes = {"group:soil"},
+	grow_timer = TREE_TIME,
+	grow_timer_random = TREE_VAR,
+	on_grow = function(pos)
+		minetest.log("info","A Rosewood tree has grown at "..minetest.pos_to_string(pos))
+		minetest.set_node(pos, {name = "air"})
+		qtcore.grow_rosewood_tree(pos)
+	end,
+})
+
+qts.register_growable_node("default:palm_sapling", {
+	description = "Palm Sapling",
+	tiles ={"default_palm_leaves.png", "default_palm_leaves.png", 
+		"default_palm_leaves.png^[lowpart:37:default_palm_side.png"},
+	use_texture_alpha = "clip",
+	groups = {snappy=3, flammable=2, sapling=1, generation_replacable=1},
+	sounds = qtcore.node_sound_stone(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = qtcore.nb_sapling(),
+	paramtype2 = "facedir",
+	
+	growable_nodes = {"group:soil"},
+	grow_timer = TREE_TIME,
+	grow_timer_random = TREE_VAR,
+	on_grow = function(pos)
+		minetest.log("info","A Palm tree has grown at "..minetest.pos_to_string(pos))
+		minetest.set_node(pos, {name = "air"})
+		qtcore.grow_palm_tree(pos)
+	end,
+})
+
+qts.register_growable_node("default:pine_sapling", {
+	description = "Pine Sapling",
+	tiles ={"default_pine_needles.png", "default_pine_needles.png", 
+		"default_pine_needles.png^[lowpart:37:default_pine_side.png"},
+	use_texture_alpha = "clip",
+	groups = {snappy=3, flammable=2, sapling=1, generation_replacable=1},
+	sounds = qtcore.node_sound_stone(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = qtcore.nb_sapling(),
+	paramtype2 = "facedir",
+	
+	growable_nodes = {"group:soil"},
+	grow_timer = TREE_TIME,
+	grow_timer_random = TREE_VAR,
+	on_grow = function(pos)
+		minetest.log("info","A pine tree has grown at "..minetest.pos_to_string(pos))
+		minetest.set_node(pos, {name = "air"})
+		qtcore.grow_pine_tree(pos)
+	end,
 })
 ]]

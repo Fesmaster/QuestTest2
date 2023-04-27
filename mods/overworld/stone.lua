@@ -71,53 +71,7 @@ qtcore.register_artistic_nodes("overworld:marble",{
 })
 
 
---Bricks
-qts.register_shaped_node ("overworld:brick", {
-	description = "Brick",
-	tiles = {"default_brick.png"},
-	groups = {cracky=3, bricks=1, generation_artificial=1},
-	is_ground_content = false,
-	sounds = qtcore.node_sound_stone(),
-	paramtype2 = "color",
-	palette = "default_palette_paint_light.png",
-})
 
-qts.register_shaped_node ("overworld:brick_gray", {
-	description = "Gray Brick",
-	tiles = {"default_brick_gray.png"},
-	groups = {cracky=3, bricks=1, stone=1, gray_stone=1, generation_artificial=1},
-	is_ground_content = false,
-	sounds = qtcore.node_sound_stone(),
-	paramtype2 = "color",
-	palette = "default_palette_paint_light.png",
-})
-
-qts.register_fencelike_node("overworld:brick_wall", {
-	description = "Brick Wall",
-	type = "wall",
-	tiles = {"default_brick.png"},
-	groups = {cracky=3, stone=1, grey_stone=1},
-	sounds = qtcore.node_sound_stone(),
-	paramtype2 = "color",
-	palette = "default_palette_paint_light.png",
-})
-qts.register_fencelike_node("overworld:brick_gray_wall", {
-	description = "Gray Brick Wall",
-	type = "wall",
-	tiles = {"default_brick_gray.png"},
-	groups = {cracky=3, stone=1, grey_stone=1},
-	sounds = qtcore.node_sound_stone(),
-	paramtype2 = "color",
-	palette = "default_palette_paint_light.png",
-})
-
---others
-qts.register_shaped_node("overworld:cement", {
-	description = "Cement",
-	tiles = {"default_cement.png"},
-	groups = {cracky=3, explode_resistance=10},
-	sounds = qtcore.node_sound_stone(),
-})
 
 
 --[[
@@ -338,3 +292,92 @@ qts.register_fencelike_node("default:desert_sandstone_cobble_wall", {
 ]]
 
 
+--[[
+--gray stone
+qts.register_craft({
+	ingredients = {"group:gray_stone"},
+	results = {"default:stone"},
+	near = {"group:workbench_heavy"},
+})
+qts.register_craft({
+	ingredients = {"group:gray_stone"},
+	results = {"default:stone_cobble"},
+	near = {"group:workbench_heavy"},
+})
+
+qts.register_craft({
+	ingredients = {"group:gray_stone"},
+	results = {"default:stone_cobble_wall"},
+	near = {"group:workbench_heavy"},
+})
+--moss stone
+qts.register_craft({
+	ingredients = {"group:mossy_stone"},
+	results = {"default:moss_stone"},
+	near = {"group:workbench_heavy"},
+})
+qts.register_craft({
+	ingredients = {"group:mossy_stone"},
+	results = {"default:moss_stone_cobble"},
+	near = {"group:workbench_heavy"},
+})
+qts.register_craft({
+	ingredients = {"group:mossy_stone"},
+	results = {"default:moss_stone_cobble_wall"},
+	near = {"group:workbench_heavy"},
+})
+--red stone
+qts.register_craft({
+	ingredients = {"group:red_stone"},
+	results = {"default:red_stone"},
+	near = {"group:workbench_heavy"},
+})
+qts.register_craft({
+	ingredients = {"group:red_stone"},
+	results = {"default:red_stone_cobble"},
+	near = {"group:workbench_heavy"},
+})
+qts.register_craft({
+	ingredients = {"group:red_stone"},
+	results = {"default:red_stone_cobble_wall"},
+	near = {"group:workbench_heavy"},
+})
+--sandstone
+qts.register_craft({
+	ingredients = {"group:sand_stone"},
+	results = {"default:sandstone"},
+	near = {"group:workbench_heavy"},
+})
+qts.register_craft({
+	ingredients = {"group:sand_stone"},
+	results = {"default:sandstone_cobble"},
+	near = {"group:workbench_heavy"},
+})
+qts.register_craft({
+	ingredients = {"group:sand_stone"},
+	results = {"default:sandstone_cobble_wall"},
+	near = {"group:workbench_heavy"},
+})
+--desert sandstone
+qts.register_craft({
+	ingredients = {"group:desert_stone"},
+	results = {"default:desert_sandstone"},
+	near = {"group:workbench_heavy"},
+})
+qts.register_craft({
+	ingredients = {"group:desert_stone"},
+	results = {"default:desert_sandstone_cobble"},
+	near = {"group:workbench_heavy"},
+})
+qts.register_craft({
+	ingredients = {"group:desert_stone"},
+	results = {"default:desert_sandstone_cobble_wall"},
+	near = {"group:workbench_heavy"},
+})
+--obsidian
+qts.register_craft({
+	ingredients = {"group:obsidian"},
+	results = {"default:obsidian"},
+	near = {"group:workbench_heavy"},
+})
+]]

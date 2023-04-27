@@ -2,22 +2,7 @@
 --wood permutations
 local names = {"swamp", "rosewood", "pine", "oak", "mahogany", "lanternfruit", "coffee", "aspen", "apple", "rowan"}
 for i, n in ipairs(names) do
-	--planks
-	qts.register_craft({
-		ingredients = {"default:"..n.."_log 1"},
-		results = {"default:"..n.."_wood_planks 4"},
-	})
 	
-	qts.register_craft({
-		ingredients = {"default:stripped_"..n.."_log 1"},
-		results = {"default:"..n.."_wood_planks 4"},
-	})
-	--fences
-	qts.register_craft({
-		ingredients = {"default:"..n.."_wood_planks 2"},
-		results = {"default:"..n.."_wood_fence 4"},
-		near = {"group:workbench"},
-	})
 	--crates
 	qts.register_craft({
 		ingredients = {"default:"..n.."_wood_planks 4"},
@@ -32,113 +17,15 @@ for i, n in ipairs(names) do
 	})
 end
 
-qts.register_craft({
-	ingredients = {"default:bamboo"},
-	results = {"default:bamboo_slats 2"},
-})
-
-qts.register_craft({
-		ingredients = {"default:bamboo_slats 2"},
-		results = {"default:bamboo_fence 4"},
-		near = {"group:workbench"},
-	})
---mushroom derivatives
-qts.register_craft({
-	ingredients = {"default:mycelium", "default:blue_mushroom_cap"},
-	results = {"default:blue_mushroom_plates 2"},
-})
-
-qts.register_craft({
-	ingredients = {"default:blue_mushroom_trunk"},
-	results = {"default:blue_mushroom_slats 4"},
-})
-
-qts.register_craft({
-		ingredients = {"default:blue_mushroom_slats 2"},
-		results = {"default:blue_mushroom_fence 4"},
-		near = {"group:workbench"},
-	})
-
-qts.register_craft({
-	ingredients = {"default:mycelium", "default:gold_mushroom_cap"},
-	results = {"default:gold_mushroom_plates 2"},
-})
-
-qts.register_craft({
-	ingredients = {"default:gold_mushroom_trunk"},
-	results = {"default:gold_mushroom_slats 4"},
-})
-
-qts.register_craft({
-		ingredients = {"default:gold_mushroom_slats 2"},
-		results = {"default:gold_mushroom_fence 4"},
-		near = {"group:workbench"},
-	})
-
-qts.register_craft({
-	ingredients = {"default:mycelium", "default:brown_mushroom_cap"},
-	results = {"default:brown_mushroom_plates 2"},
-})
-
-qts.register_craft({
-	ingredients = {"default:brown_mushroom_trunk"},
-	results = {"default:brown_mushroom_slats 4"},
-})
-
-qts.register_craft({
-		ingredients = {"default:brow_mushroom_slats 2"},
-		results = {"default:brown_mushroom_fence 4"},
-		near = {"group:workbench"},
-	})
 
 --knife recipies
 
 
-qts.register_craft({
-	ingredients = {"group:wood"},
-	results = {"default:tinder 4"},
-	held = {"group:knife"},
-})
-qts.register_craft({
-	ingredients = {"group:wood"},
-	results = {"default:stick 16"},
-	held = {"group:knife"},
-})
-qts.register_craft({
-	ingredients = {"group:leaves"},
-	results = {"default:tinder"},
-	held = {"group:knife"},
-})
-qts.register_craft({
-	ingredients = {"group:underbrush"},
-	results = {"default:tinder"},
-	held = {"group:knife"},
-})
-qts.register_craft({
-	ingredients = {"group:wood", "default:tinder", "default:flint"},
-	results = {"default:tinderbox"},
-	near = {"group:workbench"},
-})
+
 
 
 
 --various other
-qts.register_craft({
-	ingredients = {"group:wood 5"},
-	results = {"default:campfire"},
-})
-
-qts.register_craft({
-	ingredients = {"default:brick_item 4"},
-	results = {"default:brick"},
-	near = {"group:workbench"},
-})
-
-qts.register_craft({
-	ingredients = {"default:lime", "group:sand 4"},
-	results = {"default:cement 4"},
-})
-
 qts.register_craft({
 	ingredients = {"default:clay_lump 4"},
 	results = {"overworld:clay"},
@@ -154,44 +41,9 @@ qts.register_craft({
 	results = {"default:poltice_milfoil"},
 })
 
-
-
 qts.register_craft({
 	ingredients = {"default:herb_flax 6"},
 	results = {"default:textile_flax"},
-})
-
-
-
-qts.register_craft({
-	ingredients = {"group:wood", "group:coal"},
-	results = {"default:torch 4",},
-})
-
-qts.register_craft({
-	ingredients = {"default:reeds 2"},
-	results = {"default:paper"},
-})
-
-qts.register_craft({
-	ingredients = {"default:paper 2"},
-	results = {"default:book"},
-})
-
-qts.register_craft({
-	ingredients = {"group:wood 4"},
-	results = {"default:workbench",},
-})
-
-qts.register_craft({
-	ingredients = {"group:wood 4", "default:underbrush_item 4"},
-	results = {"default:sifter"},
-	near = {"group:workbench"},
-})
-
-qts.register_craft({
-	ingredients = {"default:workbench", "default:iron_bar 4"},
-	results = {"default:workbench_heavy",},
 })
 
 --weapons and tools
@@ -390,43 +242,6 @@ qts.register_craft({
 })
 
 --stone and stone walls (and bricks)
---gray stone
-qts.register_craft({
-	ingredients = {"group:gray_stone"},
-	results = {"default:stone"},
-	near = {"group:workbench_heavy"},
-})
-qts.register_craft({
-	ingredients = {"group:gray_stone"},
-	results = {"default:stone_cobble"},
-	near = {"group:workbench_heavy"},
-})
-qts.register_craft({
-	ingredients = {"group:gray_stone"},
-	results = {"default:brick_gray"},
-	near = {"group:workbench_heavy"},
-})
-qts.register_craft({
-	ingredients = {"group:gray_stone"},
-	results = {"default:stone_cobble_wall"},
-	near = {"group:workbench_heavy"},
-})
---moss stone
-qts.register_craft({
-	ingredients = {"group:mossy_stone"},
-	results = {"default:moss_stone"},
-	near = {"group:workbench_heavy"},
-})
-qts.register_craft({
-	ingredients = {"group:mossy_stone"},
-	results = {"default:moss_stone_cobble"},
-	near = {"group:workbench_heavy"},
-})
-qts.register_craft({
-	ingredients = {"group:mossy_stone"},
-	results = {"default:moss_stone_cobble_wall"},
-	near = {"group:workbench_heavy"},
-})
 --understone
 qts.register_craft({
 	ingredients = {"group:understone"},
@@ -441,78 +256,6 @@ qts.register_craft({
 qts.register_craft({
 	ingredients = {"group:understone"},
 	results = {"default:understone_cobble_wall"},
-	near = {"group:workbench_heavy"},
-})
---red stone
-qts.register_craft({
-	ingredients = {"group:red_stone"},
-	results = {"default:red_stone"},
-	near = {"group:workbench_heavy"},
-})
-qts.register_craft({
-	ingredients = {"group:red_stone"},
-	results = {"default:red_stone_cobble"},
-	near = {"group:workbench_heavy"},
-})
-qts.register_craft({
-	ingredients = {"group:red_stone"},
-	results = {"default:red_stone_cobble_wall"},
-	near = {"group:workbench_heavy"},
-})
---sandstone
-qts.register_craft({
-	ingredients = {"group:sand_stone"},
-	results = {"default:sandstone"},
-	near = {"group:workbench_heavy"},
-})
-qts.register_craft({
-	ingredients = {"group:sand_stone"},
-	results = {"default:sandstone_cobble"},
-	near = {"group:workbench_heavy"},
-})
-qts.register_craft({
-	ingredients = {"group:sand_stone"},
-	results = {"default:sandstone_cobble_wall"},
-	near = {"group:workbench_heavy"},
-})
---desert sandstone
-qts.register_craft({
-	ingredients = {"group:desert_stone"},
-	results = {"default:desert_sandstone"},
-	near = {"group:workbench_heavy"},
-})
-qts.register_craft({
-	ingredients = {"group:desert_stone"},
-	results = {"default:desert_sandstone_cobble"},
-	near = {"group:workbench_heavy"},
-})
-qts.register_craft({
-	ingredients = {"group:desert_stone"},
-	results = {"default:desert_sandstone_cobble_wall"},
-	near = {"group:workbench_heavy"},
-})
---obsidian
-qts.register_craft({
-	ingredients = {"group:obsidian"},
-	results = {"default:obsidian"},
-	near = {"group:workbench_heavy"},
-})
-
---brick
-qts.register_craft({
-	ingredients = {"group:brick"},
-	results = {"default:brick"},
-	near = {"group:workbench_heavy"},
-})
-
-qts.register_craft({
-	ingredients = {"default:brick"},
-	results = {"default:brick_wall"},
-	near = {"group:workbench_heavy"},
-})
-qts.register_craft({
-	ingredients = {"default:brick_gray"},
-	results = {"default:brick_gray_wall"},
 	near = {"group:workbench_heavy"},
 })
 
@@ -854,15 +597,3 @@ qts.register_craft({
 	near = {"group:ttable", "default:alchemy_equipment_basic"}
 })
 
---bark crafting (temp)
-local woodtypes={"oak", "apple", "aspen", "coffee", "mahogany", "rosewood", "pine", "lanternfruit", "rowan"}
-local woodnames={"Oak", "Apple", "Aspen", "Coffee", "Mahogany", "Rosewood", "Pine", "Lanternfruit", "Rowan"}
-
-for i, wood in ipairs(woodtypes) do
-	qts.register_craft({
-		ingredients = {"default:"..wood.."_log"},
-		results = {"default:stripped_"..wood.."_log", "default:bark_"..wood.. " 4"},
-		near = {"group:workbench"},
---		held = {"group:knife"},
-	})
-end

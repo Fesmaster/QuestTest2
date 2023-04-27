@@ -16,6 +16,7 @@ dofile(minetest.get_modpath("qtcore").."/forms.lua")
 dofile(minetest.get_modpath("qtcore").."/trees.lua")
 dofile(minetest.get_modpath("qtcore").."/deconodes.lua")
 dofile(minetest.get_modpath("qtcore").."/fire.lua")
+dofile(minetest.get_modpath("qtcore").."/materials.lua")
 --[[
 Random functions are placed here
 --]]
@@ -66,3 +67,10 @@ minetest.register_node(":default:default", {
 minetest.override_item("air", {
 	groups={not_in_creative_inventory = 1, generation_replacable=1}
 })
+
+---make the first letter of a string Upper Case
+---@param str string
+---@return string
+function qtcore.string_first_to_upper(str)
+    return (str:gsub("^%l", string.upper))
+end

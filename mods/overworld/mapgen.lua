@@ -2,6 +2,16 @@
 -- Aliases for map generator outputs
 --
 
+--[[
+	DEAL WITH THESE:
+
+	NodeResolver: failed to resolve node name 'default:palm_leaves'.
+	NodeResolver: failed to resolve node name 'default:palm_log'.
+	NodeResolver: failed to resolve node name 'default:natural_coconut'.
+	NodeResolver: failed to resolve node name 'default:coffeetree_leaves'.
+	NodeResolver: failed to resolve node name 'default:lantern_fruit'.
+	NodeResolver: failed to resolve node name 'default:lantern_fruit'.
+]]
 
 qts.worldgen.set_mapgen_defaults("overworld:stone", "default:water_source", "default:river_water_source")
 
@@ -30,7 +40,7 @@ qts.worldgen.register_biome("grasslands", {
 	surface = "overworld:dirt_with_grass",
 	fill = "overworld:dirt",
 	stone = "overworld:stone",
-	plant = {"default:grass_tall", "default:grass_short", "default:flower_kniphofia", "default:flower_chicory"},
+	plant = {"overworld:grass_tall", "overworld:grass_short", "overworld:flower_kniphofia", "overworld:flower_chicory"},
 	plant_freq = 10,
 	surface_depth = 1,
 	fill_depth = 2,
@@ -48,7 +58,7 @@ qts.worldgen.register_biome("woods", {
 	surface = "overworld:dirt_with_grass",
 	fill = "overworld:dirt",
 	stone = "overworld:stone",
-	plant = {"default:grass_tall", "default:grass_short", "default:flower_violet", "default:bonewort"},
+	plant = {"overworld:grass_tall", "overworld:grass_short", "overworld:flower_violet", "overworld:bonewort"},
 	plant_freq = 10,
 	surface_depth = 1,
 	fill_depth = 2,
@@ -66,7 +76,7 @@ qts.worldgen.register_biome("prarie", {
 	surface = "overworld:dirt_with_prarie_grass",
 	fill = "overworld:dirt",
 	stone = "overworld:stone",
-	plant = {"default:grass_dry_tall", "default:grass_dry_short"},
+	plant = {"overworld:grass_dry_tall", "overworld:grass_dry_short"},
 	plant_freq = 10,
 	surface_depth = 1,
 	fill_depth = 3,
@@ -84,7 +94,7 @@ qts.worldgen.register_biome("swamp", {
 	surface = {"overworld:dirt_with_swamp_grass"},
 	fill = {"overworld:dirt_swamp"},
 	stone = {"overworld:stone"},
-	plant = {"default:swamp_plant", "default:flower_iris"},
+	plant = {"overworld:swamp_plant", "overworld:flower_iris"},
 	plant_freq = 10,
 	surface_depth = 1,
 	fill_depth = 5,
@@ -102,7 +112,7 @@ qts.worldgen.register_biome("rainforest", {
 	surface = {"overworld:dirt_with_rainforest_grass"},
 	fill = "overworld:dirt",
 	stone = "overworld:stone",
-	plant = {"default:underbrush_short","default:underbrush_tall","default:herb_mureux_ripe", "default:bonewort"},
+	plant = {"overworld:underbrush_short","overworld:underbrush_tall","default:herb_mureux_ripe", "overworld:bonewort"},
 	plant_freq = 2,
 	surface_depth = 1,
 	fill_depth = 5,
@@ -120,7 +130,7 @@ qts.worldgen.register_biome("mushroom_forest", {
 	surface = {"overworld:dirt_with_mushroom_grass"},
 	fill = {"overworld:dirt"},
 	stone = {"overworld:stone"},
-	plant = {"default:small_mushroom"},
+	plant = {"overworld:small_mushroom"},
 	plant_freq = 7,
 	surface_depth = 1,
 	fill_depth = 5,
@@ -192,7 +202,7 @@ qts.worldgen.register_biome("beach", {
 	surface = "overworld:sand",
 	fill = {"overworld:sand","overworld:sandstone"},
 	stone = "overworld:sandstone",
-	plant = {"default:beach_grass"},
+	plant = {"overworld:beach_grass"},
 	plant_freq = 20,
 	underwater = "overworld:sand",
 	surface_depth = 2,
@@ -216,6 +226,8 @@ qts.worldgen.register_biome("underwater", {
 	stone_depth = 10,
 })
 --]]
+
+--TODO: move this to caverealm mod.
 qts.worldgen.register_biome("caverealm", {
 	heat_point = 50,
 	humidity_point = 50,
@@ -363,21 +375,9 @@ minetest.register_ore({
 })
 
 --Coal
---[[
 minetest.register_ore({
 	ore_type       = "scatter",
-	ore            = "default:stone_with_coal",
-	wherein        = "overworld:stone",
-	clust_scarcity = 12 * 12 * 12,
-	clust_num_ores = 9,
-	clust_size     = 3,
-	y_max          = 31000,
-	y_min          = 1025,
-})
---]]
-minetest.register_ore({
-	ore_type       = "scatter",
-	ore            = "default:stone_with_coal",
+	ore            = "overworld:stone_with_coal",
 	wherein        = "overworld:stone",
 	clust_scarcity = 10 * 10 * 10,
 	clust_num_ores = 8,
@@ -388,7 +388,7 @@ minetest.register_ore({
 
 minetest.register_ore({
 	ore_type       = "scatter",
-	ore            = "default:stone_with_coal",
+	ore            = "overworld:stone_with_coal",
 	wherein        = "overworld:stone",
 	clust_scarcity = 16 * 16 * 16,
 	clust_num_ores = 16,
@@ -420,18 +420,7 @@ minetest.register_ore({
 	y_max          = -64,
 	y_min          = -127,
 })
---[[
-minetest.register_ore({
-	ore_type       = "scatter",
-	ore            = "default:stone_with_tin",
-	wherein        = "overworld:stone",
-	clust_scarcity = 10 * 10 * 10,
-	clust_num_ores = 5,
-	clust_size     = 3,
-	y_max          = -128,
-	y_min          = -31000,
-})
---]]
+
 
 -- Copper
 minetest.register_ore({
@@ -455,18 +444,6 @@ minetest.register_ore({
 	y_max          = -64,
 	y_min          = -127,
 })
---[[
-minetest.register_ore({
-	ore_type       = "scatter",
-	ore            = "default:stone_with_copper",
-	wherein        = "overworld:stone",
-	clust_scarcity = 9 * 9 * 9,
-	clust_num_ores = 5,
-	clust_size     = 3,
-	y_max          = -128,
-	y_min          = -31000,
-})
---]]
 
 -- Iron
 minetest.register_ore({
@@ -517,28 +494,33 @@ minetest.register_ore({
 
 
 --jems
+--[[
 local jems = {
-	"default:stone_with_ruby",
-	"default:stone_with_fire_opal",
-	"default:stone_with_citrine",
-	"default:stone_with_emerald",
-	"default:stone_with_diamond",
-	"default:stone_with_sapphire",
-	"default:stone_with_amathest",
-	"default:stone_with_oynx",
+	"overworld:stone_with_ruby",
+	"overworld:stone_with_fire_opal",
+	"overworld:stone_with_citrine",
+	"overworld:stone_with_emerald",
+	"overworld:stone_with_diamond",
+	"overworld:stone_with_sapphire",
+	"overworld:stone_with_amathest",
+	"overworld:stone_with_oynx",
 }
 for key, jem in ipairs(jems) do
-	minetest.register_ore({
-		ore_type       = "scatter",
-		ore            = jem,
-		wherein        = "overworld:stone",
-		clust_scarcity = 30 * 30 * 30,
-		clust_num_ores = 4,
-		clust_size     = 2,
-		y_max          = -256,
-		y_min          = -1024,
-	})
-end
+]]
+qtcore.for_all_materials("jem", function(fields)
+	if fields.ore then
+		minetest.register_ore({
+			ore_type       = "scatter",
+			ore            = fields.ore,
+			wherein        = "overworld:stone",
+			clust_scarcity = 30 * 30 * 30,
+			clust_num_ores = 4,
+			clust_size     = 2,
+			y_max          = -256,
+			y_min          = -1024,
+		})
+	end
+end)
 
 
 --[[
