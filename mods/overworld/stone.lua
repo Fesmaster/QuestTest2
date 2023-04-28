@@ -71,8 +71,16 @@ qtcore.register_artistic_nodes("overworld:marble",{
 })
 
 
-
-
+--ice
+qts.register_shaped_node("overworld:ice", {
+	description = "Ice",
+	tiles = {"default_ice.png"},
+	use_texture_alpha = "blend",
+	drawtype = "glasslike",
+	paramtype = "light",
+	groups = {cracky=3, ice=1, cooling=1, slippery=4, generation_ground=1},
+	sounds = qtcore.node_sound_metal(),
+})
 
 --[[
 

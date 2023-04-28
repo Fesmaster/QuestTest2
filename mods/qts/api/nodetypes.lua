@@ -388,7 +388,7 @@ local function register_bucket_full(bucketid, liquidid)
 	local source_name = liquid_data.name.."_source"
 
 	--yes, this is about as insane as it looks. go for it!
-	minetest.register_craftitem(bucket_data.name .. to_bucket_name(liquid_data.name), {
+	minetest.register_craftitem(":"..bucket_data.name .. to_bucket_name(liquid_data.name), {
 		description = bucket_data.desc .. " of " .. liquid_data.desc,
 		inventory_image = bucket_data.image.."^"..liquid_data.image,
 		groups = groups,

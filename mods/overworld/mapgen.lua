@@ -13,7 +13,7 @@
 	NodeResolver: failed to resolve node name 'default:lantern_fruit'.
 ]]
 
-qts.worldgen.set_mapgen_defaults("overworld:stone", "default:water_source", "default:river_water_source")
+qts.worldgen.set_mapgen_defaults("overworld:stone", "overworld:water_source", "overworld:river_water_source")
 
 --[[
 	heat_point = number
@@ -198,7 +198,6 @@ qts.worldgen.register_biome("beach", {
 	max_ground_height = 5,
 	min_light = 0,--half
 	min_air = 10,
-	--dust = "air",
 	surface = "overworld:sand",
 	fill = {"overworld:sand","overworld:sandstone"},
 	stone = "overworld:sandstone",
@@ -209,7 +208,7 @@ qts.worldgen.register_biome("beach", {
 	fill_depth = 4,
 	stone_depth = 10,
 })
----[[
+
 qts.worldgen.register_biome("underwater", {
 	heat_point = 50,
 	humidity_point = 50,
@@ -217,34 +216,10 @@ qts.worldgen.register_biome("underwater", {
 	max_ground_height = 0,
 	min_light = 0,--half
 	min_air = 10,
-	--dust = "air",
 	underwater = "overworld:sand",
-	--fill = {"default:sand","default:sandstone"},
-	--stone = "default:sandstone",
 	surface_depth = 2,
 	fill_depth = 4,
 	stone_depth = 10,
-})
---]]
-
---TODO: move this to caverealm mod.
-qts.worldgen.register_biome("caverealm", {
-	heat_point = 50,
-	humidity_point = 50,
-	min_ground_height = -31000,
-	max_ground_height = -300,
-	min_light = 0,
-	min_air = 1,
-	--dust = "air",
-	surface = "default:understone",
-	underwater = "default:understone",
-	--fill = "default:understone",
-	plant = {"default:cave_crystal_blue", "default:cave_crystal_green", "default:cave_crystal_purple"},
-	plant_freq = 10,
-	stone = "default:understone",
-	surface_depth = 12,
-	fill_depth = 12,
-	stone_depth = 0,
 })
 
 qts.worldgen.register_biome("snow", {
@@ -273,7 +248,6 @@ qts.worldgen.register_biome("snow_beach", {
 	min_light = 0,--half
 	min_air = 10,
 	dust = {"overworld:snow"},
-	--dust = nil,
 	surface = "overworld:sand",
 	fill = {"overworld:sand","overworld:sandstone"},
 	stone = "overworld:sandstone",
@@ -327,7 +301,7 @@ minetest.register_ore({
 
 minetest.register_ore({
 	ore_type       = "scatter",
-	ore            = "default:river_water_source",
+	ore            = "overworld:river_water_source",
 	wherein        = {"overworld:dirt_swamp", "overworld:peat"},
 	clust_scarcity = 10 * 10 * 10,
 	clust_num_ores = 8,
@@ -401,7 +375,7 @@ minetest.register_ore({
 -- Tin
 minetest.register_ore({
 	ore_type       = "scatter",
-	ore            = "default:stone_with_tin",
+	ore            = "overworld:stone_with_tin",
 	wherein        = "overworld:stone",
 	clust_scarcity = 16 * 16 * 16,
 	clust_num_ores = 5,
@@ -412,7 +386,7 @@ minetest.register_ore({
 
 minetest.register_ore({
 	ore_type       = "scatter",
-	ore            = "default:stone_with_tin",
+	ore            = "overworld:stone_with_tin",
 	wherein        = "overworld:stone",
 	clust_scarcity = 13 * 13 * 13,
 	clust_num_ores = 6,
@@ -425,7 +399,7 @@ minetest.register_ore({
 -- Copper
 minetest.register_ore({
 	ore_type       = "scatter",
-	ore            = "default:stone_with_copper",
+	ore            = "overworld:stone_with_copper",
 	wherein        = "overworld:stone",
 	clust_scarcity = 12 * 12 * 12,
 	clust_num_ores = 5,
@@ -436,7 +410,7 @@ minetest.register_ore({
 
 minetest.register_ore({
 	ore_type       = "scatter",
-	ore            = "default:stone_with_copper",
+	ore            = "overworld:stone_with_copper",
 	wherein        = "overworld:stone",
 	clust_scarcity = 12 * 12 * 12,
 	clust_num_ores = 8,
@@ -448,7 +422,7 @@ minetest.register_ore({
 -- Iron
 minetest.register_ore({
 	ore_type       = "scatter",
-	ore            = "default:stone_with_iron",
+	ore            = "overworld:stone_with_iron",
 	wherein        = "overworld:stone",
 	clust_scarcity = 7 * 7 * 7,
 	clust_num_ores = 10,
@@ -459,7 +433,7 @@ minetest.register_ore({
 
 minetest.register_ore({
 	ore_type       = "scatter",
-	ore            = "default:stone_with_iron",
+	ore            = "overworld:stone_with_iron",
 	wherein        = "overworld:stone",
 	clust_scarcity = 12 * 12 * 12,
 	clust_num_ores = 20,
@@ -471,7 +445,7 @@ minetest.register_ore({
 --gold
 minetest.register_ore({
 	ore_type       = "scatter",
-	ore            = "default:stone_with_gold",
+	ore            = "overworld:stone_with_gold",
 	wherein        = "overworld:stone",
 	clust_scarcity = 20 * 20 * 20,
 	clust_num_ores = 20,
@@ -483,7 +457,7 @@ minetest.register_ore({
 --silver
 minetest.register_ore({
 	ore_type       = "scatter",
-	ore            = "default:stone_with_silver",
+	ore            = "overworld:stone_with_silver",
 	wherein        = "overworld:stone",
 	clust_scarcity = 20 * 20 * 20,
 	clust_num_ores = 20,
@@ -494,19 +468,6 @@ minetest.register_ore({
 
 
 --jems
---[[
-local jems = {
-	"overworld:stone_with_ruby",
-	"overworld:stone_with_fire_opal",
-	"overworld:stone_with_citrine",
-	"overworld:stone_with_emerald",
-	"overworld:stone_with_diamond",
-	"overworld:stone_with_sapphire",
-	"overworld:stone_with_amathest",
-	"overworld:stone_with_oynx",
-}
-for key, jem in ipairs(jems) do
-]]
 qtcore.for_all_materials("jem", function(fields)
 	if fields.ore then
 		minetest.register_ore({
@@ -544,59 +505,4 @@ qts.worldgen.register_structure("", {
 	rotate = true,
 	flags = qts.worldgen.centers(false, true, false),
 })
-
 --]]
---minetest.register_alias("mapgen_stone", "default:stone")
---minetest.register_alias("mapgen_dirt", "default:dirt")
---minetest.register_alias("mapgen_dirt_with_grass", "overworld:dirt_with_grass")
---minetest.register_alias("mapgen_sand", "default:sand")
---minetest.register_alias("mapgen_water_source", "default:water_source")
---minetest.register_alias("mapgen_river_water_source", "air")
---minetest.register_alias("mapgen_lava_source", "air")
---minetest.register_alias("mapgen_gravel", "default:default")
---
---minetest.register_alias("mapgen_tree", "default:default")
---minetest.register_alias("mapgen_leaves", "default:default")
---minetest.register_alias("mapgen_apple", "default:default")
---minetest.register_alias("mapgen_junglegrass", "default:default")
---
---minetest.register_alias("mapgen_cobble", "default:cobble")
---minetest.register_alias("mapgen_stair_cobble", "default:cobble_stair")
---minetest.register_alias("mapgen_mossycobble", "default:default")
---
---minetest.clear_registered_biomes()
---minetest.clear_registered_decorations()
---
---minetest.register_biome({
---	name = "default:grasslands",
---	--node_dust = "",
---	node_top = "overworld:dirt_with_grass",
---	depth_top = 1,
---	node_filler = "default:dirt",
---	depth_filler = 1,
---	--node_stone = "",
---	--node_water_top = "",
---	--depth_water_top = ,
---	--node_water = "",
---	y_min = 5,
---	y_max = 31000,
---	heat_point = 50,
---	humidity_point = 50,
---})
---
---minetest.register_biome({
---	name = "default:grassland_ocean",
---	--node_dust = "",
---	node_top = "default:default",
---	depth_top = 1,
---	node_filler = "default:default",
---	depth_filler = 2,
---	--node_stone = "",
---	--node_water_top = "",
---	--depth_water_top = ,
---	--node_water = "",
---	y_min = -31000,
---	y_max = 4,
---	heat_point = 50,
---	humidity_point = 50,
---})

@@ -14,6 +14,8 @@ dofile(minetest.get_modpath("craftable").."/book.lua")
 dofile(minetest.get_modpath("craftable").."/campfire.lua")
 dofile(minetest.get_modpath("craftable").."/sifter.lua")
 dofile(minetest.get_modpath("craftable").."/torches.lua")
+dofile(minetest.get_modpath("craftable").."/furnace.lua")
+dofile(minetest.get_modpath("craftable").."/rope.lua")
 
 --crafting only
 dofile(minetest.get_modpath("craftable").."/recipes.lua")

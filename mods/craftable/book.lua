@@ -2,7 +2,7 @@
 local S = qts.gui.gui_makesize
 local P = qts.gui.gui_makepos
 
-qts.gui.register_gui("craftable:book_writeable", {
+qts.gui.register_gui("craftable_book_writeable", {
 	get = function(data, pos, playername)
 		local s = "size[16.03125,12]no_prepend[]bgcolor[#00000000;true]background[0,0;16.03125,12;default_book_UI_background.png]"
         --styling of text here
@@ -78,10 +78,10 @@ minetest.register_craftitem("craftable:book", {
     description="Book",
     inventory_image = "default_book.png",
     on_place = function(itemstack, placer, pointed_thing)
-        qts.gui.show_gui(placer:get_pos(), placer, "craftable:book_writeable")
+        qts.gui.show_gui(placer:get_pos(), placer, "craftable_book_writeable")
     end,
     on_secondary_use = function(itemstack, user, pointed_thing)
-        qts.gui.show_gui(user:get_pos(), user, "craftable:book_writeable")
+        qts.gui.show_gui(user:get_pos(), user, "craftable_book_writeable")
     end,
 })
 

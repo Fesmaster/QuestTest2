@@ -3,20 +3,20 @@
 ]]
 
 local colorstring_from_dye_node_name = {
-	["default:dye_red"] = "red",
-	["default:dye_orange"] = "orange",
-	["default:dye_yellow"] = "yellow",
-	["default:dye_green"] = "green",
-	["default:dye_cyan"] = "cyan",
-	["default:dye_blue"] = "blue",
-	["default:dye_purple"] = "purple",
-	["default:dye_magenta"] = "magenta",
-	["default:dye_white"] = "white",
-	["default:dye_gray"] = "gray",
-	["default:dye_dark_gray"] = "dark_gray",
-	["default:dye_black"] = "black",
-	["default:dye_dark_green"] = "dark_green",
-	["default:dye_brown"] = "brown",
+	["craftable:dye_red"]		= "red",
+	["craftable:dye_orange"]	= "orange",
+	["craftable:dye_yellow"]	= "yellow",
+	["craftable:dye_green"]		= "green",
+	["craftable:dye_cyan"]		= "cyan",
+	["craftable:dye_blue"]		= "blue",
+	["craftable:dye_purple"]	= "purple",
+	["craftable:dye_magenta"]	= "magenta",
+	["craftable:dye_white"]		= "white",
+	["craftable:dye_gray"]		= "gray",
+	["craftable:dye_dark_gray"] = "dark_gray",
+	["craftable:dye_black"] 	= "black",
+	["craftable:dye_dark_green"]= "dark_green",
+	["craftable:dye_brown"]		= "brown",
 }
 
 
@@ -56,7 +56,7 @@ end
 local texturetable = qtcore.armor_cloth_textures(qtcore.colors.white, 79)
 
 --robes
-minetest.register_tool("default:armor_robes", {
+minetest.register_tool("tools:cloth_armor_robes", {
 	description = "Robes",
 	inventory_image = texturetable.robe.item,
 	skin_image = function(entity, itemstack)
@@ -68,7 +68,7 @@ minetest.register_tool("default:armor_robes", {
 })
 
 --capes
-minetest.register_tool("default:armor_cape", {
+minetest.register_tool("tools:cloth_armor_cape", {
 	description = "Cape",
 	inventory_image = texturetable.cloak.item,
 	skin_image = function(entity, itemstack)
@@ -80,7 +80,7 @@ minetest.register_tool("default:armor_cape", {
 })
 
 --hood
-minetest.register_tool("default:armor_hood", {
+minetest.register_tool("tools:cloth_armor_hood", {
 	description = "Hood",
 	inventory_image = texturetable.hood.item,
 	skin_image = function(entity, itemstack)
@@ -92,7 +92,7 @@ minetest.register_tool("default:armor_hood", {
 })
 
 --glove
-minetest.register_tool("default:armor_gloves", {
+minetest.register_tool("tools:cloth_armor_gloves", {
 	description = "Gloves",
 	inventory_image = texturetable.gloves.item,
 	skin_image = function(entity, itemstack)
@@ -104,7 +104,7 @@ minetest.register_tool("default:armor_gloves", {
 })
 
 --boots
-minetest.register_tool("default:armor_boots", {
+minetest.register_tool("tools:cloth_armor_boots", {
 	description = "Boots",
 	inventory_image = texturetable.boots.item,
 	skin_image = function(entity, itemstack)

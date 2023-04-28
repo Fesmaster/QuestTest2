@@ -153,7 +153,10 @@ end
 ]]
 function qts.gui.register_gui(name, def)
 	--minetest.log("form registered")
-	def.name = name
+	def.name = string.gsub(name, ":", "_"); --names cannot have a colen in them: its breaks the fields distributing system.
+	if def.name ~= name then
+		minetest.log("warning", "GUI has been renamed: " .. name .. " to " .. def.name)
+	end
 	if def.get == nil or def.handle == nil then
 		minetest.log("error", "qts.gui.register_form: get() and handle() must be implemented")
 		return
@@ -176,7 +179,7 @@ function qts.gui.register_gui(name, def)
 		--this form is the owner of a tab
 		def.tabs = {}
 	end
-	qts.gui.forms[name] = def
+	qts.gui.forms[def.name] = def
 end
 
 --[[
@@ -306,7 +309,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		inv = true
 	end
 	local formname = formname:split(":")
-	if formname[1] == "qts" and formname[2] then
+	if formname[1] == "qts" and formname[2] and qts.gui.forms[formname[2]] then
 		--found a form registered by this API
 		local handle_func = qts.gui.forms[formname[2]].handle
 		local pname = player:get_player_name()

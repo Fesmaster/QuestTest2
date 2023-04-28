@@ -971,107 +971,112 @@ local Tool_Capabilities = {
 
 ---@alias ItemWear integer 0 - 65535
 
+---Create an itemstack
+---@param param ItemString|ItemTable
+---@return ItemStack
+function ItemStack(param) end
+
 ---@class ItemStack
 local ItemStackDef = {
     ---Check if itemstack is empty
     ---@return boolean
-    is_empty = function() end,
+    is_empty = function(self) end,
 
     ---Get the item name
     ---@return ItemString
-    get_name = function() end,
+    get_name = function(self) end,
 
     ---Override the name of the item in the stack
     ---@param name ItemName
     ---@return boolean true if cleared
-    set_name = function(name) end,
+    set_name = function(self,name) end,
 
     ---Get the number of items in the stack
     ---@return integer
-    get_count = function() end,
+    get_count = function(self) end,
 
     ---Set the number of items in the stack
     ---@param count integer
-    set_count = function(count) end,
+    set_count = function(self,count) end,
 
     ---get the wear of the item
     ---@return ItemWear
-    get_wear = function() end,
+    get_wear = function(self) end,
 
     ---Set the wear of the item
     ---@param wear ItemWear
-    set_wear = function(wear) end,
+    set_wear = function(self,wear) end,
 
     ---get the item's metadata
     ---@return ItemStackMetaRef
-    get_meta = function() end,
+    get_meta = function(self) end,
 
     ---Get the item's description
     ---@return string
-    get_description = function() end,
+    get_description = function(self) end,
     
     ---get the item's short description
     ---@return string
-    get_short_description = function() end,
+    get_short_description = function(self) end,
     
     ---clear the itemstack to have 0 items of no type
-    clear = function() end,
+    clear = function(self) end,
 
     ---Replace the contents of the stack
     ---@param item ItemStack|ItemString|ItemTable
-    replace = function(item) end,
+    replace = function(self,item) end,
 
     ---Convert the ItemStack to an ItemString
     ---@return ItemString
-    to_string = function() end,
+    to_string = function(self) end,
 
     ---convert the ItemStack to an ItemTable
     ---@return ItemTable
-    to_table = function() end,
+    to_table = function(self) end,
 
     ---Get the max size for the stack
     ---@return integer
-    get_stack_max = function() end,
+    get_stack_max = function(self) end,
     
     ---Get the remaining size for the stack
     ---@return integer
-    get_free_space = function() end,
+    get_free_space = function(self) end,
 
     ---Get if there is a registered item for this itemstack
     ---@return boolean
-    is_known = function() end,
+    is_known = function(self) end,
 
     ---returns the item definition table
     ---@return table
-    get_definition = function() end,
+    get_definition = function(self) end,
 
     ---get the tool capabilities
     ---@return Tool_Capabilities
-    get_tool_capabilities = function() end,
+    get_tool_capabilities = function(self) end,
 
     ---Add wear to the item
     ---@param wear ItemWear
-    add_wear = function(wear) end,
+    add_wear = function(self,wear) end,
 
     ---Attempt to add two stacks together
     ---@param item Item
     ---@return ItemStack leftovers
-    add_item = function(item) end,
+    add_item = function(self,item) end,
 
     ---Check if another stack can be combined with no leftovers
     ---@param item ItemStack|ItemString|ItemTable
     ---@return boolean
-    item_fits = function(item) end,
+    item_fits = function(self,item) end,
     
     ---Take an item from the stack
     ---@param n integer the number of items to take
     ---@return ItemStack the taken items
-    take_item = function(n) end,
+    take_item = function(self,n) end,
 
     ---Act as if you item from the stack, but don't actually remove it
     ---@param n integer the number of items to take
     ---@return ItemStack the taken items
-    peek_item = function(n) end,
+    peek_item = function(self,n) end,
 }
 
 ---@alias ItemString string a string representation of an item

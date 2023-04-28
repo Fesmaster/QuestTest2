@@ -299,8 +299,12 @@ minetest.register_node("overworld:snow", {
 	leveled_max = 64,
 	paramtype2 = "leveled",
 	sounds = qtcore.node_sound_defaults(),
+	---@param pos Vector
+	---@param node NodeRef
+	---@param digger Player
+	---@return boolean
 	on_dig = function(pos, node, digger)
-		local p2 = (minetest.get_node(pos).param2) / 8
+		local p2 = math.ceil((minetest.get_node(pos).param2) / 8)
 		local l = minetest.node_dig(pos, node, digger)
 		if (not l) then return false end
 		if (qts.is_player_creative(digger:get_player_name()))then
@@ -311,10 +315,12 @@ minetest.register_node("overworld:snow", {
 		if (p2 > 0) then
 			local inv = digger:get_inventory()
 			local i = ItemStack("overworld:snow")
-			i:set_count(p2)
-			i = inv:add_item("main", i)
-			if (not i:is_empty()) then
-				minetest.item_drop(i, digger, digger:get_pos())
+			if i ~= nil and inv ~= nil then
+				i:set_count(p2)
+				i = inv:add_item("main", i)
+				if (not i:is_empty()) then
+					minetest.item_drop(i, digger, digger:get_pos())
+				end
 			end
 		end
 		return true
@@ -336,10 +342,21 @@ minetest.register_node("overworld:snow", {
 })
 
 
+--clay
 qts.register_shaped_node("overworld:clay", {
 	description = "Clay Block",
 	tiles = {"default_clay_block.png"},
 	groups = {crumbly=3, generation_ground=1},
 	sounds = qtcore.node_sound_stone(),
 	drop = "overworld:clay_lump 4"
+})
+
+qts.register_craft({
+	ingredients = {"overworld:clay_lump 4"},
+	results = {"overworld:clay"},
+})
+
+qts.register_craft({
+	ingredients = {"overworld:clay"},
+	results = {"default:clay_lump 4"},
 })
