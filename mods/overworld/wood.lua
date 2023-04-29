@@ -161,6 +161,8 @@ for i, wood in ipairs(woods) do
 		sapling="overworld:"..wood.name.."_sapling",
 		fence="overworld:"..wood.name.."_wood_fence",
 		rail="overworld:"..wood.name.."_wood_rail",
+
+		plank_texture = "default_"..wood.name.."_wood.png",
 	})
 
 end
@@ -353,6 +355,7 @@ qtcore.register_material("wood", {
 	log="overworld:swamp_log",
 	log_stripped="overworld:stripped_swamp_log",
 	leaves="overworld:swamp_leaves",
+	plank_texture = "default_swamp_wood.png",
 --	sapling="overworld:palm_sapling",
 })
 
@@ -445,11 +448,14 @@ qts.register_fencelike_node("overworld:bamboo_rail", {
 })
 
 qtcore.register_material("wood", {
+	name="bamboo",
+	desc="Bamboo",
 	planks="overworld:bamboo_planks",
 	log="overworld:bamboo",
 	leaves="overworld:bamboo_leaves",
 	fence="overworld:bamboo_fence",
 	rail="overworld:bamboo_rail",
+	plank_texture = "default_bamboo_slats.png",
 })
 
 --Mushrooms
@@ -524,15 +530,16 @@ for i, name in ipairs(mushroom_names) do
 	qts.register_shapeed_alias("default:"..name.."_mushroom_cap", "overworld:"..name.."_mushroom_cap")
 
 	qtcore.register_material("wood", {
-		name = name,
-		desc = desc,
-		is_mushroom=true, --mushrooms are a bit different sometimes
+		name = name..'_mushroom',
+		desc = desc.." Mushroom",
+		class="mushroom", --mushrooms are a bit different sometimes
 		planks="overworld:"..name.."_mushroom_slats",
 		log="overworld:"..name.."_mushroom_trunk",
 		plates="overworld:"..name.."_mushroom_plates",
 		leaves="overworld:"..name.."_mushroom_cap",
 		fence="overworld:"..name.."_mushroom_fence",
 		rail="overworld:"..name.."_mushroom_rail",
+		plank_texture = "default_mushroom_"..name.."_slats.png"
 	})
 end
 
@@ -595,7 +602,7 @@ qtcore.for_all_materials("wood", function(fields)
 	end
 
 	--mushroom plates
-	if fields.is_mushroom and fields.plates and fields.leaves then
+	if fields.class == "mushroom" and fields.plates and fields.leaves then
 		qts.register_craft({
 			ingredients = {"default:mycelium", fields.leaves},
 			results = {fields.plates.." 2"},

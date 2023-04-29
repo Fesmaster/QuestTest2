@@ -48,6 +48,7 @@ qtcore.register_material("metal", {
 	ore = "overworld:stone_with_tin",
 	utility_metal=false,
 	wealth_metal=true,
+	craft_groups = {"group:workbench"},
 })
 
 
@@ -86,6 +87,7 @@ qtcore.register_material("metal", {
 	ore = "overworld:stone_with_copper",
 	utility_metal=true,
 	wealth_metal=true,
+	craft_groups = {"group:workbench"},
 })
 
 
@@ -127,6 +129,7 @@ qtcore.register_material("metal", {
 	alloy = "overworld:bronze_alloy",
 	utility_metal=true,
 	wealth_metal=false,
+	craft_groups = {"group:workbench"},
 })
 
 
@@ -163,6 +166,7 @@ qtcore.register_material("metal", {
 	ore = "overworld:stone_with_iron",
 	utility_metal=true,
 	wealth_metal=false,
+	craft_groups = {"group:anvil", "group:furnace"},
 })
 
 --STEEL
@@ -202,6 +206,7 @@ qtcore.register_material("metal", {
 	alloy = "overworld:steel_alloy",
 	utility_metal=true,
 	wealth_metal=false,
+	craft_groups = {"group:anvil", "group:furnace"},
 })
 
 --[[ WEALTH METALS ]]
@@ -239,6 +244,7 @@ qtcore.register_material("metal", {
 	ore = "overworld:stone_with_silver",
 	utility_metal=false,
 	wealth_metal=true,
+	craft_groups = {"group:workbench_heavy"},
 })
 
 --gold
@@ -274,4 +280,5 @@ qtcore.register_material("metal", {
 	ore = "overworld:stone_with_gold",
 	utility_metal=false,
 	wealth_metal=true,
+	craft_groups = {"group:workbench_heavy"},
 })

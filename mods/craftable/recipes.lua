@@ -441,3 +441,23 @@ qts.register_craft({
 	results = {"craftable:solas_block_orange"},
 	near = {"group:ttable", "default:alchemy_equipment_basic"}
 })
+
+--candle
+qts.register_craft({
+	ingredients = {"default:wax_palm", "default:herb_flax"},
+	results = {"craftable:candle_palm"},
+	near = {"group:workbench", "group:furnace"},
+})
+
+--storage pots
+qts.register_craft({
+	ingredients = {"overworld:clay_lump 4"},
+	results = {"craftable:storage_pot_greenware"},
+	near = {"group:workbench"},
+})
+
+minetest.register_craft({
+	type = "cooking",
+	output = "craftable:storage_pot_clay",
+	recipe = "craftable:storage_pot_greenware",
+})

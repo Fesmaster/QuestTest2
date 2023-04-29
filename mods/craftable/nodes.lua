@@ -248,6 +248,106 @@ minetest.register_node("craftable:lime", {
 	node_box = qtcore.nb_dustpile(),
 })
 
+--storage pots
+qts.register_chest("craftable:storage_pot_clay", {
+	description = "Clay Storage Pot",
+	tiles = {
+		"default_clay_storage_pot.png",
+	},
+	groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -2/16, -8/16, -2/16, 2/16, -7/16, 2/16, },
+			{ -3/16, -7/16, -3/16, -2/16, -6/16, 3/16, },
+			{ 2/16, -7/16, -3/16, 3/16, -6/16, 3/16, },
+			{ -3/16, -7/16, -3/16, 3/16, -6/16, -2/16, },
+			{ -3/16, -7/16, 2/16, 3/16, -6/16, 3/16, },
+			{ -4/16, -6/16, -4/16, 4/16, -1/16, -3/16, },
+			{ 3/16, -6/16, -4/16, 4/16, -1/16, 4/16, },
+			{ -4/16, -6/16, 3/16, 4/16, -1/16, 4/16, },
+			{ -4/16, -6/16, -4/16, -3/16, -1/16, 4/16, },
+			{ -3/16, -1/16, 2/16, 3/16, 0/16, 3/16, },
+			{ -3/16, -1/16, -3/16, 3/16, 0/16, -2/16, },
+			{ 2/16, -1/16, -3/16, 3/16, 0/16, 3/16, },
+			{ -3/16, -1/16, -3/16, -2/16, 0/16, 3/16, },
+			{ -2/16, -1/16, -2/16, -1/16, 3/16, 2/16, },
+			{ 1/16, -1/16, -2/16, 2/16, 3/16, 2/16, },
+			{ -2/16, -1/16, -2/16, 2/16, 3/16, -1/16, },
+			{ -2/16, -1/16, 1/16, 2/16, 3/16, 2/16, },
+			{ -3/16, 3/16, -3/16, -1/16, 4/16, 3/16, },
+			{ 1/16, 3/16, -3/16, 3/16, 4/16, 3/16, },
+			{ -3/16, 3/16, -3/16, 3/16, 4/16, -1/16, },
+			{ -3/16, 3/16, 1/16, 3/16, 4/16, 3/16, },
+			},
+		},
+	is_ground_content = false,
+	sounds = qtcore.node_sound_wood(),
+	
+	invsize = 8*4,		get_chest_formspec = qtcore.get_default_chest_formspec,	
+})
+
+minetest.register_node("craftable:storage_pot_greenware", {
+	description = "Greenware Storage Pot",
+	tiles = {
+		"default_dishes_clay_greenware.png",
+	},
+	groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -2/16, -8/16, -2/16, 2/16, -7/16, 2/16, },
+			{ -3/16, -7/16, -3/16, -2/16, -6/16, 3/16, },
+			{ 2/16, -7/16, -3/16, 3/16, -6/16, 3/16, },
+			{ -3/16, -7/16, -3/16, 3/16, -6/16, -2/16, },
+			{ -3/16, -7/16, 2/16, 3/16, -6/16, 3/16, },
+			{ -4/16, -6/16, -4/16, 4/16, -1/16, -3/16, },
+			{ 3/16, -6/16, -4/16, 4/16, -1/16, 4/16, },
+			{ -4/16, -6/16, 3/16, 4/16, -1/16, 4/16, },
+			{ -4/16, -6/16, -4/16, -3/16, -1/16, 4/16, },
+			{ -3/16, -1/16, 2/16, 3/16, 0/16, 3/16, },
+			{ -3/16, -1/16, -3/16, 3/16, 0/16, -2/16, },
+			{ 2/16, -1/16, -3/16, 3/16, 0/16, 3/16, },
+			{ -3/16, -1/16, -3/16, -2/16, 0/16, 3/16, },
+			{ -2/16, -1/16, -2/16, -1/16, 3/16, 2/16, },
+			{ 1/16, -1/16, -2/16, 2/16, 3/16, 2/16, },
+			{ -2/16, -1/16, -2/16, 2/16, 3/16, -1/16, },
+			{ -2/16, -1/16, 1/16, 2/16, 3/16, 2/16, },
+			{ -3/16, 3/16, -3/16, -1/16, 4/16, 3/16, },
+			{ 1/16, 3/16, -3/16, 3/16, 4/16, 3/16, },
+			{ -3/16, 3/16, -3/16, 3/16, 4/16, -1/16, },
+			{ -3/16, 3/16, 1/16, 3/16, 4/16, 3/16, },
+			},
+		},
+})
+
+--candles
+minetest.register_node("craftable:candle_palm", {
+	description = "Palm Wax Candle",
+	tiles = {"default_candle_palm_side.png"},
+	use_texture_alpha="clip",
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, ttable=1, generation_artificial=1},
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -1/16, -8/16, -1/16, 1/16, -4/16, 1/16, },
+			{ 0/16, -4/16, -1/16, 0/16, -3/16, 1/16, },
+			{ -1/16, -4/16, 0/16, 1/16, -3/16, 0/16, },
+		}
+	},
+	--sounds = qtcore.node_sound_wood(),
+	light_source = 8,
+})
+
 --old solas block definitions
 --[[
 qts.register_shaped_node("default:solas_block_white", {
