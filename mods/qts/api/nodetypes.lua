@@ -97,10 +97,10 @@ function qts.register_fencelike_node(name, def)
 
 		if def.fence_alt then
 			local fence_alt = def.fence_alt
-			default_fields.on_hammer = function(pos, user, mode)
-				local node = minetest.get_node_or_nil(pos)
-				if node then
-					minetest.set_node(pos, {
+			default_fields.on_hammer = function(pointed_thing, user, mode, newnode)
+				local node = minetest.get_node_or_nil(pointed_thing.under)
+				if node and mode == qts.HAMMER_FUNCTION.CHANGE_TYPE then
+					minetest.set_node(pointed_thing.under, {
 						name = fence_alt,
 						param1 = node.param1,
 						param2 = node.param2
@@ -157,10 +157,10 @@ function qts.register_fencelike_node(name, def)
 
 		if def.fence_alt then
 			local fence_alt = def.fence_alt
-			default_fields.on_hammer = function(pos, user, mode)
-				local node = minetest.get_node_or_nil(pos)
-				if node then
-					minetest.set_node(pos, {
+			default_fields.on_hammer = function(pointed_thing, user, mode, newnode)
+				local node = minetest.get_node_or_nil(pointed_thing.under)
+				if node and mode == qts.HAMMER_FUNCTION.CHANGE_TYPE then
+					minetest.set_node(pointed_thing.under, {
 						name = fence_alt,
 						param1 = node.param1,
 						param2 = node.param2

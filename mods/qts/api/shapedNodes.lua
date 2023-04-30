@@ -1,10 +1,18 @@
---shaped Nodes API
+--[[
+	shaped Nodes API
 
+	This handles the Node Registration, as well as Hammers and their functionality.
+
+	New node callback:
+
+	on_hammer = function(pointed_thing, user, mode, newnode)
+		return [true|false|nil]
+	end
+	if return is nul or true then the hammering does not apply normal stuff
+--]]
 
 --[[
-	Rotate and place a stair or slab
-	modified from the stair mod of minetest_game
-	license of this is the GNU LGPL v 2.1
+	Rotate and place a stair, slant, or slab
 
 	Params:
 		itemstack - the itemstack to place
@@ -15,27 +23,42 @@
 	Returns:
 		if dont_place is false or nil, returns the return value of minetest.item_place
 		otherwise, returns the param2 of the node.
-
-	
-	some of the code in this function is heavily based on the stairs mod in minetest_game
-	license for this function is lgpl
 ]]
+---Rotate and Place a facedir / coloredfacedir node
+---@param itemstack ItemStack|nil can be nil if dont_place is true
+---@param placer ObjectRef
+---@param pointed_thing Pointed_Thing
+---@param dont_place boolean just return the param2 value, don't actually place. default is false.
+---@return ItemStack|number
 function qts.rotate_and_place(itemstack, placer, pointed_thing, dont_place)
-	local p0 = pointed_thing.under
-	local p1 = pointed_thing.above
 	local param2 = 0
 	
-	if placer then
-		local placer_pos = placer:get_pos()
-		if placer_pos then
-			param2 = minetest.dir_to_facedir(vector.subtract(p1, placer_pos))
+	if placer and pointed_thing and pointed_thing.under then
+		local finepos = vector.subtract(minetest.pointed_thing_to_face_pos(placer, pointed_thing), pointed_thing.under)
+
+		if (pointed_thing.under.y == pointed_thing.above.y) then
+			param2 = minetest.dir_to_facedir(vector.subtract(pointed_thing.above, placer:get_pos()))
+		else
+			--if on top or on bottom, then use the edge hit for the direction
+			if math.abs(finepos.x) > math.abs(finepos.z) then
+				if finepos.x < 0 then
+					param2 = 1
+				else
+					param2 = 3
+				end
+			else
+				if finepos.z < 0 then
+					param2 = 0
+				else
+					param2 = 2
+				end
+			end
 		end
 		
-		local finepos = minetest.pointed_thing_to_face_pos(placer, pointed_thing)
-		local fpos = finepos.y % 1
-		
-		if p0.y - 1 == p1.y or (fpos > 0 and fpos < 0.5)
-				or (fpos < -0.5 and fpos > -0.999999999999) then
+		--handle vertical flip
+		if (pointed_thing.under.y - 1 == pointed_thing.above.y) or (finepos.y < 0)
+		then
+			--flip the node upside down.
 			param2 = param2 + 20
 			if param2 == 21 then
 				param2 = 23
@@ -51,58 +74,82 @@ function qts.rotate_and_place(itemstack, placer, pointed_thing, dont_place)
 	end
 end
 
---[[
-	Rotate and set a node, for hammers
-	modified from the stair mod of minetest_game
-	license of this is the GNU LGPL v 2.1
-
-	Params:
-		placer - the PlayerRef engagint in the operation
-		pointed_thing - the player's pointed_thing
-		node - the node reference to set {name, param1, param2}
-
-	Returns:
-		results of minetest.swap_node()
-]]
-function qts.hammer_rotate_and_set(placer, pointed_thing, node)
-	local p0 = pointed_thing.under
-	local p1 = pointed_thing.above
-	local param2 = 0
-	local other = node.param2 - node.param2 % 32 --everything but the first five bits
-	
-	if placer then
-		local placer_pos = placer:get_pos()
-		if placer_pos then
-			param2 = minetest.dir_to_facedir(vector.subtract(p1, placer_pos))
-		end
-		
-		local finepos = minetest.pointed_thing_to_face_pos(placer, pointed_thing)
-		local fpos = finepos.y - math.floor(p0.y)
-		--minetest.log("Face pos:"..tostring(fpos))
-		
-		if p0.y - 1 == p1.y or (fpos > -1 and fpos < 0 and not(placer:get_pos().y+1 > p0.y))then
-			param2 = param2 + 20
-			if param2 == 21 then
-				param2 = 23
-			elseif param2 == 23 then
-				param2 = 21
-			end
-		end
-	end
-	return minetest.swap_node(p0, {name = node.name, param1 = node.param1, param2 = param2+other}) --last bit of param2 data added back in
+---Check if a wallmounted pos and rotation is valid
+---@param rotation number
+---@param pos Vector
+local function check_wallmounted_dir(rotation, pos)
+	local off = minetest.wallmounted_to_dir(rotation)
+	local node = minetest.get_node_or_nil(pos+off)
+	if node == nil then return false end
+	local def = minetest.registered_nodes[node.name]
+	return def and def.walkable
 end
 
+---rotate a node around its axis or change its axis. It preserves any node color.
+---@param pos Vector
+---@param node NodeRef
+---@param change_axis boolean
+---@param don_set boolean
+---@return any|number
+function qts.rotate_node(pos, node, change_axis, don_set)
+	local nodedef = minetest.registered_nodes[node.name]
+	if not nodedef then return 0 end
 
+	local param2 = node.param2
+	--calculate the new param2
+	if nodedef.paramtype2 == "facedir" or nodedef.paramtype2 == "colorfacedir" then
+		--facedir rotation
+		local rotation = param2%0x04 	  --bits 0, 1
+		local axis = math.floor(param2/0x04)%0x08 --bits 2,3,4
+		local color = 	(math.floor(param2/0x20)%0x08)*0x20 --bits 5,6,7
+		if change_axis then
+			axis = (axis + 1) % 0x8
+		else
+			rotation = (rotation + 1) % 0x4
+		end
+		param2 = rotation + (axis * 0x4) + color
+	elseif nodedef.paramtype2 == "wallmounted" or nodedef.paramtype2 == "colorwallmounted" then
+		--wallmounted
+		--a bit tricky, because there are invalid wallmounted values.
+		local dircode = param2%0x8 -- bits 0,1,2,3
+		local color = param2-dircode -- bits 3,4,5,6,7
+		for i = 1,5 do
+			local newdir = (dircode + i)%6 --there are six facing directions
+			if check_wallmounted_dir(newdir, pos) then
+				dircode = newdir
+				break
+			end
+		end
+		param2 = dircode + color
+	elseif nodedef.paramtype2 == "4dir" or nodedef.paramtype2 == "color4dir" then
+		--4dir
+		local rotation = param2%0x04 	  --bits 0,1
+		local color = param2-rotation --bits 2,3,4,5,6,7
+		rotation = (rotation + 1) % 0x04
+		param2 = rotation + color
+	end
+
+	--perform final operation: set or return
+	if (don_set) then
+		return param2
+	else
+		minetest.swap_node(pos, {name=node.name, param1=node.param1, param2=param2})
+	end
+end
 
 
 --[[
 	Enum for hammer function modes
-	CHANGE_TYPE - change the type of node (solid->stair->slant->slab->solid)
-	CHANGE_STYLE - change the style of the stair or slant (flat->inner->outer->flat)
+		
+		CHANGE_TYPE - change the type of node (solid->stair->slant->slab->solid)
+		CHANGE_STYLE - change the style of the stair or slant (flat->inner->outer->flat)
 ]]
+---@enum HammerFunction
 qts.HAMMER_FUNCTION = {
 	CHANGE_TYPE = 1,
-	CHANGE_STYLE = 2
+	CHANGE_STYLE = 2,
+	ROTATE_FACE = 3,
+	ROTATE_AXIS = 4,
 }
 
 --[[
@@ -114,9 +161,13 @@ qts.HAMMER_FUNCTION = {
 		mode a qts.HAMMER_FUNCTION for how it should operate
 
 	Will call the on_hammer callback in a node
-	on_hammer(pos, user, mode) ->boolean 
+	on_hammer(pointed_thing, user, mode, newnode) ->boolean 
 		if return is nul or true then the hammering does not apply normal stuff
 ]]
+---Apply a hammer to a node
+---@param pointed_thing Pointed_Thing
+---@param user ObjectRef
+---@param mode HammerFunction
 function qts.hammer_apply(pointed_thing, user, mode)
 	if not mode then mode = qts.HAMMER_FUNCTION.CHANGE_TYPE end
 	local player_name = user:get_player_name() or ""
@@ -125,56 +176,76 @@ function qts.hammer_apply(pointed_thing, user, mode)
 		minetest.record_protection_violation(pos, player_name)
 		return
 	end
-	local node = minetest.get_node(pos)
+
+	--get node and definition
+	local node = minetest.get_node_or_nil(pos)
+	if node == nil then return end
 	local nodedef= minetest.registered_nodes[node.name]
-	if nodedef.on_hammer then
-		local rval = nodedef.on_hammer(pointed_thing.under, user, mode)
-		if rval == nil or rval == true then
-			return
-		end
-	end
-	if minetest.get_item_group(node.name, "shaped_node") >= 1 then
+	if nodedef == nil then return end
+
+	--preliminary of post-hammered form
+	local newnode = {name=node.name, param1 = node.param1, param2 = node.param2}
+	
+	--perform various functions of the hammer
+	if minetest.get_item_group(node.name, "shaped_node") >= 1 and (mode == qts.HAMMER_FUNCTION.CHANGE_STYLE or mode == qts.HAMMER_FUNCTION.CHANGE_TYPE) then
+		--perform shape changes to shaped nodes
 		if node.name:find("_stair") then
-			if mode and mode == qts.HAMMER_FUNCTION.CHANGE_STYLE then
+			if mode == qts.HAMMER_FUNCTION.CHANGE_STYLE then
 				--change corner mode
 				if node.name:find("_inner") then
-					qts.hammer_rotate_and_set(user, pointed_thing, {name = node.name:gsub("_inner", "_outer"),param1 = node.param1, param2 = node.param2})
+					newnode.name = node.name:gsub("_inner", "_outer")
 				elseif node.name:find("_outer") then
-					qts.hammer_rotate_and_set(user, pointed_thing, {name = node.name:gsub("_outer", ""),param1 = node.param1, param2 = node.param2})
+					newnode.name = node.name:gsub("_outer", "")
 				else
-					qts.hammer_rotate_and_set(user, pointed_thing, {name = node.name.."_inner",param1 = node.param1, param2 = node.param2})
+					newnode.name = node.name.."_inner"
 				end
 			else
 				--stair-->slab
-				qts.hammer_rotate_and_set(user, pointed_thing, {name = node.name:gsub("_stair", "_slant"),param1 = node.param1, param2 = node.param2})
+				newnode.name = node.name:gsub("_stair", "_slant")
 			end
 		elseif node.name:find("_slant") then
-			if mode and mode == qts.HAMMER_FUNCTION.CHANGE_STYLE then
+			if mode == qts.HAMMER_FUNCTION.CHANGE_STYLE then
 				--change corner mode
 				if node.name:find("_inner") then
-					qts.hammer_rotate_and_set(user, pointed_thing, {name = node.name:gsub("_inner", "_outer"),param1 = node.param1, param2 = node.param2})
+					newnode.name = node.name:gsub("_inner", "_outer")
 				elseif node.name:find("_outer") then
-					qts.hammer_rotate_and_set(user, pointed_thing, {name = node.name:gsub("_outer", ""),param1 = node.param1, param2 = node.param2})
+					newnode.name = node.name:gsub("_outer", "")
 				else
-					qts.hammer_rotate_and_set(user, pointed_thing, {name = node.name.."_inner",param1 = node.param1, param2 = node.param2})
+					newnode.name = node.name.."_inner"
 				end
 			else
 				--stair-->slab
-				qts.hammer_rotate_and_set(user, pointed_thing, {name = node.name:gsub("_slant", "_slab"):gsub("_inner", ""):gsub("_outer", ""),param1 = node.param1, param2 = node.param2})
+				newnode.name = node.name:gsub("_slant", "_slab"):gsub("_inner", ""):gsub("_outer", "")
 			end
 		elseif node.name:find("_slab") then
 			--slab --> whole
 			if mode == qts.HAMMER_FUNCTION.CHANGE_TYPE then
-				qts.hammer_rotate_and_set(user, pointed_thing, {name = node.name:gsub("_slab", ""),param1 = node.param1, param2 = node.param2})
+				newnode.name = node.name:gsub("_slab", "")
 			end
 		else
 			--whole --> stair
 			if mode == qts.HAMMER_FUNCTION.CHANGE_TYPE then
-				qts.hammer_rotate_and_set(user, pointed_thing, {name = node.name.."_stair",param1 = node.param1, param2 = node.param2})
+				newnode.name = node.name.."_stair"
 			end
 		end
-		--TODO: implement any added shapes into the hammer functionality
+
+		--get the param2
+		local color = newnode.param2 - newnode.param2%0x20 --everything but the first five bits - to preserve color!
+		local param2 = qts.rotate_and_place(nil, user, pointed_thing, true) --get the number instead of placing
+		newnode.param2 = param2+color --last bit of param2 data added back in
+	elseif mode == qts.HAMMER_FUNCTION.ROTATE_AXIS or mode == qts.HAMMER_FUNCTION.ROTATE_FACE then
+		--handle rotations 
+		--color preservation is handled by rotate_node
+		newnode.param2 = qts.rotate_node(pointed_thing.under, newnode, mode == qts.HAMMER_FUNCTION.ROTATE_AXIS, true) --get the number instead of placing
 	end
+
+	if nodedef.on_hammer then
+		local rval = nodedef.on_hammer(pointed_thing, user, mode, newnode)
+		if rval == nil or rval == true then
+			return
+		end
+	end
+	minetest.swap_node(pointed_thing.under, newnode)
 end
 
 --[[
@@ -208,7 +279,7 @@ qts.register_hammer = function(name, def)
 			local hlvl = minetest.get_item_group(itemstack:get_name(), "level")
 			if nlvl <= hlvl then
 				if user:get_player_control().sneak then
-					qts.screwdriver.apply(pointed_thing, user, qts.screwdriver.ROTATE_FACE)
+					qts.hammer_apply(pointed_thing, user, qts.HAMMER_FUNCTION.ROTATE_FACE)
 				else
 					qts.hammer_apply(pointed_thing, user, qts.HAMMER_FUNCTION.CHANGE_TYPE)
 				end
@@ -233,7 +304,7 @@ qts.register_hammer = function(name, def)
 			local hlvl = minetest.get_item_group(itemstack:get_name(), "level")
 			if nlvl <= hlvl then
 				if user:get_player_control().sneak then
-					qts.screwdriver.apply(pointed_thing, user, qts.screwdriver.ROTATE_AXIS)
+					qts.hammer_apply(pointed_thing, user, qts.HAMMER_FUNCTION.ROTATE_AXIS)
 				else
 					qts.hammer_apply(pointed_thing, user, qts.HAMMER_FUNCTION.CHANGE_STYLE)
 				end
@@ -591,5 +662,4 @@ function qts.register_shaped_node(name, def)
 	end
 
 	minetest.register_node(":"..name.."_slab", qts.table_deep_copy(def))
-	--TODO: implement more shapes
 end
