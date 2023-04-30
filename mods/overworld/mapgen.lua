@@ -13,7 +13,7 @@
 	NodeResolver: failed to resolve node name 'default:lantern_fruit'.
 ]]
 
-qts.worldgen.set_mapgen_defaults("overworld:stone", "overworld:water_source", "overworld:river_water_source")
+qts.worldgen.set_mapgen_defaults("overworld:granite", "overworld:water_source", "overworld:river_water_source")
 
 --[[
 	heat_point = number
@@ -39,7 +39,7 @@ qts.worldgen.register_biome("grasslands", {
 	dust = nil,
 	surface = "overworld:dirt_with_grass",
 	fill = "overworld:dirt",
-	stone = "overworld:stone",
+	stone = "overworld:granite",
 	plant = {"overworld:grass_tall", "overworld:grass_short", "overworld:flower_kniphofia", "overworld:flower_chicory"},
 	plant_freq = 10,
 	surface_depth = 1,
@@ -57,7 +57,7 @@ qts.worldgen.register_biome("woods", {
 	dust = nil,
 	surface = "overworld:dirt_with_grass",
 	fill = "overworld:dirt",
-	stone = "overworld:stone",
+	stone = "overworld:granite",
 	plant = {"overworld:grass_tall", "overworld:grass_short", "overworld:flower_violet", "overworld:bonewort"},
 	plant_freq = 10,
 	surface_depth = 1,
@@ -75,7 +75,7 @@ qts.worldgen.register_biome("prarie", {
 	dust = nil,
 	surface = "overworld:dirt_with_prarie_grass",
 	fill = "overworld:dirt",
-	stone = "overworld:stone",
+	stone = "overworld:granite",
 	plant = {"overworld:grass_dry_tall", "overworld:grass_dry_short"},
 	plant_freq = 10,
 	surface_depth = 1,
@@ -93,7 +93,7 @@ qts.worldgen.register_biome("swamp", {
 	dust = nil,
 	surface = {"overworld:dirt_with_swamp_grass"},
 	fill = {"overworld:dirt_swamp"},
-	stone = {"overworld:stone"},
+	stone = {"overworld:granite"},
 	plant = {"overworld:swamp_plant", "overworld:flower_iris"},
 	plant_freq = 10,
 	surface_depth = 1,
@@ -111,7 +111,7 @@ qts.worldgen.register_biome("rainforest", {
 	dust = nil,
 	surface = {"overworld:dirt_with_rainforest_grass"},
 	fill = "overworld:dirt",
-	stone = "overworld:stone",
+	stone = "overworld:granite",
 	plant = {"overworld:underbrush_short","overworld:underbrush_tall","overworld:mureux_plant_ripe", "overworld:bonewort"},
 	plant_freq = 2,
 	surface_depth = 1,
@@ -129,7 +129,7 @@ qts.worldgen.register_biome("mushroom_forest", {
 	dust = nil,
 	surface = {"overworld:dirt_with_mushroom_grass"},
 	fill = {"overworld:dirt"},
-	stone = {"overworld:stone"},
+	stone = {"overworld:granite"},
 	plant = {"overworld:small_mushroom"},
 	plant_freq = 7,
 	surface_depth = 1,
@@ -146,8 +146,8 @@ qts.worldgen.register_biome("desert", {
 	min_air = 2,
 	dust = nil,
 	surface = "overworld:desert_sand",
-	fill = {"overworld:desert_sand", "overworld:desert_sandstone"},
-	stone = "overworld:desert_sandstone",
+	fill = {"overworld:desert_sand", "overworld:sandstone"},
+	stone = "overworld:sandstone",
 	plant = nil,
 	plant_freq = 0,
 	surface_depth = 5,
@@ -163,9 +163,9 @@ qts.worldgen.register_biome("mountain", {
 	min_light = 7,--half
 	min_air = 2,
 	dust = "overworld:snow",
-	surface = {"overworld:dirt", "overworld:stone"}, --TODO:replace with gravel and add pines?
+	surface = {"overworld:dirt", "overworld:granite"}, --TODO:replace with gravel and add pines?
 	fill = "overworld:dirt",
-	stone = "overworld:stone",
+	stone = "overworld:granite",
 	plant = nil,
 	plant_freq = 0,
 	surface_depth = 2,
@@ -181,9 +181,9 @@ qts.worldgen.register_biome("desert_mountains", {
 	min_light = 0,--half
 	min_air = 0,
 	dust = nil,
-	surface = "overworld:desert_sandstone",
-	fill = {"overworld:desert_sandstone", "overworld:desert_sandstone"},
-	stone = "overworld:desert_sandstone",
+	surface = "overworld:sandstone",
+	fill = {"overworld:sandstone", "overworld:sandstone"},
+	stone = "overworld:sandstone",
 	plant = nil,
 	plant_freq = 0,
 	surface_depth = 0,
@@ -199,8 +199,8 @@ qts.worldgen.register_biome("beach", {
 	min_light = 0,--half
 	min_air = 10,
 	surface = "overworld:sand",
-	fill = {"overworld:sand","overworld:sandstone"},
-	stone = "overworld:sandstone",
+	fill = {"overworld:sand","overworld:limestone"},
+	stone = "overworld:limestone",
 	plant = {"overworld:beach_grass"},
 	plant_freq = 20,
 	underwater = "overworld:sand",
@@ -232,7 +232,7 @@ qts.worldgen.register_biome("snow", {
 	dust = "overworld:snow",
 	surface = "overworld:dirt_with_snow",
 	fill = "overworld:dirt",
-	stone = "overworld:stone",
+	stone = "overworld:granite",
 	plant = nil,
 	plant_freq = 0,
 	surface_depth = 1,
@@ -249,8 +249,8 @@ qts.worldgen.register_biome("snow_beach", {
 	min_air = 10,
 	dust = {"overworld:snow"},
 	surface = "overworld:sand",
-	fill = {"overworld:sand","overworld:sandstone"},
-	stone = "overworld:sandstone",
+	fill = {"overworld:sand","overworld:limestone"},
+	stone = "overworld:limestone",
 	underwater = "overworld:sand",
 	surface_depth = 2,
 	fill_depth = 4,
@@ -313,7 +313,7 @@ minetest.register_ore({
 minetest.register_ore({
 	ore_type        = "blob",
 	ore             = "overworld:obsidian",
-	wherein         = {"overworld:stone"},
+	wherein         = {"overworld:granite"},
 	clust_scarcity  = 24 * 24 * 24,
 	clust_size      = 6,
 	y_max           = 128,
@@ -332,7 +332,7 @@ minetest.register_ore({
 minetest.register_ore({
 	ore_type        = "blob",
 	ore             = "overworld:marble",
-	wherein         = {"overworld:stone"},
+	wherein         = {"overworld:granite"},
 	clust_scarcity  = 24 * 24 * 24,
 	clust_size      = 6,
 	y_max           = 128,
@@ -352,7 +352,7 @@ minetest.register_ore({
 minetest.register_ore({
 	ore_type       = "scatter",
 	ore            = "overworld:stone_with_coal",
-	wherein        = "overworld:stone",
+	wherein        = "overworld:granite",
 	clust_scarcity = 10 * 10 * 10,
 	clust_num_ores = 8,
 	clust_size     = 3,
@@ -363,7 +363,7 @@ minetest.register_ore({
 minetest.register_ore({
 	ore_type       = "scatter",
 	ore            = "overworld:stone_with_coal",
-	wherein        = "overworld:stone",
+	wherein        = "overworld:granite",
 	clust_scarcity = 16 * 16 * 16,
 	clust_num_ores = 16,
 	clust_size     = 5,
@@ -376,7 +376,7 @@ minetest.register_ore({
 minetest.register_ore({
 	ore_type       = "scatter",
 	ore            = "overworld:stone_with_tin",
-	wherein        = "overworld:stone",
+	wherein        = "overworld:granite",
 	clust_scarcity = 16 * 16 * 16,
 	clust_num_ores = 5,
 	clust_size     = 3,
@@ -387,7 +387,7 @@ minetest.register_ore({
 minetest.register_ore({
 	ore_type       = "scatter",
 	ore            = "overworld:stone_with_tin",
-	wherein        = "overworld:stone",
+	wherein        = "overworld:granite",
 	clust_scarcity = 13 * 13 * 13,
 	clust_num_ores = 6,
 	clust_size     = 3,
@@ -400,7 +400,7 @@ minetest.register_ore({
 minetest.register_ore({
 	ore_type       = "scatter",
 	ore            = "overworld:stone_with_copper",
-	wherein        = "overworld:stone",
+	wherein        = "overworld:granite",
 	clust_scarcity = 12 * 12 * 12,
 	clust_num_ores = 5,
 	clust_size     = 3,
@@ -411,7 +411,7 @@ minetest.register_ore({
 minetest.register_ore({
 	ore_type       = "scatter",
 	ore            = "overworld:stone_with_copper",
-	wherein        = "overworld:stone",
+	wherein        = "overworld:granite",
 	clust_scarcity = 12 * 12 * 12,
 	clust_num_ores = 8,
 	clust_size     = 4,
@@ -423,7 +423,7 @@ minetest.register_ore({
 minetest.register_ore({
 	ore_type       = "scatter",
 	ore            = "overworld:stone_with_iron",
-	wherein        = "overworld:stone",
+	wherein        = "overworld:granite",
 	clust_scarcity = 7 * 7 * 7,
 	clust_num_ores = 10,
 	clust_size     = 3,
@@ -434,7 +434,7 @@ minetest.register_ore({
 minetest.register_ore({
 	ore_type       = "scatter",
 	ore            = "overworld:stone_with_iron",
-	wherein        = "overworld:stone",
+	wherein        = "overworld:granite",
 	clust_scarcity = 12 * 12 * 12,
 	clust_num_ores = 20,
 	clust_size     = 5,
@@ -446,7 +446,7 @@ minetest.register_ore({
 minetest.register_ore({
 	ore_type       = "scatter",
 	ore            = "overworld:stone_with_gold",
-	wherein        = "overworld:stone",
+	wherein        = "overworld:granite",
 	clust_scarcity = 20 * 20 * 20,
 	clust_num_ores = 20,
 	clust_size     = 5,
@@ -458,7 +458,7 @@ minetest.register_ore({
 minetest.register_ore({
 	ore_type       = "scatter",
 	ore            = "overworld:stone_with_silver",
-	wherein        = "overworld:stone",
+	wherein        = "overworld:granite",
 	clust_scarcity = 20 * 20 * 20,
 	clust_num_ores = 20,
 	clust_size     = 5,
@@ -473,7 +473,7 @@ qtcore.for_all_materials("jem", function(fields)
 		minetest.register_ore({
 			ore_type       = "scatter",
 			ore            = fields.ore,
-			wherein        = "overworld:stone",
+			wherein        = "overworld:granite",
 			clust_scarcity = 30 * 30 * 30,
 			clust_num_ores = 4,
 			clust_size     = 2,

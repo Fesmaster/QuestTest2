@@ -2,53 +2,94 @@
     Overworld stone types.
 
     The reason stones are not stuck in a loop is that the names are annoyingly custom (IE, Sandstone being one word)
+
+	Granite (?bassalt)
+	Mudstone (red stone)
+	Sandstone
+
 ]]
 
-
-qtcore.register_artistic_nodes("overworld:stone",{
-	description = "Stone",
-	cobble_desc = "Cobblestone",
+--granite
+qtcore.register_artistic_nodes("overworld:granite",{
+	description = "Granite",
+	cobble_desc = "Granite Cobble",
 	tiles = {"default_stone.png"},
-	groups = {cracky=3, stone=1, gray_stone=1, generation_artificial=1},
+	groups = {cracky=3, stone=1, granite=1, generation_artificial=1},
 	sounds = qtcore.node_sound_stone(),
-	craft_group = "gray_stone",
+	craft_group = "granite",
 })
 
-qtcore.register_artistic_nodes("overworld:moss_stone",{
-	description = "Mossy Stone",
-    cobble_desc = "Mossy Cobblestone",
-	tiles = {"default_moss_stone.png"},
-	groups = {cracky=3, stone=1, mossy_stone=1, generation_artificial=1},
+qtcore.register_artistic_nodes("overworld:granite_moss",{
+	description = "Mossy Granite",
+    cobble_desc = "Mossy Granite Cobble",
+	tiles = {"default_stone.png"},
+	groups = {cracky=3, stone=1, granite=1, generation_artificial=1},
 	sounds = qtcore.node_sound_stone(),
-	craft_group = "mossy_stone",
+	craft_group = "granite",
+	overlay_image = "qt_moss_{TITLE}_overlay.png"
 })
 
-qtcore.register_artistic_nodes("overworld:red_stone",{
-	description = "Red Stone",
-    cobble_desc = "Red Cobblestone",
+
+--mudstone
+qtcore.register_artistic_nodes("overworld:mudstone",{
+	description = "Mudstone",
+    cobble_desc = "Mudstone Cobble",
 	tiles = {"default_red_stone.png"},
-	groups = {cracky=3, stone=1, red_stone=1, generation_artificial=1},
+	groups = {cracky=3, stone=1, mudstone=1, generation_artificial=1},
 	sounds = qtcore.node_sound_stone(),
-	craft_group = "red_stone",
+	craft_group = "mudstone",
 })
 
+qtcore.register_artistic_nodes("overworld:mudstone_moss",{
+	description = "Mossy Mudstone",
+    cobble_desc = "Mossy Mudstone Cobble",
+	tiles = {"default_red_stone.png"},
+	groups = {cracky=3, stone=1, mudstone=1, generation_artificial=1},
+	sounds = qtcore.node_sound_stone(),
+	craft_group = "mudstone",
+	overlay_image = "qt_moss_{TITLE}_overlay.png"
+})
+
+--limestone
+qtcore.register_artistic_nodes("overworld:limestone",{
+	description = "Limestone",
+    cobble_desc = "Limestone Cobble",
+	tiles = {"default_sandstone.png"},
+	groups = {cracky=3, stone=1, limestone=1, generation_artificial=1},
+	sounds = qtcore.node_sound_stone(),
+	craft_group = "limestone",
+})
+
+qtcore.register_artistic_nodes("overworld:limestone_moss",{
+	description = "Mossy Limestone",
+    cobble_desc = "Mossy Limestone Cobble",
+	tiles = {"default_sandstone.png"},
+	groups = {cracky=3, stone=1, limestone=1, generation_artificial=1},
+	sounds = qtcore.node_sound_stone(),
+	craft_group = "limestone",
+	overlay_image = "qt_moss_{TITLE}_overlay.png"
+})
+
+--sandstone
 qtcore.register_artistic_nodes("overworld:sandstone",{
 	description = "Sandstone",
     cobble_desc = "Sandstone Cobble",
-	tiles = {"default_sandstone.png"},
-	groups = {cracky=3, stone=1, sand_stone=1, generation_artificial=1},
+	tiles = {"default_desert_sandstone.png"},
+	groups = {cracky=3, stone=1, sandstone=1, generation_artificial=1},
 	sounds = qtcore.node_sound_stone(),
-	craft_group = "sand_stone",
+	craft_group = "sandstone",
 })
 
-qtcore.register_artistic_nodes("overworld:desert_sandstone",{
-	description = "Desert Sandstone",
-    cobble_desc = "Desert Sandstone Cobble",
+qtcore.register_artistic_nodes("overworld:sandstone_moss",{
+	description = "Mossy Sandstone",
+    cobble_desc = "Mossy Sandstone Cobble",
 	tiles = {"default_desert_sandstone.png"},
-	groups = {cracky=3, stone=1, desert_stone=1, generation_artificial=1},
+	groups = {cracky=3, stone=1, sandstone=1, generation_artificial=1},
 	sounds = qtcore.node_sound_stone(),
-	craft_group = "desert_stone",
+	craft_group = "sandstone",
+	overlay_image = "qt_moss_{TITLE}_overlay.png"
 })
+
 
 -- Obsidian
 qtcore.register_artistic_nodes("overworld:obsidian",{
@@ -58,6 +99,16 @@ qtcore.register_artistic_nodes("overworld:obsidian",{
 	sounds = qtcore.node_sound_stone(),
 	craft_group = "obsidian",
     no_cobble=true,
+})
+
+qtcore.register_artistic_nodes("overworld:obsidian_moss",{
+	description = "Mossy Obsidian",
+	tiles = {"default_obsidian.png"},
+	groups = {cracky=3, stone=1, obsidian=1, generation_artificial=1},
+	sounds = qtcore.node_sound_stone(),
+	craft_group = "obsidian",
+	overlay_image = "qt_moss_{TITLE}_overlay.png",
+	no_cobble=true,
 })
 
 -- Marble
@@ -70,8 +121,32 @@ qtcore.register_artistic_nodes("overworld:marble",{
     no_cobble=true,
 })
 
+qtcore.register_artistic_nodes("overworld:marble_moss",{
+	description = "Mossy Marble",
+	tiles = {"default_marble.png"},
+	groups = {cracky=3, stone=1, marble=1, generation_artificial=1},
+	sounds = qtcore.node_sound_stone(),
+	craft_group = "marble",
+	overlay_image = "qt_moss_{TITLE}_overlay.png",
+	no_cobble=true,
+})
+
 
 --ice
+qtcore.register_artistic_nodes("overworld:ice",{
+	description = "Ice",
+	cobble_desc = "Ice Chunks",
+	tiles = {"default_ice.png"},
+	use_texture_alpha = "blend",
+	drawtype = "glasslike",
+	paramtype = "light",
+	groups = {cracky=3, ice=1, cooling=1, slippery=4, generation_ground=1},
+	sounds = qtcore.node_sound_stone(),
+	craft_group = "ice",
+	singleface = true,
+})
+
+--[[
 qts.register_shaped_node("overworld:ice", {
 	description = "Ice",
 	tiles = {"default_ice.png"},
@@ -81,6 +156,7 @@ qts.register_shaped_node("overworld:ice", {
 	groups = {cracky=3, ice=1, cooling=1, slippery=4, generation_ground=1},
 	sounds = qtcore.node_sound_metal(),
 })
+--]]
 
 --[[
 

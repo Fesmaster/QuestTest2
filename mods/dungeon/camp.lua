@@ -76,9 +76,9 @@ local function get_camp_materials_plains()
         log = "overworld:"..wood.."_log",
         wood = "overworld:"..wood.."_wood_planks",
         fence = "overworld:"..wood.."_wood_fence",
-        crate = "default:crate_"..wood.."",
+        crate = "furnature:crate_"..wood.."",
 
-        ladder = "default:ladder",
+        ladder = "furnature:ladder_"..wood,
         campfire = "craftable:campfire_lit",
         torch = "craftable:torch",
     }
@@ -89,9 +89,9 @@ local function get_camp_materials_prarie()
         log = "overworld:rosewood_log",
         wood = "overworld:rosewood_wood_planks",
         fence = "overworld:rosewood_wood_fence",
-        crate = "default:crate_rosewood",
+        crate = "furnature:crate_rosewood",
 
-        ladder = "default:ladder",
+        ladder = "furnature:ladder_rosewood",
         campfire = "craftable:campfire_lit",
         torch = "craftable:torch",
     }
@@ -148,13 +148,13 @@ end
 
 local banit_crate_items = {
     "tools:axe_bronze", "tools:axe_copper", "tools:axe_flint", 
-    "default:bread", "overworld:bronze_alloy", "overworld:bronze_bar", "default:bucket",
-    "craftable:charcoal", "overworld:coal", "overworld:clay_lump", "overworld:coconut", "overworld:copper_bar", "default:dishes_clay",  
-    "default:herb_bloodbulb", "default:herb_flax", "default:herb_grain", "default:herb_milfoil",
-    "default:herb_potatoe", "default:herb_wolfshood", "default:herb_carrot", "default:herb_goard", "default:herb_onion",
+    "foodstuffs:bread", "overworld:bronze_alloy", "overworld:bronze_bar", "tools:bucket_wood",
+    "craftable:charcoal", "overworld:coal", "overworld:clay_lump", "overworld:coconut", "overworld:copper_bar", "foodstuffs:dishes_clay",  
+    "farmworks:herb_bloodbulb", "farmworks:herb_flax", "farmworks:herb_grain", "deffarmworksault:herb_milfoil",
+    "farmworks:herb_potatoe", "farmworks:herb_wolfshood", "farmworks:herb_carrot", "farmworks:herb_goard", "farmworks:herb_onion",
 	"tools:hammer_stone", "tools:knife_flint",  "craftable:paper",
-	"default:seed_bloodbulb", "default:seed_flax", "default:seed_grain", "default:seed_milfoil", "default:seed_potatoe", 
-    "default:seed_wolfshood", "default:seed_carrot", "default:seed_goard", "default:seed_onion",
+	"farmworks:seed_bloodbulb", "farmworks:seed_flax", "farmworks:seed_grain", "farmworks:seed_milfoil", "farmworks:seed_potatoe", 
+    "farmworks:seed_wolfshood", "farmworks:seed_carrot", "farmworks:seed_goard", "farmworks:seed_onion",
 	"tools:shovel_bronze", "tools:shovel_copper", "tools:sword_bronze", "tools:sword_copper",
 	"craftable:tinderbox", "overworld:flint", "craftable:tinder", "tools:axe_rusted", "tools:knife_rusted", "tools:knife_copper", 
     "tools:knife_bronze", "tools:shovel_rusted", "tools:sword_rusted", "tools:hoe_rusted", "tools:hoe_copper", "tools:hoe_bronze"
