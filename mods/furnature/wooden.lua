@@ -185,7 +185,43 @@ qtcore.for_all_materials("wood", function (fields)
                 })
             end
 
-        end
+            --presses
+            do
+                fields.press = "furnature:press_"..fields.name
+                minetest.register_node(":"..fields.press, {
+                    description = fields.desc.." Press",
+                    tiles = {fields.plank_texture},
+                    use_texture_alpha="clip",
+                    drawtype = "nodebox",
+                    paramtype = "light",
+                    paramtype2 = "facedir",
+                    groups = {oddly_breakable_by_hand=3, press=1, generation_artificial=1},
+                    node_box = {
+                        type = "fixed",
+                        fixed = {
+                            { -7/16, -8/16, -7/16, 7/16, -7/16, 7/16, },
+                            { -6/16, -7/16, -6/16, 6/16, -6/16, 6/16, },
+                            { -4/16, -6/16, -4/16, -3/16, 1/16, 4/16, },
+                            { -4/16, -6/16, -4/16, 4/16, 1/16, -3/16, },
+                            { -4/16, -6/16, 3/16, 4/16, 1/16, 4/16, },
+                            { 3/16, -6/16, -4/16, 4/16, 1/16, 4/16, },
+                            { -4/16, 0/16, -1/16, 4/16, 1/16, 1/16, },
+                            { -4/16, 3/16, -1/16, 4/16, 4/16, 1/16, },
+                            { -1/16, -6/16, -1/16, 1/16, 4/16, 1/16, },
+                            { -3/16, -6/16, -3/16, 3/16, -5/16, 3/16, },
+                        },
+                    },
+                    sounds = qtcore.node_sound_wood(),
+            })
+            
+                qts.register_craft({
+                    ingredients = {fields.planks.." 2"},
+                    results = {fields.press},
+                    near = {"group:workbench"},
+                })
+            end
 
+            --and more!!
+        end
     end
 end)

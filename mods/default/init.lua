@@ -11,11 +11,10 @@ unless it belongs to a specific system.
 default = {}
 
 
-dofile(minetest.get_modpath("default").."/food.lua")
 
 
 --dofile(minetest.get_modpath("default").."/exemplar.lua")
-dofile(minetest.get_modpath("default").."/initial_items.lua")
+--dofile(minetest.get_modpath("default").."/initial_items.lua")
 -- Load other files
 
 
