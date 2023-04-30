@@ -10,10 +10,8 @@ unless it belongs to a specific system.
 --]]
 default = {}
 
-dofile(minetest.get_modpath("default").."/crafts.lua")
-dofile(minetest.get_modpath("default").."/farming.lua")
+
 dofile(minetest.get_modpath("default").."/food.lua")
-dofile(minetest.get_modpath("default").."/alchemy.lua")
 
 
 --dofile(minetest.get_modpath("default").."/exemplar.lua")

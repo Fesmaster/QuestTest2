@@ -461,3 +461,15 @@ minetest.register_craft({
 	output = "craftable:storage_pot_clay",
 	recipe = "craftable:storage_pot_greenware",
 })
+
+--poltice
+qts.register_craft({
+	ingredients = {"farmworks:herb_milfoil 2"},
+	results = {"craftable:poltice_milfoil"},
+})
+
+--textiles
+qts.register_craft({
+	ingredients = {"farmworks:herb_flax 6"},
+	results = {"craftable:textile_flax"},
+})

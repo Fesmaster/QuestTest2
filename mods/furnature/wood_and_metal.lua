@@ -13,7 +13,7 @@ qtcore.for_all_materials("wood", function (fields_wood)
                 --chest
                 do
                     local chestname = "furnature:chest_"..fields_wood.name.."_"..fields_metal.name
-                    qts.register_chest(chestname, {
+                    qts.register_chest(":"..chestname, {
                         description = fields_wood.desc.." and " .. fields_metal.desc .." Chest",
                         tiles = {
                             fields_wood.plank_texture.."^default_chest_"..fields_metal.name.."_top_overlay.png",
@@ -62,7 +62,7 @@ qtcore.for_all_materials("wood", function (fields_wood)
                 --door
                 do
                     local doorname  ="furnature:door_"..fields_wood.name.."_"..fields_metal.name
-                    qts.register_door(doorname, {
+                    qts.register_door(":"..doorname, {
                         description = fields_wood.desc.." and "..fields_metal.desc.." Door",
                         tiles = {
                             "default_door_"..fields_wood.name..".png^default_door_"..fields_metal.name.."_overlay.png",
@@ -81,7 +81,7 @@ qtcore.for_all_materials("wood", function (fields_wood)
                 --trapdoor
                 do
                     local doorname  ="furnature:trapdoor_"..fields_wood.name.."_"..fields_metal.name
-                    qts.register_trapdoor(doorname, {
+                    qts.register_trapdoor(":"..doorname, {
                         description = fields_wood.desc.." and "..fields_metal.desc.." Door",
                         tiles = {
                             fields_wood.plank_texture.."^default_trapdoor_"..fields_metal.name.."_overlay.png",

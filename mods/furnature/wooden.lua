@@ -134,7 +134,7 @@ qtcore.for_all_materials("wood", function (fields)
             do
                 fields.ladder = "furnature:ladder_"..fields.name
 
-                minetest.register_node(fields.ladder, {
+                minetest.register_node(":"..fields.ladder, {
                     description = fields.desc.." Ladder",
                     tiles ={fields.plank_texture},
                     drawtype = "nodebox",

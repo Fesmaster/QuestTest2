@@ -112,7 +112,7 @@ qts.worldgen.register_biome("rainforest", {
 	surface = {"overworld:dirt_with_rainforest_grass"},
 	fill = "overworld:dirt",
 	stone = "overworld:stone",
-	plant = {"overworld:underbrush_short","overworld:underbrush_tall","default:herb_mureux_ripe", "overworld:bonewort"},
+	plant = {"overworld:underbrush_short","overworld:underbrush_tall","overworld:mureux_plant_ripe", "overworld:bonewort"},
 	plant_freq = 2,
 	surface_depth = 1,
 	fill_depth = 5,

@@ -74,3 +74,8 @@ minetest.override_item("air", {
 function qtcore.string_first_to_upper(str)
     return (str:gsub("^%l", string.upper))
 end
+
+minetest.register_craft({
+	type = "toolrepair",
+	additional_wear = -0.02,
+})

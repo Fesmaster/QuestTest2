@@ -298,7 +298,7 @@ minetest.register_node("overworld:bonewort", {
 	groups = {snappy=3, flammable = 2, growable =1, attached_node=1, generation_replacable=1},
 	sounds = qtcore.node_sound_defaults(),
 	on_place = qtcore.place_random_plantlike,
-	drop = "default:herb_bonewort",
+	drop = "farmworks:herb_bonewort",
 	on_flood = floodFunc,
 })
 

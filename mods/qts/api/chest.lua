@@ -259,5 +259,5 @@ qts.register_chest = function(name, def)
 	
 	
 	--register the node
-	minetest.register_node(":"..name, def)
+	minetest.register_node(name, def)
 end
