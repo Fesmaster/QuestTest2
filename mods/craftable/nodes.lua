@@ -236,7 +236,7 @@ minetest.register_node("craftable:lime", {
 	description = "Lime",
 	tiles = {
 		"default_lime_top.png",
-		"default_oak_wood.png",
+		"overworld_oak_wood.png",
 		"default_lime_side.png"
 	},
 	use_texture_alpha="clip",

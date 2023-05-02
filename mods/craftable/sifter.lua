@@ -36,7 +36,7 @@ minetest.register_node("craftable:sifter", {
 	tiles = {
 		"default_sifter_top.png", --top
 		"default_sifter_top.png", --bottom
-		"default_oak_wood.png" --sides
+		"overworld_oak_wood.png" --sides
 	},
 	use_texture_alpha = "clip",
 	drawtype = "nodebox",
@@ -93,7 +93,7 @@ local function register_sifter(def)
         	tiles = {
         		"default_sifter_top.png^("..def.tiles.."^default_sifter_mask_top.png^[makealpha:255,126,126)", --top
         		"default_sifter_top.png^("..def.tiles.."^default_sifter_mask_top.png^[makealpha:255,126,126)", --bottom
-        		"default_oak_wood.png^("..def.tiles.."^default_sifter_mask_side.png^[makealpha:255,126,126)" --sides
+        		"overworld_oak_wood.png^("..def.tiles.."^default_sifter_mask_side.png^[makealpha:255,126,126)" --sides
         	},
         	use_texture_alpha = "clip",
         	drawtype = "nodebox",
