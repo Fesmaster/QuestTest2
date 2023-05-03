@@ -9,7 +9,7 @@ for k, color in ipairs(colors) do
 	minetest.register_node("caverealm:cave_crystal_"..color, {
 		description = colorCap[k].." Cave Crystal",
 		drawtype = "mesh",
-		tiles = {"default_cave_crystal_"..color..".png"},
+		tiles = {"caverealm_cave_crystal_"..color..".png"},
 		mesh = "cave_crystal.obj",
 		paramtype = "light",
 		paramtype2 = "wallmounted",

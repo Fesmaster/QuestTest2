@@ -5,9 +5,9 @@
 
 qts.register_ingot("alchemy:wax_palm", {
 	description = "Palm Wax",
-	inventory_image = "default_wax_palm_item.png",
+	inventory_image = "alchemy_wax_palm_item.png",
 	tiles = {
-		"default_wax_palm_ingot.png"
+		"alchemy_wax_palm_ingot.png"
 	},
 	use_texture_alpha="clip",
 	groups = {oddly_breakable_by_hand=3},
@@ -26,9 +26,9 @@ qts.register_ingot("alchemy:wax_palm", {
 
 qts.register_ingot("alchemy:soap", {
 	description = "Soap",
-	inventory_image = "default_soap_item.png",
+	inventory_image = "alchemy_soap_item.png",
 	tiles = {
-		"default_soap_ingot.png"
+		"alchemy_soap_ingot.png"
 	},
 	use_texture_alpha="clip",
 	groups = {oddly_breakable_by_hand=3},
@@ -48,13 +48,13 @@ qts.register_ingot("alchemy:soap", {
 minetest.register_node("alchemy:potash", {
 	description = "Potash",
 	tiles = {
-		"default_potash_top.png",
+		"alchemy_potash_top.png",
 		"overworld_oak_wood.png",
-		"default_potash_side.png"
+		"alchemy_potash_side.png"
 	},
 	use_texture_alpha="clip",
 	drawtype = "nodebox",
-	inventory_image = "default_potash.png",
+	inventory_image = "alchemy_potash.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
@@ -64,13 +64,13 @@ minetest.register_node("alchemy:potash", {
 minetest.register_node("alchemy:lye", {
 	description = "Lye",
 	tiles = {
-		"default_lye_top.png",
+		"alchemy_lye_top.png",
 		"overworld_oak_wood.png",
-		"default_lye_side.png"
+		"alchemy_lye_side.png"
 	},
 	use_texture_alpha="clip",
 	drawtype = "nodebox",
-	inventory_image = "default_lye.png",
+	inventory_image = "alchemy_lye.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1},

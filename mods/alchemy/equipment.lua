@@ -6,9 +6,9 @@
 minetest.register_node("alchemy:equipment_basic", {
 	description = "Basic Alchemy Equipment",
 	tiles = {
-		"default_alchemy_equipment_basic_top.png",  
+		"alchemy_equipment_basic_top.png",  
 		"default_dishes_clay.png", 
-		"default_alchemy_equipment_basic_side.png",
+		"alchemy_equipment_basic_side.png",
 	},
 	use_texture_alpha="clip",
 	drawtype = "nodebox",
@@ -44,9 +44,9 @@ minetest.register_node("alchemy:equipment_basic", {
 minetest.register_node("alchemy:equipment_advanced", {
 	description = "Advanced Alchemy Equipment",
 	tiles = {
-		"default_alchemy_equipment_advanced_top.png",  
+		"alchemy_equipment_advanced_top.png",  
 		"default_dishes_clay.png", 
-		"default_alchemy_equipment_advanced_side.png",
+		"alchemy_equipment_advanced_side.png",
 	},
 	use_texture_alpha="clip",
 	drawtype = "nodebox",
@@ -83,13 +83,13 @@ minetest.register_node("alchemy:equipment_advanced", {
 minetest.register_node("alchemy:flask_glass", {
 	description = "Glass Flask",
 	tiles = {
-		"default_flask_glass_top.png",
-		"default_flask_glass_bottom.png",
-		"default_flask_glass_side.png"
+		"alchemy_flask_glass_top.png",
+		"alchemy_flask_glass_bottom.png",
+		"alchemy_flask_glass_side.png"
 	},
 	use_texture_alpha="clip",
 	drawtype = "nodebox",
-	inventory_image = "default_flask_glass_item.png",
+	inventory_image = "alchemy_flask_glass_item.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
@@ -105,13 +105,13 @@ minetest.register_node("alchemy:flask_glass", {
 minetest.register_node("alchemy:flask_glass_water", {
 	description = "Glass Water Flask",
 	tiles = {
-		"default_flask_glass_top.png",
-		"default_flask_glass_bottom.png",
-		"default_flask_glass_water_side.png"
+		"alchemy_flask_glass_top.png",
+		"alchemy_flask_glass_bottom.png",
+		"alchemy_flask_glass_water_side.png"
 	},
 	use_texture_alpha="clip",
 	drawtype = "nodebox",
-	inventory_image = "default_flask_glass_water_item.png",
+	inventory_image = "alchemy_flask_glass_water_item.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
