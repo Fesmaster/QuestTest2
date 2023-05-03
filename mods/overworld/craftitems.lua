@@ -5,12 +5,12 @@
 
 minetest.register_craftitem("overworld:peat_chunk", {
 	description = "Peat Chunk",
-	inventory_image = "default_peat_item.png",
+	inventory_image = "overworld_peat_item.png",
 })
 
 minetest.register_craftitem("overworld:clay_lump", {
 	description = "Clay",
-	inventory_image = "default_clay_lump.png",
+	inventory_image = "overworld_clay_lump.png",
 })
 
 minetest.register_craftitem("overworld:flint", {

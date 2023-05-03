@@ -54,8 +54,8 @@ qts.register_ingot("overworld:apple", {
 --coconut
 qts.register_ingot("overworld:coconut", {
 	description = "Coconut",
-	inventory_image = "default_coconut.png",
-	tiles = {"default_coconut_top.png", "default_coconut_side.png"},
+	inventory_image = "overworld_coconut.png",
+	tiles = {"overworld_coconut_top.png", "overworld_coconut_side.png"},
 	use_texture_alpha="clip",
 	groups = {oddly_breakable_by_hand=3, fruit = 1, generation_artificial=1},
 	on_use = minetest.item_eat(2),

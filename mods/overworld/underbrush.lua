@@ -4,7 +4,7 @@
 
 minetest.register_craftitem("overworld:underbrush_item",{
 	description = "Underbrush",
-	inventory_image = "default_underbrush_item.png",
+	inventory_image = "overworld_underbrush_item.png",
 	groups = {underbrush=1}
 })
 
@@ -60,7 +60,7 @@ end
 
 minetest.register_node("overworld:swamp_plant", {
 	description = "A Strange Plant that lives in the swamp",
-	tiles = {"default_swamp_plant.png"},
+	tiles = {"overworld_swamp_plant.png"},
 	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",
@@ -76,7 +76,7 @@ minetest.register_node("overworld:swamp_plant", {
 
 minetest.register_node("overworld:small_mushroom", {
 	description = "A Small Mushroom",
-	tiles = {"default_small_mushroom.png"},
+	tiles = {"overworld_small_mushroom.png"},
 	use_texture_alpha = "clip",
 	drawtype = "nodebox",
 	paramtype = "light",
@@ -103,7 +103,7 @@ minetest.register_alias("default:small_shroom", "overworld:small_mushroom")
 
 minetest.register_node("overworld:grass_short", {
 	description = "Grass Node",
-	tiles ={"default_grass_short.png"},
+	tiles ={"overworld_grass_short.png"},
 	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",
@@ -123,7 +123,7 @@ minetest.register_node("overworld:grass_short", {
 
 minetest.register_node("overworld:grass_tall", {
 	description = "Grass Node",
-	tiles ={"default_grass_tall.png"},
+	tiles ={"overworld_grass_tall.png"},
 	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",
@@ -143,7 +143,7 @@ minetest.register_node("overworld:grass_tall", {
 
 minetest.register_node("overworld:grass_dry_short", {
 	description = "Dry Grass Node",
-	tiles ={"default_dry_grass_short.png"},
+	tiles ={"overworld_dry_grass_short.png"},
 	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",
@@ -163,7 +163,7 @@ minetest.register_node("overworld:grass_dry_short", {
 
 minetest.register_node("overworld:grass_dry_tall", {
 	description = "Dry Grass Node",
-	tiles ={"default_dry_grass_tall.png"},
+	tiles ={"overworld_dry_grass_tall.png"},
 	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",
@@ -183,7 +183,7 @@ minetest.register_node("overworld:grass_dry_tall", {
 
 minetest.register_node("overworld:underbrush_short", {
 	description = "Underbrush",
-	tiles ={"default_underbrush.png"},
+	tiles ={"overworld_underbrush.png"},
 	use_texture_alpha = "clip",
 	drawtype = "nodebox",
 	paramtype = "light",
@@ -207,7 +207,7 @@ minetest.register_node("overworld:underbrush_short", {
 })
 minetest.register_node("overworld:underbrush_tall", {
 	description = "Underbrush",
-	tiles ={"default_underbrush.png"},
+	tiles ={"overworld_underbrush.png"},
 	use_texture_alpha = "clip",
 	drawtype = "nodebox",
 	paramtype = "light",
@@ -235,7 +235,7 @@ minetest.register_node("overworld:underbrush_tall", {
 
 minetest.register_node("overworld:beach_grass", {
 	description = "Grass Node",
-	tiles ={"default_beach_grass.png"},
+	tiles ={"overworld_beach_grass.png"},
 	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",
@@ -258,12 +258,12 @@ minetest.register_node("overworld:beach_grass", {
 minetest.register_node("overworld:natural_coconut", {
 	description = "Natural Coconut",
 	tiles = {
-			"default_coconut_top.png",
-			"default_coconut_side.png",
-			"default_coconut_side.png"
+			"overworld_coconut_top.png",
+			"overworld_coconut_side.png",
+			"overworld_coconut_side.png"
 		},
 	drawtype = "nodebox",
-	inventory_image = "default_coconut.png",
+	inventory_image = "overworld_coconut.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=1, choppy = 2, generation_trees=1, not_in_creative_inventory=1},
@@ -275,7 +275,7 @@ minetest.register_node("overworld:natural_coconut", {
 	},
 	drop = {
 		items = {
-			{items = {"default:coconut"}},
+			{items = {"overworld:coconut"}},
 		}
 	},
 	sounds = qtcore.node_sound_wood(),
@@ -284,7 +284,7 @@ minetest.register_node("overworld:natural_coconut", {
 
 minetest.register_node("overworld:bonewort", {
 	description = "Bonewort",
-	tiles ={"default_bonewort.png"},
+	tiles ={"overworld_bonewort.png"},
 	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",
@@ -305,8 +305,8 @@ minetest.register_node("overworld:bonewort", {
 --flowers
 minetest.register_node("overworld:flower_kniphofia", {
 	description = "Kniphofia",
-	tiles ={"default_kniphofia.png"},
-	inventory_image = "default_kniphofia_item.png",
+	tiles ={"overworld_kniphofia.png"},
+	inventory_image = "overworld_kniphofia_item.png",
 	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",
@@ -325,8 +325,8 @@ minetest.register_node("overworld:flower_kniphofia", {
 
 minetest.register_node("overworld:flower_iris", {
 	description = "White Iris",
-	tiles ={"default_iris.png"},
-	inventory_image = "default_iris_item.png",
+	tiles ={"overworld_iris.png"},
+	inventory_image = "overworld_iris_item.png",
 	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",
@@ -345,8 +345,8 @@ minetest.register_node("overworld:flower_iris", {
 
 minetest.register_node("overworld:flower_chicory", {
 	description = "Chicory",
-	tiles ={"default_chicory.png"},
-	inventory_image = "default_chicory_item.png",
+	tiles ={"overworld_chicory.png"},
+	inventory_image = "overworld_chicory_item.png",
 	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",
@@ -365,8 +365,8 @@ minetest.register_node("overworld:flower_chicory", {
 
 minetest.register_node("overworld:flower_violet", {
 	description = "Violet",
-	tiles ={"default_violet.png"},
-	inventory_image = "default_violet_item.png",
+	tiles ={"overworld_violet.png"},
+	inventory_image = "overworld_violet_item.png",
 	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",
@@ -424,9 +424,9 @@ end
 
 minetest.register_node("overworld:reeds", {
 	description = "Reeds",
-	tiles ={"default_reeds.png"},
-	inventory_image ="default_reeds_item.png",
-	wield_image = "default_reeds_item.png",
+	tiles ={"overworld_reeds.png"},
+	inventory_image ="overworld_reeds_item.png",
+	wield_image = "overworld_reeds_item.png",
 	use_texture_alpha = "clip",
 	drawtype = "nodebox",
 	paramtype = "light",
@@ -454,7 +454,7 @@ minetest.register_node("overworld:reeds", {
 for i = 2, 4 do
 	minetest.register_node("overworld:reeds_"..i, {
 		description = "Reeds " .. i,
-		tiles ={"default_reeds.png"},
+		tiles ={"overworld_reeds.png"},
 		use_texture_alpha = "clip",
 		drawtype = "nodebox",
 		paramtype = "light",

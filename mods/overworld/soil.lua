@@ -5,7 +5,7 @@
 --Dirt
 qts.register_shaped_node ("overworld:dirt", {
 	description = "Dirt",
-	tiles = {"default_dirt.png"},
+	tiles = {"overworld_dirt.png"},
 	groups = {crumbly = 3, soil=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_dirt(),
 	drop = {
@@ -20,7 +20,7 @@ qts.register_shaped_node ("overworld:dirt", {
 minetest.register_node ("overworld:dirt_tilled", {
 	description = "Dirt",
 	drawtype = "nodebox",
-	tiles = {"default_dirt_tilled.png", "default_dirt.png","default_dirt.png"},
+	tiles = {"overworld_dirt_tilled.png", "overworld_dirt.png","overworld_dirt.png"},
 	groups = {crumbly = 3, soil=1, farmland=1, erodeable=1, generation_artificial=1},
 	sounds = qtcore.node_sound_dirt(),
 	paramtype2 = "facedir",
@@ -53,7 +53,7 @@ minetest.register_node ("overworld:dirt_tilled", {
 
 qts.register_shaped_node ("overworld:dirt_with_grass", {
 	description = "Dirt with Grass",
-	tiles = {"default_grass.png"},
+	tiles = {"overworld_grass.png"},
 	groups = {crumbly = 3, soil=1, spreading_dirt_type=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_grass(),
 	drop = {
@@ -72,14 +72,14 @@ qts.register_shaped_node ("overworld:dirt_with_grass", {
 
 --fix the sides of grass on the full node
 minetest.override_item("overworld:dirt_with_grass", {
-	tiles = {"default_grass.png", "default_dirt.png",
-		{name = "default_dirt.png^default_grass_side.png",
+	tiles = {"overworld_grass.png", "overworld_dirt.png",
+		{name = "overworld_dirt.png^overworld_grass_side.png",
 			tileable_vertical = false}},
 })
 
 qts.register_shaped_node ("overworld:dirt_with_swamp_grass", {
 	description = "Dirt with Swamp Grass",
-	tiles = {"default_swamp_grass.png"},
+	tiles = {"overworld_swamp_grass.png"},
 	groups = {crumbly = 3, soil=1, spreading_dirt_type=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_dirt(),
 	drop = {
@@ -96,22 +96,22 @@ qts.register_shaped_node ("overworld:dirt_with_swamp_grass", {
 	}
 })
 minetest.override_item("overworld:dirt_with_swamp_grass", {
-	tiles = {"default_swamp_grass.png", "default_dirt.png",
-		{name = "default_dirt.png^default_swamp_grass_side.png",
+	tiles = {"overworld_swamp_grass.png", "overworld_dirt.png",
+		{name = "overworld_dirt.png^overworld_swamp_grass_side.png",
 			tileable_vertical = false}},
 })
 
 qts.register_shaped_node ("overworld:peat", {
 	description = "Peat",
-	tiles = {"default_peat.png"},
+	tiles = {"overworld_peat.png"},
 	groups = {crumbly = 3, soil=1},
 	sounds = qtcore.node_sound_dirt(),
 	drop = "overworld:peat_chunk 4"
 })
 
 qts.register_shaped_node ("overworld:dirt_swamp", {
-	description = "You Shouldn't Have This",
-	tiles = {"default_dirt.png"},
+	description = "Swamp Dirt",
+	tiles = {"overworld_dirt.png"},
 	groups = {crumbly = 3, soil=1, generation_ground=1, not_in_creative_inventory = 1},
 	sounds = qtcore.node_sound_dirt(),
 	drop = {
@@ -125,7 +125,7 @@ qts.register_shaped_node ("overworld:dirt_swamp", {
 
 qts.register_shaped_node ("overworld:dirt_with_prarie_grass", {
 	description = "Dirt with Prarie Grass",
-	tiles = {"default_prarie_grass.png"},
+	tiles = {"overworld_prarie_grass.png"},
 	groups = {crumbly = 3, soil=1, spreading_dirt_type=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_grass(),
 	drop = {
@@ -142,14 +142,14 @@ qts.register_shaped_node ("overworld:dirt_with_prarie_grass", {
 	}
 })
 minetest.override_item("overworld:dirt_with_prarie_grass", {
-	tiles = {"default_prarie_grass.png", "default_dirt.png",
-		{name = "default_dirt.png^default_prarie_grass_side.png",
+	tiles = {"overworld_prarie_grass.png", "overworld_dirt.png",
+		{name = "overworld_dirt.png^overworld_prarie_grass_side.png",
 			tileable_vertical = false}},
 })
 
 qts.register_shaped_node ("overworld:dirt_with_mushroom_grass", {
 	description = "Dirt with Mycelium",
-	tiles = {"default_mushroom_grass.png"},
+	tiles = {"overworld_mushroom_grass.png"},
 	groups = {crumbly = 3, soil=1, spreading_dirt_type=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_grass(),
 	drop = {
@@ -167,14 +167,14 @@ qts.register_shaped_node ("overworld:dirt_with_mushroom_grass", {
 	}
 })
 minetest.override_item("overworld:dirt_with_mushroom_grass", {
-	tiles = {"default_mushroom_grass.png", "default_dirt.png",
-		{name = "default_dirt.png^default_mushroom_grass_side.png",
+	tiles = {"overworld_mushroom_grass.png", "overworld_dirt.png",
+		{name = "overworld_dirt.png^overworld_mushroom_grass_side.png",
 			tileable_vertical = false}},
 })
 
 qts.register_shaped_node ("overworld:dirt_with_rainforest_grass", {
 	description = "Dirt with Rainforest Grass",
-	tiles = {"default_rainforest_grass.png"},
+	tiles = {"overworld_rainforest_grass.png"},
 	groups = {crumbly = 3, soil=1, spreading_dirt_type=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_grass(),
 	drop = {
@@ -191,14 +191,14 @@ qts.register_shaped_node ("overworld:dirt_with_rainforest_grass", {
 	}
 })
 minetest.override_item("overworld:dirt_with_rainforest_grass", {
-	tiles = {"default_rainforest_grass.png", "default_dirt.png",
-		{name = "default_dirt.png^default_rainforest_grass_side.png",
+	tiles = {"overworld_rainforest_grass.png", "overworld_dirt.png",
+		{name = "overworld_dirt.png^overworld_rainforest_grass_side.png",
 			tileable_vertical = false}},
 })
 
 qts.register_shaped_node ("overworld:dirt_with_snow", {
 	description = "Dirt with Snow",
-	tiles = {"default_snow.png"},
+	tiles = {"overworld_snow.png"},
 	groups = {crumbly = 3, soil=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_grass(),
 	drop = {
@@ -215,8 +215,8 @@ qts.register_shaped_node ("overworld:dirt_with_snow", {
 	}
 })
 minetest.override_item("overworld:dirt_with_snow", {
-	tiles = {"default_snow.png", "default_dirt.png",
-		{name = "default_dirt.png^default_snow_side.png",
+	tiles = {"overworld_snow.png", "overworld_dirt.png",
+		{name = "overworld_dirt.png^overworld_snow_side.png",
 			tileable_vertical = false}},
 })
 
@@ -224,7 +224,7 @@ minetest.override_item("overworld:dirt_with_snow", {
 --Sand
 qts.register_shaped_node ("overworld:sand", {
 	description = "Sand",
-	tiles = {"default_sand.png"},
+	tiles = {"overworld_sand.png"},
 	groups = {oddly_breakable_by_hand = 3, crumbly = 3, falling_node=1, sand=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_sand(),
 	drop = {
@@ -243,7 +243,7 @@ qts.register_shaped_node ("overworld:sand", {
 
 qts.register_shaped_node ("overworld:desert_sand", {
 	description = "Desert Sand",
-	tiles = {"default_desert_sand.png"},
+	tiles = {"overworld_desert_sand.png"},
 	groups = {crumbly = 3, falling_node=1, sand=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_sand(),
 	drop = {
@@ -263,7 +263,7 @@ qts.register_shaped_node ("overworld:desert_sand", {
 --gravel
 qts.register_shaped_node ("overworld:gravel", {
 	description = "Gravel",
-	tiles = {"default_gravel.png"},
+	tiles = {"overworld_gravel.png"},
 	groups = {oddly_breakable_by_hand = 2, crumbly = 2, falling_node=1, gravel=1, erodeable=1, generation_ground=1},
 	sounds = qtcore.node_sound_sand(),
 	drop = {
@@ -284,9 +284,9 @@ qts.register_shaped_node ("overworld:gravel", {
 --Others
 minetest.register_node("overworld:snow", {
 	description = "Snow",
-	tiles ={"default_snow.png"},
-	inventory_image = "default_snowball.png",
-	wield_image = "default_snowball.png",
+	tiles ={"overworld_snow.png"},
+	inventory_image = "overworld_snowball.png",
+	wield_image = "overworld_snowball.png",
 	groups = {crumbly=3, snow=1, falling_node=1, cooling = 1, erodeable=1, generation_replacable=1},
 	drawtype = "nodebox",
 	node_box = {
@@ -345,7 +345,7 @@ minetest.register_node("overworld:snow", {
 --clay
 qts.register_shaped_node("overworld:clay", {
 	description = "Clay Block",
-	tiles = {"default_clay_block.png"},
+	tiles = {"overworld_clay_block.png"},
 	groups = {crumbly=3, generation_ground=1},
 	sounds = qtcore.node_sound_stone(),
 	drop = "overworld:clay_lump 4"

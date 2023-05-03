@@ -148,7 +148,7 @@ minetest.register_abm({
 register_sifter({
     name = "sand",
     description = "Sand",
-    tiles = "default_sand.png",
+    tiles = "overworld_sand.png",
     node = "overworld:sand",
     results = {"default:shell_pieces"}
 })
@@ -156,7 +156,7 @@ register_sifter({
 register_sifter({
     name = "dirt",
     description = "Dirt",
-    tiles = "default_dirt.png",
+    tiles = "overworld_dirt.png",
     node = "overworld:dirt",
     results = {"overworld:flint"}
 })
@@ -164,7 +164,7 @@ register_sifter({
 register_sifter({
     name = "gravel",
     description = "Dirt",
-    tiles = "default_gravel.png",
+    tiles = "overworld_gravel.png",
     node = "overworld:gravel",
     results = {"overworld:flint"}
 })
@@ -172,7 +172,7 @@ register_sifter({
 register_sifter({
     name = "desert_sand",
     description = "Desert Sand",
-    tiles = "default_desert_sand.png",
+    tiles = "overworld_desert_sand.png",
     node = "overworld:desert_sand",
     results = {"overworld:flint"}
 })
@@ -180,7 +180,7 @@ register_sifter({
 register_sifter({
     name = "clay",
     description = "Clay",
-    tiles = "default_clay_block.png",
+    tiles = "overworld_clay_block.png",
     node = "overworld:clay",
     results = {"craftable:refined_clay_lump"}
 })

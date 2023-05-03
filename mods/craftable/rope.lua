@@ -72,7 +72,7 @@ end
 
 minetest.register_node("craftable:chain_copper", {
 	description = "Copper Chain",
-	tiles = {"default_copper_ingot_stack.png"},
+	tiles = {"overworld_copper_ingot_stack.png"},
 	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	paramtype = "light",
@@ -87,7 +87,7 @@ minetest.register_node("craftable:chain_copper", {
 
 minetest.register_node("craftable:chain_bronze", {
 	description = "Bronze Chain",
-	tiles = {"default_bronze_ingot_stack.png"},
+	tiles = {"overworld_bronze_ingot_stack.png"},
 	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	paramtype = "light",
@@ -102,7 +102,7 @@ minetest.register_node("craftable:chain_bronze", {
 
 minetest.register_node("craftable:chain_iron", {
 	description = "Iron Chain",
-	tiles = {"default_iron_ingot_stack.png"},
+	tiles = {"overworld_iron_ingot_stack.png"},
 	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	paramtype = "light",
@@ -117,7 +117,7 @@ minetest.register_node("craftable:chain_iron", {
 
 minetest.register_node("craftable:chain_steel", {
 	description = "Steel Chain",
-	tiles = {"default_steel_ingot_stack.png"},
+	tiles = {"overworld_steel_ingot_stack.png"},
 	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	paramtype = "light",

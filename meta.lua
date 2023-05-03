@@ -1069,7 +1069,7 @@ local ItemStackDef = {
     item_fits = function(self,item) end,
     
     ---Take an item from the stack
-    ---@param n integer the number of items to take
+    ---@param n? integer the number of items to take
     ---@return ItemStack the taken items
     take_item = function(self,n) end,
 
@@ -1085,17 +1085,119 @@ local ItemStackDef = {
 
 ---@alias Item ItemStack|ItemString|ItemTable
 
+---@class InvRef
+local InvRef={
 
+    ---Check if a list is empty
+    ---@param self InvRef
+    ---@param listname string
+    ---@return boolean
+    is_empty=function(self, listname) end,
+
+    ---Get the size of an inventory list
+    ---@param self InvRef
+    ---@param listname string
+    ---@return integer
+    get_size=function(self, listname) end,
+
+    ---Set the size of an inventory list
+    ---@param self InvRef
+    ---@param listname string
+    ---@param size integer
+    ---@return boolean results false if error
+    set_size=function(self, listname, size) end,
+
+    ---Get the width of a list
+    ---@param self InvRef
+    ---@param listname string
+    ---@return number
+    get_width=function(self, listname) end,
+
+    ---Set the width of an inventory list
+    ---@param self InvRef
+    ---@param listname string
+    ---@param width integer
+    ---@return boolean results false if error
+    set_width=function(self, listname, width) end,
+
+    ---Get a copy of the ItemStack at index i in list listname
+    ---@param self InvRef
+    ---@param listname string
+    ---@param i number
+    ---@return ItemStack|nil
+    get_stack=function(self, listname, i) end,
+
+    ---Set a copy of stack into the Inventory's list listname at position i
+    ---@param self InvRef
+    ---@param listname string
+    ---@param i number
+    ---@param stack ItemStack
+    set_stack=function (self, listname, i, stack) end,
+
+    ---Get list as a list of ItemStacks
+    ---@param self InvRef
+    ---@param listname string
+    ---@return ItemStack[] list
+    get_list=function(self, listname) end,
+
+    ---Set list from a list of ItemStacks
+    ---@param self InvRef
+    ---@param listname string
+    ---@param list ItemStack[]
+    set_list=function(self, listname, list) end,
+
+    ---Returns a map of listnames to lists of itemstacks
+    ---@param self InvRef
+    ---@return {string:ItemStack[]}
+    get_lists=function(self) end,
+
+    ---Sets the lists from a map of listnames to lists of itemstacks
+    ---@param self InvRef
+    ---@param lists {string:ItemStack[]}
+    set_lists=function(self, lists) end,
+
+    ---Add an item to a list
+    ---@param self InvRef
+    ---@param listname string
+    ---@param stack ItemStack
+    ---@return ItemStack leftovers what cannot be added
+    add_item=function(self, listname, stack) end,
+
+    ---Check if an ItemStack can be added to a list
+    ---@param self InvRef
+    ---@param listname string
+    ---@param stack ItemStack
+    ---@return boolean can_add true if can be fully added with no leftovers
+    room_for_item=function(self, listname, stack) end,
+
+    ---Check if a ItemStack can be fully removed from a list
+    ---@param self InvRef
+    ---@param listname string
+    ---@param stack ItemStack
+    ---@param match_meta? boolean default: false
+    ---@return boolean can_remove true if fully removable
+    contains_item=function(self, listname, stack, match_meta) end,
+
+    ---Remove an item from a list. DOES NOT MATCH META, so do that yourself!
+    ---@param self InvRef
+    ---@param listname string
+    ---@param stack ItemStack
+    ---@return ItemStack removed removed items, may be different from passed ItemStack
+    remove_item=function(self, listname, stack) end,
+
+    ---Get a location compatable with minetest.get_inventory(location)
+    ---@param self InvRef
+    get_location=function(self) end,
+}
 
 ---Create an ItemStack
 ---@return ItemStack
-
+---@param item ItemStack|ItemString|ItemTable
 function ItemStack(item) end
 
 -- TODO: these need filling out
 -- Classes
 ---@class AreaStore
----@class InvRef
 ---@class MetaDataRef
 ---@class NodeMetaRef
 ---@class ItemStackMetaRef

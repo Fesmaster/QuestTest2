@@ -47,6 +47,7 @@ for i, wood in ipairs(woods) do
 		paramtype2 = "facedir",
 		groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1, generation_trees=1, },
 		sounds = qtcore.node_sound_wood(),
+		on_place = qtcore.pillar_place,
 	})
 	
 	--stripped logs
@@ -61,6 +62,7 @@ for i, wood in ipairs(woods) do
 		groups = {choppy = 2, oddly_breakable_by_hand = 1, flammable=2, log = 1, generation_artificial=1, },
 		sounds = qtcore.node_sound_wood(),
 		palette = "default_palette_paint_light.png",
+		on_place = qtcore.pillar_place, 
 	})
 
 	--bark
@@ -223,6 +225,7 @@ qts.register_shaped_node ("overworld:palm_log", {
 	paramtype2 = "facedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, log=1, generation_trees=1},
 	sounds = qtcore.node_sound_wood(),
+	on_place = qtcore.pillar_place, 
 })
 
 minetest.register_node("overworld:palm_leaves", {
@@ -475,6 +478,7 @@ for i, name in ipairs(mushroom_names) do
 		paramtype2 = "facedir",
 		groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, mushroom=1, generation_trees=1},
 		sounds = qtcore.node_sound_wood(),
+		on_place = qtcore.pillar_place, 
 	})
 
 	--cap (leaves)

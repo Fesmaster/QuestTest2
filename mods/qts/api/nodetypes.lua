@@ -876,3 +876,22 @@ minetest.register_node("qts:void", {
 	buildable_to=false,
 	groups = {utility_node=1, not_in_creative_inventory=1}
 })
+
+if qts.ISDEV then
+	minetest.register_chatcommand("clrvoid",{
+		params="",
+		privs={creative=true},
+		func=function(name, param)
+			local player = minetest.get_player_by_name(name)
+			local pos = player:get_pos()
+			local node = minetest.get_node_or_nil(pos)
+			if node and node.name=="qts:void" then
+				minetest.set_node(pos, {name="air"})
+				minetest.log("void cleared.")
+			else
+				minetest.log("not void at your pos!")
+			end
+		end
+	})
+
+end

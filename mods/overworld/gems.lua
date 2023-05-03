@@ -32,7 +32,7 @@ for i, gem in ipairs(gems) do
 	]]
 	minetest.register_craftitem("overworld:gem_"..gem.name, {
 		description = gem.desc.." Gemstone",
-		inventory_image = "default_gem_"..gem.name..".png",
+		inventory_image = "overworld_gem_"..gem.name..".png",
 		groups = {gem = 1,},
 	})
 	
@@ -99,7 +99,7 @@ end
 ]]
 minetest.register_craftitem("overworld:coal", {
 	description = "Coal Lump",
-	inventory_image = "default_coal.png",
+	inventory_image = "overworld_coal.png",
 	groups = {coal = 1,},
 })
 
