@@ -5,9 +5,9 @@
 
 minetest.register_node("overworld:mureux_plant", {
 	description = "Mureux Plant",
-	tiles ={"default_herb_mureux_empty.png"},
-	inventory_image = "default_herb_mureux.png",
-	wield_image = "default_herb_mureux.png",
+	tiles ={"overworld_mureux_empty.png"},
+	inventory_image = "overworld_mureux.png",
+	wield_image = "overworld_mureux.png",
 	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",
@@ -27,9 +27,9 @@ minetest.register_node("overworld:mureux_plant", {
 
 minetest.register_node("overworld:mureux_plant_ripe", {
 	description = "Mureux Plant (Ripe)",
-	tiles ={"default_herb_mureux_ripe.png"},
-	inventory_image = "default_herb_mureux.png",
-	wield_image = "default_herb_mureux.png",
+	tiles ={"overworld_mureux_ripe.png"},
+	inventory_image = "overworld_mureux.png",
+	wield_image = "overworld_mureux.png",
 	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",
@@ -70,7 +70,7 @@ minetest.register_node("overworld:mureux_plant_ripe", {
 
 minetest.register_craftitem("overworld:mureux_fruit", {
 	description = "Mureux Fruit",
-	inventory_image = "default_herb_mureux_fruit.png",
+	inventory_image = "overworld_mureux_fruit.png",
 	on_secondary_use = function(itemstack, user, pointed_thing)
 
 		qts.projectile_launch_player("overworld:mureux_fruit_projectile", user, 0)
@@ -87,7 +87,7 @@ minetest.register_craftitem("overworld:mureux_fruit", {
 
 minetest.register_node("overworld:mureux_goo", {
 	description = "Mureux Fruit Goo",
-	tiles = {"default_mureux_goo.png"},
+	tiles = {"overworld_mureux_goo.png"},
 	drawtype = "nodebox",
 	paramtype = "light",
 	groups = {oddly_breakable_by_hand=3, generation_replacable=1},

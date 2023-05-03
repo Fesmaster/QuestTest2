@@ -5,13 +5,13 @@
 minetest.register_node("overworld:shell_pieces", {
 	description = "Shell Pieces",
 	tiles = {
-		"default_shell_pieces_top.png",
+		"overworld_shell_pieces_top.png",
 		"overworld_oak_wood.png",
-		"default_shell_pieces_side.png"
+		"overworld_shell_pieces_side.png"
 	},
 	use_texture_alpha="clip",
 	drawtype = "nodebox",
-	inventory_image = "default_shell_pieces.png",
+	inventory_image = "overworld_shell_pieces.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
@@ -23,8 +23,8 @@ minetest.register_node("overworld:shell_pieces", {
 --apple
 qts.register_ingot("overworld:apple", {
 	description = "Apple",
-	inventory_image = "default_apple_fruit_item.png",
-	tiles = {"default_apple_fruit_top.png", "default_apple_fruit.png", "default_apple_fruit.png"},
+	inventory_image = "overworld_apple_fruit_item.png",
+	tiles = {"overworld_apple_fruit_top.png", "overworld_apple_fruit.png", "overworld_apple_fruit.png"},
 	groups = {oddly_breakable_by_hand=3, fruit = 1, generation_artificial=1},
 	on_use = minetest.item_eat(2),
 	sunlight_propagates = true,

@@ -4,9 +4,9 @@
 
 qts.register_liquid("overworld:water", {
 	description = "Water",
-	tiles = qtcore.liquid_texture("default_water_source_animated.png", 2.0),
-	special_tiles = qtcore.liquid_texture("default_water_flowing_animated.png", 1.5),
-	bucket_image = "default_bucket_water.png",
+	tiles = qtcore.liquid_texture("overworld_water_source_animated.png", 2.0),
+	special_tiles = qtcore.liquid_texture("overworld_water_flowing_animated.png", 1.5),
+	bucket_image = "overworld_bucket_water.png",
 	post_effect_color = {a = 103, r = 30, g = 60, b = 90},
 	groups = {water = 3, liquid = 3, cooling = 1},
 	sounds = qtcore.node_sound_water(),
@@ -15,9 +15,9 @@ qts.register_liquid("overworld:water", {
 
 qts.register_liquid("overworld:river_water", {
 	description = "River Water",
-	tiles = qtcore.liquid_texture("default_river_water_source_animated.png", 2.0),
-	special_tiles = qtcore.liquid_texture("default_river_water_flowing_animated.png", 1.5),
-	bucket_image = "default_bucket_river_water.png",
+	tiles = qtcore.liquid_texture("overworld_river_water_source_animated.png", 2.0),
+	special_tiles = qtcore.liquid_texture("overworld_river_water_flowing_animated.png", 1.5),
+	bucket_image = "overworld_bucket_river_water.png",
 	post_effect_color = {a = 103, r = 57, g = 149, b = 213},
 	groups = {water = 3, liquid = 3, cooling = 1},
 	sounds = qtcore.node_sound_water(),
@@ -27,9 +27,9 @@ qts.register_liquid("overworld:river_water", {
 
 qts.register_liquid("overworld:lava", {
 	description = "Lava",
-	tiles = qtcore.liquid_texture("default_lava_source_animated.png", 5),
-	special_tiles = qtcore.liquid_texture("default_lava_flowing_animated.png", 3),
-	bucket_image = "default_bucket_lava.png",
+	tiles = qtcore.liquid_texture("overworld_lava_source_animated.png", 5),
+	special_tiles = qtcore.liquid_texture("overworld_lava_flowing_animated.png", 3),
+	bucket_image = "overworld_bucket_lava.png",
 	post_effect_color = {a = 191, r = 255, g = 64, b = 0},
 	groups = {liquid = 3, lava = 1, coolable = 1},
 	sounds = qtcore.node_sound_water(),
