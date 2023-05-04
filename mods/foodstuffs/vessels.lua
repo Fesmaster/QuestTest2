@@ -27,13 +27,13 @@ local cup_fill_desc = {"Turkish Coffee", "Water", "Oil Coconut", "Oil_Seeds"}
 		minetest.register_node("foodstuffs:cup_"..types.."_"..fill, {
 			description = "Cup of "..cup_fill_desc[n],
 			tiles = {
-				"default_dishes_"..types..".png^default_cup_"..fill.."_top_overlay.png",
-				"default_dishes_"..types..".png",
-				"default_dishes_"..types..".png"
+				"foodstuffs_dishes_"..types..".png^foodstuffs_cup_"..fill.."_top_overlay.png",
+				"foodstuffs_dishes_"..types..".png",
+				"foodstuffs_dishes_"..types..".png"
 			},
 			use_texture_alpha="clip",
 			drawtype = "nodebox",
-			inventory_image = "default_cup_"..types.."_item.png^default_cup_"..fill.."_item_overlay.png",
+			inventory_image = "foodstuffs_cup_"..types.."_item.png^foodstuffs_cup_"..fill.."_item_overlay.png",
 			paramtype = "light",
 			paramtype2 = "facedir",
 			groups = {oddly_breakable_by_hand=3, generation_artificial=1},
@@ -54,13 +54,13 @@ local cup_fill_desc = {"Turkish Coffee", "Water", "Oil Coconut", "Oil_Seeds"}
 		minetest.register_node("foodstuffs:vessels_"..types.."_"..fill, {
 			description = cup_fill_desc[n].." Vessel",
 			tiles = {
-				"default_dishes_"..types..".png^default_cup_"..fill.."_top_overlay.png",
-				"default_dishes_"..types..".png",
-				"default_dishes_"..types..".png"
+				"foodstuffs_dishes_"..types..".png^foodstuffs_cup_"..fill.."_top_overlay.png",
+				"foodstuffs_dishes_"..types..".png",
+				"foodstuffs_dishes_"..types..".png"
 			},
 			use_texture_alpha="clip",
 			drawtype = "nodebox",
-			--inventory_image = "default_dishes_"..types.."_item.png^default_vessels_"..fill.."_item_overlay.png",
+			--inventory_image = "foodstuffs_dishes_"..types.."_item.png^foodstuffs_vessels_"..fill.."_item_overlay.png",
 			paramtype = "light",
 			paramtype2 = "facedir",
 			groups = {oddly_breakable_by_hand=3, vessels_water=1, generation_artificial=1},
@@ -186,10 +186,10 @@ local cup_fill_desc = {"Turkish Coffee", "Water", "Oil Coconut", "Oil_Seeds"}
 	--dish nodes (and empty vessels)
 	minetest.register_node("foodstuffs:dishes_"..types, {
 		description = dish_types_desc[i].." Dishes",
-		tiles = {"default_dishes_"..types..".png",},
+		tiles = {"foodstuffs_dishes_"..types..".png",},
 		use_texture_alpha="clip",
 		drawtype = "nodebox",
-		inventory_image = "default_dishes_"..types.."_item.png",
+		inventory_image = "foodstuffs_dishes_"..types.."_item.png",
 		paramtype = "light",
 		paramtype2 = "facedir",
 		groups = {oddly_breakable_by_hand=3, dishes=1, generation_artificial=1},
@@ -218,10 +218,10 @@ local cup_fill_desc = {"Turkish Coffee", "Water", "Oil Coconut", "Oil_Seeds"}
 
 	minetest.register_node("foodstuffs:vessels_empty_"..types, {
 		description = dish_types_desc[i].." Vessel",
-		tiles = {"default_dishes_"..types..".png",},
+		tiles = {"foodstuffs_dishes_"..types..".png",},
 		use_texture_alpha="clip",
 		drawtype = "nodebox",
-		--inventory_image = "default_dishes_"..types.."_item.png",
+		--inventory_image = "foodstuffs_dishes_"..types.."_item.png",
 		paramtype = "light",
 		paramtype2 = "facedir",
 		groups = {oddly_breakable_by_hand=3, dishes=1, generation_artificial=1},
@@ -266,13 +266,13 @@ local bowl_fill_desc = {"Flour"}
 		minetest.register_node("foodstuffs:bowl_"..types.."_"..fill, {
 			description = bowl_fill_desc[n].." Bowl",
 			tiles = {
-				"default_dishes_"..types..".png^default_bowl_powder_"..fill.."_top_overlay.png",
-				"default_dishes_"..types..".png",
-				"default_dishes_"..types..".png^default_bowl_powder_"..fill.."_side_overlay.png"
+				"foodstuffs_dishes_"..types..".png^foodstuffs_bowl_powder_"..fill.."_top_overlay.png",
+				"foodstuffs_dishes_"..types..".png",
+				"foodstuffs_dishes_"..types..".png^foodstuffs_bowl_powder_"..fill.."_side_overlay.png"
 			},
 			use_texture_alpha="clip",
 			drawtype = "nodebox",
-			inventory_image = "default_bowl_"..types.."_item.png^default_bowl_powder_"..fill.."_item_overlay.png",
+			inventory_image = "foodstuffs_bowl_"..types.."_item.png^foodstuffs_bowl_powder_"..fill.."_item_overlay.png",
 			paramtype = "light",
 			paramtype2 = "facedir",
 			groups = {oddly_breakable_by_hand=3, generation_artificial=1},
@@ -303,10 +303,10 @@ local bowl_fill_desc = {"Flour"}
 --individual empty cup and bowl
 	minetest.register_node("foodstuffs:cup_"..types, {
 		description = dish_types_desc[i].." Cup",
-		tiles = {"default_dishes_"..types..".png",},
+		tiles = {"foodstuffs_dishes_"..types..".png",},
 		use_texture_alpha="clip",
 		drawtype = "nodebox",
-		inventory_image = "default_cup_"..types.."_item.png",
+		inventory_image = "foodstuffs_cup_"..types.."_item.png",
 		paramtype = "light",
 		paramtype2 = "facedir",
 		groups = {oddly_breakable_by_hand=3, generation_artificial=1},
@@ -326,10 +326,10 @@ local bowl_fill_desc = {"Flour"}
 	
 	minetest.register_node("foodstuffs:bowl_"..types, {
 		description = dish_types_desc[i].." Bowl",
-		tiles = {"default_dishes_"..types..".png",},
+		tiles = {"foodstuffs_dishes_"..types..".png",},
 		use_texture_alpha="clip",
 		drawtype = "nodebox",
-		inventory_image = "default_bowl_"..types.."_item.png",
+		inventory_image = "foodstuffs_bowl_"..types.."_item.png",
 		paramtype = "light",
 		paramtype2 = "facedir",
 		groups = {oddly_breakable_by_hand=3, generation_artificial=1},
@@ -384,10 +384,10 @@ local greenware_types_desc = {"Clay","Stoneware"}
 for i, types in ipairs(greenware_types) do
 	minetest.register_node("foodstuffs:dishes_"..types.."_greenware", {
 		description = greenware_types_desc[i].." Greenware Dishes",
-		tiles = {"default_dishes_"..types.."_greenware.png",},
+		tiles = {"foodstuffs_dishes_"..types.."_greenware.png",},
 		use_texture_alpha="clip",
 		drawtype = "nodebox",
-		inventory_image = "default_dishes_"..types.."_greenware_item.png",
+		inventory_image = "foodstuffs_dishes_"..types.."_greenware_item.png",
 		paramtype = "light",
 		paramtype2 = "facedir",
 		groups = {oddly_breakable_by_hand=3, generation_artificial=1},
@@ -416,10 +416,10 @@ for i, types in ipairs(greenware_types) do
 
 	minetest.register_node("foodstuffs:vessels_"..types.."_greenware", {
 		description = greenware_types_desc[i].." Greenware Vessel",
-		tiles = {"default_dishes_"..types.."_greenware.png",},
+		tiles = {"foodstuffs_dishes_"..types.."_greenware.png",},
 		use_texture_alpha="clip",
 		drawtype = "nodebox",
-		--inventory_image = "default_dishes_"..types.."_greenware_item.png",
+		--inventory_image = "foodstuffs_dishes_"..types.."_greenware_item.png",
 		paramtype = "light",
 		paramtype2 = "facedir",
 		groups = {oddly_breakable_by_hand=3, generation_artificial=1},

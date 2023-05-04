@@ -7,7 +7,7 @@ minetest.register_node("alchemy:equipment_basic", {
 	description = "Basic Alchemy Equipment",
 	tiles = {
 		"alchemy_equipment_basic_top.png",  
-		"default_dishes_clay.png", 
+		"foodstuffs_dishes_clay.png", 
 		"alchemy_equipment_basic_side.png",
 	},
 	use_texture_alpha="clip",
@@ -45,7 +45,7 @@ minetest.register_node("alchemy:equipment_advanced", {
 	description = "Advanced Alchemy Equipment",
 	tiles = {
 		"alchemy_equipment_advanced_top.png",  
-		"default_dishes_clay.png", 
+		"foodstuffs_dishes_clay.png", 
 		"alchemy_equipment_advanced_side.png",
 	},
 	use_texture_alpha="clip",

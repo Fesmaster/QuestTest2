@@ -5,10 +5,10 @@
 
 minetest.register_node("foodstuffs:cookware_iron", {
 	description = "Cast Iron Cookware",
-	tiles = {"default_cookware_iron.png",},
+	tiles = {"foodstuffs_cookware_iron.png",},
 	use_texture_alpha="clip",
 	drawtype = "nodebox",
-	inventory_image = "default_cookware_iron_item.png",
+	inventory_image = "foodstuffs_cookware_iron_item.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, cookware=1, generation_artificial=1},
@@ -37,10 +37,10 @@ minetest.register_node("foodstuffs:cookware_iron", {
 
 minetest.register_node("foodstuffs:cookware_copper", {
 	description = "Copper Cookware",
-	tiles = {"default_cookware_copper.png",},
+	tiles = {"foodstuffs_cookware_copper.png",},
 	use_texture_alpha="clip",
 	drawtype = "nodebox",
-	inventory_image = "default_cookware_copper_item.png",
+	inventory_image = "foodstuffs_cookware_copper_item.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, cookware=1, generation_artificial=1},

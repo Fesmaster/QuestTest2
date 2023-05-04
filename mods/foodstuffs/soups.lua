@@ -48,8 +48,8 @@ for i=1, #ingredient do
 				end		
 			end
 			
-			local comb_textuereSet = "default_bowl_clay_top_overlay.png^default_soup_"..max_brothiness_name.."_top.png^"
-			local comb_invTextureSet = "default_soup_"..max_brothiness_name.."_item.png^default_bowl_clay_soup_item_overlay.png"
+			local comb_textuereSet = "foodstuffs_bowl_clay_top_overlay.png^foodstuffs_soup_"..max_brothiness_name.."_top.png^"
+			local comb_invTextureSet = "foodstuffs_soup_"..max_brothiness_name.."_item.png^foodstuffs_bowl_clay_soup_item_overlay.png"
 			
 			--now, generate a unique string from this for the name
 			--also generate a description and node texture
@@ -57,9 +57,9 @@ for i=1, #ingredient do
 				comb_name = comb_name .. name
 				comb_description = comb_description .. qtcore.string_first_to_upper(name)
 				if l == 1 then
-					comb_textuereSet = comb_textuereSet .. "default_soup_overlay_"..name..".png"
+					comb_textuereSet = comb_textuereSet .. "foodstuffs_soup_overlay_"..name..".png"
 				else
-					comb_textuereSet = comb_textuereSet .. "default_soup_overlay_"..name..".png"
+					comb_textuereSet = comb_textuereSet .. "foodstuffs_soup_overlay_"..name..".png"
 				end
 				if l < #comb_list then
 					comb_name = comb_name .. "_"
@@ -85,13 +85,12 @@ for i=1, #ingredient do
 					description = comb_description .. " Soup",
 					tiles = {
 						comb_textuereSet,
-						"default_dishes_clay.png"
+						"foodstuffs_dishes_clay.png"
 					},
 					inventory_image = comb_invTextureSet,
 					use_texture_alpha="clip",
 					groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1, soup=1},
 					drawtype = "nodebox",
-					--inventory_image = soupimage[i].."^default_bowl_clay_soup_item_overlay.png",
 					paramtype = "light",
 					on_use = qts.item_eat(6),
 					node_box = {
