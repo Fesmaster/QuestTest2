@@ -33,12 +33,6 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"craftable:brick_item 4"},
-	results = {"craftable:brick"},
-	near = {"group:workbench"},
-})
-
-qts.register_craft({
 	ingredients = {"craftable:lime", "group:sand 4"},
 	results = {"craftable:cement 4"},
 })
@@ -62,7 +56,7 @@ qts.register_craft({
 
 --sifter
 qts.register_craft({
-	ingredients = {"group:wood 4", "default:underbrush_item 4"},
+	ingredients = {"group:wood 4", "overworld:underbrush_item 4"},
 	results = {"craftable:sifter"},
 	near = {"group:workbench"},
 })
@@ -71,24 +65,24 @@ qts.register_craft({
 --workbenches
 qts.register_craft({
 	ingredients = {"group:wood 4"},
-	results = {"default:workbench",},
+	results = {"craftable:workbench",},
 })
 
 qts.register_craft({
-	ingredients = {"default:workbench", "default:iron_bar 4"},
-	results = {"default:workbench_heavy",},
+	ingredients = {"craftable:workbench", "overworld:iron_bar 4"},
+	results = {"craftable:workbench_heavy",},
 })
 
 --bricks
 qts.register_craft({
-	ingredients = {"group:gray_stone"},
+	ingredients = {"group:stone"},
 	results = {"craftable:brick_gray"},
 	near = {"group:workbench_heavy"},
 })
 qts.register_craft({
-	ingredients = {"group:brick"},
+	ingredients = {"craftable:brick_item 4"},
 	results = {"craftable:brick"},
-	near = {"group:workbench_heavy"},
+	near = {"group:workbench"},
 })
 qts.register_craft({
 	ingredients = {"craftable:brick"},
@@ -123,37 +117,37 @@ minetest.register_craft({
 
 minetest.register_craft({
 	type = "cooking",
-	output = "craftable:charcoal", "default:potash",
+	output = "craftable:charcoal", "alchemy:potash",
 	recipe = "group:wood",
 })
 
 minetest.register_craft({
 	type = "cooking",
-	output = "craftable:lime", "default:potash",
+	output = "craftable:lime", "alchemy:potash",
 	recipe = "overworld:shell_pieces",
 })
 
 minetest.register_craft({
 	type = "cooking",
-	output = "craftable:lime 16", "default:potash",
+	output = "craftable:lime 16", "alchemy:potash",
 	recipe = "overworld:marble",
 })
 
 minetest.register_craft({
 	type = "cooking",
-	output = "craftable:brick_item", "default:potash",
+	output = "craftable:brick_item", "alchemy:potash",
 	recipe = "overworld:clay_lump",
 })
 
 minetest.register_craft({
 	type = "cooking",
-	output = "default:potash",
+	output = "alchemy:potash",
 	recipe = "group:leaves",
 })
 
 minetest.register_craft({
 	type = "cooking",
-	output = "default:potash",
+	output = "alchemy:potash",
 	recipe = "group:underbrush",
 })
 
@@ -238,13 +232,13 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"default:herb_bloodbulb 2", "tools:bucket_wood_overworld_water"},
+	ingredients = {"farmworks:herb_bloodbulb 2", "tools:bucket_wood_overworld_water"},
 	results = {"craftable:dye_red", "tools:bucket_wood"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
 qts.register_craft({
-	ingredients = {"default:herb_bloodbulb 2", "tools:bucket_wood_overworld_river_water"},
+	ingredients = {"farmworks:herb_bloodbulb 2", "tools:bucket_wood_overworld_river_water"},
 	results = {"craftable:dye_red", "tools:bucket_wood"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
@@ -262,13 +256,13 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"default:herb_milfoil 2", "tools:bucket_wood_overworld_water"},
+	ingredients = {"farmworks:herb_milfoil 2", "tools:bucket_wood_overworld_water"},
 	results = {"craftable:dye_white", "tools:bucket_wood"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
 qts.register_craft({
-	ingredients = {"default:herb_milfoil 2", "tools:bucket_wood_overworld_river_water"},
+	ingredients = {"farmworks:herb_milfoil 2", "tools:bucket_wood_overworld_river_water"},
 	results = {"craftable:dye_white", "tools:bucket_wood"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
@@ -286,25 +280,25 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"default:flower_wolfshood 2", "tools:bucket_wood_overworld_water"},
+	ingredients = {"overworld:flower_wolfshood 2", "tools:bucket_wood_overworld_water"},
 	results = {"craftable:dye_purple", "tools:bucket_wood"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
 qts.register_craft({
-	ingredients = {"default:flower_wolfshood 2", "tools:bucket_wood_overworld_river_water"},
+	ingredients = {"overworld:flower_wolfshood 2", "tools:bucket_wood_overworld_river_water"},
 	results = {"craftable:dye_purple", "tools:bucket_wood"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
 qts.register_craft({
-	ingredients = {"default:herb_mureux_fruit", "tools:bucket_wood_overworld_water"},
+	ingredients = {"farmworks:herb_mureux_fruit", "tools:bucket_wood_overworld_water"},
 	results = {"craftable:dye_purple", "tools:bucket_wood"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
 qts.register_craft({
-	ingredients = {"default:herb_mureux_fruit", "tools:bucket_wood_overworld_river_water"},
+	ingredients = {"farmworks:herb_mureux_fruit", "tools:bucket_wood_overworld_river_water"},
 	results = {"craftable:dye_purple", "tools:bucket_wood"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
@@ -328,13 +322,13 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"default:herb_kingscrown", "tools:bucket_wood_overworld_water"},
+	ingredients = {"farmworks:herb_kingscrown", "tools:bucket_wood_overworld_water"},
 	results = {"craftable:dye_yellow", "tools:bucket_wood"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
 qts.register_craft({
-	ingredients = {"default:herb_kingscrown", "tools:bucket_wood_overworld_river_water"},
+	ingredients = {"farmworks:herb_kingscrown", "tools:bucket_wood_overworld_river_water"},
 	results = {"craftable:dye_yellow", "tools:bucket_wood"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
@@ -352,13 +346,13 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"default:herb_sapweed", "tools:bucket_wood_overworld_water"},
+	ingredients = {"farmworks:herb_sapweed", "tools:bucket_wood_overworld_water"},
 	results = {"craftable:dye_magenta", "tools:bucket_wood"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
 
 qts.register_craft({
-	ingredients = {"default:herb_sapweed", "tools:bucket_wood_overworld_river_water"},
+	ingredients = {"farmworks:herb_sapweed", "tools:bucket_wood_overworld_river_water"},
 	results = {"craftable:dye_magenta", "tools:bucket_wood"},
 	near = {"group:furnace", "group:cookware", "group:ttable"}
 })
@@ -400,51 +394,51 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"craftable:dye_cyan", "craftable:dye_yelloW", "craftable:dye_magenta"},
+	ingredients = {"craftable:dye_cyan", "craftable:dye_yellow", "craftable:dye_magenta"},
 	results = {"craftable:dye_brown 3"},
 	near = {"group:ttable"}
 })
 
 --Solas Blocks
 qts.register_craft({
-	ingredients = {"craftable:dye_blue", "craftable:glass", "default:herb_mureux_fruit"},
+	ingredients = {"craftable:dye_blue", "craftable:glass", "overworld:mureux_fruit"},
 	results = {"craftable:solas_block_blue"},
-	near = {"group:ttable", "default:alchemy_equipment_basic"}
+	near = {"group:table", "alchemy:equipment_basic"}
 })
 
 qts.register_craft({
-	ingredients = {"craftable:dye_white", "craftable:glass", "default:herb_mureux_fruit"},
+	ingredients = {"craftable:dye_white", "craftable:glass", "overworld:mureux_fruit"},
 	results = {"craftable:solas_block_white"},
-	near = {"group:ttable", "default:alchemy_equipment_basic"}
+	near = {"group:table", "alchemy:equipment_basic"}
 })
 
 qts.register_craft({
-	ingredients = {"craftable:dye_red", "craftable:glass", "default:herb_mureux_fruit"},
+	ingredients = {"craftable:dye_red", "craftable:glass", "overworld:mureux_fruit"},
 	results = {"craftable:solas_block_red"},
-	near = {"group:ttable", "default:alchemy_equipment_basic"}
+	near = {"group:table", "alchemy:equipment_basic"}
 })
 
 qts.register_craft({
-	ingredients = {"craftable:dye_green", "craftable:glass", "default:herb_mureux_fruit"},
+	ingredients = {"craftable:dye_green", "craftable:glass", "overworld:mureux_fruit"},
 	results = {"craftable:solas_block_green"},
-	near = {"group:ttable", "default:alchemy_equipment_basic"}
+	near = {"group:table", "alchemy:equipment_basic"}
 })
 
 qts.register_craft({
-	ingredients = {"craftable:dye_purple", "craftable:glass", "default:herb_mureux_fruit"},
+	ingredients = {"craftable:dye_purple", "craftable:glass", "overworld:mureux_fruit"},
 	results = {"craftable:solas_block_purple"},
-	near = {"group:ttable", "default:alchemy_equipment_basic"}
+	near = {"group:table", "alchemy:equipment_basic"}
 })
 
 qts.register_craft({
-	ingredients = {"craftable:dye_orange", "craftable:glass", "default:herb_mureux_fruit"},
+	ingredients = {"craftable:dye_orange", "craftable:glass", "overworld:mureux_fruit"},
 	results = {"craftable:solas_block_orange"},
-	near = {"group:ttable", "default:alchemy_equipment_basic"}
+	near = {"group:table", "alchemy:equipment_basic"}
 })
 
 --candle
 qts.register_craft({
-	ingredients = {"default:wax_palm", "default:herb_flax"},
+	ingredients = {"craftable:wax_palm", "farmworks:herb_flax"},
 	results = {"craftable:candle_palm"},
 	near = {"group:workbench", "group:furnace"},
 })

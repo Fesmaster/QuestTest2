@@ -65,6 +65,19 @@ Ambient Sounds
 	}
 ]]
 
+---@class ItemDefinition
+---@field on_carry nil|fun(itemstack:ItemStack, player:Player):ItemStack|nil called every tick when the item is in the player inventory. If return is valid, it replaces the stack.
+---@field on_wield nil|fun(itemstack:ItemStack, player:Player):ItemStack|nil called every tick when the item is in the player hand. If return is valid, it replaces the wielditem.
+---@field on_long_secondary_use nil|fun(itemstack:ItemStack, player:Player):ItemStack|nil called every frame for the wielded item starting if the rightclick is held, after a specified delay (long_secondary_use_time), if the wielded item has not changed. If return is valid, it replaces the wielditem.
+---@field on_stop_secondary_use nil|fun(itemstack:ItemStack, player:Player, cause:"unclicked"|"scrolled"):ItemStack|nil called on the wielditem when the rightclick button is released after being held for a delay (long_secondary_use_time), if the wielded item has not changed. If return is valid, it replaces the wielditem.
+---@field long_secondary_use_time nil|number the delay for on_long_secondary_use and on_stop_secondary_use. Default:1
+
+---@class NodeDefinition : ItemDefinition
+---@field on_walk nil|fun(pos:Vector, player:ObjectRef):nil called every tick when an object walks on top of the node.
+---@field on_walk_in nil|fun(pos:Vector, player:ObjectRef):nil called every tick when an object walks inside of the node.
+---@field on_walk_exit nil|fun(pos:Vector, player:ObjectRef):nil called after an object leaves the node.
+---@field on_node_update nil|fun(pos:Vector):nil called when some change to the world happens near the node.
+
 local node_damage_timer = 0
 
 local ambient_sound_cycles = 2

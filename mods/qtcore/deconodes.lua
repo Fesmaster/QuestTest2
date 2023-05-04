@@ -16,7 +16,7 @@ qtcore.register_artistic_nodes("name",{
 ---Place a pillar-like node, such as a pillar or tree trunk. Valid for setting the on_place callback in a node to this function.
 ---@param itemstack ItemStack the placed itemstack
 ---@param placer ObjectRef the placer entity
----@param pointed_thing Pointed_Thing the pointed_thing
+---@param pointed_thing PointedThing the pointed_thing
 ---@return ItemStack remaining the leftover itemstack
 function qtcore.pillar_place(itemstack, placer, pointed_thing)
 	if pointed_thing.type ~= "node" then
@@ -37,18 +37,18 @@ end
 ---@class ArtisticNodeDef
 ---@field description string the node description
 ---@field cobble_desc string|nil the cobble node description, as it can vary
----@field tiles string[]|table the node textures
----@field groups table the node groups
----@field sounds SimpleSoundSpec|any the node sounds
+---@field tiles TileDefinition[]|TileDefinition the node textures
+---@field groups Group_Set the node groups
+---@field sounds {ItemSoundField:SimpleSoundSpec|nil|table}|nil the node sounds
 ---@field craft_group string the group to use for crafting
----@field overlay_image string|nil overlay texture. If it contains "{TITLE}", this will be replaced with the node name. See overworld/stone.lua for an example.
+---@field overlay_image Texture|nil overlay texture. If it contains "{TITLE}", this will be replaced with the node name. See overworld/stone.lua for an example.
 ---@field no_base boolean|nil if true, do not create node base form
 ---@field no_generation_ground_for_base boolean|nil if true, do not swap group generation_artificial for generation_ground on base node
 ---@field no_cobble boolean|nil if true, do not create node cobble form
 ---@field singleface boolean|nil if true, do not use different textures for top and bottom face. used for compatability with some nodes (IE, transparent ones like ice)
 ---@field drawtype NodeDrawType|nil if a value, use as the node draw type. Otherwise, its auto-selectec
 ---@field paramtype ParamType|nil if a value, use as the node param type
----@field use_texture_alpha string|nil if a value, use as the node's alpha draw mode
+---@field use_texture_alpha "blend"|"clip"|"opaque"|nil if a value, use as the node's alpha draw mode
 
 ---Register a set of nodes using the stone overlays.
 ---@param name ItemName the base node name
@@ -88,7 +88,7 @@ function qtcore.register_artistic_nodes(name, def)
 				def.tiles[6]..overlay,
 			},
 			groups = groups,
-			is_ground_content = false,
+			is_ground_content = true, --make caves work!!!
 			sounds = def.sounds,
 			drawtype=def.drawtype,
 			paramtype = def.paramtype,

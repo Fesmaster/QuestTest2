@@ -26,7 +26,7 @@ minetest.register_chatcommand("playground", {
 			for x = -20,20 do
 			for z = -20,20 do
 				local p = {x=pos.x + x, y = pos.y - 1, z = pos.z + z}
-				minetest.set_node(p, {name = "default:stone_cobble"})
+				minetest.set_node(p, {name = "overworld:granite"})
 				
 			end
 			end

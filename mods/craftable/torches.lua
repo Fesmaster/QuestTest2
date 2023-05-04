@@ -1,11 +1,13 @@
-
+--[[
+	Torches.
+]]
 
 qts.register_torch("craftable:torch", {
 	description = "Torch",
-	inventory_image = "default_torch_inv.png",
-	wield_image = "default_torch_inv.png",
+	inventory_image = "craftable_torch_inv.png",
+	wield_image = "craftable_torch_inv.png",
 	tiles = {{
-		name = "default_torch.png",
+		name = "craftable_torch.png",
 		animation = {type = "vertical_frames", aspect_w = 32, aspect_h = 32, length = 1.5}
 	}},
 	walkable = false,

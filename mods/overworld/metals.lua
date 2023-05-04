@@ -48,8 +48,6 @@ qts.register_shaped_node("overworld:tin_block", {
 	sounds = qtcore.node_sound_metal(),
 })
 
-
-
 --[[
 	For every stone, we want to make the ore.
 	This requires a function for all materials
@@ -112,6 +110,7 @@ qtcore.register_material("metal", {
 	block = "overworld:tin_block",
 	utility_metal=false,
 	wealth_metal=true,
+	ingot_image="overworld_tin_ingot_stack.png",
 	craft_groups = {"group:workbench"},
 })
 
@@ -188,6 +187,7 @@ qtcore.register_material("metal", {
 	block = "overworld:copper_block",
 	utility_metal=true,
 	wealth_metal=true,
+	ingot_image="overworld_copper_ingot_stack.png",
 	craft_groups = {"group:workbench"},
 })
 
@@ -235,6 +235,7 @@ qtcore.register_material("metal", {
 	alloy = "overworld:bronze_alloy",
 	utility_metal=true,
 	wealth_metal=false,
+	ingot_image="overworld_bronze_ingot_stack.png",
 	craft_groups = {"group:workbench"},
 })
 
@@ -308,6 +309,7 @@ qtcore.register_material("metal", {
 	block = "overworld:iron_block",
 	utility_metal=true,
 	wealth_metal=false,
+	ingot_image="overworld_iron_ingot_stack.png",
 	craft_groups = {"group:anvil", "group:furnace"},
 })
 
@@ -353,6 +355,7 @@ qtcore.register_material("metal", {
 	alloy = "overworld:steel_alloy",
 	utility_metal=true,
 	wealth_metal=false,
+	ingot_image="overworld_steel_ingot_stack.png",
 	craft_groups = {"group:anvil", "group:furnace"},
 })
 
@@ -419,6 +422,7 @@ qtcore.register_material("metal", {
 	ore = "overworld:stone_with_silver",
 	utility_metal=false,
 	wealth_metal=true,
+	ingot_image="overworld_silver_ingot_stack.png",
 	craft_groups = {"group:workbench_heavy"},
 })
 
@@ -481,6 +485,7 @@ qtcore.register_material("metal", {
 	ore = "overworld:stone_with_gold",
 	utility_metal=false,
 	wealth_metal=true,
+	ingot_image="overworld_gold_ingot_stack.png",
 	craft_groups = {"group:workbench_heavy"},
 })
 

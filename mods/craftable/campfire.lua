@@ -143,7 +143,7 @@ end
 minetest.register_node("craftable:campfire", {
 	description = "Campfire",
 	drawtype = "mesh",
-	tiles ={"default_campfire.png"},
+	tiles ={"craftable_campfire.png"},
 	use_texture_alpha = "clip",
 	mesh = "campfire.obj",
 	paramtype = "light",
@@ -186,7 +186,7 @@ minetest.register_node("craftable:campfire_lit", {
 	description = "Campfire",
 	drawtype = "mesh",
 	tiles ={{
-		name = "default_campfire_animated.png",
+		name = "craftable_campfire_animated.png",
 		animation = {type = "vertical_frames", aspect_w = 16, aspect_h = 16, length = 1}
 	}},
 	use_texture_alpha = "clip",

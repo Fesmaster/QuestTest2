@@ -4,7 +4,7 @@
 
 minetest.register_tool("craftable:tinderbox", {
 	description = "Tinderbox",
-	inventory_image = "default_tinder_box.png",
+	inventory_image = "craftable_tinder_box.png",
 	sound = qtcore.tool_sounds_default(),
 	groups = {tinderbox = 1},
 	on_use = function(itemstack, user, pointed_thing)

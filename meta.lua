@@ -50,13 +50,13 @@
 ---| "mesh" 3D mesh file (.obj)
 ---| "plantlike_rooted" a solid node, with a special plant texture drawn above up, up to 16 blocks
 
----@alias PointedThingType
+---@alias PointedThing_Type
 ---| "nothing" Nothing is pointed atan
 ---| "node" A node is pointed at
 ---| "object" An object is pointed at
 
----@class Pointed_Thing
----@field type PointedThingType The pointed thing's type
+---@class PointedThing
+---@field type PointedThing_Type The pointed thing's type
 ---@field under Vector When type=="node", this hold the node selected
 ---@field above Vector When type=="node", this holds the node that would be placed over
 ---@field ref ObjectRef When type=="object", this holds the ObjRef
@@ -708,6 +708,8 @@ local LuaEntity_Def = {
 ---@operator div(Vector): Vector
 ---@operator eq(Vector): Vector
 ---@operator unm(Vector): Vector
+---@field copy fun(self:Vector):Vector copy the vector
+---@field to_string fun(self:Vector):string vector to string
 
 vector ={
     ---Creates a new vector. With no params, results in 0 vector. With vector param, makes a copy. Otherwise combines 3 params to vector.
@@ -1266,7 +1268,7 @@ minetest = {
     
     ---Get the facing position of a placer
     ---@param placer ObjectRef
-    ---@param pointed_thing Pointed_Thing
+    ---@param pointed_thing PointedThing
     ---@return Vector
     pointed_thing_to_face_pos = function(placer, pointed_thing) end,
 
@@ -1293,4 +1295,179 @@ minetest = {
     ---@param wear number original wear of the tool
     get_hit_params = function(groups, tool_capabilities, time_from_last_punch, wear) end,
 
+    ---Register a new node
+    ---@param name ItemName the itemname
+    ---@param def NodeDefinition the node definition
+    register_node = function(name, def) end,
+
+    ---Register a new item
+    ---@param name ItemName the itemname
+    ---@param def ItemDefinition the node definition
+    register_craftitem = function(name, def) end,
+
+    ---Register a new tool
+    ---@param name ItemName the itemname
+    ---@param def ItemDefinition the node definition
+    register_tool = function(name, def) end,
+
 }
+
+
+--[[
+    Groups are common classifications of nodes.
+    Common groups should be added to this alias.
+]]
+---@diagnostic disable-next-line: duplicate-doc-alias
+---@alias Group string
+---| "stone"
+---| "wood"
+
+---@alias Group_Set table<Group,number>
+
+--[[
+    Textrues are complex strings based on file names and a series of operators to manipulate them
+]]
+---@alias Texture string
+
+---@class TileAnimationDefinition
+---@field type "vertical_frames"|"sheet_2d" type of animation
+---@field aspect_w integer|nil with type="vertical_frames", the width of a frame in pixels
+---@field aspect_h integer|nil with type="vertical_frames", the height of a frame in pixels
+---@field length number|nil with type="vertical_frames", the full loop length of the animation
+---@field frames_w integer|nil with type="sheet_2d", the number of frames wide the sheet is
+---@field frames_h integer|nil with type="sheet_2d", the number of frames tall the sheet is
+---@field frame_length number|nil with type="sheet_2d", the time a single frame takes
+
+---@class TextureComplex
+---@field animation TileAnimationDefinition the texture animation
+---@field name Texture the texture name
+---@field backface_culling boolean if backface culling should apply. Defaults to true.
+---@field align_style "node"|"world"|"user" how to align the texture. "user" uses a client setting.
+---@field scale integer when align_style is "world", number of nodes in each direction covered by this texture. should divide 16 evenly for best performance. 
+---@field color ColorSpec the texture color. Multiplied with the texture. Overrides all other node colors.
+
+---@alias TileDefinition
+---| Texture
+---| TextureComplex
+
+---@alias ItemSoundField string
+---|"breaks"
+---|"eat"
+---|"punch_use"
+---|"punch_use_air"
+---|"footstep"
+---|"dig"
+---|"dug"
+---|"place"
+---|"place_failed"
+---|"fall"
+
+---TODO: fill this out
+---@alias NodeBox table
+
+--[[
+    Sides a nodebox can connect on
+]]
+---@alias NodeBoxConnectSides 
+---|"top"
+---|"bottom"
+---|"front"
+---|"left"
+---|"back"
+---|"right"
+
+---TODO: fill this out
+---@alias NodeDropTable table
+
+--[[
+    The ItemDefinition is a table of many definition fields to control registered items.
+]]
+---@class ItemDefinition
+---@field description string|nil The description. Can contain newlines ("\n"). Gotten by ItemStack:get_description()
+---@field short_description string|nil Short description, no newlines. Gotten by ItemStack:get_short_description()
+---@field groups Group_Set|nil Item Groups
+---@field inventory_image Texture|nil the image used in the inventory
+---@field inventory_overlay Texture|nil overlay inventory image not affected by coloration
+---@field wield_image Texture|nil image held in the hand
+---@field wield_overlay Texture|nil image held in the hand, not affected by coloration
+---@field wield_scale Vector|{x:number,y:number,z:number}|nil visual wield scale of the item
+---@field palette Texture|nil used to color the item based off of itsm metadata
+---@field color ColorSpec|nil the default color, overriden by palette index in metadata 
+---@field stack_max integer|nil the max items that can fit in one stack
+---@field range number|nil the range that objects and nodes can be pointed at
+---@field liquids_pointable boolean|nil true if the object can point at liquids 
+---@field light_source integer|nil from 0 to minetest.LIGHT_MAX (14). Outside this range is undefined behavior 
+---@field tool_capabilities Tool_Capabilities|nil the tool capabilities of the item
+---@field node_placement_prediction string|nil prediction of what node should be placed. ""=no prediction. <other>=place that node if a node 
+---@field node_dig_prediction string|nil prediction of what node should be placed. ""=no prediction. "air"=remove pointed node, <other>=node client immedately places on node removal 
+---@field sound {ItemSoundField:SimpleSoundSpec|nil|table}|nil the node sounds
+---@field on_place nil|fun(itemstack:ItemStack,placer:ObjectRef,pointed_thing:PointedThing):ItemStack|nil function called when item is placed. Returns the leftover ItemStack or nil 
+---@field on_secondary_use nil|fun(itemstack:ItemStack,placer:ObjectRef,pointed_thing:PointedThing):ItemStack|nil function called when item is placed without pointing at anything. Returns replacement ItemStack 
+---@field on_pickup nil|fun(itemstack:ItemStack, picker:ObjectRef, pointed_thing:PointedThing, time_from_last_punch:number, ...):ItemStack|nil called when dropped item is picked up. Returns itemstack that should remain on floor.
+---@field on_use nil|fun(itemstack:ItemStack, user:ObjectRef, pointed_thing:PointedThing):ItemStack|nil Called when puched when item. Returns replacement ItemStack.
+---@field after_use nil|fun(itemstack:ItemStack, user:ObjectRef, node:NodeRef, digparams:table):ItemStack|nil Called after node destroyed with item. returns replacement ItemStack.
+
+
+--[[
+    The NodeDefinition is a table of many definition fields to control registered nodes. Anything from ItemDefinition also applies.
+]]
+---@class NodeDefinition : ItemDefinition
+---@field drawtype NodeDrawType|nil The node draw type
+---@field visual_scale number|nil Node scale, supported for drawtypes: plantlike, signlike, torchlike, firelike, mesh, nodebox, allfaces
+---@field tiles nil|TileDefinition[] List of tiles. Order: +Y, -Y, +X, -X, +Z, -Z (top, bottom, right, left, front, back)
+---@field overlay_tiles nil|TileDefinition[] List of overlay tiles. Not affected by coloration.
+---@field special_tiles nil|TileDefinition[] special tiles used by some drawtypes
+---@field use_texture_alpha nil|"opaque"|"clip"|"blend" Alpha mode of the textures. Opaque is default for opaque nodes, clip for others. (Clip is masked). blend for translucency
+---@field post_effect_color nil|ColorSpec the screen color when camera is inside the node
+---@field paramtype nil|ParamType the node param type
+---@field paramtype2 nil|Param2Type the node param2 type
+---@field place_param2 nil|integer the default param2 of the node
+---@field is_ground_content nil|boolean if false, the cave generator will not carve through this node. Default:true
+---@field walkable nil|boolean Node collision enabled. Default:true
+---@field pointable nil|boolean Node selection enabled. Default:true
+---@field diggable nil|boolean Node can be or cannot be broken. Default:true
+---@field climbable nil|boolean Node climbing enabled. Default:false
+---@field move_resistance nil|integer 0-7, resistance a node offers to movement in it
+---@field buildable_to nil|boolean if true, placed nodes replace this node. Default:false
+---@field floodable nil|boolean if true, flowing liquids will replace this node. Default:false
+---@field liquidtype nil|"none"|"source"|"flowing" the node liquid type. Default:"none"
+---@field liquid_alternative_flowing nil|ItemName the node name for the flowing node if a liquid
+---@field liquid_alternative_source nil|ItemName the node name for the source node if a liquid
+---@field liquid_viscosity nil|integer 0-7 Liquid flow speed, 0 being fast.
+---@field liquid_renewable nil|boolean liquid renewability, ie, two sources flowing into same block becomes source. Default:true
+---@field liquid_move_physics nil|boolean liquid physics. nil:treated as true if liquid, false otherwise. Default:nil
+---@field liquid_range nil|number 0-8 Liquid flow range. Default:8
+---@field leveled nil|number For nodebox drawtype, the default level value. 0 < leveled < leveled_max
+---@field leveled_max nil|number 0-127. For nodebox drawtype, hard limit on leveled height. Default:127
+---@field drowning nil|number the ammount of damage the player takes if they have no bubbles left in this node. Default:0 (disables drowning entirely - no bubbles)
+---@field damage_per_second nil|number the ammoutn of damage the player takes if they are inside this node. Default:0 (no damage)
+---@field node_box nil|NodeBox the visual nodebox for nodebox drawtype
+---@field connects_to nil|ItemName[] nodes that this one connects to with the drawtype nodebox
+---@field connect_sides nil|NodeBoxConnectSides[] the sides that this node can connect on. Defaults to all of them that have boxes.
+---@field mesh nil|string Mesh filename for mesh drawtype. Obj Format.
+---@field selection_box nil|NodeBox Selection boxes Defaults to node_box if not defined
+---@field collision_box nil|NodeBox Colliosion boxes. Defaults to node_box if not defined
+---@field waving nil|number Waving mode: 1:wave like plants. 2:wave like leaves. 3:wave like water.
+---@field drop nil|ItemString|NodeDropTable the drops of the node. Defaults to itself.
+---@field on_construct nil|fun(pos:Vector):nil Called when node added (exept by minetest:swap_node, schematics, or VoxelManip). WARNING: Can cause infinite loops if it replaces node via minetest:set_node(...)
+---@field on_destruct nil|fun(pos:Vector):nil Called before removing a node. Not called for bulk node placement (VoxelManip)
+---@field after_destruct nil|fun(pos:Vector, oldnode:NodeRef) Called after removing a node. Not called for bulk node placement (VoxelManip)
+---@field on_flood nil|fun(pos:Vector, oldnode:NodeRef, newnode:NodeRef):nil Called when a node is flooded
+---@field preserve_metadata nil|fun(pos:Vector, oldnode:NodeRef, oldmeta:NodeMetaRef, drops:ItemStack[]) Called when a node is about to become an Itemstack, but before the node is removed. Used to move metadata from old node to ItemStack metadata
+---@field after_place_node nil|fun(pos:Vector, placer:ObjectRef|nil, itemstack:ItemStack, pointed_thing:PointedThing):boolean Called after a node is placed in a player-like fashion. Return of true blocks ItemStack from having an item taken.
+---@field after_dig_node nil|fun(pos:Vector, oldnode:NodeRef, oldmetadata:NodeMetaRef, digger:ObjectRef|nil):nil Called after a node was dug in a player-like fashion.
+---@field can_dig nil|fun(pos:Vector, player:ObjectRef|nil):boolean returns true if node can be dug by player.
+---@field on_punch nil|fun(pos:Vector, node:NodeRef, puncher:ObjectRef, pointed_thing:PointedThing):nil Called when node is punched. Default:minetest.node_punch which calls the minetest.register_on_punchnode callbacks
+---@field on_rightclick nil|fun(pos:Vector, node:NodeRef, clicker:ObjectRef, itemstack:ItemStack, pointed_thing:PointedThing|nil):nil|ItemStack Called when node is built against. Return the leftover ItemStack 
+---@field on_dig nil|fun(pos:Vector, node:NodeRef, digger:ObjectRef):boolean Called when a node is dug. return true if node dug Sucessfully.
+---@field on_timer nil|fun(pos:Vector, elapsed:number):nil|boolean Called when a node timer runs out. Return true to restart timer. 
+---@field on_receive_fields nil|fun(pos:Vector, formname:string, fields:table, sender:Player) Called when there is input in that node's UI.
+---@field allow_metadata_inventory_move nil|fun(pos:Vector, from_list:string, from_index:integer, to_list:string, to_index:integer, count:integer, player:Player):boolean
+---@field allow_metadata_inventory_put nil|fun(pos:Vector, listname:string, index:integer, stack:ItemStack, player:Player):boolean
+---@field allow_metadata_inventory_take nil|fun(pos:Vector, listname:string, index:integer, stack:ItemStack, player:Player):boolean
+---@field on_metadata_inventory_move nil|fun(pos:Vector, from_list:string, from_index:integer, to_list:string, to_index:integer, count:integer, player:Player):nil
+---@field on_metadata_inventory_put nil|fun(pos:Vector, listname:string, index:integer, stack:ItemStack, player:Player):nil
+---@field on_metadata_inventory_take nil|fun(pos:Vector, listname:string, index:integer, stack:ItemStack, player:Player):nil
+---@field on_blast nil|fun(pos:Vector, intensity:number):any called when node is exploded.
+---@field mod_origin string The origin mod. Do not set when registering a node.
+

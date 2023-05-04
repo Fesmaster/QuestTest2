@@ -2,6 +2,15 @@
     Rope and Chains
 ]]
 
+--[[
+	This function is compatable with the node callback 'on_place'
+	Its job is to do the whole "place at the bottom" thing that
+	ropes and chains do. It is half of the rope equation, the other half being the 
+]]
+---@param itemstack ItemStack
+---@param placer Player
+---@param pointed_thing PointedThing
+---@return boolean|nil iten_remains true if no item taken from stack
 local function rope_place(itemstack, placer, pointed_thing)
     local node = minetest.get_node_or_nil(pointed_thing.under)
     if node and minetest.get_item_group(node.name, "rope") ~= 0 then
@@ -25,9 +34,12 @@ local function rope_place(itemstack, placer, pointed_thing)
     return minetest.item_place(itemstack, placer, pointed_thing)
 end
 
+--[[
+	Basic Rope
+]]
 minetest.register_node("craftable:rope", {
 	description = "Rope",
-	tiles = {"default_rope.png"},
+	tiles = {"craftable_rope.png"},
 	use_texture_alpha="clip",
 	drawtype = "nodebox",
 	paramtype = "light",
@@ -43,118 +55,85 @@ minetest.register_node("craftable:rope", {
     on_place = rope_place,
 })
 
-local function chain_nodebox()
-    return {
-		type = "fixed",
-		fixed = {
-            { -2/32, -16/32, -1/32, 2/32, -15/32, 1/32, },
-            { -1/32, -16/32, -2/32, 1/32, -10/32, -1/32, },
-            { -1/32, -16/32, 1/32, 1/32, -10/32, 2/32, },
-            { -2/32, -12/32, -1/32, 2/32, -10/32, 1/32, },
-            { -2/32, -10/32, -1/32, -1/32, -5/32, 1/32, },
-            { 1/32, -10/32, -1/32, 2/32, -5/32, 1/32, },
-            { -1/32, -7/32, -2/32, 1/32, -5/32, 2/32, },
-            { -1/32, -5/32, -2/32, 1/32, 0/32, -1/32, },
-            { -1/32, -5/32, 1/32, 1/32, 1/32, 2/32, },
-            { -2/32, -1/32, -1/32, 2/32, 1/32, 1/32, },
-            { 1/32, 1/32, -1/32, 2/32, 6/32, 1/32, },
-            { -2/32, 1/32, -1/32, -1/32, 6/32, 1/32, },
-            { -1/32, 4/32, -2/32, 1/32, 6/32, 2/32, },
-            { -1/32, 6/32, 1/32, 1/32, 12/32, 2/32, },
-            { -1/32, 6/32, -2/32, 1/32, 12/32, -1/32, },
-            { -2/32, 10/32, -1/32, 2/32, 12/32, 1/32, },
-            { -2/32, 12/32, -1/32, -1/32, 16/32, 1/32, },
-            { 1/32, 12/32, -1/32, 2/32, 16/32, 1/32, },
-            { -1/32, 15/32, -2/32, 1/32, 16/32, 2/32, },
-        }
-	}
-end
-
-minetest.register_node("craftable:chain_copper", {
-	description = "Copper Chain",
-	tiles = {"overworld_copper_ingot_stack.png"},
-	use_texture_alpha="clip",
-	drawtype = "nodebox",
-	paramtype = "light",
-	groups = {oddly_breakable_by_hand=3, generation_artificial=1, rope=1},
-	node_box = chain_nodebox(),
-	connects_to = {"group:rope"},
-	sounds = qtcore.node_sound_metal(),
-    walkable = false,
-	climbable = true,
-    on_place = rope_place,
-})
-
-minetest.register_node("craftable:chain_bronze", {
-	description = "Bronze Chain",
-	tiles = {"overworld_bronze_ingot_stack.png"},
-	use_texture_alpha="clip",
-	drawtype = "nodebox",
-	paramtype = "light",
-	groups = {oddly_breakable_by_hand=3, generation_artificial=1, rope=1},
-	node_box = chain_nodebox(),
-	connects_to = {"group:rope"},
-	sounds = qtcore.node_sound_metal(),
-    walkable = false,
-	climbable = true,
-    on_place = rope_place,
-})
-
-minetest.register_node("craftable:chain_iron", {
-	description = "Iron Chain",
-	tiles = {"overworld_iron_ingot_stack.png"},
-	use_texture_alpha="clip",
-	drawtype = "nodebox",
-	paramtype = "light",
-	groups = {oddly_breakable_by_hand=3, generation_artificial=1, rope=1},
-	node_box = chain_nodebox(),
-	connects_to = {"group:rope"},
-	sounds = qtcore.node_sound_metal(),
-    walkable = false,
-	climbable = true,
-    on_place = rope_place,
-})
-
-minetest.register_node("craftable:chain_steel", {
-	description = "Steel Chain",
-	tiles = {"overworld_steel_ingot_stack.png"},
-	use_texture_alpha="clip",
-	drawtype = "nodebox",
-	paramtype = "light",
-	groups = {oddly_breakable_by_hand=3, generation_artificial=1, rope=1},
-	node_box = chain_nodebox(),
-	connects_to = {"group:rope"},
-	sounds = qtcore.node_sound_metal(),
-    walkable = false,
-	climbable = true,
-    on_place = rope_place,
-})
-
 qts.register_craft({
-	ingredients = {"default:herb_flax 1"},
+	ingredients = {"farmworks:herb_flax 1"},
 	results = {"craftable:rope"},
 })
 
-qts.register_craft({
-	ingredients = {"overworld:copper_bar 1"},
-	results = {"craftable:chain_copper"},
-	near = {"group:workbench"},
-})
+local chain_nodebox = {
+	type = "fixed",
+	fixed = {
+        { -2/32, -16/32, -1/32, 2/32, -15/32, 1/32, },
+        { -1/32, -16/32, -2/32, 1/32, -10/32, -1/32, },
+        { -1/32, -16/32, 1/32, 1/32, -10/32, 2/32, },
+        { -2/32, -12/32, -1/32, 2/32, -10/32, 1/32, },
+        { -2/32, -10/32, -1/32, -1/32, -5/32, 1/32, },
+        { 1/32, -10/32, -1/32, 2/32, -5/32, 1/32, },
+        { -1/32, -7/32, -2/32, 1/32, -5/32, 2/32, },
+        { -1/32, -5/32, -2/32, 1/32, 0/32, -1/32, },
+        { -1/32, -5/32, 1/32, 1/32, 1/32, 2/32, },
+        { -2/32, -1/32, -1/32, 2/32, 1/32, 1/32, },
+        { 1/32, 1/32, -1/32, 2/32, 6/32, 1/32, },
+        { -2/32, 1/32, -1/32, -1/32, 6/32, 1/32, },
+        { -1/32, 4/32, -2/32, 1/32, 6/32, 2/32, },
+        { -1/32, 6/32, 1/32, 1/32, 12/32, 2/32, },
+        { -1/32, 6/32, -2/32, 1/32, 12/32, -1/32, },
+        { -2/32, 10/32, -1/32, 2/32, 12/32, 1/32, },
+        { -2/32, 12/32, -1/32, -1/32, 16/32, 1/32, },
+        { 1/32, 12/32, -1/32, 2/32, 16/32, 1/32, },
+        { -1/32, 15/32, -2/32, 1/32, 16/32, 2/32, },
+    }
+}
 
-qts.register_craft({
-	ingredients = {"overworld:bronze_bar 1"},
-	results = {"craftable:chain_bronze"},
-	near = {"group:workbench"},
-})
+--[[
+	Metal Chains.
+	This will automatically register a chain for all utility metals.
+]]
+qtcore.for_all_materials("metal", function (fields)
+	--[[
+		Remember to *always* check for the fields you need
+		There can be any fields (or even none) passed, 
+		in any format.
+	]]
+	if fields.name
+		and fields.desc
+		and fields.ingot
+		and fields.ingot_image
+		and fields.utility_metal
+		and fields.craft_groups
+	then
+		
+		--[[
+			register the chain itself
+			Note the leading ":" on the chain name. This is for when this
+			function is called from a mode that is not 'craftable', and allows
+			us to bypass the naming restrictions.
+		]]
+		minetest.register_node(":craftable:chain_"..fields.name, {
+			description = fields.desc.." Chain",
+			tiles = {fields.ingot_image},
+			use_texture_alpha="clip",
+			drawtype = "nodebox",
+			paramtype = "light",
+			groups = {oddly_breakable_by_hand=3, generation_artificial=1, rope=1},
+			node_box = chain_nodebox,
+			connects_to = {"group:rope"},
+			sounds = qtcore.node_sound_metal(),
+			walkable = false,
+			climbable = true,
+			on_place = rope_place,
+		})
 
-qts.register_craft({
-	ingredients = {"overworld:iron_bar 1"},
-	results = {"craftable:chain_iron"},
-	near = {"group:furnace", "craftable:anvil"},
-})
+		--[[
+			register the crafting recipe
+			note the lack of the leading ":" on the chain name
+			this is an item name, and that will break things.
+		]]
+		qts.register_craft({
+			ingredients = {fields.ingot.." 1"},
+			results = {"craftable:chain_"..fields.name},
+			near = fields.craft_groups,
+		})
+	end
+end)
 
-qts.register_craft({
-	ingredients = {"overworld:steel_bar 1"},
-	results = {"craftable:chain_steel"},
-	near = {"group:furnace", "craftable:anvil"},
-})

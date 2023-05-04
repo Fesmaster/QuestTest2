@@ -4,7 +4,7 @@
 
 qts.register_ingot("craftable:stick", {
 	description = "Stick",
-	inventory_image = "default_stick.png",
+	inventory_image = "craftable_stick.png",
 	tiles = {"overworld_oak_wood.png"},
 	groups = {stick = 1, oddly_breakable_by_hand = 3},
 	sounds = qtcore.node_sound_wood(),
@@ -23,34 +23,27 @@ qts.register_ingot("craftable:stick", {
 
 minetest.register_craftitem("craftable:charcoal", {
 	description = "Charcoal Lump",
-	inventory_image = "default_charcoal.png",
+	inventory_image = "craftable_charcoal.png",
 	groups = {coal = 1,},
 })
 
 minetest.register_craftitem("craftable:refined_clay_lump", {
 	description = "Refined Clay",
-	inventory_image = "default_refined_clay_lump.png",
+	inventory_image = "craftable_refined_clay_lump.png",
 })
 
 minetest.register_craftitem("craftable:tinder", {
 	description = "Tinder",
-	inventory_image = "default_tinder.png",
+	inventory_image = "craftable_tinder.png",
 })
 
 minetest.register_craftitem("craftable:paper", {
 	description = "Paper",
-	inventory_image = "default_paper.png",
+	inventory_image = "craftable_paper.png",
 })
 
---minetest.register_alias("craftable:brick_single", "craftable:brick_item")
 minetest.register_craftitem("craftable:brick_item", {
 	description = "Brick",
-	inventory_image = "default_brick_item.png",
+	inventory_image = "craftable_brick_item.png",
 })
 
---TODO: Move to Farming mod
-minetest.register_craftitem("craftable:poltice_milfoil", {
-	description = "Milfoil Poltice",
-	inventory_image = "default_poltice_milfoil.png",
-	on_use = minetest.item_eat(2),
-})

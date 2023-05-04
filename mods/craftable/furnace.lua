@@ -15,8 +15,8 @@ qts.gui.register_gui("craftable_gui_furnace", {
 		str = str .. "list[nodemeta:"..spos..";src;"..P(2.75,0.5)..";1,1;]"..
 			"list[nodemeta:"..spos..";fuel;"..P(2.75,2.5)..";1,1;]"..
 			"list[nodemeta:"..spos..";dst;"..P(4.75,0.96)..";2,2;]"..
-			"image["..P(2.75,1.5)..";1,1;default_furnace_fire_bg.png^[lowpart:"..
-			(fuel_percent)..":default_furnace_fire_fg.png]"..
+			"image["..P(2.75,1.5)..";1,1;craftable_furnace_fire_bg.png^[lowpart:"..
+			(fuel_percent)..":craftable_furnace_fire_fg.png]"..
 			"image["..P(3.75,1.5)..";1,1;gui_furnace_arrow_bg.png^[lowpart:"..
 			(item_percent)..":gui_furnace_arrow_fg.png^[transformR270]"..
 			inventory.get_player_main(qts.gui.gui_makepos(0, 4.25), false) ..
@@ -47,7 +47,7 @@ minetest.register_chatcommand("ft", {
 	description = "Furnace Test",
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
-		qts.gui.show_gui(player:get_pos(), player, "default_furnace")
+		qts.gui.show_gui(player:get_pos(), player, "craftable_furnace")
 	end
 })
 --]]
@@ -336,7 +336,6 @@ local function register_furnace(name, def)
 		tiles = def.tiles_on,
 		paramtype2 = "facedir",
 		groups = {cracky=2, not_in_creative_inventory = 1, furnace=1, generation_artificial=1},
-		--legacy_facedir_simple = true,
 		is_ground_content = false,
 		sounds = qtcore.node_sound_stone(),
 	
@@ -377,14 +376,14 @@ end
 register_furnace("craftable:furnace", {
 	description = "Furnace",
 	tiles_off = {
-		"default_furnace_top.png", "default_furnace_bottom.png",
-		"default_furnace_side.png", "default_furnace_side.png",
-		"default_furnace_side.png", "default_furnace_front.png"
+		"craftable_furnace_top.png", "craftable_furnace_bottom.png",
+		"craftable_furnace_side.png", "craftable_furnace_side.png",
+		"craftable_furnace_side.png", "craftable_furnace_front.png"
 	},
 	tiles_on = {
-		"default_furnace_top.png", "default_furnace_bottom.png",
-		"default_furnace_side.png", "default_furnace_side.png",
-		"default_furnace_side.png", "default_furnace_front_active.png"
+		"craftable_furnace_top.png", "craftable_furnace_bottom.png",
+		"craftable_furnace_side.png", "craftable_furnace_side.png",
+		"craftable_furnace_side.png", "craftable_furnace_front_active.png"
 	}
 })
 
@@ -392,27 +391,27 @@ register_furnace("craftable:furnace", {
 register_furnace("craftable:furnace_brick", {
 	description = "Brick Furnace",
 	tiles_off = {
-		"default_furnace_brick_top.png", "default_furnace_brick_top.png",
-		"default_furnace_brick_side.png", "default_furnace_brick_side.png",
-		"default_furnace_brick_side.png", "default_furnace_brick_front.png"
+		"craftable_furnace_brick_top.png", "craftable_furnace_brick_top.png",
+		"craftable_furnace_brick_side.png", "craftable_furnace_brick_side.png",
+		"craftable_furnace_brick_side.png", "craftable_furnace_brick_front.png"
 	},
 	tiles_on = {
-		"default_furnace_brick_top.png", "default_furnace_brick_top.png",
-		"default_furnace_brick_side.png", "default_furnace_brick_side.png",
-		"default_furnace_brick_side.png", "default_furnace_brick_front_active.png" 
+		"craftable_furnace_brick_top.png", "craftable_furnace_brick_top.png",
+		"craftable_furnace_brick_side.png", "craftable_furnace_brick_side.png",
+		"craftable_furnace_brick_side.png", "craftable_furnace_brick_front_active.png" 
 	}
 })
 
 register_furnace("craftable:furnace_brick_gray", {
 	description = "Brick Furnace",
 	tiles_off = {
-		"default_furnace_brick_gray_top.png", "default_furnace_brick_gray_top.png",
-		"default_furnace_brick_gray_side.png", "default_furnace_brick_gray_side.png",
-		"default_furnace_brick_gray_side.png", "default_furnace_brick_gray_front.png"
+		"craftable_furnace_brick_gray_top.png", "craftable_furnace_brick_gray_top.png",
+		"craftable_furnace_brick_gray_side.png", "craftable_furnace_brick_gray_side.png",
+		"craftable_furnace_brick_gray_side.png", "craftable_furnace_brick_gray_front.png"
 	},
 	tiles_on = {
-		"default_furnace_brick_gray_top.png", "default_furnace_brick_gray_top.png",
-		"default_furnace_brick_gray_side.png", "default_furnace_brick_gray_side.png",
-		"default_furnace_brick_gray_side.png", "default_furnace_brick_gray_front_active.png"
+		"craftable_furnace_brick_gray_top.png", "craftable_furnace_brick_gray_top.png",
+		"craftable_furnace_brick_gray_side.png", "craftable_furnace_brick_gray_side.png",
+		"craftable_furnace_brick_gray_side.png", "craftable_furnace_brick_gray_front_active.png"
 	}
 })

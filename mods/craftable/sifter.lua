@@ -1,3 +1,9 @@
+--[[
+    Sifter block
+    An autocrafting block available early in the game that
+    can be used to process grainy items for more drops, mostly flint.
+    Frankly, needs more good uses.
+]]
 
 local sifter_outs = {}
 local sifter_ins = {}
@@ -34,8 +40,8 @@ end
 minetest.register_node("craftable:sifter", {
     description = "Sifter",
 	tiles = {
-		"default_sifter_top.png", --top
-		"default_sifter_top.png", --bottom
+		"craftable_sifter_top.png", --top
+		"craftable_sifter_top.png", --bottom
 		"overworld_oak_wood.png" --sides
 	},
 	use_texture_alpha = "clip",
@@ -81,9 +87,9 @@ minetest.register_node("craftable:sifter", {
 def = {
     name = the sifting name
     description = optional, readable name
-    def.tiles = string, texture of sift
-    def.node = string, the in node name
-    def.results = table, possible results
+    tiles = string, texture of sift
+    node = string, the in node name
+    results = table, possible results
 }
 ]]
 local function register_sifter(def)
@@ -91,9 +97,9 @@ local function register_sifter(def)
         minetest.register_node("craftable:sifter_"..def.name.."_"..i, {
             description = "Sifter "..(def.description or def.name) .." ".. i,
         	tiles = {
-        		"default_sifter_top.png^("..def.tiles.."^default_sifter_mask_top.png^[makealpha:255,126,126)", --top
-        		"default_sifter_top.png^("..def.tiles.."^default_sifter_mask_top.png^[makealpha:255,126,126)", --bottom
-        		"overworld_oak_wood.png^("..def.tiles.."^default_sifter_mask_side.png^[makealpha:255,126,126)" --sides
+        		"craftable_sifter_top.png^("..def.tiles.."^craftable_sifter_mask_top.png^[makealpha:255,126,126)", --top
+        		"craftable_sifter_top.png^("..def.tiles.."^craftable_sifter_mask_top.png^[makealpha:255,126,126)", --bottom
+        		"overworld_oak_wood.png^("..def.tiles.."^craftable_sifter_mask_side.png^[makealpha:255,126,126)" --sides
         	},
         	use_texture_alpha = "clip",
         	drawtype = "nodebox",
@@ -130,6 +136,16 @@ local function register_sifter(def)
     end
     sifter_outs["craftable:sifter_"..def.name.."_"] = def.results
     sifter_ins[def.node] = "craftable:sifter_"..def.name.."_6"
+
+    --[[
+        register a reference crafting recipe for siftable items
+    ]]
+    qts.register_reference_craft({
+        ingredients={def.node , "craftable:sifter"},
+        results=def.results,
+        type="reference",
+        description="Sifting with a sifter."
+    })
 end
 
 minetest.register_abm({

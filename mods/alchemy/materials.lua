@@ -76,3 +76,9 @@ minetest.register_node("alchemy:lye", {
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
 	node_box = qtcore.nb_dustpile(),
 })
+
+minetest.register_craftitem("alchemy:poltice_milfoil", {
+	description = "Milfoil Poltice",
+	inventory_image = "alchemy_poltice_milfoil.png",
+	on_use = minetest.item_eat(2),
+})
