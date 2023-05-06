@@ -201,6 +201,13 @@ minetest.register_node("overworld:lantern_fruit", {
 	light_source = 12,
 })
 
+--[[
+	fix lanternfruit wood fence, as it uses a special texture.
+]]
+minetest.override_item("overworld:lanternfruit_wood_fence", {
+	tiles = {"overworld_lanternfruit_wood_fence.png"},
+})
+
 minetest.register_alias("default:lantern_fruit", "overworld:lantern_fruit")
 
 --fruit-bearing apple leaves:
@@ -367,6 +374,31 @@ minetest.register_node("overworld:swamp_leaves", {
 })
 minetest.register_alias("default:swamp_leaves", "overworld:swamp_leaves")
 
+--fence
+qts.register_fencelike_node("overworld:swamp_wood_fence", {
+	description = "Swamp Wood Fence",
+	type = "fence",
+	tiles = {"overworld_swamp_wood.png"},
+	groups = {choppy=3, oddly_breakable_by_hand=2, fence=1, generation_artificial=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "overworld:swamp_wood_rail",
+	paramtype2 = "color",
+	palette = "qt_palette_paint_light.png",
+})
+
+--rail
+qts.register_fencelike_node("overworld:swamp_wood_rail", {
+	description = "Swamp Wood Rail",
+	type = "rail",
+	tiles = {"overworld_swamp_wood.png"},
+	groups = {choppy=3, oddly_breakable_by_hand=2, fence=1, not_in_creative_inventory=1, generation_artificial=1},
+	sounds = qtcore.node_sound_wood(),
+	fence_alt = "overworld:swamp_wood_fence", 
+	drop = "overworld:swamp_wood_fence",
+	paramtype2 = "color",
+	palette = "qt_palette_paint_light.png",
+})
+
 qtcore.register_material("wood", {
 	name="swamp",
 	desc = "Swamp",
@@ -375,6 +407,8 @@ qtcore.register_material("wood", {
 	log_stripped="overworld:stripped_swamp_log",
 	leaves="overworld:swamp_leaves",
 	plank_texture = "overworld_swamp_wood.png",
+	fence="overworld:swamp_wood_fence",
+	rail="overworld:swamp_wood_rail",
 --	sapling="overworld:palm_sapling",
 })
 
