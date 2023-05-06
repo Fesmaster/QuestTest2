@@ -16,6 +16,10 @@ minetest.register_tool("tools:pick_rusted", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {pickaxe = 1}
 })
+--add the pick as an initial item
+qtcore.add_initial_item("tools:pick_rusted")
+
+
 --copper
 minetest.register_tool("tools:pick_copper", {
 	description = "Copper Pickaxe",

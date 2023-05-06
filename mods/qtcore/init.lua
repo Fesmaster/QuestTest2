@@ -17,6 +17,7 @@ dofile(minetest.get_modpath("qtcore").."/trees.lua")
 dofile(minetest.get_modpath("qtcore").."/deconodes.lua")
 dofile(minetest.get_modpath("qtcore").."/fire.lua")
 dofile(minetest.get_modpath("qtcore").."/materials.lua")
+dofile(minetest.get_modpath("qtcore").."/initial_items.lua")
 --[[
 Random functions are placed here
 --]]
