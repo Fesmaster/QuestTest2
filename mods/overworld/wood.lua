@@ -176,6 +176,8 @@ for i, wood in ipairs(woods) do
 
 end
 
+minetest.register_alias("default:coffeetree_leaves", "overworld:coffee_leaves")
+
 --lanternfruit early misspelling fix for tree backcompatablility
 qts.register_shapeed_alias("default:lanterfruit_log", "overworld:lanternfruit_log")
 
@@ -320,6 +322,7 @@ minetest.register_node("overworld:swamp_log", {
 		}
 	}
 })
+minetest.register_alias("default:swamp_log", "overworld:swamp_log")
 
 minetest.register_node("overworld:stripped_swamp_log", {
 	description = "Stripped Swamp Log",
@@ -362,6 +365,7 @@ minetest.register_node("overworld:swamp_leaves", {
 		}
 	}
 })
+minetest.register_alias("default:swamp_leaves", "overworld:swamp_leaves")
 
 qtcore.register_material("wood", {
 	name="swamp",
@@ -404,6 +408,7 @@ minetest.register_node("overworld:bamboo", {
 		}
 	}
 })
+minetest.register_alias("default:bamboo", "overworld:bamboo")
 
 minetest.register_node("overworld:bamboo_leaves", {
 	description = "Bamboo Leaves",
@@ -438,6 +443,7 @@ minetest.register_node("overworld:bamboo_leaves", {
 		}
 	}
 })
+minetest.register_alias("default:bamboo_leaves", "overworld:bamboo_leaves")
 
 qts.register_fencelike_node("overworld:bamboo_fence", {
 	description = "Bamboo Fence",

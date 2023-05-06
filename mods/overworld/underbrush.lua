@@ -99,7 +99,7 @@ minetest.register_node("overworld:small_mushroom", {
 	on_flood = floodFunc,
 })
 
-minetest.register_alias("overworld:small_shroom", "overworld:small_mushroom")
+minetest.register_alias("default:small_shroom", "overworld:small_mushroom")
 
 
 minetest.register_node("overworld:grass_short", {
@@ -253,6 +253,7 @@ minetest.register_node("overworld:beach_grass", {
 	drop = underbrush_drops,
 	on_flood = floodFunc,
 })
+minetest.register_alias("default:beach_grass", "overworld:beach_grass")
 
 --natural coconut
 
@@ -281,7 +282,7 @@ minetest.register_node("overworld:natural_coconut", {
 	},
 	sounds = qtcore.node_sound_wood(),
 })
-
+minetest.register_alias("default:natural_coconut", "overworld:natural_coconut")
 
 minetest.register_node("overworld:bonewort", {
 	description = "Bonewort",

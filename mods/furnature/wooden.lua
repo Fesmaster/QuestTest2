@@ -5,6 +5,9 @@
 local table_nodeboxes = dofile(minetest.get_modpath("furnature").."/nodeboxes/table.lua")
 local chair_nodeboxes = dofile(minetest.get_modpath("furnature").."/nodeboxes/chair.lua")
 
+local registered_exemplar_table = false
+local registered_exemplar_press = false
+
 qtcore.for_all_materials("wood", function (fields)
     if fields.name and fields.desc and fields.planks then
 
@@ -70,6 +73,11 @@ qtcore.for_all_materials("wood", function (fields)
                     results = {fields.table},
                     near = {"group:workbench"},
                 })
+
+                if not registered_exemplar_table then
+                    registered_exemplar_table=true
+                    inventory.register_exemplar_item("table", fields.table)
+                end
             end
 
             --chair
@@ -238,12 +246,14 @@ qtcore.for_all_materials("wood", function (fields)
                     results = {fields.press},
                     near = {"group:workbench"},
                 })
+
+                if not registered_exemplar_press then
+                    registered_exemplar_press=true
+                    inventory.register_exemplar_item("press", fields.press)
+                end
             end
 
             --and more!!
         end
     end
 end)
-
-inventory.register_exemplar_item("table", "furnature:table_oak") --assumed to exist!
-inventory.register_exemplar_item("press", "furnature:press_oak") --assumed to exist!

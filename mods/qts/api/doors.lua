@@ -69,8 +69,10 @@ local function register_doorlike_internal(name, def, doorOpts)
         This is to remove a leading ":" from names. Nodes registered outside of their mod need this, but
         it tends to break itemstacks and node names at runtime
     ]]
+    local prefix = ""
     if string.sub(name, 1,1) == ":" then
         name_left_closed = string.gsub(name, ":", "",1)
+        prefix = ":"
     end
     local name_left_open = name_left_closed.."_open"
     local name_right_closed = name_left_closed..doorOpts.alt
@@ -112,10 +114,10 @@ local function register_doorlike_internal(name, def, doorOpts)
     alt_open.collision_box = doorOpts.boxes.alt_open
     
     --registers
-    minetest.register_node(name_left_closed,  main_closed)
-    minetest.register_node(name_left_open,    main_open)
-    minetest.register_node(name_right_closed, alt_closed)
-    minetest.register_node(name_right_open,   alt_open)
+    minetest.register_node(prefix..name_left_closed,  main_closed)
+    minetest.register_node(prefix..name_left_open,    main_open)
+    minetest.register_node(prefix..name_right_closed, alt_closed)
+    minetest.register_node(prefix..name_right_open,   alt_open)
 end
 
 local param2_to_leftvector = {

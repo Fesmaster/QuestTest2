@@ -323,11 +323,15 @@ function inventory.register_util_btn(label, on_click)
 end
 
 function inventory.register_exemplar_item(group, item)
+	--remove any ":" prefix
+	if string.sub(item, 1,1) == ":" then
+        item = string.gsub(item, ":", "",1)
+    end
 	if (minetest.registered_items[item]) then
 		inventory.exemplar[group] = item
 		minetest.log("verbose", "Inventory: exemplar item for " .. group .. " added: " .. item)
 	else
-		minetest.log("warning", "Inventory: register_exemplar_item: invalid item. please declare first!")
+		minetest.log("warning", "Inventory: register_exemplar_item: invalid item ["..dump(item).."]. please declare first!")
 	end
 end
 

@@ -74,6 +74,18 @@ qtcore.for_all_materials("stone", function(fields)
 		})
 
 		--[[
+			Next, create the smeltable in the foundry mod
+		]]
+		foundry.register_smeltable({
+			itemname = "overworld:"..fields.name.."_with_tin",
+			smelt_time = 4,
+			type = "melt",
+			heat = 1,
+			metal = "iron",
+			metal_ammount = 4,
+		})
+
+		--[[
 			Then, create the ore registrations.
 		]]
 		minetest.register_ore({
@@ -154,6 +166,15 @@ qtcore.for_all_materials("stone", function(fields)
 			tiles = {fields.base_img.."^overworld_stone_with_copper.png"},
 			groups = {cracky=3, stone=1, [fields.craft_group]=1, ore=1, generation_ground=1},
 			sounds = qtcore.node_sound_stone(),
+		})
+
+		foundry.register_smeltable({
+			itemname = "overworld:"..fields.name.."_with_copper",
+			smelt_time = 4,
+			type = "melt",
+			heat = 1,
+			metal = "iron",
+			metal_ammount = 4,
 		})
 
 		minetest.register_ore({
@@ -276,6 +297,15 @@ qtcore.for_all_materials("stone", function(fields)
 			tiles = {fields.base_img.."^overworld_stone_with_iron.png"},
 			groups = {cracky=3, stone=1, [fields.craft_group]=1, ore=1, generation_ground=1},
 			sounds = qtcore.node_sound_stone(),
+		})
+
+		foundry.register_smeltable({
+			itemname = "overworld:"..fields.name.."_with_iron",
+			smelt_time = 4,
+			type = "melt",
+			heat = 1,
+			metal = "iron",
+			metal_ammount = 4,
 		})
 
 		minetest.register_ore({
@@ -401,6 +431,15 @@ qtcore.for_all_materials("stone", function(fields)
 			sounds = qtcore.node_sound_stone(),
 		})
 
+		foundry.register_smeltable({
+			itemname = "overworld:"..fields.name.."_with_silver",
+			smelt_time = 4,
+			type = "melt",
+			heat = 1,
+			metal = "iron",
+			metal_ammount = 4,
+		})
+
 		minetest.register_ore({
 			ore_type       = "scatter",
 			ore            = "overworld:"..fields.name.."_with_silver",
@@ -462,6 +501,15 @@ qtcore.for_all_materials("stone", function(fields)
 			tiles = {fields.base_img.."^overworld_stone_with_gold.png"},
 			groups = {cracky=3, stone=1, [fields.craft_group]=1, ore=1, generation_ground=1},
 			sounds = qtcore.node_sound_stone(),
+		})
+
+		foundry.register_smeltable({
+			itemname = "overworld:"..fields.name.."_with_gold",
+			smelt_time = 4,
+			type = "melt",
+			heat = 1,
+			metal = "iron",
+			metal_ammount = 4,
 		})
 
 		minetest.register_ore({

@@ -23,15 +23,6 @@ foundry.register_metal("iron", {
 	block = "overworld:iron_block",
 })
 
-foundry.register_smeltable({
-	itemname = "overworld:stone_with_iron",
-	smelt_time = 4,
-	type = "melt",
-	heat = 1,
-	metal = "iron",
-	metal_ammount = 4,
-})
-
 --steel
 foundry.register_metal("steel", {
 	description = "Steel",
@@ -57,30 +48,12 @@ foundry.register_metal("tin", {
 	block = "overworld:tin_block",
 })
 
-foundry.register_smeltable({
-	itemname = "overworld:stone_with_tin",
-	smelt_time = 4,
-	type = "melt",
-	heat = 1,
-	metal = "tin",
-	metal_ammount = 4,
-})
-
 --copper
 foundry.register_metal("copper", {
 	description = "Copper",
 	texture = "foundry_steel_molten.png",
 	ingot = "overworld:copper_bar",
 	block = "overworld:copper_block",
-})
-
-foundry.register_smeltable({
-	itemname = "overworld:stone_with_copper",
-	smelt_time = 4,
-	type = "melt",
-	heat = 1,
-	metal = "copper",
-	metal_ammount = 4,
 })
 
 --bronze
@@ -108,28 +81,10 @@ foundry.register_metal("gold", {
 	block = "overworld:gold_block",
 })
 
-foundry.register_smeltable({
-	itemname = "overworld:stone_with_gold",
-	smelt_time = 4,
-	type = "melt",
-	heat = 1,
-	metal = "gold",
-	metal_ammount = 4,
-})
-
 --silver
 foundry.register_metal("silver", {
 	description = "Silver",
 	texture = "foundry_steel_molten.png",
 	ingot = "overworld:silver_bar",
 	block = "overworld:silver_block",
-})
-
-foundry.register_smeltable({
-	itemname = "overworld:stone_with_silver",
-	smelt_time = 4,
-	type = "melt",
-	heat = 1,
-	metal = "silver",
-	metal_ammount = 4,
 })
