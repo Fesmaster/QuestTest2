@@ -26,7 +26,7 @@ end
 qts.ignite = function(pos)
 	--local sound_pos = pointed_thing.above or user:get_pos()
 		minetest.sound_play(
-			"tinderbox",
+			"qtcore_ignite",
 			{pos = pos, gain = 1, max_hear_distance = 8},
 			true
 		)
@@ -49,10 +49,10 @@ minetest.register_node("qtcore:fire", {
 	description = "Fire",
 	drawtype = "firelike",
 	tiles = {{
-		name = "default_flame_animated.png",
+		name = "qtcore_flame_animated.png",
 		animation = {type = "vertical_frames", aspect_w = 16, aspect_h = 16, length = 1}
 	}},
-	inventory_image = "default_flame.png",
+	inventory_image = "qtcore_flame.png",
 	paramtype = "light",
 	light_source = 13,
 	walkable = false,
@@ -65,7 +65,7 @@ minetest.register_node("qtcore:fire", {
 	
 	sounds = {
 		ambience = {
-			name = "campfire",
+			name = "qtcore_sound_fire",
 			spec = {gain = 10},
 			chance = 1,
 			playtime = 16,

@@ -117,7 +117,7 @@ for i=1, #ingredient do
 				qts.register_craft({
 					ingredients = ig_List,
 					results = {"foodstuffs:bowl_clay_soup_"..comb_name, "foodstuffs:cup_clay"},
-					near = {"group:ttable", "group:furnace", "group:cookware"},
+					near = {"group:table", "group:furnace", "group:cookware"},
 				})
 
 			end

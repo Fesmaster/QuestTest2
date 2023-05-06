@@ -87,7 +87,8 @@ for i, gem in ipairs(gems) do
 		ore = "overworld:stone_with_"..gem.name,
 	})
 
-end 
+end
+inventory.register_exemplar_item("gem", "overworld:gem_ruby")
 
 
 --[[
@@ -102,6 +103,7 @@ minetest.register_craftitem("overworld:coal", {
 	inventory_image = "overworld_coal.png",
 	groups = {coal = 1,},
 })
+inventory.register_exemplar_item("coal", "overworld:coal")
 
 --[[
 	Since there are many stones, register a coal ore for each stone.

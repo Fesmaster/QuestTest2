@@ -4,7 +4,7 @@
 
 minetest.register_tool("tools:knife_flint", {
 	description = "Flint Knife",
-	inventory_image = "default_knife_flint.png",
+	inventory_image = "tools_knife_flint.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
 		max_drop_level=1,
@@ -16,10 +16,11 @@ minetest.register_tool("tools:knife_flint", {
 	sound = qtcore.tool_sounds_default(),
 	groups = {knife = 1}
 })
+inventory.register_exemplar_item("knife", "tools:knife_flint")
 
 minetest.register_tool("tools:knife_rusted", {
 	description = "Rusted Knife",
-	inventory_image = "default_knife_rusted.png",
+	inventory_image = "tools_knife_rusted.png",
 	tool_capabilities = {
 		full_punch_interval = 0.9,
 		max_drop_level=1,
@@ -34,7 +35,7 @@ minetest.register_tool("tools:knife_rusted", {
 
 minetest.register_tool("tools:knife_copper", {
 	description = "Copper Knife",
-	inventory_image = "default_knife_copper.png",
+	inventory_image = "tools_knife_copper.png",
 	tool_capabilities = {
 		full_punch_interval = 0.9,
 		max_drop_level=1,
@@ -49,7 +50,7 @@ minetest.register_tool("tools:knife_copper", {
 
 minetest.register_tool("tools:knife_bronze", {
 	description = "Bronze Knife",
-	inventory_image = "default_knife_bronze.png",
+	inventory_image = "tools_knife_bronze.png",
 	tool_capabilities = {
 		full_punch_interval = 0.9,
 		max_drop_level=1,
@@ -64,7 +65,7 @@ minetest.register_tool("tools:knife_bronze", {
 
 minetest.register_tool("tools:knife_iron", {
 	description = "Iron Knife",
-	inventory_image = "default_knife_iron.png",
+	inventory_image = "tools_knife_iron.png",
 	tool_capabilities = {
 		full_punch_interval = 0.8,
 		max_drop_level=1,
@@ -79,7 +80,7 @@ minetest.register_tool("tools:knife_iron", {
 
 minetest.register_tool("tools:knife_steel", {
 	description = "Steel Knife",
-	inventory_image = "default_knife_steel.png",
+	inventory_image = "tools_knife_steel.png",
 	tool_capabilities = {
 		full_punch_interval = 0.8,
 		max_drop_level=1,

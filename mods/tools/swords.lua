@@ -3,7 +3,7 @@ SWORDS
 --]]
 minetest.register_tool("tools:sword_rusted", {
 	description = "Rusted Sword",
-	inventory_image = "default_sword_rusted.png",
+	inventory_image = "tools_sword_rusted.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
 		max_drop_level=1,
@@ -18,7 +18,7 @@ minetest.register_tool("tools:sword_rusted", {
 --copper
 minetest.register_tool("tools:sword_copper", {
 	description = "Copper Sword",
-	inventory_image = "default_sword_copper.png",
+	inventory_image = "tools_sword_copper.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
 		max_drop_level=1,
@@ -33,7 +33,7 @@ minetest.register_tool("tools:sword_copper", {
 --bronze
 minetest.register_tool("tools:sword_bronze", {
 	description = "Bronze Sword",
-	inventory_image = "default_sword_bronze.png",
+	inventory_image = "tools_sword_bronze.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
 		max_drop_level=1,
@@ -48,7 +48,7 @@ minetest.register_tool("tools:sword_bronze", {
 --iron
 minetest.register_tool("tools:sword_iron", {
 	description = "Iron Sword",
-	inventory_image = "default_sword_iron.png",
+	inventory_image = "tools_sword_iron.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
 		max_drop_level=1,
@@ -63,7 +63,7 @@ minetest.register_tool("tools:sword_iron", {
 --steel
 minetest.register_tool("tools:sword_steel", {
 	description = "Steel Sword",
-	inventory_image = "default_sword_steel.png",
+	inventory_image = "tools_sword_steel.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
 		max_drop_level=1,

@@ -198,205 +198,205 @@ minetest.register_craft({
 qts.register_craft({
 	ingredients = {"craftable:charcoal 2", "tools:bucket_wood_overworld_water"},
 	results = {"craftable:dye_black", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"craftable:charcoal 2", "tools:bucket_wood_overworld_river_water"},
 	results = {"craftable:dye_black", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"overworld:flower_chicory 2", "tools:bucket_wood_overworld_water"},
 	results = {"craftable:dye_blue", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"overworld:flower_chicory 2", "tools:bucket_wood_overworld_river_water"},
 	results = {"craftable:dye_blue", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"overworld:flower_kniphofia 2", "tools:bucket_wood_overworld_water"},
 	results = {"craftable:dye_red", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"overworld:flower_kniphofia 2", "tools:bucket_wood_overworld_river_water"},
 	results = {"craftable:dye_red", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"farmworks:herb_bloodbulb 2", "tools:bucket_wood_overworld_water"},
 	results = {"craftable:dye_red", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"farmworks:herb_bloodbulb 2", "tools:bucket_wood_overworld_river_water"},
 	results = {"craftable:dye_red", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"overworld:flower_iris 2", "tools:bucket_wood_overworld_water"},
 	results = {"craftable:dye_white", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"overworld:flower_iris 2", "tools:bucket_wood_overworld_river_water"},
 	results = {"craftable:dye_white", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"farmworks:herb_milfoil 2", "tools:bucket_wood_overworld_water"},
 	results = {"craftable:dye_white", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"farmworks:herb_milfoil 2", "tools:bucket_wood_overworld_river_water"},
 	results = {"craftable:dye_white", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"overworld:flower_violet 2", "tools:bucket_wood_overworld_water"},
 	results = {"craftable:dye_purple", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"overworld:flower_violet 2", "tools:bucket_wood_overworld_river_water"},
 	results = {"craftable:dye_purple", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
-	ingredients = {"overworld:flower_wolfshood 2", "tools:bucket_wood_overworld_water"},
+	ingredients = {"farmworks:herb_wolfshood 2", "tools:bucket_wood_overworld_water"},
 	results = {"craftable:dye_purple", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
-	ingredients = {"overworld:flower_wolfshood 2", "tools:bucket_wood_overworld_river_water"},
+	ingredients = {"farmworks:herb_wolfshood 2", "tools:bucket_wood_overworld_river_water"},
 	results = {"craftable:dye_purple", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
-	ingredients = {"farmworks:herb_mureux_fruit", "tools:bucket_wood_overworld_water"},
+	ingredients = {"overworld:mureux_fruit", "tools:bucket_wood_overworld_water"},
 	results = {"craftable:dye_purple", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
-	ingredients = {"farmworks:herb_mureux_fruit", "tools:bucket_wood_overworld_river_water"},
+	ingredients = {"overworld:mureux_fruit", "tools:bucket_wood_overworld_river_water"},
 	results = {"craftable:dye_purple", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"group:leaves 2", "tools:bucket_wood_overworld_water"},
 	results = {"craftable:dye_green", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"group:leaves 2", "tools:bucket_wood_overworld_river_water"},
 	results = {"craftable:dye_green", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"craftable:dye_red", "craftable:dye_green"},
 	results = {"craftable:dye_yellow 2"},
-	near = {"group:ttable"}
+	near = {"group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"farmworks:herb_kingscrown", "tools:bucket_wood_overworld_water"},
 	results = {"craftable:dye_yellow", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"farmworks:herb_kingscrown", "tools:bucket_wood_overworld_river_water"},
 	results = {"craftable:dye_yellow", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"craftable:dye_blue", "craftable:dye_green"},
 	results = {"craftable:dye_cyan 2"},
-	near = {"group:ttable"}
+	near = {"group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"craftable:dye_blue", "craftable:dye_red"},
 	results = {"craftable:dye_magenta 2"},
-	near = {"group:ttable"}
+	near = {"group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"farmworks:herb_sapweed", "tools:bucket_wood_overworld_water"},
 	results = {"craftable:dye_magenta", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"farmworks:herb_sapweed", "tools:bucket_wood_overworld_river_water"},
 	results = {"craftable:dye_magenta", "tools:bucket_wood"},
-	near = {"group:furnace", "group:cookware", "group:ttable"}
+	near = {"group:furnace", "group:cookware", "group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"craftable:dye_white", "craftable:dye_black"},
 	results = {"craftable:dye_dark_gray 2"},
-	near = {"group:ttable"}
+	near = {"group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"craftable:dye_dark_green", "craftable:dye_red"},
 	results = {"craftable:dye_orange 2"},
-	near = {"group:ttable"}
+	near = {"group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"craftable:dye_green 2", "craftable:dye_black"},
 	results = {"craftable:dye_dark_green 3"},
-	near = {"group:ttable"}
+	near = {"group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"craftable:dye_white 2", "craftable:dye_black"},
 	results = {"craftable:dye_gray 3"},
-	near = {"group:ttable"}
+	near = {"group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"craftable:dye_red 2", "craftable:dye_green"},
 	results = {"craftable:dye_orange 3"},
-	near = {"group:ttable"}
+	near = {"group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"craftable:dye_blue 2", "craftable:dye_red"},
 	results = {"craftable:dye_purple 3"},
-	near = {"group:ttable"}
+	near = {"group:table"}
 })
 
 qts.register_craft({
 	ingredients = {"craftable:dye_cyan", "craftable:dye_yellow", "craftable:dye_magenta"},
 	results = {"craftable:dye_brown 3"},
-	near = {"group:ttable"}
+	near = {"group:table"}
 })
 
 --Solas Blocks
@@ -438,7 +438,7 @@ qts.register_craft({
 
 --candle
 qts.register_craft({
-	ingredients = {"craftable:wax_palm", "farmworks:herb_flax"},
+	ingredients = {"alchemy:wax_palm", "farmworks:herb_flax"},
 	results = {"craftable:candle_palm"},
 	near = {"group:workbench", "group:furnace"},
 })
@@ -454,12 +454,6 @@ minetest.register_craft({
 	type = "cooking",
 	output = "craftable:storage_pot_clay",
 	recipe = "craftable:storage_pot_greenware",
-})
-
---poltice
-qts.register_craft({
-	ingredients = {"farmworks:herb_milfoil 2"},
-	results = {"craftable:poltice_milfoil"},
 })
 
 --textiles

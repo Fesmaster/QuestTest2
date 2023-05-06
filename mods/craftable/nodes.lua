@@ -11,7 +11,7 @@ qts.register_shaped_node ("craftable:brick", {
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
 	paramtype2 = "color",
-	palette = "default_palette_paint_light.png",
+	palette = "qt_palette_paint_light.png",
 })
 
 qts.register_shaped_node ("craftable:brick_gray", {
@@ -21,7 +21,7 @@ qts.register_shaped_node ("craftable:brick_gray", {
 	is_ground_content = false,
 	sounds = qtcore.node_sound_stone(),
 	paramtype2 = "color",
-	palette = "default_palette_paint_light.png",
+	palette = "qt_palette_paint_light.png",
 })
 
 qts.register_fencelike_node("craftable:brick_wall", {
@@ -31,7 +31,7 @@ qts.register_fencelike_node("craftable:brick_wall", {
 	groups = {cracky=3, stone=1, grey_stone=1},
 	sounds = qtcore.node_sound_stone(),
 	paramtype2 = "color",
-	palette = "default_palette_paint_light.png",
+	palette = "qt_palette_paint_light.png",
 })
 qts.register_fencelike_node("craftable:brick_gray_wall", {
 	description = "Gray Brick Wall",
@@ -40,7 +40,7 @@ qts.register_fencelike_node("craftable:brick_gray_wall", {
 	groups = {cracky=3, stone=1, grey_stone=1},
 	sounds = qtcore.node_sound_stone(),
 	paramtype2 = "color",
-	palette = "default_palette_paint_light.png",
+	palette = "qt_palette_paint_light.png",
 })
 
 
@@ -78,6 +78,7 @@ minetest.register_node("craftable:workbench", {
 	},
 	sounds = qtcore.node_sound_wood(),
 })
+inventory.register_exemplar_item("workbench", "craftable:workbench")
 
 minetest.register_node("craftable:workbench_heavy", {
 	description = "Heavy Workbench",
@@ -102,6 +103,7 @@ minetest.register_node("craftable:workbench_heavy", {
 	},
 	sounds = qtcore.node_sound_wood(),
 })
+inventory.register_exemplar_item("workbench_heavy", "craftable:workbench_heavy")
 
 minetest.register_node("craftable:anvil", {
 	description = "Steel Anvil",
@@ -122,6 +124,7 @@ minetest.register_node("craftable:anvil", {
 	groups = {cracky=2, falling_node=1, anvil=1, generation_artificial=1},
 	sounds = qtcore.node_sound_metal(),
 })
+inventory.register_exemplar_item("anvil", "craftable:anvil")
 
 --glass
 
@@ -287,7 +290,8 @@ qts.register_chest("craftable:storage_pot_clay", {
 	is_ground_content = false,
 	sounds = qtcore.node_sound_wood(),
 	
-	invsize = 8*4,		get_chest_formspec = qtcore.get_default_chest_formspec,	
+	invsize = 8*4,
+	get_chest_formspec = qtcore.get_default_chest_formspec,	
 })
 
 minetest.register_node("craftable:storage_pot_greenware", {
@@ -335,7 +339,7 @@ minetest.register_node("craftable:candle_palm", {
 	drawtype = "nodebox",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, ttable=1, generation_artificial=1},
+	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, generation_artificial=1},
 	node_box = {
 		type = "fixed",
 		fixed = {

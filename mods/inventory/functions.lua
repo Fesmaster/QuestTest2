@@ -471,3 +471,124 @@ function qts.get_player_equipment_list(player)
 	return retval
 end
 
+--[[
+	chatcommand to check and verify all crafting recipes
+]]
+if qts.ISDEV then
+	minetest.register_chatcommand("verifycrafting", {
+		params = "",
+		description = "verify that all craft recipes have only registered items and all groups have exemplar items",
+		privs={},
+		func = function (name, param)
+			local unknown_items = {}
+			local unaliased_groups = {}
+			local found_unknown = false
+			local found_unaliased = false
+			for resultname, craftlist in pairs(qts.crafts) do
+				for i, recipe in ipairs(craftlist) do
+					--check everything!!!
+					for ingredient, _ in pairs(recipe.ingredients) do
+						local itemname = string.split(ingredient, " ", false, 1, false)[1]
+
+						if not (minetest.registered_items[itemname]) then
+							if qts.is_group(itemname) then
+								local groupname = qts.remove_modname_from_item(itemname)
+								if not (inventory.exemplar[groupname]) then
+									--non-exemplar group
+									unaliased_groups[groupname] = true
+									found_unaliased = true
+								end
+							else
+								--not known!!
+								unknown_items[itemname] = true
+								found_unknown=true
+							end
+						end
+					end
+
+					for near, _ in pairs(recipe.near) do
+						local itemname = string.split(near, " ", false, 1, false)[1]
+
+						if not (minetest.registered_items[itemname]) then
+							if qts.is_group(itemname) then
+								local groupname = qts.remove_modname_from_item(itemname)
+								if not (inventory.exemplar[groupname]) then
+									--non-exemplar group
+									unaliased_groups[groupname] = true
+									found_unaliased = true
+								end
+							else
+								--not known!!
+								unknown_items[itemname] = true
+								found_unknown=true
+							end
+						end
+					end
+
+					for held, _ in pairs(recipe.held) do
+						local itemname = string.split(held, " ", false, 1, false)[1]
+
+						if not (minetest.registered_items[itemname]) then
+							if qts.is_group(itemname) then
+								local groupname = qts.remove_modname_from_item(itemname)
+								if not (inventory.exemplar[groupname]) then
+									--non-exemplar group
+									unaliased_groups[groupname] = true
+									found_unaliased = true
+								end
+							else
+								--not known!!
+								unknown_items[itemname] = true
+								found_unknown=true
+							end
+						end
+					end
+
+					for result, _ in pairs(recipe.results) do
+						local itemname = string.split(result, " ", false, 1, false)[1]
+
+						if not (minetest.registered_items[itemname]) then
+							if qts.is_group(itemname) then
+								local groupname = qts.remove_modname_from_item(itemname)
+								if not (inventory.exemplar[groupname]) then
+									--non-exemplar group
+									unaliased_groups[groupname] = true
+									found_unaliased = true
+								end
+							else
+								--not known!!
+								unknown_items[itemname] = true
+								found_unknown=true
+							end
+						end
+					end
+				end
+			end
+
+			--print the output
+			if (found_unaliased or found_unknown) then
+				minetest.log("Craft Verification Results: FAILURE")
+
+				if found_unaliased then
+					local groupstr = ""
+					for group, _ in pairs(unaliased_groups) do
+						groupstr = groupstr .. dump(group) .. "\n"
+					end
+					minetest.log("Groups without exemplar items found:\n"..groupstr)
+				end
+
+				if found_unknown then
+					local itemsstr = ""
+					for item, _ in pairs(unknown_items) do
+						itemsstr = itemsstr .. dump(item) .. "\n"
+					end
+					minetest.log("Unregistered items found:\n"..itemsstr)
+				end
+
+			else
+				minetest.log("Craft Verification Results: SUCESS")
+			end
+		end
+	})
+
+end

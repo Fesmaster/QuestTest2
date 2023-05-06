@@ -93,7 +93,10 @@ for i, stone in ipairs(stones) do
 		has_ore=stone.ore, --if the stone has ore in it
 	})
 
+
+	inventory.register_exemplar_item(stone.name, "overworld:"..stone.name)
 end
+inventory.register_exemplar_item("stone", "overworld:granite")
 
 --ice
 qtcore.register_artistic_nodes("overworld:ice",{
@@ -118,3 +121,4 @@ qtcore.register_material("stone", {
 	base_item = "overworld:ice",
 	class = "ice", --class is optional, and if present, it means "I'll be treating this special somewhere"
 })
+inventory.register_exemplar_item("ice", "overworld:ice")

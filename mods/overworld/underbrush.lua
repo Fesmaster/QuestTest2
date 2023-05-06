@@ -7,6 +7,7 @@ minetest.register_craftitem("overworld:underbrush_item",{
 	inventory_image = "overworld_underbrush_item.png",
 	groups = {underbrush=1}
 })
+inventory.register_exemplar_item("underbrush", "overworld:underbrush_item")
 
 local underbrush_drops = {
 	max_items = 1,
@@ -14,27 +15,27 @@ local underbrush_drops = {
 		{
 			tool_groups = {"knife"},
 			rarity=5,
-			items = {"default:herb_milfoil", "default:seed_milfoil"},
+			items = {"farmworks:herb_milfoil", "farmworks:seed_milfoil"},
 		},
 		{
 			tool_groups = {"knife"},
 			rarity=4,
-			items = {"default:herb_bloodbulb", "default:seed_bloodbulb"},
+			items = {"farmworks:herb_bloodbulb", "farmworks:seed_bloodbulb"},
 		},
 		{
 			tool_groups = {"knife"},
 			rarity=3,
-			items = {"default:herb_wolfshood", "default:seed_wolfshood"},
+			items = {"farmworks:herb_wolfshood", "farmworks:seed_wolfshood"},
 		},
 		{
 			tool_groups = {"knife"},
 			rarity=4,
-			items = {"default:herb_sapweed", "default:seed_sapweed"},
+			items = {"farmworks:herb_sapweed", "farmworks:seed_sapweed"},
 		},
 		{
 			tool_groups = {"knife"},
 			rarity=3,
-			items = {"default:herb_kingscrown", "default:seed_kingscrown"},
+			items = {"farmworks:herb_kingscrown", "farmworks:seed_kingscrown"},
 		},
 		{
 			tool_groups = {"axe", "knife"},
@@ -98,7 +99,7 @@ minetest.register_node("overworld:small_mushroom", {
 	on_flood = floodFunc,
 })
 
-minetest.register_alias("default:small_shroom", "overworld:small_mushroom")
+minetest.register_alias("overworld:small_shroom", "overworld:small_mushroom")
 
 
 minetest.register_node("overworld:grass_short", {
@@ -388,7 +389,7 @@ minetest.register_node("overworld:flower_violet", {
 	--grow_timer_random = 0,
 	--on_grow = function(pos)
 	--	minetest.log("Grass Grown")
-	--	minetest.set_node(pos, {name = "default:grass_5", param2 = qtcore.get_random_meshdata()})
+	--	minetest.set_node(pos, {name = "overworld:grass_5", param2 = qtcore.get_random_meshdata()})
 	--	--minetest.log("Grass should be placed")
 	--end,
 --]]

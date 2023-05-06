@@ -908,8 +908,9 @@ function math.round(x) end
 ---@param str string the string to split
 ---@param seperator string the string to split on
 ---@param include_empty boolean defaults to false. To include emptry strings 
+---@param max_splits integer max splits to make
 ---@param sep_is_pattern boolean defaults to false. Set to true to make the seperator treated as regex
-function string.split(str, seperator, include_empty, sep_is_pattern) end
+function string.split(str, seperator, include_empty, max_splits, sep_is_pattern) end
 
 ---trims the whitespaces off of the start and end of a string
 ---@param str string the string to split

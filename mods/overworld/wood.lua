@@ -33,7 +33,7 @@ for i, wood in ipairs(woods) do
 		paramtype2 = "colorfacedir",
 		groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1, generation_artificial=1, },
 		sounds = qtcore.node_sound_wood(),
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 	})
 
 	--log
@@ -61,7 +61,7 @@ for i, wood in ipairs(woods) do
 		paramtype2 = "colorfacedir",
 		groups = {choppy = 2, oddly_breakable_by_hand = 1, flammable=2, log = 1, generation_artificial=1, },
 		sounds = qtcore.node_sound_wood(),
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 		on_place = qtcore.pillar_place, 
 	})
 
@@ -130,7 +130,7 @@ for i, wood in ipairs(woods) do
 		sounds = qtcore.node_sound_wood(),
 		fence_alt = "overworld:"..wood.name.."_wood_rail",
 		paramtype2 = "color",
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 	})
 	
 	--rail
@@ -143,7 +143,7 @@ for i, wood in ipairs(woods) do
 		fence_alt = "overworld:"..wood.name.."_wood_fence", 
 		drop = "overworld:"..wood.name.."_wood_fence",
 		paramtype2 = "color",
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 	})
 
 	--default aliases for tree backcompatablility
@@ -166,6 +166,13 @@ for i, wood in ipairs(woods) do
 
 		plank_texture = "overworld_"..wood.name.."_wood.png",
 	})
+
+	if wood == woods[1] then
+		inventory.register_exemplar_item("wood", "overworld:"..wood.name.."_wood_planks")
+		inventory.register_exemplar_item("log", "overworld:"..wood.name.."_log")
+		inventory.register_exemplar_item("leaves", "overworld:"..wood.name.."_leaves")
+		inventory.register_exemplar_item("bark", "overworld:bark_"..wood.name)
+	end
 
 end
 
@@ -192,6 +199,8 @@ minetest.register_node("overworld:lantern_fruit", {
 	light_source = 12,
 })
 
+minetest.register_alias("default:lantern_fruit", "overworld:lantern_fruit")
+
 --fruit-bearing apple leaves:
 minetest.register_node("overworld:apple_leaves_fruit", {
 	description = "Apple Leaves with Apples",
@@ -204,7 +213,7 @@ minetest.register_node("overworld:apple_leaves_fruit", {
 	drop = {
 		max_items = 2,
 		items = {
-			{items = {"default:apple"}},
+			{items = {"overworld:apple"}},
 			{items = {"overworld:apple_leaves"}},
 		}
 	},
@@ -214,7 +223,7 @@ minetest.register_node("overworld:apple_leaves_fruit", {
 	after_place_node = qtcore.after_place_leaves;
 })
 --worldgen alias
-minetest.register_alias("default:apple_leaves_fruit", 			"overworld:apple_leaves_fruit")
+minetest.register_alias("default:apple_leaves_fruit", "overworld:apple_leaves_fruit")
 
 --palm, swamp, and bamboo are a bit special.
 
@@ -227,6 +236,8 @@ qts.register_shaped_node ("overworld:palm_log", {
 	sounds = qtcore.node_sound_wood(),
 	on_place = qtcore.pillar_place, 
 })
+
+qts.register_shapeed_alias("default:palm_log", "overworld:palm_log")
 
 minetest.register_node("overworld:palm_leaves", {
 	description = "Palm Leaves",
@@ -248,6 +259,7 @@ minetest.register_node("overworld:palm_leaves", {
 	sounds = qtcore.node_sound_grass(),
 	after_place_node = qtcore.after_place_leaves;
 })
+minetest.register_alias("default:palm_leaves", "overworld:palm_leaves")
 
 qts.register_growable_node("overworld:palm_sapling", {
 	description = "Palm Sapling",
@@ -286,7 +298,7 @@ qts.register_shaped_node ("overworld:swamp_wood_planks", {
 	paramtype2 = "colorfacedir",
 	groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, wood=1, generation_artificial=1},
 	sounds = qtcore.node_sound_wood(),
-	palette = "default_palette_paint_light.png",
+	palette = "qt_palette_paint_light.png",
 })
 
 minetest.register_node("overworld:swamp_log", {
@@ -435,7 +447,7 @@ qts.register_fencelike_node("overworld:bamboo_fence", {
 	sounds = qtcore.node_sound_wood(),
 	fence_alt = "overworld:bamboo_rail", 
 	paramtype2 = "color",
-	palette = "default_palette_paint_light.png",
+	palette = "qt_palette_paint_light.png",
 })
 
 qts.register_fencelike_node("overworld:bamboo_rail", {
@@ -447,7 +459,7 @@ qts.register_fencelike_node("overworld:bamboo_rail", {
 	fence_alt = "overworld:bamboo_fence", 
 	drop = "overworld:bamboo_fence",
 	paramtype2 = "color",
-	palette = "default_palette_paint_light.png",
+	palette = "qt_palette_paint_light.png",
 })
 
 qtcore.register_material("wood", {
@@ -517,7 +529,7 @@ for i, name in ipairs(mushroom_names) do
 		sounds = qtcore.node_sound_wood(),
 		fence_alt = "overworld:"..name.."_wood_rail",
 		paramtype2 = "color",
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 	})
 	
 	--rail
@@ -530,7 +542,7 @@ for i, name in ipairs(mushroom_names) do
 		fence_alt = "overworld:"..name.."_mushroom_fence", 
 		drop = "overworld:"..name.."_mushroom_fence",
 		paramtype2 = "color",
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 	})
 
 	--worldgen aliases
@@ -612,7 +624,7 @@ qtcore.for_all_materials("wood", function(fields)
 	--mushroom plates
 	if fields.class == "mushroom" and fields.plates and fields.leaves then
 		qts.register_craft({
-			ingredients = {"default:mycelium", fields.leaves},
+			ingredients = {"overworld:mycelium", fields.leaves},
 			results = {fields.plates.." 2"},
 		})
 	end

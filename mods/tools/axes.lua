@@ -4,7 +4,7 @@ AXES
 --flint
 minetest.register_tool("tools:axe_flint", {
 	description = "Flint Axe",
-	inventory_image = "default_axe_flint.png",
+	inventory_image = "tools_axe_flint.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
 		max_drop_level=1,
@@ -18,7 +18,7 @@ minetest.register_tool("tools:axe_flint", {
 })
 minetest.register_tool("tools:axe_rusted", {
 	description = "Rusted Axe",
-	inventory_image = "default_axe_rusted.png",
+	inventory_image = "tools_axe_rusted.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
 		max_drop_level=1,
@@ -33,7 +33,7 @@ minetest.register_tool("tools:axe_rusted", {
 --copper
 minetest.register_tool("tools:axe_copper", {
 	description = "Copper Axe",
-	inventory_image = "default_axe_copper.png",
+	inventory_image = "tools_axe_copper.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
 		max_drop_level=1,
@@ -48,7 +48,7 @@ minetest.register_tool("tools:axe_copper", {
 --bronze
 minetest.register_tool("tools:axe_bronze", {
 	description = "Bronze Axe",
-	inventory_image = "default_axe_bronze.png",
+	inventory_image = "tools_axe_bronze.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
 		max_drop_level=1,
@@ -63,7 +63,7 @@ minetest.register_tool("tools:axe_bronze", {
 --iron
 minetest.register_tool("tools:axe_iron", {
 	description = "Iron Axe",
-	inventory_image = "default_axe_iron.png",
+	inventory_image = "tools_axe_iron.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
 		max_drop_level=1,
@@ -78,7 +78,7 @@ minetest.register_tool("tools:axe_iron", {
 --steel
 minetest.register_tool("tools:axe_steel", {
 	description = "Steel Axe",
-	inventory_image = "default_axe_steel.png",
+	inventory_image = "tools_axe_steel.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
 		max_drop_level=1,

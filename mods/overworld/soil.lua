@@ -240,6 +240,7 @@ qts.register_shaped_node ("overworld:sand", {
 		}
 	}
 })
+inventory.register_exemplar_item("sand", "overworld:sand")
 
 qts.register_shaped_node ("overworld:desert_sand", {
 	description = "Desert Sand",
@@ -358,5 +359,5 @@ qts.register_craft({
 
 qts.register_craft({
 	ingredients = {"overworld:clay"},
-	results = {"default:clay_lump 4"},
+	results = {"overworld:clay_lump 4"},
 })

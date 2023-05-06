@@ -10,7 +10,7 @@ for k, color in ipairs(colors) do
 		description = colorCap[k].." Cave Crystal",
 		drawtype = "mesh",
 		tiles = {"caverealm_cave_crystal_"..color..".png"},
-		mesh = "cave_crystal.obj",
+		mesh = "caverealm_crystal.obj",
 		paramtype = "light",
 		paramtype2 = "wallmounted",
 		walkable = false,

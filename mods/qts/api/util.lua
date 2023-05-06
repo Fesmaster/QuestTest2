@@ -293,8 +293,9 @@ end
 	NOTE: this function should be implemented in whatever mod actually adds fire
 		This is to keep fire lighting abstract and not dependant on that mod.
 ]]
+---@diagnostic disable-next-line: duplicate-set-field
 function qts.ignite(pos)
-	minetest.log("qts.ignite should be implemented in default mod")
+	minetest.log("qts.ignite should be implemented in qtcore mod")
 end
 
 --[[
@@ -305,7 +306,7 @@ end
 
 	Return:
 		string, just the modname 
-		For example, if the param is "default:wood", it returns "default"
+		For example, if the param is "overworld:wood", it returns "overworld"
 ]]
 function qts.get_modname_from_item(itemname)
 	return string.match(itemname, '([%w_]*):')
@@ -319,7 +320,7 @@ end
 
 	Return:
 		string, everything but the mod name and colon
-		For example, if the param is "default:wood 4", it returns "wood 4"
+		For example, if the param is "overworld:wood 4", it returns "wood 4"
 ]]
 function qts.remove_modname_from_item(itemname)
 	return string.match(itemname, ':([%w_]*)')

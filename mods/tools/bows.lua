@@ -41,9 +41,9 @@ def is a table with values:
 qts.register_projectile("tools:arrow_projectile", {
     visual="mesh",
     visual_size = vector.new(5,5,5),
-    textures = {"default_arrow.png"},
+    textures = {"tools_arrow.png"},
     use_texture_alpha=false,
-    mesh ="arrow.obj",
+    mesh ="tools_arrow.obj",
     automatic_rotate=true,
     
     radius = 0.25,
@@ -62,7 +62,7 @@ qts.register_projectile("tools:arrow_projectile", {
 
 minetest.register_craftitem("tools:arrow", {
 	description = "Arrow",
-	inventory_image = "default_arrow_item.png",
+	inventory_image = "tools_arrow_item.png",
 	groups = {ammunition = 1, arrow=1,},
     projectile = "tools:arrow_projectile",
 })
@@ -70,9 +70,9 @@ minetest.register_craftitem("tools:arrow", {
 qts.register_projectile("tools:arrow_gold_projectile", {
     visual="mesh",
     visual_size = vector.new(5,5,5),
-    textures = {"default_arrow_gold.png"},
+    textures = {"tools_arrow_gold.png"},
     use_texture_alpha=false,
-    mesh ="arrow.obj",
+    mesh ="tools_arrow.obj",
     automatic_rotate=true,
     
     radius = 0.25,
@@ -91,7 +91,7 @@ qts.register_projectile("tools:arrow_gold_projectile", {
 
 minetest.register_craftitem("tools:arrow_gold", {
 	description = "Gold Arrow",
-	inventory_image = "default_arrow_gold_item.png",
+	inventory_image = "tools_arrow_gold_item.png",
 	groups = {ammunition = 1, arrow=1,},
     projectile = "tools:arrow_gold_projectile",
 })
@@ -256,7 +256,7 @@ end
 
 register_bow("tools:bow", {
     description = "Bow",
-    inventory_images = {"default_bow1.png", "default_bow2.png", "default_bow3.png"},
+    inventory_images = {"tools_bow1.png", "tools_bow2.png", "tools_bow3.png"},
     groups = {},
     draw_time = 1.5,
     inaccuracy = 5,

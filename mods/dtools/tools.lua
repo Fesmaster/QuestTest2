@@ -57,7 +57,7 @@ minetest.register_tool("dtools:testingTool", {
 			minetest.set_node(pointed_thing.under, node)
 			--minetest.set_node(pointed_thing.above, {name="arcane:disollving_stone", param2=20})
 			--minetest.log(minetest.pos_to_string(vector.subtract(pointed_thing.above, pointed_thing.under)))
-			minetest.set_node(pointed_thing.above, {name="default:snow"})
+			minetest.set_node(pointed_thing.above, {name="overworld:snow"})
 		end
 		--]]
         
@@ -185,7 +185,7 @@ minetest.register_tool("dtools:light_wand", {
 				for z = -radius, radius do
 					local p = vector.add(pos, {x=x,y=y,z=z})
 					local node = minetest.get_node(p)
-					if node.name == "default:torch" then
+					if node.name == "craftable:torch" then
 						minetest.set_node(p, {name="dtools:light_node"})
 					end
 				end
@@ -258,7 +258,7 @@ minetest.register_tool("dtools:anti_stone", {
 		if pointed_thing.under then
 			local nodes = qts.get_nodes_in_radius(pointed_thing.under, 10)
 			for i, nodedat in ipairs(nodes) do
-				if nodedat.noderef.name == "default:stone" then
+				if nodedat.noderef.name == "overworld:granite" then
 					minetest.remove_node(nodedat.pos)
 				end
 			end

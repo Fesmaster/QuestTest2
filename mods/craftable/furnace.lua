@@ -42,22 +42,11 @@ qts.gui.register_gui("craftable_gui_furnace", {
 })
 
 --[[
-minetest.register_chatcommand("ft", {
-	params = "",
-	description = "Furnace Test",
-	func = function(name, param)
-		local player = minetest.get_player_by_name(name)
-		qts.gui.show_gui(player:get_pos(), player, "craftable_furnace")
-	end
-})
+	Functions that are the same for both active and inactive furnaces
+
+	Note: some of this code is copied and edited from the default mod of minetest_game
+	and is thus licensed under the lgpl license. For more information, see LICENSE
 --]]
-
-
---
---Functions that are the same for both active and inactive furnaces
---
---Note: this code is copied and edited from the default mod of minetest_game
---
 
 local function can_dig(pos, player)
 	local meta = minetest.get_meta(pos);
@@ -285,7 +274,9 @@ local function furnace_node_timer(pos, elapsed)
 	return result
 end
 
-
+--[[
+	The remainder of this code is Not copied from anywhere, and is soley part of QuestTest2
+]]
 
 local function register_furnace(name, def)
 	
@@ -294,7 +285,6 @@ local function register_furnace(name, def)
 		tiles = def.tiles_off,
 		paramtype2 = "facedir",
 		groups = {cracky=2, furnace=1, generation_artificial=1},
-		--legacy_facedir_simple = true,
 		is_ground_content = false,
 		sounds = qtcore.node_sound_stone(),
 		can_dig = can_dig,
@@ -311,7 +301,6 @@ local function register_furnace(name, def)
 			minetest.get_node_timer(pos):start(1.0)
 		end,
 		on_metadata_inventory_put = function(pos)
-			-- start timer function, it will sort out whether furnace can burn or not.
 			minetest.get_node_timer(pos):start(1.0)
 		end,
 		on_blast = function(pos)
@@ -354,9 +343,9 @@ local function register_furnace(name, def)
 	
 		on_blast = function(pos)
 			local drops = {}
-			default.get_inventory_drops(pos, "src", drops)
-			default.get_inventory_drops(pos, "fuel", drops)
-			default.get_inventory_drops(pos, "dst", drops)
+			qts.get_node_inventory_drops(pos, "src", drops)
+			qts.get_node_inventory_drops(pos, "fuel", drops)
+			qts.get_node_inventory_drops(pos, "dst", drops)
 			drops[#drops+1] = name
 			minetest.remove_node(pos)
 			return drops
@@ -386,6 +375,7 @@ register_furnace("craftable:furnace", {
 		"craftable_furnace_side.png", "craftable_furnace_front_active.png"
 	}
 })
+inventory.register_exemplar_item("furnace", "craftable:furnace")
 
 
 register_furnace("craftable:furnace_brick", {

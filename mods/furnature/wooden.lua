@@ -11,7 +11,7 @@ qtcore.for_all_materials("wood", function (fields)
         --crate
         do
             fields.crate = "furnature:crate_"..fields.name
-            local crate_texture = "default_crate_"..fields.name..".png"
+            local crate_texture = "furnature_crate_"..fields.name..".png"
             local crate_desc = fields.desc.." Wood Crate"
             if fields.class == "mushroom" then
                 crate_desc = fields.desc.." Crate"
@@ -45,10 +45,18 @@ qtcore.for_all_materials("wood", function (fields)
                     nodebox = table_nodeboxes["_default_"]
                     minetest.log("warning", "[Furnature] Unable to find custom table nodebox for: " .. fields.name)
                 end
+                local tiles = {fields.plank_texture}
+                if fields.name=="bamboo" then
+                    tiles = {
+                        "furnature_bamboo_table_top.png",
+                        "furnature_bamboo_table_top.png",
+                        "overworld_bamboo_log_side.png"
+                    }
+                end
 
                 minetest.register_node(":"..fields.table, {
                     description = fields.desc.. " Table",
-                    tiles = {fields.plank_texture},
+                    tiles = tiles,
                     drawtype = "nodebox",
                     paramtype = "light",
                     paramtype2 = "facedir",
@@ -72,10 +80,21 @@ qtcore.for_all_materials("wood", function (fields)
                     nodebox = chair_nodeboxes["_default_"]
                     minetest.log("warning", "[Furnature] Unable to find custom chair nodebox for: " .. fields.name)
                 end
+                local tiles = {fields.plank_texture}
+                if fields.name=="bamboo" then
+                    tiles = {
+                        "furnature_bamboo_chair_top.png",  
+                        "furnature_bamboo_chair_bottom.png", 
+                        "furnature_bamboo_chair_side.png", 
+                        "furnature_bamboo_chair_side.png", 
+                        "furnature_bamboo_chair_front.png", 
+                        "furnature_bamboo_chair_front.png"
+                    }
+                end
 
                 minetest.register_node(":"..fields.chair, {
                     description = fields.desc.." Chair",
-                    tiles = {fields.plank_texture},
+                    tiles = tiles,
                     drawtype = "nodebox",
                     paramtype = "light",
                     paramtype2 = "facedir",
@@ -99,7 +118,7 @@ qtcore.for_all_materials("wood", function (fields)
                     drawtype="nodebox",
                     paramtype = "light",
                     tiles = {{name = fields.plank_texture, align_style = "node"}, {name = fields.plank_texture, align_style = "node"}, 
-                    fields.plank_texture, fields.plank_texture, fields.plank_texture.."^default_bookshelf.png", fields.plank_texture.."^default_bookshelf.png"},
+                    fields.plank_texture, fields.plank_texture, fields.plank_texture.."^furnature_bookshelf.png", fields.plank_texture.."^furnature_bookshelf.png"},
                     paramtype2 = "facedir",
                     groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, bookshelf=1, generation_artificial=1},
                     sounds = qtcore.node_sound_wood(),
@@ -225,3 +244,6 @@ qtcore.for_all_materials("wood", function (fields)
         end
     end
 end)
+
+inventory.register_exemplar_item("table", "furnature:table_oak") --assumed to exist!
+inventory.register_exemplar_item("press", "furnature:press_oak") --assumed to exist!

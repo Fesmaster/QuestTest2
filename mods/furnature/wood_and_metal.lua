@@ -16,12 +16,12 @@ qtcore.for_all_materials("wood", function (fields_wood)
                     qts.register_chest(":"..chestname, {
                         description = fields_wood.desc.." and " .. fields_metal.desc .." Chest",
                         tiles = {
-                            fields_wood.plank_texture.."^default_chest_"..fields_metal.name.."_top_overlay.png",
-                            fields_wood.plank_texture.."^default_chest_"..fields_metal.name.."_top_overlay.png",
-                            fields_wood.plank_texture.."^default_chest_"..fields_metal.name.."_side_overlay.png",
-                            fields_wood.plank_texture.."^default_chest_"..fields_metal.name.."_side_overlay.png",
-                            fields_wood.plank_texture.."^default_chest_"..fields_metal.name.."_back_overlay.png",
-                            fields_wood.plank_texture.."^default_chest_"..fields_metal.name.."_front_overlay.png"
+                            fields_wood.plank_texture.."^furnature_chest_"..fields_metal.name.."_top_overlay.png",
+                            fields_wood.plank_texture.."^furnature_chest_"..fields_metal.name.."_top_overlay.png",
+                            fields_wood.plank_texture.."^furnature_chest_"..fields_metal.name.."_side_overlay.png",
+                            fields_wood.plank_texture.."^furnature_chest_"..fields_metal.name.."_side_overlay.png",
+                            fields_wood.plank_texture.."^furnature_chest_"..fields_metal.name.."_back_overlay.png",
+                            fields_wood.plank_texture.."^furnature_chest_"..fields_metal.name.."_front_overlay.png"
 
                         },
                         groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
@@ -65,7 +65,7 @@ qtcore.for_all_materials("wood", function (fields_wood)
                     qts.register_door(":"..doorname, {
                         description = fields_wood.desc.." and "..fields_metal.desc.." Door",
                         tiles = {
-                            "default_door_"..fields_wood.name..".png^default_door_"..fields_metal.name.."_overlay.png",
+                            "furnature_door_"..fields_wood.name..".png^furnature_door_"..fields_metal.name.."_overlay.png",
                         },
                         groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
                         sounds = qtcore.node_sound_wood(),
@@ -84,7 +84,7 @@ qtcore.for_all_materials("wood", function (fields_wood)
                     qts.register_trapdoor(":"..doorname, {
                         description = fields_wood.desc.." and "..fields_metal.desc.." Door",
                         tiles = {
-                            fields_wood.plank_texture.."^default_trapdoor_"..fields_metal.name.."_overlay.png",
+                            fields_wood.plank_texture.."^furnature_trapdoor_"..fields_metal.name.."_overlay.png",
                         },
                         groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
                         sounds = qtcore.node_sound_wood(),

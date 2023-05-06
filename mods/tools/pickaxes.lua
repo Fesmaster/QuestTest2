@@ -4,7 +4,7 @@ Pickaxes
 --rusted
 minetest.register_tool("tools:pick_rusted", {
 	description = "Rusted Pickaxe",
-	inventory_image = "default_pick_rusted.png",
+	inventory_image = "tools_pick_rusted.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
 		max_drop_level=1,
@@ -19,7 +19,7 @@ minetest.register_tool("tools:pick_rusted", {
 --copper
 minetest.register_tool("tools:pick_copper", {
 	description = "Copper Pickaxe",
-	inventory_image = "default_pick_copper.png",
+	inventory_image = "tools_pick_copper.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
 		max_drop_level=1,
@@ -34,7 +34,7 @@ minetest.register_tool("tools:pick_copper", {
 --bronze
 minetest.register_tool("tools:pick_bronze", {
 	description = "Bronze Pickaxe",
-	inventory_image = "default_pick_bronze.png",
+	inventory_image = "tools_pick_bronze.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
 		max_drop_level=1,
@@ -49,7 +49,7 @@ minetest.register_tool("tools:pick_bronze", {
 --iron
 minetest.register_tool("tools:pick_iron", {
 	description = "Iron Pickaxe",
-	inventory_image = "default_pick_iron.png",
+	inventory_image = "tools_pick_iron.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
 		max_drop_level=1,
@@ -64,7 +64,7 @@ minetest.register_tool("tools:pick_iron", {
 --steel
 minetest.register_tool("tools:pick_steel", {
 	description = "Steel Pickaxe",
-	inventory_image = "default_pick_steel.png",
+	inventory_image = "tools_pick_steel.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
 		max_drop_level=1,

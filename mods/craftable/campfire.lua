@@ -145,7 +145,7 @@ minetest.register_node("craftable:campfire", {
 	drawtype = "mesh",
 	tiles ={"craftable_campfire.png"},
 	use_texture_alpha = "clip",
-	mesh = "campfire.obj",
+	mesh = "craftable_campfire.obj",
 	paramtype = "light",
 	is_ground_content = false,
 	floodable = true,
@@ -190,7 +190,7 @@ minetest.register_node("craftable:campfire_lit", {
 		animation = {type = "vertical_frames", aspect_w = 16, aspect_h = 16, length = 1}
 	}},
 	use_texture_alpha = "clip",
-	mesh = "campfire.obj",
+	mesh = "craftable_campfire.obj",
 	light_source = 13,
 	paramtype = "light",
 	is_ground_content = false,
@@ -207,7 +207,7 @@ minetest.register_node("craftable:campfire_lit", {
 	groups = {oddly_breakable_by_hand=3, campfire=1, ambient=1, not_in_creative_inventory = 1, generation_artificial=1, bandit_waypoint=1},
 	sounds = qtcore.node_sound_wood({
 		ambience = {
-			name = "campfire",
+			name = "qtcore_sound_fire",
 			spec = {gain = 10},
 			chance = 1,
 			playtime = 16,

@@ -17,6 +17,11 @@ local function SeedPlace(plantname)
 	end
 end
 
+--[[
+	This boolean is entirely to tell if exemplar seeds have been registered yet.
+]]
+local registered_exemplar_seeds = false
+
 function  farmworks.register_farm_plant(name, def)
 	
 	minetest.register_node("farmworks:seed_" .. name, {
@@ -34,6 +39,10 @@ function  farmworks.register_farm_plant(name, def)
 		node_box = qtcore.nb_dustpile(),
 		on_place = SeedPlace("farmworks:herb_"..name.."_1"),
 	})
+	if not registered_exemplar_seeds then
+		registered_exemplar_seeds = true
+		inventory.register_exemplar_item("seeds", "farmworks:seed_" .. name)
+	end
 	
 	minetest.register_craftitem("farmworks:herb_" .. name, {
 		description = def.description,

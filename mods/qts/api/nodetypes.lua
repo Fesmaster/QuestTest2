@@ -48,8 +48,8 @@ function qts.register_fencelike_node(name, def)
 	--fence style
 
 	if def.type == "fence" then
-		local fence_texture = "default_fence_overlay.png^" .. def.tiles[1] ..
-			"^default_fence_overlay.png^[makealpha:255,126,126"
+		local fence_texture = "qts_fence_overlay.png^" .. def.tiles[1] ..
+			"^qts_fence_overlay.png^[makealpha:255,126,126"
 
 		if not def.no_tile_transform then
 			for i, v in ipairs(def.tiles) do
@@ -114,8 +114,8 @@ function qts.register_fencelike_node(name, def)
 		def.groups.fence = 1
 
 	elseif def.type == "rail" then
-		local fence_rail_texture =  "default_fence_rail_overlay.png^" .. def.tiles[1] ..
-			"^default_fence_rail_overlay.png^[makealpha:255,126,126"
+		local fence_rail_texture =  "qts_fence_rail_overlay.png^" .. def.tiles[1] ..
+			"^qts_fence_rail_overlay.png^[makealpha:255,126,126"
 
 		-- Allow almost everything to be overridden
 		default_fields = {

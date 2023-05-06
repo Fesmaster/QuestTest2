@@ -22,4 +22,4 @@ qtcore.register_artistic_nodes("caverealm:slate_moss",{
 	craft_group = "slate",
 	overlay_image = "qt_moss_{TITLE}_overlay.png",
 })
-
+inventory.register_exemplar_item("slate", "caverealm:slate")

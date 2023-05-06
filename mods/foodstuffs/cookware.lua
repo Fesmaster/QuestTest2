@@ -34,6 +34,7 @@ minetest.register_node("foodstuffs:cookware_iron", {
 	},
 	sounds = qtcore.node_sound_metal(),
 })
+inventory.register_exemplar_item("cookware", "foodstuffs:cookware_iron")
 
 minetest.register_node("foodstuffs:cookware_copper", {
 	description = "Copper Cookware",

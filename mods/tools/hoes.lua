@@ -46,7 +46,7 @@ end
 
 minetest.register_tool("tools:hoe_rusted", {
 	description = "Rusted Hoe",
-	inventory_image = "default_hoe_rusted.png",
+	inventory_image = "tools_hoe_rusted.png",
 	sound = qtcore.tool_sounds_default(),
 	groups = {hoe = 1},
 	on_use = Hoe_Use,
@@ -57,7 +57,7 @@ minetest.register_tool("tools:hoe_rusted", {
 
 minetest.register_tool("tools:hoe_copper", {
 	description = "Copper Hoe",
-	inventory_image = "default_hoe_copper.png",
+	inventory_image = "tools_hoe_copper.png",
 	sound = qtcore.tool_sounds_default(),
 	groups = {hoe = 1},
 	on_use = Hoe_Use,
@@ -67,7 +67,7 @@ minetest.register_tool("tools:hoe_copper", {
 --bronze
 minetest.register_tool("tools:hoe_bronze", {
 	description = "Bronze Hoe",
-	inventory_image = "default_hoe_bronze.png",
+	inventory_image = "tools_hoe_bronze.png",
 	sound = qtcore.tool_sounds_default(),
 	groups = {hoe = 1},
 	on_use = Hoe_Use,
@@ -77,7 +77,7 @@ minetest.register_tool("tools:hoe_bronze", {
 --iron
 minetest.register_tool("tools:hoe_iron", {
 	description = "Iron Hoe",
-	inventory_image = "default_hoe_iron.png",
+	inventory_image = "tools_hoe_iron.png",
 	sound = qtcore.tool_sounds_default(),
 	groups = {hoe = 1},
 	on_use = Hoe_Use,
@@ -87,7 +87,7 @@ minetest.register_tool("tools:hoe_iron", {
 --steel
 minetest.register_tool("tools:hoe_steel", {
 	description = "Steel Hoe",
-	inventory_image = "default_hoe_steel.png",
+	inventory_image = "tools_hoe_steel.png",
 	sound = qtcore.tool_sounds_default(),
 	groups = {hoe = 1},
 	on_use = Hoe_Use,

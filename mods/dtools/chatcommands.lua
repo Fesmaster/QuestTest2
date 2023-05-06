@@ -91,7 +91,7 @@ minetest.register_chatcommand("randpos_check", {
 				2
 			)
 			if pos then
-				minetest.set_node(pos, {name="default:copper_block"})
+				minetest.set_node(pos, {name="overworld:copper_block"})
 				--player:set_pos(pos)
 			else
 				minetest.log("No position returned. try: " .. i)
@@ -111,7 +111,7 @@ minetest.register_chatcommand("randpos_clear", {
 		for z = -32, 32 do
 			local p = vector.add({x=x,y=y,z=z}, pos)
 			local node = minetest.get_node_or_nil(p)
-			if node and node.name == "default:copper_block" then
+			if node and node.name == "overworld:copper_block" then
 				minetest.set_node(p, {name="air"})
 			end
 		end

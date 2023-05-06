@@ -94,7 +94,7 @@ function qtcore.register_artistic_nodes(name, def)
 			paramtype = def.paramtype,
 			use_texture_alpha = def.use_texture_alpha,
 			paramtype2 = "color",
-			palette = "default_palette_paint_light.png",
+			palette = "qt_palette_paint_light.png",
 		})
 		qts.register_craft({
 			ingredients = {"group:" .. def.craft_group},
@@ -125,7 +125,7 @@ function qtcore.register_artistic_nodes(name, def)
 			drawtype=def.drawtype,
 			use_texture_alpha = def.use_texture_alpha,
             paramtype2 = "color",
-            palette = "default_palette_paint_light.png",
+            palette = "qt_palette_paint_light.png",
         })
 		qts.register_craft({
 			ingredients = {"group:" .. def.craft_group},
@@ -148,7 +148,7 @@ function qtcore.register_artistic_nodes(name, def)
 			sounds = def.sounds,
 			use_texture_alpha = def.use_texture_alpha,
 			paramtype2 = "color",
-			palette = "default_palette_paint_light.png",
+			palette = "qt_palette_paint_light.png",
 		})
 		qts.register_craft({
 			ingredients = {"group:" .. def.craft_group},
@@ -178,7 +178,7 @@ function qtcore.register_artistic_nodes(name, def)
 		paramtype = def.paramtype,
 		use_texture_alpha = def.use_texture_alpha,
 		paramtype2 = "color",
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 	})
 
 	overlay = string.gsub(overlay_raw, "{TITLE}", "block")
@@ -202,7 +202,7 @@ function qtcore.register_artistic_nodes(name, def)
 		paramtype = def.paramtype,
 		use_texture_alpha = def.use_texture_alpha,
 		paramtype2 = "color",
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 	})
 
 	overlay = string.gsub(overlay_raw, "{TITLE}", "cross")
@@ -226,7 +226,7 @@ function qtcore.register_artistic_nodes(name, def)
 		paramtype = def.paramtype,
 		use_texture_alpha = def.use_texture_alpha,
 		paramtype2 = "color",
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 	})
 
 	overlay = string.gsub(overlay_raw, "{TITLE}", "french")
@@ -250,7 +250,7 @@ function qtcore.register_artistic_nodes(name, def)
 		paramtype = def.paramtype,
 		use_texture_alpha = def.use_texture_alpha,
 		paramtype2 = "color",
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 	})
 
 	overlay = string.gsub(overlay_raw, "{TITLE}", "knot")
@@ -274,7 +274,7 @@ function qtcore.register_artistic_nodes(name, def)
 		paramtype = def.paramtype,
 		use_texture_alpha = def.use_texture_alpha,
 		paramtype2 = "color",
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 	})
 
 	overlay = string.gsub(overlay_raw, "{TITLE}", "pillar")
@@ -302,7 +302,7 @@ function qtcore.register_artistic_nodes(name, def)
 		paramtype = def.paramtype,
 		use_texture_alpha = def.use_texture_alpha,
 		paramtype2 = "colorfacedir",
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 		on_place = qtcore.pillar_place,
 	})
 
@@ -331,7 +331,7 @@ function qtcore.register_artistic_nodes(name, def)
 		paramtype = def.paramtype,
 		use_texture_alpha = def.use_texture_alpha,
 		paramtype2 = "colorfacedir",
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 		on_place = qtcore.pillar_place,
 	})
 
@@ -356,7 +356,7 @@ function qtcore.register_artistic_nodes(name, def)
 		paramtype = def.paramtype,
 		use_texture_alpha = def.use_texture_alpha,
 		paramtype2 = "color",
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 	})
 
 	overlay = string.gsub(overlay_raw, "{TITLE}", "enigma")
@@ -380,7 +380,7 @@ function qtcore.register_artistic_nodes(name, def)
 		paramtype = def.paramtype,
 		use_texture_alpha = def.use_texture_alpha,
 		paramtype2 = "color",
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 	})
 
 	overlay = string.gsub(overlay_raw, "{TITLE}", "border")
@@ -408,7 +408,7 @@ function qtcore.register_artistic_nodes(name, def)
 		paramtype = def.paramtype,
 		use_texture_alpha = def.use_texture_alpha,
 		paramtype2 = "color",
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 	})
 
 	overlay = string.gsub(overlay_raw, "{TITLE}", "border2")
@@ -432,7 +432,7 @@ function qtcore.register_artistic_nodes(name, def)
 		paramtype = def.paramtype,
 		use_texture_alpha = def.use_texture_alpha,
 		paramtype2 = "color",
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 	})
 
 	overlay = string.gsub(overlay_raw, "{TITLE}", "target")
@@ -456,7 +456,7 @@ function qtcore.register_artistic_nodes(name, def)
 		paramtype = def.paramtype,
 		use_texture_alpha = def.use_texture_alpha,
 		paramtype2 = "color",
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 	})
 	
 	overlay = string.gsub(overlay_raw, "{TITLE}", "base")
@@ -478,7 +478,7 @@ function qtcore.register_artistic_nodes(name, def)
 		sounds = def.sounds,
 		use_texture_alpha = def.use_texture_alpha,
 		paramtype2 = "color",
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 	})
 
 	overlay = string.gsub(overlay_raw, "{TITLE}", "brick")
@@ -500,7 +500,7 @@ function qtcore.register_artistic_nodes(name, def)
 		sounds = def.sounds,
 		use_texture_alpha = def.use_texture_alpha,
 		paramtype2 = "color",
-		palette = "default_palette_paint_light.png",
+		palette = "qt_palette_paint_light.png",
 	})
 	
 	if def.craft_group then

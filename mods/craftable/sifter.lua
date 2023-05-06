@@ -166,7 +166,7 @@ register_sifter({
     description = "Sand",
     tiles = "overworld_sand.png",
     node = "overworld:sand",
-    results = {"default:shell_pieces"}
+    results = {"overworld:shell_pieces"}
 })
 
 register_sifter({

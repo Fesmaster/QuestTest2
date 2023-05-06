@@ -20,9 +20,9 @@ local dish_types_desc = {"Clay", "Stoneware", "Gold", "Silver"}
 --main dish making for loop
 for i, types in ipairs(dish_types) do
 
---full cups and vessels
-local cup_fill = {"coffee_turkish", "water", "oil_coconut", "oil_seeds"}
-local cup_fill_desc = {"Turkish Coffee", "Water", "Oil Coconut", "Oil_Seeds"}
+	--full cups and vessels
+	local cup_fill = {"coffee_turkish", "water", "oil_coconut", "oil_seeds"}
+	local cup_fill_desc = {"Turkish Coffee", "Water", "Oil Coconut", "Oil_Seeds"}
 	for n, fill in ipairs(cup_fill) do
 		minetest.register_node("foodstuffs:cup_"..types.."_"..fill, {
 			description = "Cup of "..cup_fill_desc[n],
@@ -131,13 +131,13 @@ local cup_fill_desc = {"Turkish Coffee", "Water", "Oil Coconut", "Oil_Seeds"}
 		qts.register_craft({
 			ingredients = {"foodstuffs:coffee_grounds", "foodstuffs:vessels_empty_"..types, "tools:bucket_wood_overworld_"..fill},
 			results = {"foodstuffs:vessels_"..types.."_coffee_turkish", "tools:bucket_wood"},
-			near = {"group:ttable", "group:cookware", "group:furnace"},
+			near = {"group:table", "group:cookware", "group:furnace"},
 		})
 
 		qts.register_craft({
 			ingredients = {"foodstuffs:coffee_grounds", "foodstuffs:vessels_empty_"..types},
 			results = {"foodstuffs:vessels_"..types.."_coffee_turkish", "tools:bucket_wood"},
-			near = {"group:ttable", "group:cookware", "group:furnace", "overworld:"..fill.."_source"},
+			near = {"group:table", "group:cookware", "group:furnace", "overworld:"..fill.."_source"},
 		})
 	end
 		
@@ -145,7 +145,7 @@ local cup_fill_desc = {"Turkish Coffee", "Water", "Oil Coconut", "Oil_Seeds"}
 	qts.register_craft({
 		ingredients = {"foodstuffs:vessels_empty_"..types, "overworld:coconut 4"},
 		results = {"foodstuffs:vessels_"..types.."_oil_coconut"},
-		near = {"group:ttable", "group:cookware", "group:furnace"},
+		near = {"group:table", "group:cookware", "group:furnace"},
 	})
 
 	qts.register_craft({
@@ -157,13 +157,13 @@ local cup_fill_desc = {"Turkish Coffee", "Water", "Oil Coconut", "Oil_Seeds"}
 	qts.register_craft({
 		ingredients = {"foodstuffs:vessels_"..types.."_oil_coconut", "alchemy:lye"},
 		results = {"alchemy:soap"},
-		near = {"group:ttable", "foodstuffs:vessel_empty_"..types},
+		near = {"group:table", "foodstuffs:vessels_empty_"..types},
 	})
 
 	qts.register_craft({
 		ingredients = {"foodstuffs:vessels_"..types.."_oil_seeds", "alchemy:lye"},
 		results = {"alchemy:soap"},
-		near = {"group:ttable", "foodstuffs:vessel_empty_"..types},
+		near = {"group:table", "foodstuffs:vessels_empty_"..types},
 	})
 
 	--vessel cup interchangability
@@ -215,6 +215,10 @@ local cup_fill_desc = {"Turkish Coffee", "Water", "Oil Coconut", "Oil_Seeds"}
 		},
 		sounds = qtcore.node_sound_stone(),
 	})
+	
+	if types == dish_types[1] then
+		inventory.register_exemplar_item("dishes", "foodstuffs:dishes_"..types)
+	end
 
 	minetest.register_node("foodstuffs:vessels_empty_"..types, {
 		description = dish_types_desc[i].." Vessel",
@@ -259,9 +263,9 @@ local cup_fill_desc = {"Turkish Coffee", "Water", "Oil Coconut", "Oil_Seeds"}
 		sounds = qtcore.node_sound_stone(),
 	})
 
---powder bowls
-local bowl_fill = {"flour"}
-local bowl_fill_desc = {"Flour"}
+	--powder bowls
+	local bowl_fill = {"flour"}
+	local bowl_fill_desc = {"Flour"}
 	for n, fill in ipairs(bowl_fill) do
 		minetest.register_node("foodstuffs:bowl_"..types.."_"..fill, {
 			description = bowl_fill_desc[n].." Bowl",
@@ -288,19 +292,19 @@ local bowl_fill_desc = {"Flour"}
 		})
 	end
 	--powder bowl crafting
-			qts.register_craft({
-			ingredients = {"foodstuffs:dishes_"..types, "farmworks:herb_grain 4"},
-			results = {"foodstuffs:bowl_"..types.."_flour", "foodstuffs:cup_"..types},
-			near = {"group:ttable", "group:dishes"},
-		})
-		
-		qts.register_craft({
-			ingredients = {"foodstuffs:bowl_"..types, "farmworks:herb_grain 4"},
-			results = {"foodstuffs:bowl_"..types.."_flour"},
-			near = {"group:ttable", "group:dishes"},
-		})
+	qts.register_craft({
+		ingredients = {"foodstuffs:dishes_"..types, "farmworks:herb_grain 4"},
+		results = {"foodstuffs:bowl_"..types.."_flour", "foodstuffs:cup_"..types},
+		near = {"group:table", "group:dishes"},
+	})
+	
+	qts.register_craft({
+		ingredients = {"foodstuffs:bowl_"..types, "farmworks:herb_grain 4"},
+		results = {"foodstuffs:bowl_"..types.."_flour"},
+		near = {"group:table", "group:dishes"},
+	})
 
---individual empty cup and bowl
+	--individual empty cup and bowl
 	minetest.register_node("foodstuffs:cup_"..types, {
 		description = dish_types_desc[i].." Cup",
 		tiles = {"foodstuffs_dishes_"..types..".png",},
@@ -365,13 +369,13 @@ local bowl_fill_desc = {"Flour"}
 	qts.register_craft({
 		ingredients = {"foodstuffs:bowl_"..types.."_flour", "tools:bucket_wood_overworld_water"},
 		results = {"foodstuffs:bread", "foodstuffs:bowl_"..types, "tools:bucket_wood"},
-		near = {"group:ttable", "group:dishes", "group:furnace"},
+		near = {"group:table", "group:dishes", "group:furnace"},
 	})
 	
 	qts.register_craft({
 		ingredients = {"foodstuffs:bowl_"..types.."_flour", "tools:bucket_wood_overworld_river_water"},
 		results = {"foodstuffs:bread", "foodstuffs:bowl_"..types, "tools:bucket_wood"},
-		near = {"group:ttable", "group:dishes", "group:furnace"},
+		near = {"group:table", "group:dishes", "group:furnace"},
 	})
 
 end

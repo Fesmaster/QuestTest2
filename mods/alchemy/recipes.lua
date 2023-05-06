@@ -72,12 +72,18 @@ qts.register_craft({
 
 --equipment crafting
 qts.register_craft({
-	ingredients = {"default:dishes_clay 2"},
+	ingredients = {"foodstuffs:dishes_clay 2"},
 	results = {"alchemy:equipment_basic"},
 })
 
 qts.register_craft({
-	ingredients = {"default:dishes_clay", "overworld:steel_bar"},
+	ingredients = {"foodstuffs:dishes_clay", "overworld:steel_bar"},
 	results = {"alchemy:equipment_advanced"},
 	near = {"group:workbench", "group:anvil"},
+})
+
+--poltice
+qts.register_craft({
+	ingredients = {"farmworks:herb_milfoil 2"},
+	results = {"alchemy:poltice_milfoil"},
 })

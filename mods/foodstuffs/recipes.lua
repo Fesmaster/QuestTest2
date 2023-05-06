@@ -3,7 +3,7 @@
 ]]
 qts.register_craft({
 	ingredients = {"farmworks:herb_potatoe"},
-	results = {"farmworks:seeds_potatoe"},
+	results = {"farmworks:seed_potatoe"},
 })
 
 qts.register_craft({
@@ -34,7 +34,7 @@ qts.register_craft({
 qts.register_craft({
 	ingredients = {"overworld:iron_bar 3"},
 	results = {"foodstuffs:cookware_iron"},
-	near = {"group:furnace", "default:anvil"},
+	near = {"group:furnace", "group:anvil"},
 })
 
 qts.register_craft({

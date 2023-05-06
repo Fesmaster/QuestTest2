@@ -293,22 +293,22 @@ CRAFTING
 
 
 qts.register_craft({
-	ingredients = {"default:cement", "default:clay_lump"},
+	ingredients = {"craftable:cement", "overworld:clay_lump"},
 	results = {"foundry:spout",},
 })
 
 qts.register_craft({
-	ingredients = {"group:sand", "default:clay_lump"},
+	ingredients = {"group:sand", "overworld:clay_lump"},
 	results = {"foundry:casting_sand",},
 })
 
 qts.register_craft({
-	ingredients = {"group:sand", "default:clay_lump"},
+	ingredients = {"group:sand", "overworld:clay_lump"},
 	results = {"foundry:block_mold",},
 })
 
 qts.register_craft({
-	ingredients = {"group:sand", "default:clay_lump"},
+	ingredients = {"group:sand", "overworld:clay_lump"},
 	results = {"foundry:ingot_mold",},
 })
 
@@ -323,6 +323,6 @@ qts.register_craft({
 })
 
 qts.register_craft({
-	ingredients = {"default:brick 4", "default:cement"},
+	ingredients = {"craftable:brick 4", "craftable:cement"},
 	results = {"foundry:foundry_inactive",},
 })

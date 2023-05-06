@@ -361,14 +361,4 @@ def contains:
 	offset = vector or nil
 	flags = flags for placing
 --]]
---[[
-qts.worldgen.register_structure("", {
-	schematic = minetest.get_modpath("default") .. "/schems/strange.mts",
-	chance = 30,
-	biomes = {"grasslands"},
-	nodes = {"overworld:dirt_with_grass"},
-	force_place = false,
-	rotate = true,
-	flags = qts.worldgen.centers(false, true, false),
-})
---]]
+
