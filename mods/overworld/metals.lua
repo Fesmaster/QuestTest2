@@ -81,7 +81,7 @@ qtcore.for_all_materials("stone", function(fields)
 			smelt_time = 4,
 			type = "melt",
 			heat = 1,
-			metal = "iron",
+			metal = "tin",
 			metal_ammount = 4,
 		})
 
@@ -138,7 +138,7 @@ qts.register_ingot("overworld:copper_bar", {
 	description = "Copper Bar",
 	inventory_image = "overworld_copper_ingot.png",
 	tiles = {"overworld_copper_ingot_stack.png"},
-	groups = {cracky=3, oddly_breakable_by_hand=3, iron = 1, generation_artificial=1},
+	groups = {cracky=3, oddly_breakable_by_hand=3, copper = 1, generation_artificial=1},
 	sounds = qtcore.node_sound_metal(),
 	nodeboxes = nodeboxes,
 	levels = 8,
@@ -173,7 +173,7 @@ qtcore.for_all_materials("stone", function(fields)
 			smelt_time = 4,
 			type = "melt",
 			heat = 1,
-			metal = "iron",
+			metal = "copper",
 			metal_ammount = 4,
 		})
 
@@ -222,7 +222,7 @@ qts.register_ingot("overworld:bronze_bar", {
 	description = "Bronze Bar",
 	inventory_image = "overworld_bronze_ingot.png",
 	tiles = {"overworld_bronze_ingot_stack.png"},
-	groups = {cracky=3, oddly_breakable_by_hand=3, iron = 1, generation_artificial=1},
+	groups = {cracky=3, oddly_breakable_by_hand=3, bronze = 1, generation_artificial=1},
 	sounds = qtcore.node_sound_metal(),
 	nodeboxes = nodeboxes,
 	levels = 8,
@@ -353,7 +353,7 @@ qts.register_ingot("overworld:steel_bar", {
 	description = "Steel Bar",
 	inventory_image = "overworld_steel_ingot.png",
 	tiles = {"overworld_steel_ingot_stack.png"},
-	groups = {cracky=3, oddly_breakable_by_hand=3, iron = 1, generation_artificial=1},
+	groups = {cracky=3, oddly_breakable_by_hand=3, steel = 1, generation_artificial=1},
 	sounds = qtcore.node_sound_metal(),
 	nodeboxes = nodeboxes,
 	levels = 8,
@@ -425,7 +425,7 @@ qtcore.for_all_materials("stone", function(fields)
 		and fields.has_ore
 	) then
 		qts.register_shaped_node("overworld:"..fields.name.."_with_silver", {
-			description = "Iron Ore In "..fields.desc,
+			description = "Silver Ore In "..fields.desc,
 			tiles = {fields.base_img.."^overworld_stone_with_silver.png"},
 			groups = {cracky=3, stone=1, [fields.craft_group]=1, ore=1, generation_ground=1},
 			sounds = qtcore.node_sound_stone(),
@@ -436,7 +436,7 @@ qtcore.for_all_materials("stone", function(fields)
 			smelt_time = 4,
 			type = "melt",
 			heat = 1,
-			metal = "iron",
+			metal = "silver",
 			metal_ammount = 4,
 		})
 
@@ -497,7 +497,7 @@ qtcore.for_all_materials("stone", function(fields)
 		and fields.has_ore
 	) then
 		qts.register_shaped_node("overworld:"..fields.name.."_with_gold", {
-			description = "Iron Ore In "..fields.desc,
+			description = "Gold Ore In "..fields.desc,
 			tiles = {fields.base_img.."^overworld_stone_with_gold.png"},
 			groups = {cracky=3, stone=1, [fields.craft_group]=1, ore=1, generation_ground=1},
 			sounds = qtcore.node_sound_stone(),
@@ -508,7 +508,7 @@ qtcore.for_all_materials("stone", function(fields)
 			smelt_time = 4,
 			type = "melt",
 			heat = 1,
-			metal = "iron",
+			metal = "gold",
 			metal_ammount = 4,
 		})
 
