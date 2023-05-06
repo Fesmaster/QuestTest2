@@ -86,7 +86,7 @@ function qts.register_fencelike_node(name, def)
 				connect_back =  {-1/8, -1/2,  1/8,  1/8, 1/2 + fence_collision_extra,  1/2},
 				connect_right = { 1/8, -1/2, -1/8,  1/2, 1/2 + fence_collision_extra,  1/8}
 			},
-			connects_to = {"group:fence", "group:wood", "group:tree", "group:wall"},
+			connects_to = {"group:fence", "group:wood", "group:tree", "group:wall", "group:shaped_node"},
 			inventory_image = fence_texture,
 			wield_image = fence_texture,
 			tiles = def.tiles,
@@ -146,7 +146,7 @@ function qts.register_fencelike_node(name, def)
 				connect_back =  {-1/8, -1/2,  1/8,  1/8, 1/2 + fence_collision_extra,  1/2},
 				connect_right = { 1/8, -1/2, -1/8,  1/2, 1/2 + fence_collision_extra,  1/8}
 			},
-			connects_to = {"group:fence", "group:wall"},
+			connects_to = {"group:fence", "group:wall", "group:shaped_node"},
 			inventory_image = fence_rail_texture,
 			wield_image = fence_rail_texture,
 			tiles = def.tiles,
@@ -196,7 +196,7 @@ function qts.register_fencelike_node(name, def)
 				connect_back = {-1/4,-1/2,1/4,1/4,1/2 + fence_collision_extra,1/2},
 				connect_right = {1/4,-1/2,-1/4,1/2,1/2 + fence_collision_extra,1/4},
 			},
-			connects_to = { "group:wall", "group:stone", "group:fence" },
+			connects_to = { "group:wall", "group:stone", "group:fence", "group:shaped_node" },
 			tiles = def.tiles,
 			sunlight_propagates = true,
 			is_ground_content = false,
