@@ -54,9 +54,30 @@ Player_API.register_on_doubleclick(function(player, control)
 end)
 
 ---[[
+---Special function to rotate the inventory in devmode
+---@param player Player
+---@param isClicked boolean
+---@param newEvent boolean
 Player_API.register_on_special_key(function(player, isClicked, newEvent)
-	if newEvent then
-		minetest.log("SPECIAL")
+	if newEvent and isClicked and qts.ISDEV then
+		--minetest.log("SPECIAL")
+		--rotate the inventory
+
+		local inv = player:get_inventory()
+		if inv == nil then return end
+		local mainlist = inv:get_list("main")
+		local newlist = {}
+		local list_width = 10
+		local fullList = #mainlist --40
+		for i=0,#mainlist do
+			local newindex = i - list_width
+			if newindex < 1 then
+				newindex = newindex + fullList
+			end
+			newlist[newindex] = mainlist[i]
+		end
+
+		inv:set_list("main", newlist)
 	end
 end)
 --]]

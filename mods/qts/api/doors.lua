@@ -65,9 +65,18 @@ local function register_doorlike_internal(name, def, doorOpts)
 	def.paramtype2 = "facedir"
     
     local name_left_closed = name
-    local name_left_open = name.."_open"
-    local name_right_closed = name..doorOpts.alt
-    local name_right_open = name..doorOpts.alt.."_open"
+    --[[
+        This is to remove a leading ":" from names. Nodes registered outside of their mod need this, but
+        it tends to break itemstacks and node names at runtime
+    ]]
+    local prefix = ""
+    if string.sub(name, 1,1) == ":" then
+        name_left_closed = string.gsub(name, ":", "",1)
+        prefix = ":"
+    end
+    local name_left_open = name_left_closed.."_open"
+    local name_right_closed = name_left_closed..doorOpts.alt
+    local name_right_open = name_left_closed..doorOpts.alt.."_open"
 
     local mapping = {
         [name_left_closed] = name_left_open,
@@ -82,7 +91,7 @@ local function register_doorlike_internal(name, def, doorOpts)
 
     local main_closed = qts.table_deep_copy(def)
     def.groups.not_in_creative_inventory=1
-    def.drop = def.drop or name
+    def.drop = def.drop or name_left_closed --not def.name just in case there is a leading ":", which breaks it.
     --do these after to get them to propigate to all the non-normal ones
     local main_open = qts.table_deep_copy(def)
     local alt_closed = qts.table_deep_copy(def)
@@ -105,10 +114,10 @@ local function register_doorlike_internal(name, def, doorOpts)
     alt_open.collision_box = doorOpts.boxes.alt_open
     
     --registers
-    minetest.register_node(name_left_closed,  main_closed)
-    minetest.register_node(name_left_open,    main_open)
-    minetest.register_node(name_right_closed, alt_closed)
-    minetest.register_node(name_right_open,   alt_open)
+    minetest.register_node(prefix..name_left_closed,  main_closed)
+    minetest.register_node(prefix..name_left_open,    main_open)
+    minetest.register_node(prefix..name_right_closed, alt_closed)
+    minetest.register_node(prefix..name_right_open,   alt_open)
 end
 
 local param2_to_leftvector = {
@@ -153,9 +162,12 @@ function qts.register_door(name, def)
     end
 
     local name_left_closed = name
-    local name_left_open = name.."_open"
-    local name_right_closed = name.."_right"
-    local name_right_open = name.."_right_open"
+    if string.sub(name, 1,1) == ":" then
+        name_left_closed = string.gsub(name, ":", "",1)
+    end
+    local name_left_open = name_left_closed.."_open"
+    local name_right_closed = name_left_closed.."_right"
+    local name_right_open = name_left_closed.."_right_open"
     
     
     def.on_place = function(itemstack, placer, pointed_thing)
@@ -185,6 +197,7 @@ function qts.register_door(name, def)
             minetest.log("Placing door failed due to a bad param2: "..dump(param2))
             return itemstack 
         end
+        minetest.log("Placing door should succeed")
         local toTheLeft = minetest.get_node_or_nil(pointed_thing.above+param2_to_leftvector[param2])
         local toTheRight = minetest.get_node_or_nil(pointed_thing.above-param2_to_leftvector[param2])
         
@@ -268,9 +281,13 @@ function qts.register_trapdoor(name, def)
     end
 
     local name_left_closed = name
-    local name_left_open = name.."_open"
-    local name_right_closed = name.."_top"
-    local name_right_open = name.."_top_open"
+    if string.sub(name, 1,1) == ":" then
+        name_left_closed = string.gsub(name, ":", "",1)
+    end
+    local name_left_open = name_left_closed.."_open"
+    local name_right_closed = name_left_closed.."_top"
+    local name_right_open = name_left_closed.."_top_open"
+    
 
     def.on_place = function(itemstack, placer, pointed_thing)
         local under = minetest.get_node_or_nil(pointed_thing.under)

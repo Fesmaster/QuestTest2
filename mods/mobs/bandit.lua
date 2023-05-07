@@ -201,17 +201,17 @@ qts.ai.register_spawner_config("mobs:spawnconfig_bandit", {
 
 --list of items that bandists can spawn holding, when using the weapon spawnconfig
 local bandit_weapons = {
-    "default:knife_flint",
-    "default:knife_rusted",
-    "default:knife_copper",
-    "default:knife_bronze",
-    "default:axe_flint",
-    "default:axe_rusted",
-    "default:axe_copper",
-    "default:axe_bronze",
-    "default:sword_rusted",
-    "default:sword_copper",
-    "default:sword_bronze",
+    "tools:knife_flint",
+    "tools:knife_rusted",
+    "tools:knife_copper",
+    "tools:knife_bronze",
+    "tools:axe_flint",
+    "tools:axe_rusted",
+    "tools:axe_copper",
+    "tools:axe_bronze",
+    "tools:sword_rusted",
+    "tools:sword_copper",
+    "tools:sword_bronze",
 }
 
 qts.ai.register_spawner_config("mobs:spawnconfig_bandit_weapons", {

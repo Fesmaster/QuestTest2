@@ -11,6 +11,9 @@
 	if return is nul or true then the hammering does not apply normal stuff
 --]]
 
+---@class NodeDefinition : ItemDefinition
+---@field on_hammer nil|fun(pointed_thing:PointedThing, user:ObjectRef, mode:HammerFunction, newnode:NodeRef):nil:boolean Called when a node is hammered. Return false to use the default behavior, true or nil to ignore it.
+
 --[[
 	Rotate and place a stair, slant, or slab
 
@@ -27,7 +30,7 @@
 ---Rotate and Place a facedir / coloredfacedir node
 ---@param itemstack ItemStack|nil can be nil if dont_place is true
 ---@param placer ObjectRef
----@param pointed_thing Pointed_Thing
+---@param pointed_thing PointedThing
 ---@param dont_place boolean just return the param2 value, don't actually place. default is false.
 ---@return ItemStack|number
 function qts.rotate_and_place(itemstack, placer, pointed_thing, dont_place)
@@ -165,7 +168,7 @@ qts.HAMMER_FUNCTION = {
 		if return is nul or true then the hammering does not apply normal stuff
 ]]
 ---Apply a hammer to a node
----@param pointed_thing Pointed_Thing
+---@param pointed_thing PointedThing
 ---@param user ObjectRef
 ---@param mode HammerFunction
 function qts.hammer_apply(pointed_thing, user, mode)
@@ -458,6 +461,9 @@ end
 		shaped_slab=1
 	
 ]]
+---Register a shaped node
+---@param name ItemName the item name
+---@param def NodeDefinition the node def
 function qts.register_shaped_node(name, def)
 	--prep the data for node registration
 	if (def.drop == nil) then
@@ -662,4 +668,19 @@ function qts.register_shaped_node(name, def)
 	end
 
 	minetest.register_node(":"..name.."_slab", qts.table_deep_copy(def))
+end
+
+---Register an alias for a shaped node. Automatically registers all needed aliases for all shapes
+---@param alias ItemName
+---@param base ItemName
+function qts.register_shapeed_alias(alias, base)
+	minetest.register_alias(alias, 					base)
+	minetest.register_alias(alias.."_stair", 		base.."_stair")
+	minetest.register_alias(alias.."_stair_inner", 	base.."_stair_inner")
+	minetest.register_alias(alias.."_stair_outer", 	base.."_stair_outer")
+	minetest.register_alias(alias.."_slant", 		base.."_slant")
+	minetest.register_alias(alias.."_slant_inner", 	base.."_slant_inner")
+	minetest.register_alias(alias.."_slant_outer", 	base.."_slant_oute")
+	minetest.register_alias(alias.."_slab", 		base.."_slab")
+	minetest.register_alias(alias.."_slab", 		base.."_slab")
 end

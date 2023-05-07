@@ -54,6 +54,7 @@ function qtcore.armor_cloth_textures(basecolor, shadowstrength)
 	}
 end
 
+---@type table<string, ColorSpec> List of supported dye colors. Iterate with pairs() not ipairs()
 qtcore.colors = {
 	red = "#a40000",--"#ff0000", --
 	orange = "#ff7f00", --"#a45200",--

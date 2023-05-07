@@ -48,8 +48,8 @@ function qts.register_fencelike_node(name, def)
 	--fence style
 
 	if def.type == "fence" then
-		local fence_texture = "default_fence_overlay.png^" .. def.tiles[1] ..
-			"^default_fence_overlay.png^[makealpha:255,126,126"
+		local fence_texture = "qts_fence_overlay.png^" .. def.tiles[1] ..
+			"^qts_fence_overlay.png^[makealpha:255,126,126"
 
 		if not def.no_tile_transform then
 			for i, v in ipairs(def.tiles) do
@@ -86,7 +86,7 @@ function qts.register_fencelike_node(name, def)
 				connect_back =  {-1/8, -1/2,  1/8,  1/8, 1/2 + fence_collision_extra,  1/2},
 				connect_right = { 1/8, -1/2, -1/8,  1/2, 1/2 + fence_collision_extra,  1/8}
 			},
-			connects_to = {"group:fence", "group:wood", "group:tree", "group:wall"},
+			connects_to = {"group:fence", "group:wood", "group:tree", "group:wall", "group:shaped_node"},
 			inventory_image = fence_texture,
 			wield_image = fence_texture,
 			tiles = def.tiles,
@@ -114,8 +114,8 @@ function qts.register_fencelike_node(name, def)
 		def.groups.fence = 1
 
 	elseif def.type == "rail" then
-		local fence_rail_texture =  "default_fence_rail_overlay.png^" .. def.tiles[1] ..
-			"^default_fence_rail_overlay.png^[makealpha:255,126,126"
+		local fence_rail_texture =  "qts_fence_rail_overlay.png^" .. def.tiles[1] ..
+			"^qts_fence_rail_overlay.png^[makealpha:255,126,126"
 
 		-- Allow almost everything to be overridden
 		default_fields = {
@@ -146,7 +146,7 @@ function qts.register_fencelike_node(name, def)
 				connect_back =  {-1/8, -1/2,  1/8,  1/8, 1/2 + fence_collision_extra,  1/2},
 				connect_right = { 1/8, -1/2, -1/8,  1/2, 1/2 + fence_collision_extra,  1/8}
 			},
-			connects_to = {"group:fence", "group:wall"},
+			connects_to = {"group:fence", "group:wall", "group:shaped_node"},
 			inventory_image = fence_rail_texture,
 			wield_image = fence_rail_texture,
 			tiles = def.tiles,
@@ -196,7 +196,7 @@ function qts.register_fencelike_node(name, def)
 				connect_back = {-1/4,-1/2,1/4,1/4,1/2 + fence_collision_extra,1/2},
 				connect_right = {1/4,-1/2,-1/4,1/2,1/2 + fence_collision_extra,1/4},
 			},
-			connects_to = { "group:wall", "group:stone", "group:fence" },
+			connects_to = { "group:wall", "group:stone", "group:fence", "group:shaped_node" },
 			tiles = def.tiles,
 			sunlight_propagates = true,
 			is_ground_content = false,
@@ -388,7 +388,7 @@ local function register_bucket_full(bucketid, liquidid)
 	local source_name = liquid_data.name.."_source"
 
 	--yes, this is about as insane as it looks. go for it!
-	minetest.register_craftitem(bucket_data.name .. to_bucket_name(liquid_data.name), {
+	minetest.register_craftitem(":"..bucket_data.name .. to_bucket_name(liquid_data.name), {
 		description = bucket_data.desc .. " of " .. liquid_data.desc,
 		inventory_image = bucket_data.image.."^"..liquid_data.image,
 		groups = groups,
@@ -876,3 +876,22 @@ minetest.register_node("qts:void", {
 	buildable_to=false,
 	groups = {utility_node=1, not_in_creative_inventory=1}
 })
+
+if qts.ISDEV then
+	minetest.register_chatcommand("clrvoid",{
+		params="",
+		privs={creative=true},
+		func=function(name, param)
+			local player = minetest.get_player_by_name(name)
+			local pos = player:get_pos()
+			local node = minetest.get_node_or_nil(pos)
+			if node and node.name=="qts:void" then
+				minetest.set_node(pos, {name="air"})
+				minetest.log("void cleared.")
+			else
+				minetest.log("not void at your pos!")
+			end
+		end
+	})
+
+end

@@ -1,5 +1,5 @@
 --[[
-This code is based on the code from the schemedit mod (MIT license - see bottom of file)
+This code is based on the code from the schemedit mod (MIT license - see bottom of file, or LICENSE file)
 Much of it is straight from said mod
 --]]
 

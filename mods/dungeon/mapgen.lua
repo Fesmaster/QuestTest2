@@ -20,7 +20,7 @@
 qts.worldgen.register_scatter("lake-grassy", {
 	nodes = {"dungeon:lake_generator"},
 	replace = {"air"},
-	below = {"default:dirt_with_grass"},
+	below = {"overworld:dirt_with_grass"},
 	chance = 5000,
 	stage = "pre-structure",
 })
@@ -28,7 +28,7 @@ qts.worldgen.register_scatter("lake-grassy", {
 qts.worldgen.register_scatter("camp-plains", {
 	nodes = {"dungeon:camp_generator_plains"},
 	replace = {"air"},
-	below = {"default:dirt_with_grass"},
+	below = {"overworld:dirt_with_grass"},
 	chance = 6000,
 	stage = "pre-structure",
 })
@@ -36,7 +36,7 @@ qts.worldgen.register_scatter("camp-plains", {
 qts.worldgen.register_scatter("camp-prarie", {
 	nodes = {"dungeon:camp_generator_prarie"},
 	replace = {"air"},
-	below = {"default:dirt_with_prarie_grass"},
+	below = {"overworld:dirt_with_prarie_grass"},
 	chance = 6000,
 	stage = "pre-structure",
 })
