@@ -157,10 +157,9 @@ function Player_API.sprint(player, on)
 		return
 	end
 	if on then
+		dat.sprint = true
 		local mods = qts.get_player_modifier(player, "CONTROL_INTERNAL")
-		--Player_API.SPRINT_INCREASE
 		local sprint_max = qts.get_player_sprint_multipliers(player)
-		--TODO: pick which field to use
 		local playerpos = player:get_pos()
 		local node = minetest.get_node_or_nil(playerpos)
 		if node and node.name then
@@ -182,20 +181,24 @@ function Player_API.sprint(player, on)
 
 		if not mods then
 			qts.override_player_modifer(player, "CONTROL_INTERNAL", {speed = sprint_max})
-			dat.sprint = true
 			return
 		end
-		mods.speed = (mods.speed or 1) + Player_API.SPRINT_INCREASE
-		if mods.speed > sprint_max then
-			qts.override_player_modifer(player, "CONTROL_INTERNAL", {speed = sprint_max})
-			dat.sprint = true
-		else
-			qts.override_player_modifer(player, "CONTROL_INTERNAL", {speed = mods.speed})
-		end
-	elseif on == false and dat.sprint == true then
-		qts.override_player_modifer(player, "CONTROL_INTERNAL", {speed = 1})
-		dat.sprint = false
 
+		--early out if already at max speed
+		if mods.speed == sprint_max then
+			return
+		end
+		mods.speed = math.min((mods.speed or 1) + Player_API.SPRINT_INCREASE.get(), sprint_max)
+		qts.override_player_modifer(player, "CONTROL_INTERNAL", mods)
+	elseif on == false and dat.sprint then
+		local mods = qts.get_player_modifier(player, "CONTROL_INTERNAL")
+		if mods then
+			mods.speed = 1
+			qts.override_player_modifer(player, "CONTROL_INTERNAL", mods)
+		else
+			qts.override_player_modifer(player, "CONTROL_INTERNAL", {speed = 1})
+		end
+		dat.sprint = false
 	end
 end
 
@@ -205,14 +208,38 @@ function Player_API.sneak(player, on)
 		dat.sprint = false
 	end
 	if on and dat.sneak == false then
+		--lower the camera
 		player:set_eye_offset({x=0,y=-1.5,z=0}, {x=0,y=0,z=0})
-		qts.override_player_modifer(player, "CONTROL_INTERNAL", {speed = qts.get_player_sneak_multiplier(player) })
+		
+		--shrink collision box
 		player:set_properties({collisionbox = {-0.3, 0.0, -0.3, 0.3, 1.3, 0.3},})
+		
+		--set the player speed
+		local mods = qts.get_player_modifier(player, "CONTROL_INTERNAL")
+		if mods then
+			mods.speed = qts.get_player_sneak_multiplier(player)
+			qts.override_player_modifer(player, "CONTROL_INTERNAL", mods)
+		else
+			qts.override_player_modifer(player, "CONTROL_INTERNAL", {speed = qts.get_player_sneak_multiplier(player) })
+		end
+		
+		--reminder that we are sneaking for later.
 		dat.sneak = true
 	elseif on == false and dat.sneak then
+		--set regilar eye and collision box
 		player:set_eye_offset({x=0,y=0,z=0}, {x=0,y=0,z=0})
-		qts.override_player_modifer(player, "CONTROL_INTERNAL", {speed = 1})
 		player:set_properties({collisionbox = {-0.3, 0.0, -0.3, 0.3, 1.7, 0.3},})
+		
+		--set player overrides
+		local mods = qts.get_player_modifier(player, "CONTROL_INTERNAL")
+		if mods then
+			mods.speed = 1
+			qts.override_player_modifer(player, "CONTROL_INTERNAL", mods)
+		else
+			qts.override_player_modifer(player, "CONTROL_INTERNAL", {speed = 1})
+		end
+
+		--reminder that we are not sneaking for later.
 		dat.sneak = false
 	end
 end
@@ -303,7 +330,7 @@ minetest.register_globalstep(function(dtime)
 
 		--now, scan for double clicks and call the double click functions
 		for control, prev in pairs(switched) do
-			if math.abs(prev) <= Player_API.DOUBLECLICK_TIME and ctrl[control] then
+			if math.abs(prev) <= Player_API.DOUBLECLICK_TIME.get() and ctrl[control] then
 				--doubleclick found. run funcs
 				for i, func in ipairs(FDoubleClick) do
 					func(player, control)
@@ -313,9 +340,12 @@ minetest.register_globalstep(function(dtime)
 
 		--cancel sprinting if the forward key is not pressed, or the player is not moving enough
 		local vel = vector.length(player:get_velocity())
-		if (not ctrl.up) or (vel < Player_API.SPRINT_MIN_SPEED) then
+		if ctrl.up and pdat.controlTimer.up > 3 then
+			Player_API.sprint(player, true)
+		elseif vector.length(player:get_velocity()) < Player_API.SPRINT_MIN_SPEED.get() and ctrl.sneak == false then
 			Player_API.sprint(player, false)
-		end
+		end 
+	
 
 		--block dodging when sneaking or when not moving forward
 		if switched.sneak or switched.up then
@@ -347,12 +377,7 @@ minetest.register_globalstep(function(dtime)
 			end
 		end
 
-		--sprint 3
-		--if Player_API.SPRINT_MODE == 3 then
-		if ctrl.up and pdat.controlTimer.up > 3 then
-			Player_API.sprint(player, true)
-		end
-		--end
+		
 
 		--Animation stuff
 		local model_name = pdat.model

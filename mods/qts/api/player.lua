@@ -68,14 +68,10 @@ function qts.get_player_data(player, catagory, field)
 	if (type(player) ~= "string") then player = player:get_player_name() end
 	
 	if (qts.player_data[player] == nil) then
-		qts.player_data[player] = {}
 		playerdata_profile_stop()
 		return nil
 	end
 	if (qts.player_data[player][catagory] == nil) then
-		if (field ~= nil) then
-			qts.player_data[player][catagory] = {}
-		end
 		playerdata_profile_stop()
 		return nil
 	end
