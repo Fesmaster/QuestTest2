@@ -10,10 +10,9 @@ dofile(minetest.get_modpath("player").."/api.lua")
 minetest.settings:set_bool("aux1_decends", false)
 minetest.settings:set_bool("always_fly_fast", true)
 
-Player_API.SPRINT_MODE = 1
-Player_API.SPRINT_INCREASE = 0.01
-Player_API.DOUBLECLICK_TIME = 0.50
-Player_API.SPRINT_MIN_SPEED = 0.75
+Player_API.SPRINT_INCREASE = qts.config("SPRINT_INCREASE", 0.01, "ammount of speed you gain each frame when starting to sprint")
+Player_API.DOUBLECLICK_TIME = qts.config("DOUBLECLICK_TIME", 0.50, "max ammount of time between clicks to make it count as a double click")
+Player_API.SPRINT_MIN_SPEED = qts.config("SPRINT_MIN_SPEED",0.75,"blocks per second you must be moving at to start sprinting")
 --these two were moved to player modifier system
 --Player_API.SPRINT_MULT = 2.5
 --Player_API.SNEAK_MULT = 0.75
@@ -84,6 +83,7 @@ end)
 
 
 --[[DEBUG STUFF]]
+if qts.ISDEV then
 minetest.register_chatcommand("phys", {
 	params = "<text>",
 	description = "Log your physics overrdie",
@@ -108,4 +108,4 @@ minetest.register_chatcommand("sprintmode", {
 		end
 	end
 })
-
+end
