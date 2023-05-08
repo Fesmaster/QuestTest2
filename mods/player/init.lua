@@ -90,22 +90,7 @@ minetest.register_chatcommand("phys", {
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
 		local phys = player:get_physics_override()
-		minetest.log(dump(phys))
-	end
-})
-
-minetest.register_chatcommand("sprintmode", {
-	params = "<number>",
-	description = "Change sprint mode",
-	func = function(name, param)
-		minetest.log(dump(param))
-		if param == '1' then
-			Player_API.SPRINT_MODE = 1
-		elseif param == '2' then
-			Player_API.SPRINT_MODE = 2
- 		else
-			Player_API.SPRINT_MODE = 3
-		end
+		minetest.log("Physics Override for player: [" .. name .. "] : " .. dump(phys))
 	end
 })
 end
