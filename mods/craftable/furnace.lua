@@ -324,6 +324,7 @@ local function register_furnace(name, def)
 		description = def.description,
 		tiles = def.tiles_on,
 		paramtype2 = "facedir",
+		light_source = 6,
 		groups = {cracky=2, not_in_creative_inventory = 1, furnace=1, generation_artificial=1},
 		is_ground_content = false,
 		sounds = qtcore.node_sound_stone(),

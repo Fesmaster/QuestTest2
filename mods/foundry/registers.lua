@@ -11,35 +11,36 @@ qts.register_shaped_node ("foundry:marker", {
 	sounds = qtcore.node_sound_stone(),
 })
 --]]
-
-minetest.register_tool("foundry:analizer", {
-	description = "Foundry Analizer Tool",
-	inventory_image = "foundry_analizer.png",
-	range = 10.0,
-	--liquids_pointable = true,
-	on_use = function(itemstack, user, pointed_thing)
-		if pointed_thing.under then
-			local p = foundry.get_pos_foundry(pointed_thing.under)
-			if p then
-				minetest.log("info","Foundry: "..minetest.pos_to_string(p))
-				local FD = foundry.GetFoundryData(p)
-				FD:add_heat(100)
-				FD:apply()
-			else
-				minetest.log("info","Foundry: NONE")
+if qts.ISDEV then
+	minetest.register_tool("foundry:analizer", {
+		description = "Foundry Analizer Tool",
+		inventory_image = "foundry_analizer.png",
+		range = 10.0,
+		--liquids_pointable = true,
+		on_use = function(itemstack, user, pointed_thing)
+			if pointed_thing.under then
+				local p = foundry.get_pos_foundry(pointed_thing.under)
+				if p then
+					minetest.log("info","Foundry: "..minetest.pos_to_string(p))
+					local FD = foundry.GetFoundryData(p)
+					FD:add_heat(100)
+					FD:apply()
+				else
+					minetest.log("info","Foundry: NONE")
+					end
 			end
-		end
-	end,
-	on_place = function(itemstack, user, pointed_thing)
-		if pointed_thing.under then
-			local p = foundry.get_pos_foundry(pointed_thing.under)
-			if p then
-				local FD = foundry.GetFoundryData(p)
-				minetest.log("info","Foundry Data:"..dump(FD))
+		end,
+		on_place = function(itemstack, user, pointed_thing)
+			if pointed_thing.under then
+				local p = foundry.get_pos_foundry(pointed_thing.under)
+				if p then
+					local FD = foundry.GetFoundryData(p)
+					minetest.log("info","Foundry Data:"..dump(FD))
+				end
 			end
-		end
-	end,
-})
+		end,
+	})
+end
 
 --]]
 
