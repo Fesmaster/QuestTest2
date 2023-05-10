@@ -548,8 +548,9 @@ local DAMAGE_VIGNETTE_TIME = qts.config("DAMAGE_VIGNETTE_TIME", 0.2, "Duration o
 ---@param reason any
 minetest.register_on_player_hpchange(function (player, hpchange, reason) 
 	if hpchange < 0 then
-		minetest.log("Player HP Change: " .. dump(hpchange))
-		--taking damage
+		local playername = player:get_player_name()
+		
+		--add the HUD vignette
 		local screenflash_id = player:hud_add({
 			hud_elem_type="image",
 			z_index = -400, --vignette
@@ -561,13 +562,15 @@ minetest.register_on_player_hpchange(function (player, hpchange, reason)
 			direction=1,
 			offset={x=0,y=0},
 		})
-		minetest.log("vignette: " .. dump(screenflash_id))
-
-		local playername = player:get_player_name()
+		
+		--remove the vignette a bit later
 		local job = minetest.after(DAMAGE_VIGNETTE_TIME.get(), function()
-			minetest.log("removing vignette")
 			local player = minetest.get_player_by_name(playername)
 			player:hud_remove(screenflash_id)
 		end)
+		
+		--play sound effect
+		minetest.sound_play("player_hit", {gain = 0.5, to_player = playername}, true)
+
 	end
 end, false)
