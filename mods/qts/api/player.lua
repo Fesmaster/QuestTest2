@@ -220,28 +220,26 @@ end
 		nothing
 ]]
 function qts.recalculate_player_armor(player)
-	local armor_groups = {fleshy=1, stabby=1, psycic=1, enviromental=1} --DEFUALT ARMOR GROUPS
+	if IS_DAMAGE_ENABLED then --only do this when damage is enabled, as that is when it has a purpose.
+		local armor_groups = {fleshy=1, stabby=1, psycic=1, enviromental=1} --DEFUALT ARMOR GROUPS
 
-	
-	for index,stack in ipairs(qts.get_player_equipment_list(player)) do
-		if not stack:is_empty() then
-			local name = stack:get_name()
-			local def = minetest.registered_items[name]
-			if def and def.armor_groups then
-				for k, v in pairs(def.armor_groups) do
-					if armor_groups[k] then
-						armor_groups[k] = armor_groups[k]+v
-					else
-						armor_groups[k] = v+1 --this deals with the off-by-one error
+		for index,stack in ipairs(qts.get_player_equipment_list(player)) do
+			if not stack:is_empty() then
+				local name = stack:get_name()
+				local def = minetest.registered_items[name]
+				if def and def.armor_groups then
+					for k, v in pairs(def.armor_groups) do
+						if armor_groups[k] then
+							armor_groups[k] = armor_groups[k]+v
+						else
+							armor_groups[k] = v+1 --this deals with the off-by-one error
+						end
 					end
 				end
 			end
 		end
+		player:set_armor_groups(armor_groups)
 	end
-
-	--minetest.log("Armor Groups Recalculated: ".. dump(armor_groups))
-
-	player:set_armor_groups(armor_groups)
 end
 
 local old_register_on_puchplayer = minetest.register_on_punchplayer
@@ -535,6 +533,11 @@ minetest.register_on_shutdown(function()
 	qts.settings.save()
 	minetest.log("QTS shutdown finished")
 end)
+
+
+--[[
+	Damage Effects
+]]
 
 local DAMAGE_VIGNETTE_COLOR = qts.config("DAMAGE_VIGNETTE_COLOR", "#FF0000", "Color of the screen flash vignette when taking damage.")
 local DAMAGE_VIGNETTE_TIME = qts.config("DAMAGE_VIGNETTE_TIME", 0.2, "Duration of the screen flash vignette when taking damage.")
