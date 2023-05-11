@@ -49,11 +49,13 @@ minetest.register_chatcommand("punchme", {
 	params = "<text>",
 	description = "Player punches themselves in the arm",
 	func = function(name, param)
+		---@type Player
 		local player = minetest.get_player_by_name(name)
-		player:punch(player, 1.0, {
-				full_punch_interval = 0.9,
-				damage_groups = {fleshy = 50},
-			}, nil)
+		local wielditem = player:get_wielded_item()
+		if wielditem then
+			local toolcaps = wielditem:get_tool_capabilities()
+			player:punch(player, 1.0, toolcaps, vector.new(0,0,0))
+		end
 	end,
 })
 

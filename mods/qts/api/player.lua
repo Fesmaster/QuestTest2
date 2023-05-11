@@ -220,28 +220,26 @@ end
 		nothing
 ]]
 function qts.recalculate_player_armor(player)
-	local armor_groups = {fleshy=1, stabby=1, psycic=1, enviromental=1} --DEFUALT ARMOR GROUPS
+	if IS_DAMAGE_ENABLED then --only do this when damage is enabled, as that is when it has a purpose.
+		local armor_groups = {fleshy=1, stabby=1, psycic=1, enviromental=1} --DEFUALT ARMOR GROUPS
 
-	
-	for index,stack in ipairs(qts.get_player_equipment_list(player)) do
-		if not stack:is_empty() then
-			local name = stack:get_name()
-			local def = minetest.registered_items[name]
-			if def and def.armor_groups then
-				for k, v in pairs(def.armor_groups) do
-					if armor_groups[k] then
-						armor_groups[k] = armor_groups[k]+v
-					else
-						armor_groups[k] = v+1 --this deals with the off-by-one error
+		for index,stack in ipairs(qts.get_player_equipment_list(player)) do
+			if not stack:is_empty() then
+				local name = stack:get_name()
+				local def = minetest.registered_items[name]
+				if def and def.armor_groups then
+					for k, v in pairs(def.armor_groups) do
+						if armor_groups[k] then
+							armor_groups[k] = armor_groups[k]+v
+						else
+							armor_groups[k] = v+1 --this deals with the off-by-one error
+						end
 					end
 				end
 			end
 		end
+		player:set_armor_groups(armor_groups)
 	end
-
-	--minetest.log("Armor Groups Recalculated: ".. dump(armor_groups))
-
-	player:set_armor_groups(armor_groups)
 end
 
 local old_register_on_puchplayer = minetest.register_on_punchplayer
@@ -373,6 +371,9 @@ end
 old_register_on_puchplayer(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
 	damage_profile_start()
 	if IS_DAMAGE_ENABLED then
+		for i, func in ipairs(registered_puchplayers) do
+			func(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
+		end
 		qts.set_player_hp(player, qts.get_player_hp(player)-qts.calculate_damage(player, hitter, time_from_last_punch, tool_capabilities, dir), "punch")
 	end
 	damage_profile_stop()
@@ -535,3 +536,44 @@ minetest.register_on_shutdown(function()
 	qts.settings.save()
 	minetest.log("QTS shutdown finished")
 end)
+
+
+--[[
+	Damage Effects
+]]
+
+local DAMAGE_VIGNETTE_COLOR = qts.config("DAMAGE_VIGNETTE_COLOR", "#FF0000", "Color of the screen flash vignette when taking damage.")
+local DAMAGE_VIGNETTE_TIME = qts.config("DAMAGE_VIGNETTE_TIME", 0.2, "Duration of the screen flash vignette when taking damage.")
+
+---player HP loss screen flash and other effects
+---@param player Player
+---@param hpchange number
+---@param reason any
+minetest.register_on_player_hpchange(function (player, hpchange, reason) 
+	if hpchange < 0 then
+		local playername = player:get_player_name()
+		
+		--add the HUD vignette
+		local screenflash_id = player:hud_add({
+			hud_elem_type="image",
+			z_index = -400, --vignette
+			text = "vignette.png^[multiply:"..DAMAGE_VIGNETTE_COLOR.get(),
+			position = {x=0.5,y=0.5},
+			alignment = {x=0,y=0},
+			scale = {x=-100,y=-100}, --negative scale values are percentage of screen
+			name="QTS_damageVignette",
+			direction=1,
+			offset={x=0,y=0},
+		})
+		
+		--remove the vignette a bit later
+		local job = minetest.after(DAMAGE_VIGNETTE_TIME.get(), function()
+			local player = minetest.get_player_by_name(playername)
+			player:hud_remove(screenflash_id)
+		end)
+		
+		--play sound effect
+		minetest.sound_play("player_hit", {gain = 0.5, to_player = playername}, true)
+
+	end
+end, false)

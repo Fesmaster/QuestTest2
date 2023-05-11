@@ -106,87 +106,87 @@ local ObjectRef = {
 
     ---Get the object position
     ---@return Vector
-    get_pos = function() end,
+    get_pos = function(self) end,
 
     ---Set the position
     ---@param pos Vector
-    set_pos = function(pos) end,
+    set_pos = function(self, pos) end,
     
     ---Get the object velocity
     ---@return Vector
-    get_velocity = function() end,
+    get_velocity = function(self) end,
     
     ---Add velocity to the object
     ---@param vel Vector
-    add_velocity = function(vel) end,
+    add_velocity = function(self, vel) end,
 
     ---Move the object to a location
     ---@param pos Vector the location
     ---@param continuous boolean? if should slide, default is false
-    move_to = function(pos, continuous) end, --
+    move_to = function(self, pos, continuous) end, --
     
     ---Punch the object
     ---@param puncher ObjectRef
     ---@param time_from_last_punch number
     ---@param tool_capabilities table
     ---@param direction Vector
-    punch = function(puncher, time_from_last_punch, tool_capabilities, direction) end, --
+    punch = function(self, puncher, time_from_last_punch, tool_capabilities, direction) end, --
     
     ---Rightclick an Object
     ---@param clicker ObjectRef
-    right_click = function(clicker) end, --; `clicker` is another `ObjectRef`
+    right_click = function(self, clicker) end, --; `clicker` is another `ObjectRef`
     
     --- returns number of health points
     ---@return number health
-    get_hp = function() end, 
+    get_hp = function(self) end, 
 
     ---set number of health points
     ---@param hp number
     ---@param reason HPChangeReason
-    set_hp = function(hp, reason) end, -- 
+    set_hp = function(self, hp, reason) end, -- 
     
     ---returns an `InvRef` for players, otherwise returns `nil`
     ---@return InvRef|nil
-    get_inventory = function() end,
+    get_inventory = function(self) end,
     
     ---Get the name of inventory list the wielded item is in. Player only
     ---@return string|nil
-    get_wield_list = function() end,
+    get_wield_list = function(self) end,
     
     ---Get the index of wielded item. Player only
     ---@return integer|nil
-    get_wield_index = function() end,
+    get_wield_index = function(self) end,
 
     ---Get the wielded item. Player Only
     ---@return ItemStack|nil
-    get_wielded_item = function() end, -- returns an `ItemStack`
+    get_wielded_item = function(self) end, -- returns an `ItemStack`
 
     ---Set the wielded item. Player Only
     ---@param item ItemStack
-    set_wielded_item = function(item) end, -- replaces the wielded item, returns `true` if successful.
+    set_wielded_item = function(self, item) end, -- replaces the wielded item, returns `true` if successful.
     
     ---Set the armor groups for the entity
     ---@param groups table<string, number>
-    set_armor_groups = function(groups) end,
+    set_armor_groups = function(self, groups) end,
     
     ---Get the armor groups
     ---@return table<string, number>
-    get_armor_groups = function() end,
+    get_armor_groups = function(self) end,
     
     ---Set the currently playing animation
     ---@param frame_range {x:number, y:number}
     ---@param frame_speed number
     ---@param frame_blend number
     ---@param frame_loop boolean
-    set_animation = function(frame_range, frame_speed, frame_blend, frame_loop) end, --
+    set_animation = function(self, frame_range, frame_speed, frame_blend, frame_loop) end, --
 
     ---get the currently playing animation
     ---@return {x:number,y:number} range, number speed, number blend, boolean loop
-    get_animation = function() end, -- returns `range`, `frame_speed`, `frame_blend` and `frame_loop`.
+    get_animation = function(self) end, -- returns `range`, `frame_speed`, `frame_blend` and `frame_loop`.
 
     ---Set the current animation speed
     ---@param frame_speed number
-    set_animation_frame_speed = function(frame_speed) end, --
+    set_animation_frame_speed = function(self, frame_speed) end, --
     
     ---Attach one entity to another
     ---@param parent ObjectRef
@@ -194,49 +194,49 @@ local ObjectRef = {
     ---@param position Vector relative to bone
     ---@param rotation Rotator relative to bone
     ---@param forced_visible boolean set to true to force it to appear in first person
-    set_attach = function(parent, bone, position, rotation, forced_visible) end, --
+    set_attach = function(self, parent, bone, position, rotation, forced_visible) end, --
 
     ---returns attachment or nil
     ---@return nil | ObjectRef parent, string bone, Vector position, Rotator rotation, boolean force_visible
-    get_attach = function() end,
+    get_attach = function(self) end,
     
     ---Return the children attached to this object
     ---@return ObjectRef[]
-    get_children = function() end,
+    get_children = function(self) end,
     
     ---Unknwon, no documentation
-    set_detach = function() end,
+    set_detach = function(self) end,
     
     ---Set the position of a given bone.
     ---@param bone string "" for root bone
     ---@param position Vector
     ---@param rotation Rotator
-    set_bone_position = function(bone, position, rotation) end, --
+    set_bone_position = function(self, bone, position, rotation) end, --
 
     ---Get the position and rotation of a given bone
     ---@param bone string "" for root
     ---@return Vector position, Rotator rotation
-    get_bone_position = function(bone) end,
+    get_bone_position = function(self, bone) end,
     
     ---Set the object protperties
     ---@param properties EntityProperties
-    set_properties = function(properties) end, --
+    set_properties = function(self, properties) end, --
     
     ---Returns object property table
     ---@return EntityProperties
-    get_properties = function() end, --
+    get_properties = function(self) end, --
 
     --- returns true for players, false otherwise
     ---@return boolean is_player
-    is_player = function() end, --
+    is_player = function(self) end, --
     
     ---Get nametag attributes
     ---@return {text:string, color:ColorSpec, bgcolor:ColorSpec|false} attributes
-    get_nametag_attributes = function() end, --
+    get_nametag_attributes = function(self) end, --
     
     ---Set Nametag Attributes
     ---@param attributes {text:string, color:ColorSpec, bgcolor:ColorSpec|false}
-    set_nametag_attributes = function(attributes) end, --
+    set_nametag_attributes = function(self, attributes) end, --
 }
 
 
@@ -245,59 +245,59 @@ local ObjectRef = {
 local LuaObject = {
 
     ---remove the object
-    remove = function() end,
+    remove = function(self) end,
     
     ---set the object's velocity
     ---@param vel Vector
-    set_velocity = function(vel) end,
+    set_velocity = function(self, vel) end,
     
     ---sets the object's acceleraton
     ---@param acc Vector
-    set_acceleration = function(acc) end,
+    set_acceleration = function(self, acc) end,
     
     ---gets the object's acceleraton
     ---@return Vector
-    get_acceleration = function() end,
+    get_acceleration = function(self) end,
     
     ---sets the object's rotation via rotation vector in radians
     ---@param rot Rotator
-    set_rotation = function(rot) end,
+    set_rotation = function(self, rot) end,
     
     ---gets the object's rotation as a rotation vector in radians
     ---@return Rotator
-    get_rotation = function() end,
+    get_rotation = function(self) end,
     
     ---sets the object's yaw in radians
     ---@param yaw Radians
-    set_yaw = function(yaw) end,
+    set_yaw = function(self, yaw) end,
     
     ---gets the object's yaw in radians
     ---@return Radians
-    get_yaw = function() end,
+    get_yaw = function(self) end,
     
     ---set the texture modifier for when entity takes damage
     ---@param mod string
-    set_texture_mod = function(mod) end,
+    set_texture_mod = function(self, mod) end,
     
     ---get the texture modifier for when the entity takes damage
     ---@return string
-    get_texture_mod = function() end,
+    get_texture_mod = function(self) end,
     
     ---set the entity sprite animations.
     ---@param start_frame {x:integer, y:integer}
     ---@param num_frames integer
     ---@param framelength number
     ---@param select_x_by_camera boolean
-    set_sprite = function(start_frame, num_frames, framelength, select_x_by_camera) end,
+    set_sprite = function(self, start_frame, num_frames, framelength, select_x_by_camera) end,
     
     ---**DEPRICATED** get the entity's name
     ---@deprecated
     ---@return string
-    get_entity_name = function() end,
+    get_entity_name = function(self) end,
     
     --- get the luatable that the entity is using (the event callback func, custom stuff, etc.)
     ---@return LuaEntity
-    get_luaentity = function() end,
+    get_luaentity = function(self) end,
     
 }
 
@@ -307,152 +307,152 @@ local LuaObject = {
 local Player = {
     --- gets the player name or "" if not a player
     ---@return string
-    get_player_name = function() end,
+    get_player_name = function(self) end,
     
     --- get camera direction as unit vector
     ---@return Vector
-    get_look_dir = function() end,
+    get_look_dir = function(self) end,
     
     --- camera pitch in radians
     ---@return Radians
-    get_look_vertical = function() end,
+    get_look_vertical = function(self) end,
     
     --- camera yaw in radians
     ---@return Radians 
-    get_look_horizontal = function() end,
+    get_look_horizontal = function(self) end,
     
     --- set camera pitch
     ---@param radians Radians
-    set_look_vertical = function(radians) end,
+    set_look_vertical = function(self, radians) end,
     
     --- set camera yaw
     ---comment
     ---@param radians Radians
-    set_look_horizontal = function(radians) end,
+    set_look_horizontal = function(self, radians) end,
     
     ---get the player breath value. 0=drowning,
     ---@return number 
-    get_breath = function() end,
+    get_breath = function(self) end,
     
     --- set the player's breath value
     ---comment
     ---@param value number
-    set_breath = function(value) end,
+    set_breath = function(self, value) end,
     
     --- set the player FOV.
     ---@param fov number
     ---@param is_multiplier boolean
     ---@param transition_time number
-    set_fov = function(fov, is_multiplier, transition_time) end,
+    set_fov = function(self, fov, is_multiplier, transition_time) end,
     
     --- get the FOV, 0 for no override.
     ---@return number fov, boolean is_multiplier, number transition_time 
-    get_fov = function() end,
+    get_fov = function(self) end,
     
     --- get the player metadata reference
     ---@return PlayerMetaRef
-    get_meta = function() end,
+    get_meta = function(self) end,
     
     --- set the inventory formspec
     ---comment
     ---@param formspec_string string
-    set_inventory_formspec = function(formspec_string) end,
+    set_inventory_formspec = function(self, formspec_string) end,
     
     --- returns inventory formspec string
     ---@return string
-    get_inventory_formspec = function() end,
+    get_inventory_formspec = function(self) end,
     
     --- set the prepend formspec string
     ---comment
     ---@param formspec_string string
-    set_formspec_prepend = function(formspec_string) end,
+    set_formspec_prepend = function(self, formspec_string) end,
     
     --- gets th prepend formspec string
     ---@return string
-    get_formspec_prepend = function() end,
+    get_formspec_prepend = function(self) end,
     
     --- retuns a table with the pressed keys.
     ---@return {up:boolean, down:boolean, left:boolean, right:boolean, jump:boolean, aux1:boolean, sneak:boolean, dig:boolean, place:boolean, zoom:boolean}
-    get_player_control = function() end,
+    get_player_control = function(self) end,
     
     --- retusn a packed int with the bits set for controls.
     ---@return integer
-    get_player_control_bits = function() end,
+    get_player_control_bits = function(self) end,
     
     --- set the player physics override. Prefer QuestTest functions for this.
     ---comment
     ---@param override_table {speed:number,jump:number,gravity:number,sneak:boolean,sneak_glitch:boolean,new_move:boolean}
-    set_physics_override = function(override_table) end,
+    set_physics_override = function(self, override_table) end,
     
     --- get the current physics override
     ---@return {speed:number,jump:number,gravity:number,sneak:boolean,sneak_glitch:boolean,new_move:boolean}
-    get_physics_override = function() end,
+    get_physics_override = function(self) end,
     
     --- add a hud element to the player screen. Retuns an ID handle on success
     ---comment
     ---@param hud_def HudDefinition
     ---@return HudID
-    hud_add = function(hud_def) end,
+    hud_add = function(self, hud_def) end,
     
     --- remove an added HUD by its ID.
     ---comment
     ---@param ID HudID
-    hud_remove = function(ID) end,
+    hud_remove = function(self, ID) end,
     
     --- change a value of previously added HUD element by ID
     ---comment
     ---@param ID HudID
     ---@param stat "position"|"name"|"scale"|"text"|"number"|"item"|"dir"
     ---@param value Vector|string|number|ItemStack
-    hud_change = function(ID, stat, value) end,
+    hud_change = function(self, ID, stat, value) end,
     
     --- get the HUD definition by ID
     ---comment
     ---@param ID HudID
     ---@return HudDefinition
-    hud_get = function(ID) end,
+    hud_get = function(self, ID) end,
     
     --- set default HUD elements via flags Flags is table with boolean keys:
     ---comment
     ---@param flags {hotbar:boolean, healthbar:boolean, crosshair:boolean, wielditem:boolean, breathbar:boolean, minimap:boolean, minimap_radar:boolean, basic_debug:boolean}
-    hud_set_flags = function(flags) end,
+    hud_set_flags = function(self, flags) end,
     
     --- returns a flag table
     ---@return {hotbar:boolean, healthbar:boolean, crosshair:boolean, wielditem:boolean, breathbar:boolean, minimap:boolean, minimap_radar:boolean, basic_debug:boolean}
-    hud_get_flags = function() end,
+    hud_get_flags = function(self) end,
     
     --- set the number of elements in the hotbar
     ---comment
     ---@param count integer
-    hud_set_hotbar_itemcount = function(count) end,
+    hud_set_hotbar_itemcount = function(self, count) end,
     
     --- get the number of elements in the hotbar
     ---@return integer
-    hud_get_hotbar_itemcount = function() end,
+    hud_get_hotbar_itemcount = function(self) end,
     
     --- set the background image for the hotbar
     ---comment
     ---@param texturename string
-    hud_set_hotbar_image = function(texturename) end,
+    hud_set_hotbar_image = function(self, texturename) end,
     
     --- get the background image for the hotbar
     ---@return string
-    hud_get_hotbar_image = function() end,
+    hud_get_hotbar_image = function(self) end,
     
     --- set the selector image for the hotbar
     ---comment
     ---@param texturename string
-    hud_set_hotbar_selected_image = function(texturename) end,
+    hud_set_hotbar_selected_image = function(self, texturename) end,
     
     --- get the selector image for the hotbar
     ---@return string
-    hud_get_hotbar_selected_image = function() end,
+    hud_get_hotbar_selected_image = function(self) end,
     
     --- set the minimap mode. Supply list of modes and the index of selected mode. mode is MinimapMode
     ---comment
     ---@param modes {type:"off"|"surface"|"radar"|"texture", label:string, size:number, texture:string?, scale:number?}[]
     ---@param selected_mode integer
-    set_minimap_modes = function(modes, selected_mode) end,
+    set_minimap_modes = function(self, modes, selected_mode) end,
     
     ---Set the sky
     ---@param sky? {base_color:ColorSpec, type:"regular"|"skybox"|"plain", textures:string[], clouds:boolean, sky_color:SkyColorType?}
@@ -501,12 +501,12 @@ local Player = {
                 `"default"` uses the classic Minetest sun and moon tinting.
                 Will use tonemaps, if set to `"default"`. (default: `"default"`)
     ]]
-    set_sky = function(sky) end,
+    set_sky = function(self, sky) end,
 
     --- get the sky. Boolean **must** be true, otherwise a depricated format will be returned. Very foolish, yes.
     ---@param as_table true
     ---@return {base_color:ColorSpec?, type:"regular"|"skybox"|"plain", textures:string[], clouds:boolean, sky_color:SkyColorType}
-    get_sky = function(as_table) end,
+    get_sky = function(self, as_table) end,
     
     --- set the sun format.
     ---@param SunParams? {visible:boolean, texture:string, tonemap:string, sunrise:string, sunrise_visible:boolean, scale:number}
@@ -520,11 +520,11 @@ local Player = {
         * `sunrise_visible`: Boolean for whether the sunrise texture is visible. (default: `true`)
         * `scale`: Float controlling the overall size of the sun. (default: `1`)
     ]]
-    set_sun = function(SunParams) end,
+    set_sun = function(self, SunParams) end,
     
     --- returns the current SunParams
     ---@return {visible:boolean, texture:string, tonemap:string, sunrise:string, sunrise_visible:boolean, scale:number}
-    get_sun = function() end,
+    get_sun = function(self) end,
     
     --- set the moon format
     ---comment
@@ -542,11 +542,11 @@ local Player = {
             (default: `"moon_tonemap.png"`)
         * `scale`: Float controlling the overall size of the moon (default: `1`)
     ]]
-    set_moon = function(MoonParams) end,
+    set_moon = function(self, MoonParams) end,
     
     --- get the current moon params
     ---@return {visible:boolean, texture:string, tonemap:string, scale:number}
-    get_moon = function() end,
+    get_moon = function(self) end,
     
     --- 
     ---Set the stars
@@ -564,11 +564,11 @@ local Player = {
             (default: `#ebebff69`)
         * `scale`: Float controlling the overall size of the stars (default: `1`)
     ]]
-    set_stars = function(StarParams) end,
+    set_stars = function(self, StarParams) end,
     
     --- get the current star params
     ---@return {visible:boolean, count:integer, star_color:ColorSpec, scale:number}
-    get_stars = function() end,
+    get_stars = function(self) end,
     
     --- set the current clouds
     ---comment
@@ -587,19 +587,19 @@ local Player = {
         * `speed`: 2D cloud speed + direction in nodes per second
           (default `{x=0, z=-2}`).
     ]]
-    set_clouds = function(CloudParams) end,
+    set_clouds = function(self, CloudParams) end,
     
     --- get the current cloud def
     ---@return {density:Alpha, color:ColorSpec, ambient:ColorSpec, thickness:number, speed:{x:integer,y:integer}|Vector}
-    get_clouds = function() end,
+    get_clouds = function(self) end,
     
     --- if not nil, use a 0-1 value to set the day to night ratio
     ---@param ratio Alpha|nil
-    override_day_night_ratio = function(ratio) end,
+    override_day_night_ratio = function(self, ratio) end,
     
     --- get the current day to night ratio override.
     ---@return Alpha
-    get_day_night_ratio = function() end,
+    get_day_night_ratio = function(self) end,
     
     --- set current animation frames. Each animation is a table in the formatL {x=start_frame, y=end_frame}.
     ---comment
@@ -608,34 +608,34 @@ local Player = {
     ---@param dig {x:integer,y:integer}
     ---@param walk_while_dig {x:integer,y:integer}
     ---@param frame_speed number
-    set_local_animation = function(idle, walk, dig, walk_while_dig, frame_speed) end,
+    set_local_animation = function(self, idle, walk, dig, walk_while_dig, frame_speed) end,
     
     --- the the current animations
     ---@return {x:integer,y:integer} idle, {x:integer,y:integer} walk, {x:integer,y:integer} dig, {x:integer,y:integer} walk_while_dig, number frame_speed
-    get_local_animation = function() end,
+    get_local_animation = function(self) end,
     
     --- set eye offsets for the camera.
     ---@param firstperson Vector
     ---@param thirdperson Vector max. values `{x=-10/10,y=-10,15,z=-5/5}`
-    set_eye_offset = function(firstperson, thirdperson) end,
+    set_eye_offset = function(self, firstperson, thirdperson) end,
     
     --- get the camera eye offsets
     ---@return Vector firstperson, Vector thirdperson
-    get_eye_offset = function() end,
+    get_eye_offset = function(self) end,
     
     --- send a server-loaded mapblock to the player (devide node pos by 16 for mapblock coord). VERY SLOW USE WITH CAUTION
     ---comment
     ---@param blockpos Vector
-    send_mapblock = function(blockpos) end,
+    send_mapblock = function(self, blockpos) end,
     
     --- set the shadow intensity. 0=no shadows, 1=blackness.
     ---comment
     ---@param light_definition {shadow:{intensity:Alpha}}
-    set_lighting = function(light_definition) end,
+    set_lighting = function(self, light_definition) end,
     
     --- get the lighting table (shadows only)
     ---@return {shadow:{intensity:Alpha}}
-    get_lighting = function() end,
+    get_lighting = function(self) end,
 }
 
 ---@class LuaEntity_Base

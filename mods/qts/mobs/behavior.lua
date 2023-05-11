@@ -263,6 +263,10 @@ function qts.ai.register_creature(name, def)
 	---@field bisincurrenttask boolean
 	---@field distance_despawn boolean despawn from distance. default to true
 	---@field nearest_player_objref ObjectRef|nil only valid in on_step(...)
+	---@field animations table list of animations
+	---@field armor_groups_base table list of basic armor groups to use when spawning the entity
+	---@field armor_groups table list of active armor groups
+	---@field immortal boolean true to make objects immortal
 	local entity_def = {
 		initial_properties = {},
 
@@ -277,6 +281,28 @@ function qts.ai.register_creature(name, def)
 			self.current_task = nil
 
 			local data = minetest.deserialize(staticdata)
+
+			--load armor
+			if data ~= nil and data.armor_groups ~= nil then
+				self.armor_groups = data.armor_groups
+			elseif self.armor_groups_base ~= nil then
+				self.armor_groups = table.copy(self.armor_groups_base)
+			elseif self.armor_groups then
+				self.armor_groups_base = table.copy(self.armor_groups)
+				minetest.log("warning", "Creature spawned with armor groups defined, but not base. Please prefer armor_groups_base in creature definitions. Entity: ".. self:id_string())
+			else
+				minetest.log("warning", "Creature spawned with no defined armor groups. please defind armor_groups_base = {...} in its definition. Entity: ".. self:id_string())
+				self.armor_groups = {}
+			end
+
+			--apply armor
+			local armor_groups = {fleshy=1, stabby=1, psycic=1, enviromental=1}
+			for k, v in pairs(self.armor_groups) do
+				armor_groups[k] = v+1 --deal with that off by one error
+			end
+			self.object:set_armor_groups(armor_groups)
+			
+
 			--self.modules = data.modules
 			if self.modules == nil then
 				self.modules = {}
@@ -352,7 +378,13 @@ function qts.ai.register_creature(name, def)
 					minetest.log("error", "tried to save a creature with an unknown module list. Entity: ".. self:id_string())
 				end
 			end
-			
+			--save armor
+			if self.armor_groups then
+				data.armor_groups = self.armor_groups
+			elseif self.armor_groups_base then
+				data.armor_groups = self.armor_groups_base
+			end
+			--save modules
 			data.modules = self.modules
 
 			return minetest.serialize(data)
@@ -439,13 +471,61 @@ function qts.ai.register_creature(name, def)
 		---@param dir Vector
 		---@return boolean
 		on_punch = function(self, puncher, time_from_last_punch, tool_capabilities, dir)
-			minetest.log("Punch called on entity " .. self:id_string() .. " by " ..qts.object_name(puncher))
+			--calculate damage
+			local damage = qts.calculate_damage(self.object, puncher, time_from_last_punch, tool_capabilities, dir)
+			local new_hp = self.object:get_hp() - damage
+			minetest.log("Punch called on entity " .. self:id_string() .. " by " ..qts.object_name(puncher) .. " Damgae: " .. dump(damage) .. " New HP: " .. dump(new_hp))
+
+			--set the HP. everything else gets the new HP
+			self.object:set_hp(new_hp, "punch")
+			
+			--item modifier functions.
+			if puncher then
+				local item = puncher:get_wielded_item()
+				if item then
+					local meta = item:get_meta()
+					local modstr = meta:get_string("qt_item_modifers")
+					if modstr and modstr ~= "" then 
+						local mods = minetest.deserialize(modstr)
+						for mod_name, mod_level in pairs(mods) do
+							local m_def = qts.registered_item_modifiers[mod_name]
+							if m_def and m_def.on_punch_entity then
+								m_def.on_punch_entity(self.object, puncher, time_from_last_punch, tool_capabilities, dir, damage)
+							end
+						end
+					end
+				end
+			end
+
 			-- run all module on_punch functions
 			for i, module_punch_func in ipairs(self.module_function_punch) do
 				module_punch_func(self, puncher, time_from_last_punch, tool_capabilities, dir)
 			end
-			return true
+
 			
+			--handle deaths
+			if new_hp <= 0 and not self.immortal then
+				minetest.log("Entity " .. self:id_string() .. " has died. Collecting drops and destroying")
+				local drops = {}
+				for i, modulename in ipairs(self.modules) do
+					local module = qts.registered_modules[modulename]
+					if module then
+						if module.on_death and type(module.on_death) == "function" then
+							module.on_death(self, drops)
+						end
+					else
+						minetest.log("error", "somehow, despite all odds, a unregistered module name ended up in a dying entity. You should probably fix this. Or don't.")
+					end
+				end
+				local pos = self.object:get_pos()
+				for i, itemstring in ipairs(drops) do
+					minetest.add_item(pos, itemstring)
+				end
+				--destroy object and return
+				self.object:remove()
+			end
+
+			return true
 		end,
 
 		---Entity on_rightclick function
@@ -749,66 +829,7 @@ end
 --qts-defined modules. These are very common, base modules.
 qts.ai.module = {}
 
--- TODO: make a seperate self.armor_groups that Can be modified, to work with a armor-wearing module
 
---[[
-	module that makes it possible to damage a creature. Very common, and uses the damage system, so its part of qts.
-]]
-qts.ai.module.damageable = qts.ai.register_module("qts:ai:module_damageable", {
-	depends_properties = {
-		armor_groups_base= {fleshy=1}
-	},
-
-	on_activate = function(self, data, dtime_s)
-		--load armor
-		if data ~= nil and data.armor_groups_base ~= nil and self.armor_groups_base == nil then
-			self.armor_groups_base = data.armor_groups_base
-		end
-
-		--apply armor
-		if (self.armor_groups_base) then
-			local armor_groups = {fleshy=1, stabby=1, psycic=1, enviromental=1}
-			for k, v in pairs(self.armor_groups_base) do
-				armor_groups[k] = v+1 --deal with that off by one error
-			end
-			self.object:set_armor_groups(armor_groups)
-		end
-	end,
-
-	get_staticdata = function(self, data)
-		data.armor_groups_base = self.armor_groups_base
-	end,
-
-	on_punch = function(self, puncher, time_from_last_punch, tool_capabilities, dir)
-		local damage = qts.calculate_damage(self.object, puncher, time_from_last_punch, tool_capabilities, dir)
-		local new_hp = self.object:get_hp() - damage
-		
-		--handle deaths
-		if new_hp <= 0 and not self.immortal then
-			minetest.log("Entity " .. self:id_string() .. " has died. Collecting drops and destroying")
-			local drops = {}
-			for i, modulename in ipairs(self.modules) do
-				local module = qts.registered_modules[modulename]
-				if module then
-					if module.on_death and type(module.on_death) == "function" then
-						module.on_death(self, drops)
-					end
-				else
-					minetest.log("error", "somehow, despite all odds, a unregistered module name ended up in a dying entity. You should probably fix this. Or don't.")
-				end
-			end
-			local pos = self.object:get_pos()
-			for i, itemstring in ipairs(drops) do
-				minetest.add_item(pos, itemstring)
-			end
-			self.object:remove()
-			return true
-		end
-
-		self.object:set_hp(new_hp, "punch")
-	end,
-	
-})
 
 --[[
 	Module that gives gravity to the object. Very common, so its part of qts

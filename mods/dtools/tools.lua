@@ -487,11 +487,11 @@ qts.register_item_modifier("testPlace", {
 	on_punch_node = function(pos, node, puncher, pointed_thing)
 		minetest.log("modified Item used to punch a node")
 	end,
-	on_punch_player_ = function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
-		minetest.log("modified Item used to punch a player")
+	on_punch_player = function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
+		minetest.log("warning", "modified Item used to punch a player")
 	end,
 	on_punch_entity = function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
-		minetest.log("modified Item used to punch a entity")
+		minetest.log("warning", "modified Item used to punch a entity")
 	end,
 	on_dieplayer = function(player, reason)
 		minetest.log("player died with modified Item in the inventory")
