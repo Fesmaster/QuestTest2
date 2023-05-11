@@ -131,7 +131,7 @@ local module_bandit_goldenfinger = qts.ai.register_module("mobs:bandit_goldenfin
 qts.ai.register_creature("mobs:basic_bandit", {
 	initial_properties = {
 		hp_max = 10,
-		armor_groups = {fleshy = 0},
+		armor_groups_base = {fleshy = 0},
 		level = 0,
 		collisionbox = {-0.3, 0.0, -0.3, 0.3, 1.7, 0.3},
 		selectionbox = {-0.3, 0.0, -0.3, 0.3, 1.7, 0.3},
@@ -172,7 +172,6 @@ qts.ai.register_creature("mobs:basic_bandit", {
 	},
 
 	modules = {
-		qts.ai.module.damageable,
 		qts.ai.module.gravity,
 		mobs.modules.target_player, --set the player as the target
 		mobs.modules.target_item, --set a dropped item as the target

@@ -32,6 +32,7 @@ function qts.profile(id, scale, needs_framecount)
 		local v = gettime()
 		if timestamp == nil then
 			minetest.log("warning", "Attemtped to stop a profiler before starting it!")
+			return
 		end
 		table.insert(trials, v-timestamp)
 		if needs_framecount then

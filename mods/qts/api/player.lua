@@ -371,6 +371,9 @@ end
 old_register_on_puchplayer(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
 	damage_profile_start()
 	if IS_DAMAGE_ENABLED then
+		for i, func in ipairs(registered_puchplayers) do
+			func(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
+		end
 		qts.set_player_hp(player, qts.get_player_hp(player)-qts.calculate_damage(player, hitter, time_from_last_punch, tool_capabilities, dir), "punch")
 	end
 	damage_profile_stop()
