@@ -509,7 +509,6 @@ minetest.register_on_respawnplayer(function(player)
 	local spawnpointstr = qts.get_player_data(player, "WAYPOINTS", "SPAWNPOINT")
 	if spawnpointstr then
 		local point = vector.from_string(spawnpointstr)
-		minetest.log("RESPAWN ISSUES: "..dump(point))
 		if point then
 			minetest.after(0, function()
 				player:set_pos(point)

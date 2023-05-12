@@ -5,6 +5,7 @@
 
 dofile(minetest.get_modpath("furnature").."/wooden.lua")
 dofile(minetest.get_modpath("furnature").."/wood_and_metal.lua")
+dofile(minetest.get_modpath("furnature").."/stone.lua")
 
 
 --[[
