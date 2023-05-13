@@ -14,7 +14,7 @@ dofile(minetest.get_modpath("mobs").."/bandit.lua")
 
 
 if qts.ISDEV then
-
+--[[
 qts.ai.register_creature("mobs:testing_humanoid", {
 	initial_properties = {
 		hp_max = 10,
@@ -58,11 +58,9 @@ qts.ai.register_creature("mobs:testing_humanoid", {
 	},
 
 	modules = {
-		qts.ai.module.damageable,
 		qts.ai.module.gravity,
 		mobs.modules.target_player, --set the player as the target
 		mobs.modules.target_item, --set a dropped item as the target
-		mobs.modules.target_tracking, --constantly update the target position
 		mobs.modules.move_to_target, --actually cause it to move to the target
 		mobs.modules.punch_target,  --cause the creature to punch its target
 		mobs.modules.pickup_item, -- causes the creature to pickup targeted dropped items
@@ -75,5 +73,5 @@ qts.ai.register_creature("mobs:testing_humanoid", {
 		pattern = "spots",
 	}
 })
-
+--]]
 end

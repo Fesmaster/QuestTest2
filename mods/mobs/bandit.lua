@@ -66,7 +66,8 @@ local module_bandit_goldenfinger = qts.ai.register_module("mobs:bandit_goldenfin
                 return 2
             end
             --don't target weapons
-            if (itemdef.tool_capabilities and 
+            if (itemdef and
+                itemdef.tool_capabilities and 
 				itemdef.tool_capabilities.damage_groups and 
 				itemdef.tool_capabilities.damage_groups.fleshy and
 				itemdef.tool_capabilities.damage_groups.fleshy ~= 0)
@@ -177,7 +178,6 @@ qts.ai.register_creature("mobs:basic_bandit", {
 		mobs.modules.target_item, --set a dropped item as the target
         module_bandit_wander, --bandits wander between certain nodes, like chests and fires.
 		mobs.modules.move_to_target, --actually cause it to move to the target
-		mobs.modules.target_tracking, --constantly update the target position
 		mobs.modules.punch_target,  --cause the creature to punch its target
 		mobs.modules.pickup_item, -- causes the creature to pickup targeted dropped items
 		mobs.modules.target_attacker, -- causes the creature to target whatever attacks it
