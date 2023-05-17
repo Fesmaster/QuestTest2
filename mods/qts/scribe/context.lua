@@ -48,8 +48,6 @@ local function build_formspec_from_fields(formdata)
         if formspec_builder_postchild[type] then
             formstr = formstr .. formspec_builder_postchild[type](formdata)
         end
-    else
-        minetest.log("skipping invisible formspec")
     end
     return formstr
 end
@@ -78,6 +76,8 @@ local function common_build_child_formdata(context, childformdata, def, type)
     end
     childformdata.details.position = qts.scribe.vec2.copy(def.position, childformdata.details.position)
     childformdata.details.tooltip = def.tooltip
+    childformdata.details.spacing = qts.scribe.vec2.copy(def.spacing)
+    childformdata.details.padding = qts.scribe.vec2.copy(def.padding)
 end
 
 ---Get the size of a form, taking its visibility into account
@@ -112,6 +112,10 @@ local function common_build_child_size(context, childformdata, def, defaultsize)
         size.y = def.height
     end
     --assign to form
+    if childformdata.details.padding then
+        size.x=size.x+(childformdata.details.padding.x*2)
+        size.y=size.y+(childformdata.details.padding.y*2)
+    end
     childformdata.details.size = size
 end
 
@@ -241,7 +245,7 @@ qts.scribe.context_base = {
         end
         
         --running height of next element
-        local runningHeight = 0 --TODO: include padding
+        local runningHeight = 0
         
         local scrollbar_size = 0
         if def.scrollable then
@@ -261,10 +265,28 @@ qts.scribe.context_base = {
             for i, subchildformdata in ipairs(child.formdata.children) do
                 maxwidth = math.max(maxwidth, get_formdata_size(subchildformdata).x)
             end
+            if child.formdata.details.padding then
+                maxwidth = maxwidth + child.formdata.details.padding.x*2
+            end
         end
 
+        local vert_spacing = 0
+        if child.formdata.details.spacing then
+            vert_spacing = child.formdata.details.spacing.y
+        end
+
+        local had_noncollapsed_element = false
         --arrange children and get total height
         for i, subchildformdata in ipairs(child.formdata.children) do
+            --add spacing if you are not the first and you are visible
+            if subchildformdata.details.visibility ~= qts.scribe.visibility.COLLAPSED then
+                if had_noncollapsed_element then 
+                    runningHeight = runningHeight + vert_spacing
+                else
+                    had_noncollapsed_element = true
+                end
+            end
+
             local size = get_formdata_size(subchildformdata)
             local x_pos = 0 --default: left allignment
             if def.alignment == qts.scribe.allignment.CENTER then
@@ -274,11 +296,14 @@ qts.scribe.context_base = {
                 --right allignment
                 x_pos = maxwidth - size.x
             end
+            if child.formdata.details.padding then
+                x_pos = x_pos - child.formdata.details.padding.x
+            end
             --set the position
             subchildformdata.details.position = {x=x_pos, y=runningHeight}
             
             --update height for next one
-            runningHeight = runningHeight + size.y --TODO: include spacing!
+            runningHeight = runningHeight + size.y
         end
 
         --full size of list, in case scrollable
@@ -289,7 +314,7 @@ qts.scribe.context_base = {
         if def.height then
             child.formdata.details.size.y = def.height
         else
-            child.formdata.details.size.y = runningHeight --TODO: include padding!
+            child.formdata.details.size.y = runningHeight
         end
         child.formdata.details.size.x = maxwidth + scrollbar_size
 
@@ -465,6 +490,8 @@ qts.scribe.new_context = qts.scribe.context_base.create
 ---@field position vec2|nil
 ---@field visibility ScribeFormVisibility
 ---@field tooltip string|{text:string,bgcolor:ColorSpec,fgcolor:ColorSpec}|nil
+---@field padding vec2|nil the padding around child elements
+---@field spacing vec2|nil the spacing between child elements
 
 ---@class ScribeFormdata
 ---@field details ScribeFormDetails|table details about the type of form represented
@@ -487,6 +514,8 @@ qts.scribe.new_context = qts.scribe.context_base.create
 ---@field tooltip string|{text:string,bgcolor:ColorSpec,fgcolor:ColorSpec}|nil if supplied, it is the tooltip text when hovering over this form.
 ---@field visibility ScribeFormVisibility|nil if supplied, it is the visibility of the form. defaults to VISIBLE
 ---@field position vec2|nil the position of the form, if supported.
+---@field padding vec2|nil the padding around child elements, if supported.
+---@field spacing vec2|nil the spacing between child elements, if supported.
 
 ---@class ScribeContainerFormDefinition : ScribeBasicFormDefinition
 ---@field texture Texture|nil the background texture of the form, if supplied.
@@ -528,6 +557,7 @@ local function gui_test_func(context)
         --texture="gui_formbg.png",
         width=10,
         height=10,
+        padding={x=1,y=1}
         --middle=5,
     }, function (context_c1)
         --do nothing right now.
@@ -551,16 +581,21 @@ local function gui_test_func(context)
         },
         function(event)
             minetest.log("Button1 pressed")
+            event.userdata.show_list = (not event.userdata.show_list)
+            minetest.log("show list: " .. dump(event.userdata.show_list))
+            event:mark_for_refresh()
         end)
-        :vertical_box({
+        context_c1:vertical_box({
             texture="gui_buttonareabg.png",
             position={x=0,y=1},
             scrollable=true,
             height=8,
-            width=7,
+            --width=7,
             alignment=qts.scribe.allignment.CENTER,
             scrollbar_side=qts.scribe.allignment.LEFT,
-            scrollbar_size=0.5
+            scrollbar_size=0.35,
+            padding={x=0.5,y=0.5},
+            spacing={x=0,y=1},
         }, function(context_v1)
             context_v1:button({
                 tooltip="The granite Button",
@@ -576,7 +611,7 @@ local function gui_test_func(context)
                 tooltip="The marble Button",
                 item="overworld:marble",
                 width=3,
-                height=4,
+                height=3,
                 padding=5,
             },
             function(event)
@@ -586,7 +621,7 @@ local function gui_test_func(context)
                 tooltip="The oak Button",
                 item="overworld:oak_wood_planks",
                 width=2,
-                height=4,
+                height=2,
                 padding=5,
             },
             function(event)
@@ -596,8 +631,9 @@ local function gui_test_func(context)
                 tooltip="The aspen Button",
                 item="overworld:aspen_wood_planks",
                 width=1,
-                height=4,
+                height=1,
                 padding=5,
+                visibility = qts.select(context_c1.userdata.show_list, qts.scribe.visibility.VISIBLE, qts.scribe.visibility.COLLAPSED),
             },
             function(event)
                 minetest.log("aspen button pressed")
@@ -605,12 +641,14 @@ local function gui_test_func(context)
             
         end)
         --[[
-        ]]
-    end)
-    :quit_callback(function(event)
+            ]]
+        end)
+        :quit_callback(function(event)
         minetest.log("scribe test gui quit!")
     end)
 end
+
+
 
 local userdata = {}
 local callbacks = {}
@@ -625,7 +663,6 @@ minetest.register_chatcommand("scribetest", {
             gui_test_func(context)
             userdata = context.userdata
             callbacks = context.callbacks
-            minetest.log("FORMSPEC: "..context:generate_formspec())
             context:show_gui()
         end
 	end
@@ -635,7 +672,13 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
     if formname == "qts:scribe_test" then
         minetest.log("Fields: " ..dump(fields))
         
-        local event = qts.scribe.new_event(player, player:get_pos(), formname, userdata, fields, gui_test_func)
+        local event = qts.scribe.new_event(player, player:get_pos(), formname, userdata, fields, 
+            function (context)
+                gui_test_func(context)
+                userdata = context.userdata
+                callbacks = context.callbacks
+            end
+        )
         for name, callback in pairs(callbacks) do
             if fields[name] then
                 if type(callback) == "function" then
