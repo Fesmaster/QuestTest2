@@ -30,13 +30,20 @@ return {
     container = function(formdata)
         local pos = {x=0,y=0}
         if formdata.details.position ~= nil then
-            pos = formdata.details.position
+            pos = qts.scribe.vec2.copy(formdata.details.position,pos)
         end
         if pos == nil then
             minetest.log("warning", "Scribe: Invalid container.")
             return ""
         end
+        local pos_bg = qts.scribe.vec2.copy(pos)
+        if formdata.details.padding then
+            pos.x = pos.x + formdata.details.padding.x
+            pos.y = pos.y + formdata.details.padding.y
+        end
         local posstr = qts.scribe.vec2.tostring(pos)
+        
+        --no need to padd size, as its only used for background, which is full unpadded area.
         local sizestr = qts.scribe.vec2.tostring(formdata.details.size)
 
         --if an texture is used, generate that element 
@@ -44,10 +51,10 @@ return {
         if formdata.details.texture then
             if formdata.details.middle then
                 local middle = formdata.details.middle
-                imgstring = "background9["..posstr..";" .. sizestr ..";"..formdata.details.texture..";false;"..
+                imgstring = "background9["..qts.scribe.vec2.tostring(pos_bg)..";" .. sizestr ..";"..formdata.details.texture..";false;"..
                     math.floor(middle.x_min)..","..math.floor(middle.y_min)..",-"..math.floor(middle.x_max)..",-"..math.floor(middle.y_max).."]"
             else
-                imgstring = "background["..posstr..";" .. sizestr ..";"..formdata.details.texture..";false]"
+                imgstring = "background["..qts.scribe.vec2.tostring(pos_bg)..";" .. sizestr ..";"..formdata.details.texture..";false]"
             end
         end
         
@@ -65,14 +72,22 @@ return {
             minetest.log("warning", "Scribe: Invalid container.")
             return ""
         end
+        local pos_bg = qts.scribe.vec2.copy(pos)
         if formdata.details.scrollable and formdata.details.scrollbar_side < qts.scribe.allignment.MAX then
             pos.x = pos.x + scrollbar_size
         end
+        if formdata.details.padding then
+            pos.x = pos.x + formdata.details.padding.x
+            pos.y = pos.y + formdata.details.padding.y
+        end
         local posstr = qts.scribe.vec2.tostring(pos)
         local size = qts.scribe.vec2.copy(formdata.details.size)
-        local size_bg = qts.scribe.vec2.copy(size)
         if formdata.details.scrollable  then
             size.x = size.x - scrollbar_size
+        end
+        if formdata.details.padding then
+            size.x = size.x - (formdata.details.padding.x*2)
+            size.y = size.y - (formdata.details.padding.y*2)
         end
         local sizestr = qts.scribe.vec2.tostring(size)
 
@@ -81,10 +96,10 @@ return {
         if formdata.details.texture then
             if formdata.details.middle then
                 local middle = formdata.details.middle
-                imgstring = "background9["..posstr..";" .. qts.scribe.vec2.tostring(size_bg) ..";"..formdata.details.texture..";false;"..
+                imgstring = "background9["..qts.scribe.vec2.tostring(pos_bg)..";" .. qts.scribe.vec2.tostring(formdata.details.size) ..";"..formdata.details.texture..";false;"..
                     math.floor(middle.x_min)..","..math.floor(middle.y_min)..",-"..math.floor(middle.x_max)..",-"..math.floor(middle.y_max).."]"
             else
-                imgstring = "background["..posstr..";" .. qts.scribe.vec2.tostring(size_bg) ..";"..formdata.details.texture..";false]"
+                imgstring = "background["..qts.scribe.vec2.tostring(pos_bg)..";" .. qts.scribe.vec2.tostring(formdata.details.size) ..";"..formdata.details.texture..";false]"
             end
         end
         
@@ -92,17 +107,17 @@ return {
         if formdata.details.scrollable then
             local scrollbar_name = qts.scribe.next_element_name("scrollbar")
             
-            local scrollbar_ticks = math.ceil((formdata.details.listsize - formdata.details.size.y) * qts.scribe.scrollbar_ticks_per_unit)
-            local vis_size = math.floor(formdata.details.size.y / formdata.details.listsize  * scrollbar_ticks)
+            local scrollbar_ticks = math.ceil((formdata.details.listsize - size.y) * qts.scribe.scrollbar_ticks_per_unit)
+            local vis_size = math.floor(size.y / formdata.details.listsize  * scrollbar_ticks)
             local scrollbar_pos = {x=pos.x-scrollbar_size, y=pos.y}
             if formdata.details.scrollbar_side == qts.scribe.allignment.MAX then
                 scrollbar_pos.x = pos.x + size.x
             end
-            local scrollbar_size = {x=scrollbar_size,y=formdata.details.size.y}
+            local scrollbar_size = {x=scrollbar_size,y=size.y}
 
             return imgstring..
             "scrollbaroptions["..
-            "min=0;max="..scrollbar_ticks..";smallstep=1;largestep="..
+            "min=0;max="..scrollbar_ticks..";smallstep=10;largestep="..
             vis_size ..";thumbsize="..vis_size..";"..
             "arrows=default]" .. --scrollbar options
             "scrollbar["..qts.scribe.vec2.tostring(scrollbar_pos)..";"..qts.scribe.vec2.tostring(scrollbar_size)..
@@ -226,7 +241,9 @@ return {
             needs_style_all=true
         end
         if formdata.details.padding then
+            ---@type Rect
             local padding = formdata.details.padding
+            ---padding in context of a button is a different struct
             style_all=style_all..";padding="..math.floor(padding.x_min)..","..math.floor(padding.y_min)..",-"..math.floor(padding.x_max)..",-"..math.floor(padding.y_max)
             needs_style_all=true
         end
