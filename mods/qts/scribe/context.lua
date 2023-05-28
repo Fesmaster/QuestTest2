@@ -257,8 +257,6 @@ qts.scribe.context_base = {
         
         --running height of next element
         local runningHeight = 0
-        
-        
 
         --calculate width and place all elements at final height
         local maxwidth = 0
@@ -291,14 +289,11 @@ qts.scribe.context_base = {
             runningHeight = runningHeight + size.y
         end
 
-        
-
         --full size of list, in case scrollable
         child.formdata.details.listsize = runningHeight
 
         --set self size
         child.formdata.details.size = {}
-        
         
         --set the vertical size
         if def.height then
@@ -334,7 +329,6 @@ qts.scribe.context_base = {
         --set the horizontal size
         child.formdata.details.size.x = maxwidth + scrollbar_size
         
-        
         --arrange children horizontally now that width and scrollbar status is known
         for i, subchildformdata in ipairs(child.formdata.children) do
             local size = get_formdata_size(subchildformdata)
@@ -347,16 +341,154 @@ qts.scribe.context_base = {
                 x_pos = maxwidth - size.x - (child.formdata.details.padding.x*2)
             end
 
-            --if child.formdata.details.padding then
-            --    x_pos = x_pos - child.formdata.details.padding.x
-            --end
-
             --set the horizontal position
             subchildformdata.details.position.x = x_pos
         end
 
-        
+        --add the child to self.
+        self.formdata.children[#self.formdata.children+1] = child.formdata
 
+        --ALWAYS return self from gui form type functions!
+        return self
+    end,
+
+
+    ---Create a vertical box element. Lists its children vertically, with allignment.
+    ---@param self ScribeContext
+    ---@param def ScribeBoxFormDefinition
+    ---@param children ScribeContextFunction|nil
+    ---@return ScribeContext self self-reference.
+    horizontal_box = function(self, def, children)
+        --create the child context
+        local child = self:child()
+        common_build_child_formdata(self, child.formdata, def, "horizontal_box")
+
+        --texture
+        if def.texture and type(def.texture) == "string" then
+            child.formdata.details.texture = def.texture
+        
+            --check for a valid middle definition
+            local hasMid = false
+            if def.middle then
+                child.formdata.details.middle = parse_middle_format(def.middle)
+            end
+        end
+
+        --other box fields:
+        if def.scrollable ~= nil then
+            child.formdata.details.scrollable = def.scrollable
+        else
+            child.formdata.details.scrollable = false
+        end
+        child.formdata.details.alignment = def.alignment
+        child.formdata.details.scrollbar_side = def.scrollbar_side
+        --scrollbar name
+        if def.scrollbar_name then
+            child.formdata.details.scrollbar_name = def.scrollbar_name
+        else
+            child.formdata.details.scrollbar_name = qts.scribe.next_element_name("scrollbar")
+        end
+        --auto-hide scrollbar
+        child.formdata.details.scrollbar_autohide=true
+        if def.scrollbar_autohide ~= nil then
+            child.formdata.details.scrollbar_autohide=def.scrollbar_autohide
+        end
+
+        --children
+        if type(children) == "function" then
+            children(child)
+        end
+        
+        --running width of next element
+        local running_width = 0
+
+        --calculate width and place all elements at final height
+        local maxheight = 0
+
+        local horz_spacing = 0
+        if child.formdata.details.spacing then
+            horz_spacing = child.formdata.details.spacing.x
+        end
+
+        local had_noncollapsed_element = false
+        for i, subchildformdata in ipairs(child.formdata.children) do
+
+            --add spacing if you are not the first and you are visible
+            if subchildformdata.details.visibility ~= qts.scribe.visibility.COLLAPSED then
+                if had_noncollapsed_element then 
+                    running_width = running_width + horz_spacing
+                else
+                    had_noncollapsed_element = true
+                end
+            end
+            local size = get_formdata_size(subchildformdata)
+            
+            --calculate width
+            maxheight = math.max(maxheight, size.y)
+
+            --set vertical position and reset horizontal.
+            subchildformdata.details.position = {x=running_width, y=0}
+
+            --update width for next one
+            running_width = running_width + size.x
+        end
+
+        --full size of list, in case scrollable
+        child.formdata.details.listsize = running_width
+
+        --set self size
+        child.formdata.details.size = {}
+        
+        --set the vertical size
+        if def.width then
+            child.formdata.details.size.x = def.width
+            
+            if running_width <= def.width and child.formdata.details.scrollbar_autohide then
+                child.formdata.details.scrollable=false
+            end
+        else
+            child.formdata.details.size.x = running_width
+        end
+
+        --calculate the scrollbar size
+        local scrollbar_size = 0
+        if child.formdata.details.scrollable then
+            if def.scrollbar_size then
+                scrollbar_size = def.scrollbar_size
+            else
+                scrollbar_size = 0.3
+            end
+        end
+        child.formdata.details.scrollbar_size = scrollbar_size
+
+        --edit width
+        if def.height then 
+            maxheight = def.height - scrollbar_size
+        else
+            if child.formdata.details.padding then
+                maxheight = maxheight + child.formdata.details.padding.y*2
+            end
+        end
+
+        --set the horizontal size
+        child.formdata.details.size.y = maxheight + scrollbar_size
+        
+        
+        --arrange children horizontally now that width and scrollbar status is known
+        for i, subchildformdata in ipairs(child.formdata.children) do
+            local size = get_formdata_size(subchildformdata)
+            local y_pos = 0 --default: TOP allignment
+            if def.alignment == qts.scribe.allignment.CENTER then
+                --center allignment
+                y_pos = (maxheight/2) - (size.y/2) - child.formdata.details.padding.y
+            elseif def.alignment == qts.scribe.allignment.BOTTOM then
+                --right allignment
+                y_pos = maxheight - size.y - (child.formdata.details.padding.y*2)
+            end
+
+            --set the horizontal position
+            subchildformdata.details.position.y = y_pos
+        end
 
         --add the child to self.
         self.formdata.children[#self.formdata.children+1] = child.formdata
@@ -626,19 +758,19 @@ local function gui_test_func(context)
             minetest.log("show list: " .. dump(event.userdata.show_list))
             event:mark_for_refresh()
         end)
-        context_c1:vertical_box({
+        context_c1:horizontal_box({
             texture="gui_buttonareabg.png",
             position={x=0,y=1},
             scrollable=true,
-            height=8,
-            --width=7,
-            alignment=qts.scribe.allignment.RIGHT,
-            scrollbar_side=qts.scribe.allignment.LEFT,
+            --height=8,
+            width=8,
+            alignment=qts.scribe.allignment.CENTER,
+            scrollbar_side=qts.scribe.allignment.TOP,
             scrollbar_size=0.35,
             scrollbar_name="vertbox_bar_1",
-            scrollbar_autohide = false,
+            scrollbar_autohide = true,
             padding={x=0.5,y=0.5},
-            spacing={x=0,y=1},
+            spacing={x=1,y=1},
         }, function(context_v1)
             context_v1:button({
                 tooltip="The granite Button",
