@@ -105,8 +105,6 @@ return {
         
         
         if formdata.details.scrollable then
-            local scrollbar_name = qts.scribe.next_element_name("scrollbar")
-            
             local scrollbar_ticks = math.ceil((formdata.details.listsize - size.y) * qts.scribe.scrollbar_ticks_per_unit)
             local vis_size = math.floor(size.y / formdata.details.listsize  * scrollbar_ticks)
             local scrollbar_pos = {x=pos.x-scrollbar_size, y=pos.y}
@@ -121,8 +119,8 @@ return {
             vis_size ..";thumbsize="..vis_size..";"..
             "arrows=default]" .. --scrollbar options
             "scrollbar["..qts.scribe.vec2.tostring(scrollbar_pos)..";"..qts.scribe.vec2.tostring(scrollbar_size)..
-            ";vertical;".. scrollbar_name .. ";0]" .. --scrollbar
-            "scroll_container["..posstr..";"..sizestr..";"..scrollbar_name..";vertical;0.1]"
+            ";vertical;".. formdata.details.scrollbar_name .. ";0]" .. --scrollbar
+            "scroll_container["..posstr..";"..sizestr..";"..formdata.details.scrollbar_name..";vertical;0.1]"
             
         else
             return imgstring.."container["..posstr.."]"

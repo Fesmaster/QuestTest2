@@ -238,7 +238,18 @@ qts.scribe.context_base = {
         end
         child.formdata.details.alignment = def.alignment
         child.formdata.details.scrollbar_side = def.scrollbar_side
-        
+        --scrollbar name
+        if def.scrollbar_name then
+            child.formdata.details.scrollbar_name = def.scrollbar_name
+        else
+            child.formdata.details.scrollbar_name = qts.scribe.next_element_name("scrollbar")
+        end
+        --auto-hide scrollbar
+        child.formdata.details.scrollbar_autohide=true
+        if def.scrollbar_autohide ~= nil then
+            child.formdata.details.scrollbar_autohide=def.scrollbar_autohide
+        end
+
         --children
         if type(children) == "function" then
             children(child)
@@ -247,28 +258,10 @@ qts.scribe.context_base = {
         --running height of next element
         local runningHeight = 0
         
-        local scrollbar_size = 0
-        if def.scrollable then
-            if def.scrollbar_size then
-                scrollbar_size = def.scrollbar_size
-            else
-                scrollbar_size = 0.5
-            end
-        end
-        child.formdata.details.scrollbar_size = scrollbar_size
+        
 
-        --calculate width
+        --calculate width and place all elements at final height
         local maxwidth = 0
-        if def.width then 
-            maxwidth = def.width - scrollbar_size
-        else
-            for i, subchildformdata in ipairs(child.formdata.children) do
-                maxwidth = math.max(maxwidth, get_formdata_size(subchildformdata).x)
-            end
-            if child.formdata.details.padding then
-                maxwidth = maxwidth + child.formdata.details.padding.x*2
-            end
-        end
 
         local vert_spacing = 0
         if child.formdata.details.spacing then
@@ -276,8 +269,8 @@ qts.scribe.context_base = {
         end
 
         local had_noncollapsed_element = false
-        --arrange children and get total height
         for i, subchildformdata in ipairs(child.formdata.children) do
+
             --add spacing if you are not the first and you are visible
             if subchildformdata.details.visibility ~= qts.scribe.visibility.COLLAPSED then
                 if had_noncollapsed_element then 
@@ -286,37 +279,83 @@ qts.scribe.context_base = {
                     had_noncollapsed_element = true
                 end
             end
-
             local size = get_formdata_size(subchildformdata)
-            local x_pos = 0 --default: left allignment
-            if def.alignment == qts.scribe.allignment.CENTER then
-                --center allignment
-                x_pos = (maxwidth/2) - (size.x/2)
-            elseif def.alignment == qts.scribe.allignment.RIGHT then
-                --right allignment
-                x_pos = maxwidth - size.x
-            end
-            if child.formdata.details.padding then
-                x_pos = x_pos - child.formdata.details.padding.x
-            end
-            --set the position
-            subchildformdata.details.position = {x=x_pos, y=runningHeight}
             
+            --calculate width
+            maxwidth = math.max(maxwidth, size.x)
+
+            --set vertical position and reset horizontal.
+            subchildformdata.details.position = {x=0, y=runningHeight}
+
             --update height for next one
             runningHeight = runningHeight + size.y
         end
+
+        
 
         --full size of list, in case scrollable
         child.formdata.details.listsize = runningHeight
 
         --set self size
         child.formdata.details.size = {}
+        
+        
+        --set the vertical size
         if def.height then
             child.formdata.details.size.y = def.height
+            
+            if runningHeight <= def.height and child.formdata.details.scrollbar_autohide then
+                child.formdata.details.scrollable=false
+            end
         else
             child.formdata.details.size.y = runningHeight
         end
+
+        --calculate the scrollbar size
+        local scrollbar_size = 0
+        if child.formdata.details.scrollable then
+            if def.scrollbar_size then
+                scrollbar_size = def.scrollbar_size
+            else
+                scrollbar_size = 0.3
+            end
+        end
+        child.formdata.details.scrollbar_size = scrollbar_size
+
+        --edit width
+        if def.width then 
+            maxwidth = def.width - scrollbar_size
+        else
+            if child.formdata.details.padding then
+                maxwidth = maxwidth + child.formdata.details.padding.x*2
+            end
+        end
+
+        --set the horizontal size
         child.formdata.details.size.x = maxwidth + scrollbar_size
+        
+        
+        --arrange children horizontally now that width and scrollbar status is known
+        for i, subchildformdata in ipairs(child.formdata.children) do
+            local size = get_formdata_size(subchildformdata)
+            local x_pos = 0 --default: left allignment
+            if def.alignment == qts.scribe.allignment.CENTER then
+                --center allignment
+                x_pos = (maxwidth/2) - (size.x/2) - child.formdata.details.padding.x
+            elseif def.alignment == qts.scribe.allignment.RIGHT then
+                --right allignment
+                x_pos = maxwidth - size.x - (child.formdata.details.padding.x*2)
+            end
+
+            --if child.formdata.details.padding then
+            --    x_pos = x_pos - child.formdata.details.padding.x
+            --end
+
+            --set the horizontal position
+            subchildformdata.details.position.x = x_pos
+        end
+
+        
 
 
         --add the child to self.
@@ -526,6 +565,8 @@ qts.scribe.new_context = qts.scribe.context_base.create
 ---@field alignment ScribeFormAllignment|nil how should the elements be aligned?
 ---@field scrollbar_side ScribeFormAllignment|nil where should the scrollbar be placed?
 ---@field scrollbar_size number|nil scrollbar size. Default: 1
+---@field scrollbar_name string|nil scrollbar name. Default: nil for autogenerated name
+---@field scrollbar_autohide boolean|nil automatically hide the scrollbar when there are not enough elements for the list to be scrollable. Default to true.
 
 ---@class ScribeButtonFormDefinition : ScribeBasicFormDefinition
 ---@field name string|nil form name, if you want a static one. Otherwise, a autogenerated oen will be used.
@@ -591,9 +632,11 @@ local function gui_test_func(context)
             scrollable=true,
             height=8,
             --width=7,
-            alignment=qts.scribe.allignment.CENTER,
+            alignment=qts.scribe.allignment.RIGHT,
             scrollbar_side=qts.scribe.allignment.LEFT,
             scrollbar_size=0.35,
+            scrollbar_name="vertbox_bar_1",
+            scrollbar_autohide = false,
             padding={x=0.5,y=0.5},
             spacing={x=0,y=1},
         }, function(context_v1)
@@ -603,6 +646,7 @@ local function gui_test_func(context)
                 width=4,
                 height=4,
                 padding=5,
+                visibility = qts.select(context_c1.userdata.show_list, qts.scribe.visibility.VISIBLE, qts.scribe.visibility.COLLAPSED),
             },
             function(event)
                 minetest.log("granite button pressed")
@@ -613,6 +657,7 @@ local function gui_test_func(context)
                 width=3,
                 height=3,
                 padding=5,
+                visibility = qts.select(context_c1.userdata.show_list, qts.scribe.visibility.VISIBLE, qts.scribe.visibility.COLLAPSED),
             },
             function(event)
                 minetest.log("marble button pressed")
@@ -633,7 +678,7 @@ local function gui_test_func(context)
                 width=1,
                 height=1,
                 padding=5,
-                visibility = qts.select(context_c1.userdata.show_list, qts.scribe.visibility.VISIBLE, qts.scribe.visibility.COLLAPSED),
+                
             },
             function(event)
                 minetest.log("aspen button pressed")
