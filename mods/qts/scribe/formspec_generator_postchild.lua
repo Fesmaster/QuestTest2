@@ -13,4 +13,13 @@ return {
             return "container_end[]"
         end
     end,
+
+    ---@param formdata ScribeFormdata
+    horizontal_box = function(formdata)
+        if formdata.details.scrollable then
+            return "scroll_container_end[]"
+        else
+            return "container_end[]"
+        end
+    end,
 }

@@ -125,8 +125,72 @@ return {
         else
             return imgstring.."container["..posstr.."]"
         end
+    end,
 
+    ---@param formdata ScribeFormdata
+    horizontal_box = function(formdata)
+        local scrollbar_size = formdata.details.scrollbar_size
+        local pos = {x=0,y=0}
+        if formdata.details.position ~= nil then
+            pos = qts.scribe.vec2.copy(formdata.details.position)
+        end
+        if pos == nil then
+            minetest.log("warning", "Scribe: Invalid container.")
+            return ""
+        end
+        local pos_bg = qts.scribe.vec2.copy(pos)
+        if formdata.details.scrollable and formdata.details.scrollbar_side < qts.scribe.allignment.MAX then
+            pos.y = pos.y + scrollbar_size
+        end
+        if formdata.details.padding then
+            pos.x = pos.x + formdata.details.padding.x
+            pos.y = pos.y + formdata.details.padding.y
+        end
+        local posstr = qts.scribe.vec2.tostring(pos)
+        local size = qts.scribe.vec2.copy(formdata.details.size)
+        if formdata.details.scrollable  then
+            size.y = size.y - scrollbar_size
+        end
+        if formdata.details.padding then
+            size.x = size.x - (formdata.details.padding.x*2)
+            size.y = size.y - (formdata.details.padding.y*2)
+        end
+        local sizestr = qts.scribe.vec2.tostring(size)
 
+        --if an texture is used, generate that element 
+        local imgstring = ""
+        if formdata.details.texture then
+            if formdata.details.middle then
+                local middle = formdata.details.middle
+                imgstring = "background9["..qts.scribe.vec2.tostring(pos_bg)..";" .. qts.scribe.vec2.tostring(formdata.details.size) ..";"..formdata.details.texture..";false;"..
+                    math.floor(middle.x_min)..","..math.floor(middle.y_min)..",-"..math.floor(middle.x_max)..",-"..math.floor(middle.y_max).."]"
+            else
+                imgstring = "background["..qts.scribe.vec2.tostring(pos_bg)..";" .. qts.scribe.vec2.tostring(formdata.details.size) ..";"..formdata.details.texture..";false]"
+            end
+        end
+        
+        
+        if formdata.details.scrollable then
+            local scrollbar_ticks = math.ceil((formdata.details.listsize - size.x) * qts.scribe.scrollbar_ticks_per_unit)
+            local vis_size = math.floor(size.x / formdata.details.listsize  * scrollbar_ticks)
+            local scrollbar_pos = {x=pos.x, y=pos.y-scrollbar_size}
+            if formdata.details.scrollbar_side == qts.scribe.allignment.MAX then
+                scrollbar_pos.y = pos.y + size.y
+            end
+            local scrollbar_size = {x=size.x,y=scrollbar_size}
+
+            return imgstring..
+            "scrollbaroptions["..
+            "min=0;max="..scrollbar_ticks..";smallstep=10;largestep="..
+            vis_size ..";thumbsize="..vis_size..";"..
+            "arrows=default]" .. --scrollbar options
+            "scrollbar["..qts.scribe.vec2.tostring(scrollbar_pos)..";"..qts.scribe.vec2.tostring(scrollbar_size)..
+            ";horizontal;".. formdata.details.scrollbar_name .. ";0]" .. --scrollbar
+            "scroll_container["..posstr..";"..sizestr..";"..formdata.details.scrollbar_name..";horizontal;0.1]"
+            
+        else
+            return imgstring.."container["..posstr.."]"
+        end
     end,
 
     ---@param formdata ScribeFormdata
