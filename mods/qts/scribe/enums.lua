@@ -19,6 +19,7 @@ qts.scribe.allignment = {
     MAX=2,
     RIGHT=2,
     BOTTOM=2,
+    JUSTIFY=3
 }
 
 qts.scribe.scrollbar_ticks_per_unit = 10 --gained from imperical testing
