@@ -87,7 +87,7 @@ local function get_formdata_size(formdata)
     if formdata.details.visibility == qts.scribe.visibility.COLLAPSED then
         return {x=0,y=0}
     end
-    return formdata.details.size
+    return qts.scribe.vec2.copy(formdata.details.size)
 end
 
 
@@ -99,9 +99,15 @@ end
 local function common_build_child_size(context, childformdata, def, defaultsize)
     ---@type vec2
     local size = defaultsize or {x=0,y=0}
+    
+    
     for i, subchildformdata in ipairs(childformdata.children) do
         if subchildformdata.details.visibility ~= qts.scribe.visibility.COLLAPSED then
-            qts.scribe.vec2.max(get_formdata_size(subchildformdata), size, size)
+            local size_and_pos =get_formdata_size(subchildformdata)
+            --take position of elements into account
+            size_and_pos.x = size_and_pos.x + subchildformdata.details.position.x
+            size_and_pos.y = size_and_pos.y + subchildformdata.details.position.y
+            qts.scribe.vec2.max(size_and_pos, size, size)
         end
     end
     --override with set width and height
@@ -111,12 +117,31 @@ local function common_build_child_size(context, childformdata, def, defaultsize)
     if def.height and type(def.height)=="number" then
         size.y = def.height
     end
-    --assign to form
+    --calculate padding
     if childformdata.details.padding then
         size.x=size.x+(childformdata.details.padding.x*2)
         size.y=size.y+(childformdata.details.padding.y*2)
     end
+    --assign to form
     childformdata.details.size = size
+end
+
+---comment
+---@param context ScribeContext
+---@param childformdata ScribeFormdata
+local function common_build_subchild_sizes(context, childformdata)
+    for i, subchildformdata in ipairs(childformdata.children) do
+        if subchildformdata.details.visibility ~= qts.scribe.visibility.COLLAPSED then
+            local size_and_pos =get_formdata_size(subchildformdata)
+            --take position of elements into account
+            if subchildformdata.details.size.x < 0 then
+                subchildformdata.details.size.x = childformdata.details.size.x
+            end
+            if subchildformdata.details.size.y < 0 then
+                subchildformdata.details.size.y = childformdata.details.size.y
+            end
+        end
+    end
 end
 
 ---Parse the ScribeTextureMiddle format
@@ -201,6 +226,8 @@ qts.scribe.context_base = {
         end
 
         common_build_child_size(self, child.formdata, def)
+
+        common_build_subchild_sizes(self, child.formdata)
 
         --add the child to self.
         self.formdata.children[#self.formdata.children+1] = child.formdata
@@ -344,6 +371,8 @@ qts.scribe.context_base = {
             --set the horizontal position
             subchildformdata.details.position.x = x_pos
         end
+
+        common_build_subchild_sizes(self, child.formdata)
 
         --add the child to self.
         self.formdata.children[#self.formdata.children+1] = child.formdata
@@ -490,6 +519,8 @@ qts.scribe.context_base = {
             subchildformdata.details.position.y = y_pos
         end
 
+        common_build_subchild_sizes(self, child.formdata)
+
         --add the child to self.
         self.formdata.children[#self.formdata.children+1] = child.formdata
 
@@ -505,26 +536,8 @@ qts.scribe.context_base = {
     text = function(self, def, callback)
         --create the child context
         local childformdata = common_create_formdata(self)
-        childformdata.details.type = "text"
-        if def.visibility then
-            childformdata.details.visibility = def.visibility
-        else
-            childformdata.details.visibility = qts.scribe.visibility.VISIBLE
-        end
-        
-        childformdata.details.tooltip = def.tooltip
-
-        childformdata.details.size = {
-            x = def.width or 1,
-            y = def.height or 1
-        } --TODO: calculate from font and text
-
-        --must change at interpritation to calculate from upper-left corner like everything else.
-        childformdata.details.position = qts.scribe.vec2.copy(def.position, childformdata.details.position)
-        
-        --probably unnesecary
-        childformdata.details.spacing = qts.scribe.vec2.copy(def.spacing)
-        childformdata.details.padding = qts.scribe.vec2.copy(def.padding)
+        common_build_child_formdata(self, childformdata, def, "text")
+        common_build_child_size(self, childformdata, def, {x=1,y=1})
 
         --text stuff
         childformdata.details.name = def.name or qts.scribe.next_element_name("text")
@@ -543,6 +556,63 @@ qts.scribe.context_base = {
             self.callbacks[childformdata.details.name] = callback
         end
 
+        return self
+    end,
+
+    ---Create an Image element. Can show a texture or an item
+    ---@param self ScribeContext
+    ---@param def ScribeImageFormDefinition
+    ---@return ScribeContext self
+    image = function(self, def)
+        local childformdata = common_create_formdata(self)
+        common_build_child_formdata(self, childformdata, def, "image")
+        common_build_child_size(self, childformdata, def, {x=1,y=1})
+
+        childformdata.details.name = def.name or qts.scribe.next_element_name("image")
+        if def.item then
+            childformdata.details.item = def.item
+        elseif def.texture then
+            childformdata.details.texture = def.texture
+            childformdata.details.animation = def.animation 
+            childformdata.details.middle = parse_middle_format(def.middle)
+        else
+            error("qts.scribe: image element must have either an item or a texture defined.")
+        end
+
+        --add the child
+        self.formdata.children[#self.formdata.children+1] = childformdata
+
+        return self
+    end,
+
+    ---Create a colored rectangle
+    ---@param self ScribeContext
+    ---@param def ScribeRectFormDefinition
+    ---@return ScribeContext self self-reference
+    rect = function(self, def)
+        local childformdata = common_create_formdata(self)
+        common_build_child_formdata(self, childformdata, def, "rect")
+        common_build_child_size(self, childformdata, def, {x=1,y=1})
+        --color
+        childformdata.details.color = def.color or "none"
+
+        --add the child
+        self.formdata.children[#self.formdata.children+1] = childformdata
+        return self
+    end,
+
+    ---Create a seperator bar
+    ---@param self ScribeContext
+    ---@param def ScribeSeperatorFormDefinition
+    ---@return ScribeContext self
+    seperator = function(self, def)
+        def.width = def.length or -1
+        def.height = 0.01
+        if def.orientation == qts.scribe.orientation.VERTICAL then
+            def.height = def.width
+            def.width = 0.01
+        end
+        self:rect(def)
         return self
     end,
 
@@ -715,6 +785,7 @@ qts.scribe.new_context = qts.scribe.context_base.create
 ---| "button"
 ---| "vertical_box"
 ---| "horizontal_box"
+---| "rect"
 ---| "text"
 ---| "textentry"
 ---| "image"
@@ -745,6 +816,11 @@ qts.scribe.new_context = qts.scribe.context_base.create
 ---@field color ColorSpec|nil Text color
 ---@field secondary_color ColorSpec|nil Secondary Text color, if a secondary color is needed. Example is hoverable text in a Text element.
 
+---@class ScribeAnimation
+---@field count integer the number of frames vertically.
+---@field duration number the frame duration in milliseconds
+---@field start integer the starting frame index 
+
 ---@class ScribeBasicFormDefinition
 ---@field width number|nil if supplied, the width of the container. If not, size is auto-calculated.
 ---@field height number|nil if supplied, the height of the container. If not, size is auto-calculated.
@@ -767,7 +843,7 @@ qts.scribe.new_context = qts.scribe.context_base.create
 ---@field scrollbar_autohide boolean|nil automatically hide the scrollbar when there are not enough elements for the list to be scrollable. Default to true.
 
 ---@class ScribeTextFormDefinition : ScribeBasicFormDefinition
----@field name string|nil form name, if you want a static one. Otherwise, a autogenerated oen will be used.
+---@field name string|nil form name, if you want a static one. Otherwise, a autogenerated name will be used.
 ---@field text string|nil the text to display. May have markups, though not <global>.
 ---@field font ScribeFontStyle|nil the label font. Color is unused.
 ---@field vertical_allignment ScribeFormAllignment|nil the vertical allignment of the text, defaults to CENTER
@@ -775,6 +851,19 @@ qts.scribe.new_context = qts.scribe.context_base.create
 ---@field background_color ColorSpec|"none"|nil the color of the background, defaults to transparent
 ---@field margin number|nil page margin in pixels
 
+---@class ScribeRectFormDefinition : ScribeBasicFormDefinition
+---@field color ColorSpec|"none"|nil the color of the background, or nil/"none" for invisible
+
+---@class ScribeSeperatorFormDefinition : ScribeRectFormDefinition
+---@field length number|nil the length of the line. Defaults to -1. Set to nil or negative to use the parent element size.
+---@field orientation ScribeFormOrientation|nil the orientation of the line
+
+---@class ScribeImageFormDefinition : ScribeBasicFormDefinition
+---@field name string|nil form name, if you want a static one. Otherwise, an autogenerated name will be used
+---@field texture Texture|nil texture, if a texture is being used. If nil, then item must be defined.
+---@field item ItemName|nil item, if an item is being used. If nil, then texture must be defined.
+---@field animation ScribeAnimation|nil
+---@field middle Rect|nil
 
 ---@class ScribeButtonFormDefinition : ScribeBasicFormDefinition
 ---@field name string|nil form name, if you want a static one. Otherwise, a autogenerated oen will be used.
@@ -813,8 +902,8 @@ local function gui_test_func(context)
         --texture="gui_formbg.png",
         width=10,
         height=10,
-        padding={x=1,y=1}
-        --middle=5,
+        padding={x=0.1,y=0.1},
+        middle=5,
     }, function (context_c1)
         --do nothing right now.
         context_c1
@@ -858,9 +947,50 @@ local function gui_test_func(context)
                 --bold=true,
                 --italic=true,
                 --underline=true
-            }
+            },
+            tooltip="Text area"
         }, function (event)
             minetest.log("text callback event: ".. dump(event.fields.hypertext_element))
+        end)
+        :seperator({
+            position={x=0,y=1.05},
+            color="#000000FF"
+        })
+        :vertical_box({
+            position={x=0,y=1.1},
+            alignment=qts.scribe.allignment.LEFT,
+            scrollable=false,
+            spacing={x=0.1,y=0.1},
+        }, function(context_v1)
+            context_v1:image({
+                width=2,
+                height=2,
+                texture="bubble.png",
+                tooltip="bubbles!",
+            })
+            :image({
+                width=2,
+                height=2,
+                texture="qtcore_flame_animated.png",
+                animation={
+                    count=8,
+                    duration=90,
+                    start=1
+                },
+                tooltip="fire!",
+            })
+            :image({
+                width=2,
+                height=2,
+                item="overworld:marble",
+                tooltip="marble!",
+            })
+            :rect({
+                width=2,
+                height=2,
+                color="#505050FF",
+                tooltip ="DepressingGrey",
+            })
         end)
         --[[
         :horizontal_box({

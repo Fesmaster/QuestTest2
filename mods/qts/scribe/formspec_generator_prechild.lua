@@ -226,6 +226,32 @@ return {
     end,
 
     ---@param formdata ScribeFormdata
+    rect = function(formdata)
+        if formdata.details.color == nil or formdata.details.color == "none" then
+            return ""
+        end
+
+        local pos = {x=0,y=0}
+        if formdata.details.position ~= nil then
+            pos = qts.scribe.vec2.copy(formdata.details.position)
+        end
+
+        local outstr = "box["..
+            qts.scribe.vec2.tostring(pos)..";"..
+            qts.scribe.vec2.tostring(formdata.details.size)..";"..
+            formdata.details.color.."]"
+
+        if formdata.details.tooltip then
+            outstr=outstr.."\ntooltip["..
+            qts.scribe.vec2.tostring(pos)..";"..
+            qts.scribe.vec2.tostring(formdata.details.size)..";"..
+            formdata.details.tooltip.."]"
+        end
+
+        return outstr
+    end,
+
+    ---@param formdata ScribeFormdata
     text = function(formdata)
         local pos = {x=0,y=0}
         if formdata.details.position ~= nil then
@@ -289,7 +315,66 @@ return {
             "<global" .. stylestring .. ">"..
             startstring .. formdata.details.text .. endstring ..
             "]"
+        if formdata.details.tooltip then
+            outstr=outstr.."\ntooltip["..
+            qts.scribe.vec2.tostring(pos)..";"..
+            qts.scribe.vec2.tostring(formdata.details.size)..";"..
+            formdata.details.tooltip.."]"
+        end
+
+        return outstr
+    end,
+
+    ---@param formdata ScribeFormdata
+    image = function (formdata)
+        local pos = {x=0,y=0}
+        if formdata.details.position ~= nil then
+            pos = qts.scribe.vec2.copy(formdata.details.position)
+        end
+
+        local outstr = ""
+        if formdata.details.item then
+            outstr = "item_image["..
+                qts.scribe.vec2.tostring(pos)..";"..
+                qts.scribe.vec2.tostring(formdata.details.size)..";"..
+                formdata.details.item.."]"
+        else
+                
+            if formdata.details.animation then
+                --animated image
+                outstr = "animated_image["..
+                    qts.scribe.vec2.tostring(pos)..";"..
+                    qts.scribe.vec2.tostring(formdata.details.size)..";"..
+                    formdata.details.name..";"..
+                    formdata.details.texture..";"..
+                    formdata.details.animation.count..";"..
+                    formdata.details.animation.duration..";"..
+                    formdata.details.animation.start
+            else
+                --regular image
+                outstr = "image["..
+                    qts.scribe.vec2.tostring(pos)..";"..
+                    qts.scribe.vec2.tostring(formdata.details.size)..";"..
+                    formdata.details.texture
+            end
+
+            if formdata.details.middle then
+                outstr=outstr .. ";" .. formdata.details.middle.x_min..","..
+                    formdata.details.middle.y_min..","..formdata.details.middle.x_max..
+                    ","..formdata.details.middle.y_max
+            end
+            outstr = outstr .. "]"
+
+            
+        end
         
+        if formdata.details.tooltip then
+            outstr=outstr.."\ntooltip["..
+            qts.scribe.vec2.tostring(pos)..";"..
+            qts.scribe.vec2.tostring(formdata.details.size)..";"..
+            formdata.details.tooltip.."]"
+        end
+
         return outstr
     end,
 
