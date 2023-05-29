@@ -1,3 +1,35 @@
+--[[
+    This file has the first half of the conversion functions from scribe gui to formspec gui.
+]]
+
+---build a formspec style string from a ScribeFontStyle table
+---@param font ScribeFontStyle|nil
+local function build_font_string(font, needs_style, needs_size, needs_color)
+    if font == nil then return "" end
+
+    local retstr = ""
+    if needs_style and (font.style or font.bold or font.italic) then
+        local fontstr = "normal"
+        if font.style then
+            fontstr = font.style
+        end
+        if font.bold then
+            fontstr = fontstr..",bold"
+        end
+        if font.italic then
+            fontstr = fontstr..",italic"
+        end
+        retstr=retstr..";font="..fontstr
+    end
+    if needs_size and font.size then
+        retstr=retstr..";font_size="..font.size
+    end
+    if needs_color and font.color then
+        retstr=retstr..";textcolor="..font.color
+    end
+    return retstr
+end
+
 ---@type table<ScribeFormType,fun(formdata:ScribeFormdata):string>
 return {
     ---@param formdata ScribeFormdata
@@ -194,6 +226,74 @@ return {
     end,
 
     ---@param formdata ScribeFormdata
+    text = function(formdata)
+        local pos = {x=0,y=0}
+        if formdata.details.position ~= nil then
+            pos = qts.scribe.vec2.copy(formdata.details.position)
+        end
+        
+        local stylestring = ""
+        local startstring = ""
+        local endstring = ""
+        if formdata.details.font then
+            if formdata.details.font.style then
+                stylestring = stylestring .. " font="..formdata.details.font.style
+            end
+
+            if formdata.details.font.size then
+                stylestring = stylestring .. " size="..formdata.details.font.size
+            end
+
+            if formdata.details.font.color then
+                stylestring = stylestring .. " color="..formdata.details.font.color
+            end
+
+            if formdata.details.font.secondary_color then
+                stylestring = stylestring .. " hovercolor="..formdata.details.font.secondary_color
+            end
+            
+            if formdata.details.font.bold then
+                startstring = startstring .. "<b>"
+                endstring = "</b>" .. endstring
+            end
+
+            if formdata.details.font.italic then
+                startstring = startstring .. "<i>"
+                endstring = "</i>" .. endstring
+            end
+
+            if formdata.details.font.underline then
+                startstring = startstring .. "<u>"
+                endstring = "</u>" .. endstring
+            end
+        end
+        local allignments_v = {
+            [qts.scribe.allignment.TOP]="top", 
+            [qts.scribe.allignment.CENTER]="middle", 
+            [qts.scribe.allignment.BOTTOM]="bottom"
+        }
+        local allignments_h = {
+            [qts.scribe.allignment.LEFT]="left", 
+            [qts.scribe.allignment.CENTER]="center", 
+            [qts.scribe.allignment.RIGHT]="right", 
+            [qts.scribe.allignment.JUSTIFY]="justify"
+        }
+        stylestring = stylestring.. " valign="..allignments_v[formdata.details.vertical_allignment]
+            .. " halign="..allignments_h[formdata.details.horizontal_allignment]
+            .. " background="..formdata.details.background_color
+
+        local outstr = "hypertext["..
+            qts.scribe.vec2.tostring(pos)..";"..
+            qts.scribe.vec2.tostring(formdata.details.size)..";"..
+            formdata.details.name..";"..
+            "<global" .. stylestring .. ">"..
+            startstring .. formdata.details.text .. endstring ..
+            "]"
+        
+        return outstr
+    end,
+
+    ---@param formdata ScribeFormdata
     button = function(formdata)
         local pos = {x=0,y=0}
         if formdata.details.position ~= nil then
@@ -265,33 +365,8 @@ return {
         end
         --font
         if (formdata.details.font) then
-            ---@type ScribeFontStyle
-            local font = formdata.details.font
-            
-            if font.style or font.bold or font.italic then
-                local fontstr = "normal"
-                if font.style then
-                    fontstr = font.style
-                end
-                if font.bold then
-                    fontstr = fontstr..",bold"
-                end
-                if font.italic then
-                    fontstr = fontstr..",italic"
-                end
-                style_all=style_all..";font="..fontstr
-                needs_style_all=true
-            end
-
-            if font.size then
-                style_all=style_all..";font_size="..font.size
-                needs_style_all=true
-            end
-
-            if font.color then
-                style_all=style_all..";textcolor="..font.color
-                needs_style_all=true
-            end
+            style_all=style_all..build_font_string(formdata.details.font, true, true, true)
+            needs_style_all=true
         end
 
         if formdata.details.border then
