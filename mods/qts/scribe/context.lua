@@ -183,6 +183,10 @@ end
 ---@param style_dest ScribeButtonStateStyle inout style
 ---@param style_src ScribeButtonStateStyle
 local function ApplyButtonStyleToAnother(style_dest, style_src)
+    if style_dest == nil or style_src == nil then
+        return
+    end
+
     if style_dest.background == nil then
         style_dest.background = style_src.background
     end
@@ -742,7 +746,7 @@ qts.scribe.context_base = {
     button = function(self, def, callback)
         local childformdata = common_create_formdata(self)
         common_build_child_formdata(self, childformdata, def, "button")
-        common_build_child_size(self, childformdata, def, {x=1,y=1})
+        common_build_child_size(self, childformdata, def, {x=1,y=qts.select(def.toggleable, 0.66, 1)})
 
         if def.name then
             childformdata.details.name = def.name
@@ -751,62 +755,127 @@ qts.scribe.context_base = {
         end
         childformdata.details.label = def.label
         childformdata.details.is_exit = def.is_exit
-        childformdata.details.texture = def.texture
-        childformdata.details.texture_pressed = def.texture_pressed
         childformdata.details.sound = def.sound or "gui_button" --default sound!!!
         
-        if def.style_any then
-            childformdata.details.style_any = table.copy(def.style_any)
-        else
-            childformdata.details.style_any = {}
+        local is_toggled = false
+        if def.toggleable then
+            if self.userdata._scribe == nil then
+                self.userdata._scribe = {[childformdata.details.name] = {toggled = false}}
+            elseif self.userdata._scribe[childformdata.details.name] == nil then 
+                self.userdata._scribe[childformdata.details.name] = {toggled = false}
+            elseif self.userdata._scribe[childformdata.details.name].toggled == nil then
+                self.userdata._scribe[childformdata.details.name].toggled = false
+            else
+                is_toggled = self.userdata._scribe[childformdata.details.name].toggled
+            end
+
+            --default textures
+            if def.texture == nil then
+                def.texture = "gui_toggle_off.png"
+                def.texture_pressed = "gui_toggle_on.png"
+            end
+
+            --default empty background
+            if def.style_all == nil then
+                def.style_all = {}
+            end
+            if def.style_toggled_all == nil then
+                def.style_toggled_all = {}
+            end
+            if def.style_all.background == nil then
+                def.style_all.background = ""
+            end
+            if def.style_toggled_all.background == nil then
+                def.style_toggled_all.background = ""
+            end
         end
-        if def.style_normal then
-            childformdata.details.style_normal = table.copy(def.style_normal)
+        
+        if is_toggled then
+            --when button is toggled on
+            childformdata.details.texture = def.texture_pressed
+            childformdata.details.texture_pressed = def.texture
+            
+            if def.style_any then
+                childformdata.details.style_any = table.copy(def.style_toggled_any)
+            else
+                childformdata.details.style_any = {}
+            end
+            if def.style_normal then
+                childformdata.details.style_normal = table.copy(def.style_toggled_normal)
+            else
+                childformdata.details.style_normal = {}
+            end
+            if def.style_hovered then
+                childformdata.details.style_hovered = table.copy(def.style_toggled_hovered)
+            else
+                childformdata.details.style_hovered = {}
+            end
+            if def.style_pressed then
+                childformdata.details.style_pressed = table.copy(def.style_toggled_pressed)
+            else
+                childformdata.details.style_pressed = {}
+            end
+            if def.style_all then
+                ApplyButtonStyleToAnother(childformdata.details.style_normal, def.style_toggled_all)
+                ApplyButtonStyleToAnother(childformdata.details.style_hovered, def.style_toggled_all)
+                ApplyButtonStyleToAnother(childformdata.details.style_pressed, def.style_toggled_all)
+            end
         else
-            childformdata.details.style_normal = {}
-        end
-        if def.style_hovered then
-            childformdata.details.style_hovered = table.copy(def.style_hovered)
-        else
-            childformdata.details.style_hovered = {}
-        end
-        if def.style_pressed then
-            childformdata.details.style_pressed = table.copy(def.style_pressed)
-        else
-            childformdata.details.style_pressed = {}
-        end
-        if def.style_all then
-            ApplyButtonStyleToAnother(childformdata.details.style_normal, def.style_all)
-            ApplyButtonStyleToAnother(childformdata.details.style_hovered, def.style_all)
-            ApplyButtonStyleToAnother(childformdata.details.style_pressed, def.style_all)
+            childformdata.details.texture = def.texture
+            childformdata.details.texture_pressed = def.texture_pressed
+            
+            if def.style_any then
+                childformdata.details.style_any = table.copy(def.style_any)
+            else
+                childformdata.details.style_any = {}
+            end
+            if def.style_normal then
+                childformdata.details.style_normal = table.copy(def.style_normal)
+            else
+                childformdata.details.style_normal = {}
+            end
+            if def.style_hovered then
+                childformdata.details.style_hovered = table.copy(def.style_hovered)
+            else
+                childformdata.details.style_hovered = {}
+            end
+            if def.style_pressed then
+                childformdata.details.style_pressed = table.copy(def.style_pressed)
+            else
+                childformdata.details.style_pressed = {}
+            end
+            if def.style_all then
+                ApplyButtonStyleToAnother(childformdata.details.style_normal, def.style_all)
+                ApplyButtonStyleToAnother(childformdata.details.style_hovered, def.style_all)
+                ApplyButtonStyleToAnother(childformdata.details.style_pressed, def.style_all)
+            end
         end
 
-        --[[
-        childformdata.details.background = def.background
-        childformdata.details.background_pressed = def.background_pressed
-        childformdata.details.background_hovered = def.background_hovered
-        childformdata.details.background_middle = parse_middle_format(def.background_middle)
-        childformdata.details.background_use_alpha = def.background_use_alpha
-        childformdata.details.background_tint = def.background_tint
-        childformdata.details.background_tint_hovered = def.background_tint_hovered
-        childformdata.details.background_tint_pressed = def.background_tint_pressed
-        childformdata.details.font = def.font or {}
-        childformdata.details.border = def.border or false
-        childformdata.details.internal_offset = def.internal_offset
-        childformdata.details.padding = parse_middle_format(def.padding)
-        --]]
         
         if def.texture == nil and def.texture_pressed == nil and (def.is_exit == nil or def.is_exit == false) then
             childformdata.details.item = def.item
         else
-            minetest.log("warning", "[formspec unsupported] you cannot make a button with an item if it has a texture, a texture_pressed, or is an exit button. Sorry!")
+            if def.item then
+                minetest.log("warning", "[formspec unsupported] you cannot make a button with an item if it has a texture, a texture_pressed, or is an exit button. Sorry!")
+            end
         end
 
         self.formdata.children[#self.formdata.children+1] = childformdata
 
         --add the function
         if callback then
-            self:named_callback(childformdata.details.name, callback)
+
+            if def.toggleable then
+                local name = childformdata.details.name
+                --custom wrapper callback to update the toggle
+                self:named_callback(childformdata.details.name, function (event)
+                    event.userdata._scribe[name].toggled = not self.userdata._scribe[name].toggled
+                    callback(event)
+                    event:mark_for_refresh()
+                end)
+            else
+                self:named_callback(childformdata.details.name, callback)
+            end
         end
 
         return self
@@ -952,7 +1021,7 @@ qts.scribe.new_context = qts.scribe.context_base.create
 
 ---@alias ScribeContextFunction fun(context:ScribeContext):nil function for generating GUI elements using a context
 
----@alias ScribeCallbackFunction fun(context:ScribeEvent):nil function for a gui event callback
+---@alias ScribeCallbackFunction fun(event:ScribeEvent):nil function for a gui event callback
 
 ---@alias ScribeFormType
 ---| "base"
@@ -1062,13 +1131,11 @@ qts.scribe.new_context = qts.scribe.context_base.create
 ---@field internal_offset vec2|nil offset the contents of the button without resize.
 ---@field padding Rect|nil padding around the middle. Relative ot the internal_offset
 
-
-
 ---@class ScribeButtonFormDefinition : ScribeBasicFormDefinition
 ---@field name string|nil form name, if you want a static one. Otherwise, a autogenerated oen will be used.
 ---@field label string|nil text on the button
 ---@field is_exit boolean|nil if true, the button will close the form on exit. does not work with 'item'.
----@field texture Texture|nil texture to show, if wanted
+---@field texture Texture|nil texture to show, if wanted.
 ---@field texture_pressed Texture|nil if texture is valid, and this is valid, show texture_pressed instead of texture when button pressed
 ---@field item ItemName|nil item to appear on the button. Does not work with 'texture' or 'texture_pressed'
 ---@field sound string sound to play when clicked.
@@ -1077,7 +1144,12 @@ qts.scribe.new_context = qts.scribe.context_base.create
 ---@field style_hovered ScribeButtonStateStyle|nil Style in the hovered state
 ---@field style_pressed ScribeButtonStateStyle|nil Style in the pressed state
 ---@field style_all ScribeButtonStateStyle|nil Style in all states, overriding global style, but not overriding style set per state per element.
-
+---@field toggleable boolean|nil Make the button a toggle button. When toggled "on", texture and texture_pressed are switched.
+---@field style_toggled_any ScribeButtonStateStyle|nil Style when no other state specifies it. Global styles override this. Used when toggled on.
+---@field style_toggled_normal ScribeButtonStateStyle|nil Style in the normal state. Used when toggled on.
+---@field style_toggled_hovered ScribeButtonStateStyle|nil Style in the hovered state. Used when toggled on.
+---@field style_toggled_pressed ScribeButtonStateStyle|nil Style in the pressed state. Used when toggled on.
+---@field style_toggled_all ScribeButtonStateStyle|nil Style in all states, overriding global style, but not overriding style set per state per element. Used when toggled on.
 
 
 
@@ -1221,6 +1293,15 @@ local function gui_test_func(context)
 
             }, function (event)
                 minetest.log("textentry1 pressed:"..dump(event.fields.textentry1))
+            end)
+            :button({
+                toggleable=true,
+                name="toggleButton1",
+                tooltip="Toggleable Button",
+                --width=1,
+                --height=0.66,
+            }, function (event)
+                minetest.log("Toggleable Status: " .. dump(event.userdata._scribe.toggleButton1.toggled))
             end)
         end)
         --[[
