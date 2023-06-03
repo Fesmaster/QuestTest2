@@ -76,6 +76,42 @@ local function build_button_style_string(style)
     return stylestr
 end
 
+---Build a tooltip element
+---@param name_or_pos string|{pos:vec2|string,size:vec2|string}|
+---@param tooltip string|{text:string,bgcolor:ColorSpec,fgcolor:ColorSpec}
+---@return string
+local function build_tooltip(name_or_pos, tooltip)
+    local tooltip_text = ""
+    if tooltip then
+        if type(name_or_pos) == "string" then
+            tooltip_text = "tooltip["..name_or_pos..";"
+        elseif type(name_or_pos) == "table" then
+            local posstr = ""
+            if type(name_or_pos.pos) == "string" then
+                posstr = name_or_pos.pos
+            else
+                posstr = qts.scribe.vec2.tostring(name_or_pos.pos)
+            end
+
+            local sizestr = ""
+            if type(name_or_pos.size) == "string" then
+                sizestr = name_or_pos.size
+            else
+                sizestr = qts.scribe.vec2.tostring(name_or_pos.size)
+            end
+
+            tooltip_text = "tooltip["..posstr..";"..sizestr..";"
+        end
+
+        if type(tooltip) == "string" then
+            tooltip_text=tooltip_text..tooltip.."]"
+        elseif type(tooltip) == "table" then
+            tooltip_text=tooltip_text..tooltip.text..";"..tooltip.bgcolor..";"..tooltip.fgcolor.."]"
+        end
+    end
+    return tooltip_text
+end
+
 ---@type table<ScribeFormType,fun(formdata:ScribeFormdata):string>
 return {
     ---@param formdata ScribeFormdata
@@ -288,10 +324,7 @@ return {
             formdata.details.color.."]"
 
         if formdata.details.tooltip then
-            outstr=outstr.."\ntooltip["..
-            qts.scribe.vec2.tostring(pos)..";"..
-            qts.scribe.vec2.tostring(formdata.details.size)..";"..
-            formdata.details.tooltip.."]"
+            outstr=outstr..build_tooltip({pos=pos,size=formdata.details.size}, formdata.details.tooltip)
         end
 
         return outstr
@@ -361,11 +394,9 @@ return {
             "<global" .. stylestring .. ">"..
             startstring .. formdata.details.text .. endstring ..
             "]"
+
         if formdata.details.tooltip then
-            outstr=outstr.."\ntooltip["..
-            qts.scribe.vec2.tostring(pos)..";"..
-            qts.scribe.vec2.tostring(formdata.details.size)..";"..
-            formdata.details.tooltip.."]"
+            outstr=outstr..build_tooltip({pos=pos,size=formdata.details.size}, formdata.details.tooltip)
         end
 
         return outstr
@@ -416,7 +447,7 @@ return {
 
         --tooltip
         if formdata.details.tooltip then
-            outstr=outstr.."tooltip["..formdata.details.name..";"..formdata.details.tooltip.."]"
+            outstr=outstr..build_tooltip(formdata.details.name, formdata.details.tooltip)
         end
 
         return outstr
@@ -466,10 +497,11 @@ return {
         end
         
         if formdata.details.tooltip then
-            outstr=outstr.."\ntooltip["..
+            outstr=outstr..build_tooltip({pos=pos,size=formdata.details.size}, formdata.details.tooltip)
+            --[["\ntooltip["..
             qts.scribe.vec2.tostring(pos)..";"..
             qts.scribe.vec2.tostring(formdata.details.size)..";"..
-            formdata.details.tooltip.."]"
+            formdata.details.tooltip.."]"]]
         end
 
         return outstr
@@ -566,15 +598,9 @@ return {
         end
 
         --build the tooltip
-        local tooltip = ""
-        if formdata.details.tooltip then
-            if type(formdata.details.tooltip) == "string" then
-                tooltip = "tooltip["..formdata.details.name..";"..formdata.details.tooltip.."]"
-            elseif type(formdata.details.tooltip) == "table" then
-                tooltip = "tooltip["..formdata.details.name..";"..formdata.details.tooltip.text..";"..formdata.details.tooltip.bgcolor..";"..formdata.details.tooltip.fgcolor.."]"
-            end
-        end
+        local tooltip = build_tooltip(formdata.details.name, formdata.details.tooltip)
 
         return style..btn..tooltip
     end,
 }
+
