@@ -326,6 +326,57 @@ return {
     end,
 
     ---@param formdata ScribeFormdata
+    text_entry = function(formdata)
+        local pos = {x=0,y=0}
+        if formdata.details.position ~= nil then
+            pos = qts.scribe.vec2.copy(formdata.details.position)
+        end
+
+        local outstr=""
+        --styling
+        if formdata.details.border ~= nil or formdata.details.font then
+            outstr = outstr .. "\nstyle["..formdata.details.name..
+                build_font_string(formdata.details.font, true, true, true)..
+                ";border="..qts.select(formdata.details.border, "true", "false").. "]"
+        
+        end
+
+        if formdata.details.obscure_content then
+            outstr = outstr .. "\npwdfield["..qts.scribe.vec2.tostring(pos)..";"..
+                qts.scribe.vec2.tostring(formdata.details.size)..";"..
+                formdata.details.name..";"..
+                formdata.details.label.."]"
+        elseif formdata.details.multiline then
+            outstr = outstr .. "\ntextarea["..qts.scribe.vec2.tostring(pos)..";"..
+                qts.scribe.vec2.tostring(formdata.details.size)..";"..
+                formdata.details.name..";"..
+                formdata.details.label..";"..
+                formdata.details.default_value.."]"
+        else
+            outstr = outstr .. "\nfield["..qts.scribe.vec2.tostring(pos)..";"..
+                qts.scribe.vec2.tostring(formdata.details.size)..";"..
+                formdata.details.name..";"..
+                formdata.details.label..";"..
+                formdata.details.default_value.."]"
+        end
+
+        --field to stop text entry from closing the UI by default
+        if not formdata.details.multiline then
+            outstr = outstr.."\nfield_close_on_enter["..formdata.details.name..";"..
+                qts.select(formdata.details.close_on_enter, "true", "false") .. "]"
+        end
+
+        
+
+        --tooltip
+        if formdata.details.tooltip then
+            outstr=outstr.."tooltip["..formdata.details.name..";"..formdata.details.tooltip.."]"
+        end
+
+        return outstr
+    end,
+
+    ---@param formdata ScribeFormdata
     image = function (formdata)
         local pos = {x=0,y=0}
         if formdata.details.position ~= nil then

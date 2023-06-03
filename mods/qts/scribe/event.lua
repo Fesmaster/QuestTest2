@@ -22,11 +22,23 @@ qts.scribe.event_base = {
     ---You should always return right after calling this
     ---@param self ScribeEvent
     refresh_gui = function(self)
+        if self.callbacks and self.callbacks.refresh then
+            if type(self.callbacks.refresh) == "table" then
+                ---@diagnostic disable-next-line: param-type-mismatch
+                for i, func in ipairs(self.callbacks.refresh) do
+                    func(self)
+                end
+            else
+                self.callbacks.refresh(self)
+            end
+        end        
+
         if self.context_func then
             local context = qts.scribe.new_context(self.player, self.position, self.name)
             context.userdata = self.userdata --copy userdata ref
             self.context_func(context)
             self.callbacks = context.callbacks
+            self.userdata = context.userdata
             context:show_gui()
         end
     end,
@@ -59,13 +71,14 @@ qts.scribe.event_base = {
     ---@param fields table
     ---@param context_func nil|fun(context:ScribeContext):nil
     ---@return ScribeEvent
-    create = function(player, position, name, userdata, fields, context_func)
+    create = function(player, position, name, userdata, callbacks, fields, context_func)
         --custom data
         local t = {
             player = player,
             position = position,
             name=name,
             userdata = userdata,
+            callbacks = callbacks,
             fields = fields,
             context_func = context_func,
         }
