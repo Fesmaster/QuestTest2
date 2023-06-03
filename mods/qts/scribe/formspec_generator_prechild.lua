@@ -30,6 +30,52 @@ local function build_font_string(font, needs_style, needs_size, needs_color)
     return retstr
 end
 
+---Create the string for a button style
+---@param style ScribeButtonStateStyle
+local function build_button_style_string(style)
+    local stylestr = ""
+    --bg alpha
+    if style.background_use_alpha then
+        stylestr = stylestr .. ";alpha="..qts.select(style.background_use_alpha, "true", "false")
+    end
+    --bg image
+    if style.background then
+        stylestr=stylestr..";bgimg="..style.background
+        --middle
+        if style.background_middle then
+            ---@type Rect
+            local padding = style.background_middle
+            ---padding in context of a button is a different struct
+            stylestr=stylestr..";bgimg_middle="..math.floor(padding.x_min)..","..math.floor(padding.y_min)..",-"..math.floor(padding.x_max)..",-"..math.floor(padding.y_max)
+        end
+    end
+    --bg tint
+    if style.background_tint then
+        stylestr=stylestr..";bgcolor="..style.background_tint
+    end
+    --font
+    if style.font then
+        stylestr=stylestr..build_font_string(style.font, true, true, true)
+    end
+    --border
+    if style.border then
+        stylestr=stylestr..";border="..tostring(style.border)
+    end
+    --internal offset
+    if style.internal_offset then
+        stylestr=stylestr..";content_offset="..qts.scribe.vec2.tostring(style.internal_offset)
+    end
+    --padding
+    if style.padding then
+        ---@type Rect
+        local padding = style.padding
+        ---padding in context of a button is a different struct
+        stylestr=stylestr..";padding="..math.floor(padding.x_min)..","..math.floor(padding.y_min)..",-"..math.floor(padding.x_max)..",-"..math.floor(padding.y_max)
+    end
+    
+    return stylestr
+end
+
 ---@type table<ScribeFormType,fun(formdata:ScribeFormdata):string>
 return {
     ---@param formdata ScribeFormdata
@@ -444,91 +490,52 @@ return {
         local label = formdata.details.label or ""
 
         --build the button style controls
+        local style_any = "style["..formdata.details.name
         local style_normal = "style["..formdata.details.name..":default"
         local style_hovered = "style["..formdata.details.name..":hovered"
         local style_pressed = "style["..formdata.details.name..":pressed"
-        local style_all = "style["..formdata.details.name
 
-        local needs_style_all = false
+        local needs_style_any = false
         local needs_style_normal = false
         local needs_style_hovered = false
         local needs_style_pressed = false
         
-        --bg alpha
-        if (formdata.details.background_use_alpha) then
-            style_all = style_all .. ";alpha="..tostring(formdata.details.background_use_alpha)
-            --this does not mark them needed!
-        end
-        --bg image
-        if (formdata.details.background) then
-            if (formdata.details.background_pressed or formdata.details.background_hovered) then
-                --use specific bg style
-                style_normal=style_normal..";bgimg="..formdata.details.background
-                needs_style_normal=true
-            else
-                --use style all
-                style_all=style_all..";bgimg="..formdata.details.background
-                needs_style_all=true
-            end
-        end
-        if (formdata.details.background_hovered) then
-            style_hovered=style_hovered..";bgimg="..formdata.details.background_hovered
-            needs_style_hovered=true
-        end
-        if (formdata.details.background_pressed) then
-            style_pressed=style_pressed..";bgimg="..formdata.details.background_pressed
-            needs_style_pressed=true
-        end
-        --bg tint
-        if (formdata.details.background_tint) then
-            if (formdata.details.background_tint_hovered or formdata.details.background_tint_pressed) then
-                --use specific bg style
-                style_normal=style_normal..";bgcolor="..formdata.details.background_tint
-                needs_style_normal=true
-            else
-                --use style all
-                style_all=style_all..";bgcolor="..formdata.details.background_tint
-                needs_style_all=true
-            end
-        end
-        if (formdata.details.background_tint_hovered) then
-            style_hovered=style_hovered..";bgcolor="..formdata.details.background_tint_hovered
-            needs_style_hovered=true
-        end
-        if (formdata.details.background_tint_pressed) then
-            style_pressed=style_pressed..";bgcolor="..formdata.details.background_tint_pressed
-            needs_style_pressed=true
-        end
-        --font
-        if (formdata.details.font) then
-            style_all=style_all..build_font_string(formdata.details.font, true, true, true)
-            needs_style_all=true
+        
+        local any_content = build_button_style_string(formdata.details.style_any)
+        if any_content ~= "" then
+            needs_style_any = true
+            style_any = style_any..any_content    
         end
 
-        if formdata.details.border then
-            style_all=style_all..";border="..tostring(formdata.details.border)
-            needs_style_all=true
+        local normal_content = build_button_style_string(formdata.details.style_normal)
+        if normal_content ~= "" then
+            needs_style_normal = true
+            style_normal = style_normal..normal_content    
         end
-        if formdata.details.internal_offset then
-            style_all=style_all..";content_offset="..qts.scribe.vec2.tostring(formdata.details.internal_offset)
-            needs_style_all=true
+
+        local hovered_content = build_button_style_string(formdata.details.style_hovered)
+        if hovered_content ~= "" then
+            needs_style_hovered = true
+            style_hovered = style_hovered..hovered_content    
         end
-        if formdata.details.padding then
-            ---@type Rect
-            local padding = formdata.details.padding
-            ---padding in context of a button is a different struct
-            style_all=style_all..";padding="..math.floor(padding.x_min)..","..math.floor(padding.y_min)..",-"..math.floor(padding.x_max)..",-"..math.floor(padding.y_max)
-            needs_style_all=true
+
+        local pressed_content = build_button_style_string(formdata.details.style_pressed)
+        if pressed_content ~= "" then
+            needs_style_pressed = true
+            style_pressed = style_pressed..pressed_content    
         end
+
         if formdata.details.sound then
-            style_all=style_all..";sound="..tostring(formdata.details.sound)
-            needs_style_all=true
+            style_any=style_any..";sound="..tostring(formdata.details.sound)
+            needs_style_any=true
         end
+
+        
         
         --collect styles
         local style = ""
-        if needs_style_all then
-            style = style..style_all.."]"
+        if needs_style_any then
+            style = style..style_any.."]"
         end
         if needs_style_normal then
             style = style..style_normal.."]"
@@ -562,9 +569,9 @@ return {
         local tooltip = ""
         if formdata.details.tooltip then
             if type(formdata.details.tooltip) == "string" then
-                tooltip = "tooltip["..posstr..";"..sizestr..";"..formdata.details.tooltip.."]"
+                tooltip = "tooltip["..formdata.details.name..";"..formdata.details.tooltip.."]"
             elseif type(formdata.details.tooltip) == "table" then
-                tooltip = "tooltip["..posstr..";"..sizestr..";"..formdata.details.tooltip.text..";"..formdata.details.tooltip.bgcolor..";"..formdata.details.tooltip.fgcolor.."]"
+                tooltip = "tooltip["..formdata.details.name..";"..formdata.details.tooltip.text..";"..formdata.details.tooltip.bgcolor..";"..formdata.details.tooltip.fgcolor.."]"
             end
         end
 

@@ -179,7 +179,53 @@ local function parse_middle_format(middle)
     return out
 end
 
+---Apply a source tyle to a destination style, without overriding anything from the destination style
+---@param style_dest ScribeButtonStateStyle inout style
+---@param style_src ScribeButtonStateStyle
+local function ApplyButtonStyleToAnother(style_dest, style_src)
+    if style_dest.background == nil then
+        style_dest.background = style_src.background
+    end
+    if style_dest.background_middle == nil then
+        style_dest.background_middle = style_src.background_middle
+    end
+    if style_dest.background_use_alpha == nil then
+        style_dest.background_use_alpha = style_src.background_use_alpha
+    end
+    if style_dest.background_tint == nil then
+        style_dest.background_tint = style_src.background_tint
+    end
 
+    if style_dest.font == nil then
+        style_dest.font = style_src.font
+    else
+        if style_dest.font.bold == nil then
+            style_dest.font.bold = style_src.font.bold
+        end
+        if style_dest.font.color == nil then
+            style_dest.font.color = style_src.font.color
+        end
+        if style_dest.font.italic == nil then
+            style_dest.font.italic = style_src.font.italic
+        end
+        if style_dest.font.size == nil then
+            style_dest.font.size = style_src.font.size
+        end
+        if style_dest.font.style == nil then
+            style_dest.font.style = style_src.font.style
+        end
+    end
+    
+    if style_dest.border == nil then
+        style_dest.border = style_src.border
+    end
+    if style_dest.internal_offset == nil then
+        style_dest.internal_offset = style_src.internal_offset
+    end
+    if style_dest.padding == nil then
+        style_dest.padding = style_src.padding
+    end
+end
 
 
 
@@ -553,7 +599,7 @@ qts.scribe.context_base = {
 
         --add the function
         if callback then
-            self.callbacks[childformdata.details.name] = callback
+            self:named_callback(childformdata.details.name, callback)
         end
 
         return self
@@ -617,8 +663,14 @@ qts.scribe.context_base = {
         self.formdata.children[#self.formdata.children+1] = childformdata
 
         --add the function
+        --due to text entry fields needing to make extra checks, this is done in a custom lambda.
         if callback then
-            self.callbacks[childformdata.details.name] = callback
+            local name = childformdata.details.name
+            self:named_callback(childformdata.details.name, function (event)
+                if event.fields.key_enter and event.fields.key_enter_field == name then
+                    callback(event)
+                end 
+            end)
         end
 
         return self
@@ -701,6 +753,35 @@ qts.scribe.context_base = {
         childformdata.details.is_exit = def.is_exit
         childformdata.details.texture = def.texture
         childformdata.details.texture_pressed = def.texture_pressed
+        childformdata.details.sound = def.sound or "gui_button" --default sound!!!
+        
+        if def.style_any then
+            childformdata.details.style_any = table.copy(def.style_any)
+        else
+            childformdata.details.style_any = {}
+        end
+        if def.style_normal then
+            childformdata.details.style_normal = table.copy(def.style_normal)
+        else
+            childformdata.details.style_normal = {}
+        end
+        if def.style_hovered then
+            childformdata.details.style_hovered = table.copy(def.style_hovered)
+        else
+            childformdata.details.style_hovered = {}
+        end
+        if def.style_pressed then
+            childformdata.details.style_pressed = table.copy(def.style_pressed)
+        else
+            childformdata.details.style_pressed = {}
+        end
+        if def.style_all then
+            ApplyButtonStyleToAnother(childformdata.details.style_normal, def.style_all)
+            ApplyButtonStyleToAnother(childformdata.details.style_hovered, def.style_all)
+            ApplyButtonStyleToAnother(childformdata.details.style_pressed, def.style_all)
+        end
+
+        --[[
         childformdata.details.background = def.background
         childformdata.details.background_pressed = def.background_pressed
         childformdata.details.background_hovered = def.background_hovered
@@ -713,7 +794,7 @@ qts.scribe.context_base = {
         childformdata.details.border = def.border or false
         childformdata.details.internal_offset = def.internal_offset
         childformdata.details.padding = parse_middle_format(def.padding)
-        childformdata.details.sound = def.sound or "gui_button" --default sound!!!
+        --]]
         
         if def.texture == nil and def.texture_pressed == nil and (def.is_exit == nil or def.is_exit == false) then
             childformdata.details.item = def.item
@@ -724,7 +805,9 @@ qts.scribe.context_base = {
         self.formdata.children[#self.formdata.children+1] = childformdata
 
         --add the function
-        self.callbacks[childformdata.details.name] = callback
+        if callback then
+            self:named_callback(childformdata.details.name, callback)
+        end
 
         return self
     end,
@@ -774,14 +857,22 @@ qts.scribe.context_base = {
     ---@param callback ScribeCallbackFunction
     named_callback = function(self, name, callback)
         if self.callbacks[name] then
-            minetest.log("GUI: overriding callback of name'["..name.."] in GUI: " ..self.name)
+            if type(self.callbacks[name]) == "function" then
+                local f =self.callbacks[name]
+                self.callbacks[name] = {
+                    f,
+                    callback
+                } 
+            elseif type(self.callbacks[name]) == "table" then
+                self.callbacks[name][#self.callbacks[name]+1] = callback
+            end
+        else
+            self.callbacks[name] = callback
         end
-        self.callbacks[name] = callback
         return self
     end,
 
-    --[[   Internal Utility Functions   ]]
-
+    --[[   Internal Utility Functions   ]] 
     ---Create a ScribeContext
     ---@param player Player The player the GUI should be open for
     ---@param position Vector gui position name
@@ -961,26 +1052,34 @@ qts.scribe.new_context = qts.scribe.context_base.create
 ---@field animation ScribeAnimation|nil
 ---@field middle Rect|nil
 
+---@class ScribeButtonStateStyle The description of the look of a button's State
+---@field background_use_alpha boolean|nil should the bg images use their alpha channel?
+---@field background Texture|nil the texture to be shown behind the main one
+---@field background_middle Rect|nil the middle of the background texture, to make it a 9-slice tile
+---@field background_tint ColorSpec|nil tint for normal button
+---@field font ScribeFontStyle|nil Font permutation.
+---@field border boolean|nil draw the border or not
+---@field internal_offset vec2|nil offset the contents of the button without resize.
+---@field padding Rect|nil padding around the middle. Relative ot the internal_offset
+
+
+
 ---@class ScribeButtonFormDefinition : ScribeBasicFormDefinition
 ---@field name string|nil form name, if you want a static one. Otherwise, a autogenerated oen will be used.
 ---@field label string|nil text on the button
 ---@field is_exit boolean|nil if true, the button will close the form on exit. does not work with 'item'.
 ---@field texture Texture|nil texture to show, if wanted
----@field texture_pressed Texture|nil 
+---@field texture_pressed Texture|nil if texture is valid, and this is valid, show texture_pressed instead of texture when button pressed
 ---@field item ItemName|nil item to appear on the button. Does not work with 'texture' or 'texture_pressed'
----@field background Texture|nil the texture to be shown behind the main one
----@field background_hovered Texture|nil the texture to be shown behind the main one when hovered
----@field background_pressed Texture|nil the texture to be shown behind the main one when pressed
----@field background_middle Rect|nil the middle of the background texture, to make it a 9-slice tile
----@field background_use_alpha boolean|nil should the bg images use their alpha channel?
----@field background_tint ColorSpec|nil tint for normal button
----@field background_tint_hovered ColorSpec|nil tint for hovered button
----@field background_tint_pressed ColorSpec|nil tint for pressed button
----@field font ScribeFontStyle|nil Font permutation.
----@field border boolean|nil draw the border or not
----@field internal_offset vec2|nil offset the contents of the button without resize.
----@field padding Rect|nil padding around the middle. Relative ot the internal_offset
 ---@field sound string sound to play when clicked.
+---@field style_any ScribeButtonStateStyle|nil Style when no other state specifies it. Global styles override this.
+---@field style_normal ScribeButtonStateStyle|nil Style in the normal state
+---@field style_hovered ScribeButtonStateStyle|nil Style in the hovered state
+---@field style_pressed ScribeButtonStateStyle|nil Style in the pressed state
+---@field style_all ScribeButtonStateStyle|nil Style in all states, overriding global style, but not overriding style set per state per element.
+
+
+
 
 --[[TESTING]]
 
@@ -1010,18 +1109,34 @@ local function gui_test_func(context)
             tooltip="The first Button",
             width=2,
             height=1,
-            padding=0,
-            --background="Transparent.png",
+            --padding=0,
             --background_hovered="Transparent.png",
             --background_pressed="Transparent.png",
             position={x=1,y=0},
-            font = {
-                style="mono",
-                bold=true,
-                italic=true,
-                color="#FF0000",
-                size=20
-            }
+            style_all={
+                --background="Transparent.png",
+                font = {
+                    style="mono",
+                    bold=true,
+                    italic=true,
+                    size=20
+                },
+            },
+            style_normal={
+                font={
+                    color="#ff0000",
+                },
+            },
+            style_hovered={
+                font={
+                    color="#ffff00",
+                },
+            },
+            style_pressed={
+                font={
+                    color="#ff00ff",
+                },
+            },
         },
         function(event)
             minetest.log("Button1 pressed")
