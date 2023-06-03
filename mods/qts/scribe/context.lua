@@ -263,8 +263,8 @@ qts.scribe.context_base = {
         else
             child.formdata.details.scrollable = false
         end
-        child.formdata.details.alignment = def.alignment
-        child.formdata.details.scrollbar_side = def.scrollbar_side
+        child.formdata.details.alignment = def.alignment or qts.scribe.allignment.MIN
+        child.formdata.details.scrollbar_side = def.scrollbar_side or qts.scribe.allignment.MIN
         --scrollbar name
         if def.scrollbar_name then
             child.formdata.details.scrollbar_name = def.scrollbar_name
@@ -409,8 +409,8 @@ qts.scribe.context_base = {
         else
             child.formdata.details.scrollable = false
         end
-        child.formdata.details.alignment = def.alignment
-        child.formdata.details.scrollbar_side = def.scrollbar_side
+        child.formdata.details.alignment = def.alignment or qts.scribe.allignment.MIN
+        child.formdata.details.scrollbar_side = def.scrollbar_side or qts.scribe.allignment.MIN
         --scrollbar name
         if def.scrollbar_name then
             child.formdata.details.scrollbar_name = def.scrollbar_name
@@ -559,6 +559,71 @@ qts.scribe.context_base = {
         return self
     end,
 
+    ---Create an editable text element
+    ---@param self ScribeContext
+    ---@param def ScribeTextInputFormDefinition
+    ---@param callback ScribeCallbackFunction|nil
+    ---@return ScribeContext self
+    text_entry = function(self, def, callback)
+        local childformdata = common_create_formdata(self)
+        common_build_child_formdata(self, childformdata, def, "text_entry")
+        common_build_child_size(self, childformdata, def, {x=1,y=1})
+        
+        
+        childformdata.details.name = def.name or qts.scribe.next_element_name("text_entry")
+        childformdata.details.label = def.label or ""
+        if def.obscure_content then
+            childformdata.details.obscure_content = true
+            childformdata.details.multiline = false
+        else
+            childformdata.details.obscure_content = false
+            childformdata.details.default_value = def.default_value or ""
+            
+            if def.persistant_text or def.persistant_text == nil then
+                local name = childformdata.details.name
+                self:refresh_callback(function (event)
+                    if event.fields[name] then
+                        if event.userdata._scribe == nil then
+                            event.userdata._scribe = {}
+                        end
+                        --store the value
+                        event.userdata._scribe[name] = event.fields[name]
+                    end
+                end)
+
+                --fetch the value
+                if self.userdata._scribe and self.userdata._scribe[childformdata.details.name] then
+                    childformdata.details.default_value = self.userdata._scribe[childformdata.details.name]
+                end
+            end
+            
+            if def.multiline then
+                childformdata.details.multiline = true
+            else
+                childformdata.details.multiline = false
+            end
+
+        end
+        childformdata.details.border = def.border
+        if childformdata.details.border == nil then
+            childformdata.details.border = true
+        end
+        childformdata.details.font = def.font
+        childformdata.details.close_on_enter = def.close_on_enter
+
+        
+
+        --add the child
+        self.formdata.children[#self.formdata.children+1] = childformdata
+
+        --add the function
+        if callback then
+            self.callbacks[childformdata.details.name] = callback
+        end
+
+        return self
+    end,
+
     ---Create an Image element. Can show a texture or an item
     ---@param self ScribeContext
     ---@param def ScribeImageFormDefinition
@@ -684,6 +749,26 @@ qts.scribe.context_base = {
         return self
     end,
 
+    ---Add a callback function to run when GUI is refreshed. More than 1 can be added.
+    ---@param self ScribeContext
+    ---@param callback ScribeCallbackFunction
+    refresh_callback = function(self, callback)
+        if self.callbacks.refresh then
+            if type(self.callbacks.refresh) == "function" then
+                local f =self.callbacks.refresh
+                self.callbacks.refresh = {
+                    f,
+                    callback
+                } 
+            elseif type(self.callbacks.refresh) == "table" then
+                self.callbacks.refresh[#self.callbacks.refresh+1] = callback
+            end
+        else
+            self.callbacks.refresh = callback
+        end
+        return self
+    end,
+
     ---Add an arbitrary callback function to run when the callback is named. Only one can be added with the same name.
     ---@param self ScribeContext
     ---@param callback ScribeCallbackFunction
@@ -787,7 +872,7 @@ qts.scribe.new_context = qts.scribe.context_base.create
 ---| "horizontal_box"
 ---| "rect"
 ---| "text"
----| "textentry"
+---| "text_entry"
 ---| "image"
 
 ---@class ScribeFormDetails
@@ -843,13 +928,24 @@ qts.scribe.new_context = qts.scribe.context_base.create
 ---@field scrollbar_autohide boolean|nil automatically hide the scrollbar when there are not enough elements for the list to be scrollable. Default to true.
 
 ---@class ScribeTextFormDefinition : ScribeBasicFormDefinition
----@field name string|nil form name, if you want a static one. Otherwise, a autogenerated name will be used.
+---@field name string|nil form name, if you want a static one. Otherwise, an autogenerated name will be used.
 ---@field text string|nil the text to display. May have markups, though not <global>.
 ---@field font ScribeFontStyle|nil the label font. Color is unused.
 ---@field vertical_allignment ScribeFormAllignment|nil the vertical allignment of the text, defaults to CENTER
 ---@field horizontal_allignment ScribeFormAllignment|nil the horizontal allignment of the text, defaults to CENTER
 ---@field background_color ColorSpec|"none"|nil the color of the background, defaults to transparent
 ---@field margin number|nil page margin in pixels
+
+---@class ScribeTextInputFormDefinition : ScribeBasicFormDefinition
+---@field name string|nil form name, if you want a static one. Otherwise, an autogenerated name will be used.
+---@field label string|nil Label for the field, appears in the upper-left, above the TextInput form.
+---@field default_value string|nil If supplied and supported, the default text in the field.
+---@field obscure_content boolean|nil if true, the field will show a "*" instead of the actual character typed in. Used for passwords. Incompatable with `multiline`.
+---@field multiline boolean|nil If true, the field will support multiline text. Incompatable with `obscure_content`.
+---@field border boolean|nil if true, show the default border. Defaults to true.
+---@field font ScribeFontStyle|nil the text font.
+---@field close_on_enter boolean|nil if true, close the UI on text submission.
+---@field persistant_text boolean|nil if true, the text entered is maintained across refreshes. Default is true
 
 ---@class ScribeRectFormDefinition : ScribeBasicFormDefinition
 ---@field color ColorSpec|"none"|nil the color of the background, or nil/"none" for invisible
@@ -898,7 +994,8 @@ local function gui_test_func(context)
         context.userdata.label_size = 16
     end
 
-    context:container({
+    context
+    :container({
         --texture="gui_formbg.png",
         width=10,
         height=10,
@@ -959,14 +1056,16 @@ local function gui_test_func(context)
         :vertical_box({
             position={x=0,y=1.1},
             alignment=qts.scribe.allignment.LEFT,
-            scrollable=false,
+            scrollable=true,
             spacing={x=0.1,y=0.1},
         }, function(context_v1)
-            context_v1:image({
+            context_v1
+            :image({
                 width=2,
                 height=2,
                 texture="bubble.png",
                 tooltip="bubbles!",
+                visibility=qts.scribe.visibility.COLLAPSED,
             })
             :image({
                 width=2,
@@ -974,23 +1073,39 @@ local function gui_test_func(context)
                 texture="qtcore_flame_animated.png",
                 animation={
                     count=8,
-                    duration=90,
+                    duration=120,
                     start=1
                 },
                 tooltip="fire!",
+                visibility=qts.scribe.visibility.COLLAPSED,
             })
             :image({
                 width=2,
                 height=2,
                 item="overworld:marble",
                 tooltip="marble!",
+                visibility=qts.scribe.visibility.COLLAPSED,
             })
             :rect({
                 width=2,
                 height=2,
                 color="#505050FF",
                 tooltip ="DepressingGrey",
+                visibility=qts.scribe.visibility.COLLAPSED,
             })
+            :text_entry({
+                name="textentry1",
+                width=4,
+                height=2,
+                --close_on_enter=true,
+                --multiline=true,
+                --border=false,
+                font={size=24},
+                --obscure_content=true,
+
+            }, function (event)
+                minetest.log("textentry1 pressed:"..dump(event.fields.textentry1))
+            end)
         end)
         --[[
         :horizontal_box({
@@ -1153,7 +1268,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
     if formname == "qts:scribe_test" then
         minetest.log("Fields: " ..dump(fields))
         
-        local event = qts.scribe.new_event(player, player:get_pos(), formname, userdata, fields, 
+        local event = qts.scribe.new_event(player, player:get_pos(), formname, userdata, callbacks, fields, 
             function (context)
                 gui_test_func(context)
                 userdata = context.userdata
