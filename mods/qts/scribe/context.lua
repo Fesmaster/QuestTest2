@@ -1106,7 +1106,7 @@ local function gui_test_func(context)
         
         :button({
             label="Button1",
-            tooltip="The first Button",
+            tooltip={text="The first Button", bgcolor="#000000", fgcolor="#00FFFF"},
             width=2,
             height=1,
             --padding=0,
@@ -1179,8 +1179,8 @@ local function gui_test_func(context)
                 width=2,
                 height=2,
                 texture="bubble.png",
-                tooltip="bubbles!",
-                visibility=qts.scribe.visibility.COLLAPSED,
+                tooltip={text="bubbles!",fgcolor="#000000", bgcolor="#FFFFFF"},
+                --visibility=qts.scribe.visibility.COLLAPSED,
             })
             :image({
                 width=2,
@@ -1212,6 +1212,7 @@ local function gui_test_func(context)
                 name="textentry1",
                 width=4,
                 height=2,
+                tooltip={text="Enter some text here", fgcolor="#06FFFF", bgcolor="#040404"},
                 --close_on_enter=true,
                 --multiline=true,
                 --border=false,
