@@ -54,6 +54,7 @@ end
 	vector.unit.Y - unit Y vector  
 	vector.unit.Z - unit Z vector  
 ]]
+---@type {X:Vector,Y:Vector,Z:Vector}
 vector.unit = qts.readonly_table({
 	X = vector.readonly(1,0,0),
 	Y = vector.readonly(0,1,0),
