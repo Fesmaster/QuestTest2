@@ -28,6 +28,15 @@ qts.scribe.orientation = {
     VERTICAL=1
 }
 
+---@enum ScribeInventorySource
+qts.scribe.inventory_source = {
+    CURRENT_NODE=0,
+    CURRENT_PLAYER=1,
+    SPECIFIC_PLAYER=2,
+    SPECIFIC_NODE=3,
+    DETACHED=4,
+}
+
 qts.scribe.scrollbar_ticks_per_unit = 10 --gained from imperical testing
 --formula for scrollbar ticks: (internal_size - external_size) * ticks_per_unit
 --formula for scrollbar size: external_size / internal_size * ticks_per_unit

@@ -602,5 +602,79 @@ return {
 
         return style..btn..tooltip
     end,
+
+    ---@param formdata ScribeFormdata
+    inventory = function(formdata)
+        local pos = {x=0,y=0}
+        if formdata.details.position ~= nil then
+            pos = qts.scribe.vec2.copy(formdata.details.position)
+        end
+
+        --build style element first. It must always exist
+        local outstr = "style_type[list;size="..
+            qts.scribe.vec2.tostring(formdata.details.slot_size)..";spacing="..
+            qts.scribe.vec2.tostring(formdata.details.slot_spacing).."]"
+
+        -- list colors are a universal setting, and cannot be set per-element
+        --[[ this uses QT2 Defaults, not minetest defaults.
+        outstr = outstr .. "\nlistcolors["..
+        qts.select(formdata.details.background_color,       formdata.details.background_color,          "#00000069").. ";" ..
+        qts.select(formdata.details.background_color_hover, formdata.details.background_color_hover,    "#5A5A5A")  .. ";" ..
+        qts.select(formdata.details.border_color,           formdata.details.border_color,              "#141318")  .. ";" ..
+        qts.select(formdata.details.tooltip_color,          formdata.details.tooltip_color,             "#30434C")  .. ";" ..
+        qts.select(formdata.details.tooltip_text_color,     formdata.details.tooltip_text_color,        "#FFFFFF")  .. "]"
+        --]]
+        
+        --list element
+        local list_src = ""
+        if formdata.details.source == qts.scribe.inventory_source.CURRENT_PLAYER then
+            list_src = "current_player"
+        elseif formdata.details.source == qts.scribe.inventory_source.SPECIFIC_NODE then
+            minetest.log("Source Name in translator: " .. dump(formdata.details.sourcename))
+            list_src = "nodemeta:"..
+                qts.select(
+                    type(formdata.details.sourcename)=="string", 
+                    formdata.details.sourcename, 
+                    ""..formdata.details.sourcename.x..","..formdata.details.sourcename.y..","..formdata.details.sourcename.z
+                )
+            minetest.log("Current list_src = " .. list_src)
+        elseif formdata.details.source == qts.scribe.inventory_source.SPECIFIC_PLAYER then
+            list_src = "player:"..formdata.details.sourcename
+            
+        elseif formdata.details.source == qts.scribe.inventory_source.DETACHED then
+            list_src = "detached:"..formdata.details.sourcename
+        end
+
+        if formdata.details.orientation == qts.scribe.orientation.HORIZONTAL then
+            --normal list orientation - easy!
+            outstr = outstr .. "\nlist[" .. list_src .. ";" .. formdata.details.listname .. ";"..
+                qts.scribe.vec2.tostring(pos)..";"..
+                qts.scribe.vec2.tostring(formdata.details.slots)..";"..
+                formdata.details.starting_item_index .. "]"
+        else
+            --vertical list orientation - hard!
+            --not supported by formspec, so we have to make a bunch of individual lists that are 1 element wide and space them correctly.
+            local running_start = formdata.details.starting_item_index
+            local running_pos = qts.scribe.vec2.copy(pos)
+            --for each column
+            for x = 0, formdata.details.slots.x-1 do
+                --add vertical list strip
+                outstr = outstr .. "\nlist[" .. list_src .. ";" .. formdata.details.listname .. ";"..
+                    qts.scribe.vec2.tostring(running_pos)..";"..
+                    "1,"..formdata.details.slots.y..";"..
+                    running_start .. "]"
+
+                --update the start and running pos
+                running_pos.x = running_pos.x + formdata.details.slot_size.y + formdata.details.slot_spacing.y
+                running_start = running_start + formdata.details.slots.y
+            end
+        end
+
+        if formdata.details.use_list_ring then
+            outstr = outstr .. "\nlistring["..list_src..";"..formdata.details.listname.."]"
+        end
+
+        return outstr
+    end,
 }
 

@@ -881,6 +881,73 @@ qts.scribe.context_base = {
         return self
     end,
 
+    ---Create an inventory element
+    ---@param self ScribeContext
+    ---@param def ScribeInventoryFormDefinition
+    ---@return ScribeContext self
+    inventory = function(self, def)
+        local childformdata = common_create_formdata(self)
+        common_build_child_formdata(self, childformdata, def, "inventory")
+
+        local slot_size = def.slot_size or {x=1,y=1}
+        local slot_spacing = def.slot_spacing or {x=0.25,y=0.25}
+        childformdata.details.slot_size = slot_size
+        childformdata.details.slot_spacing = slot_spacing
+
+        local actual_size = {x=0,y=0}
+        local slots = {x=0,y=0}
+        if def.use_actual_size then
+            actual_size.x = def.width or slot_size.x
+            actual_size.y = def.height or slot_size.y
+
+            --calcualte the slots
+            slots.x = 1 + math.floor((actual_size.x - slot_size.x) / (slot_size.x+slot_spacing.x))
+            slots.y = 1 + math.floor((actual_size.y - slot_size.y) / (slot_size.y+slot_spacing.y))
+        else
+            slots.x = def.width or 1
+            slots.y = def.height or 1
+
+            --calculate the actual size
+            actual_size.x = (slots.x * slot_size.x) + ((slots.x-1) * slot_spacing.x)
+            actual_size.y = (slots.y * slot_size.y) + ((slots.y-1) * slot_spacing.y)
+        end
+
+        --set the size and slots
+        childformdata.details.size = actual_size
+        childformdata.details.slots = slots
+        
+        --source
+        childformdata.details.source = def.source or qts.scribe.inventory_source.CURRENT_PLAYER
+        if type(def.sourcename) == "table" then
+            childformdata.details.sourcename = vector.new(def.sourcename)
+            minetest.log("Source Vector: " .. vector.to_string(childformdata.details.sourcename))
+        else
+            childformdata.details.sourcename = def.sourcename
+        end
+        if childformdata.details.source == qts.scribe.inventory_source.CURRENT_NODE then
+            childformdata.details.source = qts.scribe.inventory_source.SPECIFIC_NODE
+            childformdata.details.sourcename = vector.new(self.position)
+        end
+        childformdata.details.listname = def.listname or "main"
+
+        childformdata.details.starting_item_index = def.starting_item_index or 0
+        childformdata.details.orientation = def.orientation or qts.scribe.orientation.HORIZONTAL
+        childformdata.details.use_list_ring = def.use_list_ring
+        
+        --colors
+        --[[ List colors are a universal setting, and cannot be set per-element
+        childformdata.details.background_color          = def.background_color          or "#00000069"
+        childformdata.details.background_hover_color    = def.background_hover_color    or "#5A5A5A"
+        childformdata.details.border_color              = def.border_color              or "#141318"
+        childformdata.details.tooltip_color             = def.tooltip_color             or "#30434C"
+        childformdata.details.tooltip_text_tint         = def.tooltip_text_tint         or "#FFFFFF"
+        --]]
+        
+        --add the child
+        self.formdata.children[#self.formdata.children+1] = childformdata
+        return self
+    end,
+
     ---Add a callback function to run when GUI is closed. More than 1 can be added.
     ---@param self ScribeContext
     ---@param callback ScribeCallbackFunction
@@ -1034,6 +1101,7 @@ qts.scribe.new_context = qts.scribe.context_base.create
 ---| "text"
 ---| "text_entry"
 ---| "image"
+---| "inventory"
 
 ---@class ScribeFormDetails
 ---@field type ScribeFormType
@@ -1151,7 +1219,23 @@ qts.scribe.new_context = qts.scribe.context_base.create
 ---@field style_toggled_pressed ScribeButtonStateStyle|nil Style in the pressed state. Used when toggled on.
 ---@field style_toggled_all ScribeButtonStateStyle|nil Style in all states, overriding global style, but not overriding style set per state per element. Used when toggled on.
 
+---@class ScribeInventoryFormDefinition : ScribeBasicFormDefinition
+---@field source ScribeInventorySource|nil The source for the inventory. Defaults to CURRENT_PLAYER
+---@field sourcename string|Vector|nil If the source is specified or detached, then this is the specified name. A vector or a vector string can be used for nodes.
+---@field listname string|nil Name of the inventory list.
+---@field starting_item_index integer|nil The starting item index for the area. Default: 0 (no offset) - This is 0-indexed!
+---@field use_list_ring boolean|nil If true, the inventory is added to the list ring.
+---@field slot_size vec2|nil The size of the inventory slots
+---@field slot_spacing vec2|nil The size of the inventory slot spacing
+---@field use_actual_size boolean|nil if true, the width, height supplied will be actual UI size and not number of elements
+---@field orientation ScribeFormOrientation|nil The orientation.Defaults to HORIZONTAL
 
+---@class ScribeInventoryFormColors Colors for building an inventory
+---@field background_color ColorSpec|nil The background color
+---@field background_hover_color ColorSpec|nil The background color when hovered
+---@field border_color ColorSpec|nil The border color
+---@field tooltip_color ColorSpec|nil The tooltip background color
+---@field tooltip_text_tint ColorSpec|nil The tooltip text color
 
 --[[TESTING]]
 
@@ -1168,17 +1252,43 @@ local function gui_test_func(context)
     context
     :container({
         --texture="gui_formbg.png",
-        width=10,
+        --width=10,
         height=10,
         padding={x=0.1,y=0.1},
         middle=5,
     }, function (context_c1)
         --do nothing right now.
         context_c1
+        :inventory({
+            source = qts.scribe.inventory_source.CURRENT_PLAYER,
+            sourcename = "",
+            listname = "main",
+            width=10,
+            height=4,
+            position={x=0,y=1},
+            orientation = qts.select(
+                context_c1.userdata.show_list, 
+                qts.scribe.orientation.VERTICAL, 
+                qts.scribe.orientation.HORIZONTAL
+            ),
+            slot_size = {x=0.5,y=0.5},
+            slot_spacing = {x=0.125,y=0.125},
+            use_list_ring=true,
+        })
+        :inventory({
+            source = qts.scribe.inventory_source.DETACHED,
+            sourcename = "trash",
+            listname = "main",
+            width=1,
+            height=1,
+            position={x=0,y=7},
+            use_list_ring=true,
+        })
         
         :button({
-            label="Button1",
-            tooltip={text="The first Button", bgcolor="#000000", fgcolor="#00FFFF"},
+            label="Switch List Orientation",
+            --visibility=qts.scribe.visibility.COLLAPSED,
+            tooltip={text="Switched the list orientation", bgcolor="#000000", fgcolor="#00FFFF"},
             width=2,
             height=1,
             --padding=0,
@@ -1219,6 +1329,7 @@ local function gui_test_func(context)
         
         :text({
             name="hypertext_element",
+            visibility=qts.scribe.visibility.COLLAPSED,
             text = "ABCaijk<action name=arbitrary_action_name>pqlg</action>",
             position={x=3.2,y=context_c1.userdata.label_pos},
             width=4,
@@ -1238,10 +1349,12 @@ local function gui_test_func(context)
         end)
         :seperator({
             position={x=0,y=1.05},
+            visibility=qts.scribe.visibility.COLLAPSED,
             color="#000000FF"
         })
         :vertical_box({
             position={x=0,y=1.1},
+            visibility=qts.scribe.visibility.COLLAPSED,
             alignment=qts.scribe.allignment.LEFT,
             scrollable=true,
             spacing={x=0.1,y=0.1},
