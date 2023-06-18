@@ -142,7 +142,7 @@ local ObjectRef = {
 
     ---set number of health points
     ---@param hp number
-    ---@param reason HPChangeReason
+    ---@param reason? HPChangeReason
     set_hp = function(self, hp, reason) end, -- 
     
     ---returns an `InvRef` for players, otherwise returns `nil`
@@ -732,7 +732,7 @@ vector ={
  
     ---Create vector from string
     ---@param s string format: "(x, y, z)"
-    ---@param init number optional offset into string
+    ---@param init? number optional offset into string
     ---@return Vector|nil , number
     from_string = function(s, init) end, --
  
@@ -907,9 +907,10 @@ function math.round(x) end
 ---splits a string
 ---@param str string the string to split
 ---@param seperator string the string to split on
----@param include_empty boolean defaults to false. To include emptry strings 
----@param max_splits integer max splits to make
----@param sep_is_pattern boolean defaults to false. Set to true to make the seperator treated as regex
+---@param include_empty? boolean defaults to false. To include emptry strings 
+---@param max_splits? integer max splits to make
+---@param sep_is_pattern? boolean defaults to false. Set to true to make the seperator treated as regex
+---@return string[]
 function string.split(str, seperator, include_empty, max_splits, sep_is_pattern) end
 
 ---trims the whitespaces off of the start and end of a string
