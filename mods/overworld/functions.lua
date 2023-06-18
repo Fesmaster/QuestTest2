@@ -54,14 +54,15 @@ minetest.register_abm({
 	end
 })
 
-local reed_growth_rate = qts.config("REED_GROWTH", 12, "reed growth interval")
+local reed_growth_rate = qts.config("REED_GROWTH", 12, "reed growth interval", {loadtime=true})
+local reed_growth_chance = qts.config("REED_GROWTH_CHANCE", 15, "reed growth chance", {loadtime=true})
 
 minetest.register_abm({
 	label = "Reed Growth",
 	nodenames = {"group:reeds"},
 	neighbors = {"group:soil", "group:sand", "group:water"},
 	interval = reed_growth_rate.get(),
-	chance = 15,
+	chance = reed_growth_chance.get(),
 	catch_up = true,
 	action = function(pos, node, active_object_count, active_object_count_wider)
 		--check the height of the reeds
