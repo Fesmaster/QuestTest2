@@ -475,9 +475,6 @@ function qts.ai.register_creature(name, def)
 			local damage = qts.calculate_damage(self.object, puncher, time_from_last_punch, tool_capabilities, dir)
 			local new_hp = self.object:get_hp() - damage
 			minetest.log("Punch called on entity " .. self:id_string() .. " by " ..qts.object_name(puncher) .. " Damgae: " .. dump(damage) .. " New HP: " .. dump(new_hp))
-
-			--set the HP. everything else gets the new HP
-			self.object:set_hp(new_hp, "punch")
 			
 			--item modifier functions.
 			if puncher then
@@ -523,6 +520,11 @@ function qts.ai.register_creature(name, def)
 				end
 				--destroy object and return
 				self.object:remove()
+			else
+				--set the HP, if it won't kill the entity.
+				--immortal entities that received lethal damage will get here, but their HP goes to 1.
+				--that is the job of the max function.
+				self.object:set_hp(math.max(new_hp,1), "punch")
 			end
 
 			return true
