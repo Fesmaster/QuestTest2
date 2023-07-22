@@ -18,6 +18,7 @@ dofile(minetest.get_modpath("tools").."/hoes.lua")
 dofile(minetest.get_modpath("tools").."/armor.lua")
 dofile(minetest.get_modpath("tools").."/bows.lua")
 dofile(minetest.get_modpath("tools").."/buckets.lua")
+dofile(minetest.get_modpath("tools").."/paintbrushes.lua")
 
 dofile(minetest.get_modpath("tools").."/recipes.lua")
 

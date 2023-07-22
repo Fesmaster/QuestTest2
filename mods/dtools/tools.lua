@@ -505,7 +505,7 @@ qts.register_item_modifier("testPlace", {
 	end,
 })
 
-
+--[[
 minetest.register_tool("dtools:paintbrush", {
 	description = "Paintbrush",
 	inventory_image = "dtools_paintbrush.png",
@@ -544,7 +544,7 @@ minetest.register_tool("dtools:paintbrush", {
 		end
 	end,
 })
-
+]]--
 
 minetest.register_craftitem("dtools:equipment_item", {
 	description = "Generic Equipment item",
