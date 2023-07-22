@@ -544,7 +544,7 @@ minetest.register_tool("dtools:paintbrush", {
 		end
 	end,
 })
-]]--
+--]]
 
 minetest.register_craftitem("dtools:equipment_item", {
 	description = "Generic Equipment item",

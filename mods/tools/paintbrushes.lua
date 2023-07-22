@@ -116,4 +116,4 @@ minetest.register_tool("tools:paintbrush_", {
 		end
 	end
 })
-]]--
+--]]
