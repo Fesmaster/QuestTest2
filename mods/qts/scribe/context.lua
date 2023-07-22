@@ -10,11 +10,23 @@
 
 local element_name_counter = Counter()
 
+qts.scribe.registered_styles = {}
+
 ---Create an element name for those that do not exist
 ---@param basename string
 ---@return string
 function qts.scribe.next_element_name(basename)
     return basename .. element_name_counter()
+end
+
+---Register a new GUI style
+---@param name string modname:stylename the name of the style
+---@param def ScribeStyle
+function qts.scribe.register_style(name, def)
+    if qts.scribe.registered_styles[name] ~= nil then
+        minetest.log("warning", "Scribe Style " .. name .. " is registered twice. Using the second definition.")
+    end
+    qts.scribe.registered_styles[name] = def
 end
 
 --import these datatables to make this file more writable
@@ -1236,6 +1248,21 @@ qts.scribe.new_context = qts.scribe.context_base.create
 ---@field border_color ColorSpec|nil The border color
 ---@field tooltip_color ColorSpec|nil The tooltip background color
 ---@field tooltip_text_tint ColorSpec|nil The tooltip text color
+
+---@class ScribeStyle a table with the default style values for the UI elements
+---@field use_minetest_prepend boolean|nil if true, will use the registered minetest prepend. Only works when style is applied to root context.
+---@field container ScribeContainerFormDefinition|nil default for a container form
+---@field vertical_box ScribeBoxFormDefinition|nil defaults for a vertical box form
+---@field horizontal_box ScribeBoxFormDefinition|nil defaults for a horizontal box form
+---@field text ScribeTextFormDefinition|nil defaults for a text form
+---@field text_input ScribeTextInputFormDefinition|nil defaults for a text input form
+---@field rect ScribeRectFormDefinition|nil defaults for a rect form
+---@field image ScribeImageFormDefinition|nil defaults for an image form
+---@field button ScribeButtonFormDefinition|nil defaults for a regular button form
+---@field toggle_button ScribeButtonStateStyle|nil defaults for a toggleable button form
+---@field inventory ScribeInventoryFormDefinition|nil defaults for an inventory form
+---@field inventory_colors ScribeInventoryFormColors|nil default colors for an inventory form. Only works when style is applied to root context.
+
 
 --[[TESTING]]
 
