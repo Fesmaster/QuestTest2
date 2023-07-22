@@ -1,5 +1,3 @@
-minetest.log("QTS loading!")
-minetest.log("Loading lua version: " .. _VERSION)
 qts = {}
 qts_internal = {}
 qts.path = minetest.get_modpath("qts")
@@ -12,6 +10,13 @@ minetest.craftitemdef_default.stack_max = 999
 minetest.noneitemdef_default.stack_max = 999
 
 dofile(qts.path.."/customversions.lua")
+
+--workaround to get an insecure environment into the watermark file.
+--most players won't need this to work, and most should leave it off. Its for GIT integration into version watermarking.
+qts_internal.insecure = minetest.request_insecure_environment()
+dofile(qts.path.."/watermark.lua")
+qts_internal.insecure = nil
+
 dofile(qts.path.."/worldsettings.lua")
 --load the QT2 Settings File
 
