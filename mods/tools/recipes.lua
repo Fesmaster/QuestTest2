@@ -177,3 +177,9 @@ qts.register_craft({
 	results = {"tools:bucket_wood"},
 	near = {"group:workbench"},
 })
+
+qts.register_craft({
+	ingredients = {"group:wood", "farmworks:herb_flax 8"},
+	results = {"tools:paintbrush"},
+	near = {"group:workbench"},
+})
