@@ -40,7 +40,7 @@ local function parseVersionString(str)
     return vals
 end
 
----Check if QTS is at least the veriion provided in versionstring
+---Check if QTS is at least the version provided in versionstring
 ---@param versionstring string format "<major>.<minor>.<patch>"
 function qts.is_version(versionstring)
     local testv = parseVersionString(versionstring)
