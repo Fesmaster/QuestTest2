@@ -192,6 +192,7 @@ minetest.register_node("craftable:campfire_lit", {
 	use_texture_alpha = "clip",
 	mesh = "craftable_campfire.obj",
 	light_source = 13,
+	damage_per_second=3,
 	paramtype = "light",
 	is_ground_content = false,
 	floodable = true,
