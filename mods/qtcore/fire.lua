@@ -55,6 +55,7 @@ minetest.register_node("qtcore:fire", {
 	inventory_image = "qtcore_flame.png",
 	paramtype = "light",
 	light_source = 13,
+	damage_per_second=3,
 	walkable = false,
 	buildable_to = true,
 	sunlight_propigates = true,
