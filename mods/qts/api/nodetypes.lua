@@ -737,7 +737,7 @@ function qts.register_ingot(name, def)
 			groups = groups_node,
 			sounds = def.sounds,
 			on_rotate = function(pos, node, user, mode, new_param2)
-				if mode == qts.screwdriver.ROTATE_FACE then
+				if mode == qts.HAMMER_FUNCTION.ROTATE_FACE then
 					return true
 				else
 					return false
