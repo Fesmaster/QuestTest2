@@ -1,5 +1,8 @@
 # Journal
-Welcome, traveler, to this land. I leave this journal to you, for I have passed from this world long before, but know you will come. I cannot promise your journey will be smooth, but within these pages you will find my notes, may they help you survive, nay, conquer this world.
+
+Welcome, traveler, to this land. 
+I leave this journal to you, for I have passed from this world long before, but know you will come. I cannot promise your journey will be smooth, but within these pages you will find my notes, may they help you survive, nay, conquer this world.
+
 ~ Darin Mysticus
 
 ## Starting Off
