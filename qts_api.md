@@ -455,7 +455,7 @@ There are lots of fields in `def` that should not be used, and will be overriden
 * `paramtype2 = "wallmounted"`
 * `group.torch = 1`
 * `group.attached_node =1`
-* `sunlight_propigates = true`
+* `sunlight_propagates = true`
 * `on_rotate = false`
 * `mesh = <various>`
 * `selection_box = <various>`

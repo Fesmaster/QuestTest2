@@ -102,7 +102,7 @@ end
 
 function qtcore.tool_sounds_default(table)
 	table = table or {}
-	table.breaks = table.breaks or {name = "default_tool_breaks", gain = 1.0}
+	table.breaks = table.breaks or {name = "sounds_tool_breaks", gain = 1.0}
 	return table
 end
 

@@ -6,7 +6,7 @@
 	This makes them rather expensive.
 ]]
 
-qts.EXPLOSION_MAX_STEPS = qts.settings.get_num('EXPLOSION_MAX_STEPS') or 1000
+qts.EXPLOSION_MAX_STEPS = qts.config("EXPLOSION_MAX_STEPS", 256, "How many steps are used when tracing an explotion ray.", {})
 --qts.EXPLOSION_DEFAULT_STEP_SIZE = 0.9
 
 --node found list
@@ -260,7 +260,7 @@ function qts.explode_ray(pos, slopeVector, stepSize, power, returnFound, exclude
 	
 	local DEBUG_ITERS = 0
 	local prevdist = 0
-	for i = 1, qts.EXPLOSION_MAX_STEPS do
+	for i = 1, qts.EXPLOSION_MAX_STEPS.get() do
 		
 		if ( --breaking rays that have NAN directions
 				check.x ~= check.x 

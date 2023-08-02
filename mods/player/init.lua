@@ -10,10 +10,9 @@ dofile(minetest.get_modpath("player").."/api.lua")
 minetest.settings:set_bool("aux1_decends", false)
 minetest.settings:set_bool("always_fly_fast", true)
 
-Player_API.SPRINT_MODE = 1
-Player_API.SPRINT_INCREASE = 0.01
-Player_API.DOUBLECLICK_TIME = 0.50
-Player_API.SPRINT_MIN_SPEED = 0.75
+Player_API.SPRINT_INCREASE = qts.config("SPRINT_INCREASE", 0.01, "ammount of speed you gain each frame when starting to sprint")
+Player_API.DOUBLECLICK_TIME = qts.config("DOUBLECLICK_TIME", 0.50, "max ammount of time between clicks to make it count as a double click")
+Player_API.SPRINT_MIN_SPEED = qts.config("SPRINT_MIN_SPEED",0.75,"blocks per second you must be moving at to start sprinting")
 --these two were moved to player modifier system
 --Player_API.SPRINT_MULT = 2.5
 --Player_API.SNEAK_MULT = 0.75
@@ -54,37 +53,44 @@ Player_API.register_on_doubleclick(function(player, control)
 end)
 
 ---[[
+---Special function to rotate the inventory in devmode
+---@param player Player
+---@param isClicked boolean
+---@param newEvent boolean
 Player_API.register_on_special_key(function(player, isClicked, newEvent)
-	if newEvent then
-		minetest.log("SPECIAL")
+	if newEvent and isClicked and qts.ISDEV then
+		--minetest.log("SPECIAL")
+		--rotate the inventory
+
+		local inv = player:get_inventory()
+		if inv == nil then return end
+		local mainlist = inv:get_list("main")
+		local newlist = {}
+		local list_width = 10
+		local fullList = #mainlist --40
+		for i=0,#mainlist do
+			local newindex = i - list_width
+			if newindex < 1 then
+				newindex = newindex + fullList
+			end
+			newlist[newindex] = mainlist[i]
+		end
+
+		inv:set_list("main", newlist)
 	end
 end)
 --]]
 
 
 --[[DEBUG STUFF]]
+if qts.ISDEV then
 minetest.register_chatcommand("phys", {
 	params = "<text>",
 	description = "Log your physics overrdie",
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
 		local phys = player:get_physics_override()
-		minetest.log(dump(phys))
+		minetest.log("Physics Override for player: [" .. name .. "] : " .. dump(phys))
 	end
 })
-
-minetest.register_chatcommand("sprintmode", {
-	params = "<number>",
-	description = "Change sprint mode",
-	func = function(name, param)
-		minetest.log(dump(param))
-		if param == '1' then
-			Player_API.SPRINT_MODE = 1
-		elseif param == '2' then
-			Player_API.SPRINT_MODE = 2
- 		else
-			Player_API.SPRINT_MODE = 3
-		end
-	end
-})
-
+end

@@ -2,6 +2,7 @@
 Bandit Camp generation
 
 --]]
+--TODO: Change these to settings
 local MIN_CLASSES_PER_CHEST = 3
 local MAX_CLASSES_PER_CHEST = 8
 local MAX_ITEMS_PER_CLASS = 8
@@ -41,6 +42,10 @@ end
     Trace upwards to find the top of the ground  
     will return null if no ground found
 ]]
+---Trace upwards to find the ground
+---@param pos Vector
+---@param delta number
+---@return Vector|nil
 local function trace_up(pos, delta)
     local found_earth = false
     for y= -delta, delta do
@@ -68,27 +73,27 @@ This can later be randomized, based off of biome
 local function get_camp_materials_plains()
     local wood = woodtypes_plains[math.random(#woodtypes_plains)]
     return {
-        log = "default:"..wood.."_log",
-        wood = "default:"..wood.."_wood_planks",
-        fence = "default:"..wood.."_wood_fence",
-        crate = "default:crate_"..wood.."",
+        log = "overworld:"..wood.."_log",
+        wood = "overworld:"..wood.."_wood_planks",
+        fence = "overworld:"..wood.."_wood_fence",
+        crate = "furnature:crate_"..wood.."",
 
-        ladder = "default:ladder",
-        campfire = "default:campfire_lit",
-        torch = "default:torch",
+        ladder = "furnature:ladder_"..wood,
+        campfire = "craftable:campfire_lit",
+        torch = "craftable:torch",
     }
 end
 
 local function get_camp_materials_prarie()
     return {
-        log = "default:rosewood_log",
-        wood = "default:rosewood_wood_planks",
-        fence = "default:rosewood_wood_fence",
-        crate = "default:crate_rosewood",
+        log = "overworld:rosewood_log",
+        wood = "overworld:rosewood_wood_planks",
+        fence = "overworld:rosewood_wood_fence",
+        crate = "furnature:crate_rosewood",
 
-        ladder = "default:ladder",
-        campfire = "default:campfire_lit",
-        torch = "default:torch",
+        ladder = "furnature:ladder_rosewood",
+        campfire = "craftable:campfire_lit",
+        torch = "craftable:torch",
     }
 end
 
@@ -142,17 +147,17 @@ local function build_fire_pit(pos, materials)
 end
 
 local banit_crate_items = {
-    "default:axe_bronze", "default:axe_copper", "default:axe_flint", 
-    "default:bread", "default:bronze_alloy", "default:bronze_bar", "default:bucket",
-    "default:charcoal", "default:coal", "default:clay_lump", "default:coconut", "default:copper_bar", "default:dishes_clay",  
-    "default:herb_bloodbulb", "default:herb_flax", "default:herb_grain", "default:herb_milfoil",
-    "default:herb_potatoe", "default:herb_wolfshood", "default:herb_carrot", "default:herb_goard", "default:herb_onion",
-	"default:hammer_stone", "default:knife_flint",  "default:paper",
-	"default:seed_bloodbulb", "default:seed_flax", "default:seed_grain", "default:seed_milfoil", "default:seed_potatoe", 
-    "default:seed_wolfshood", "default:seed_carrot", "default:seed_goard", "default:seed_onion",
-	"default:shovel_bronze", "default:shovel_copper", "default:sword_bronze", "default:sword_copper",
-	"default:tinderbox", "default:flint", "default:tinder", "default:axe_rusted", "default:knife_rusted", "default:knife_copper", 
-    "default:knife_bronze", "default:shovel_rusted", "default:sword_rusted", "default:hoe_rusted", "default:hoe_copper", "default:hoe_bronze"
+    "tools:axe_bronze", "tools:axe_copper", "tools:axe_flint", 
+    "foodstuffs:bread", "overworld:bronze_alloy", "overworld:bronze_bar", "tools:bucket_wood",
+    "craftable:charcoal", "overworld:coal", "overworld:clay_lump", "overworld:coconut", "overworld:copper_bar", "foodstuffs:dishes_clay",  
+    "farmworks:herb_bloodbulb", "farmworks:herb_flax", "farmworks:herb_grain", "deffarmworksault:herb_milfoil",
+    "farmworks:herb_potatoe", "farmworks:herb_wolfshood", "farmworks:herb_carrot", "farmworks:herb_goard", "farmworks:herb_onion",
+	"tools:hammer_stone", "tools:knife_flint",  "craftable:paper",
+	"farmworks:seed_bloodbulb", "farmworks:seed_flax", "farmworks:seed_grain", "farmworks:seed_milfoil", "farmworks:seed_potatoe", 
+    "farmworks:seed_wolfshood", "farmworks:seed_carrot", "farmworks:seed_goard", "farmworks:seed_onion",
+	"tools:shovel_bronze", "tools:shovel_copper", "tools:sword_bronze", "tools:sword_copper",
+	"craftable:tinderbox", "overworld:flint", "craftable:tinder", "tools:axe_rusted", "tools:knife_rusted", "tools:knife_copper", 
+    "tools:knife_bronze", "tools:shovel_rusted", "tools:sword_rusted", "tools:hoe_rusted", "tools:hoe_copper", "tools:hoe_bronze"
 }
 local function build_crate(pos, materials)
     minetest.set_node(pos, {name=materials.crate})
@@ -164,9 +169,12 @@ local function build_crate(pos, materials)
         --get the item and count
         local itemname = banit_crate_items[math.random(#banit_crate_items)]
         local item = ItemStack(itemname)
-        local stack_max = minetest.registered_items[itemname].stack_max
+        local stack_max = 1
+        if minetest.registered_items[itemname] then
+            stack_max = minetest.registered_items[itemname].stack_max
+        end
         if stack_max > 1 then
-            item:set_count(math.random(1,MAX_ITEMS_PER_CLASS))
+            item:set_count(math.random(1,math.min(MAX_ITEMS_PER_CLASS, stack_max)))
         end
         --place into inventory scattered
         local placed = false
@@ -348,6 +356,9 @@ local features = {
     build_fire_pit,
     build_watch_tower,
 }
+---Build a Camp
+---@param pos Vector
+---@param materials table
 local function build_camp(pos, materials)
     local featureCount = math.random(CAMP_FEATURES_MIN, CAMP_FEATURES_MAX)
     for i =1,featureCount do
@@ -357,6 +368,18 @@ local function build_camp(pos, materials)
         if (vAdjust) then
             --pick a random feature and build it
             features[math.random(#features)](vAdjust, materials)
+        end
+    end
+    --make the spawner
+    local needs_spawner = true
+    local attempt_count = 0
+    while(needs_spawner and attempt_count < 10) do
+        local spawner_offset = trace_up(pos + vector.new(math.random(-CAMP_SIZE/2, CAMP_SIZE/2), 0, math.random(-CAMP_SIZE/2, CAMP_SIZE/2)), CAMP_SIZE)
+        if spawner_offset then
+            qts.ai.create_spawner_from_config(spawner_offset+vector.new(0,math.random(2,4),0), "mobs:spawnconfig_bandit_weapons") 
+            needs_spawner=false
+        else
+            attempt_count=attempt_count+1
         end
     end
 end

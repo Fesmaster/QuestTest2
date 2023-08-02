@@ -1,4 +1,6 @@
 # QuestTest2
+![Icon](./menu/icon.png)
+
 QuestTest2 Game for Minetest
 
 
@@ -27,8 +29,18 @@ This game is not intended to be run as a multiplayer or server. You can try, it 
 
 ## Current Status
 
-This project is currently is a semi-closed alpha. It is nowhere near feature complete.
+This project is currently in alpha. It is nowhere near feature complete.
 
 If you found this by chance, congratulations! Feel free to report any bugs you find, by creating an Issue.
 
 For a list of planned features, check out the projects tab on GitHub. 
+
+## FAQ
+
+Q: How do I do X?
+
+A: Please refer to the Journal found in the Journal directory for guided information, or the in-game crafting guide. If you can't find it, create an issue and we will add that thing to the document.
+
+Q: What is up with the name?
+
+A: The game itself is a Quest, meaning, a search, a hunt. We who make the game search for knowledge and experience, while we who play the game search for fun, or maybe just a bit more coal.

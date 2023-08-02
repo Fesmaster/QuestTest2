@@ -26,7 +26,7 @@ minetest.register_chatcommand("playground", {
 			for x = -20,20 do
 			for z = -20,20 do
 				local p = {x=pos.x + x, y = pos.y - 1, z = pos.z + z}
-				minetest.set_node(p, {name = "default:stone_cobble"})
+				minetest.set_node(p, {name = "overworld:granite"})
 				
 			end
 			end
@@ -49,11 +49,13 @@ minetest.register_chatcommand("punchme", {
 	params = "<text>",
 	description = "Player punches themselves in the arm",
 	func = function(name, param)
+		---@type Player
 		local player = minetest.get_player_by_name(name)
-		player:punch(player, 1.0, {
-				full_punch_interval = 0.9,
-				damage_groups = {fleshy = 50},
-			}, nil)
+		local wielditem = player:get_wielded_item()
+		if wielditem then
+			local toolcaps = wielditem:get_tool_capabilities()
+			player:punch(player, 1.0, toolcaps, vector.new(0,0,0))
+		end
 	end,
 })
 
@@ -91,7 +93,7 @@ minetest.register_chatcommand("randpos_check", {
 				2
 			)
 			if pos then
-				minetest.set_node(pos, {name="default:copper_block"})
+				minetest.set_node(pos, {name="overworld:copper_block"})
 				--player:set_pos(pos)
 			else
 				minetest.log("No position returned. try: " .. i)
@@ -111,7 +113,7 @@ minetest.register_chatcommand("randpos_clear", {
 		for z = -32, 32 do
 			local p = vector.add({x=x,y=y,z=z}, pos)
 			local node = minetest.get_node_or_nil(p)
-			if node and node.name == "default:copper_block" then
+			if node and node.name == "overworld:copper_block" then
 				minetest.set_node(p, {name="air"})
 			end
 		end

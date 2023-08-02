@@ -27,7 +27,7 @@
 	ADD_damgae_bonus_fleshy			= damage bonus to what the player deals when fleshy
 	ADD_damage_bonus_stabby			= damage bonus to what the player deals when stabby
 	ADD_damage_bonus_psycic			= damage bonus to what the player deals when psycic
-	ADD_damage_bonus_<group>		= damage bonus for your custom <group> of damage NOT returned in the qts.get_player_bonus_damages() function
+	ADD_damage_bonus_<group>		= damage bonus for your custom <group> of damage. NOT returned in the qts.get_player_bonus_damages() function
 	ADD_health_bonus				= bonus to player health
 
 	All these keys have special getter functions for utility, more can be added and gotten via:
@@ -52,8 +52,10 @@ local handle_counter = Counter()
 ]]
 function qts.update_player_modifiers(player)
 	local name = player:get_player_name()
+	---@type table<string,number|boolean>[]
 	local mods = player_modifer_lists[name]
 	if not mods then return end
+	---@type table<string,number|boolean>
 	local sum_mods = {
 		speed = 1,
 		jump = 1,

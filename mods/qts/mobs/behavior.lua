@@ -17,6 +17,8 @@ the table of depends attributes are only set if they are not yet set. They do no
 
 --]]
 
+qts.ai.CREATURE_DESPAWN_DISTANCE = qts.config("CREATURE_DESPAWN_DISTANCE", 64, "how far a creature must be from the player to despawn, if its distance_despawn field is true")
+
 ---Register a Creature Module
 ---@param name string "modname:name" format
 ---@param def table module definition table
@@ -98,6 +100,59 @@ local properties_to_propigate = {
 	show_on_minimap = true,
 }
 
+---@alias TargetType
+---| "none" No Target
+---| "player" A PlayerRef
+---| "item" A __builtin:item
+---| "creature" A QTS Creature
+---| "entity" An arbitrary entity, that may or may not be tracked by QTS
+---| "node" A node
+---| "point" A arbitrary point
+
+---Get the target type of a ObjRef
+---@param object ObjectRef
+---@return TargetType 
+function qts.ai.get_object_target_type(object)
+	if object:is_player() then
+		return "player"
+	end
+	local name = qts.object_name(object)
+	if name == "__builtin:item" then
+		return "item"
+	elseif qts.registered_creatures[name] then
+		return "creature"
+	end
+	return "entity"
+end
+
+---@type {[TargetType]:true}
+local mobile_target_types = {
+    creature = true,
+	entity = true,
+	item = true,
+	player = true
+}
+
+---Check if a given target type is a mobile object
+---@param target_type TargetType
+---@return boolean
+function qts.ai.get_is_target_type_mobile(target_type)
+	return qts.select(mobile_target_types[target_type], true, false) 
+end
+
+---@type {[TargetType]:true}
+local static_target_types = {
+    node = true,
+	point = true,
+}
+
+---Check if a given target type is a mobile object
+---@param target_type TargetType
+---@return boolean
+function qts.ai.get_is_target_type_static(target_type)
+	return qts.select(static_target_types[target_type], true, false) 
+end
+
 ---Registeres a new creature
 ---@param name string "modname:name" format
 ---@param def table creature definition table
@@ -110,6 +165,7 @@ local properties_to_propigate = {
 				color1 = "colorstring",
 				color2 = "colorstring",
 				pattern = "spots", -current patterns are limited to "spots"
+				spawner_config = "string" -- the spawner config to apply to a spawner when you rightclick one with the egg
 			}
 
 	special fields in initial_properties:
@@ -195,9 +251,29 @@ function qts.ai.register_creature(name, def)
 	--add the modules list to the initial properties
 	properties.modules = modules
 
+	---@class CreatureLuaEntity : LuaEntity
+	---@field modules string[] list of module names
+	---@field module_function_step function[]
+	---@field module_function_punch function[]
+	---@field module_function_rightclick function[]
+	---@field queued_events {handle: string, timer: number, func: function}[]
+	---@field current_task_priority number
+	---@field current_task function(self, dtime, moveresult)
+	---@field TICK_COUNT integer
+	---@field bisincurrenttask boolean
+	---@field distance_despawn boolean despawn from distance. default to true
+	---@field nearest_player_objref ObjectRef|nil only valid in on_step(...)
+	---@field animations table list of animations
+	---@field armor_groups_base table list of basic armor groups to use when spawning the entity
+	---@field armor_groups table list of active armor groups
+	---@field immortal boolean true to make objects immortal
 	local entity_def = {
 		initial_properties = {},
 
+		---Entity on_activate function
+		---@param self CreatureLuaEntity
+		---@param staticdata string
+		---@param dtime_s number
 		on_activate = function(self, staticdata, dtime_s)
 			self.QTID = qts.gen_entity_id()
 			self.queued_events = {}
@@ -205,6 +281,28 @@ function qts.ai.register_creature(name, def)
 			self.current_task = nil
 
 			local data = minetest.deserialize(staticdata)
+
+			--load armor
+			if data ~= nil and data.armor_groups ~= nil then
+				self.armor_groups = data.armor_groups
+			elseif self.armor_groups_base ~= nil then
+				self.armor_groups = table.copy(self.armor_groups_base)
+			elseif self.armor_groups then
+				self.armor_groups_base = table.copy(self.armor_groups)
+				minetest.log("warning", "Creature spawned with armor groups defined, but not base. Please prefer armor_groups_base in creature definitions. Entity: ".. self:id_string())
+			else
+				minetest.log("warning", "Creature spawned with no defined armor groups. please defind armor_groups_base = {...} in its definition. Entity: ".. self:id_string())
+				self.armor_groups = {}
+			end
+
+			--apply armor
+			local armor_groups = {fleshy=1, stabby=1, psycic=1, enviromental=1}
+			for k, v in pairs(self.armor_groups) do
+				armor_groups[k] = v+1 --deal with that off by one error
+			end
+			self.object:set_armor_groups(armor_groups)
+			
+
 			--self.modules = data.modules
 			if self.modules == nil then
 				self.modules = {}
@@ -239,31 +337,23 @@ function qts.ai.register_creature(name, def)
 				self.modules[index] = modulename
 			end
 
-			minetest.log("Activating entiy: ".. self:id_string() .. "! Modules: ")
 			for i, modulename in ipairs(self.modules) do
 				local module = qts.registered_modules[modulename]
 				if module ~= nil then
-					local modulesstr = "\t"..modulename.." "
-					--minetest.log("\t"..dump(modulename))
 					--load up the module
 					if module.on_activate and type(module.on_activate) == "function" then
 						module.on_activate(self, data, dtime_s)
-						modulesstr = modulesstr .. "ACTIVATE "
 					end
 					--add existing attributes to the queues
 					if module.on_step and type(module.on_step) == "function" then
 						self.module_function_step[#self.module_function_step+1] = module.on_step
-						modulesstr = modulesstr .. "STEP "
 					end
 					if module.on_punch and type(module.on_punch) == "function" then
 						self.module_function_punch[#self.module_function_punch+1] = module.on_punch
-						modulesstr = modulesstr .. "PUNCH "
 					end
 					if module.on_rightclick and type(module.on_rightclick) == "function" then
 						self.module_function_rightclick[#self.module_function_rightclick+1] = module.on_rightclick
-						modulesstr = modulesstr .. "RIGHTCLICK "
 					end
-					minetest.log(modulesstr)
 				else
 					minetest.log("error", "tried to create a creature with an unknown module list. Entity: ".. self:id_string())
 				end
@@ -272,6 +362,9 @@ function qts.ai.register_creature(name, def)
 			
 		end,
 
+		---Entity get_staticdata function
+		---@param self CreatureLuaEntity
+		---@return string
 		get_staticdata = function(self)
 			local data = {}
 			for i, modulename in ipairs(self.modules) do
@@ -285,12 +378,22 @@ function qts.ai.register_creature(name, def)
 					minetest.log("error", "tried to save a creature with an unknown module list. Entity: ".. self:id_string())
 				end
 			end
-			
+			--save armor
+			if self.armor_groups then
+				data.armor_groups = self.armor_groups
+			elseif self.armor_groups_base then
+				data.armor_groups = self.armor_groups_base
+			end
+			--save modules
 			data.modules = self.modules
 
 			return minetest.serialize(data)
 		end,
 
+		---Entity on_step function
+		---@param self CreatureLuaEntity
+		---@param dtime number
+		---@param moveresult table
 		on_step = function(self, dtime, moveresult)
 			if self.TICK_COUNT == nil then 
 				self.TICK_COUNT = 1 
@@ -298,7 +401,33 @@ function qts.ai.register_creature(name, def)
 				self.TICK_COUNT = self.TICK_COUNT + 1
 			end
 
-			
+			-- get nearest player to check for death
+			local players = minetest.get_connected_players()
+			if #players == 1 then
+				--fast singleplayer case
+				self.nearest_player_objref = players[1]
+			elseif #players > 1 then
+				local nearest_player_index = nil
+				local nearest_player_dist_sq = nil
+				for i, obj in ipairs(players) do
+					local dist_sq = vector.distancesq(self.object:get_pos(), obj:get_pos())
+					if nearest_player_index == nil or dist_sq < nearest_player_dist_sq  then
+						nearest_player_dist_sq = dist_sq
+						nearest_player_index = i
+					end
+				end
+				self.nearest_player_objref = players[nearest_player_index]
+			end
+			if (self.distance_despawn == nil or self.distance_despawn) then
+				local maxdistsq = qts.ai.CREATURE_DESPAWN_DISTANCE.get()
+				maxdistsq = maxdistsq * maxdistsq
+				local dist_sq = vector.distancesq(self.object:get_pos(), self.nearest_player_objref:get_pos())
+				if dist_sq > maxdistsq then
+					minetest.log("Removing entity " .. self:id_string() .. " due to distance from players")
+					self.object:remove()
+					return
+				end
+			end
 
 			-- first, run all module on_step functions
 			for i, module_step_func in ipairs(self.module_function_step) do
@@ -312,7 +441,6 @@ function qts.ai.register_creature(name, def)
 					event.timer = event.timer - dtime
 					if event.timer <= 0 then
 						event.func(self)
-						minetest.log("executed queued event "..dump(event.handle).."in entity: ".. self:id_string())
 						table.insert(index_to_remove, 1, i)
 					end
 				end
@@ -329,18 +457,82 @@ function qts.ai.register_creature(name, def)
 				self.current_task(self, dtime, moveresult)
 				self.bisincurrenttask = false
 			end
+
+			--ALWAYS reset the objectref at the end.
+			self.target_objref = false
+			self.nearest_player_objref = nil
 		end,
 
+		---Entity on_punch function
+		---@param self CreatureLuaEntity
+		---@param puncher ObjectRef
+		---@param time_from_last_punch number
+		---@param tool_capabilities table
+		---@param dir Vector
+		---@return boolean
 		on_punch = function(self, puncher, time_from_last_punch, tool_capabilities, dir)
-			minetest.log("Punch called on entity " .. self:id_string() .. " by " ..qts.object_name(puncher))
+			--calculate damage
+			local damage = qts.calculate_damage(self.object, puncher, time_from_last_punch, tool_capabilities, dir)
+			local new_hp = self.object:get_hp() - damage
+			minetest.log("Punch called on entity " .. self:id_string() .. " by " ..qts.object_name(puncher) .. " Damgae: " .. dump(damage) .. " New HP: " .. dump(new_hp))
+			
+			--item modifier functions.
+			if puncher then
+				local item = puncher:get_wielded_item()
+				if item then
+					local meta = item:get_meta()
+					local modstr = meta:get_string("qt_item_modifers")
+					if modstr and modstr ~= "" then 
+						local mods = minetest.deserialize(modstr)
+						for mod_name, mod_level in pairs(mods) do
+							local m_def = qts.registered_item_modifiers[mod_name]
+							if m_def and m_def.on_punch_entity then
+								m_def.on_punch_entity(self.object, puncher, time_from_last_punch, tool_capabilities, dir, damage)
+							end
+						end
+					end
+				end
+			end
+
 			-- run all module on_punch functions
 			for i, module_punch_func in ipairs(self.module_function_punch) do
 				module_punch_func(self, puncher, time_from_last_punch, tool_capabilities, dir)
 			end
-			return true
+
 			
+			--handle deaths
+			if new_hp <= 0 and not self.immortal then
+				minetest.log("Entity " .. self:id_string() .. " has died. Collecting drops and destroying")
+				local drops = {}
+				for i, modulename in ipairs(self.modules) do
+					local module = qts.registered_modules[modulename]
+					if module then
+						if module.on_death and type(module.on_death) == "function" then
+							module.on_death(self, drops)
+						end
+					else
+						minetest.log("error", "somehow, despite all odds, a unregistered module name ended up in a dying entity. You should probably fix this. Or don't.")
+					end
+				end
+				local pos = self.object:get_pos()
+				for i, itemstring in ipairs(drops) do
+					minetest.add_item(pos, itemstring)
+				end
+				--destroy object and return
+				self.object:remove()
+			else
+				--set the HP, if it won't kill the entity.
+				--immortal entities that received lethal damage will get here, but their HP goes to 1.
+				--that is the job of the max function.
+				self.object:set_hp(math.max(new_hp,1), "punch")
+			end
+
+			return true
 		end,
 
+		---Entity on_rightclick function
+		---@param self CreatureLuaEntity
+		---@param clicker ObjectRef
 		on_rightclick = function(self, clicker)
 			minetest.log("Rightclick called on entity " .. self:id_string() .. " by " .. qts.object_name(clicker))
 			for i, module_rightclick_func in ipairs(self.module_function_rightclick) do
@@ -350,6 +542,10 @@ function qts.ai.register_creature(name, def)
 
 		-- add a module
 
+		---Check if a module is in this creature
+		---@param self CreatureLuaEntity
+		---@param modulename string the module name
+		---@return boolean true if module is present
 		contains_module = function(self, modulename)
 			for i, existingmodulename in ipairs(self.modules) do
 				if existingmodulename == modulename then
@@ -359,6 +555,10 @@ function qts.ai.register_creature(name, def)
 			return false
 		end,
 
+		---Add a module
+		---@param self CreatureLuaEntity
+		---@param modulename string the module name
+		---@param run_activate boolean true to run the activation func of the module
 		add_module = function(self, modulename, run_activate)
 			if self:contains_module(modulename) then
 				minetest.log("warning", "you cannot add two of the same module. Entity: ".. self:id_string())
@@ -367,6 +567,14 @@ function qts.ai.register_creature(name, def)
 			local module = qts.registered_modules[modulename]
 			if module ~= nil then
 				self.modules[#self.modules+1] = modulename
+
+				--load dependant meodules!
+				for i, depends_modulename in ipairs(module.required_modules) do
+					if not self:contains_module(depends_modulename) then
+						self:add_module(depends_modulename, run_activate)
+					end
+				end
+
 				if (run_activate and module.on_activate ~= nil and type(module.on_activate) == "function") then
 					module.on_activate(self, {}, 0)
 				end
@@ -386,6 +594,9 @@ function qts.ai.register_creature(name, def)
 			end
 		end,
 
+		---Remove a module
+		---@param self CreatureLuaEntity
+		---@param modulename string
 		remove_module = function(self, modulename)
 			local containsmodule = false
 			local module = qts.registered_modules[modulename]
@@ -436,17 +647,25 @@ function qts.ai.register_creature(name, def)
 
 		-- Tasks (or, the state machine)
 
+		---Run a task on the current creature
+		---@param self CreatureLuaEntity
+		---@param priority number the tasks's priority
+		---@param func function(self, dtime, moveresult) the task.
+		---@return boolean result true if this this task will run (unless it is superceeded)
 		run_task = function (self, priority, func)
 			if self.current_task_priority == nil then self.current_task_priority = 0 end
 			if priority > self.current_task_priority and type(func) == "function" then
 				self.current_task_priority = priority
 				self.current_task = func
-				minetest.log("new task selected for entity: ".. self:id_string())
 				return true
 			end
 			return false
 		end,
 
+		---Set the current task priority. Can only be called from a task
+		---@param self CreatureLuaEntity
+		---@param priority number the new priority
+		---@param allow_from_anywhere boolean? default to false
 		set_current_task_priority = function(self, priority, allow_from_anywhere)
 			if (self:is_in_task() or allow_from_anywhere) then
 				self.current_task_priority = priority
@@ -455,6 +674,9 @@ function qts.ai.register_creature(name, def)
 			end
 		end,
 
+		---Clear the current task. Can only be called from a task
+		---@param self CreatureLuaEntity
+		---@param allow_from_anywhere boolean? default to false
 		clear_current_task = function(self, allow_from_anywhere)
 			if (self:is_in_task() or allow_from_anywhere) then
 				self.current_task_priority = qts.ai.PRIORITY_NONE
@@ -464,14 +686,21 @@ function qts.ai.register_creature(name, def)
 			end
 		end,
 
+		---Check if the currently running func is part of a task
+		---@param self CreatureLuaEntity
+		---@return boolean result true if in a current task
 		is_in_task = function(self)
 			return qts.select(self.bisincurrenttask==nil, false, self.bisincurrenttask)
 		end,
+
 		--[[
 			Play an animation
 
 			anim_name - a name into an animation table self.animations
 		]]
+		---Play an animation by name
+		---@param self CreatureLuaEntity
+		---@param anim_name string
 		play_animation = function(self, anim_name)
 			if self.current_animation ~= nil and self.current_animation == anim_name then
 				return
@@ -484,9 +713,13 @@ function qts.ai.register_creature(name, def)
 
 		-- Event Queues
 
+		---Enqueue an event to happen later on the entity
+		---@param self CreatureLuaEntity
+		---@param handle string the event handle
+		---@param time number the time till the event happens
+		---@param func function the actual event
 		enqueue_event = function(self, handle, time, func)
 			if self.queued_events == nil then
-				minetest.log("Creating event queue for entity: " .. self:id_string())
 				self.queued_events = {}
 			end
 			self.queued_events[#self.queued_events+1] = {
@@ -494,10 +727,11 @@ function qts.ai.register_creature(name, def)
 				timer = time,
 				func = func
 			}
-			minetest.log("Enqueued event " .. dump(handle) .. " in entity: ".. self:id_string() .. " for " .. dump(time) .. " second from now")
-			minetest.log("Full Event Queue: " .. dump(self.queued_events))
 		end,
 
+		---Kill an enqueued event by its handle
+		---@param self CreatureLuaEntity
+		---@param handle string the handle
 		kill_event = function(self, handle)
 			if self.queued_events then
 				local index_to_remove = {}
@@ -510,14 +744,33 @@ function qts.ai.register_creature(name, def)
 				for i = #index_to_remove, 0, -1 do
 					table.remove(self.queued_events, index_to_remove[i])
 				end
-
-				minetest.log("killed "..dump(#index_to_remove).." queued events of handle "..dump(handle).." in entity.")
 			end
 		end,
 
+		---Get the entity's unique ID string
+		---@param self CreatureLuaEntity
+		---@return string
 		id_string = function(self)
 			return (qts.select(self.name ~= nil, dump(self.name), "UNNAMED ENTITY") .. "(" .. dump(self.QTID) .. ")")
-		end
+		end,
+
+		---Reset the current target
+		---@param self CreatureLuaEntity
+		reset_target = function(self)
+			self.target_id = false
+			self.target_pos = false
+			self.target_objref = false
+			self.target_type = "none"
+		end,
+
+		---@type false|QTID the target QTID
+		target_id = false,
+		---@type false|Vector the target position
+		target_pos = false,
+		---@type false|ObjectRef the target objectref. should be set to false at end of step.
+		target_objref = false,
+        ---@type TargetType the target type
+		target_type =  "none",
 	}
 
 	for key, value in pairs(properties) do
@@ -542,13 +795,30 @@ function qts.ai.register_creature(name, def)
 				".png^[multiply:"..
 				def.spawnegg.color2..")",
 			groups = {spawnegg = 1,},
+			spawn_entity_name = name,
+			default_spawner_config = def.spawnegg.spawner_config,
 			on_place = function(itemstack, placer, pointed_thing)
+				local itemdef = minetest.registered_items[itemstack:get_name()]
+				if not itemdef or not itemdef.spawn_entity_name then return end
+
 				if pointed_thing.above then
-					local obj = minetest.add_entity(pointed_thing.above, name)
+					if itemdef.default_spawner_config then
+						local below_node = minetest.get_node_or_nil(pointed_thing.under)
+						if below_node and minetest.get_item_group(below_node.name, "spawner") ~= 0 then
+							--clicked on a spawner
+							qts.ai.apply_spawner_config(pointed_thing.under, itemdef.default_spawner_config)
+							if not qts.is_player_creative(placer) then
+								itemstack:take_item(1)
+							end
+							return itemstack;
+						end
+					end
+
+					local obj = minetest.add_entity(pointed_thing.above, itemdef.spawn_entity_name)
 					if obj and not qts.is_player_creative(placer) then
 						itemstack:take_item(1)
-						return itemstack;
 					end
+					return itemstack;
 				end
 			end
 		})
@@ -561,66 +831,7 @@ end
 --qts-defined modules. These are very common, base modules.
 qts.ai.module = {}
 
--- TODO: make a seperate self.armor_groups that Can be modified, to work with a armor-wearing module
 
---[[
-	module that makes it possible to damage a creature. Very common, and uses the damage system, so its part of qts.
-]]
-qts.ai.module.damageable = qts.ai.register_module("qts:ai:module_damageable", {
-	depends_properties = {
-		armor_groups_base= {fleshy=1}
-	},
-
-	on_activate = function(self, data, dtime_s)
-		--load armor
-		if data ~= nil and data.armor_groups_base ~= nil and self.armor_groups_base == nil then
-			self.armor_groups_base = data.armor_groups_base
-		end
-
-		--apply armor
-		if (self.armor_groups_base) then
-			local armor_groups = {fleshy=1, stabby=1, psycic=1, enviromental=1}
-			for k, v in pairs(self.armor_groups_base) do
-				armor_groups[k] = v+1 --deal with that off by one error
-			end
-			self.object:set_armor_groups(armor_groups)
-		end
-	end,
-
-	get_staticdata = function(self, data)
-		data.armor_groups_base = self.armor_groups_base
-	end,
-
-	on_punch = function(self, puncher, time_from_last_punch, tool_capabilities, dir)
-		local damage = qts.calculate_damage(self.object, puncher, time_from_last_punch, tool_capabilities, dir)
-		local new_hp = self.object:get_hp() - damage
-		
-		--handle deaths
-		if new_hp <= 0 and not self.immortal then
-			minetest.log("Entity " .. self:id_string() .. " has died. Collecting drops and destroying")
-			local drops = {}
-			for i, modulename in ipairs(self.modules) do
-				local module = qts.registered_modules[modulename]
-				if module then
-					if module.on_death and type(module.on_death) == "function" then
-						module.on_death(self, drops)
-					end
-				else
-					minetest.log("error", "somehow, despite all odds, a unregistered module name ended up in a dying entity. You should probably fix this. Or don't.")
-				end
-			end
-			local pos = self.object:get_pos()
-			for i, itemstring in ipairs(drops) do
-				minetest.add_item(pos, itemstring)
-			end
-			self.object:remove()
-			return true
-		end
-
-		self.object:set_hp(new_hp, "punch")
-	end,
-	
-})
 
 --[[
 	Module that gives gravity to the object. Very common, so its part of qts

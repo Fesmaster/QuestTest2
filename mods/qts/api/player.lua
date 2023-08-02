@@ -9,6 +9,13 @@ QuestTest Damge Groups:
 	enviromental = node damage, fall damage, drowning damage, poison, etc.
 --]]
 
+---@diagnostic disable-next-line: duplicate-doc-alias
+---@alias Group
+---| "fleshy"
+---| "stabby"
+---| "psycic"
+---| "enviromental"
+
 local playerDataPath = minetest.get_worldpath().."/QT2PlayerData"
 minetest.mkdir(playerDataPath)
 
@@ -29,6 +36,10 @@ local damage_profile_start, damage_profile_stop = qts.profile("Player Damage", "
 		data - the data to set (if ommited, then field is the data - useful when setting a table, as its keys can be fields for future gets)
 
 ]]
+---@param player Player|string the player. can be a player name
+---@param catagory string mod-specific or use specific category. To prevent name clashing. Should at least contain the mod name
+---@param field string|any the specific field
+---@param data? any the data to set (if ommited, then field is the data - useful when setting a table, as its keys can be fields for future gets)
 function qts.set_player_data(player, catagory, field, data)
 	playerdata_profile_start()
 	if (type(player) ~= "string") then player = player:get_player_name() end
@@ -60,22 +71,20 @@ end
 
 	Returns:
 		the data field
-
-	
 ]]
+---@param player Player|string the player. can be a player name 
+---@param catagory string mod-specific or use specific category. To prevent name clashing. Should at least contain the mod name
+---@param field? string the specific field or nil if no field
+---@return any data the data field
 function qts.get_player_data(player, catagory, field)
 	playerdata_profile_start()
 	if (type(player) ~= "string") then player = player:get_player_name() end
 	
 	if (qts.player_data[player] == nil) then
-		qts.player_data[player] = {}
 		playerdata_profile_stop()
 		return nil
 	end
 	if (qts.player_data[player][catagory] == nil) then
-		if (field ~= nil) then
-			qts.player_data[player][catagory] = {}
-		end
 		playerdata_profile_stop()
 		return nil
 	end
@@ -88,11 +97,15 @@ function qts.get_player_data(player, catagory, field)
 	end
 end
 
+---@type boolean
 local IS_DAMAGE_ENABLED = minetest.settings:get_bool("enable_damage")
 
 --[[
 	QuestTest armor calculations function
 --]]
+---@param damage number
+---@param armor number
+---@return number
 local function apply_armor(damage, armor)
 	if not armor then return 0 end --nil armor value means no damage at all from that.
 	if damage*10 < armor then
@@ -113,7 +126,12 @@ end
 		damage - the ammount of damage
 		damage_group - the type of damage
 ]]
+---@param victim ObjectRef
+---@param damage number
+---@param damage_group Group
+---@return number damage the actual Damge
 function qts.apply_armor_to_damage(victim, damage, damage_group)
+	---@type Group_Set|number
 	local armor = victim:get_armor_groups()
 	--default to fleshy, if available
 	damage_group = damage_group or "fleshy"
@@ -139,6 +157,7 @@ local function clamp(a, min, max)
 	return math.max(math.min(a, max),min)
 end
 
+---type (fun(victim:ObjectRef, hitter:Player, time_from_last_punch:number, tool_capabilities:Tool_Capabilities, dir:Vector):Tool_Capabilities?)[]
 local registered_playerpunches = {}
 --[[
 	Register a function to be run when the player attacks an entity or another player.
@@ -148,6 +167,7 @@ local registered_playerpunches = {}
 	Params:
 		function(victim, hitter, time_from_last_punch, tool_capabilities, dir)
 ]]
+---@param func fun(victim:ObjectRef, hitter:Player, time_from_last_punch:number, tool_capabilities:Tool_Capabilities, dir:Vector):Tool_Capabilities?
 function qts.register_on_player_attack(func)
 	registered_playerpunches[#registered_playerpunches+1] = func 
 end
@@ -167,6 +187,12 @@ end
 
 	TODO: this needs to take Item Modifiers into account. See itemModifiers.lua
 ]]
+---@param victim ObjectRef victim entity
+---@param hitter ObjectRef punching entity
+---@param time_from_last_punch number time since last punch delivered by hitter to anyone
+---@param tool_capabilities Tool_Capabilities tool capabilities table
+---@param dir Vector direction hit came from (usually hitter to victim, but it may not be, for example, if the hit is actually from a projectile. The shooter is the hitter)
+---@return number damage the damage corrected for armor, bonuses, etc.
 function qts.calculate_damage(victim, hitter, time_from_last_punch, tool_capabilities, dir)
 	
 	if hitter:is_player() then
@@ -191,7 +217,7 @@ function qts.calculate_damage(victim, hitter, time_from_last_punch, tool_capabil
 		local clamping = clamp((time_from_last_punch or 1)/(tool_capabilities.full_punch_interval or 1), 0.0, 1.0)
 		local bonus = 0
 		if hitter:is_player() then
-			bonus = qts.get_player_data(hitter, "MODIFIERS", "ADD_damgae_bonus_" .. cap) or 0
+			bonus = qts.get_player_data(hitter--[[@as Player]], "MODIFIERS", "ADD_damgae_bonus_" .. cap) or 0
 		end
 		dmg = dmg + apply_armor((val * clamping) + bonus, armor_groups[cap]-1)
 	end
@@ -210,6 +236,9 @@ end
 	Returns:
 		table - an array of **item names**, not ItemStacks, item strings, or item stables
 ]]
+---@param player Player the player
+---@return ItemStack[] equipment_list array of ItemStacks.
+---@diagnostic disable-next-line: duplicate-set-field
 function qts.get_player_equipment_list(player)
 	return {}
 end
@@ -223,29 +252,28 @@ end
 	Returns:
 		nothing
 ]]
+---@param player Player
 function qts.recalculate_player_armor(player)
-	local armor_groups = {fleshy=1, stabby=1, psycic=1, enviromental=1} --DEFUALT ARMOR GROUPS
+	if IS_DAMAGE_ENABLED then --only do this when damage is enabled, as that is when it has a purpose.
+		local armor_groups = {fleshy=1, stabby=1, psycic=1, enviromental=1} --DEFUALT ARMOR GROUPS
 
-	
-	for index,stack in ipairs(qts.get_player_equipment_list(player)) do
-		if not stack:is_empty() then
-			local name = stack:get_name()
-			local def = minetest.registered_items[name]
-			if def and def.armor_groups then
-				for k, v in pairs(def.armor_groups) do
-					if armor_groups[k] then
-						armor_groups[k] = armor_groups[k]+v
-					else
-						armor_groups[k] = v+1 --this deals with the off-by-one error
+		for index,stack in ipairs(qts.get_player_equipment_list(player)) do
+			if not stack:is_empty() then
+				local name = stack:get_name()
+				local def = minetest.registered_items[name]
+				if def and def.armor_groups then
+					for k, v in pairs(def.armor_groups) do
+						if armor_groups[k] then
+							armor_groups[k] = armor_groups[k]+v
+						else
+							armor_groups[k] = v+1 --this deals with the off-by-one error
+						end
 					end
 				end
 			end
 		end
+		player:set_armor_groups(armor_groups)
 	end
-
-	--minetest.log("Armor Groups Recalculated: ".. dump(armor_groups))
-
-	player:set_armor_groups(armor_groups)
 end
 
 local old_register_on_puchplayer = minetest.register_on_punchplayer
@@ -263,6 +291,8 @@ local registered_hpchanges_nomod = {}
 	Returns:
 		the player health
 ]]
+---@param player Player
+---@return number
 function qts.get_player_hp(player)
 	if IS_DAMAGE_ENABLED then
 		return qts.get_player_data(player, "COMBATSYSTEM", "HP")
@@ -280,6 +310,8 @@ end
 	Returns:
 		the plaeyr's max health (unboosted)
 ]]
+---@param player Player
+---@return number
 function qts.get_player_hp_max(player)
 	return qts.get_player_data(player, "COMBATSYSTEM", "HP_MAX")
 end
@@ -296,6 +328,9 @@ end
 	Returns:
 		nothing
 ]]
+---@param player Player
+---@param max number
+---@param fillHealth boolean
 function qts.set_player_hp_max(player, max, fillHealth)
 	qts.set_player_data(player, "COMBATSYSTEM", "HP_MAX", max)
 	if fillHealth or fillHealth == nil then
@@ -303,6 +338,10 @@ function qts.set_player_hp_max(player, max, fillHealth)
 	end
 end
 
+---Clamp the player HP between 0 and its max.
+---@param player Player
+---@param hp number
+---@return number
 local function clamp_player_hp(player,hp)
 	return math.min(hp, qts.get_player_data(player, "COMBATSYSTEM", "HP_MAX") + (qts.get_player_data(player, "MODIFIERS", "ADD_health_bonus") or 0))
 end
@@ -314,6 +353,7 @@ end
 	Params:
 		player - the player
 ]]
+---@param player Player
 function qts.refresh_player_hp(player)
 	local oldhp = qts.get_player_data(player, "COMBATSYSTEM", "HP")
 	local newhp = clamp_player_hp(player, oldhp)
@@ -334,6 +374,9 @@ end
 		hp - the change in health
 		reason - if negative, then the reason for the HP change. defaults to "set_hp"
 ]]
+---@param player Player
+---@param hp number relative HP change
+---@param reason HPChangeReason
 function qts.add_player_hp(player, hp, reason)
 	qts.set_player_hp(player, qts.get_player_data(player, "COMBATSYSTEM", "HP")+hp, reason or "set_hp")
 end
@@ -344,8 +387,11 @@ end
 	Params:
 		player - the player
 		hp - the change in health
-		reason - if negative, then the reason for the HP change. defaults to "set_hp"
+		reason - the reason for the HP change. defaults to "set_hp"
 ]]
+---@param player Player
+---@param hp number absolute new HP
+---@param reason HPChangeReason
 function qts.set_player_hp(player, hp, reason)
 	if IS_DAMAGE_ENABLED then
 		local oldhp = qts.get_player_data(player, "COMBATSYSTEM", "HP")
@@ -374,9 +420,19 @@ function qts.set_player_hp(player, hp, reason)
 	end
 end
 
+---Set the player spawn position
+---@param player Player
+---@param spawnpoint Vector
+function qts.set_player_spawnpoint(player, spawnpoint)
+	qts.set_player_data(player, "WAYPOINTS", "SPAWNPOINT", spawnpoint:to_string())
+end
+
 old_register_on_puchplayer(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
 	damage_profile_start()
 	if IS_DAMAGE_ENABLED then
+		for i, func in ipairs(registered_puchplayers) do
+			func(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
+		end
 		qts.set_player_hp(player, qts.get_player_hp(player)-qts.calculate_damage(player, hitter, time_from_last_punch, tool_capabilities, dir), "punch")
 	end
 	damage_profile_stop()
@@ -443,17 +499,35 @@ old_register_on_player_hpchange(function(player, hp_change, reason)
 	end
 end, true)
 
+
+---@param player Player
 minetest.register_on_respawnplayer(function(player)
+	--set the player HP
 	qts.set_player_hp(player, qts.get_player_data(player, "COMBATSYSTEM", "HP_MAX"), "respawn")
 	player:set_hp(20)
+	--Respawn player
+	local spawnpointstr = qts.get_player_data(player, "WAYPOINTS", "SPAWNPOINT")
+	if spawnpointstr then
+		local point = vector.from_string(spawnpointstr)
+		if point then
+			minetest.after(0, function()
+				player:set_pos(point)
+			end)
+		end
+	end
 end)
 
 --[[
 	Override these so they don't interfere with the new damage mechanism
 ]]
+---Register a function to run when the player is punched
+---@param func fun(player:Player, hitter:ObjectRef, time_from_last_punch:number, tool_capabilities:Tool_Capabilities, dir:Vector, damage:number):boolean
 minetest.register_on_punchplayer = function(func)
 	registered_puchplayers[#registered_puchplayers+1] = func
 end
+---Register a function to run when the player's HP changes
+---@param func fun(player:Player, hp_change:number, reason:table):number callback function
+---@param mod boolean true if the function modifies the player HP.
 minetest.register_on_player_hpchange = function(func, mod)
 	if mod then
 		registered_hpchanges_mod[#registered_hpchanges_mod+1] = func
@@ -466,8 +540,8 @@ end
 minetest.register_on_newplayer(function(player)
 	minetest.log("New player, creating custom data for " .. player:get_player_name())
 	qts.player_data[player:get_player_name()] = {}
-	qts.set_player_data(player, "COMBATSYSTEM", "HP", qts.DEFAULT_HP)
-	qts.set_player_data(player, "COMBATSYSTEM", "HP_MAX", qts.DEFAULT_HP)
+	qts.set_player_data(player, "COMBATSYSTEM", "HP", qts.DEFAULT_HP.get())
+	qts.set_player_data(player, "COMBATSYSTEM", "HP_MAX", qts.DEFAULT_HP.get())
 	--player:set_armor_groups({fleshy=0})
 end)
 
@@ -496,8 +570,8 @@ minetest.register_on_joinplayer(function(player, last_login)
 	end, player:get_player_name())
 	
 	if qts.get_player_data(player,"COMBATSYSTEM", "HP") == nil then
-		qts.set_player_data(player, "COMBATSYSTEM", "HP", qts.DEFAULT_HP)
-		qts.set_player_data(player, "COMBATSYSTEM", "HP_MAX", qts.DEFAULT_HP)
+		qts.set_player_data(player, "COMBATSYSTEM", "HP", qts.DEFAULT_HP.get())
+		qts.set_player_data(player, "COMBATSYSTEM", "HP_MAX", qts.DEFAULT_HP.get())
 	end
 end)
 
@@ -539,3 +613,44 @@ minetest.register_on_shutdown(function()
 	qts.settings.save()
 	minetest.log("QTS shutdown finished")
 end)
+
+
+--[[
+	Damage Effects
+]]
+
+local DAMAGE_VIGNETTE_COLOR = qts.config("DAMAGE_VIGNETTE_COLOR", "#FF0000", "Color of the screen flash vignette when taking damage.")
+local DAMAGE_VIGNETTE_TIME = qts.config("DAMAGE_VIGNETTE_TIME", 0.2, "Duration of the screen flash vignette when taking damage.")
+
+---player HP loss screen flash and other effects
+---@param player Player
+---@param hpchange number
+---@param reason HPChangeReason
+minetest.register_on_player_hpchange(function (player, hpchange, reason) 
+	if hpchange < 0 then
+		local playername = player:get_player_name()
+		
+		--add the HUD vignette
+		local screenflash_id = player:hud_add({
+			hud_elem_type="image",
+			z_index = -400, --vignette
+			text = "vignette.png^[multiply:"..DAMAGE_VIGNETTE_COLOR.get(),
+			position = {x=0.5,y=0.5},
+			alignment = {x=0,y=0},
+			scale = {x=-100,y=-100}, --negative scale values are percentage of screen
+			name="QTS_damageVignette",
+			direction=1,
+			offset={x=0,y=0},
+		})
+		
+		--remove the vignette a bit later
+		local job = minetest.after(DAMAGE_VIGNETTE_TIME.get(), function()
+			local player = minetest.get_player_by_name(playername)
+			player:hud_remove(screenflash_id)
+		end)
+		
+		--play sound effect
+		minetest.sound_play("player_hit", {gain = 0.5, to_player = playername}, true)
+
+	end
+end, false)

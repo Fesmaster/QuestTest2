@@ -116,7 +116,3 @@ function foundry.register_casting_recipe(rtype, def)
 	end
 end
 
-function foundry.register_casting_recepie(a, b)
-	error("UNSUPPORTED FUNCTION. should be 'register_casting_recipe'")
-	return foundry.register_casting_recipe(a, b)
-end

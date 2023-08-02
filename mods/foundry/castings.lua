@@ -17,11 +17,11 @@ foundry.register_casting_type("anvil", {
 
 foundry.register_casting_recipe("anvil", {
 	metal = "steel",
-	result = "default:anvil 1",
+	result = "craftable:anvil 1",
 })
 
 qts.register_craft({
-	ingredients = {"default:sand", "default:clay_lump"},
+	ingredients = {"group:sand", "overworld:clay_lump"},
 	results = {"foundry:anvil_mold",},
 })
 
