@@ -42,7 +42,7 @@ local function build_button_style_string(style)
     if style.background then
         stylestr=stylestr..";bgimg="..style.background
         --middle
-        if style.background_middle then
+        if style.background_middle ~= nil then
             ---@type Rect
             local padding = style.background_middle
             ---padding in context of a button is a different struct
@@ -129,15 +129,27 @@ return {
             end
         end
 
-        --return constructed formspec string
-        return "formspec_version[6]"..
-            "size["..size.x..","..size.y..",false]"..
-            [[
+        local base = "formspec_version[6]"..
+        "size["..size.x..","..size.y..",false]"..
+        [[
             position[0.5,0.5]
             anchor[0.5,0.5]
             padding[0.05,0.05]
-            real_coordinates[true]
-            ]]
+            ]]..
+            qts.select(formdata.details.use_minetest_prepend, "", "no_prepend[]")..
+            "real_coordinates[true]"
+        if formdata.details.inventory_colors ~= nil then
+            local colors = formdata.details.inventory_colors
+            ---@cast colors +ScribeInventoryFormColors
+            base = base .. "listcolors["..
+                colors.background_color..";"..
+                colors.background_hover_color..";"..
+                colors.border_color..";"..
+                colors.tooltip_color..";"..
+                colors.tooltip_text_color.."]"
+        end
+        --return constructed formspec string
+        return base
     end,
 
     ---@param formdata ScribeFormdata

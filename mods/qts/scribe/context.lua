@@ -37,7 +37,15 @@ local formspec_builder_prechild = dofile(qts.path.."/scribe/formspec_generator_p
 ---@type table<ScribeFormType,fun(formdata:ScribeFormdata):string>
 local formspec_builder_postchild = dofile(qts.path.."/scribe/formspec_generator_postchild.lua")
 
-
+---Pick the first value that is not nil
+---@param a any
+---@param b any
+---@param c any
+local function pick_first_not_nil(a, b, c)
+    if a ~= nil then return a end
+    if b ~= nil then return b end
+    return c
+end
 
 ---Builg a formspec string from ScribeFormData, recursively iterating over all children.
 ---@param formdata ScribeFormdata
@@ -78,8 +86,9 @@ end
 ---@param context ScribeContext
 ---@param childformdata ScribeFormdata
 ---@param def ScribeBasicFormDefinition
+---@param defaults ScribeBasicFormDefinition
 ---@param type ScribeFormType
-local function common_build_child_formdata(context, childformdata, def, type)
+local function common_build_child_formdata(context, childformdata, def, defaults, type)
     childformdata.details.type = type
     if def.visibility then
         childformdata.details.visibility = def.visibility
@@ -87,9 +96,9 @@ local function common_build_child_formdata(context, childformdata, def, type)
         childformdata.details.visibility = qts.scribe.visibility.VISIBLE
     end
     childformdata.details.position = qts.scribe.vec2.copy(def.position, childformdata.details.position)
-    childformdata.details.tooltip = def.tooltip
-    childformdata.details.spacing = qts.scribe.vec2.copy(def.spacing)
-    childformdata.details.padding = qts.scribe.vec2.copy(def.padding)
+    childformdata.details.tooltip = pick_first_not_nil(def.tooltip, defaults.tooltip, nil)
+    childformdata.details.spacing = qts.scribe.vec2.copy(pick_first_not_nil(def.spacing, defaults.spacing, nil))
+    childformdata.details.padding = qts.scribe.vec2.copy(pick_first_not_nil(def.padding, defaults.padding, nil))
 end
 
 ---Get the size of a form, taking its visibility into account
@@ -107,11 +116,17 @@ end
 ---@param context ScribeContext
 ---@param childformdata ScribeFormdata
 ---@param def ScribeBasicFormDefinition
+---@param defaults ScribeBasicFormDefinition
 ---@param defaultsize vec2|nil defautls to {x=0,y=0}
-local function common_build_child_size(context, childformdata, def, defaultsize)
+local function common_build_child_size(context, childformdata, def, defaults, defaultsize)
     ---@type vec2
     local size = defaultsize or {x=0,y=0}
-    
+    if defaults.width and type(defaults.width) == "number" then
+        size.x = defaults.width
+    end
+    if defaults.height and type(defaults.height)=="number" then
+        size.y = defaults.height
+    end
     
     for i, subchildformdata in ipairs(childformdata.children) do
         if subchildformdata.details.visibility ~= qts.scribe.visibility.COLLAPSED then
@@ -191,7 +206,7 @@ local function parse_middle_format(middle)
     return out
 end
 
----Apply a source tyle to a destination style, without overriding anything from the destination style
+---Apply a source style to a destination style, without overriding anything from the destination style
 ---@param style_dest ScribeButtonStateStyle inout style
 ---@param style_src ScribeButtonStateStyle
 local function ApplyButtonStyleToAnother(style_dest, style_src)
@@ -243,8 +258,6 @@ local function ApplyButtonStyleToAnother(style_dest, style_src)
     end
 end
 
-
-
 ---@class ScribeContext
 ---@field player Player the player the context is created for
 ---@field position Vector the position the GUI is related To
@@ -267,18 +280,27 @@ qts.scribe.context_base = {
     ---@param children ScribeContextFunction|nil
     ---@return ScribeContext self self-reference.
     container = function(self, def, children)
+        local defaults = self:get_element_defaults("container")
+        ---@cast defaults +ScribeContainerFormDefinition
+        
         --create the child context
         local child = self:child()
-        common_build_child_formdata(self, child.formdata, def, "container")
+        common_build_child_formdata(self, child.formdata, def, defaults, "container")
 
         --texture
         if def.texture and type(def.texture) == "string" then
             child.formdata.details.texture = def.texture
 
             --check for a valid middle definition
-            local hasMid = false
             if def.middle then
                 child.formdata.details.middle = parse_middle_format(def.middle)
+            end
+        elseif defaults.texture and type(defaults.texture)== "string" then
+            child.formdata.details.texture = defaults.texture
+
+            --check for a valid middle definition
+            if defaults.middle then
+                child.formdata.details.middle = parse_middle_format(defaults.middle)
             end
         end
 
@@ -287,7 +309,7 @@ qts.scribe.context_base = {
             children(child)
         end
 
-        common_build_child_size(self, child.formdata, def)
+        common_build_child_size(self, child.formdata, def, defaults, {x=0,y=0})
 
         common_build_subchild_sizes(self, child.formdata)
 
@@ -304,29 +326,40 @@ qts.scribe.context_base = {
     ---@param children ScribeContextFunction|nil
     ---@return ScribeContext self self-reference.
     vertical_box = function(self, def, children)
+        local defaults = self:get_element_defaults("vertical_box")
+        ---@cast defaults +ScribeBoxFormDefinition
+
         --create the child context
         local child = self:child()
-        common_build_child_formdata(self, child.formdata, def, "vertical_box")
+        common_build_child_formdata(self, child.formdata, def, defaults, "vertical_box")
 
         --texture
         if def.texture and type(def.texture) == "string" then
             child.formdata.details.texture = def.texture
         
             --check for a valid middle definition
-            local hasMid = false
             if def.middle then
                 child.formdata.details.middle = parse_middle_format(def.middle)
+            end
+        elseif defaults.texture and type(defaults.texture) == "string" then
+            child.formdata.details.texture = defaults.texture
+        
+            --check for a valid middle definition
+            if defaults.middle then
+                child.formdata.details.middle = parse_middle_format(defaults.middle)
             end
         end
 
         --other box fields:
         if def.scrollable ~= nil then
             child.formdata.details.scrollable = def.scrollable
+        elseif defaults.scrollable ~= nil then
+            child.formdata.details.scrollable = defaults.scrollable
         else
             child.formdata.details.scrollable = false
         end
-        child.formdata.details.alignment = def.alignment or qts.scribe.allignment.MIN
-        child.formdata.details.scrollbar_side = def.scrollbar_side or qts.scribe.allignment.MIN
+        child.formdata.details.allignment = pick_first_not_nil(def.allignment, defaults.allignment, qts.scribe.allignment.MIN)
+        child.formdata.details.scrollbar_side = pick_first_not_nil(def.scrollbar_side, defaults.scrollbar_side, qts.scribe.allignment.MIN)
         --scrollbar name
         if def.scrollbar_name then
             child.formdata.details.scrollbar_name = def.scrollbar_name
@@ -334,10 +367,7 @@ qts.scribe.context_base = {
             child.formdata.details.scrollbar_name = qts.scribe.next_element_name("scrollbar")
         end
         --auto-hide scrollbar
-        child.formdata.details.scrollbar_autohide=true
-        if def.scrollbar_autohide ~= nil then
-            child.formdata.details.scrollbar_autohide=def.scrollbar_autohide
-        end
+        child.formdata.details.scrollbar_autohide=pick_first_not_nil(def.scrollbar_autohide, defaults.scrollbar_autohide, true)
 
         --children
         if type(children) == "function" then
@@ -398,11 +428,7 @@ qts.scribe.context_base = {
         --calculate the scrollbar size
         local scrollbar_size = 0
         if child.formdata.details.scrollable then
-            if def.scrollbar_size then
-                scrollbar_size = def.scrollbar_size
-            else
-                scrollbar_size = 0.3
-            end
+            scrollbar_size = pick_first_not_nil(def.scrollbar_size, defaults.scrollbar_size, 0.3)
         end
         child.formdata.details.scrollbar_size = scrollbar_size
 
@@ -419,13 +445,14 @@ qts.scribe.context_base = {
         child.formdata.details.size.x = maxwidth + scrollbar_size
         
         --arrange children horizontally now that width and scrollbar status is known
+        local allignment = pick_first_not_nil(def.allignment, defaults.allignment, qts.scribe.allignment.LEFT)
         for i, subchildformdata in ipairs(child.formdata.children) do
             local size = get_formdata_size(subchildformdata)
             local x_pos = 0 --default: left allignment
-            if def.alignment == qts.scribe.allignment.CENTER then
+            if allignment == qts.scribe.allignment.CENTER then
                 --center allignment
                 x_pos = (maxwidth/2) - (size.x/2) - child.formdata.details.padding.x
-            elseif def.alignment == qts.scribe.allignment.RIGHT then
+            elseif allignment == qts.scribe.allignment.RIGHT then
                 --right allignment
                 x_pos = maxwidth - size.x - (child.formdata.details.padding.x*2)
             end
@@ -450,29 +477,40 @@ qts.scribe.context_base = {
     ---@param children ScribeContextFunction|nil
     ---@return ScribeContext self self-reference.
     horizontal_box = function(self, def, children)
+        local defaults = self:get_element_defaults("horizontal_box")
+        ---@cast defaults +ScribeBoxFormDefinition
+
         --create the child context
         local child = self:child()
-        common_build_child_formdata(self, child.formdata, def, "horizontal_box")
+        common_build_child_formdata(self, child.formdata, def, defaults, "horizontal_box")
 
         --texture
         if def.texture and type(def.texture) == "string" then
             child.formdata.details.texture = def.texture
         
             --check for a valid middle definition
-            local hasMid = false
             if def.middle then
                 child.formdata.details.middle = parse_middle_format(def.middle)
+            end
+        elseif defaults.texture and type(defaults.texture) == "string" then
+            child.formdata.details.texture = defaults.texture
+        
+            --check for a valid middle definition
+            if defaults.middle then
+                child.formdata.details.middle = parse_middle_format(defaults.middle)
             end
         end
 
         --other box fields:
         if def.scrollable ~= nil then
             child.formdata.details.scrollable = def.scrollable
+        elseif defaults.scrollable ~= nil then
+            child.formdata.details.scrollable = defaults.scrollable
         else
             child.formdata.details.scrollable = false
         end
-        child.formdata.details.alignment = def.alignment or qts.scribe.allignment.MIN
-        child.formdata.details.scrollbar_side = def.scrollbar_side or qts.scribe.allignment.MIN
+        child.formdata.details.allignment = pick_first_not_nil(def.allignment, defaults.allignment, qts.scribe.allignment.MIN)
+        child.formdata.details.scrollbar_side = pick_first_not_nil(def.scrollbar_side, defaults.scrollbar_side, qts.scribe.allignment.MIN)
         --scrollbar name
         if def.scrollbar_name then
             child.formdata.details.scrollbar_name = def.scrollbar_name
@@ -480,10 +518,7 @@ qts.scribe.context_base = {
             child.formdata.details.scrollbar_name = qts.scribe.next_element_name("scrollbar")
         end
         --auto-hide scrollbar
-        child.formdata.details.scrollbar_autohide=true
-        if def.scrollbar_autohide ~= nil then
-            child.formdata.details.scrollbar_autohide=def.scrollbar_autohide
-        end
+        child.formdata.details.scrollbar_autohide=pick_first_not_nil(def.scrollbar_autohide, defaults.scrollbar_autohide, true)
 
         --children
         if type(children) == "function" then
@@ -544,11 +579,7 @@ qts.scribe.context_base = {
         --calculate the scrollbar size
         local scrollbar_size = 0
         if child.formdata.details.scrollable then
-            if def.scrollbar_size then
-                scrollbar_size = def.scrollbar_size
-            else
-                scrollbar_size = 0.3
-            end
+            scrollbar_size = pick_first_not_nil(def.scrollbar_size, defaults.scrollbar_size, 0.3)
         end
         child.formdata.details.scrollbar_size = scrollbar_size
 
@@ -566,13 +597,14 @@ qts.scribe.context_base = {
         
         
         --arrange children horizontally now that width and scrollbar status is known
+        local allignment = pick_first_not_nil(def.allignment, defaults.allignment, qts.scribe.allignment.TOP)
         for i, subchildformdata in ipairs(child.formdata.children) do
             local size = get_formdata_size(subchildformdata)
             local y_pos = 0 --default: TOP allignment
-            if def.alignment == qts.scribe.allignment.CENTER then
+            if allignment == qts.scribe.allignment.CENTER then
                 --center allignment
                 y_pos = (maxheight/2) - (size.y/2) - child.formdata.details.padding.y
-            elseif def.alignment == qts.scribe.allignment.BOTTOM then
+            elseif allignment == qts.scribe.allignment.BOTTOM then
                 --right allignment
                 y_pos = maxheight - size.y - (child.formdata.details.padding.y*2)
             end
@@ -596,19 +628,22 @@ qts.scribe.context_base = {
     ---@param callback ScribeCallbackFunction|nil
     ---@return ScribeContext self self-reference.
     text = function(self, def, callback)
+        local defaults = self:get_element_defaults("text")
+        ---@cast defaults +ScribeTextFormDefinition
+
         --create the child context
         local childformdata = common_create_formdata(self)
-        common_build_child_formdata(self, childformdata, def, "text")
-        common_build_child_size(self, childformdata, def, {x=1,y=1})
+        common_build_child_formdata(self, childformdata, def, defaults, "text")
+        common_build_child_size(self, childformdata, def, defaults, {x=1,y=1})
 
         --text stuff
         childformdata.details.name = def.name or qts.scribe.next_element_name("text")
-        childformdata.details.text = def.text or "Hello World" --default text
-        childformdata.details.font = def.font or {}
-        childformdata.details.vertical_allignment = def.vertical_allignment or qts.scribe.allignment.CENTER
-        childformdata.details.horizontal_allignment = def.horizontal_allignment or qts.scribe.allignment.CENTER
-        childformdata.details.background_color = def.background_color or "none"
-        childformdata.details.margin = def.margin or 0
+        childformdata.details.text = pick_first_not_nil(def.text, defaults.text, "Hello World") --default text
+        childformdata.details.font = pick_first_not_nil(def.font, defaults.font, {})
+        childformdata.details.vertical_allignment =   pick_first_not_nil(def.vertical_allignment,   defaults.vertical_allignment,   qts.scribe.allignment.CENTER)
+        childformdata.details.horizontal_allignment = pick_first_not_nil(def.horizontal_allignment, defaults.horizontal_allignment, qts.scribe.allignment.CENTER)
+        childformdata.details.background_color = pick_first_not_nil(def.background_color, defaults.background_color, "none")
+        childformdata.details.margin = pick_first_not_nil(def.margin, defaults.margin, 0)
 
         --add the child
         self.formdata.children[#self.formdata.children+1] = childformdata
@@ -627,21 +662,25 @@ qts.scribe.context_base = {
     ---@param callback ScribeCallbackFunction|nil
     ---@return ScribeContext self
     text_entry = function(self, def, callback)
+        local defaults = self:get_element_defaults("text_input")
+        ---@cast defaults +ScribeTextInputFormDefinition
+
         local childformdata = common_create_formdata(self)
-        common_build_child_formdata(self, childformdata, def, "text_entry")
-        common_build_child_size(self, childformdata, def, {x=1,y=1})
+        common_build_child_formdata(self, childformdata, def, defaults, "text_entry")
+        common_build_child_size(self, childformdata, def, defaults, {x=1,y=1})
         
         
         childformdata.details.name = def.name or qts.scribe.next_element_name("text_entry")
-        childformdata.details.label = def.label or ""
-        if def.obscure_content then
+        childformdata.details.label = pick_first_not_nil(def.label, defaults.label, "")
+        local obscure_content = pick_first_not_nil(def.obscure_content, defaults.obscure_content, false)
+        if obscure_content then
             childformdata.details.obscure_content = true
             childformdata.details.multiline = false
         else
             childformdata.details.obscure_content = false
-            childformdata.details.default_value = def.default_value or ""
+            childformdata.details.default_value = pick_first_not_nil(def.default_value, defaults.default_value, "")
             
-            if def.persistant_text or def.persistant_text == nil then
+            if pick_first_not_nil(def.persistant_text, defaults.persistant_text, true) then
                 local name = childformdata.details.name
                 self:refresh_callback(function (event)
                     if event.fields[name] then
@@ -659,21 +698,16 @@ qts.scribe.context_base = {
                 end
             end
             
-            if def.multiline then
+            if pick_first_not_nil(def.multiline, defaults.multiline, false) then
                 childformdata.details.multiline = true
             else
                 childformdata.details.multiline = false
             end
 
         end
-        childformdata.details.border = def.border
-        if childformdata.details.border == nil then
-            childformdata.details.border = true
-        end
-        childformdata.details.font = def.font
-        childformdata.details.close_on_enter = def.close_on_enter
-
-        
+        childformdata.details.border = pick_first_not_nil(def.border, defaults.border, true)
+        childformdata.details.font = pick_first_not_nil(def.font, defaults.font, {})
+        childformdata.details.close_on_enter = pick_first_not_nil(def.close_on_enter, defaults.close_on_enter, false)
 
         --add the child
         self.formdata.children[#self.formdata.children+1] = childformdata
@@ -697,9 +731,12 @@ qts.scribe.context_base = {
     ---@param def ScribeImageFormDefinition
     ---@return ScribeContext self
     image = function(self, def)
+        local defaults = self:get_element_defaults("image")
+        ---@cast defaults +ScribeImageFormDefinition
+
         local childformdata = common_create_formdata(self)
-        common_build_child_formdata(self, childformdata, def, "image")
-        common_build_child_size(self, childformdata, def, {x=1,y=1})
+        common_build_child_formdata(self, childformdata, def, defaults, "image")
+        common_build_child_size(self, childformdata, def, defaults, {x=1,y=1})
 
         childformdata.details.name = def.name or qts.scribe.next_element_name("image")
         if def.item then
@@ -708,6 +745,12 @@ qts.scribe.context_base = {
             childformdata.details.texture = def.texture
             childformdata.details.animation = def.animation 
             childformdata.details.middle = parse_middle_format(def.middle)
+        elseif defaults.item then
+            childformdata.details.item = defaults.item
+        elseif defaults.texture then
+            childformdata.details.texture = defaults.texture
+            childformdata.details.animation = defaults.animation 
+            childformdata.details.middle = parse_middle_format(defaults.middle)
         else
             error("qts.scribe: image element must have either an item or a texture defined.")
         end
@@ -723,11 +766,14 @@ qts.scribe.context_base = {
     ---@param def ScribeRectFormDefinition
     ---@return ScribeContext self self-reference
     rect = function(self, def)
+        local defaults = self:get_element_defaults("rect")
+        ---@cast defaults +ScribeRectFormDefinition
+
         local childformdata = common_create_formdata(self)
-        common_build_child_formdata(self, childformdata, def, "rect")
-        common_build_child_size(self, childformdata, def, {x=1,y=1})
+        common_build_child_formdata(self, childformdata, def, defaults, "rect")
+        common_build_child_size(self, childformdata, def, defaults, {x=1,y=1})
         --color
-        childformdata.details.color = def.color or "none"
+        childformdata.details.color = pick_first_not_nil(def.color, defaults.color, "none")
 
         --add the child
         self.formdata.children[#self.formdata.children+1] = childformdata
@@ -756,18 +802,24 @@ qts.scribe.context_base = {
     ---@param callback ScribeCallbackFunction|nil
     ---@return ScribeContext self self-reference.
     button = function(self, def, callback)
+        local defaults = self:get_element_defaults("button")
+        if def.toggleable then
+            defaults = self:get_element_defaults("toggle_button")
+        end
+        ---@cast defaults +ScribeButtonFormDefinition
+
         local childformdata = common_create_formdata(self)
-        common_build_child_formdata(self, childformdata, def, "button")
-        common_build_child_size(self, childformdata, def, {x=1,y=qts.select(def.toggleable, 0.66, 1)})
+        common_build_child_formdata(self, childformdata, def, defaults, "button")
+        common_build_child_size(self, childformdata, def, defaults, {x=1,y=qts.select(def.toggleable, 0.66, 1)})
 
         if def.name then
             childformdata.details.name = def.name
         else
             childformdata.details.name = qts.scribe.next_element_name("button")
         end
-        childformdata.details.label = def.label
+        childformdata.details.label = pick_first_not_nil(def.label, defaults.label, nil)
         childformdata.details.is_exit = def.is_exit
-        childformdata.details.sound = def.sound or "gui_button" --default sound!!!
+        childformdata.details.sound = pick_first_not_nil(def.sound, defaults.sound, "gui_button") --default sound!!!
         
         local is_toggled = false
         if def.toggleable then
@@ -782,7 +834,7 @@ qts.scribe.context_base = {
             end
 
             --default textures
-            if def.texture == nil then
+            if def.texture == nil and defaults.texture == nil then
                 def.texture = "gui_toggle_off.png"
                 def.texture_pressed = "gui_toggle_on.png"
             end
@@ -794,18 +846,18 @@ qts.scribe.context_base = {
             if def.style_toggled_all == nil then
                 def.style_toggled_all = {}
             end
-            if def.style_all.background == nil then
+            if def.style_all.background == nil and (defaults.style_all == nil or defaults.style_all.background == nil) then
                 def.style_all.background = ""
             end
-            if def.style_toggled_all.background == nil then
+            if def.style_toggled_all.background == nil and (defaults.style_toggled_all == nil or defaults.style_toggled_all.background == nil) then
                 def.style_toggled_all.background = ""
             end
         end
         
         if is_toggled then
             --when button is toggled on
-            childformdata.details.texture = def.texture_pressed
-            childformdata.details.texture_pressed = def.texture
+            childformdata.details.texture = pick_first_not_nil(def.texture_pressed, defaults.texture_pressed, nil)
+            childformdata.details.texture_pressed = pick_first_not_nil(def.texture, defaults.texture, nil)
             
             if def.style_any then
                 childformdata.details.style_any = table.copy(def.style_toggled_any)
@@ -832,9 +884,17 @@ qts.scribe.context_base = {
                 ApplyButtonStyleToAnother(childformdata.details.style_hovered, def.style_toggled_all)
                 ApplyButtonStyleToAnother(childformdata.details.style_pressed, def.style_toggled_all)
             end
+            --apply the defaults to everything, if needed
+            ApplyButtonStyleToAnother(childformdata.details.style_normal,  defaults.style_toggled_normal)
+            ApplyButtonStyleToAnother(childformdata.details.style_hovered, defaults.style_toggled_hovered)
+            ApplyButtonStyleToAnother(childformdata.details.style_pressed, defaults.style_toggled_pressed)
+
+            ApplyButtonStyleToAnother(childformdata.details.style_normal,  defaults.style_toggled_all)
+            ApplyButtonStyleToAnother(childformdata.details.style_hovered, defaults.style_toggled_all)
+            ApplyButtonStyleToAnother(childformdata.details.style_pressed, defaults.style_toggled_all)
         else
-            childformdata.details.texture = def.texture
-            childformdata.details.texture_pressed = def.texture_pressed
+            childformdata.details.texture = pick_first_not_nil(def.texture, defaults.texture, nil)
+            childformdata.details.texture_pressed = pick_first_not_nil(def.texture_pressed, defaults.texture_pressed, nil)
             
             if def.style_any then
                 childformdata.details.style_any = table.copy(def.style_any)
@@ -861,11 +921,30 @@ qts.scribe.context_base = {
                 ApplyButtonStyleToAnother(childformdata.details.style_hovered, def.style_all)
                 ApplyButtonStyleToAnother(childformdata.details.style_pressed, def.style_all)
             end
+            --apply the defaults to everything, if needed
+            ApplyButtonStyleToAnother(childformdata.details.style_normal,  defaults.style_normal)
+            ApplyButtonStyleToAnother(childformdata.details.style_hovered, defaults.style_hovered)
+            ApplyButtonStyleToAnother(childformdata.details.style_pressed, defaults.style_pressed)
+
+            ApplyButtonStyleToAnother(childformdata.details.style_normal,  defaults.style_all)
+            ApplyButtonStyleToAnother(childformdata.details.style_hovered, defaults.style_all)
+            ApplyButtonStyleToAnother(childformdata.details.style_pressed, defaults.style_all)
+        end
+
+        --verify middles are parsed
+        if childformdata.details.style_normal.background_middle ~= nil then
+            childformdata.details.style_normal.background_middle = parse_middle_format(childformdata.details.style_normal.background_middle)
+        end
+        if childformdata.details.style_hovered.background_middle ~= nil then
+            childformdata.details.style_hovered.background_middle = parse_middle_format(childformdata.details.style_hovered.background_middle)
+        end
+        if childformdata.details.style_pressed.background_middle ~= nil then
+            childformdata.details.style_pressed.background_middle = parse_middle_format(childformdata.details.style_pressed.background_middle)
         end
 
         
-        if def.texture == nil and def.texture_pressed == nil and (def.is_exit == nil or def.is_exit == false) then
-            childformdata.details.item = def.item
+        if childformdata.details.texture == nil and childformdata.details.texture_pressed == nil and (childformdata.details.is_exit == nil or childformdata.details.is_exit == false) then
+            childformdata.details.item = pick_first_not_nil(def.item, defaults.item, nil)
         else
             if def.item then
                 minetest.log("warning", "[formspec unsupported] you cannot make a button with an item if it has a texture, a texture_pressed, or is an exit button. Sorry!")
@@ -898,17 +977,20 @@ qts.scribe.context_base = {
     ---@param def ScribeInventoryFormDefinition
     ---@return ScribeContext self
     inventory = function(self, def)
-        local childformdata = common_create_formdata(self)
-        common_build_child_formdata(self, childformdata, def, "inventory")
+        local defaults = self:get_element_defaults("inventory")
+        ---@cast defaults +ScribeInventoryFormDefinition
 
-        local slot_size = def.slot_size or {x=1,y=1}
-        local slot_spacing = def.slot_spacing or {x=0.25,y=0.25}
+        local childformdata = common_create_formdata(self)
+        common_build_child_formdata(self, childformdata, def, defaults, "inventory")
+
+        local slot_size = pick_first_not_nil(def.slot_size, defaults.slot_size, {x=1,y=1})
+        local slot_spacing = pick_first_not_nil(def.slot_spacing, defaults.slot_spacing, {x=0.25,y=0.25})
         childformdata.details.slot_size = slot_size
         childformdata.details.slot_spacing = slot_spacing
 
         local actual_size = {x=0,y=0}
         local slots = {x=0,y=0}
-        if def.use_actual_size then
+        if pick_first_not_nil(def.use_actual_size, defaults.use_actual_size, false) then
             actual_size.x = def.width or slot_size.x
             actual_size.y = def.height or slot_size.y
 
@@ -932,7 +1014,7 @@ qts.scribe.context_base = {
         childformdata.details.source = def.source or qts.scribe.inventory_source.CURRENT_PLAYER
         if type(def.sourcename) == "table" then
             childformdata.details.sourcename = vector.new(def.sourcename)
-            minetest.log("Source Vector: " .. vector.to_string(childformdata.details.sourcename))
+            --minetest.log("Source Vector: " .. vector.to_string(childformdata.details.sourcename))
         else
             childformdata.details.sourcename = def.sourcename
         end
@@ -940,11 +1022,11 @@ qts.scribe.context_base = {
             childformdata.details.source = qts.scribe.inventory_source.SPECIFIC_NODE
             childformdata.details.sourcename = vector.new(self.position)
         end
-        childformdata.details.listname = def.listname or "main"
+        childformdata.details.listname = pick_first_not_nil(def.listname, defaults.listname or "main")
 
-        childformdata.details.starting_item_index = def.starting_item_index or 0
-        childformdata.details.orientation = def.orientation or qts.scribe.orientation.HORIZONTAL
-        childformdata.details.use_list_ring = def.use_list_ring
+        childformdata.details.starting_item_index = pick_first_not_nil(def.starting_item_index, defaults.starting_item_index, 0)
+        childformdata.details.orientation = pick_first_not_nil(def.orientation, defaults.orientation, qts.scribe.orientation.HORIZONTAL)
+        childformdata.details.use_list_ring = pick_first_not_nil(def.use_list_ring, defaults.use_list_ring, false)
         
         --colors
         --[[ List colors are a universal setting, and cannot be set per-element
@@ -1020,6 +1102,44 @@ qts.scribe.context_base = {
         return self
     end,
 
+    ---Assign a style for this element's children
+    ---@param self ScribeContext
+    ---@param stylename string "modname:name" style scribe style name
+    set_style = function(self, stylename)
+        ---@type ScribeStyle
+        local style = qts.scribe.registered_styles[stylename]
+        if style == nil then
+            minetest.log("warning", "Attempted to set a named style that is not registered. Style: " .. stylename)
+            return
+        end
+        if (self.formdata.details.type == "base" ) then
+            self.formdata.details.use_minetest_prepend = qts.select(style.use_minetest_prepend, true, false)
+
+            if style.inventory_colors ~= nil and type(style.inventory_colors) == "table" then
+                --TODO: handler style.inventory_colors here
+                ---@type ScribeInventoryFormColors
+                self.formdata.details.inventory_colors = table.copy(style.inventory_colors)
+                if self.formdata.details.inventory_colors.background_color == nil then 
+                    self.formdata.details.inventory_colors.background_color = "#00000069"
+                end
+                if self.formdata.details.inventory_colors.background_hover_color == nil then 
+                    self.formdata.details.inventory_colors.background_hover_color = "#5A5A5A"
+                end
+                if self.formdata.details.inventory_colors.border_color == nil then 
+                    self.formdata.details.inventory_colors.border_color = "#141318"
+                end
+                if self.formdata.details.inventory_colors.tooltip_color == nil then 
+                    self.formdata.details.inventory_colors.tooltip_color = "#30434C"
+                end
+                if self.formdata.details.inventory_colors.tooltip_text_color == nil then 
+                    self.formdata.details.inventory_colors.tooltip_text_color = "#FFFFFF"
+                end
+            end
+        end
+        self.formdata.details.stylename = stylename
+        return self
+    end,
+
     --[[   Internal Utility Functions   ]] 
     ---Create a ScribeContext
     ---@param player Player The player the GUI should be open for
@@ -1040,6 +1160,7 @@ qts.scribe.context_base = {
             details = {
                 type="base",
                 visibility = qts.scribe.visibility.VISIBLE,
+                stylename = nil,
             },
             children = {}
         }
@@ -1062,7 +1183,11 @@ qts.scribe.context_base = {
             userdata = self.userdata,
             callbacks = self.callbacks,
             formdata = {
-                details = {type="child"},
+                details = {
+                    type="child",
+                    visibility = self.formdata.details.visibility,
+                    stylename = self.formdata.details.stylename,
+                },
                 children = {}
             },
         }
@@ -1081,6 +1206,24 @@ qts.scribe.context_base = {
     ---@param self ScribeContext
     show_gui = function(self)
         minetest.show_formspec(self.player:get_player_name(), self.name, self:generate_formspec())
+    end,
+
+        ---Get the default fields for an element name
+    ---@param self ScribeContext
+    ---@param elementname ScribeElementName
+    ---@return ScribeBasicFormDefinition
+    get_element_defaults = function(self, elementname)
+        ---@type ScribeStyle
+        local style = qts.scribe.registered_styles[self.formdata.details.stylename]
+        if style == nil then 
+            return {} 
+        end
+        ---@type ScribeBasicFormDefinition
+        local defaults = {}
+        if style[elementname] ~= nil then
+            defaults = style[elementname]
+        end
+        return defaults
     end,
 }
 
@@ -1123,6 +1266,7 @@ qts.scribe.new_context = qts.scribe.context_base.create
 ---@field tooltip string|{text:string,bgcolor:ColorSpec,fgcolor:ColorSpec}|nil
 ---@field padding vec2|nil the padding around child elements
 ---@field spacing vec2|nil the spacing between child elements
+---@field stylename string|nil the name of the style being used
 
 ---@class ScribeFormdata
 ---@field details ScribeFormDetails|table details about the type of form represented
@@ -1161,7 +1305,7 @@ qts.scribe.new_context = qts.scribe.context_base.create
 
 ---@class ScribeBoxFormDefinition : ScribeContainerFormDefinition
 ---@field scrollable boolean|nil should the box be able to scroll
----@field alignment ScribeFormAllignment|nil how should the elements be aligned?
+---@field allignment ScribeFormAllignment|nil how should the elements be aligned?
 ---@field scrollbar_side ScribeFormAllignment|nil where should the scrollbar be placed?
 ---@field scrollbar_size number|nil scrollbar size. Default: 1
 ---@field scrollbar_name string|nil scrollbar name. Default: nil for autogenerated name
@@ -1218,7 +1362,7 @@ qts.scribe.new_context = qts.scribe.context_base.create
 ---@field texture Texture|nil texture to show, if wanted.
 ---@field texture_pressed Texture|nil if texture is valid, and this is valid, show texture_pressed instead of texture when button pressed
 ---@field item ItemName|nil item to appear on the button. Does not work with 'texture' or 'texture_pressed'
----@field sound string sound to play when clicked.
+---@field sound string|nil sound to play when clicked.
 ---@field style_any ScribeButtonStateStyle|nil Style when no other state specifies it. Global styles override this.
 ---@field style_normal ScribeButtonStateStyle|nil Style in the normal state
 ---@field style_hovered ScribeButtonStateStyle|nil Style in the hovered state
@@ -1247,7 +1391,7 @@ qts.scribe.new_context = qts.scribe.context_base.create
 ---@field background_hover_color ColorSpec|nil The background color when hovered
 ---@field border_color ColorSpec|nil The border color
 ---@field tooltip_color ColorSpec|nil The tooltip background color
----@field tooltip_text_tint ColorSpec|nil The tooltip text color
+---@field tooltip_text_color ColorSpec|nil The tooltip text color
 
 ---@class ScribeStyle a table with the default style values for the UI elements
 ---@field use_minetest_prepend boolean|nil if true, will use the registered minetest prepend. Only works when style is applied to root context.
@@ -1259,13 +1403,84 @@ qts.scribe.new_context = qts.scribe.context_base.create
 ---@field rect ScribeRectFormDefinition|nil defaults for a rect form
 ---@field image ScribeImageFormDefinition|nil defaults for an image form
 ---@field button ScribeButtonFormDefinition|nil defaults for a regular button form
----@field toggle_button ScribeButtonStateStyle|nil defaults for a toggleable button form
+---@field toggle_button ScribeButtonFormDefinition|nil defaults for a toggleable button form
 ---@field inventory ScribeInventoryFormDefinition|nil defaults for an inventory form
 ---@field inventory_colors ScribeInventoryFormColors|nil default colors for an inventory form. Only works when style is applied to root context.
 
+---@alias ScribeElementName
+---|"container"
+---|"vertical_box"
+---|"horizontal_box"
+---|"text"
+---|"text_input"
+---|"rect"
+---|"image"
+---|"button"
+---|"toggle_button"
+---|"inventory"
 
---[[TESTING]]
+--[[TESTING]] 
 
+qts.scribe.register_style("basic", {
+    container={
+        texture="gui_formbg.png",
+        middle=10,
+        padding={x=0.2,y=0.2}
+    },
+    vertical_box={
+        texture="gui_buttonareabg.png"
+    },
+    horizontal_box={
+        texture="gui_buttonareabg.png"
+    },
+    button={
+        height=1,
+        width=1,
+        sound="gui_button",
+        style_normal={
+            background="gui_button.png",
+            background_middle=8,
+            border=false,
+        },
+        style_hovered={
+            background="gui_button_hovered.png",
+            background_middle=8,
+            border=false,
+        },
+        style_pressed={
+            background="gui_button_clicked.png",
+            background_middle=8,
+            border=false,
+        },
+
+    },
+    toggle_button={
+        height=0.66,
+        width=1,
+        sound="gui_button",
+        style_all={
+            background=""
+        },
+        style_toggled_all={
+            background=""
+        },
+        texture="gui_toggle_off.png",
+        texture_pressed="gui_toggle_on.png"
+    },
+    inventory_colors={
+        --background_color="#00000069",
+        background_color="#FF00FF69",
+        background_hover_color="#5A5A5A",
+        border_color="#141318",
+        tooltip_color="#30434C",
+        tooltip_text_color="#FFFFFF"
+    },
+    use_minetest_prepend=false,
+})
+
+qts.scribe.register_style("default_prepend", {
+    use_minetest_prepend=true,
+})
 ---Test function
 ---@param context ScribeContext
 local function gui_test_func(context)
@@ -1277,12 +1492,14 @@ local function gui_test_func(context)
     end
 
     context
+    :set_style("basic")
+    --:set_style("default_prepend")
     :container({
         --texture="gui_formbg.png",
+        --middle=5,
         --width=10,
         height=10,
         padding={x=0.1,y=0.1},
-        middle=5,
     }, function (context_c1)
         --do nothing right now.
         context_c1
@@ -1292,13 +1509,13 @@ local function gui_test_func(context)
             listname = "main",
             width=10,
             height=4,
-            position={x=0,y=1},
+            position={x=0,y=1.1},
             orientation = qts.select(
                 context_c1.userdata.show_list, 
                 qts.scribe.orientation.VERTICAL, 
                 qts.scribe.orientation.HORIZONTAL
             ),
-            slot_size = {x=0.5,y=0.5},
+            slot_size = {x=1,y=1},
             slot_spacing = {x=0.125,y=0.125},
             use_list_ring=true,
         })
@@ -1382,7 +1599,7 @@ local function gui_test_func(context)
         :vertical_box({
             position={x=0,y=1.1},
             visibility=qts.scribe.visibility.COLLAPSED,
-            alignment=qts.scribe.allignment.LEFT,
+            allignment=qts.scribe.allignment.LEFT,
             scrollable=true,
             spacing={x=0.1,y=0.1},
         }, function(context_v1)
