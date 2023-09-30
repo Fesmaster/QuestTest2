@@ -104,9 +104,9 @@ local function build_tooltip(name_or_pos, tooltip)
         end
 
         if type(tooltip) == "string" then
-            tooltip_text=tooltip_text..tooltip.."]"
+            tooltip_text=tooltip_text..tooltip.."]\n"
         elseif type(tooltip) == "table" then
-            tooltip_text=tooltip_text..tooltip.text..";"..tooltip.bgcolor..";"..tooltip.fgcolor.."]"
+            tooltip_text=tooltip_text..tooltip.text..";"..tooltip.bgcolor..";"..tooltip.fgcolor.."]\n"
         end
     end
     return tooltip_text
@@ -129,15 +129,15 @@ return {
             end
         end
 
-        local base = "formspec_version[6]"..
-        "size["..size.x..","..size.y..",false]"..
+        local base = "formspec_version[6]\n"..
+        "size["..size.x..","..size.y..",false]\n"..
         [[
             position[0.5,0.5]
             anchor[0.5,0.5]
             padding[0.05,0.05]
             ]]..
-            qts.select(formdata.details.use_minetest_prepend, "", "no_prepend[]")..
-            "real_coordinates[true]"
+            qts.select(formdata.details.use_minetest_prepend, "", "no_prepend[]\n")..
+            "real_coordinates[true]\n"
         if formdata.details.inventory_colors ~= nil then
             local colors = formdata.details.inventory_colors
             ---@cast colors +ScribeInventoryFormColors
@@ -146,7 +146,7 @@ return {
                 colors.background_hover_color..";"..
                 colors.border_color..";"..
                 colors.tooltip_color..";"..
-                colors.tooltip_text_color.."]"
+                colors.tooltip_text_color.."]\n"
         end
         --return constructed formspec string
         return base
@@ -178,13 +178,13 @@ return {
             if formdata.details.middle then
                 local middle = formdata.details.middle
                 imgstring = "background9["..qts.scribe.vec2.tostring(pos_bg)..";" .. sizestr ..";"..formdata.details.texture..";false;"..
-                    math.floor(middle.x_min)..","..math.floor(middle.y_min)..",-"..math.floor(middle.x_max)..",-"..math.floor(middle.y_max).."]"
+                    math.floor(middle.x_min)..","..math.floor(middle.y_min)..",-"..math.floor(middle.x_max)..",-"..math.floor(middle.y_max).."]\n"
             else
-                imgstring = "background["..qts.scribe.vec2.tostring(pos_bg)..";" .. sizestr ..";"..formdata.details.texture..";false]"
+                imgstring = "background["..qts.scribe.vec2.tostring(pos_bg)..";" .. sizestr ..";"..formdata.details.texture..";false]\n"
             end
         end
         
-        return imgstring.."container["..posstr.."]"
+        return imgstring.."container["..posstr.."]\n"
     end,
 
     ---@param formdata ScribeFormdata
@@ -223,9 +223,9 @@ return {
             if formdata.details.middle then
                 local middle = formdata.details.middle
                 imgstring = "background9["..qts.scribe.vec2.tostring(pos_bg)..";" .. qts.scribe.vec2.tostring(formdata.details.size) ..";"..formdata.details.texture..";false;"..
-                    math.floor(middle.x_min)..","..math.floor(middle.y_min)..",-"..math.floor(middle.x_max)..",-"..math.floor(middle.y_max).."]"
+                    math.floor(middle.x_min)..","..math.floor(middle.y_min)..",-"..math.floor(middle.x_max)..",-"..math.floor(middle.y_max).."]\n"
             else
-                imgstring = "background["..qts.scribe.vec2.tostring(pos_bg)..";" .. qts.scribe.vec2.tostring(formdata.details.size) ..";"..formdata.details.texture..";false]"
+                imgstring = "background["..qts.scribe.vec2.tostring(pos_bg)..";" .. qts.scribe.vec2.tostring(formdata.details.size) ..";"..formdata.details.texture..";false]\n"
             end
         end
         
@@ -243,13 +243,13 @@ return {
             "scrollbaroptions["..
             "min=0;max="..scrollbar_ticks..";smallstep=10;largestep="..
             vis_size ..";thumbsize="..vis_size..";"..
-            "arrows=default]" .. --scrollbar options
+            "arrows=default]\n" .. --scrollbar options
             "scrollbar["..qts.scribe.vec2.tostring(scrollbar_pos)..";"..qts.scribe.vec2.tostring(scrollbar_size)..
-            ";vertical;".. formdata.details.scrollbar_name .. ";0]" .. --scrollbar
-            "scroll_container["..posstr..";"..sizestr..";"..formdata.details.scrollbar_name..";vertical;0.1]"
+            ";vertical;".. formdata.details.scrollbar_name .. ";0]\n" .. --scrollbar
+            "scroll_container["..posstr..";"..sizestr..";"..formdata.details.scrollbar_name..";vertical;0.1]\n"
             
         else
-            return imgstring.."container["..posstr.."]"
+            return imgstring.."container["..posstr.."]\n"
         end
     end,
 
@@ -289,9 +289,9 @@ return {
             if formdata.details.middle then
                 local middle = formdata.details.middle
                 imgstring = "background9["..qts.scribe.vec2.tostring(pos_bg)..";" .. qts.scribe.vec2.tostring(formdata.details.size) ..";"..formdata.details.texture..";false;"..
-                    math.floor(middle.x_min)..","..math.floor(middle.y_min)..",-"..math.floor(middle.x_max)..",-"..math.floor(middle.y_max).."]"
+                    math.floor(middle.x_min)..","..math.floor(middle.y_min)..",-"..math.floor(middle.x_max)..",-"..math.floor(middle.y_max).."]\n"
             else
-                imgstring = "background["..qts.scribe.vec2.tostring(pos_bg)..";" .. qts.scribe.vec2.tostring(formdata.details.size) ..";"..formdata.details.texture..";false]"
+                imgstring = "background["..qts.scribe.vec2.tostring(pos_bg)..";" .. qts.scribe.vec2.tostring(formdata.details.size) ..";"..formdata.details.texture..";false]\n"
             end
         end
         
@@ -309,13 +309,13 @@ return {
             "scrollbaroptions["..
             "min=0;max="..scrollbar_ticks..";smallstep=10;largestep="..
             vis_size ..";thumbsize="..vis_size..";"..
-            "arrows=default]" .. --scrollbar options
+            "arrows=default]\n" .. --scrollbar options
             "scrollbar["..qts.scribe.vec2.tostring(scrollbar_pos)..";"..qts.scribe.vec2.tostring(scrollbar_size)..
-            ";horizontal;".. formdata.details.scrollbar_name .. ";0]" .. --scrollbar
-            "scroll_container["..posstr..";"..sizestr..";"..formdata.details.scrollbar_name..";horizontal;0.1]"
+            ";horizontal;".. formdata.details.scrollbar_name .. ";0]\n" .. --scrollbar
+            "scroll_container["..posstr..";"..sizestr..";"..formdata.details.scrollbar_name..";horizontal;0.1]\n"
             
         else
-            return imgstring.."container["..posstr.."]"
+            return imgstring.."container["..posstr.."]\n"
         end
     end,
 
@@ -333,7 +333,7 @@ return {
         local outstr = "box["..
             qts.scribe.vec2.tostring(pos)..";"..
             qts.scribe.vec2.tostring(formdata.details.size)..";"..
-            formdata.details.color.."]"
+            formdata.details.color.."]\n"
 
         if formdata.details.tooltip then
             outstr=outstr..build_tooltip({pos=pos,size=formdata.details.size}, formdata.details.tooltip)
@@ -405,7 +405,7 @@ return {
             formdata.details.name..";"..
             "<global" .. stylestring .. ">"..
             startstring .. formdata.details.text .. endstring ..
-            "]"
+            "]\n"
 
         if formdata.details.tooltip then
             outstr=outstr..build_tooltip({pos=pos,size=formdata.details.size}, formdata.details.tooltip)
@@ -426,7 +426,7 @@ return {
         if formdata.details.border ~= nil or formdata.details.font then
             outstr = outstr .. "\nstyle["..formdata.details.name..
                 build_font_string(formdata.details.font, true, true, true)..
-                ";border="..qts.select(formdata.details.border, "true", "false").. "]"
+                ";border="..qts.select(formdata.details.border, "true", "false").. "]\n"
         
         end
 
@@ -434,25 +434,25 @@ return {
             outstr = outstr .. "\npwdfield["..qts.scribe.vec2.tostring(pos)..";"..
                 qts.scribe.vec2.tostring(formdata.details.size)..";"..
                 formdata.details.name..";"..
-                formdata.details.label.."]"
+                formdata.details.label.."]\n"
         elseif formdata.details.multiline then
             outstr = outstr .. "\ntextarea["..qts.scribe.vec2.tostring(pos)..";"..
                 qts.scribe.vec2.tostring(formdata.details.size)..";"..
                 formdata.details.name..";"..
                 formdata.details.label..";"..
-                formdata.details.default_value.."]"
+                formdata.details.default_value.."]\n"
         else
             outstr = outstr .. "\nfield["..qts.scribe.vec2.tostring(pos)..";"..
                 qts.scribe.vec2.tostring(formdata.details.size)..";"..
                 formdata.details.name..";"..
                 formdata.details.label..";"..
-                formdata.details.default_value.."]"
+                formdata.details.default_value.."]\n"
         end
 
         --field to stop text entry from closing the UI by default
         if not formdata.details.multiline then
             outstr = outstr.."\nfield_close_on_enter["..formdata.details.name..";"..
-                qts.select(formdata.details.close_on_enter, "true", "false") .. "]"
+                qts.select(formdata.details.close_on_enter, "true", "false") .. "]\n"
         end
 
         
@@ -477,7 +477,7 @@ return {
             outstr = "item_image["..
                 qts.scribe.vec2.tostring(pos)..";"..
                 qts.scribe.vec2.tostring(formdata.details.size)..";"..
-                formdata.details.item.."]"
+                formdata.details.item.."]\n"
         else
                 
             if formdata.details.animation then
@@ -503,7 +503,7 @@ return {
                     formdata.details.middle.y_min..","..formdata.details.middle.x_max..
                     ","..formdata.details.middle.y_max
             end
-            outstr = outstr .. "]"
+            outstr = outstr .. "]\n"
 
             
         end
@@ -579,16 +579,16 @@ return {
         --collect styles
         local style = ""
         if needs_style_any then
-            style = style..style_any.."]"
+            style = style..style_any.."]\n"
         end
         if needs_style_normal then
-            style = style..style_normal.."]"
+            style = style..style_normal.."]\n"
         end
         if needs_style_hovered then
-            style = style..style_hovered.."]"
+            style = style..style_hovered.."]\n"
         end
         if needs_style_pressed then
-            style = style..style_pressed.."]"
+            style = style..style_pressed.."]\n"
         end
 
         --build the button
@@ -597,16 +597,16 @@ return {
             --image button
             btn = "image_button["..posstr..";"..sizestr..";"..formdata.details.texture..";"..formdata.details.name..";"..label
             if formdata.details.texture_pressed then
-                btn=btn..";true;false;"..formdata.details.texture_pressed.."]"
+                btn=btn..";true;false;"..formdata.details.texture_pressed.."]\n"
             else
-                btn=btn..";true;false;"..formdata.details.texture.."]"
+                btn=btn..";true;false;"..formdata.details.texture.."]\n"
             end
         elseif formdata.details.item then
             --item button
-            btn = "item_image_button["..posstr..";"..sizestr..";"..formdata.details.item..";"..formdata.details.name..";"..label.."]"
+            btn = "item_image_button["..posstr..";"..sizestr..";"..formdata.details.item..";"..formdata.details.name..";"..label.."]\n"
         else
             --regular button
-            btn = "button["..posstr..";"..sizestr..";"..formdata.details.name..";"..formdata.details.label.."]"
+            btn = "button["..posstr..";"..sizestr..";"..formdata.details.name..";"..formdata.details.label.."]\n"
         end
 
         --build the tooltip
@@ -625,7 +625,7 @@ return {
         --build style element first. It must always exist
         local outstr = "style_type[list;size="..
             qts.scribe.vec2.tostring(formdata.details.slot_size)..";spacing="..
-            qts.scribe.vec2.tostring(formdata.details.slot_spacing).."]"
+            qts.scribe.vec2.tostring(formdata.details.slot_spacing).."]\n"
 
         -- list colors are a universal setting, and cannot be set per-element
         --[[ this uses QT2 Defaults, not minetest defaults.
@@ -662,7 +662,7 @@ return {
             outstr = outstr .. "\nlist[" .. list_src .. ";" .. formdata.details.listname .. ";"..
                 qts.scribe.vec2.tostring(pos)..";"..
                 qts.scribe.vec2.tostring(formdata.details.slots)..";"..
-                formdata.details.starting_item_index .. "]"
+                formdata.details.starting_item_index .. "]\n"
         else
             --vertical list orientation - hard!
             --not supported by formspec, so we have to make a bunch of individual lists that are 1 element wide and space them correctly.
@@ -674,7 +674,7 @@ return {
                 outstr = outstr .. "\nlist[" .. list_src .. ";" .. formdata.details.listname .. ";"..
                     qts.scribe.vec2.tostring(running_pos)..";"..
                     "1,"..formdata.details.slots.y..";"..
-                    running_start .. "]"
+                    running_start .. "]\n"
 
                 --update the start and running pos
                 running_pos.x = running_pos.x + formdata.details.slot_size.y + formdata.details.slot_spacing.y
@@ -683,9 +683,49 @@ return {
         end
 
         if formdata.details.use_list_ring then
-            outstr = outstr .. "\nlistring["..list_src..";"..formdata.details.listname.."]"
+            outstr = outstr .. "\nlistring["..list_src..";"..formdata.details.listname.."]\n"
         end
 
+        return outstr
+    end,
+
+
+    ---@param formdata ScribeFormdata
+    model = function(formdata)
+        local pos = {x=0,y=0}
+        if formdata.details.position ~= nil then
+            pos = qts.scribe.vec2.copy(formdata.details.position)
+        end
+
+        local style_str = ""
+        if (formdata.details.background_color) then
+            style_str = "style["..formdata.details.name..";bgcolor="..formdata.details.background_color.."]\n"
+        end
+
+        local posstr = qts.scribe.vec2.tostring(pos)
+        local sizestr = qts.scribe.vec2.tostring(formdata.details.size)
+
+        local outstr = style_str .. "model["..
+            posstr..";"..
+            sizestr..";"..
+            formdata.details.name..";"..
+            formdata.details.mesh..";"..
+            formdata.details.textures..";"..
+            qts.scribe.vec2.tostring(formdata.details.rotation)..";"..
+            qts.select(formdata.details.continuous_rotation, "true", "false")..";"..
+            qts.select(formdata.details.mouse_control, "true", "false")
+
+        if (formdata.details.frames_per_second > 0) then
+            --frame_loop_range vec2? the range of any animation to play, <begin>,<end>. Default: {x=0,y=0}
+            --frames_per_second number? frames per second on the animation. Default: 0
+            outstr = outstr ..";"..
+                qts.scribe.vec2.tostring(formdata.details.frame_loop_range)..";"..
+                formdata.details.frames_per_second
+        end
+
+        outstr = outstr.."]\n"
+        
+        
         return outstr
     end,
 }
