@@ -229,7 +229,7 @@ local function ApplyButtonStyleToAnother(style_dest, style_src)
 
     if style_dest.font == nil then
         style_dest.font = style_src.font
-    else
+    elseif type(style_src.font) == "table" then
         if style_dest.font.bold == nil then
             style_dest.font.bold = style_src.font.bold
         end
@@ -289,18 +289,22 @@ qts.scribe.context_base = {
 
         --texture
         if def.texture and type(def.texture) == "string" then
-            child.formdata.details.texture = def.texture
-
-            --check for a valid middle definition
-            if def.middle then
-                child.formdata.details.middle = parse_middle_format(def.middle)
+            if (def.texture ~= "") then
+                child.formdata.details.texture = def.texture
+                
+                --check for a valid middle definition
+                if def.middle then
+                    child.formdata.details.middle = parse_middle_format(def.middle)
+                end
             end
         elseif defaults.texture and type(defaults.texture)== "string" then
-            child.formdata.details.texture = defaults.texture
+            if (defaults.texture ~= "") then
+                child.formdata.details.texture = defaults.texture
 
-            --check for a valid middle definition
-            if defaults.middle then
-                child.formdata.details.middle = parse_middle_format(defaults.middle)
+                --check for a valid middle definition
+                if defaults.middle then
+                    child.formdata.details.middle = parse_middle_format(defaults.middle)
+                end
             end
         end
 
@@ -335,18 +339,22 @@ qts.scribe.context_base = {
 
         --texture
         if def.texture and type(def.texture) == "string" then
-            child.formdata.details.texture = def.texture
-        
-            --check for a valid middle definition
-            if def.middle then
-                child.formdata.details.middle = parse_middle_format(def.middle)
+            if (def.texture ~= "") then
+                child.formdata.details.texture = def.texture
+                
+                --check for a valid middle definition
+                if def.middle then
+                    child.formdata.details.middle = parse_middle_format(def.middle)
+                end
             end
         elseif defaults.texture and type(defaults.texture) == "string" then
-            child.formdata.details.texture = defaults.texture
-        
-            --check for a valid middle definition
-            if defaults.middle then
-                child.formdata.details.middle = parse_middle_format(defaults.middle)
+            if (defaults.texture ~= "") then
+                child.formdata.details.texture = defaults.texture
+                
+                --check for a valid middle definition
+                if defaults.middle then
+                    child.formdata.details.middle = parse_middle_format(defaults.middle)
+                end
             end
         end
 
@@ -486,18 +494,22 @@ qts.scribe.context_base = {
 
         --texture
         if def.texture and type(def.texture) == "string" then
-            child.formdata.details.texture = def.texture
-        
-            --check for a valid middle definition
-            if def.middle then
-                child.formdata.details.middle = parse_middle_format(def.middle)
+            if (def.texture ~= "") then
+                child.formdata.details.texture = def.texture
+                
+                --check for a valid middle definition
+                if def.middle then
+                    child.formdata.details.middle = parse_middle_format(def.middle)
+                end
             end
         elseif defaults.texture and type(defaults.texture) == "string" then
-            child.formdata.details.texture = defaults.texture
-        
-            --check for a valid middle definition
-            if defaults.middle then
-                child.formdata.details.middle = parse_middle_format(defaults.middle)
+            if (defaults.texture ~= "") then
+                child.formdata.details.texture = defaults.texture
+                
+                --check for a valid middle definition
+                if defaults.middle then
+                    child.formdata.details.middle = parse_middle_format(defaults.middle)
+                end
             end
         end
 
@@ -1084,6 +1096,181 @@ qts.scribe.context_base = {
         return self
     end,
 
+    ---Create a tab header and its tabs
+    ---@param self ScribeContext
+    ---@param def ScribeTabHeaderFormDefinition
+    ---@param tabs ScribeTab[]
+    tab_header = function(self, def, tabs)
+        --tab header is actually a bunch of buttons and a container
+        if (#tabs == 0) then return end
+        
+        local defaults = self:get_element_defaults("tab_header")
+        ---@cast defaults +ScribeTabHeaderFormDefinition
+
+        local inner_size = pick_first_not_nil(def.inner_size, defaults.inner_size, {x=nil,y=nil})
+
+        local active_tab = tabs[1] ---@type ScribeTab
+        local active_tab_name = active_tab.tab.name
+        local active_tab_index = 1
+        local active_tab_entry = "__scribe_active_tab_"..def.name
+        if self.userdata[active_tab_entry] then 
+            active_tab_name = self.userdata[active_tab_entry]
+            local found = false
+            for i, tab in ipairs(tabs) do
+                if tab.tab.name == active_tab_name then
+                    active_tab = tab
+                    active_tab_index = i
+                    found=true
+                    break
+                end
+            end
+            if not found then
+                active_tab_name = active_tab.tab.name
+            end
+        end
+        
+        
+        ---function to display the tabs
+        ---@param context ScribeContext
+        local tabs_func = function(context)
+            --TODO: appropreately implement per-tab allignment
+
+            for i, tab_entry in ipairs(tabs) do
+                ---@cast tab_entry ScribeTab
+                local tab = tab_entry.tab
+                if (i == active_tab_index) then
+                    minetest.log("Active Tab: " .. tab.name)
+                end
+
+                --merging button styles
+                if tab.style_any == nil then tab.style_any = {} end
+                if tab.style_normal == nil then tab.style_normal = {} end
+                if tab.style_hovered == nil then tab.style_hovered = {} end
+                if tab.style_pressed == nil then tab.style_pressed = {} end
+                if tab.style_all == nil then tab.style_all = {} end
+                ApplyButtonStyleToAnother(tab.style_any, def.style_any)
+                ApplyButtonStyleToAnother(tab.style_any, defaults.style_any)
+                ApplyButtonStyleToAnother(tab.style_normal, def.style_normal)
+                ApplyButtonStyleToAnother(tab.style_normal, defaults.style_normal)
+                ApplyButtonStyleToAnother(tab.style_hovered, def.style_hovered)
+                ApplyButtonStyleToAnother(tab.style_hovered, defaults.style_hovered)
+                ApplyButtonStyleToAnother(tab.style_pressed, def.style_pressed)
+                ApplyButtonStyleToAnother(tab.style_pressed, defaults.style_pressed)
+                ApplyButtonStyleToAnother(tab.style_all, def.style_all)
+                ApplyButtonStyleToAnother(tab.style_all, defaults.style_all)
+
+                -- allignment ScribeFormAllignment? Overide to the global allignment
+                context:button({
+                    position = tab.position,
+                    width = tab.width,
+                    height = tab.height,
+                    padding = tab.padding,
+
+                    name = tab.name,
+                    label = tab.label,
+                    texture = qts.select(i==active_tab_index, tab.texture_pressed, tab.texture),
+                    texture_pressed = qts.select(i==active_tab_index, tab.texture, tab.texture_pressed),
+                    item = tab.item,
+                    sound = tab.sound,
+                    style_any = tab.style_any,
+                    style_normal = qts.select(i==active_tab_index, tab.style_pressed, tab.style_normal),
+                    style_hovered = tab.style_hovered,
+                    style_pressed = qts.select(i==active_tab_index, tab.style_normal, tab.style_pressed),
+                    style_all = tab.style_all,
+
+                    toggleable=false,
+                    is_exit=false,
+                    tooltip=tab.tooltip,
+                    visibility=tab.visibility,
+                }, function (event)
+                    event.userdata[active_tab_entry] = tab_entry.tab.name
+                    event:mark_for_refresh();
+                end)
+            end
+        end
+        
+        
+        if (def.orientation == qts.scribe.orientation.HORIZONTAL) then
+            self:vertical_box({
+                position = def.position,
+                width = def.width,
+                height = def.height,
+                tooltip = def.tooltip,
+                visibility = def.visibility,
+                padding=def.padding,
+                texture="",
+                middle={0,0,0,0}
+            }, function(context)
+                if (def.allignment == qts.scribe.allignment.TOP) then
+                    --tabs on top
+                    context:horizontal_box({
+                        allignment=def.tabs_allignment,
+                        padding={x=0,y=0},
+                        texture="",
+                        middle={0,0,0,0}
+                    }, tabs_func)
+                end
+                --tab body
+                context:container({
+                    width=inner_size.x,
+                    height=inner_size.y,
+                    padding={x=0,y=0},
+                    texture="",
+                    middle={0,0,0,0}
+                }, active_tab.page)
+                if (def.allignment ~= qts.scribe.allignment.TOP) then
+                    --tabs on bottom
+                    context:horizontal_box({
+                        allignment=def.tabs_allignment,
+                        padding={x=0,y=0},
+                        texture="",
+                        middle={0,0,0,0}
+                    }, tabs_func)
+                end
+            end)
+        elseif (def.orientation == qts.scribe.orientation.VERTICAL) then
+            self:horizontal_box({
+                position = def.position,
+                width = def.width,
+                height = def.height,
+                tooltip = def.tooltip,
+                visibility = def.visibility,
+                padding=def.padding,
+                texture="",
+                middle={0,0,0,0}
+            }, function(context)
+                if (def.allignment == qts.scribe.allignment.LEFT) then
+                    --tabs on left
+                    context:vertical_box({
+                        allignment=def.tabs_allignment,
+                        padding={x=0,y=0},
+                        texture="",
+                        middle={0,0,0,0}
+                    }, tabs_func)
+                end
+                --tab body
+                context:container({
+                    width=inner_size.x,
+                    height=inner_size.y,
+                    padding={x=0,y=0},
+                        texture="",
+                        middle={0,0,0,0}
+                }, active_tab.page)
+                if (def.allignment ~= qts.scribe.allignment.LEFT) then
+                    --tabs on right
+                    context:vertical_box({
+                        allignment=def.tabs_allignment,
+                        padding={x=0,y=0},
+                        texture="",
+                        middle={0,0,0,0}
+                    }, tabs_func)
+                end
+            end)
+        end
+
+        return self
+    end,
+
     ---Add a callback function to run when GUI is closed. More than 1 can be added.
     ---@param self ScribeContext
     ---@param callback ScribeCallbackFunction
@@ -1253,7 +1440,7 @@ qts.scribe.context_base = {
         minetest.show_formspec(self.player:get_player_name(), self.name, self:generate_formspec())
     end,
 
-        ---Get the default fields for an element name
+    ---Get the default fields for an element name
     ---@param self ScribeContext
     ---@param elementname ScribeElementName
     ---@return ScribeBasicFormDefinition
@@ -1280,10 +1467,6 @@ qts.scribe.context_base = {
         return self
     end,
 }
-
-
-
-
 
 --set the context as the metatable 
 qts.scribe.context_base.__mt.__index  = qts.scribe.context_base
@@ -1447,14 +1630,44 @@ All other types of elements are made from these collected together.
 
 ---@class ScribeModelFormDefinition : ScribeBasicFormDefinition
 ---@field name string? Element name. Default: generated.
----@field mesh string Mesh model name. Must be provided.
----@field textures string Mesh textures, seperated by commas. Must be provided.
+---@field mesh Mesh Mesh model name. Must be provided.
+---@field textures Texture Mesh textures, seperated by commas. Must be provided.
 ---@field rotation vec2? Initial camera rotation. Default: {x=0,y=0}
 ---@field continuous_rotation boolean? If true, the rotation value is continuous, like a turntable. Default: false
 ---@field mouse_control boolean? If true, the mouse can control the rotation. Default: false
 ---@field frame_loop_range vec2? the range of any animation to play, <begin>,<end>. Default: {x=0,y=0}
 ---@field frames_per_second number? frames per second on the animation. Default: 0
 ---@field background_color ColorSpec? background color. Default: minetest default
+
+---@class ScribeTabHeaderFormDefinition : ScribeBasicFormDefinition
+---@field name string Element name. Must be provided.
+---@field style_any ScribeButtonStateStyle? Style when no other state specifies it. Global styles override this.
+---@field style_normal ScribeButtonStateStyle? Style in the normal state
+---@field style_hovered ScribeButtonStateStyle? Style in the hovered state
+---@field style_pressed ScribeButtonStateStyle? Style in the pressed state
+---@field style_all ScribeButtonStateStyle? Style in the pressed state
+---@field orientation ScribeFormOrientation? Orientation of the header
+---@field allignment ScribeFormAllignment? Allignment of the header (IE, left-right or top-bottom selection)
+---@field tabs_allignment ScribeFormAllignment? Allignment of the header tabs (left-to-right, centered, top-to-bottom, etc)
+---@field inner_size vec2? Size of the inner container for the tab pages
+
+---@class ScribeTabDefinition : ScribeBasicFormDefinition
+---@field name string tab name. Must be supplied to keep it static
+---@field label string? text on the button
+---@field texture Texture? texture to show, if wanted.
+---@field texture_pressed Texture|nil if texture is valid, and this is valid, show texture_pressed instead of texture when button pressed
+---@field item ItemName? item to appear on the button. Does not work with 'texture' or 'texture_pressed'
+---@field sound string? sound to play when clicked.
+---@field style_any ScribeButtonStateStyle? Style when no other state specifies it. Global styles override this.
+---@field style_normal ScribeButtonStateStyle? Style in the normal state
+---@field style_hovered ScribeButtonStateStyle? Style in the hovered state
+---@field style_pressed ScribeButtonStateStyle? Style in the pressed state
+---@field style_all ScribeButtonStateStyle? Style in all states, overriding global style, but not overriding style set per state per element.
+---@field allignment ScribeFormAllignment? Overide to the global allignment
+
+---@class ScribeTab
+---@field tab ScribeTabDefinition
+---@field page ScribeContextFunction
 
 ---@class ScribeInventoryFormColors Colors for building an inventory
 ---@field background_color ColorSpec|nil The background color
@@ -1475,6 +1688,8 @@ All other types of elements are made from these collected together.
 ---@field button ScribeButtonFormDefinition|nil defaults for a regular button form
 ---@field toggle_button ScribeButtonFormDefinition|nil defaults for a toggleable button form
 ---@field inventory ScribeInventoryFormDefinition|nil defaults for an inventory form
+---@field model ScribeModelFormDefinition|nil defaults for a model form
+---@field tab_header ScribeTabHeaderFormDefinition|nil defaults for a model form
 ---@field inventory_colors ScribeInventoryFormColors|nil default colors for an inventory form. Only works when style is applied to root context.
 
 --[[
@@ -1569,190 +1784,214 @@ local function gui_test_func(context)
     end
 
     context
-    :enable_debug_printing(true)
+    --:enable_debug_printing(true)
     :set_style("basic")
     --:set_style("default_prepend")
     :container({
         --texture="gui_formbg.png",
         --middle=5,
-        width=10,
-        height=10,
-        padding={x=0.1,y=0.1},
+        --width=10,
+        --height=10,
+        --padding={x=0.1,y=0.1},
     }, function (context_c1)
         context_c1
-        :model({
-            width=4,
-            height=4,
-            position={x=0,y=1.1},
-            mesh="character.x",
-            textures=minetest.formspec_escape(qts.make_humanoid_texture("player_base.png", nil, nil, nil, nil)),
-            --mouse_control=false,
-            rotation={x=0,y=90},
-            continuous_rotation=true,
-            --background_color="#101010FF",
-            --frame_loop_range={x = 168, y = 187},
-            --frames_per_second=15
-        })
-        :inventory({
-            visibility=qts.scribe.visibility.COLLAPSED,
-            source = qts.scribe.inventory_source.CURRENT_PLAYER,
-            sourcename = "",
-            listname = "main",
-            width=10,
-            height=4,
-            position={x=0,y=1.1},
-            orientation = qts.select(
-                context_c1.userdata.show_list, 
-                qts.scribe.orientation.VERTICAL, 
-                qts.scribe.orientation.HORIZONTAL
-            ),
-            slot_size = {x=1,y=1},
-            slot_spacing = {x=0.125,y=0.125},
-            use_list_ring=true,
-        })
-        :inventory({
-            visibility=qts.scribe.visibility.COLLAPSED,
-            source = qts.scribe.inventory_source.DETACHED,
-            sourcename = "trash",
-            listname = "main",
-            width=1,
-            height=1,
-            position={x=0,y=7},
-            use_list_ring=true,
-        })
-        
-        :button({
-            label="Switch List Orientation",
-            --visibility=qts.scribe.visibility.COLLAPSED,
-            tooltip={text="Switched the list orientation", bgcolor="#000000", fgcolor="#00FFFF"},
-            width=2,
-            height=1,
-            --padding=0,
-            --background_hovered="Transparent.png",
-            --background_pressed="Transparent.png",
-            position={x=1,y=0},
-            style_all={
-                --background="Transparent.png",
-                font = {
-                    style="mono",
-                    bold=true,
-                    italic=true,
-                    size=20
-                },
-            },
-            style_normal={
-                font={
-                    color="#ff0000",
-                },
-            },
-            style_hovered={
-                font={
-                    color="#ffff00",
-                },
-            },
+        :tab_header({
+            name="primarytab",
+            orientation = qts.scribe.orientation.VERTICAL,
+            allignment = qts.scribe.allignment.RIGHT,
+            --width=10,
+            --height=10,
+            position={x=0,y=0},
+            inner_size={x=10,y=9},
+            tabs_allignment = qts.scribe.allignment.LEFT,
             style_pressed={
                 font={
-                    color="#ff00ff",
+                    bold=true
                 },
+                background_tint="#FF0000"
+            }
+        }, {
+            { --tab 1
+                tab={
+                    name="Tab 1",
+                    label="Tab 1",
+                    height=0.7,
+                    width=1.2,
+                },
+                page=function (context_tab1)
+                    context_tab1:model({
+                        width=4,
+                        height=4,
+                        position={x=0,y=1.1},
+                        mesh="character.x",
+                        textures=minetest.formspec_escape(qts.make_humanoid_texture("player_base.png", nil, nil, nil, nil)),
+                        --mouse_control=false,
+                        rotation={x=0,y=90},
+                        continuous_rotation=true,
+                        --background_color="#101010FF",
+                        --frame_loop_range={x = 168, y = 187},
+                        --frames_per_second=15
+                    })
+                end
             },
-        },
-        function(event)
-            minetest.log("Button1 pressed")
-            event.userdata.show_list = (not event.userdata.show_list)
-            minetest.log("show list: " .. dump(event.userdata.show_list))
-            event:mark_for_refresh()
-        end)
-        
-        :text({
-            name="hypertext_element",
-            visibility=qts.scribe.visibility.COLLAPSED,
-            text = "ABCaijk<action name=arbitrary_action_name>pqlg</action>",
-            position={x=3.2,y=context_c1.userdata.label_pos},
-            width=4,
-            height=1,
-            vertical_allignment=qts.scribe.allignment.TOP,
-            horizontal_allignment=qts.scribe.allignment.LEFT,
-            font={
-                style="mono",
-                size=context_c1.userdata.label_size,
-                --bold=true,
-                --italic=true,
-                --underline=true
+            { --tab 2
+                tab={
+                    name="Tab 2",
+                    label="Tab 2",
+                    height=0.7,
+                    width=1.2,
+                },
+                page=function (context_tab1)
+                    context_tab1:inventory({
+                        source = qts.scribe.inventory_source.CURRENT_PLAYER,
+                        sourcename = "",
+                        listname = "main",
+                        width=10,
+                        height=4,
+                        position={x=0,y=1.1},
+                        orientation = qts.select(
+                            context_c1.userdata.show_list, 
+                            qts.scribe.orientation.VERTICAL, 
+                            qts.scribe.orientation.HORIZONTAL
+                        ),
+                        slot_size = {x=1,y=1},
+                        slot_spacing = {x=0.125,y=0.125},
+                        use_list_ring=true,
+                    })
+                    :inventory({
+                        source = qts.scribe.inventory_source.DETACHED,
+                        sourcename = "trash",
+                        listname = "main",
+                        width=1,
+                        height=1,
+                        position={x=0,y=7},
+                        use_list_ring=true,
+                    })
+                    
+                    :button({
+                        label="Switch List Orientation",
+                        tooltip={text="Switched the list orientation", bgcolor="#000000", fgcolor="#00FFFF"},
+                        width=2,
+                        height=1,
+                        position={x=1,y=0},
+                        style_all={
+                            font = {
+                                style="mono",
+                                bold=true,
+                                italic=true,
+                                size=20
+                            },
+                        },
+                        style_normal={
+                            font={
+                                color="#ff0000",
+                            },
+                        },
+                        style_hovered={
+                            font={
+                                color="#ffff00",
+                            },
+                        },
+                        style_pressed={
+                            font={
+                                color="#ff00ff",
+                            },
+                        },
+                    },
+                    function(event)
+                        minetest.log("Button1 pressed")
+                        event.userdata.show_list = (not event.userdata.show_list)
+                        minetest.log("show list: " .. dump(event.userdata.show_list))
+                        event:mark_for_refresh()
+                    end)
+                end
             },
-            tooltip="Text area"
-        }, function (event)
-            minetest.log("text callback event: ".. dump(event.fields.hypertext_element))
-        end)
-        :seperator({
-            position={x=0,y=1.05},
-            visibility=qts.scribe.visibility.COLLAPSED,
-            color="#000000FF"
+            { --tab 3
+                tab={
+                    name="Tab 3",
+                    label="Tab 3",
+                    height=0.7,
+                    width=1.2,
+                },
+                page=function (context_tab1)
+                    context_tab1:text({
+                        name="hypertext_element",
+                        text = "ABCaijk<action name=arbitrary_action_name>pqlg</action>",
+                        position={x=3.2,y=context_c1.userdata.label_pos},
+                        width=4,
+                        height=1,
+                        vertical_allignment=qts.scribe.allignment.TOP,
+                        horizontal_allignment=qts.scribe.allignment.LEFT,
+                        font={
+                            style="mono",
+                            size=context_c1.userdata.label_size,
+                        },
+                        tooltip="Text area"
+                    }, function (event)
+                        minetest.log("text callback event: ".. dump(event.fields.hypertext_element))
+                    end)
+                    :seperator({
+                        position={x=0,y=1.05},
+                        color="#000000FF"
+                    })
+                    :vertical_box({
+                        position={x=0,y=1.1},
+                        allignment=qts.scribe.allignment.LEFT,
+                        scrollable=true,
+                        height=8,
+                        spacing={x=0.1,y=0.1},
+                    }, function(context_v1)
+                        context_v1
+                        :image({
+                            width=2,
+                            height=2,
+                            texture="bubble.png",
+                            tooltip={text="bubbles!",fgcolor="#000000", bgcolor="#FFFFFF"},
+                        })
+                        :image({
+                            width=2,
+                            height=2,
+                            texture="qtcore_flame_animated.png",
+                            animation={
+                                count=8,
+                                duration=120,
+                                start=1
+                            },
+                            tooltip="fire!",
+                        })
+                        :image({
+                            width=2,
+                            height=2,
+                            item="overworld:marble",
+                            tooltip="marble!",
+                        })
+                        :rect({
+                            width=2,
+                            height=2,
+                            color="#505050FF",
+                            tooltip ="DepressingGrey",
+                        })
+                        :text_entry({
+                            name="textentry1",
+                            width=4,
+                            height=2,
+                            tooltip={text="Enter some text here", fgcolor="#06FFFF", bgcolor="#040404"},
+                            font={size=24},
+                        }, function (event)
+                            minetest.log("textentry1 pressed:"..dump(event.fields.textentry1))
+                        end)
+                        :button({
+                            toggleable=true,
+                            name="toggleButton1",
+                            tooltip="Toggleable Button",
+                        }, function (event)
+                            minetest.log("Toggleable Status: " .. dump(event.userdata._scribe.toggleButton1.toggled))
+                        end)
+                    end)
+                end
+            }
         })
-        :vertical_box({
-            position={x=0,y=1.1},
-            visibility=qts.scribe.visibility.COLLAPSED,
-            allignment=qts.scribe.allignment.LEFT,
-            scrollable=true,
-            spacing={x=0.1,y=0.1},
-        }, function(context_v1)
-            context_v1
-            :image({
-                width=2,
-                height=2,
-                texture="bubble.png",
-                tooltip={text="bubbles!",fgcolor="#000000", bgcolor="#FFFFFF"},
-                --visibility=qts.scribe.visibility.COLLAPSED,
-            })
-            :image({
-                width=2,
-                height=2,
-                texture="qtcore_flame_animated.png",
-                animation={
-                    count=8,
-                    duration=120,
-                    start=1
-                },
-                tooltip="fire!",
-                visibility=qts.scribe.visibility.COLLAPSED,
-            })
-            :image({
-                width=2,
-                height=2,
-                item="overworld:marble",
-                tooltip="marble!",
-                visibility=qts.scribe.visibility.COLLAPSED,
-            })
-            :rect({
-                width=2,
-                height=2,
-                color="#505050FF",
-                tooltip ="DepressingGrey",
-                visibility=qts.scribe.visibility.COLLAPSED,
-            })
-            :text_entry({
-                name="textentry1",
-                width=4,
-                height=2,
-                tooltip={text="Enter some text here", fgcolor="#06FFFF", bgcolor="#040404"},
-                --close_on_enter=true,
-                --multiline=true,
-                --border=false,
-                font={size=24},
-                --obscure_content=true,
-
-            }, function (event)
-                minetest.log("textentry1 pressed:"..dump(event.fields.textentry1))
-            end)
-            :button({
-                toggleable=true,
-                name="toggleButton1",
-                tooltip="Toggleable Button",
-                --width=1,
-                --height=0.66,
-            }, function (event)
-                minetest.log("Toggleable Status: " .. dump(event.userdata._scribe.toggleButton1.toggled))
-            end)
-        end)
+        
         --[[
         :horizontal_box({
             position={x=0,y=1},
