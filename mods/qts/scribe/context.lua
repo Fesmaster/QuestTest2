@@ -1138,9 +1138,6 @@ qts.scribe.context_base = {
             for i, tab_entry in ipairs(tabs) do
                 ---@cast tab_entry ScribeTab
                 local tab = tab_entry.tab
-                if (i == active_tab_index) then
-                    minetest.log("Active Tab: " .. tab.name)
-                end
 
                 --merging button styles
                 if tab.style_any == nil then tab.style_any = {} end
@@ -1711,6 +1708,65 @@ All other types of elements are made from these collected together.
 ---|"model"
 ---|"tab_header"
 
+--[[  Register a Scribe GUI for the existing GUI system  ]]
+
+---Register a scribe GUI for the existing GUI system
+---@param name string the gui name
+---@param func ScribeContextFunction 
+function qts.gui.register_scribe_gui(name, func)
+    
+    qts.gui.register_gui(name, {
+        get = function (data, pos, playername, context)
+            local player = minetest.get_player_by_name(playername)
+            
+            if (context == nil) then
+                context = qts.scribe.new_context(player, pos, name)
+            end
+            func(context)
+            data.userdata = context.userdata
+            data.callbacks = context.callbacks
+            if (data.userdata.__scribe__debug_printing__) then
+                minetest.log("Scribe GUI Debug Output:\n"..context:generate_formspec()) 
+            end
+            return context:generate_formspec()
+        end,
+        handle = function (data, pos, playername, fields)
+            if data.userdata == nil then data.userdata = {} end
+            if data.callbacks == nil then data.callbacks = {} end
+            
+            local player = minetest.get_player_by_name(playername)
+            
+            local event = qts.scribe.new_event(player, pos, name, data.userdata, data.callbacks, fields, 
+                function (context)
+                    qts.gui.show_gui(pos, player, name, 1, true, context)
+                    data.userdata = context.userdata
+                    data.callbacks = context.callbacks
+                end
+            )
+            
+            for name, callback in pairs(data.callbacks) do
+                if fields[name] then
+                    if type(callback) == "function" then
+                        callback(event)
+                    elseif type(callback)=="table" then
+                        for i, fun in ipairs(callback) do
+                            fun(event)
+                        end
+                    end
+                end
+            end
+            
+            if event.needs_close then
+                event:close_gui()
+            elseif event.needs_refresh then
+               event:refresh_gui(true)
+            end
+        end,
+        tab=false,
+        tab_owner=false,
+    })
+end
+
 --[[TESTING]] 
 
 qts.scribe.register_style("basic", {
@@ -1775,7 +1831,7 @@ qts.scribe.register_style("default_prepend", {
 })
 ---Test function
 ---@param context ScribeContext
-local function gui_test_func(context)
+qts.gui.register_scribe_gui("qts_testing_scribe_gui", function(context)
     if context.userdata.label_pos == nil then
         context.userdata.label_pos = 0
     end
@@ -1797,8 +1853,8 @@ local function gui_test_func(context)
         context_c1
         :tab_header({
             name="primarytab",
-            orientation = qts.scribe.orientation.VERTICAL,
-            allignment = qts.scribe.allignment.RIGHT,
+            orientation = qts.scribe.orientation.HORIZONTAL,
+            allignment = qts.scribe.allignment.TOP,
             --width=10,
             --height=10,
             position={x=0,y=0},
@@ -2127,12 +2183,8 @@ local function gui_test_func(context)
     :quit_callback(function(event)
         minetest.log("scribe test gui quit!")
     end)
-end
+end)
 
-
-
-local userdata = {}
-local callbacks = {}
 
 minetest.register_chatcommand("scribetest", {
     params = "",
@@ -2140,15 +2192,11 @@ minetest.register_chatcommand("scribetest", {
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
         if player then
-            local context = qts.scribe.new_context(player, player:get_pos(), "qts:scribe_test")
-            gui_test_func(context)
-            userdata = context.userdata
-            callbacks = context.callbacks
-            context:show_gui()
+            qts.gui.show_gui(player:get_pos(), player, "qts_testing_scribe_gui")
         end
 	end
 })
-
+--[[
 minetest.register_on_player_receive_fields(function(player, formname, fields)
     if formname == "qts:scribe_test" then
         minetest.log("Fields: " ..dump(fields))
@@ -2182,4 +2230,4 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
     end
     return false
 end)
-
+]]

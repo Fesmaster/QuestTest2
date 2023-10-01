@@ -257,6 +257,7 @@ end
 ]]
 function qts.gui.show_gui(pos, player, formname, tabindex, show, ...)
 	--minetest.log(""..formname.." attemting to load (1)")
+	formname = string.gsub(formname, ":", "_"); --auto-handle formnames that contain colons.
 	if qts.gui.forms[formname] then --does the form name exist?
 		--minetest.log(""..formname.." attemting to load (2)")
 		if show == nil then show = true end --show default value
@@ -296,7 +297,8 @@ function qts.gui.show_gui(pos, player, formname, tabindex, show, ...)
 		else
 			return {"qts:"..formname, formstr}
 		end
-		
+	else
+		minetest.log("Warning", "Unable to find a registered GUI named '"..formname.."'")
 	end
 end
 

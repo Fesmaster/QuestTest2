@@ -21,7 +21,8 @@ qts.scribe.event_base = {
     ---Regenerate the GUI. Completely replaces the callback function list.
     ---You should always return right after calling this
     ---@param self ScribeEvent
-    refresh_gui = function(self)
+    ---@param ignore_show boolean? set to "true" to skip showing the GUI - as this might break some automated GUI systems
+    refresh_gui = function(self, ignore_show)
         if self.callbacks and self.callbacks.refresh then
             if type(self.callbacks.refresh) == "table" then
                 ---@diagnostic disable-next-line: param-type-mismatch
@@ -39,7 +40,9 @@ qts.scribe.event_base = {
             self.context_func(context)
             self.callbacks = context.callbacks
             self.userdata = context.userdata
-            context:show_gui()
+            if (not ignore_show) then
+                context:show_gui()
+            end
         end
     end,
 
