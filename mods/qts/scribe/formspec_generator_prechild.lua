@@ -58,7 +58,7 @@ local function build_button_style_string(style)
         stylestr=stylestr..build_font_string(style.font, true, true, true)
     end
     --border
-    if style.border then
+    if style.border ~= nil then
         stylestr=stylestr..";border="..tostring(style.border)
     end
     --internal offset
@@ -105,8 +105,14 @@ local function build_tooltip(name_or_pos, tooltip)
 
         if type(tooltip) == "string" then
             tooltip_text=tooltip_text..tooltip.."]\n"
-        elseif type(tooltip) == "table" then
-            tooltip_text=tooltip_text..tooltip.text..";"..tooltip.bgcolor..";"..tooltip.fgcolor.."]\n"
+        elseif type(tooltip) == "table" and tooltip.text ~= nil then
+            if (tooltip.fgcolor ~= nil and tooltip.bgcolor ~= nil) then
+                tooltip_text=tooltip_text..tooltip.text..";"..tooltip.bgcolor..";"..tooltip.fgcolor.."]\n"
+            else
+                tooltip_text=tooltip_text..tooltip.text.."]\n"
+            end
+        else
+            tooltip_text="" --error case - invalid tooltip
         end
     end
     return tooltip_text

@@ -82,6 +82,25 @@ local function common_create_formdata(context)
     }
 end
 
+---Build a tooltop
+---@param custom ScribeToolTip?
+---@param default ScribeToolTip
+---@return ScribeToolTip
+local function build_tooltip(custom, default)
+    if custom then 
+        if type(custom) == "string" and default ~= nil then
+            return {
+                text=custom,
+                fgcolor=default.fgcolor,
+                bgcolor=default.bgcolor
+            }
+        elseif type(custom) == "table" then
+            return custom
+        end
+    end
+    return default
+end
+
 ---Helper for building a child context.
 ---@param context ScribeContext
 ---@param childformdata ScribeFormdata
@@ -96,7 +115,7 @@ local function common_build_child_formdata(context, childformdata, def, defaults
         childformdata.details.visibility = qts.scribe.visibility.VISIBLE
     end
     childformdata.details.position = qts.scribe.vec2.copy(def.position, childformdata.details.position)
-    childformdata.details.tooltip = pick_first_not_nil(def.tooltip, defaults.tooltip, nil)
+    childformdata.details.tooltip = build_tooltip(def.tooltip, defaults.tooltip)
     childformdata.details.spacing = qts.scribe.vec2.copy(pick_first_not_nil(def.spacing, defaults.spacing, nil))
     childformdata.details.padding = qts.scribe.vec2.copy(pick_first_not_nil(def.padding, defaults.padding, nil))
 end
@@ -430,7 +449,7 @@ qts.scribe.context_base = {
                 child.formdata.details.scrollable=false
             end
         else
-            child.formdata.details.size.y = runningHeight
+            child.formdata.details.size.y = runningHeight + (2 * vert_spacing)
         end
 
         --calculate the scrollbar size
@@ -585,7 +604,7 @@ qts.scribe.context_base = {
                 child.formdata.details.scrollable=false
             end
         else
-            child.formdata.details.size.x = running_width
+            child.formdata.details.size.x = running_width + (2 * horz_spacing)
         end
 
         --calculate the scrollbar size
@@ -828,6 +847,10 @@ qts.scribe.context_base = {
             childformdata.details.name = def.name
         else
             childformdata.details.name = qts.scribe.next_element_name("button")
+            if (def.toggleable) then
+                minetest.log("warning", "Warning: toggleables without a static name will not function!")
+            end
+                
         end
         childformdata.details.label = pick_first_not_nil(def.label, defaults.label, nil)
         childformdata.details.is_exit = def.is_exit
@@ -852,6 +875,8 @@ qts.scribe.context_base = {
             end
 
             --default empty background
+            --this should be enfored by the style, not the API
+            --[[
             if def.style_all == nil then
                 def.style_all = {}
             end
@@ -864,6 +889,7 @@ qts.scribe.context_base = {
             if def.style_toggled_all.background == nil and (defaults.style_toggled_all == nil or defaults.style_toggled_all.background == nil) then
                 def.style_toggled_all.background = ""
             end
+            --]]
         end
         
         if is_toggled then
@@ -1102,7 +1128,10 @@ qts.scribe.context_base = {
     ---@param tabs ScribeTab[]
     tab_header = function(self, def, tabs)
         --tab header is actually a bunch of buttons and a container
-        if (#tabs == 0) then return end
+        if (#tabs == 0) then 
+            minetest.log("warning", "Number of tabs in a tab header is 0.")
+            return 
+        end
         
         local defaults = self:get_element_defaults("tab_header")
         ---@cast defaults +ScribeTabHeaderFormDefinition
@@ -1128,7 +1157,6 @@ qts.scribe.context_base = {
                 active_tab_name = active_tab.tab.name
             end
         end
-        
         
         ---function to display the tabs
         ---@param context ScribeContext
@@ -1164,7 +1192,7 @@ qts.scribe.context_base = {
                     padding = tab.padding,
 
                     name = tab.name,
-                    label = tab.label,
+                    label = pick_first_not_nil(tab.label,tab.name, "ERROR: UNNAMED TAB"),
                     texture = qts.select(i==active_tab_index, tab.texture_pressed, tab.texture),
                     texture_pressed = qts.select(i==active_tab_index, tab.texture, tab.texture_pressed),
                     item = tab.item,
@@ -1186,6 +1214,9 @@ qts.scribe.context_base = {
             end
         end
         
+        def.orientation = pick_first_not_nil(def.orientation, defaults.orientation, qts.scribe.orientation.HORIZONTAL)
+        def.allignment = pick_first_not_nil(def.allignment, defaults.allignment, qts.scribe.allignment.TOP)
+        def.tabs_allignment = pick_first_not_nil(def.tabs_allignment, defaults.tabs_allignment, qts.scribe.allignment.LEFT)
         
         if (def.orientation == qts.scribe.orientation.HORIZONTAL) then
             self:vertical_box({
@@ -1451,6 +1482,9 @@ qts.scribe.context_base = {
         local defaults = {}
         if style[elementname] ~= nil then
             defaults = style[elementname]
+            if (defaults) then
+                defaults.tooltip = build_tooltip(defaults.tooltip, style.tooltip_colors)
+            end
         end
         return defaults
     end,
@@ -1515,6 +1549,10 @@ All other types of elements are made from these collected together.
 
 ---@alias Rect number|vec2|{x_min:number,y_min:number,x_max:number,y_max:number} a middle definition for 9-slice elements
 
+---@alias ScribeToolTip
+---|string
+---|{text:string,bgcolor:ColorSpec,fgcolor:ColorSpec}
+
 ---@class ScribeFontStyle {style:"normal"|"mono"|nil, bold:boolean|nil, italic:boolean|nil, size:number|string|nil}
 ---@field style "normal"|"mono"|nil use normal or monospace. If nil, normal is used
 ---@field bold boolean|nil boolean text bold or not
@@ -1532,7 +1570,7 @@ All other types of elements are made from these collected together.
 ---@class ScribeBasicFormDefinition
 ---@field width number|nil if supplied, the width of the container. If not, size is auto-calculated.
 ---@field height number|nil if supplied, the height of the container. If not, size is auto-calculated.
----@field tooltip string|{text:string,bgcolor:ColorSpec,fgcolor:ColorSpec}|nil if supplied, it is the tooltip text when hovering over this form.
+---@field tooltip ScribeToolTip|nil if supplied, it is the tooltip text when hovering over this form.
 ---@field visibility ScribeFormVisibility|nil if supplied, it is the visibility of the form. defaults to VISIBLE
 ---@field position vec2|nil the position of the form, if supported.
 ---@field padding vec2|nil the padding around child elements, if supported.
@@ -1688,6 +1726,7 @@ All other types of elements are made from these collected together.
 ---@field model ScribeModelFormDefinition|nil defaults for a model form
 ---@field tab_header ScribeTabHeaderFormDefinition|nil defaults for a model form
 ---@field inventory_colors ScribeInventoryFormColors|nil default colors for an inventory form. Only works when style is applied to root context.
+---@field tooltip_colors ScribeToolTip? default tooltip colors
 
 --[[
     The scribe element is the type used for styling scribe forms.
@@ -1767,467 +1806,4 @@ function qts.gui.register_scribe_gui(name, func)
     })
 end
 
---[[TESTING]] 
 
-qts.scribe.register_style("basic", {
-    container={
-        texture="gui_formbg.png",
-        middle=10,
-        padding={x=0.2,y=0.2}
-    },
-    vertical_box={
-        texture="gui_buttonareabg.png"
-    },
-    horizontal_box={
-        texture="gui_buttonareabg.png"
-    },
-    button={
-        height=1,
-        width=1,
-        sound="gui_button",
-        style_normal={
-            background="gui_button.png",
-            background_middle=8,
-            border=false,
-        },
-        style_hovered={
-            background="gui_button_hovered.png",
-            background_middle=8,
-            border=false,
-        },
-        style_pressed={
-            background="gui_button_clicked.png",
-            background_middle=8,
-            border=false,
-        },
-
-    },
-    toggle_button={
-        height=0.66,
-        width=1,
-        sound="gui_button",
-        style_all={
-            background=""
-        },
-        style_toggled_all={
-            background=""
-        },
-        texture="gui_toggle_off.png",
-        texture_pressed="gui_toggle_on.png"
-    },
-    inventory_colors={
-        background_color="#00000069",
-        --background_color="#FF00FF69",
-        background_hover_color="#5A5A5A",
-        border_color="#141318",
-        tooltip_color="#30434C",
-        tooltip_text_color="#FFFFFF"
-    },
-    use_minetest_prepend=false,
-})
-
-qts.scribe.register_style("default_prepend", {
-    use_minetest_prepend=true,
-})
----Test function
----@param context ScribeContext
-qts.gui.register_scribe_gui("qts_testing_scribe_gui", function(context)
-    if context.userdata.label_pos == nil then
-        context.userdata.label_pos = 0
-    end
-    if context.userdata.label_size == nil then
-        context.userdata.label_size = 16
-    end
-
-    context
-    --:enable_debug_printing(true)
-    :set_style("basic")
-    --:set_style("default_prepend")
-    :container({
-        --texture="gui_formbg.png",
-        --middle=5,
-        --width=10,
-        --height=10,
-        --padding={x=0.1,y=0.1},
-    }, function (context_c1)
-        context_c1
-        :tab_header({
-            name="primarytab",
-            orientation = qts.scribe.orientation.HORIZONTAL,
-            allignment = qts.scribe.allignment.TOP,
-            --width=10,
-            --height=10,
-            position={x=0,y=0},
-            inner_size={x=10,y=9},
-            tabs_allignment = qts.scribe.allignment.LEFT,
-            style_pressed={
-                font={
-                    bold=true
-                },
-                background_tint="#FF0000"
-            }
-        }, {
-            { --tab 1
-                tab={
-                    name="Tab 1",
-                    label="Tab 1",
-                    height=0.7,
-                    width=1.2,
-                },
-                page=function (context_tab1)
-                    context_tab1:model({
-                        width=4,
-                        height=4,
-                        position={x=0,y=1.1},
-                        mesh="character.x",
-                        textures=minetest.formspec_escape(qts.make_humanoid_texture("player_base.png", nil, nil, nil, nil)),
-                        --mouse_control=false,
-                        rotation={x=0,y=90},
-                        continuous_rotation=true,
-                        --background_color="#101010FF",
-                        --frame_loop_range={x = 168, y = 187},
-                        --frames_per_second=15
-                    })
-                end
-            },
-            { --tab 2
-                tab={
-                    name="Tab 2",
-                    label="Tab 2",
-                    height=0.7,
-                    width=1.2,
-                },
-                page=function (context_tab1)
-                    context_tab1:inventory({
-                        source = qts.scribe.inventory_source.CURRENT_PLAYER,
-                        sourcename = "",
-                        listname = "main",
-                        width=10,
-                        height=4,
-                        position={x=0,y=1.1},
-                        orientation = qts.select(
-                            context_c1.userdata.show_list, 
-                            qts.scribe.orientation.VERTICAL, 
-                            qts.scribe.orientation.HORIZONTAL
-                        ),
-                        slot_size = {x=1,y=1},
-                        slot_spacing = {x=0.125,y=0.125},
-                        use_list_ring=true,
-                    })
-                    :inventory({
-                        source = qts.scribe.inventory_source.DETACHED,
-                        sourcename = "trash",
-                        listname = "main",
-                        width=1,
-                        height=1,
-                        position={x=0,y=7},
-                        use_list_ring=true,
-                    })
-                    
-                    :button({
-                        label="Switch List Orientation",
-                        tooltip={text="Switched the list orientation", bgcolor="#000000", fgcolor="#00FFFF"},
-                        width=2,
-                        height=1,
-                        position={x=1,y=0},
-                        style_all={
-                            font = {
-                                style="mono",
-                                bold=true,
-                                italic=true,
-                                size=20
-                            },
-                        },
-                        style_normal={
-                            font={
-                                color="#ff0000",
-                            },
-                        },
-                        style_hovered={
-                            font={
-                                color="#ffff00",
-                            },
-                        },
-                        style_pressed={
-                            font={
-                                color="#ff00ff",
-                            },
-                        },
-                    },
-                    function(event)
-                        minetest.log("Button1 pressed")
-                        event.userdata.show_list = (not event.userdata.show_list)
-                        minetest.log("show list: " .. dump(event.userdata.show_list))
-                        event:mark_for_refresh()
-                    end)
-                end
-            },
-            { --tab 3
-                tab={
-                    name="Tab 3",
-                    label="Tab 3",
-                    height=0.7,
-                    width=1.2,
-                },
-                page=function (context_tab1)
-                    context_tab1:text({
-                        name="hypertext_element",
-                        text = "ABCaijk<action name=arbitrary_action_name>pqlg</action>",
-                        position={x=3.2,y=context_c1.userdata.label_pos},
-                        width=4,
-                        height=1,
-                        vertical_allignment=qts.scribe.allignment.TOP,
-                        horizontal_allignment=qts.scribe.allignment.LEFT,
-                        font={
-                            style="mono",
-                            size=context_c1.userdata.label_size,
-                        },
-                        tooltip="Text area"
-                    }, function (event)
-                        minetest.log("text callback event: ".. dump(event.fields.hypertext_element))
-                    end)
-                    :seperator({
-                        position={x=0,y=1.05},
-                        color="#000000FF"
-                    })
-                    :vertical_box({
-                        position={x=0,y=1.1},
-                        allignment=qts.scribe.allignment.LEFT,
-                        scrollable=true,
-                        height=8,
-                        spacing={x=0.1,y=0.1},
-                    }, function(context_v1)
-                        context_v1
-                        :image({
-                            width=2,
-                            height=2,
-                            texture="bubble.png",
-                            tooltip={text="bubbles!",fgcolor="#000000", bgcolor="#FFFFFF"},
-                        })
-                        :image({
-                            width=2,
-                            height=2,
-                            texture="qtcore_flame_animated.png",
-                            animation={
-                                count=8,
-                                duration=120,
-                                start=1
-                            },
-                            tooltip="fire!",
-                        })
-                        :image({
-                            width=2,
-                            height=2,
-                            item="overworld:marble",
-                            tooltip="marble!",
-                        })
-                        :rect({
-                            width=2,
-                            height=2,
-                            color="#505050FF",
-                            tooltip ="DepressingGrey",
-                        })
-                        :text_entry({
-                            name="textentry1",
-                            width=4,
-                            height=2,
-                            tooltip={text="Enter some text here", fgcolor="#06FFFF", bgcolor="#040404"},
-                            font={size=24},
-                        }, function (event)
-                            minetest.log("textentry1 pressed:"..dump(event.fields.textentry1))
-                        end)
-                        :button({
-                            toggleable=true,
-                            name="toggleButton1",
-                            tooltip="Toggleable Button",
-                        }, function (event)
-                            minetest.log("Toggleable Status: " .. dump(event.userdata._scribe.toggleButton1.toggled))
-                        end)
-                    end)
-                end
-            }
-        })
-        
-        --[[
-        :horizontal_box({
-            position={x=0,y=1},
-            alignment=qts.scribe.allignment.CENTER,
-            scrollable=false,
-            spacing={x=0.1,y=0.1},
-        }, function(context_h1)
-            context_h1:vertical_box({
-                alignment=qts.scribe.allignment.CENTER,
-                scrollable=false,
-                spacing={x=0.1,y=0.1},
-            }, function(context_v1)
-                context_v1:button({
-                    name="btn_pos_up",
-                    label="^ Position (0.01)",
-                    width=3,
-                    height=1,
-                }, function (event)
-                    event.userdata.label_pos = event.userdata.label_pos+0.01
-                    event:mark_for_refresh()
-                end)
-                :text({
-                    text="pos: " .. math.round(context_v1.userdata.label_pos*100)/100,
-                    width=3,
-                    height=1,
-                    horizontal_allignment=qts.scribe.allignment.LEFT,
-                })
-                :button({
-                    name="btn_pos_down",
-                    label="V Position (0.01)",
-                    width=3,
-                    height=1,
-                }, function (event)
-                    event.userdata.label_pos = event.userdata.label_pos-0.01
-                    event:mark_for_refresh()
-                end)
-            end)
-            :vertical_box({
-                alignment=qts.scribe.allignment.CENTER,
-                scrollable=false,
-                spacing={x=0.1,y=0.1},
-            }, function(context_v2)
-                context_v2:button({
-                    name="btn_size_up",
-                    label="^ Size (1)",
-                    width=2,
-                    height=1,
-                }, function (event)
-                    event.userdata.label_size = event.userdata.label_size+1
-                    event:mark_for_refresh()
-                end)
-                :text({
-                    text="size: " .. math.round(context_v2.userdata.label_size),
-                    width=2,
-                    height=1,
-                    horizontal_allignment=qts.scribe.allignment.LEFT,
-                })
-                :button({
-                    name="btn_size_down",
-                    label="V Size (1)",
-                    width=2,
-                    height=1,
-                }, function (event)
-                    event.userdata.label_size = event.userdata.label_size-1
-                    event:mark_for_refresh()
-                end)
-            end)
-        end)
-        --]]
-
-        --[[
-        :horizontal_box({
-            texture="gui_buttonareabg.png",
-            position={x=0,y=1},
-            scrollable=true,
-            --height=8,
-            width=8,
-            alignment=qts.scribe.allignment.CENTER,
-            scrollbar_side=qts.scribe.allignment.TOP,
-            scrollbar_size=0.35,
-            scrollbar_name="vertbox_bar_1",
-            scrollbar_autohide = true,
-            padding={x=0.5,y=0.5},
-            spacing={x=1,y=1},
-        }, function(context_v1)
-            context_v1:button({
-                tooltip="The granite Button",
-                item="overworld:granite",
-                width=4,
-                height=4,
-                padding=5,
-                visibility = qts.select(context_c1.userdata.show_list, qts.scribe.visibility.VISIBLE, qts.scribe.visibility.COLLAPSED),
-            },
-            function(event)
-                minetest.log("granite button pressed")
-            end)
-            :button({
-                tooltip="The marble Button",
-                item="overworld:marble",
-                width=3,
-                height=3,
-                padding=5,
-                visibility = qts.select(context_c1.userdata.show_list, qts.scribe.visibility.VISIBLE, qts.scribe.visibility.COLLAPSED),
-            },
-            function(event)
-                minetest.log("marble button pressed")
-            end)
-            :button({
-                tooltip="The oak Button",
-                item="overworld:oak_wood_planks",
-                width=2,
-                height=2,
-                padding=5,
-            },
-            function(event)
-                minetest.log("oak button pressed")
-            end)
-            :button({
-                tooltip="The aspen Button",
-                item="overworld:aspen_wood_planks",
-                width=1,
-                height=1,
-                padding=5,
-                
-            },
-            function(event)
-                minetest.log("aspen button pressed")
-            end)
-            
-        end)
-        --]]
-    end)
-    :quit_callback(function(event)
-        minetest.log("scribe test gui quit!")
-    end)
-end)
-
-
-minetest.register_chatcommand("scribetest", {
-    params = "",
-	description = "Tests Scribe GUI system",
-	func = function(name, param)
-		local player = minetest.get_player_by_name(name)
-        if player then
-            qts.gui.show_gui(player:get_pos(), player, "qts_testing_scribe_gui")
-        end
-	end
-})
---[[
-minetest.register_on_player_receive_fields(function(player, formname, fields)
-    if formname == "qts:scribe_test" then
-        minetest.log("Fields: " ..dump(fields))
-        
-        local event = qts.scribe.new_event(player, player:get_pos(), formname, userdata, callbacks, fields, 
-            function (context)
-                gui_test_func(context)
-                userdata = context.userdata
-                callbacks = context.callbacks
-            end
-        )
-        for name, callback in pairs(callbacks) do
-            if fields[name] then
-                if type(callback) == "function" then
-                    callback(event)
-                elseif type(callback)=="table" then
-                    for i, fun in ipairs(callback) do
-                        fun(event)
-                    end
-                end
-            end
-        end
-        
-        if event.needs_close then
-            event:close_gui()
-        elseif event.needs_refresh then
-           event:refresh_gui()
-        end
-
-        return true
-    end
-    return false
-end)
-]]
