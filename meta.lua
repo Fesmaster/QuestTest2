@@ -1331,6 +1331,8 @@ minetest = {
 ]]
 ---@alias Texture string
 
+---@alias Mesh string
+
 ---@class TileAnimationDefinition
 ---@field type "vertical_frames"|"sheet_2d" type of animation
 ---@field aspect_w integer|nil with type="vertical_frames", the width of a frame in pixels

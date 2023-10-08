@@ -18,6 +18,11 @@ dofile(minetest.get_modpath("qtcore").."/deconodes.lua")
 dofile(minetest.get_modpath("qtcore").."/fire.lua")
 dofile(minetest.get_modpath("qtcore").."/materials.lua")
 dofile(minetest.get_modpath("qtcore").."/initial_items.lua")
+
+
+--GUI styles
+qtcore.styles = {}
+dofile(minetest.get_modpath("qtcore").."/GUI_Stormcloud.lua")
 --[[
 Random functions are placed here
 --]]

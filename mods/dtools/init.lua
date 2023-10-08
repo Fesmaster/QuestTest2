@@ -36,4 +36,5 @@ dofile(path.."/tools.lua")
 dofile(path.."/schematics.lua")
 
 dofile(path.."/other.lua")
+dofile(path.."/gui_element.lua")
 end
