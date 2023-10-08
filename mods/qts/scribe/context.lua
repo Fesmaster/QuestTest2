@@ -811,11 +811,11 @@ qts.scribe.context_base = {
         return self
     end,
 
-    ---Create a seperator bar
+    ---Create a separator bar
     ---@param self ScribeContext
-    ---@param def ScribeSeperatorFormDefinition
+    ---@param def ScribeSeparatorFormDefinition
     ---@return ScribeContext self
-    seperator = function(self, def)
+    separator = function(self, def)
         def.width = def.length or -1
         def.height = 0.01
         if def.orientation == qts.scribe.orientation.VERTICAL then
@@ -1611,7 +1611,7 @@ All other types of elements are made from these collected together.
 ---@class ScribeRectFormDefinition : ScribeBasicFormDefinition
 ---@field color ColorSpec|"none"|nil the color of the background, or nil/"none" for invisible
 
----@class ScribeSeperatorFormDefinition : ScribeRectFormDefinition
+---@class ScribeSeparatorFormDefinition : ScribeRectFormDefinition
 ---@field length number|nil the length of the line. Defaults to -1. Set to nil or negative to use the parent element size.
 ---@field orientation ScribeFormOrientation|nil the orientation of the line
 

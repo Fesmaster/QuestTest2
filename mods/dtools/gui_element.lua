@@ -290,7 +290,7 @@ qts.gui.register_scribe_gui("dtools:style_debug_gui", function (context)
                                         qts.scribe.visibility.VISIBLE
                                     ),
                                 })
-                                :seperator({
+                                :separator({
                                     orientation=qts.scribe.orientation.HORIZONTAL,
                                     length=4,
                                     color=qtcore.styles.stormcloud.TEXT_COLOR, -- Stormcloud_text
@@ -332,7 +332,7 @@ qts.gui.register_scribe_gui("dtools:style_debug_gui", function (context)
                                         qts.scribe.visibility.VISIBLE
                                     ),
                                 })
-                                :seperator({
+                                :separator({
                                     orientation=qts.scribe.orientation.HORIZONTAL,
                                     length=4,
                                     color=qtcore.styles.stormcloud.TEXT_COLOR, -- Stormcloud_text
