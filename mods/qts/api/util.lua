@@ -3,7 +3,7 @@
 
 --
 --[[
-	
+	Deep Copy of a table [Depricated]	
 
 	Params:
 		orig - the table to copy
@@ -12,7 +12,6 @@
 	Returns:
 		a true deep copy of the table.
 ]]
----Deep Copy of a table
 ---@param orig table
 ---@param copies table
 ---@return table
@@ -35,6 +34,8 @@ end
 	Returns:
 		read-only table
 ]]
+---@param tbl table
+---@return table
 function qts.readonly_table(tbl)
 	return setmetatable({}, {
 		__index = tbl,
@@ -63,6 +64,10 @@ local function group_matching_func(pos, node, matching_table)
 	return false
 end
 
+---Matching function for always matching
+---@param pos Vector
+---@param node NodeRef
+---@return boolean
 local function always_match(pos, node) return true end
 
 --[[
@@ -80,11 +85,10 @@ local function always_match(pos, node) return true end
 			noderef - the node reference
 		}
 ]]
----Get a list of all the nodes in a sphere
 ---@param pos Vector
 ---@param radius number
----@param matching nil|table|function
----@return table?
+---@param matching nil|table|fun(pos:Vector, node:NodeRef):boolean
+---@return Vector[]
 function qts.get_nodes_in_radius(pos, radius, matching)
 	local matching_func = always_match
 	local matching_table = nil
@@ -96,7 +100,6 @@ function qts.get_nodes_in_radius(pos, radius, matching)
 	end
 	if pos ~= nil and radius ~= nil then
 		local ntable = {}
-		local counter = 1
 		for z = -radius, radius do
 		for y = -radius, radius do 
 		for x = -radius, radius do
@@ -105,10 +108,10 @@ function qts.get_nodes_in_radius(pos, radius, matching)
 				local npos = {x=pos.x+x,y=pos.y+y,z=pos.z+z}
 				local nref = minetest.get_node(npos)
 				if (matching_func(npos, nref, matching_table)) then
-					ntable[counter]={}
-					ntable[counter].pos = npos
-					ntable[counter].noderef = nref
-					counter = counter+1
+					ntable[#ntable+1]={
+						pos=npos,
+						noderef = nref
+					}
 				end
 			end
 		end
@@ -116,7 +119,7 @@ function qts.get_nodes_in_radius(pos, radius, matching)
 		end
 		return ntable
 	else
-		return nil
+		return {}
 	end
 end
 
@@ -134,11 +137,10 @@ end
 			noderef - the node reference
 		}
 ]]
----Get a list of all the nodes on the surface of a sphere
 ---@param pos Vector
 ---@param radius number
----@param matching nil|function|table
----@return table
+---@param matching nil|table|fun(pos:Vector, node:NodeRef):boolean
+---@return Vector[]
 function qts.get_nodes_on_radius(pos, radius, matching)
 	local matching_func = always_match
 	local matching_table = nil
@@ -150,7 +152,6 @@ function qts.get_nodes_on_radius(pos, radius, matching)
 	end
 	if pos ~= nil and radius ~= nil then
 		local ntable = {}
-		local counter = 1
 		for z = -radius, radius do
 		for y = -radius, radius do 
 		for x = -radius, radius do
@@ -159,10 +160,10 @@ function qts.get_nodes_on_radius(pos, radius, matching)
 				local npos = {x=pos.x+x,y=pos.y+y,z=pos.z+z}
 				local nref = minetest.get_node(npos)
 				if (matching_func(npos, nref, matching_table)) then
-					ntable[counter]={}
-					ntable[counter].pos = npos
-					ntable[counter].noderef = nref
-					counter = counter+1
+					ntable[#ntable+1]={
+						pos=npos,
+						noderef=nref
+					}
 				end
 			end
 		end
@@ -170,7 +171,7 @@ function qts.get_nodes_on_radius(pos, radius, matching)
 		end
 		return ntable
 	else
-		return nil
+		return {}
 	end
 end
 
@@ -190,6 +191,10 @@ end
 	
 	TODO: Possible change so that it prioritizes the closest node that matches the criteria
 --]]
+---@param pos Vector
+---@param radius number
+---@param nodename ItemName
+---@return Vector?
 function qts.is_node_in_radius(pos, radius, nodename)
 	if pos == nil or radius == nil or nodename == nil then return nil end
 	local IS = ItemStack(nodename)
@@ -236,6 +241,8 @@ end
 	Returns:
 		array of points as unit vectors
 ]]
+---@param point_count integer the number of points
+---@return Vector[]
 function qts.distribute_points_on_sphere(point_count)
 	local points = {}
 	
@@ -262,6 +269,7 @@ end
 	Params:
 		player - the player or playername
 ]]
+---@param player Player|string
 function qts.pickup_sound(player)
 	if (type(player) ~= "string") then player = player:get_player_name() end
 	minetest.sound_play("pickup", {
@@ -279,6 +287,7 @@ end
 	NOTE: this function should be implemented in whatever mod actually adds fire
 		This is to keep fire lighting abstract and not dependant on that mod.
 ]]
+---@param pos Vector
 ---@diagnostic disable-next-line: duplicate-set-field
 function qts.ignite(pos)
 	minetest.log("qts.ignite should be implemented in qtcore mod")
@@ -294,6 +303,8 @@ end
 		string, just the modname 
 		For example, if the param is "overworld:wood", it returns "overworld"
 ]]
+---@param itemname ItemName
+---@return string?
 function qts.get_modname_from_item(itemname)
 	return string.match(itemname, '([%w_]*):')
 end
@@ -308,6 +319,8 @@ end
 		string, everything but the mod name and colon
 		For example, if the param is "overworld:wood 4", it returns "wood 4"
 ]]
+---@param itemname ItemName
+---@return string?
 function qts.remove_modname_from_item(itemname)
 	return string.match(itemname, ':([%w_]*)')
 end
@@ -321,27 +334,10 @@ end
 	Returns:
 		boolean, true if the itemname is a group in the form "group:<groupname>"
 ]]
+---@param itemname ItemName
+---@return boolean is_group
 function qts.is_group(itemname)
 	return (string.match(itemname, '([%w_]*):') == "group")
-end
-
-
---[[
-	DEPRICATED
-	use qts.inventory_contains_group() instead
-]]
-function qts.inv_contains_group(inv, groupString, ignoreNames)
-	error("ERROR: qts.inv_contains_group is depricated. Use qts.inventory_contains_group() instead")
-	return qts.inventory_contains_group(inv, "main", groupString, ignoreNames)
-end
-
---[[
-	DEPRICATED
-	use qts.inventory_take_group()
-]]
-function qts.inv_take_group(inv, groupString, ignoreNames)
-	error("ERROR: qts.inv_take_group is depricated. Use qts.inventory_take_group() instead")
-	return qts.inventory_take_group(inv, "main", groupString, ignoreNames)
 end
 
 --[[
@@ -356,11 +352,17 @@ end
 	Returns:
 		boolean, true if found, false otherwise
 --]]
+---comment
+---@param inventory InvRef
+---@param listname string
+---@param groupString ItemString
+---@param ignoreNames {ItemName:true}
+---@return boolean
 function qts.inventory_contains_group(inventory, listname, groupString, ignoreNames)
 	if not ignoreNames then ignoreNames = {} end
 	local groupStack = ItemStack(groupString)
 	--local minlevel = groupStack:get_count()
-	if (qts.get_modname_from_item(groupStack:get_name()) ~= "group") then return nil end --not a group.
+	if (qts.get_modname_from_item(groupStack:get_name()) ~= "group") then return false end --not a group.
 	local groupname = qts.remove_modname_from_item(groupStack:get_name())
 	local itemList = inventory:get_list(listname)
 	local count = groupStack:get_count()
@@ -394,11 +396,16 @@ end
 	Returns:
 		array of remved ItemStacks
 --]]
+---@param inventory InvRef
+---@param listname string
+---@param groupString ItemString
+---@param ignoreNames {ItemName:true}
+---@return ItemStack[]
 function qts.inventory_take_group(inventory, listname, groupString, ignoreNames)
 	if not ignoreNames then ignoreNames = {} end
 	local groupStack = ItemStack(groupString)
 	--local minlevel = groupStack:get_count()
-	if (qts.get_modname_from_item(groupStack:get_name()) ~= "group") then return nil end --not a group.
+	if (qts.get_modname_from_item(groupStack:get_name()) ~= "group") then return {} end --not a group.
 	local groupname = qts.remove_modname_from_item(groupStack:get_name())
 	local itemList = inventory:get_list(listname)
 	local removeList = {}
@@ -423,7 +430,7 @@ function qts.inventory_take_group(inventory, listname, groupString, ignoreNames)
 		end
 	end
 	if (count > 0) then
-		return nil
+		return {}
 	end
 	inventory:set_list(listname, itemList)
 	return removeList
@@ -441,6 +448,9 @@ end
 	Return: 
 		boolean true or false  
 ]]
+---@param objA ObjectRef
+---@param objB ObjectRef
+---@return boolean
 function qts.objects_overlapping(objA, objB)
 	--get bounding boxes
 	local propsA = objA:get_properties()
@@ -461,6 +471,7 @@ end
 
 --[[
 	Apply the default wear to a tool itemstack
+	Concious of the level group
 
 	Params:
 		itemstack - the item to remove the wear from.
@@ -469,6 +480,9 @@ end
 	Returns:
 		itemstack - the modified itemstack
 ]]
+---@param itemstack ItemStack
+---@param itemname ItemName
+---@return ItemStack
 function qts.apply_default_wear(itemstack,itemname)
 	local nlvl = 0
 	if itemname then
@@ -529,6 +543,9 @@ end
 
 	uses z-y-x ordering for max efficenty
 ]]
+---@param pos1 Vector
+---@param pos2 Vector
+---@return function
 function qts.rectangle(pos1, pos2)
 	local co = coroutine.create(rect_iter)
 	return function()
@@ -553,6 +570,9 @@ end
 
 	uses z-x-y ordering to do it by columns
 ]]
+---@param pos1 Vector
+---@param pos2 Vector
+---@return function
 function qts.columns(pos1, pos2)
 	local co = coroutine.create(columns_iter)
 	return function()
@@ -564,6 +584,8 @@ function qts.columns(pos1, pos2)
 		end
 	end
 end
+
+---@alias Table3 {integer:{integer:{integer:any}}}
 
 --[[
 	given a 3 dimentional array, insert an item into a position as a vector.
@@ -579,11 +601,20 @@ end
 	Returns:
 		t
 ]]
+---@param t Table3?
+---@param pos Vector
+---@param item any
+---@return Table3
 function qts.insert3(t, pos, item)
-	t = t or {}
-	t[pos.x] = t[pos.x] or {}
-	t[pos.x][pos.y] = t[pos.x][pos.y] or {}
-	t[pos.x][pos.y][pos.z] = item
+	if t==nil then 
+		t={[pos.x]={[pos.y]={[pos.z]=item}}}
+	elseif t[pos.x] == nil then
+		t[pos.x]={[pos.y]={[pos.z]=item}}
+	elseif t[pos.x][pos.y] == nil then
+		t[pos.x][pos.y]={[pos.z]=item}
+	else
+		t[pos.x][pos.y][pos.z]=item
+	end
 	return t
 end
 
@@ -598,9 +629,13 @@ end
 	Returns:
 		value at that position or nil if no value present
 ]]
+---@param t Table3?
+---@param pos Vector
+---@return any
 function qts.read3(t, pos)
-	if not t[pos.x] then return nil end
-	if not t[pos.x][pos.y] then return nil end
+	if type(t) ~= "table" then return nil end
+	if type(t[pos.x]) ~= "table" then return nil end
+	if type(t[pos.x][pos.y]) ~= "table" then return nil end
 	return t[pos.x][pos.y][pos.z]
 end
 
@@ -616,6 +651,9 @@ if not qts.ASYNC then
 	Returns:
 		3D array of node references
 ]]
+---@param pos1 Vector
+---@param pos2 Vector
+---@return Table3
 function qts.readNodes(pos1, pos2)
 	local t = {}
 	pos1, pos2 = vector.sort(pos1, pos2)
@@ -635,6 +673,9 @@ end
 
 	Returns - nothing
 ]]
+---@param pos1 Vector
+---@param pos2 Vector
+---@param tbl Table3
 function qts.writeNodes(pos1, pos2, tbl)
 	pos1, pos2 = vector.sort(pos1, pos2)
 	for p in qts.rectangle(pos1, pos2) do
@@ -683,9 +724,10 @@ end
 
 	uses z-y-x ordering
 ]]
+---@param tbl Table3
+---@return function
 function qts.nodePairs(tbl)
 	local co = coroutine.create(nodePairs_iter)
-	
 	return function()
 		local status, pos, node = coroutine.resume(co, tbl)
 		if status then
@@ -713,6 +755,10 @@ if not qts.ASYNC then
 		on_secondary_use = <your custom function>
 
 ]]
+---@param itemstack ItemStack
+---@param placer Player
+---@param pointed_thing PointedThing
+---@return ItemStack?
 function qts.item_place_check_and_propigate(itemstack, placer, pointed_thing)
 	if pointed_thing.under then
 		local node = minetest.get_node_or_nil(pointed_thing.under)
@@ -746,6 +792,9 @@ end
 	Returns:
 		a function compatable with Item Definition Table's `on_use(...)` callback
 ]]
+---@param hpchange number
+---@param replace_with_item Item
+---@return function
 function qts.item_eat(hpchange, replace_with_item)
 	return function(itemstack, user, pointed_thing)
 		return qts.do_item_eat(hpchange, replace_with_item, itemstack, user, pointed_thing)
@@ -763,6 +812,12 @@ end
 		user - who is doing the eating
 		pointed_thing - what you are pointing at
 ]]
+---@param hpchange number
+---@param replace_with_item Item
+---@param itemstack ItemStack
+---@param user Player
+---@param pointed_thing PointedThing
+---@return ItemStack?
 function qts.do_item_eat(hpchange, replace_with_item, itemstack, user, pointed_thing)
 	if user:is_player() then
 		local playerHP = qts.get_player_hp(user)
@@ -780,7 +835,7 @@ function qts.do_item_eat(hpchange, replace_with_item, itemstack, user, pointed_t
 			--do health increas
 			itemstack:take_item(1)
 			local inv = user:get_inventory()
-			inv:add_item("main", ItemStack(replace_with_item))
+			if (inv) then inv:add_item("main", ItemStack(replace_with_item)) end
 			qts.set_player_hp(user, playerHP+hpchange, "set_hp")
 		end
 	end
@@ -796,6 +851,10 @@ minetest.item_eat = qts.item_eat
 
 local old_register_allow_player_inventory_action = minetest.register_allow_player_inventory_action
 local registered_allowed_inventory_move_funcs = {}
+
+---Determines how much of a stack may be taken, put or moved to a player inventory
+---@param func fun(player:Player, action:InventoryAction, inventory:InvRef, inventory_info:InventoryInfo)
+---@return number? countToMove
 minetest.register_allow_player_inventory_action = function(func)
     table.insert(registered_allowed_inventory_move_funcs, func)
 end
@@ -808,7 +867,8 @@ old_register_allow_player_inventory_action(function(player, action, inventory, i
 			min = val
 		end
 	end
-	return min or 0
+---@diagnostic disable-next-line: redundant-return-value
+	return min or -1
 end)
 
 

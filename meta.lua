@@ -1194,6 +1194,14 @@ local InvRef={
     get_location=function(self) end,
 }
 
+---@alias InventoryAction
+---|"move"
+---|"put"
+---|"take"
+
+---@alias InventoryInfo
+---|{from_list:string?, to_list:string?, from_index:number?, to_index:number?, count:number?} for "move" and "take"
+---|{listname:string?, index:number?, stack:ItemStack?} for "put"
 
 
 -- TODO: these need filling out
