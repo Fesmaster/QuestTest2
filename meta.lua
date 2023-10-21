@@ -1704,7 +1704,7 @@ minetest = {
     --Async Environment Functions
 
     ---Queues the function func() to be called on an async thread. Calls the callback on main thread when done with the return values of func as arguments. 
-    ---@param func fun(...):unknown
+    ---@param func fun(...):...
     ---@param callback fun(...)
     ---@param ... unknown arguments passed to func(...)
     handle_async = function(func, callback, ...) end,
