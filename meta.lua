@@ -976,7 +976,7 @@ local Tool_Capabilities = {
 ---@alias ItemWear integer 0 - 65535
 
 ---Create an itemstack
----@param param ItemString|ItemTable
+---@param param ItemStack|ItemString|ItemTable
 ---@return ItemStack
 function ItemStack(param) end
 
@@ -1194,10 +1194,7 @@ local InvRef={
     get_location=function(self) end,
 }
 
----Create an ItemStack
----@return ItemStack
----@param item ItemStack|ItemString|ItemTable
-function ItemStack(item) end
+
 
 -- TODO: these need filling out
 -- Classes
@@ -1216,6 +1213,27 @@ function ItemStack(item) end
 ---@class SecureRandom
 ---@class Settings
 ---@class StorageRef
+---@class VoxelManip
+---@class DecorationID
+---@class MapgenObject
+---@class BiomeID
+---@class LSystemDef
+
+---@alias EmergeType any
+
+---@alias GenNotifyFlags
+---|"dungeon"
+---|"temple"
+---|"cave_begin"
+---|"cave_end"
+---|"large_cave_begin"
+---|"large_cave_end"
+---|"decoration"
+
+---@class BiomeData
+---@field heat number
+---@field humidity number
+---@field biome BiomeID
 
 
 
@@ -1226,6 +1244,17 @@ function ItemStack(item) end
     Minetest namespace. Lots of stuff in here!
 ]]
 minetest = {
+    ---@type EmergeType
+    EMERGE_CANCELLED=0,
+    ---@type EmergeType
+    EMERGE_ERRORED=1,
+    ---@type EmergeType
+    EMERGE_FROM_MEMORY=2,
+    ---@type EmergeType
+    EMERGE_FROM_DISK=3,
+    ---@type EmergeType
+    EMERGE_GENERATED=4,
+
     ---Add newlines to a string to keep it within a limit
     ---@param str string the string to wrap
     ---@param limit number max characters per line
@@ -1312,6 +1341,377 @@ minetest = {
     ---@param def ItemDefinition the node definition
     register_tool = function(name, def) end,
 
+    --ENVRIRONMENT ACCESS
+
+    ---Set a node in the world
+    ---@param pos Vector
+    ---@param node NodeRef
+    set_node = function(pos, node) end,
+
+    ---Set a number of nodes simultaniously.
+    ---
+    ---1.3x faster on a cube than set_node.
+    ---
+    ---LVM is 20x faster than this.
+    ---
+    ---does call callbacks.
+    ---@param positions Vector[]
+    ---@param node NodeRef
+    bulk_set_node = function(positions, node) end,
+
+    ---Set a node, but don't remove metadata
+    ---@param pos Vector
+    ---@param node NodeRef
+    swap_node = function(pos, node) end,
+
+    ---Sets a node to air
+    ---@param pos Vector
+    remove_node = function(pos) end,
+
+    ---Get a node at a location
+    ---@param pos Vector
+    ---@return NodeRef node
+    get_node = function(pos) end,
+
+    ---Gets a node at a location, or nil if it can't
+    ---@param pos Vector
+    ---@return NodeRef? node
+    get_node_or_nil = function(pos) end,
+
+    ---Get the light level at a particular position (0-15)
+    ---@param pos Vector
+    ---@param timeofday Alpha?
+    ---@return number lightLevel
+    get_node_light = function(pos, timeofday) end,
+
+    ---Get the light level at a particular position (0-15) that is from sunlight
+    ---@param pos Vector
+    ---@param timeofday Alpha?
+    ---@return number lightLevel
+    get_natural_light = function(pos, timeofday) end,
+
+    ---calculate artifical light contribution to a node based on its param1
+    ---@param param1 number
+    ---@return number lightLevel
+    get_artificial_light = function(param1) end,
+
+    ---Place a node as if a player placed it
+    ---@param pos Vector
+    ---@param node NodeRef
+    place_node = function(pos, node) end,
+
+    ---Break a node as if a player placed it
+    ---@param pos Vector
+    dig_node = function(pos) end,
+
+    ---Punch a node as if a player placed it
+    ---@param pos Vector
+    punch_node = function(pos) end,
+
+    ---Make a node fall
+    ---@param pos Vector
+    ---@return boolean success, ObjectRef? object
+    spawn_falling_node = function(pos) end,
+
+    ---Gets a list of nodes that contain metadata
+    ---@param pos1 Vector
+    ---@param pos2 Vector
+    ---@returns Vector[] nodes_with_meta
+    find_nodes_with_meta = function(pos1, pos2) end,
+
+    ---Gets a node's metadata
+    ---@param pos Vector
+    ---@return NodeMetaRef meta
+    get_meta = function(pos) end,
+
+    ---Gets a node's timer
+    ---@param pos Vector
+    ---@return NodeTimerRef timer
+    get_node_timer = function(pos) end,
+
+    ---Add an entity to the world
+    ---@param pos Vector
+    ---@param name string
+    ---@param staticdata string?
+    ---@return LuaObject? object
+    add_entity = function(pos, name, staticdata) end,
+
+    ---Add a dropped item
+    ---@param pos Vector
+    ---@param item Item
+    ---@return LuaObject? object
+    add_item = function(pos, item) end,
+
+    ---Get a plaer reference by player name
+    ---@param name string
+    ---@return Player?
+    get_player_by_name = function(name) end,
+
+    ---Get all entities inside a radius.
+    ---@param pos Vector
+    ---@param radius number
+    ---@return ObjectRef[] objects
+    get_objects_inside_radius = function(pos, radius) end,
+
+    ---Get objects inside a rect volume
+    ---@param pos1 Vector
+    ---@param pos2 Vector
+    ---@return ObjectRef[]
+    get_objects_in_area = function(pos1, pos2) end,
+
+    ---Set the time of day (0=midnight, 0.5=noon)
+    ---@param val Alpha
+    set_timeofday = function(val) end,
+
+    ---Get the time of day (0=midnight, 0.5=noon)
+    ---@return Alpha time
+    get_timeofday = function() end,
+
+    ---Get the seconds since world was created
+    ---@return number seconds
+    get_gametime = function() end,
+
+    ---returns number of days since world was created. Accounts for time changes
+    ---@return number days
+    get_day_count = function() end,
+
+    ---Get a list of nodes in a radius around a point. Can find groups
+    ---@param pos Vector
+    ---@param radius number
+    ---@param nodenames ItemName[]
+    ---@param search_center boolean? check the center pos (default: false)
+    find_node_near = function(pos, radius, nodenames, search_center) end,
+
+    ---Find nodes in a rectilinear area
+    ---
+    ---Area volume is limited to 4,096,000
+    ---@param pos1 Vector
+    ---@param pos2 Vector
+    ---@param nodenames ItemName[]
+    ---@param grouped boolean? Changes output format (default: false)
+    ---@return Vector[]|{ItemName:Vector} positions, {ItemName:number}? counts Form of first depends on value of grouped. Counts only present when grouped=false
+    find_nodes_in_area = function(pos1, pos2, nodenames, grouped) end,
+    
+    ---Find nodes in rectiliear area that have air above them
+    ---
+    ---Area volume is limited to 4,096,000
+    ---@param pos1 Vector
+    ---@param pos2 Vector
+    ---@param nodenames ItemName[]
+    ---@return Vector[]
+    find_nodes_in_area_under_air = function(pos1, pos2, nodenames) end,
+
+    ---Get a world-specific perlin object
+    ---@param noiseparams Perlin_Noise_Params
+    ---@return PerlinNoise
+    get_perlin = function(noiseparams) end,
+
+    ---Gets a VoxelManip object
+    ---@param pos1 Vector?
+    ---@param pos2 Vector?
+    ---@return VoxelManip VM
+    get_voxel_manip = function(pos1, pos2) end,
+
+    ---Sets the types on on-generate notifications that should be collected
+    ---@param flags GenNotifyFlags
+    ---@param deco_ids DecorationID[]?
+    set_gen_notify = function(flags, deco_ids) end,
+
+    ---Get the gen notify flags and list of DecorationIDs
+    ---@return GenNotifyFlags flags, DecorationID[] decorations
+    get_gen_notify = function() end,
+
+    ---Get a decoration ID for a decoration name
+    ---@param decoration_name string
+    ---@return DecorationID? decorationID
+    get_decoration_id = function(decoration_name) end,
+
+    ---Get the requested mapgen object if available
+    ---@param objectname string
+    ---@return MapgenObject?
+    get_mapgen_object = function(objectname) end,
+
+    ---Get the heat at a position
+    ---@param pos Vector
+    ---@return number? heat
+    get_heat = function(pos) end,
+
+    ---Get the humidity at a position
+    ---@param pos Vector
+    ---@return number? humidity
+    get_humidity = function(pos) end,
+
+    ---Get biome data at a position
+    ---@param pos Vector
+    ---@return BiomeData data
+    get_biome_data = function(pos) end,
+
+    ---Get the biome ID for a biome name
+    ---@param biome_name string
+    ---@return BiomeID?
+    get_biome_id = function(biome_name) end,
+
+    ---Get the biome name for a biome ID
+    ---@param biome_id BiomeID
+    ---@return string?
+    get_biome_name = function(biome_id) end,
+
+    ---Get the minimum and maximum possible generated node positions
+    ---@param mapgen_limit number? by default, the setting mapgen_limit
+    ---@param chunksize number? by default, the setting mapgen_chunksize
+    ---@return Vector minpos, Vector maxpos
+    get_mapgen_edges = function(mapgen_limit, chunksize) end,
+
+    ---Gets active mapgen setting in string format
+    ---@param name string setting name
+    ---@return string? value
+    get_mapgen_setting = function(name) end,
+
+    ---Get active mapgen setting for noiseparams as noiseparams
+    ---@param name string setting name
+    ---@return Perlin_Noise_Params? value
+    get_mapgen_setting_noiseparams = function(name) end,
+
+    ---Set mapgen settings. By default, will not override per world settings
+    ---@param name string setting name
+    ---@param value string setting value
+    ---@param override_meta boolean? override per world settings (default: false)
+    set_mapgen_setting = function(name, value, override_meta) end,
+
+    ---Set mapgen naoiseparam settings as noiseparam. By default, will not override per world settings
+    ---@param name string setting name
+    ---@param value Perlin_Noise_Params setting value
+    ---@param override_meta boolean? override per world settings (default: false)
+    set_mapgen_setting_noiseparams = function(name, value, override_meta) end,
+
+    ---Set noiseparam setting. Overrides default config unless told not to.
+    ---@param name string setting name
+    ---@param noiseparams Perlin_Noise_Params params
+    ---@param set_default boolean? set the default(true) or the active(false) config (default: true)
+    set_noiseparams = function(name, noiseparams, set_default) end,
+
+    ---Get noiseparam settings
+    ---@param name string setting name
+    ---@return Perlin_Noise_Params? value
+    get_noiseparams = function(name) end,
+
+    ---Generate ores in a VoxelManip object
+    ---@param vm VoxelManip
+    ---@param pos1 Vector?
+    ---@param pos2 Vector?
+    generate_ores = function(vm, pos1, pos2) end,
+
+    ---Generate decorations in a VoxelManip object
+    ---@param vm VoxelManip
+    ---@param pos1 Vector?
+    ---@param pos2 Vector?
+    generate_decorations = function(vm, pos1, pos2) end,
+
+    ---Clear all objects in the environment
+    ---@param options {mode:"full"|"quick"}? mode to clear. Full=clear all right now, Quick=Clear loaded now, rest on mapblock loaded
+    clear_objects = function(options) end,
+
+    ---Load the mapblocks containing the supplied position. Does not trigger mapgen.
+    ---@param pos1 Vector
+    ---@param pos2 Vector? defaults to pos1
+    load_area = function(pos1, pos2) end,
+
+    ---Queue all the blocks between pos1 and pos2 to be async loaded.
+    ---@param pos1 Vector
+    ---@param pos2 Vector
+    ---@param callback fun(blockpos:Vector, action:EmergeType, calls_remaining:number, param:any?)? 
+    ---@param param any? param to callback
+    emerge_area = function(pos1, pos2, callback, param) end,
+
+    ---Delete all mapblocks containing pos1 to pos2
+    ---@param pos1 Vector
+    ---@param pos2 Vector
+    delete_area = function(pos1, pos2) end,
+
+    ---Check if there is anything besides air between the two position
+    ---@param pos1 Vector
+    ---@param pos2 Vector
+    ---@return boolean
+    line_of_sight = function(pos1, pos2) end,
+
+    ---Create a raycast object between two position
+    ---@param pos1 Vector
+    ---@param pos2 Vector
+    ---@param objects boolean? If False, only nodes are hit (Default: true)
+    ---@param liquids boolean? if false, liquid nodes are not returned. (Default: false)
+    ---@return Raycast
+    raycast = function(pos1, pos2, objects, liquids) end,
+
+    ---Returns a walkable path from pos1 to pos2
+    ---@param pos1 Vector
+    ---@param pos2 Vector
+    ---@param searchdistance number extra search size outside of the rectaliniar area defined by pos1, pos2
+    ---@param max_jump number max hight up that is walkable
+    ---@param max_drop number max hight down that is walkable
+    ---@param algorithm "A*"|"A*_noprefetch"|"Dijkstra" Default:"A*_noprefetch". ("A*_noprefetch" calculates cost on the fly, "A*" calculates all costs at start)
+    find_path = function(pos1,pos2,searchdistance,max_jump,max_drop,algorithm) end,
+
+    ---Spans a L-system tree
+    ---@param pos Vector
+    ---@param treedef LSystemDef
+    spawn_tree = function(pos, treedef) end,
+
+    ---Add a liquid pos to the update queue
+    ---@param pos Vector
+    transforming_liquid_add = function(pos) end,
+
+    ---Get the max level of a particular node
+    ---@param pos Vector
+    ---@return number level
+    get_node_max_level = function(pos) end,
+
+    ---Get the current level of a particular node
+    ---@param pos Vector
+    ---@return number level
+    get_node_level = function(pos) end,
+
+    ---Set a node's level
+    ---@param pos Vector
+    ---@param level number
+    set_node_level = function(pos, level) end,
+
+    ---Add to a node's level
+    ---@param pos Vector
+    ---@param level number
+    add_node_level = function(pos, level) end,
+
+    ---Fix lighting in a rectelinear volume (SIDE EFFECT: WILL LOAD THE AREA)
+    ---@param pos1 Vector
+    ---@param pos2 Vector
+    ---@return boolean false if not generated, true otherwise
+    fix_light = function(pos1, pos2) end,
+
+    ---Checks a single position for falling / unsupported nodes. Does not spread
+    ---@param pos Vector
+    check_single_for_falling = function(pos) end,
+
+    ---Check for falling / unsupported nodes. Will spread to neighbors
+    ---@param pos Vector
+    check_for_falling = function(pos) end,
+
+    ---Checks for a spawn height for a particular world column. Usually returns nil. See lua_api.txt for more details.
+    ---@param x number
+    ---@param z number
+    ---@return number? height
+    get_spawn_level = function(x, z) end,
+
+
+    --Async Environment Functions
+
+    ---Queues the function func() to be called on an async thread. Calls the callback on main thread when done with the return values of func as arguments. 
+    ---@param func fun(...):unknown
+    ---@param callback fun(...)
+    ---@param ... unknown arguments passed to func(...)
+    handle_async = function(func, callback, ...) end,
+
+    ---Register a path to be loaded on the async environment when one is created
+    ---@param path string
+    register_async_dofile = function (path) end,
 }
 
 
