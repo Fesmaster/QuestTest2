@@ -470,12 +470,12 @@ function qts.register_shaped_node(name, def)
 		def.drop = name
 		--minetest.log("Node "..name .." did not have any drops")
 	end
-	def.groups = qts.table_deep_copy(def.groups) --copy the group table to prevent external modification
+	def.groups = table.copy(def.groups) --copy the group table to prevent external modification
 	--groups setup
 	def.groups.shaped_node = 1
 	--SOLID-----------------------
 	def.groups.shaped_full = 1
-	minetest.register_node(":"..name, qts.table_deep_copy(def))
+	minetest.register_node(":"..name, table.copy(def))
 
 	--NON_SOLID-------------------
 	local imgs = {}
@@ -524,7 +524,7 @@ function qts.register_shaped_node(name, def)
 		end
 		return qts.rotate_and_place(itemstack, placer, pointed_thing)
 	end
-	minetest.register_node(":" .. name .."_stair", qts.table_deep_copy(def))
+	minetest.register_node(":" .. name .."_stair", table.copy(def))
 	--STAIR INNER-----------------------
 	def.node_box = {
 		type = "fixed",
@@ -534,7 +534,7 @@ function qts.register_shaped_node(name, def)
 			{-0.5, 0.0, -0.5, 0.0, 0.5, 0.0},
 		},
 	}
-	minetest.register_node(":" .. name.."_stair_inner", qts.table_deep_copy(def))
+	minetest.register_node(":" .. name.."_stair_inner", table.copy(def))
 	--STAIR OUTER-----------------------
 	def.node_box = {
 		type = "fixed",
@@ -543,7 +543,7 @@ function qts.register_shaped_node(name, def)
 			{-0.5, 0.0, 0.0, 0.0, 0.5, 0.5},
 		},
 	}
-	minetest.register_node(":" .. name.."_stair_outer", qts.table_deep_copy(def))
+	minetest.register_node(":" .. name.."_stair_outer", table.copy(def))
 	--SLANT-----------------------
 	def.groups.shaped_stair = nil
 	def.groups.shaped_slant = 1
@@ -568,7 +568,7 @@ function qts.register_shaped_node(name, def)
 			{-0.5, -0.5, -0.5, 0.5, -0.4375, 0.5}, -- NodeBox16
 		},
 	}
-	minetest.register_node(":" .. name.."_slant", qts.table_deep_copy(def))
+	minetest.register_node(":" .. name.."_slant", table.copy(def))
 	def.node_box = {
 		type = "fixed",
 		fixed = {
@@ -605,7 +605,7 @@ function qts.register_shaped_node(name, def)
 			{-0.4375, -0.4375, -0.5, 0.5, -0.375, -0.4375}, -- NodeBox32
 		},
 	}
-	minetest.register_node(":" .. name.."_slant_inner", qts.table_deep_copy(def))
+	minetest.register_node(":" .. name.."_slant_inner", table.copy(def))
 	def.node_box = {
 		type = "fixed",
 		fixed = {
@@ -627,7 +627,7 @@ function qts.register_shaped_node(name, def)
 			{-0.5, -0.5, -0.5, 0.5, -0.4375, 0.5}, -- NodeBox17
 		},
 	}
-	minetest.register_node(":" .. name.."_slant_outer", qts.table_deep_copy(def))
+	minetest.register_node(":" .. name.."_slant_outer", table.copy(def))
 	--SLAB-----------------------
 	def.groups.shaped_slant = nil
 	def.groups.shaped_slab = 1
@@ -667,7 +667,7 @@ function qts.register_shaped_node(name, def)
 		end
 	end
 
-	minetest.register_node(":"..name.."_slab", qts.table_deep_copy(def))
+	minetest.register_node(":"..name.."_slab", table.copy(def))
 end
 
 ---Register an alias for a shaped node. Automatically registers all needed aliases for all shapes

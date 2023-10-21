@@ -242,7 +242,7 @@ function qts.register_fencelike_node(name, def)
 			end
 		end
 
-		minetest.register_node(name, qts.table_deep_copy(def))
+		minetest.register_node(name, table.copy(def))
 
 		if not def.drop then
 			def.drop = name
@@ -266,7 +266,7 @@ function qts.register_fencelike_node(name, def)
 			connect_right = {{1/32, -1/2, -1/32, 1/2, 1/2, 1/32}},
 		}
 
-		minetest.register_node(name.."_part", qts.table_deep_copy(def))
+		minetest.register_node(name.."_part", table.copy(def))
 
 		--this one has its own registration
 		return
@@ -485,7 +485,7 @@ function qts.register_liquid(name, def)
 	def.drawtype = "liquid"
 	def.description = prev_desc.." Source"
 	def.liquidtype = "source"
-	minetest.register_node(":"..name.."_source", qts.table_deep_copy(def))
+	minetest.register_node(":"..name.."_source", table.copy(def))
 
 	--flowing
 	def.drawtype = "flowingliquid"
@@ -493,7 +493,7 @@ function qts.register_liquid(name, def)
 	def.paramtype2 = "flowingliquid"
 	def.liquidtype = "flowing"
 	def.groups.not_in_creative_inventory = 1
-	minetest.register_node(":"..name.."_flowing", qts.table_deep_copy(def))
+	minetest.register_node(":"..name.."_flowing", table.copy(def))
 
 	--now, backpropigate already registered buckets
 	for bk_id, bk in ipairs(bucket_cache) do
@@ -580,8 +580,8 @@ This is autocalculated from the nodeboxes list length if not supplied.
 ]]
 function qts.register_ingot(name, def)
 	--group setup
-	local groups_item = qts.table_deep_copy(def.groups)
-	local groups_node = qts.table_deep_copy(def.groups)
+	local groups_item = table.copy(def.groups)
+	local groups_node = table.copy(def.groups)
 	groups_item.placeable_ingot = 1
 	groups_node.placed_ingot = 1
 	groups_node.not_in_creative_inventory = 1
@@ -785,7 +785,7 @@ function qts.register_torch(name, def)
 	--in case they forget the light.....
 	def.light_source = def.light_source or 12
 
-	local torch_main_def = qts.table_deep_copy(def)
+	local torch_main_def = table.copy(def)
 	torch_main_def.mesh = "torch_floor.obj"
 	torch_main_def.selection_box = {
 		type = "wallmounted",
@@ -822,7 +822,7 @@ function qts.register_torch(name, def)
 	minetest.register_node(name, torch_main_def)
 
 
-	local torch_wall_def = qts.table_deep_copy(def)
+	local torch_wall_def = table.copy(def)
 	torch_wall_def.groups.not_in_creative_inventory = 1
 	torch_wall_def.mesh = "torch_wall.obj"
 	torch_wall_def.selection_box = {
@@ -833,7 +833,7 @@ function qts.register_torch(name, def)
 	minetest.register_node(name.."_wall", torch_wall_def)
 
 
-	local torch_ceil_def = qts.table_deep_copy(def)
+	local torch_ceil_def = table.copy(def)
 
 	torch_ceil_def.groups.not_in_creative_inventory = 1
 	torch_ceil_def.mesh = "torch_ceiling.obj"

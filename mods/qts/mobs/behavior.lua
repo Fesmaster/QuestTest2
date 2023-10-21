@@ -185,7 +185,7 @@ function qts.ai.register_creature(name, def)
 
 	def.initial_properties.name = name
 
-	local properties = qts.table_deep_copy(def.initial_properties)
+	local properties = table.copy(def.initial_properties)
 	local backlog_properties = {} -- any depends properties with no values.
 	local modules = {}
 	local modules_added = {}

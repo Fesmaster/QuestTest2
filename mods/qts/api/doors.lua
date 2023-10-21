@@ -89,13 +89,13 @@ local function register_doorlike_internal(name, def, doorOpts)
         minetest.swap_node(pos, {name=mapping[node.name], param1=node.param1, param2=node.param2})
     end
 
-    local main_closed = qts.table_deep_copy(def)
+    local main_closed = table.copy(def)
     def.groups.not_in_creative_inventory=1
     def.drop = def.drop or name_left_closed --not def.name just in case there is a leading ":", which breaks it.
     --do these after to get them to propigate to all the non-normal ones
-    local main_open = qts.table_deep_copy(def)
-    local alt_closed = qts.table_deep_copy(def)
-    local alt_open = qts.table_deep_copy(def)
+    local main_open = table.copy(def)
+    local alt_closed = table.copy(def)
+    local alt_open = table.copy(def)
     
     --meshes
     main_closed.mesh = doorOpts.main_closed

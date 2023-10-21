@@ -32,7 +32,7 @@ vector.slerp(rot1, rot2, alpha)
 ]]
 function vector.readonly(x,y,z)
 	local upvec = vector.new(x,y,z)
-	local vector_metatable_copy = qts.table_deep_copy(vector.metatable)
+	local vector_metatable_copy = table.copy(vector.metatable)
 	vector_metatable_copy.__index = function(t,k)
 		if upvec[k] then 
 			return upvec[k]

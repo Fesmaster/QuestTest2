@@ -4,6 +4,10 @@ qts.path = minetest.get_modpath("qts")
 qts.LIGHT_MAX = 14
 qts.WEAR_MAX = 65535
 
+--add the async init file to the async environments
+minetest.register_async_dofile(qts.path.."/async_init.lua")
+qts.ASYNC=false
+
 --default stack max changes.
 minetest.nodedef_default.stack_max = 999
 minetest.craftitemdef_default.stack_max = 999

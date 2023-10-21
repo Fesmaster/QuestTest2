@@ -868,18 +868,18 @@ vector ={
 
 ---@alias Rotator Vector {x=Pitch, y=Yaw, z=Roll}, uses radians
 
----Makes a luaobject into a human-readable string
+---Makes a luaobject into a human-readable string (minetest supplied function)
 ---@param obj any
 ---@param name string defaults to "_"
 ---@return string
 function dump2(obj, name) end
 
----Makes a luaobject into a human-readable string
+---Makes a luaobject into a human-readable string (minetest supplied function)
 ---@param obj any
 ---@return string
 function dump(obj) end
 
----Get the hypotenuse of a right triangle with leg lengths x, y
+---Get the hypotenuse of a right triangle with leg lengths x, y (minetest supplied function)
 ---@param x number the first leg
 ---@param y number the second leg
 ---@return number the hypotenuse
@@ -894,17 +894,17 @@ function math.hypot(x,y) end
 ---|0 if x is NaN or abs(x) < tolerance
 function math.sign(x, tolerance) end
 
----Factorial of x
+---Factorial of x (minetest supplied function)
 ---@param x number
 ---@return number
 function math.factorial(x) end
 
----Round to the nearest integer. .5 goes away from 0
+---Round to the nearest integer. .5 goes away from 0 (minetest supplied function)
 ---@param x number
 ---@return integer
 function math.round(x) end
 
----splits a string
+---splits a string (minetest supplied function)
 ---@param str string the string to split
 ---@param seperator string the string to split on
 ---@param include_empty? boolean defaults to false. To include emptry strings 
@@ -913,33 +913,33 @@ function math.round(x) end
 ---@return string[]
 function string.split(str, seperator, include_empty, max_splits, sep_is_pattern) end
 
----trims the whitespaces off of the start and end of a string
+---trims the whitespaces off of the start and end of a string (minetest supplied function)
 ---@param str string the string to split
 ---@return string
 function string.trim(str) end
 
----Deep copy of a table
+---Deep copy of a table (minetest supplied function)
 ---@param table table
 ---@return table a deep copy
 function table.copy(table) end
 
----find the first instance of a value in an array-like table
+---find the first instance of a value in an array-like table (minetest supplied function)
 ---@param list table
 ---@param val any
 ---@return integer -1 if not found, otherwise index.
 function table.indexof(list, val) end
 
----insert all arraylike values in other_table to table in arraylike fashion
+---insert all arraylike values in other_table to table in arraylike fashion (minetest supplied function)
 ---@param table table table to modify
 ---@param other_table table table to read values from
 function table.insert_all(table, other_table) end
 
----returns a table with the keys and values swapped. Nondeterministic if two values in original are the same
+---returns a table with the keys and values swapped. Nondeterministic if two values in original are the same (minetest supplied function)
 ---@param t table
 ---@return table
 function table.key_value_swap(t) end
 
----Shuffle the elements in an arraylike table
+---Shuffle the elements in an arraylike table (minetest supplied function)
 ---@param table table
 ---@param from integer inclusive, defaults to 1
 ---@param to integer inclusive, default to #table

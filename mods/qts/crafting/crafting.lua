@@ -165,7 +165,7 @@ end
 --]]
 function qts.get_craft_recipes(item)
 	if (qts.crafts[item]) then
-		return qts.table_deep_copy(qts.crafts[item])
+		return table.copy(qts.crafts[item])
 	else
 		return {}
 	end
@@ -290,7 +290,7 @@ function qts.execute_craft(recipe, player)
 	end
 	local inv = player:get_inventory()
 	
-	local results = qts.table_deep_copy(recipe.results)
+	local results = table.copy(recipe.results)
 	
 	if (recipe.on_craft) then
 		results = recipe.on_craft(player, results)

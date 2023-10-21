@@ -109,7 +109,7 @@ minetest.register_craftitem("tools:arrow_gold", {
 ]]
 local function register_bow(name, def)
     def.groups.bow = def.groups.bow or 1
-    local groups_2 = qts.table_deep_copy(def.groups)
+    local groups_2 = table.copy(def.groups)
     groups_2.not_in_creative_inventory=1
     
     minetest.register_tool(name, {

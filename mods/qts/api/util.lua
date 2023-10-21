@@ -3,9 +3,7 @@
 
 --
 --[[
-	recursive deep copy func, that can deal with repeated subtables and metatables
-	Note that the metatable is also copied.
-	from lua-users.org  https://lua-users.org/wiki/CopyTable
+	
 
 	Params:
 		orig - the table to copy
@@ -14,25 +12,13 @@
 	Returns:
 		a true deep copy of the table.
 ]]
+---Deep Copy of a table
+---@param orig table
+---@param copies table
+---@return table
+---@deprecated
 function qts.table_deep_copy(orig, copies)
-    copies = copies or {}
-    local orig_type = type(orig)
-    local copy
-    if orig_type == 'table' then
-        if copies[orig] then
-            copy = copies[orig]
-        else
-            copy = {}
-            copies[orig] = copy
-            for orig_key, orig_value in next, orig, nil do
-                copy[qts.table_deep_copy(orig_key, copies)] = qts.table_deep_copy(orig_value, copies)
-            end
-            setmetatable(copy, qts.table_deep_copy(getmetatable(orig), copies))
-        end
-    else -- number, string, boolean, etc
-        copy = orig
-    end
-    return copy
+    return table.copy(table)
 end
 
 --[[
@@ -98,7 +84,7 @@ local function always_match(pos, node) return true end
 ---@param pos Vector
 ---@param radius number
 ---@param matching nil|table|function
----@return table
+---@return table?
 function qts.get_nodes_in_radius(pos, radius, matching)
 	local matching_func = always_match
 	local matching_table = nil
@@ -618,6 +604,7 @@ function qts.read3(t, pos)
 	return t[pos.x][pos.y][pos.z]
 end
 
+if not qts.ASYNC then
 --[[
 	read all the nodes into a 3D aray from pos1 to pos2
 	The indecies in the list will be 1-based, not starting at the values of pos1
@@ -658,6 +645,8 @@ function qts.writeNodes(pos1, pos2, tbl)
 		end
 	end
 end
+
+end --not qts.ASYNC
 
 --zero-based indexing.
 local function zpairs(tbl)
@@ -707,6 +696,8 @@ function qts.nodePairs(tbl)
 	end
 end
 
+
+if not qts.ASYNC then
 --[[
 	This function is desighed to be set as the value of the item `on_place` callback, 
 	to operate rightclickable items if pointing at them, or do the `on_secondary_use` callback if not.
@@ -819,6 +810,9 @@ old_register_allow_player_inventory_action(function(player, action, inventory, i
 	end
 	return min or 0
 end)
+
+
+end -- not qts.ASYNC
 
 --[[
 	selects opt1 if check is true, otherwise selects opt2. 
