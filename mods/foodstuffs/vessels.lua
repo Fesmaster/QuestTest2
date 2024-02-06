@@ -48,6 +48,12 @@ for i, types in ipairs(dish_types) do
 				},
 			},
 			on_use = qts.item_eat(4),
+			selection_box = {
+				type = "fixed",
+				fixed = {
+					{ -2/16, -8/16, -2/16, 2/16, -2/16, 2/16, },
+				},
+			},
 			sounds = qtcore.node_sound_stone(),
 		})
 
@@ -94,6 +100,12 @@ for i, types in ipairs(dish_types) do
 					{ -1/16, -5/16, -5/16, 1/16, 0/16, -4/16, },
 					{ -1/16, -6/16, -4/16, 1/16, -5/16, -3/16, },
 					{ -1/16, -5/16, -1/16, 1/16, 0/16, 1/16, },
+				},
+			},
+			selection_box = {
+				type = "fixed",
+				fixed = {
+					{ -3/16, -8/16, -5/16, 3/16, 2/16, 3/16, },
 				},
 			},
 			sounds = qtcore.node_sound_stone(),
@@ -213,6 +225,12 @@ for i, types in ipairs(dish_types) do
 	
 			},
 		},
+		selection_box = {
+			type = "fixed",
+			fixed = {
+				{ -7/16, -8/16, -6/16, 6/16, -2/16, 7/16, },
+			},
+		},
 		sounds = qtcore.node_sound_stone(),
 	})
 	
@@ -260,6 +278,12 @@ for i, types in ipairs(dish_types) do
 				{ -1/16, -6/16, -4/16, 1/16, -5/16, -3/16, },
 			},
 		},
+		selection_box = {
+			type = "fixed",
+			fixed = {
+				{ -3/16, -8/16, -5/16, 3/16, 2/16, 3/16, },
+			},
+		},
 		sounds = qtcore.node_sound_stone(),
 	})
 
@@ -289,6 +313,13 @@ for i, types in ipairs(dish_types) do
 				{ -2/16, -8/16, -2/16, 2/16, -3/16, 2/16, },
 				},
 			},
+			selection_box = {
+				type = "fixed",
+				fixed = {
+					{ -5/16, -8/16, -5/16, 5/16, -3/16, 5/16, },
+				},
+			},
+			sounds = qtcore.node_sound_stone(),
 		})
 	end
 	--powder bowl crafting
@@ -318,11 +349,17 @@ for i, types in ipairs(dish_types) do
 			type = "fixed",
 			fixed = {
 				{ -2/16, -8/16, -2/16, 2/16, -7/16, 2/16, },
-				{ -2/16, -8/16, 1/16, 2/16, -3/16, 2/16, },
-				{ -2/16, -8/16, -2/16, 2/16, -3/16, -1/16, },
-				{ -2/16, -8/16, -2/16, -1/16, -3/16, 2/16, },
-				{ 1/16, -8/16, -2/16, 2/16, -3/16, 2/16, },
+				{ -2/16, -8/16, 1/16, 2/16, -2/16, 2/16, },
+				{ -2/16, -8/16, -2/16, 2/16, -2/16, -1/16, },
+				{ 1/16, -8/16, -2/16, 2/16, -2/16, 2/16, },
+				{ -2/16, -8/16, -2/16, -1/16, -2/16, 2/16, },
 	
+			},
+		},
+		selection_box = {
+			type = "fixed",
+			fixed = {
+				{ -2/16, -8/16, -2/16, 2/16, -2/16, 2/16, },
 			},
 		},
 		sounds = qtcore.node_sound_stone(),
@@ -350,6 +387,12 @@ for i, types in ipairs(dish_types) do
 				{ 3/16, -6/16, -4/16, 4/16, -5/16, 4/16, },
 				{ -4/16, -6/16, -4/16, -3/16, -5/16, 4/16, },
 	
+			},
+		},
+		selection_box = {
+			type = "fixed",
+			fixed = {
+				{ -4/16, -8/16, -4/16, 4/16, -5/16, 4/16, },
 			},
 		},
 		sounds = qtcore.node_sound_stone(),
@@ -416,6 +459,12 @@ for i, types in ipairs(greenware_types) do
 			},
 		},
 		sounds = qtcore.node_sound_stone(),
+		selection_box = {
+			type = "fixed",
+			fixed = {
+				{ -7/16, -8/16, -6/16, 6/16, -2/16, 7/16, },
+			},
+		},
 	})
 
 	minetest.register_node("foodstuffs:vessels_"..types.."_greenware", {

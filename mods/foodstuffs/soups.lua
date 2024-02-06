@@ -104,6 +104,12 @@ for i=1, #ingredient do
 							{ -5/16, -6/16, -5/16, -4/16, -5/16, 5/16, },
 						},
 					},
+					selection_box = {
+						type = "fixed",
+						fixed = {
+							{ -5/16, -8/16, -5/16, 5/16, -5/16, 5/16, },
+						},
+					},
 					sounds = qtcore.node_sound_stone(),
 				})
 				
