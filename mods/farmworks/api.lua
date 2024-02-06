@@ -37,6 +37,7 @@ function  farmworks.register_farm_plant(name, def)
 		groups = {attached_node=1, seeds=1, oddly_breakable_by_hand=3, dig_immediate=1, generation_replacable=1},
 		sounds = qtcore.node_sound_defaults(),
 		node_box = qtcore.nb_dustpile(),
+		selection_box = qtcore.nb_dustpile_selection(),
 		on_place = SeedPlace("farmworks:herb_"..name.."_1"),
 	})
 	if not registered_exemplar_seeds then

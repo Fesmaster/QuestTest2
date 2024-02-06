@@ -75,3 +75,12 @@ qtcore.nb_dustpile = function()
 		}
 	}
 end
+
+qtcore.nb_dustpile_selection = function()
+	return{
+		type = "fixed",
+		fixed = {
+			{ -3/16, -8/16, -6/16, 3/16, -5/16, 6/16, },
+		}
+	}
+end

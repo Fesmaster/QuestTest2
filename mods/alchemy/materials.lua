@@ -59,6 +59,7 @@ minetest.register_node("alchemy:potash", {
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
 	node_box = qtcore.nb_dustpile(),
+	selection_box = qtcore.nb_dustpile_selection(),
 })
 
 minetest.register_node("alchemy:lye", {
@@ -75,6 +76,7 @@ minetest.register_node("alchemy:lye", {
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
 	node_box = qtcore.nb_dustpile(),
+	selection_box = qtcore.nb_dustpile_selection(),
 })
 
 minetest.register_craftitem("alchemy:poltice_milfoil", {
