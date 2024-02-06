@@ -287,8 +287,14 @@ qts.register_chest("craftable:storage_pot_clay", {
 			{ -3/16, 3/16, 1/16, 3/16, 4/16, 3/16, },
 			},
 		},
+		selection_box = {
+			type = "fixed",
+			fixed = {
+				{ -4/16, -8/16, -4/16, 4/16, 4/16, 4/16, },
+			},
+		},
 	is_ground_content = false,
-	sounds = qtcore.node_sound_wood(),
+	sounds = qtcore.node_sound_stone(),
 	
 	invsize = 8*4,
 	get_chest_formspec = qtcore.get_default_chest_formspec,	
