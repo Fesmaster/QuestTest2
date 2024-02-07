@@ -44,7 +44,7 @@ qtcore.for_all_materials("wood", function (fields_wood)
                             { 4/16, -8/16, -6/16, 6/16, 0/16, 6/16, },
                             { -1/16, -4/16, -6/16, 1/16, -1/16, -5/16, },
                             },
-                            },
+                        },
                         selection_box = {
                             type = "fixed",
                             fixed = {
