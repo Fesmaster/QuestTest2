@@ -17,6 +17,7 @@ minetest.register_node("foodstuffs:coffee_grounds", {
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
 	node_box = qtcore.nb_dustpile(),
+	selection_box = qtcore.nb_dustpile_selection(),
 })
 
 minetest.register_node("foodstuffs:sugar", {
@@ -33,6 +34,7 @@ minetest.register_node("foodstuffs:sugar", {
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
 	node_box = qtcore.nb_dustpile(),
+	selection_box = qtcore.nb_dustpile_selection(),
 })
 
 

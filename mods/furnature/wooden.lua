@@ -65,6 +65,12 @@ qtcore.for_all_materials("wood", function (fields)
                     paramtype2 = "facedir",
                     groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, table=1, generation_artificial=1},
                     node_box = nodebox,
+                    selection_box = {
+                        type = "fixed",
+                        fixed = {
+                            { -8/16, -8/16, -8/16, 8/16, 8/16, 8/16, },
+                        },
+                    },
                     sounds = qtcore.node_sound_wood(),
                 })
 
@@ -108,6 +114,12 @@ qtcore.for_all_materials("wood", function (fields)
                     paramtype2 = "facedir",
                     groups = {choppy=2, oddly_breakable_by_hand=2, flammable=2, chair=1, generation_artificial=1},
                     node_box = nodebox,
+                    selection_box = {
+                        type = "fixed",
+                        fixed = {
+                            { -4/16, -8/16, -4/16, 4/16, 11/16, 4/16, },
+                        },
+                    },
                     sounds = qtcore.node_sound_wood(),
                 })
 
@@ -236,6 +248,12 @@ qtcore.for_all_materials("wood", function (fields)
                             { -4/16, 3/16, -1/16, 4/16, 4/16, 1/16, },
                             { -1/16, -6/16, -1/16, 1/16, 4/16, 1/16, },
                             { -3/16, -6/16, -3/16, 3/16, -5/16, 3/16, },
+                        },
+                    },
+                    selection_box = {
+                        type = "fixed",
+                        fixed = {
+                            { -7/16, -8/16, -7/16, 7/16, 4/16, 7/16, },
                         },
                     },
                     sounds = qtcore.node_sound_wood(),

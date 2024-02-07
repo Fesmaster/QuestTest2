@@ -32,6 +32,12 @@ minetest.register_node("foodstuffs:cookware_iron", {
 
 		},
 	},
+	selection_box = {
+		type = "fixed",
+		fixed = {
+			{ -6/16, -8/16, -7/16, 6/16, -2/16, 6/16, },
+		},
+	},
 	sounds = qtcore.node_sound_metal(),
 })
 inventory.register_exemplar_item("cookware", "foodstuffs:cookware_iron")
@@ -63,6 +69,12 @@ minetest.register_node("foodstuffs:cookware_copper", {
 			{ 2/16, -4/16, -1/16, 4/16, -3/16, 1/16, },
 			{ 2/16, -4/16, -7/16, 4/16, -3/16, -5/16, },
 
+		},
+	},
+	selection_box = {
+		type = "fixed",
+		fixed = {
+			{ -6/16, -8/16, -7/16, 6/16, -2/16, 6/16, },
 		},
 	},
 	sounds = qtcore.node_sound_metal(),

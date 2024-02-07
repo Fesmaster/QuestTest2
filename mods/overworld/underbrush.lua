@@ -96,6 +96,12 @@ minetest.register_node("overworld:small_mushroom", {
 		}
 	},
 	sounds = qtcore.node_sound_defaults(),
+	selection_box = {
+		type = "fixed",
+		fixed = {
+			{ -5/16, -8/16, -4/16, 4/16, -4/16, 5/16, },
+		}
+	},
 	on_flood = floodFunc,
 })
 

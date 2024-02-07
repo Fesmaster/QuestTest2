@@ -38,6 +38,12 @@ minetest.register_node("alchemy:equipment_basic", {
 
 		},
 	},
+	selection_box = {
+		type= "fixed",
+		fixed = {
+			{ -5/16, -8/16, -6/16, 7/16, -2/16, 5/16, },
+		}
+	},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -75,6 +81,12 @@ minetest.register_node("alchemy:equipment_advanced", {
 
 		},
 	},
+	selection_box = {
+		type= "fixed",
+		fixed = {
+			{ -5/16, -8/16, -6/16, 0/16, -1/16, 5/16, },
+		}
+	},
 	sounds = qtcore.node_sound_stone(),
 })
 
@@ -100,6 +112,13 @@ minetest.register_node("alchemy:flask_glass", {
 			{ -1/16, -4/16, -1/16, 1/16, -1/16, 1/16, },
 		},
 	},
+	selection_box = {
+		type= "fixed",
+		fixed = {
+			{ -2/16, -8/16, -2/16, 2/16, -1/16, 2/16, },
+		}
+	},
+	sounds = qtcore.node_sound_glass(),
 })
 
 minetest.register_node("alchemy:flask_glass_water", {
@@ -122,4 +141,11 @@ minetest.register_node("alchemy:flask_glass_water", {
 			{ -1/16, -4/16, -1/16, 1/16, -1/16, 1/16, },
 		},
 	},
+	selection_box = {
+		type= "fixed",
+		fixed = {
+			{ -2/16, -8/16, -2/16, 2/16, -1/16, 2/16, },
+		}
+	},
+	sounds = qtcore.node_sound_glass(),
 })

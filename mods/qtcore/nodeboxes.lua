@@ -7,7 +7,7 @@ a handy thing to have if you are registering many nodes with the same shape
 local levels = {-3/8, -1/4, -1/8, 0, 1/8, 1/5, 3/8}
 for i= 1,7 do
 	qtcore["nb_level"..i] = function()
-		return{
+		return {
 			type = "fixed",
 			fixed = {
 				{-1/2, -1/2, -1/2, 1/2, levels[i], 1/2},
@@ -17,7 +17,7 @@ for i= 1,7 do
 end
 
 qtcore.nb_bottle = function()
-	return{
+	return {
 		type = "fixed",
 		fixed = {
 			{-0.125, -0.5, -0.125, 0.125, -0.4375, 0.125},
@@ -30,7 +30,7 @@ qtcore.nb_bottle = function()
 end
 
 qtcore.nb_chest = function()
-	return{
+	return {
 		type = "fixed",
 		fixed = {
 			{-0.4375, -0.5, -0.375, 0.4375, 0.0625, 0.4375},
@@ -40,7 +40,7 @@ qtcore.nb_chest = function()
 end
 
 qtcore.nb_lantern_fruit = function()
-	return{
+	return {
 		type = "fixed",
 		fixed = {
 			{-0.1875, -0.4375, -0.1875, 0.1875, 0.125, 0.1875},
@@ -52,7 +52,7 @@ qtcore.nb_lantern_fruit = function()
 end
 
 qtcore.nb_sapling = function()
-	return{
+	return {
 		type = "fixed",
 		fixed = {
 			{-0.0625, -0.5, -0.0625, 0.0625, 0.1875, 0.0625},
@@ -65,13 +65,22 @@ qtcore.nb_sapling = function()
 end
 
 qtcore.nb_dustpile = function()
-	return{
+	return {
 		type = "fixed",
 		fixed = {
 			{ -3/16, -8/16, -5/16, 3/16, -7/16, 5/16, },
 			{ -2/16, -7/16, -4/16, 2/16, -6/16, 4/16, },
 			{ -1/16, -6/16, -3/16, 1/16, -5/16, 3/16, },
 			{ -2/16, -8/16, -6/16, 2/16, -7/16, 6/16, },
+		}
+	}
+end
+
+qtcore.nb_dustpile_selection = function()
+	return {
+		type = "fixed",
+		fixed = {
+			{ -3/16, -8/16, -6/16, 3/16, -5/16, 6/16, },
 		}
 	}
 end

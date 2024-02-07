@@ -16,6 +16,7 @@ minetest.register_node("overworld:shell_pieces", {
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=3, generation_artificial=1},
 	node_box = qtcore.nb_dustpile(),
+	selection_box = qtcore.nb_dustpile_selection(),
 })
 
 --foods that drop directly
