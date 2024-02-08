@@ -46,6 +46,25 @@ local underbrush_drops = {
 		}
 	}
 }
+
+local underbrush_drops_mushroom = {
+	max_items = 1,
+	items={
+		{
+			rarity=5,
+			items = {"farmworks:herb_destroying_angel"},
+		},
+		{
+			rarity=5,
+			items = {"farmworks:herb_blue_milk"},
+		},
+		{
+			rarity=5,
+			items = {"farmworks:herb_puff_egg"},
+		},
+	},
+}
+
 local function floodFunc(pos, oldnode, newnode)
 	local d = minetest.get_node_drops(oldnode, "wieldhand")
 	for index, item in ipairs(d) do
@@ -83,7 +102,7 @@ minetest.register_node("overworld:small_mushroom", {
 	paramtype = "light",
 	walkable = false,
 	floodable = true,
-	groups = {snappy = 3, flammable = 2, attached_node=1, underbrush=1, generation_replacable=1},
+	groups = {snappy = 3, flammable = 2, attached_node=1, underbrush=1, generation_replacable=1, not_in_creative_inventory=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -102,6 +121,7 @@ minetest.register_node("overworld:small_mushroom", {
 			{ -5/16, -8/16, -4/16, 4/16, -4/16, 5/16, },
 		}
 	},
+	drops = underbrush_drops_mushroom,
 	on_flood = floodFunc,
 })
 
