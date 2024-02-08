@@ -132,3 +132,40 @@ farmworks.register_farm_plant("flax", {
 	grow_timer = 190,
 	grow_timer_random = 30,
 })
+
+--mushrooms
+farmworks.register_farm_mushroom("destroying_angel", {
+	description = "Destroying Angel",
+	seed_image = "farmworks_seeds_flax_item.png",
+	seed_tiles = {"farmworks_seeds_flax_top.png", "overworld_oak_wood.png", "farmworks_seeds_flax_side.png"},
+	item_image = "farmworks_herb_destroying_angel.png",
+	plant_levels = 7,
+	plant_tiles_list = {"farmworks_herb_0.png", "farmworks_herb_flax_1.png", "farmworks_herb_flax_2.png", "farmworks_herb_flax_3.png", "farmworks_herb_flax_4.png",
+	"farmworks_herb_flax_5.png", "farmworks_herb_flax_6.png"},
+	grow_timer = 190,
+	grow_timer_random = 30,
+})
+
+farmworks.register_farm_mushroom("blue_milk", {
+	description = "Blue Milk Mushroom",
+	seed_image = "farmworks_seeds_flax_item.png",
+	seed_tiles = {"farmworks_seeds_flax_top.png", "overworld_oak_wood.png", "farmworks_seeds_flax_side.png"},
+	item_image = "farmworks_herb_blue_milk.png",
+	plant_levels = 7,
+	plant_tiles_list = {"farmworks_herb_0.png", "farmworks_herb_flax_1.png", "farmworks_herb_flax_2.png", "farmworks_herb_flax_3.png", "farmworks_herb_flax_4.png",
+	"farmworks_herb_flax_5.png", "farmworks_herb_flax_6.png"},
+	grow_timer = 190,
+	grow_timer_random = 30,
+})
+
+farmworks.register_farm_mushroom("puff_egg", {
+	description = "Puff Egg Mushroom",
+	seed_image = "farmworks_seeds_flax_item.png",
+	seed_tiles = {"farmworks_seeds_flax_top.png", "overworld_oak_wood.png", "farmworks_seeds_flax_side.png"},
+	item_image = "farmworks_herb_puff_egg.png",
+	plant_levels = 7,
+	plant_tiles_list = {"farmworks_herb_0.png", "farmworks_herb_flax_1.png", "farmworks_herb_flax_2.png", "farmworks_herb_flax_3.png", "farmworks_herb_flax_4.png",
+	"farmworks_herb_flax_5.png", "farmworks_herb_flax_6.png"},
+	grow_timer = 190,
+	grow_timer_random = 30,
+})

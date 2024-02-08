@@ -51,16 +51,16 @@ local underbrush_drops_mushroom = {
 	max_items = 1,
 	items={
 		{
-			rarity=5,
-			items = {"farmworks:herb_destroying_angel"},
+			rarity=4,
+			items = {"farmworks:herb_destroying_angel", "farmworks:seed_destroying_angel"},
 		},
 		{
-			rarity=5,
-			items = {"farmworks:herb_blue_milk"},
+			rarity=3,
+			items = {"farmworks:herb_blue_milk", "farmworks:seed_blue_milk"},
 		},
 		{
-			rarity=5,
-			items = {"farmworks:herb_puff_egg"},
+			rarity=3,
+			items = {"farmworks:herb_puff_egg", "farmworks:seed_puff_egg"},
 		},
 	},
 }
@@ -121,7 +121,7 @@ minetest.register_node("overworld:small_mushroom", {
 			{ -5/16, -8/16, -4/16, 4/16, -4/16, 5/16, },
 		}
 	},
-	drops = underbrush_drops_mushroom,
+	drop = underbrush_drops_mushroom,
 	on_flood = floodFunc,
 })
 

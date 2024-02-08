@@ -20,6 +20,7 @@ local function Hoe_Use(itemstack, user, pointed_thing)
 			end
 			
 			local soilness = minetest.get_item_group(node.name, "soil")
+			local loamness = minetest.get_item_group(node.name, "loam")
 			if soilness ~= 0 then
 				
 				local param2 = 0
@@ -36,6 +37,21 @@ local function Hoe_Use(itemstack, user, pointed_thing)
 					qts.apply_default_wear(itemstack, node.name)
 				end
 				
+			elseif loamness ~= 0 then 
+
+				local param2 = 0
+				if user then
+					local user_pos = user:get_pos()
+					if user_pos then
+						param2 = minetest.dir_to_facedir(vector.subtract(pointed_thing.above, user_pos))
+					end
+				end
+				
+				minetest.swap_node(pos, {name = "overworld:loam_tilled", param2=param2})
+				
+				if not (qts.is_player_creative(user)) then
+					qts.apply_default_wear(itemstack, node.name)
+				end
 			else
 				minetest.punch_node(pos)
 			end

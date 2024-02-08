@@ -9,8 +9,9 @@ minetest.register_craftitem("farmworks:herb_bonewort", {
 	inventory_image = "farmworks_herb_bonewort.png",
 })
 
--- mushrooms, need special growing mulch later
-minetest.register_craftitem("farmworks:herb_destroying_angel", {
+
+--[[
+	minetest.register_craftitem("farmworks:herb_destroying_angel", {
 	description = "Destroying Angel Mushroom",
 	inventory_image = "farmworks_herb_destroying_angel.png",
 })
@@ -24,3 +25,4 @@ minetest.register_craftitem("farmworks:herb_puff_egg", {
 	description = "Puff Egg Mushroom",
 	inventory_image = "farmworks_herb_puff_egg.png",
 })
+]]--
