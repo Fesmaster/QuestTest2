@@ -52,15 +52,15 @@ local underbrush_drops_mushroom = {
 	items={
 		{
 			rarity=4,
-			items = {"farmworks:herb_destroying_angel", "farmworks:seed_destroying_angel"},
+			items = {"farmworks:herb_destroying_angel"},
 		},
 		{
 			rarity=3,
-			items = {"farmworks:herb_blue_milk", "farmworks:seed_blue_milk"},
+			items = {"farmworks:herb_bluesap"},
 		},
 		{
 			rarity=3,
-			items = {"farmworks:herb_puff_egg", "farmworks:seed_puff_egg"},
+			items = {"farmworks:herb_puffball"},
 		},
 	},
 }

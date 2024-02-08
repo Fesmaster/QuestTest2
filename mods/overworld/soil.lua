@@ -279,7 +279,7 @@ minetest.register_node ("overworld:loam_tilled", {
 	sounds = qtcore.node_sound_dirt(),
 	paramtype2 = "facedir",
 	paramtype = 'light',
-	drop = "overworld:dirt",
+	drop = "overworld:loam",
 	node_box = {
         type = "fixed",
         fixed = {

@@ -4,15 +4,17 @@
 
 
 --list of ingredient names
-local ingredient={"apple", "goard", "grain", "carrot", "onion", "potatoe"}
+local ingredient={"apple", "goard", "grain", "carrot", "onion", "potatoe", "puffball", "bluesap"}
 --mapping of said name to the actual item used to craft it
 local ingredient_map = {
 	apple = {item = "overworld:apple",          broth_affinity = 0},
 	goard = {item = "farmworks:herb_goard",     broth_affinity = 1},
 	grain = {item = "farmworks:herb_grain",     broth_affinity = 2},
-	carrot= {item = "farmworks:herb_carrot",    broth_affinity = 3},
-	onion = {item = "farmworks:herb_onion",     broth_affinity = 4},
+	carrot= {item = "farmworks:herb_carrot",    broth_affinity = 4},
+	onion = {item = "farmworks:herb_onion",     broth_affinity = 3},
 	potatoe={item = "farmworks:herb_potatoe",   broth_affinity = 5},
+	puffball ={item = "farmworks:herb_puffball", 	broth_affinity = 4.2},
+	bluesap ={item = "farmworks:herb_bluesap", 	broth_affinity = 3.5},
 }
 
 
@@ -125,7 +127,6 @@ for i=1, #ingredient do
 					results = {"foodstuffs:bowl_clay_soup_"..comb_name, "foodstuffs:cup_clay"},
 					near = {"group:table", "group:furnace", "group:cookware"},
 				})
-
 			end
 		end
 	end
