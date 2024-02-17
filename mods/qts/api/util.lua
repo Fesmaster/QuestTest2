@@ -545,7 +545,7 @@ end
 ]]
 ---@param pos1 Vector
 ---@param pos2 Vector
----@return function
+---@return fun():Vector?
 function qts.rectangle(pos1, pos2)
 	local co = coroutine.create(rect_iter)
 	return function()
@@ -572,7 +572,7 @@ end
 ]]
 ---@param pos1 Vector
 ---@param pos2 Vector
----@return function
+---@return fun():Vector?
 function qts.columns(pos1, pos2)
 	local co = coroutine.create(columns_iter)
 	return function()
@@ -907,82 +907,4 @@ function qts.select(check, opt1, opt2, ...)
 end
 
 
-if not qts.ASYNC then
---
-
----Parallel for loop
----@param start_value number starting value
----@param stop_value number stopping value (never reached)
----@param increment number? increment value (default: 1)
----@param body fun(i:number, ...):unknown loop body (run on async threads)
----@param body_sync fun(i:number, ...)? syncronous loop body (run on main thread). Parasm are return value from body()
----@param finished fun()? syncronous after all loops (run on main thread)
----@param ... unknown params to the loop body
-function qts.parallel_for(start_value, stop_value, increment, body, body_sync, finished, ...)
-	if increment == nil then increment = 1 end
-
-	local max_iters = math.abs(math.floor((stop_value - start_value) / increment)) + 1;
-	for i=start_value,stop_value,increment do
-		minetest.handle_async(function(body_func, i, ...)
-			return i, body_func(i, ...)
-		end, 
-		function(i, ...)
-			if (body_sync) then body_sync(i, ...) end
-			max_iters = max_iters - 1
-			if (max_iters == 0 and finished) then
-				finished()
-			end
-		end, body, i, ...)
-	end
-end
-
----Parallel for k, v, in ipairs(...)
----@param table table
----@param body fun(k:number, v:any, ...):... loop body
----@param body_sync fun(k:number, v:any, ...)? syncronous loob body (run on main thread). Params are return value from body()
----@param finished fun()? Syncronous after all loops (run on main thread)
----@param ... unknown params to the loop body
-function qts.parallel_ipairs(table, body, body_sync, finished, ...)
-	local max_iters = #table
-	for k, v in ipairs(table) do
-		minetest.handle_async(function(body_func, k, v, ...)
-			return k, v, body_func(k, v, ...)
-		end, 
-		function(k, v, ...)
-			if (body_sync) then body_sync(k, v, ...) end
-			max_iters = max_iters - 1
-			if (max_iters == 0 and finished) then
-				finished()
-			end
-		end, body, k, v, ...)
-	end
-end
-
----Parallel for k, v, in pairs(...)
----@param table table
----@param body fun(k:number, v:any, ...):... loop body
----@param body_sync fun(k:number, v:any, ...)? syncronous loob body (run on main thread). Params are return value from body()
----@param finished fun()? Syncronous after all loops (run on main thread)
----@param ... unknown params to the loop body
-function qts.parallel_pairs(table, body, body_sync, finished, ...)
-	local counted_iters = 0
-	local added_all_iters = false
-	for k, v in pairs(table) do
-		counted_iters = counted_iters + 1
-		minetest.handle_async(function(body_func, k, v, ...)
-			return k, v, body_func(k, v, ...)
-		end, 
-		function(k, v, ...)
-			if (body_sync) then body_sync(k, v, ...) end
-			counted_iters = counted_iters - 1
-			if (counted_iters == 0 and added_all_iters and finished) then
-				finished()
-			end
-		end, body, k, v, ...)
-	end
-	added_all_iters = true
-end
-
---
-end --not qts.ASYNC
 

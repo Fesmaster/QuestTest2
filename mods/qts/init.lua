@@ -41,6 +41,7 @@ dofile(qts.path.."/api/maths.lua") --non-vector math
 dofile(qts.path.."/api/util.lua")
 dofile(qts.path.."/api/vector.lua") --vector math
 
+dofile(qts.path.."/api/parallel.lua")
 dofile(qts.path.."/api/callbacks.lua")
 dofile(qts.path.."/api/creative.lua")
 dofile(qts.path.."/api/player.lua")

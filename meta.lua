@@ -1221,11 +1221,12 @@ local InvRef={
 ---@class SecureRandom
 ---@class Settings
 ---@class StorageRef
----@class VoxelManip
 ---@class DecorationID
 ---@class MapgenObject
 ---@class BiomeID
 ---@class LSystemDef
+
+---@alias ContentID integer
 
 ---@alias EmergeType any
 
@@ -1243,7 +1244,154 @@ local InvRef={
 ---@field humidity number
 ---@field biome BiomeID
 
+---@class MapNode A datatype used with VoxelManip and with Schematics
+---@field name string the node's name
+---@field prob number the probability of placing a node, or its param1
+---@field param1 number alias of prob
+---@field param2 number the param2 of a node
+---@field force_place boolean? should forcibly overwrite other content
 
+---@class VoxelManip
+local VoxelManipDef = {
+    ---Load a chunch of the map into the VoxelManip object. Returns min and max positions read
+    ---@param p1 Vector
+    ---@param p2 Vector
+    ---@return Vector pmin, Vector pmax
+    read_from_map = function(self,p1,p2) end,
+
+    ---Write the VoxelManip object back to the map. Must be read first
+    ---@param light boolean? If true, recalculate lighting before write. (Default: true)
+    write_to_map = function (self,light) end,
+
+    ---Get a MapNode at a position
+    ---@param pos Vector
+    ---@return MapNode node
+    get_node_at = function(self,pos) end,
+
+    ---Set a node at a location with a MapNode
+    ---@param pos Vector
+    ---@param mapnode MapNode
+    set_node_at = function (self,pos, mapnode) end,
+
+    ---Gets a buffer of ContentIDs that represent the node stored
+    ---@param buffer table? if supplied, used to store the buffer
+    ---@return ContentID[]
+    get_data = function (self,buffer) end,
+
+    ---Set the internal buffer of ContentIDs that represents the node data
+    ---@param buffer ContentID[]
+    set_data = function (self,buffer) end,
+
+    ---set the ligting to a uniform values
+    ---@param lighting {day:number, night:number}
+    ---@param p1 Vector? minpos
+    ---@param p2 Vector? maxpos
+    set_lighting = function (self,lighting, p1, p2) end,
+    
+    ---Gets a buffer of lighting values that represent the param1 of the nodes
+    ---@param buffer table? if supplied, used to store the buffer
+    ---@return ContentID[]
+    get_light_data = function (self,buffer) end,
+    
+    ---Set the internal buffer of lighting values that represents the param1 of the nodes
+    ---@param buffer ContentID[]
+    set_light_data = function (self,buffer) end,
+    
+    ---Gets a buffer of 1 byte values that represent the param2 of the nodes
+    ---@param buffer table? if supplied, used to store the buffer
+    ---@return ContentID[]
+    get_param2_data = function (self,buffer) end,
+    
+    ---Set the internal buffer of 1 byte values that represents the param2 of the nodes
+    ---@param buffer ContentID[]
+    set_param2_data = function (self,buffer) end,
+    
+    ---Calculate the lighting within the VoxelManip object.
+    ---@param p1 Vector? min position
+    ---@param p2 Vector? max position
+    ---@param propigate_shadow boolean? Shadowns propigated down. (default:true)
+    calc_lighting = function (self,p1, p2, propigate_shadow) end,
+    
+    ---Update liquid flows
+    update_liquids = function (self) end,
+    
+    ---get if the VoxelManip was modified
+    ---@return boolean wasModified
+    was_modified = function (self) end,
+    
+    ---Get the emerged area size
+    ---@return Vector minp, Vector maxp
+    get_emerged_area = function (self) end,
+}
+
+---Create a new VoxelArea. Shoudl be called as VoxelArea:new(...)
+---@param pmin Vector minimum position
+---@param pmax Vector maximum position
+---@return VoxelArea area
+function VoxelArea(pmin, pmax) end
+
+---@class VoxelArea
+---@field ystride number the change in index when moving a position one unit in the y axis.
+---@field zstride number the change in index when moving a position one unit in the z axis.
+local VoxelAreaDef = {
+    ---Get the extent of the area, as a vector.
+    ---@return Vector extent
+    getExtent = function (self) end,
+
+    ---Get the volume of the area.
+    ---@return number volume
+    getVolume = function (self) end,
+
+    ---Get the index of a coordinate.
+    ---@param x integer
+    ---@param y integer
+    ---@param z integer
+    ---@return integer index
+    index = function (self,x,y,z) end,
+    
+    ---Get the index of a coordinate. Vector must be integers!
+    ---@param p Vector
+    ---@return integer index
+    indexp = function (self,p) end,
+    
+    ---Get the position of an index.
+    ---@param i integer
+    ---@return Vector position
+    position = function (self,i) end,
+    
+    ---Checks if the area contains a coordinate.
+    ---@param x integer
+    ---@param y integer
+    ---@param z integer
+    ---@return boolean
+    contains = function (self,x, y, z) end,
+    
+    ---Checks if the area contains a coordinate. Vector must be integers!
+    ---@param p Vector
+    ---@return boolean
+    containsp = function (self,p) end,
+    
+    ---Check if the area contains an index.
+    ---@param i number
+    ---@return boolean
+    containsi = function (self,i) end,
+    
+    ---Iterate the area. order: [z [y [x]]]
+    ---@param minx integer
+    ---@param miny integer
+    ---@param minz integer
+    ---@param maxx integer
+    ---@param maxy integer
+    ---@param maxz integer
+    ---@return fun():integer
+    iter = function (self,minx, miny, minz, maxx, maxy, maxz) end,
+    
+    ---Iterate the area. order: [z [y [x]]] Vector must be integers!
+    ---@param minp Vector
+    ---@param maxp Vector
+    ---@return fun():integer
+    iterp = function (self,minp, maxp) end,
+}
 
 -- Definition Tables
 ---@class HudDefinition
@@ -1262,6 +1410,48 @@ minetest = {
     EMERGE_FROM_DISK=3,
     ---@type EmergeType
     EMERGE_GENERATED=4,
+
+    ---@type {ItemName:table}
+    registered_items={},
+
+    ---@type {ItemName:table}
+    registered_nodes={},
+
+    ---@type {ItemName:table}
+    registered_craftitems={},
+
+    ---@type {ItemName:table}
+    registered_tools={},
+
+    ---@type {ItemName:table}
+    registered_entities={},
+
+    ---@type {ItemName:table}
+    registered_abms={},
+    
+    ---@type {ItemName:table}
+    registered_lbms={},
+
+    ---@type {ItemName:table}
+    registered_aliases={},
+
+    ---@type {ItemName:table}
+    registered_ores={},
+
+    ---@type {ItemName:table}
+    registered_biomes={},
+
+    ---@type {ItemName:table}
+    registered_decorations={},
+
+    ---@type {ItemName:table}
+    registered_schematics={},
+
+    ---@type {ItemName:table}
+    registered_chatcommands={},
+
+    ---@type {ItemName:table}
+    registered_privileges={},
 
     ---Add newlines to a string to keep it within a limit
     ---@param str string the string to wrap
