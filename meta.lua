@@ -710,7 +710,6 @@ local LuaEntity_Def = {
 ---@operator unm(Vector): Vector
 ---@field copy fun(self:Vector):Vector copy the vector
 ---@field to_string fun(self:Vector):string vector to string
-
 vector ={
     ---Creates a new vector. With no params, results in 0 vector. With vector param, makes a copy. Otherwise combines 3 params to vector.
     ---@param a nil|Vector|number
@@ -861,9 +860,105 @@ vector ={
 
     ---Creates a rotation vector from a direction
     ---@param direction Vector the direction
-    ---@param up Vector the up vector. If omitted, roll will be 0.
+    ---@param up Vector? the up vector. If omitted, roll will be 0.
     ---@return Rotator
     dir_to_rotation=function(direction, up) end, --
+}
+
+bit = {
+
+    ---Normalizes a number to the numeric range for bit operations and returns it. 
+    ---This function is usually not needed since all bit operations already normalize 
+    ---all of their input arguments. Check the [operational semantics](https://bitop.luajit.org/semantics.html) for details.
+    ---@param x number
+    ---@return number
+    tobit = function (x) end,
+    
+    ---Converts its first argument to a hex string. The number of hex digits is given 
+    ---by the absolute value of the optional second argument. Positive numbers 
+    ---between 1 and 8 generate lowercase hex digits. Negative numbers generate 
+    ---uppercase hex digits. Only the least-significant 4*|n| bits are used. 
+    ---The default is to generate 8 lowercase hex digits.
+    ---@param x number
+    ---@param n number? number of digits. negative for uppercase. Default: 8 
+    ---@return string
+    tohex = function (x, n) end,
+    
+    ---Returns the bitwise not of its argument.
+    ---@param x number
+    bnot = function (x) end,
+    
+    ---Returns the bitwise **and** ( & ) of all its arguments. 
+    ---Note that more than two arguments are allowed.
+    ---@param x1 number
+    ---@param x2 number
+    ---@param ... number
+    ---@return number
+    band = function (x1, x2, ...) end,
+    
+    ---Returns the bitwise **or** ( | ) of all its arguments. 
+    ---Note that more than two arguments are allowed.
+    ---@param x1 number
+    ---@param x2 number
+    ---@param ... number
+    ---@return number
+    bor = function (x1, x2, ...) end,
+    
+    ---Returns the bitwise **xor** ( ^ ) of all its arguments. 
+    ---Note that more than two arguments are allowed.
+    ---@param x1 number
+    ---@param x2 number
+    ---@param ... number
+    ---@return number
+    bxor = function (x1, x2, ...) end,
+    
+    ---Returns either the bitwise **logical left-shift**, of its first argument 
+    ---by the number of bits given by the second argument.
+    ---Logical shifts treat the first argument as an unsigned number and shift in 0-bits.
+    ---Only the lower 5 bits of the shift count are used (reduces to the range [0..31]).
+    ---@param x number
+    ---@param n integer
+    ---@return number
+    lshift = function (x, n) end,
+    
+    ---Returns either the bitwise **logical right-shift**, of its first argument 
+    ---by the number of bits given by the second argument.
+    ---Logical shifts treat the first argument as an unsigned number and shift in 0-bits.
+    ---Only the lower 5 bits of the shift count are used (reduces to the range [0..31]).
+    ---@param x number
+    ---@param n integer
+    ---@return number
+    rshift = function (x, n) end,
+    
+    ---Returns either the bitwise **arithmetic right-shift**, of its first argument 
+    ---by the number of bits given by the second argument.
+    ---Arithmetic right-shift treats the most-significant bit as a sign bit and replicates it.
+    ---Only the lower 5 bits of the shift count are used (reduces to the range [0..31]).
+    ---@param x number
+    ---@param n integer
+    ---@return number
+    arshift = function (x, n) end,
+    
+    ---Returns either the bitwise **left rotation** of its first argument by the number 
+    ---of bits given by the second argument. Bits shifted out on one side are shifted 
+    ---back in on the other side.
+    ---Only the lower 5 bits of the rotate count are used (reduces to the range [0..31]).
+    ---@param x number
+    ---@param n number
+    ---@return number
+    rol = function (x, n) end,
+    
+    ---Returns either the bitwise **right rotation** of its first argument by the number 
+    ---of bits given by the second argument. Bits shifted out on one side are shifted 
+    ---back in on the other side.
+    ---Only the lower 5 bits of the rotate count are used (reduces to the range [0..31]).
+    ror = function (x, n) end,
+    
+    ---Swaps the bytes of its argument and returns it. This can be used to convert 
+    ---little-endian 32 bit numbers to big-endian 32 bit numbers or vice versa.
+    ---@param x number
+    ---@return number
+    bswap = function (x) end,
 }
 
 ---@alias Rotator Vector {x=Pitch, y=Yaw, z=Roll}, uses radians
@@ -1475,3 +1570,12 @@ minetest = {
 ---@field on_blast nil|fun(pos:Vector, intensity:number):any called when node is exploded.
 ---@field mod_origin string The origin mod. Do not set when registering a node.
 
+---Create a PcgRandom object
+---@param seed number The seed
+---@param sequence unknown?
+---@return PCGRandom random object
+function PcgRandom(seed, sequence) end;
+
+---@class PCGRandom
+---@field next fun(obj:PCGRandom, min:number?, max:number?): number get the next random number
+---@field rand_normal_dist fun(obj:PCGRandom, min:number, max:number, num_trials:number?): number get a random number with a normal distribution. num_trials default is 6. Increase for more accuracy

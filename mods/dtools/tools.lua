@@ -674,3 +674,38 @@ minetest.register_tool("dtools:entity_analyzer", {
 		end
 	end
 })
+
+
+minetest.register_tool("dtools:pentool_tester", {
+	description = "PenTool testing wand",
+	inventory_image = "dtools_green_wand.png",
+	range = 10.0,
+	on_use = function(itemstack, user, pointed_thing)
+		---@cast user Player
+
+		if (pointed_thing.under== nil) then return end
+		minetest.log("QTS PenTool Testing Tool used")
+		
+		local t = transform.new(
+			pointed_thing.under,
+			(pointed_thing.above - pointed_thing.under):dir_to_rotation(),
+			vector.new(1,1,1)
+		)
+		t:set_rot(vector.new(t.rot.x, user:get_look_horizontal(), t.rot.z))
+		--t:rotate(vector.new(user:get_look_horizontal(), 0, 0))
+
+		local context = qts.pentool.context_base.create(t)
+		context:pendown()
+		:forward(4)
+		:rotate(vector.new(math.rad(-90), 0, 0))
+		:push()
+		for i=0,3 do
+			context:rotate(vector.new(0, math.rad(90)*i, 0))
+			:forward(1)
+			:rotate(vector.new(math.rad(-30),0,0))
+			:forward(1)
+			:peak()
+		end
+		context:pop()
+	end,
+})

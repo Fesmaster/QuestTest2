@@ -198,84 +198,43 @@ function vector.get_rot(vec)
 	return rot
 end
 
---TODO: vector.set_rot(vec, rot)
 
-local function get_forward_vector(yaw, pitch)
-	local dir = vector.new(
-		math.sin(yaw),
-		math.cos(pitch or math.pi), --if pitch is null, PI used (dir.y == 0)
-		math.cos(yaw)
-	)
-	if dir.x ~= dir.x then 
-		dir.x=0
-	end
-	if dir.y ~= dir.y then 
-		dir.y=0
-	end
-	if dir.z ~= dir.z then 
-		dir.z=0
-	end
-	dir.x = dir.x*-1
-	return dir
-end
-
---[[
-	Gets the forward vector of a rotation
-	
-	Params:
-		rot - a vector, as euler rotation
-	--OR--
-		yaw - the yaw or the rotation
-		pitch (optional) - the pitch of the rotation
-	
-	Return: 
-		unit vector, as direction
-]]
-function vector.get_forward_vector(yaw, pitch)
-	if (type(yaw) == "table") and yaw.x ~= nil and yaw.y ~= nil then
-		return get_forward_vector(yaw.y, yaw.x)
+---Gets the forward vector of a rotation
+---@param rot Rotator|number
+---@param pitch number?
+---@param roll number?
+---@return Vector
+function vector.get_forward_vector(rot, pitch, roll)
+	if vector.check(rot) then
+		return vector.rotate(vector.new(0,0,1), rot):normalize()
 	else
-		return get_forward_vector(yaw, pitch)
+		return vector.rotate(vector.new(0,0,1), vector.new(pitch,rot,roll)):normalize()
 	end
 end
 
---[[
-	Gets the right vector of a rotation
-	
-	Params:
-		rot - a vector, as euler rotation
-	--OR--
-		yaw - the yaw or the rotation
-		pitch (optional) - the pitch of the rotation
-	
-	Return: 
-		unit vector, as direction
-]]
-function vector.get_right_vector(yaw, pitch)
-	if (type(yaw) == "table") and yaw.x and yaw.y then
-		return get_forward_vector(yaw.y+(math.pi/2), yaw.z)
+---Gets the right vector of a rotation
+---@param rot Rotator|number
+---@param pitch number?
+---@param roll number?
+---@return Vector
+function vector.get_right_vector(rot, pitch, roll)
+	if vector.check(rot) then
+		return vector.rotate(vector.new(1,0,0), rot):normalize()
 	else
-		return get_forward_vector(yaw+(math.pi/2), pitch)
+		return vector.rotate(vector.new(1,0,0), vector.new(pitch,rot,roll)):normalize()
 	end
 end
 
---[[
-	gets the up vector of a rotation
-	
-	Params:
-		rot - a vector, as euler rotation
-	--OR--
-		yaw - the yaw or the rotation
-		pitch (optional) - the pitch of the rotation. If nil, assumed to be 0
-	
-	Return: 
-		unit vector, as direction
-]]
-function vector.get_up_vector(yaw, pitch)
-	if (type(yaw) == "table") and yaw.x and yaw.y then
-		return get_forward_vector(yaw.y, yaw.z+(math.pi/2))
+---Gets the up vector of a rotation
+---@param rot Rotator|number
+---@param pitch number?
+---@param roll number?
+---@return Vector
+function vector.get_up_vector(rot, pitch, roll)
+	if vector.check(rot) then
+		return vector.rotate(vector.new(0,1,0), rot):normalize()
 	else
-		return get_forward_vector(yaw, (pitch or 0) +(math.pi/2))
+		return vector.rotate(vector.new(0,1,0), vector.new(pitch,rot,roll)):normalize()
 	end
 end
 

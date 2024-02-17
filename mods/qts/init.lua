@@ -36,6 +36,7 @@ dofile(qts.path.."/benchmark.lua")
 dofile(qts.path.."/api/maths.lua") --non-vector math
 dofile(qts.path.."/api/util.lua")
 dofile(qts.path.."/api/vector.lua") --vector math
+dofile(qts.path.."/api/transform.lua") --transform math
 
 dofile(qts.path.."/api/callbacks.lua")
 dofile(qts.path.."/api/creative.lua")
@@ -44,6 +45,7 @@ dofile(qts.path.."/api/nodetypes.lua")
 dofile(qts.path.."/api/shapedNodes.lua")
 dofile(qts.path.."/api/doors.lua")
 dofile(qts.path.."/scribe/scribe.lua")
+dofile(qts.path.."/pentool/pentool.lua")
 dofile(qts.path.."/api/growing.lua")
 dofile(qts.path.."/api/chest.lua")
 dofile(qts.path.."/api/itemModifiers.lua")

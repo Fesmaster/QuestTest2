@@ -19,6 +19,14 @@ function qts.nearly_equal(a, b, degree)
 	return (a >= b-degree and a <= b+degree)
 end
 
+---Clamp a number between two others. DOES NOT CHECK for min < max.
+---@param a number
+---@param min number
+---@param max number
+function qts.clamp(a, min, max)
+	return math.min(math.max(a, min), max)
+end
+
 --[[
 	Creats a set from a list.   
 	ie, {1="item1", 2="item2, ... N="itemN"}  
