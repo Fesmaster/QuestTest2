@@ -9,9 +9,8 @@ minetest.register_craftitem("farmworks:herb_bonewort", {
 	inventory_image = "farmworks_herb_bonewort.png",
 })
 
-
 --mushrooms (make growable later)
-	minetest.register_craftitem("farmworks:herb_destroying_angel", {
+minetest.register_craftitem("farmworks:herb_destroying_angel", {
 	description = "Destroying Angel Mushroom",
 	inventory_image = "farmworks_herb_destroying_angel.png",
 })

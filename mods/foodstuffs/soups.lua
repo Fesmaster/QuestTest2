@@ -7,14 +7,14 @@
 local ingredient={"apple", "goard", "grain", "carrot", "onion", "potatoe", "puffball", "bluesap"}
 --mapping of said name to the actual item used to craft it
 local ingredient_map = {
-	apple = {item = "overworld:apple",          broth_affinity = 0},
-	goard = {item = "farmworks:herb_goard",     broth_affinity = 1},
-	grain = {item = "farmworks:herb_grain",     broth_affinity = 2},
-	carrot= {item = "farmworks:herb_carrot",    broth_affinity = 4},
-	onion = {item = "farmworks:herb_onion",     broth_affinity = 3},
-	potatoe={item = "farmworks:herb_potatoe",   broth_affinity = 5},
-	puffball ={item = "farmworks:herb_puffball", 	broth_affinity = 4.2},
-	bluesap ={item = "farmworks:herb_bluesap", 	broth_affinity = 3.5},
+	apple   = {item = "overworld:apple",          broth_affinity = 0},
+	goard   = {item = "farmworks:herb_goard",     broth_affinity = 1},
+	grain   = {item = "farmworks:herb_grain",     broth_affinity = 2},
+	carrot  = {item = "farmworks:herb_carrot",    broth_affinity = 4},
+	onion   = {item = "farmworks:herb_onion",     broth_affinity = 3},
+	potatoe = {item = "farmworks:herb_potatoe",   broth_affinity = 5},
+	puffball= {item = "farmworks:herb_puffball",  broth_affinity = 4.2},
+	bluesap = {item = "farmworks:herb_bluesap",   broth_affinity = 3.5},
 }
 
 
