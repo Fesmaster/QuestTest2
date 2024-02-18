@@ -23,10 +23,18 @@ local function Hoe_Use(itemstack, user, pointed_thing)
 			local loamness = minetest.get_item_group(node.name, "loam")
 			if (soilness ~= 0 or loamness ~= 0) then
 				local param2 = 0
+				if user then
+					local user_pos = user:get_pos()
+					if user_pos then
+						param2 = minetest.dir_to_facedir(vector.subtract(pointed_thing.above, user_pos))
+					end
+				end
+
 				minetest.swap_node(pos, {
 					name = qts.select(soilness ~= 0, "overworld:dirt_tilled", "overworld:loam_tilled"), 
 					param2 = param2
 				})
+				
 				if not (qts.is_player_creative(user)) then
 					qts.apply_default_wear(itemstack, node.name)
 				end
@@ -37,6 +45,49 @@ local function Hoe_Use(itemstack, user, pointed_thing)
 	end
 	return itemstack
 end
+--[[
+
+local function Hoe_Use(itemstack, user, pointed_thing)
+	if pointed_thing and pointed_thing.under then
+		local node = minetest.get_node_or_nil(pointed_thing.under)
+		local nodeAbove = minetest.get_node_or_nil(pointed_thing.under + vector.new(0,1,0))
+		if node and node.name and nodeAbove and nodeAbove.name and nodeAbove.name == "air" then
+			local underbrush = minetest.get_item_group(node.name, "underbrush")
+			local pos = pointed_thing.under
+
+            --hoe thorough underbrush
+			if (underbrush ~= 0) then
+				minetest.set_node(pointed_thing.under, {name="air"})
+				pos = pos - vector.new(0,1,0)
+				node = minetest.get_node_or_nil(pos)
+			end
+			
+			local soilness = minetest.get_item_group(node.name, "soil")
+			if soilness ~= 0 then
+				
+				local param2 = 0
+				if user then
+					local user_pos = user:get_pos()
+					if user_pos then
+						param2 = minetest.dir_to_facedir(vector.subtract(pointed_thing.above, user_pos))
+					end
+				end
+				
+				minetest.swap_node(pos, {name = "overworld:dirt_tilled", param2=param2})
+				
+				if not (qts.is_player_creative(user)) then
+					qts.apply_default_wear(itemstack, node.name)
+				end
+				
+			else
+				minetest.punch_node(pos)
+			end
+		end
+	end
+	return itemstack
+end
+
+]]
 
 minetest.register_tool("tools:hoe_rusted", {
 	description = "Rusted Hoe",
