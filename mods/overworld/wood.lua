@@ -210,7 +210,7 @@ minetest.override_item("overworld:lanternfruit_wood_fence", {
 
 minetest.register_alias("default:lantern_fruit", "overworld:lantern_fruit")
 
---fruit-bearing apple leaves:
+--fruit-bearing leaves:
 minetest.register_node("overworld:apple_leaves_fruit", {
 	description = "Apple Leaves with Apples",
 	drawtype = "allfaces_optional",
@@ -224,6 +224,48 @@ minetest.register_node("overworld:apple_leaves_fruit", {
 		items = {
 			{items = {"overworld:apple"}},
 			{items = {"overworld:apple_leaves"}},
+		}
+	},
+	walkable = false,
+	climbable = true,
+	sounds = qtcore.node_sound_grass(),
+	after_place_node = qtcore.after_place_leaves;
+})
+
+minetest.register_node("overworld:pine_leaves_fruit", {
+	description = "Pine Leaves with Pine Cones",
+	drawtype = "allfaces_optional",
+	waving = 1,
+	tiles = {"overworld_pine_leaves_fruit_top.png", "overworld_pine_leaves_fruit_top.png", "overworld_pine_leaves_fruit_side.png",},
+	use_texture_alpha = "clip",
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1, generation_trees=1},
+	drop = {
+		max_items = 2,
+		items = {
+			{items = {"overworld:apple"}},
+			{items = {"overworld:pine_leaves"}},
+		}
+	},
+	walkable = false,
+	climbable = true,
+	sounds = qtcore.node_sound_grass(),
+	after_place_node = qtcore.after_place_leaves;
+})
+
+minetest.register_node("overworld:coffee_leaves_fruit", {
+	description = "Coffee Leaves with Beans",
+	drawtype = "allfaces_optional",
+	waving = 1,
+	tiles = {"overworld_coffee_leaves_fruit.png"},
+	use_texture_alpha = "clip",
+	paramtype = "light",
+	groups = {snappy = 3, flammable = 2, leaves = 1, generation_trees=1},
+	drop = {
+		max_items = 2,
+		items = {
+			{items = {"foodstuffs:coffee_beans"}},
+			{items = {"overworld:coffee_leaves"}},
 		}
 	},
 	walkable = false,
