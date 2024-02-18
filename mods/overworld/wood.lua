@@ -106,7 +106,7 @@ for i, wood in ipairs(woods) do
 			"overworld_"..wood.name.."_leaves.png^[lowpart:37:overworld_"..wood.name.."_side.png"},
 		use_texture_alpha = "clip",
 		groups = {snappy=3, flammable=2, sapling=1, generation_replacable=1},
-		sounds = qtcore.node_sound_stone(),
+		sounds = qtcore.node_sound_grass(),
 		drawtype = "nodebox",
 		paramtype = "light",
 		node_box = qtcore.nb_sapling(),
@@ -236,7 +236,7 @@ minetest.register_alias("default:apple_leaves_fruit", "overworld:apple_leaves_fr
 
 --palm, swamp, and bamboo are a bit special.
 
---palm: has no planks or stripped version. Plam is a completely useless wood
+--palm: has no planks or stripped version. palm is a completely useless wood
 qts.register_shaped_node ("overworld:palm_log", {
 	description = "Palm Log",
 	tiles = {"overworld_palm_top.png", "overworld_palm_top.png", "overworld_palm_side.png"},
@@ -276,17 +276,16 @@ qts.register_growable_node("overworld:palm_sapling", {
 		"overworld_palm_leaves.png^[lowpart:37:overworld_palm_side.png"},
 	use_texture_alpha = "clip",
 	groups = {snappy=3, flammable=2, sapling=1, generation_replacable=1},
-	sounds = qtcore.node_sound_stone(),
+	sounds = qtcore.node_sound_grass(),
 	drawtype = "nodebox",
 	paramtype = "light",
 	node_box = qtcore.nb_sapling(),
 	paramtype2 = "facedir",
-	
-	growable_nodes = {"group:soil"},
-	grow_timer = TREE_TIME,
-	grow_timer_random = TREE_VAR,
-	on_grow = function(pos)
-		minetest.log("info","A Palm tree has grown at "..minetest.pos_to_string(pos))
+	growable_nodes = {"group:sand"},
+	grow_timer = TREE_TIME.get(),
+	grow_timer_random = TREE_VAR.get(),
+	on_grow = function(pos --[[@type Vector]])
+		minetest.log("info","An palm tree has grown at "..minetest.pos_to_string(pos))
 		minetest.set_node(pos, {name = "air"})
 		qtcore.grow_palm_tree(pos)
 	end,
