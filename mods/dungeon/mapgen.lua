@@ -40,3 +40,19 @@ qts.worldgen.register_scatter("camp-prarie", {
 	chance = 6000,
 	stage = "pre-structure",
 })
+
+qts.worldgen.register_scatter("camp-snow", {
+	nodes = {"dungeon:camp_generator_snow"},
+	replace = {"air"},
+	below = {"overworld:dirt_with_snow"},
+	chance = 6000,
+	stage = "pre-structure",
+})
+
+qts.worldgen.register_scatter("camp-swamp", {
+	nodes = {"dungeon:camp_generator_swamp"},
+	replace = {"air"},
+	below = {"overworld:dirt_with_swamp_grass"},
+	chance = 6000,
+	stage = "pre-structure",
+})
