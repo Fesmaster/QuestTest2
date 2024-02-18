@@ -14,15 +14,24 @@ transform = {
     },
 
     ---create a new transform
-    ---@param pos Vector
-    ---@param rot Rotator
-    ---@param scale Vector
+    ---@param pos Vector?
+    ---@param rot Rotator?
+    ---@param scale Vector?
     ---@return Transform
     new = function(pos, rot, scale)
         if pos == nil then pos = vector.new(0,0,0) end
         if rot == nil then rot = vector.new(0,0,0) end
         if scale == nil then scale = vector.new(1,1,1) end
-    	local v = {
+    	if (not vector.check(pos)) then
+            error("Unable to create transform with non-vector position")
+        end
+        if (not vector.check(rot)) then
+            error("Unable to create transform with non-vector rotation")
+        end
+        if (not vector.check(scale)) then
+            error("Unable to create transform with non-vector scale")
+        end
+        local v = {
     		pos=pos,
     		rot=rot,
     		scale=scale,
@@ -173,5 +182,32 @@ transform = {
             ",\n"..prefix.."\tUp="..t:up():to_string()..
             "\n"..prefix.."}"
     end,
+
+    ---Take a relative position and make it absolute
+    ---@param t Transform
+    ---@param relative Vector
+    ---@return Vector absolute
+    absolute_position = function(t, relative)
+        local p1 = relative * t.scale
+        local x = t:right() * p1.x
+        local y = t:up() * p1.y
+        local z = t:forward() * p1.z
+        local p2 = x+y+z
+        return vector.add(p2, t.pos)
+    end,
+
+    ---Take an absolute position and make it relative
+    ---@param t Transform
+    ---@param absolute Vector
+    ---@return Vector relative
+    relative_position = function(t, absolute)
+        --same steps as absolute_position, but in reverse.
+        local p1 = absolute - t.pos
+        local x = vector.dot(t:right(), p1)
+        local y = vector.dot(t:up(), p1)
+        local z = vector.dot(t:forward(), p1)
+        local p2 = vector.new(x,y,z)
+        return p2 / t.scale
+    end
 }
 transform.__mt.__index = transform

@@ -21,6 +21,36 @@ vector.slerp(rot1, rot2, alpha)
 
 --]]
 
+--fixing vector.multiply
+
+vector.old_multiply = vector.multiply
+
+---Vector multiplication
+---@param v Vector
+---@param x Vector|number
+---@return Vector
+function vector.multiply(v, x)
+	if vector.check(x) then
+		return vector.new(v.x * x.x, v.y * x.y, v.z * x.z)
+	else
+		return vector.new(v.x * x, v.y*x, v.z*x)
+	end
+end
+vector.metatable.__mul = vector.multiply
+
+---Vector division
+---@param v Vector
+---@param x Vector|number
+---@return Vector
+function vector.divide(v, x)
+	if vector.check(x) then
+		return vector.new(v.x / x.x, v.y / x.y, v.z / x.z)
+	else
+		return vector.new(v.x / x, v.y / x, v.z / x)
+	end
+end
+vector.metatable.__div = vector.divide
+
 --[[
 	create a read-only vector, that operates as a normal vector
 
@@ -287,3 +317,33 @@ function vector.slerp(rot1, rot2, alpha)
 	return result
 end
 
+---Get the maximum element in a vector
+---@param v Vector
+---@return number
+function vector.max_element(v)
+	return math.max(v.x, math.max(v.y, v.z))
+end
+
+---Get the minimum element in a vector
+---@param v Vector
+---@return number
+function vector.min_element(v)
+	return math.min(v.x, math.min(v.y, v.z))
+end
+
+---Get the middle element in a vector
+---@param v Vector
+---@return number
+function vector.mid_element(v)
+	return v.x+v.y+v.z - (vector.max_element(v) + vector.min_element(v))
+end
+
+---Create a rotator from roll, pitch and yaw in degrees
+---@param roll number roll in degrees
+---@param pitch number pitch in degrees
+---@param yaw number yaw in degrees
+---@return Rotator
+---@diagnostic disable-next-line: lowercase-global
+function rotator(roll, pitch, yaw)
+	return vector.new(math.rad(pitch), math.rad(yaw), math.rad(roll))
+end

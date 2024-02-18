@@ -98,7 +98,7 @@ local function always_match(pos, node) return true end
 ---@param pos Vector
 ---@param radius number
 ---@param matching nil|table|function
----@return table
+---@return {pos:Vector,noderef:NodeRef,dist:number}[]
 function qts.get_nodes_in_radius(pos, radius, matching)
 	local matching_func = always_match
 	local matching_table = nil
@@ -122,6 +122,7 @@ function qts.get_nodes_in_radius(pos, radius, matching)
 					ntable[counter]={}
 					ntable[counter].pos = npos
 					ntable[counter].noderef = nref
+					ntable[counter].dist = dist
 					counter = counter+1
 				end
 			end
@@ -130,7 +131,51 @@ function qts.get_nodes_in_radius(pos, radius, matching)
 		end
 		return ntable
 	else
-		return nil
+		return {}
+	end
+end
+
+---Get a list of all the nodes in a blob. 
+---A blob is defined as a sphereoid with 3 different radii for different axis 
+---@param pos Vector the center of the blob
+---@param radii Vector the radii of the blob
+---@param matching nil|table|function optional matching set. can be a list of groups or a function
+---@return {pos:Vector,noderef:NodeRef,dist:number}[]
+function qts.get_nodes_in_blob(pos, radii, matching)
+	local matching_func = always_match
+	local matching_table = nil
+	if type(matching) == "function" then
+		matching_func = matching
+	elseif type(matching) == "table" then
+		matching_table = matching
+		matching_func = group_matching_func
+	end
+	if pos ~= nil and radii ~= nil then
+		local ntable = {}
+		local counter = 1
+		for z = -radii.z, radii.z do
+		for y = -radii.y, radii.y do 
+		for x = -radii.x, radii.x do
+			local dist = ((x^2)+(y^2)+(z^2))^0.5
+			local frac = vector.new(x,y,z):normalize()
+			local radius = radii:dot(frac)
+			if qts.nearly_equal(dist, radius, 0.5) or dist <= radius then
+				local npos = {x=pos.x+x,y=pos.y+y,z=pos.z+z}
+				local nref = minetest.get_node(npos)
+				if (matching_func(npos, nref, matching_table)) then
+					ntable[counter]={}
+					ntable[counter].pos = npos
+					ntable[counter].noderef = nref
+					ntable[counter].dist = dist
+					counter = counter+1
+				end
+			end
+		end
+		end
+		end
+		return ntable
+	else
+		return {}
 	end
 end
 

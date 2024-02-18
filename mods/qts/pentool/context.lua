@@ -9,7 +9,9 @@
 
 ---@class PentoolContext
 ---@field transform Transform the transform of the Pentool
+---@field original_transform Transform the transform of the Pentool at its created. 
 ---@field draw_weight Alpha the weight for drawing. 0: no drawing. 1: always draw
+---@field brush PentoolBrush The current brush, used for drawing into the world.
 ---@field _stack table Internal stack of pushes and pops. Do not use directly.
 ---@field _seed number Internal seed for random numbers. Do not use directly.
 ---@field _random PCGRandom Internal random number generator, used for the pentool random calls. Do not use directly.
@@ -32,8 +34,10 @@ qts.pentool.context_base = {
         if tbl == nil then
             tbl = {}
         end
-        tbl.transform = origin
+        tbl.transform = origin:copy()
+        tbl.original_transform = origin:copy()
         tbl.draw_weight = 1
+        tbl.brush = qts.pentool.create_empty_brush()
         tbl._stack = {}
         tbl._seed = origin:hashpos()
         tbl._random = PcgRandom(tbl._seed)
@@ -43,93 +47,221 @@ qts.pentool.context_base = {
     end,
 
     ---Set the draw chance
-    ---@param context PentoolContext
+    ---@param self PentoolContext
     ---@param weight Alpha 0: no placement. 1:always place
     ---@return PentoolContext
-    drawweight = function(context, weight)
-        context.draw_weight = qts.clamp(weight, 0, 1)
-        return context
+    drawweight = function(self, weight)
+        self.draw_weight = qts.clamp(weight, 0, 1)
+        return self
     end,
 
     ---Disable drawing
-    ---@param context PentoolContext
+    ---@param self PentoolContext
     ---@return PentoolContext
-    penup = function (context)
-        context:drawweight(0)
-        return context
+    penup = function (self)
+        self:drawweight(0)
+        return self
     end,
 
     ---Enable drawing at 100 percent chance
-    ---@param context PentoolContext
+    ---@param self PentoolContext
     ---@return PentoolContext
-    pendown = function (context)
-        context:drawweight(1)
-        return context
+    pendown = function (self)
+        self:drawweight(1)
+        return self
     end,
 
     ---Move the pen forward N nodes. Cannot move the pen backwards with a negative distance. (YET)
     ---As a rule, Pentool writes to a node when its position *enters* that node.
     ---If a pentool is at {0,0,0} and moves 5 blocks up, it will not change the node at {0,0,0}
-    ---@param context PentoolContext
+    ---@param self PentoolContext
     ---@param distance number how far to move
+    ---@param step number? step
     ---@param snap boolean? should it snap to the nearest node at each step
     ---@return PentoolContext
-    forward = function(context, distance, snap)
-        if snap == nil then snap = false end;
-        if (distance <= 0) then return context end;
-        for i = 0, math.floor(distance) do
+    forward = function(self, distance, step, snap)
+        if snap == nil then snap = false end
+        if step == nil then step = 1 end
+        if (distance <= 0) then return self end;
+        
+        for i = 1, distance * self.transform.scale.z, step do
             --calculate the new pen location, one unit on
-            context.transform:translate(context.transform:forward())
+            self.transform:translate(self.transform:forward())
             --snap, if we should
             if (snap) then
-                context.transform:set_pos(context.transform.pos:round())
+                self.transform:set_pos(self.transform.pos:round())
             end
             --draw, if we can
-            if (context.draw_weight > 0 and context._drawrandom:next(0, 1000)/1000.0 < context.draw_weight) then
-                -- TEMP
-                minetest.set_node(context.transform.pos, {name="default:default"})
-            end
+            self.brush:draw(self.transform, self.draw_weight, self)
         end
-        return context;
+        return self;
+    end,
+
+
+    ---Draw at the current location
+    ---@param self PentoolContext
+    ---@return PentoolContext
+    mark = function(self)
+        self.brush:draw(self.transform, self.draw_weight, self)
+        return self
     end,
 
     ---Rotate the pen relative to its current rotation.
     ---Currently does not draw.
-    ---@param context PentoolContext
+    ---@param self PentoolContext
     ---@param rotation Rotator
     ---@return PentoolContext
-    rotate = function(context, rotation)
-        context.transform:rotate(rotation)
-        return context
+    rotate = function(self, rotation)
+        self.transform:rotate(rotation)
+        return self
     end,
 
     ---Push the current transform to the stack
-    ---@param context PentoolContext
+    ---@param self PentoolContext
     ---@return PentoolContext
-    push = function(context)
-        context._stack[#context._stack+1] = context.transform:copy()
-        return context;
+    push = function(self)
+        self._stack[#self._stack+1] = {
+            transform = self.transform:copy(),
+            brush = self.brush:copy(),
+        }
+        return self;
     end,
 
     ---Restore the pentool to its transform before the last pop. Removes that transform from the stack.
-    ---@param context any
+    ---@param self any
     ---@return any
-    pop = function(context)
-        if (#context._stack > 0) then
-            context.transform = context._stack[#context._stack]:copy()
-            context._stack[#context._stack] = nil
+    pop = function(self)
+        if (#self._stack > 0) then
+            self.transform = self._stack[#self._stack].transform:copy()
+            self.brush = self._stack[#self._stack].brush:copy()
+            self._stack[#self._stack] = nil
         end
-        return context;
+        return self;
     end,
 
     ---Restore the pentool to its transform before the last pop. Does not removes that transform from the stack.
-    ---@param context any
+    ---@param self any
     ---@return any
-    peak = function(context)
-        if (#context._stack > 0) then
-            context.transform = context._stack[#context._stack]:copy()
+    peek = function(self)
+        if (#self._stack > 0) then
+            self.transform = self._stack[#self._stack].transform:copy()
+            self.brush = self._stack[#self._stack].brush:copy()
         end
-        return context;
+        return self;
+    end,
+
+    ---Get the chance for drawing a node
+    ---@param self PentoolContext
+    ---@return Alpha
+    get_draw_chance = function(self)
+        return self._drawrandom:next(0, 1000)/1000.0
+    end,
+
+    ---Get a random value in the range of [min, max]. Limeted to integers
+    ---@param self PentoolContext
+    ---@param min integer
+    ---@param max integer
+    ---@return integer
+    get_random_int_in_range = function(self, min, max)
+        return self._random:next(min, max)
+    end,
+
+    ---Set the current brush
+    ---@param self PentoolContext
+    ---@param brush PentoolBrush
+    ---@return PentoolContext
+    set_brush = function (self, brush)
+        self.brush = brush
+        return self
+    end,
+
+    ---Teleport relative to the current pen position
+    ---@param self PentoolContext
+    ---@param pos Vector
+    ---@return PentoolContext
+    teleport_relative = function(self, pos)
+        self.transform:set_pos(self.transform:absolute_position(pos))
+        return self
+    end,
+    
+    ---teleport relative to the original starting position
+    ---@param self PentoolContext
+    ---@param pos Vector
+    ---@return PentoolContext
+    teleport_origin = function(self, pos)
+        self.transform:set_pos(self.original_transform:absolute_position(pos))
+        return self
+    end,
+
+    ---Face upwards
+    ---@param self PentoolContext
+    ---@param keepRelative boolean? Keep the current yaw and roll. Default: true
+    ---@return PentoolContext
+    face_up = function(self, keepRelative)
+        if (keepRelative == nil) then keepRelative = true end
+        self.transform:set_rot(vector.new(
+            math.rad(90), 
+            qts.select(keepRelative, self.transform.rot.y, 0), 
+            qts.select(keepRelative, self.transform.rot.z, 0)
+        ))
+        return self
+    end,
+    
+    ---Face downward
+    ---@param self PentoolContext
+    ---@param keepRelative boolean? Keep the current yaw and roll. Default: true
+    ---@return PentoolContext
+    face_down = function(self, keepRelative)
+        if (keepRelative == nil) then keepRelative = true end
+        self.transform:set_rot(vector.new(
+            math.rad(-90), 
+            qts.select(keepRelative, self.transform.rot.y, 0), 
+            qts.select(keepRelative, self.transform.rot.z, 0)
+        ))
+        return self
+    end,
+
+    ---Face the horizon
+    ---@param self PentoolContext
+    ---@param keepRelative boolean? Keep the current yaw and roll. Default: true
+    ---@return PentoolContext
+    face_horizontal = function(self, keepRelative)
+        if (keepRelative == nil) then keepRelative = true end
+        self.transform:set_rot(vector.new(
+            0, 
+            qts.select(keepRelative, self.transform.rot.y, 0), 
+            qts.select(keepRelative, self.transform.rot.z, 0)
+        ))
+        return self
+    end,
+
+    ---Debug print the current transform, and its location relative to the origin transform
+    ---@param self PentoolContext
+    ---@return PentoolContext
+    debug_transform = function(self)
+        minetest.log("Pentool Debug Transform.\nTransform: " 
+            .. self.transform:format()..
+            "\nOrigin Transform: " .. self.original_transform:format() ..
+            "\nRelative Location: " .. self.original_transform:relative_position(self.transform.pos):to_string())
+        return self
+    end,
+
+    ---Scale the current pen as a multiple of its current scale.
+    ---@param self PentoolContext
+    ---@param scale Vector
+    ---@return PentoolContext
+    scale = function(self, scale)
+        self.transform:set_scale(self.transform.scale * scale)
+        return self
+    end,
+
+    ---Set the absolute scale the current pen.
+    ---@param self PentoolContext
+    ---@param scale Vector
+    ---@return PentoolContext
+    set_scale = function(self, scale)
+        self.transform:set_scale(scale)
+        return self
     end,
 }
 

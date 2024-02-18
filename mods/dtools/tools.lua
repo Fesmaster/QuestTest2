@@ -676,6 +676,70 @@ minetest.register_tool("dtools:entity_analyzer", {
 })
 
 
+---@class PentoolCaveBrush:PentoolBrush
+
+---Create a PentoolBrushPoint. This brush type draws a single node, and does not take into account shaped nodes.
+---@return PentoolPointBrush
+function dtools.create_cave_brush()
+    return {
+        ---PentoolBrush interface
+        ---@param self PentoolCaveBrush
+        ---@param transform Transform
+        ---@param weight Alpha
+        ---@param context PentoolContext
+        draw = function(self, transform, weight, context)
+			
+			local nodes = qts.get_nodes_in_blob(transform.pos, transform.scale)
+			--minetest.log("Cave blocks: " .. dump(nodes))
+			for k, v in ipairs(nodes) do
+				if (context:get_draw_chance() < weight) then
+				    minetest.set_node(v.pos, {name="air"})
+				end
+			end
+        end,
+        ---PentoolBrush interface copy
+        ---@param self PentoolCaveBrush
+        ---@return PentoolCaveBrush
+        copy = function(self)
+            return self
+        end,
+    }
+end
+
+---Generate a cave room and offshoots
+---@param context PentoolContext
+---@param iters integer how many recursive calls to make
+local function generate_cave_room(context, iters)
+	context:push()
+	
+	for i=1,context:get_random_int_in_range(5,15) do
+		context:rotate(rotator(
+			0, 
+			context:get_random_int_in_range(-45,45), 
+			context:get_random_int_in_range(-45,45)
+		))
+		:set_scale(vector.new(
+			context:get_random_int_in_range(2,4),
+			context:get_random_int_in_range(2,4),
+			context:get_random_int_in_range(2,4)
+		))
+		:forward(context:get_random_int_in_range(3,5),2)
+	end
+	
+	context:set_scale(vector.new(
+		context:get_random_int_in_range(5,8),
+		context:get_random_int_in_range(2,4),
+		context:get_random_int_in_range(5,8)
+	))
+	:mark()
+	if (iters > 0) then
+		for i=1, context:get_random_int_in_range(1,3) do
+			generate_cave_room(context, iters-1)
+		end
+	end
+	context:pop()
+end
+
 minetest.register_tool("dtools:pentool_tester", {
 	description = "PenTool testing wand",
 	inventory_image = "dtools_green_wand.png",
@@ -688,24 +752,60 @@ minetest.register_tool("dtools:pentool_tester", {
 		
 		local t = transform.new(
 			pointed_thing.under,
-			(pointed_thing.above - pointed_thing.under):dir_to_rotation(),
+			(pointed_thing.above - pointed_thing.under):normalize():dir_to_rotation(),
 			vector.new(1,1,1)
 		)
 		t:set_rot(vector.new(t.rot.x, user:get_look_horizontal(), t.rot.z))
 		--t:rotate(vector.new(user:get_look_horizontal(), 0, 0))
 
+		minetest.log("Transform: " .. t:format())
+		
+		--[[
 		local context = qts.pentool.context_base.create(t)
 		context:pendown()
-		:forward(4)
+		:set_brush(qts.pentool.create_point_brush("overworld:palm_log"))
+		:forward(5)
+		:set_brush(qts.pentool.create_point_brush("overworld:palm_leaves"))
+		:forward(1)
 		:rotate(vector.new(math.rad(-90), 0, 0))
 		:push()
-		for i=0,3 do
-			context:rotate(vector.new(0, math.rad(90)*i, 0))
-			:forward(1)
-			:rotate(vector.new(math.rad(-30),0,0))
-			:forward(1)
-			:peak()
+		for i=0,5 do
+			context:rotate(vector.new(0, math.rad(360/6)*i, 0))
+			:forward(1.8, 0.6)
+			:rotate(vector.new(math.rad(-40),0,0))
+			:forward(1.8, 0.6)
+			:peek()
 		end
 		context:pop()
+		--located at top of tree.
+		context:set_brush(qts.pentool.create_point_brush("overworld:granite"))
+		:face_horizontal()
+		:teleport_relative(vector.new(0, 5, 0))
+		:face_up()
+		:forward(1)
+		:teleport_origin(vector.new(5, 5, 0)) -- origin is facing "up", so traslating on Z will move pen vertically
+		:forward(1)
+		--]]
+
+		local context = qts.pentool.context_base.create(t)
+		context:penup()
+		:face_up()
+		:forward(1)
+		:face_horizontal()
+		:rotate(rotator(
+			0, 
+			context:get_random_int_in_range(-45,0), 
+			context:get_random_int_in_range(-180,180)
+		))
+		:set_brush(dtools:create_cave_brush())
+		:pendown()
+		:set_scale(vector.new(
+			context:get_random_int_in_range(2,4),
+			context:get_random_int_in_range(2,4),
+			context:get_random_int_in_range(2,4)
+		))
+		:forward(context:get_random_int_in_range(3,5),2)
+		generate_cave_room(context, 3)
 	end,
 })
+
