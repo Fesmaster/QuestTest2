@@ -258,7 +258,7 @@ qtcore.for_all_materials("wood", function (fields)
                     },
                     sounds = qtcore.node_sound_wood(),
             })
-
+            
                 qts.register_craft({
                     ingredients = {fields.planks.." 2"},
                     results = {fields.press},
