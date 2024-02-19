@@ -290,11 +290,14 @@ minetest.register_node("overworld:natural_coconut", {
 			"overworld_coconut_side.png",
 			"overworld_coconut_side.png"
 		},
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
 	drawtype = "nodebox",
 	inventory_image = "overworld_coconut.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=1, choppy = 2, generation_trees=1, not_in_creative_inventory=1},
+	groups = {oddly_breakable_by_hand=1, flammable = 2, choppy = 2, generation_trees=1, not_in_creative_inventory=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -307,6 +310,7 @@ minetest.register_node("overworld:natural_coconut", {
 		}
 	},
 	sounds = qtcore.node_sound_wood(),
+	on_flood = floodFunc,
 })
 minetest.register_alias("default:natural_coconut", "overworld:natural_coconut")
 
