@@ -692,7 +692,7 @@ function dtools.create_cave_brush()
 			local nodes = qts.get_nodes_in_blob(transform.pos, transform.scale)
 			--minetest.log("Cave blocks: " .. dump(nodes))
 			for k, v in ipairs(nodes) do
-				if (context:get_draw_chance() < weight) then
+				if (context:get_draw_alpha() < weight) then
 				    minetest.set_node(v.pos, {name="air"})
 				end
 			end
@@ -719,17 +719,35 @@ local function generate_cave_room(context, iters)
 			context:get_random_int_in_range(-45,45)
 		))
 		:set_scale(vector.new(
-			context:get_random_int_in_range(2,4),
-			context:get_random_int_in_range(2,4),
-			context:get_random_int_in_range(2,4)
+			context:get_random_int_in_range(
+				context:get_param("pathsizemin"),
+				context:get_param("pathsizemax")
+			),
+			context:get_random_int_in_range(
+				context:get_param("pathsizemin"),
+				context:get_param("pathsizemax")
+			),
+			context:get_random_int_in_range(
+				context:get_param("pathsizemin"),
+				context:get_param("pathsizemax")
+			)
 		))
-		:forward(context:get_random_int_in_range(3,5),2)
+		:forward(context:get_random_int_in_range(
+			context:get_param("forwardmin"),
+			context:get_param("forwardmax")
+		),2)
 	end
 	
 	context:set_scale(vector.new(
-		context:get_random_int_in_range(5,8),
+		context:get_random_int_in_range(
+			context:get_param("roomsizemin"), 
+			context:get_param("roomsizemax")
+		),
 		context:get_random_int_in_range(2,4),
-		context:get_random_int_in_range(5,8)
+		context:get_random_int_in_range(
+			context:get_param("roomsizemin"), 
+			context:get_param("roomsizemax")
+		)
 	))
 	:mark()
 	if (iters > 0) then
@@ -739,6 +757,82 @@ local function generate_cave_room(context, iters)
 	end
 	context:pop()
 end
+
+qts.pentool.register_tool("dtools:palm", {}, function(context)
+	context:pendown()
+	:set_brush(qts.pentool.create_point_brush("overworld:palm_log"))
+	:forward(5)
+	:set_brush(qts.pentool.create_point_brush("overworld:palm_leaves"))
+	:forward(1)
+	:rotate(vector.new(math.rad(-90), 0, 0))
+	:push()
+	for i=0,5 do
+		context:rotate(vector.new(0, math.rad(360/6)*i, 0))
+		:forward(1.8, 0.6)
+		:rotate(vector.new(math.rad(-40),0,0))
+		:forward(1.8, 0.6)
+		:peek()
+	end
+	context:pop()
+	--located at top of tree.
+	context:set_brush(qts.pentool.create_point_brush("overworld:granite"))
+	:face_horizontal()
+	:teleport_relative(vector.new(0, 5, 0))
+	:face_up()
+	:forward(1)
+	:teleport_origin(vector.new(5, 5, 0)) -- origin is facing "up", so traslating on Z will move pen vertically
+	:forward(1)
+end)
+
+qts.pentool.register_tool("dtools:cave", {
+	roomsizemin=4,
+	roomsizemax=6,
+	pathsizemin=1.5,
+	pathsizemax=3,
+	forwardmin=3,
+	forwardmax=5
+}, function (context)
+	context:penup()
+	:face_up()
+	:forward(1)
+	:face_horizontal()
+	:rotate(rotator(
+		0, 
+		context:get_random_int_in_range(-45,0), 
+		context:get_random_int_in_range(-180,180)
+	))
+	:set_brush(dtools:create_cave_brush())
+	:pendown()
+	:set_scale(vector.new(
+		context:get_random_int_in_range(
+			context:get_param("pathsizemin"),
+			context:get_param("pathsizemax")
+		),
+		context:get_random_int_in_range(
+			context:get_param("pathsizemin"),
+			context:get_param("pathsizemax")
+		),
+		context:get_random_int_in_range(
+			context:get_param("pathsizemin"),
+			context:get_param("pathsizemax")
+		)
+	))
+	:forward(context:get_random_int_in_range(
+		context:get_param("forwardmin"),
+		context:get_param("forwardmax")
+	),2)
+	generate_cave_room(context, 3)
+end)
+
+qts.pentool.register_tool_instance("dtools:cave_larger", "dtools:cave", {
+	roomsizemin=6,
+	roomsizemax=12,
+})
+
+qts.pentool.register_tool_instance("dtools:cave_bulky", "dtools:cave_larger", {
+	pathsizemin=3,
+	pathsizemax=5,
+})
 
 minetest.register_tool("dtools:pentool_tester", {
 	description = "PenTool testing wand",
@@ -759,53 +853,15 @@ minetest.register_tool("dtools:pentool_tester", {
 		--t:rotate(vector.new(user:get_look_horizontal(), 0, 0))
 
 		minetest.log("Transform: " .. t:format())
-		
-		--[[
-		local context = qts.pentool.context_base.create(t)
-		context:pendown()
-		:set_brush(qts.pentool.create_point_brush("overworld:palm_log"))
-		:forward(5)
-		:set_brush(qts.pentool.create_point_brush("overworld:palm_leaves"))
-		:forward(1)
-		:rotate(vector.new(math.rad(-90), 0, 0))
-		:push()
-		for i=0,5 do
-			context:rotate(vector.new(0, math.rad(360/6)*i, 0))
-			:forward(1.8, 0.6)
-			:rotate(vector.new(math.rad(-40),0,0))
-			:forward(1.8, 0.6)
-			:peek()
-		end
-		context:pop()
-		--located at top of tree.
-		context:set_brush(qts.pentool.create_point_brush("overworld:granite"))
-		:face_horizontal()
-		:teleport_relative(vector.new(0, 5, 0))
-		:face_up()
-		:forward(1)
-		:teleport_origin(vector.new(5, 5, 0)) -- origin is facing "up", so traslating on Z will move pen vertically
-		:forward(1)
-		--]]
 
-		local context = qts.pentool.context_base.create(t)
-		context:penup()
-		:face_up()
-		:forward(1)
-		:face_horizontal()
-		:rotate(rotator(
-			0, 
-			context:get_random_int_in_range(-45,0), 
-			context:get_random_int_in_range(-180,180)
-		))
-		:set_brush(dtools:create_cave_brush())
-		:pendown()
-		:set_scale(vector.new(
-			context:get_random_int_in_range(2,4),
-			context:get_random_int_in_range(2,4),
-			context:get_random_int_in_range(2,4)
-		))
-		:forward(context:get_random_int_in_range(3,5),2)
-		generate_cave_room(context, 3)
+		qts.pentool.execute_tool("dtools:cave_bulky", t)
+		
+
+		--qts.pentool.context_base.create(t, {})
+		--:set_brush(dtools.create_cave_brush())
+		--:set_scale(vector.new(5, 3, 8))
+		--:pendown()
+		--:mark()
 	end,
 })
 

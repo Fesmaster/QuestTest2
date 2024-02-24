@@ -14,4 +14,5 @@ qts.pentool = {}
 
 
 dofile(qts.path.."/pentool/brush.lua")
-dofile(qts.path.."/pentool/context.lua")
+dofile(qts.path.."/pentool/basic_context.lua")
+dofile(qts.path.."/pentool/registrations.lua")

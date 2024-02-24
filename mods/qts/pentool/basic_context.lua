@@ -16,6 +16,7 @@
 ---@field _seed number Internal seed for random numbers. Do not use directly.
 ---@field _random PCGRandom Internal random number generator, used for the pentool random calls. Do not use directly.
 ---@field _drawrandom PCGRandom Internal random number generator, used for drawing nodes. Do not use directly.
+---@field _params table<string,any> Internal storage of the params. Do not use directly.
 qts.pentool.context_base = {
     ---@type table the metatable for PentoolContext
     __mt = {
@@ -25,8 +26,10 @@ qts.pentool.context_base = {
 
     ---Create a Pentool Context
     ---@param origin Transform the original transform
+    ---@param params table<string,any>? table of params for the PenTool Instance
     ---@param tbl table? table to create the pentool context in
-    create = function(origin, tbl)
+    ---@return PentoolContext
+    create = function(origin, params, tbl)
         if not transform.check(origin) then
             minetest.log(dump(origin))
             error("Failed to create a Pentool context: Origin is not a Transform!")
@@ -42,9 +45,12 @@ qts.pentool.context_base = {
         tbl._seed = origin:hashpos()
         tbl._random = PcgRandom(tbl._seed)
         tbl._drawrandom = PcgRandom(tbl._seed)
+        tbl._params = qts.select(params, params, {})
         setmetatable(tbl, qts.pentool.context_base.__mt)
         return tbl
     end,
+
+    --#region PenControll
 
     ---Set the draw chance
     ---@param self PentoolContext
@@ -71,7 +77,19 @@ qts.pentool.context_base = {
         return self
     end,
 
-    ---Move the pen forward N nodes. Cannot move the pen backwards with a negative distance. (YET)
+    ---Set the current brush
+    ---@param self PentoolContext
+    ---@param brush PentoolBrush
+    ---@return PentoolContext
+    set_brush = function (self, brush)
+        self.brush = brush
+        return self
+    end,
+
+    --#endregion PenControll
+    --#region Movement
+
+    ---Move the pen forward N nodes. Cannot move the pen backwards with a negative distance.
     ---As a rule, Pentool writes to a node when its position *enters* that node.
     ---If a pentool is at {0,0,0} and moves 5 blocks up, it will not change the node at {0,0,0}
     ---@param self PentoolContext
@@ -116,62 +134,30 @@ qts.pentool.context_base = {
         return self
     end,
 
-    ---Push the current transform to the stack
+    ---Set the current pen absolute rotation.
     ---@param self PentoolContext
+    ---@param rotation Rotator
     ---@return PentoolContext
-    push = function(self)
-        self._stack[#self._stack+1] = {
-            transform = self.transform:copy(),
-            brush = self.brush:copy(),
-        }
-        return self;
+    set_rotation = function(self, rotation)
+        self.transform:set_rot(rotation)
+        return self
     end,
 
-    ---Restore the pentool to its transform before the last pop. Removes that transform from the stack.
-    ---@param self any
-    ---@return any
-    pop = function(self)
-        if (#self._stack > 0) then
-            self.transform = self._stack[#self._stack].transform:copy()
-            self.brush = self._stack[#self._stack].brush:copy()
-            self._stack[#self._stack] = nil
-        end
-        return self;
-    end,
-
-    ---Restore the pentool to its transform before the last pop. Does not removes that transform from the stack.
-    ---@param self any
-    ---@return any
-    peek = function(self)
-        if (#self._stack > 0) then
-            self.transform = self._stack[#self._stack].transform:copy()
-            self.brush = self._stack[#self._stack].brush:copy()
-        end
-        return self;
-    end,
-
-    ---Get the chance for drawing a node
+    ---Scale the current pen as a multiple of its current scale.
     ---@param self PentoolContext
-    ---@return Alpha
-    get_draw_chance = function(self)
-        return self._drawrandom:next(0, 1000)/1000.0
-    end,
-
-    ---Get a random value in the range of [min, max]. Limeted to integers
-    ---@param self PentoolContext
-    ---@param min integer
-    ---@param max integer
-    ---@return integer
-    get_random_int_in_range = function(self, min, max)
-        return self._random:next(min, max)
-    end,
-
-    ---Set the current brush
-    ---@param self PentoolContext
-    ---@param brush PentoolBrush
+    ---@param scale Vector
     ---@return PentoolContext
-    set_brush = function (self, brush)
-        self.brush = brush
+    scale = function(self, scale)
+        self.transform:set_scale(self.transform.scale * scale)
+        return self
+    end,
+
+    ---Set the absolute scale the current pen.
+    ---@param self PentoolContext
+    ---@param scale Vector
+    ---@return PentoolContext
+    set_scale = function(self, scale)
+        self.transform:set_scale(scale)
         return self
     end,
 
@@ -184,7 +170,7 @@ qts.pentool.context_base = {
         return self
     end,
     
-    ---teleport relative to the original starting position
+    ---Teleport relative to the original starting position
     ---@param self PentoolContext
     ---@param pos Vector
     ---@return PentoolContext
@@ -235,6 +221,94 @@ qts.pentool.context_base = {
         return self
     end,
 
+    ---Push the current transform to the stack
+    ---@param self PentoolContext
+    ---@return PentoolContext
+    push = function(self)
+        self._stack[#self._stack+1] = {
+            transform = self.transform:copy(),
+            brush = self.brush:copy(),
+            weight = self.draw_weight,
+        }
+        return self;
+    end,
+
+    ---Restore the pentool to its transform before the last pop. Removes that transform from the stack.
+    ---@param self any
+    ---@return any
+    pop = function(self)
+        if (#self._stack > 0) then
+            self.transform = self._stack[#self._stack].transform:copy()
+            self.brush = self._stack[#self._stack].brush:copy()
+            self.draw_weight = self._stack[#self._stack].weight
+            self._stack[#self._stack] = nil
+        end
+        return self;
+    end,
+
+    ---Restore the pentool to its transform before the last pop. Does not removes that transform from the stack.
+    ---@param self any
+    ---@return any
+    peek = function(self)
+        if (#self._stack > 0) then
+            self.transform = self._stack[#self._stack].transform:copy()
+            self.brush = self._stack[#self._stack].brush:copy()
+            self.draw_weight = self._stack[#self._stack].weight
+        end
+        return self;
+    end,
+
+    --#endregion Movement
+    --#region RandomFunctions
+
+    ---Get the chance for drawing a node
+    ---Do not use for behavior selection. Should only be used to choose between options in a brush.
+    ---@param self PentoolContext
+    ---@return Alpha
+    get_draw_alpha = function(self)
+        return self._drawrandom:next(0, 1000)/1000.0
+    end,
+
+    ---Get a random integer from the draw random genenerator.
+    ---Do not use for behavior selection. Should only be used to choose between options in a brush.
+    ---@param self PentoolContext
+    ---@param min integer
+    ---@param max integer
+    ---@return integer
+    get_draw_int_in_range = function(self, min, max)
+        return self._drawrandom:next(min, max)
+    end,
+
+    ---Get a random alpha value [0-1].
+    ---Can be used for behavior selection.
+    ---@param self PentoolContext
+    ---@param degree number? an accuracy value. Higher values mean more decimal places
+    ---@return Alpha
+    get_random_alpha = function(self, degree)
+        if degree == nil then degree = 1000 end
+        return self._random:next(0, degree)/degree
+    end,
+
+    ---Get a random value in the range of [min, max]. Limeted to integers
+    ---Can be used for behavior selection.
+    ---@param self PentoolContext
+    ---@param min integer
+    ---@param max integer
+    ---@return integer
+    get_random_int_in_range = function(self, min, max)
+        return self._random:next(min, max)
+    end,
+
+    --#endregion RandomFunctions
+
+    ---Get the value of any param.
+    ---@param self PentoolContext
+    ---@param param_name string
+    ---@return unknown
+    get_param = function(self, param_name)
+        return self._params[param_name]
+    end,
+
     ---Debug print the current transform, and its location relative to the origin transform
     ---@param self PentoolContext
     ---@return PentoolContext
@@ -246,23 +320,6 @@ qts.pentool.context_base = {
         return self
     end,
 
-    ---Scale the current pen as a multiple of its current scale.
-    ---@param self PentoolContext
-    ---@param scale Vector
-    ---@return PentoolContext
-    scale = function(self, scale)
-        self.transform:set_scale(self.transform.scale * scale)
-        return self
-    end,
-
-    ---Set the absolute scale the current pen.
-    ---@param self PentoolContext
-    ---@param scale Vector
-    ---@return PentoolContext
-    set_scale = function(self, scale)
-        self.transform:set_scale(scale)
-        return self
-    end,
 }
 
 --set the context as the metatable 

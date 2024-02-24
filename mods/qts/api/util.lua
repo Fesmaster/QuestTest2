@@ -157,9 +157,16 @@ function qts.get_nodes_in_blob(pos, radii, matching)
 		for y = -radii.y, radii.y do 
 		for x = -radii.x, radii.x do
 			local dist = ((x^2)+(y^2)+(z^2))^0.5
-			local frac = vector.new(x,y,z):normalize()
+			local frac = vector.new(math.abs(x),math.abs(y),math.abs(z))
+			frac = frac / frac:dot(vector.new(1,1,1))
 			local radius = radii:dot(frac)
-			if qts.nearly_equal(dist, radius, 0.5) or dist <= radius then
+			if (
+				qts.nearly_equal(dist, radius, 0.5) 
+				or dist <= radius
+				or (
+					z == 0 and y == 0 and z == 0
+				)
+			) then
 				local npos = {x=pos.x+x,y=pos.y+y,z=pos.z+z}
 				local nref = minetest.get_node(npos)
 				if (matching_func(npos, nref, matching_table)) then

@@ -46,7 +46,7 @@ function qts.pentool.create_point_brush(node)
         ---@param weight Alpha
         ---@param context PentoolContext
         draw = function(self, transform, weight, context)
-            if (context:get_draw_chance() < weight) then
+            if (context:get_draw_alpha() < weight) then
                 minetest.set_node(transform.pos, self.node)
             end
         end,
