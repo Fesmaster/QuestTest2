@@ -127,8 +127,8 @@ qts.worldgen.register_biome("mushroom_forest", {
 	min_light = 7,--half
 	min_air = 10,
 	dust = nil,
-	surface = {"overworld:dirt_with_mushroom_grass"},
-	fill = {"overworld:dirt"},
+	surface = {"overworld:loam_with_mushroom_grass"},
+	fill = {"overworld:loam"},
 	stone = {"overworld:granite"},
 	plant = {"overworld:small_mushroom"},
 	plant_freq = 7,
