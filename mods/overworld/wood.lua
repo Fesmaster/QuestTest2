@@ -566,7 +566,7 @@ for i, name in ipairs(mushroom_names) do
 		tiles = {"overworld_mushroom_"..name.."_slats.png"},
 		groups = {choppy=3, oddly_breakable_by_hand=2, fence=1, generation_artificial=1},
 		sounds = qtcore.node_sound_wood(),
-		fence_alt = "overworld:"..name.."_wood_rail",
+		fence_alt = "overworld:"..name.."_mushroom_rail",
 		paramtype2 = "color",
 		palette = "qt_palette_paint_light.png",
 	})
