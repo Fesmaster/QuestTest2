@@ -2,7 +2,7 @@
     Farmworks seed and plant API
 ]]
 
-
+--seed placement (dirt growable plants)
 local function SeedPlace(plantname)
 	return function(itemstack, placer, pointed_thing)
 		if pointed_thing and pointed_thing.under then
@@ -82,6 +82,7 @@ function  farmworks.register_farm_plant(name, def)
 			end,
 		})
 	end
+	
 	local lvl = def.plant_levels
 	minetest.register_node("farmworks:herb_"..name.."_"..lvl, {
 		description = def.description.." Plant "..lvl.." (Full Grown)",

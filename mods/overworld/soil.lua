@@ -147,31 +147,6 @@ minetest.override_item("overworld:dirt_with_prarie_grass", {
 			tileable_vertical = false}},
 })
 
-qts.register_shaped_node ("overworld:dirt_with_mushroom_grass", {
-	description = "Dirt with Mycelium",
-	tiles = {"overworld_mushroom_grass.png"},
-	groups = {crumbly = 3, soil=1, spreading_dirt_type=1, erodeable=1, generation_ground=1},
-	sounds = qtcore.node_sound_grass(),
-	drop = {
-		max_items = 1,
-		items = {
-			{
-				rarity = 32,
-				items = {"overworld:flint"},
-			},
-			{
-				items = {"overworld:dirt", "overworld:mycelium"}
-			}
-
-		}
-	}
-})
-minetest.override_item("overworld:dirt_with_mushroom_grass", {
-	tiles = {"overworld_mushroom_grass.png", "overworld_dirt.png",
-		{name = "overworld_dirt.png^overworld_mushroom_grass_side.png",
-			tileable_vertical = false}},
-})
-
 qts.register_shaped_node ("overworld:dirt_with_rainforest_grass", {
 	description = "Dirt with Rainforest Grass",
 	tiles = {"overworld_rainforest_grass.png"},
@@ -280,6 +255,79 @@ qts.register_shaped_node ("overworld:gravel", {
 		}
 	}
 })
+
+--Loams
+qts.register_shaped_node ("overworld:loam", {
+	description = "Loam",
+	tiles = {"overworld_loam.png"},
+	groups = {crumbly = 3, erodeable=1, loam=1, generation_ground=1},
+	sounds = qtcore.node_sound_dirt(),
+	drop = {
+		max_items = 1,
+		items = {
+			{items = {"overworld:flint"},rarity = 32},
+			{items = {"overworld:loam"}}
+		}
+	}
+})
+
+minetest.register_node ("overworld:loam_tilled", {
+	description = "Loam",
+	drawtype = "nodebox",
+	tiles = {"overworld_loam_tilled.png", "overworld_loam.png","overworld_loam.png"},
+	groups = {crumbly = 3, farmland=1, loam=1, erodeable=1, generation_artificial=1},
+	sounds = qtcore.node_sound_dirt(),
+	paramtype2 = "facedir",
+	paramtype = 'light',
+	drop = "overworld:loam",
+	node_box = {
+        type = "fixed",
+        fixed = {
+			{ -8/16, -8/16, -8/16, 8/16, 7/16, 8/16, },
+			{ -8/16, 7/16, -8/16, -6/16, 8/16, 8/16, },
+			{ -1/16, 7/16, -8/16, 1/16, 8/16, 8/16, },
+			{ 6/16, 7/16, -8/16, 8/16, 8/16, 8/16, },
+		}
+    },
+	collision_box = {
+        type = "fixed",
+        fixed = {
+			{ -8/16, -8/16, -8/16, 8/16, 7/16, 8/16, },
+		}
+    },
+	selection_box = {
+        type = "fixed",
+        fixed = {
+			{ -8/16, -8/16, -8/16, 8/16, 7/16, 8/16, },
+		}
+    },
+})
+
+qts.register_shaped_node ("overworld:loam_with_mushroom_grass", {
+	description = "Loam with Mycelium",
+	tiles = {"overworld_mushroom_grass.png"},
+	groups = {crumbly = 3, spreading_dirt_type=1, loam=1, erodeable=1, generation_ground=1},
+	sounds = qtcore.node_sound_grass(),
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				rarity = 32,
+				items = {"overworld:flint"},
+			},
+			{
+				items = {"overworld:loam", "overworld:mycelium"}
+			}
+
+		}
+	}
+})
+minetest.override_item("overworld:loam_with_mushroom_grass", {
+	tiles = {"overworld_mushroom_grass.png", "overworld_loam.png",
+		{name = "overworld_loam.png^overworld_mushroom_grass_side.png",
+			tileable_vertical = false}},
+})
+minetest.register_alias("overworld:dirt_with_mushroom_grass", "overworld:loam_with_mushroom_grass")
 
 
 --Others

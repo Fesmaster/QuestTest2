@@ -271,6 +271,57 @@ qtcore.for_all_materials("wood", function (fields)
                 end
             end
 
+            --planters
+            do
+                fields.planter = "furnature:planter_mushroom_"..fields.name
+                minetest.register_node(":"..fields.planter, {
+                    description = fields.desc.." Mushroom Planter",
+                    tiles = {
+                        fields.plank_texture,
+                        fields.plank_texture,
+                        "furnature_planter_mushroom_"..fields.name..".png",
+                        "furnature_planter_mushroom_"..fields.name..".png",
+                        "furnature_planter_mushroom_"..fields.name..".png",
+                        "furnature_planter_mushroom_"..fields.name..".png",
+                    },
+                    use_texture_alpha="clip",
+                    drawtype = "nodebox",
+                     paramtype = "light",
+                    paramtype2 = "facedir",
+                    groups = {oddly_breakable_by_hand=3, press=1, generation_artificial=1},
+                    node_box = {
+                        type = "fixed",
+                        fixed = {
+                            { -7/16, -5/16, -7/16, 7/16, 5/16, 7/16, },
+                            { -8/16, -7/16, -8/16, -4/16, 7/16, -4/16, },
+                            { -8/16, -7/16, 4/16, -4/16, 7/16, 8/16, },
+                            { 4/16, -7/16, 4/16, 8/16, 7/16, 8/16, },
+                            { 4/16, -7/16, -8/16, 8/16, 7/16, -4/16, },
+                            { -8/16, -8/16, -8/16, 8/16, -4/16, 8/16, },
+                            { -8/16, -2/16, -8/16, 8/16, 2/16, 8/16, },
+                            { -8/16, 4/16, -8/16, 8/16, 8/16, 8/16, },
+                        },
+                    },
+                    selection_box = {
+                        type = "fixed",
+                        fixed = {
+                            { -8/16, -8/16, -8/16, 8/16, 8/16, 8/16, },
+                        },
+                    },
+                    sounds = qtcore.node_sound_wood(),
+                })
+                qts.register_craft({
+                    ingredients = {fields.planks.." 2", "group:loam"},
+                    results = {fields.planter},
+                    near = {"group:workbench"},
+                })
+            
+                if not registered_exemplar_planter then
+                    registered_exemplar_planter=true
+                    inventory.register_exemplar_item("planter", fields.planter)
+                end
+            end
+
             --and more!!
         end
     end
