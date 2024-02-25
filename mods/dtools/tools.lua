@@ -775,13 +775,13 @@ qts.pentool.register_tool("dtools:palm", {}, function(context)
 	end
 	context:pop()
 	--located at top of tree.
-	context:set_brush(qts.pentool.create_point_brush("overworld:granite"))
-	:face_horizontal()
-	:teleport_relative(vector.new(0, 5, 0))
-	:face_up()
-	:forward(1)
-	:teleport_origin(vector.new(5, 5, 0)) -- origin is facing "up", so traslating on Z will move pen vertically
-	:forward(1)
+	--context:set_brush(qts.pentool.create_point_brush("overworld:granite"))
+	--:face_horizontal()
+	--:teleport_relative(vector.new(0, 5, 0))
+	--:face_up()
+	--:forward(1)
+	--:teleport_origin(vector.new(5, 5, 0)) -- origin is facing "up", so traslating on Z will move pen vertically
+	--:forward(1)
 end)
 
 qts.pentool.register_tool("dtools:cave", {
@@ -854,14 +854,14 @@ minetest.register_tool("dtools:pentool_tester", {
 
 		minetest.log("Transform: " .. t:format())
 
-		qts.pentool.execute_tool("dtools:cave_bulky", t)
+		--qts.pentool.execute_tool("dtools:cave_bulky", t)
 		
 
-		--qts.pentool.context_base.create(t, {})
-		--:set_brush(dtools.create_cave_brush())
-		--:set_scale(vector.new(5, 3, 8))
-		--:pendown()
-		--:mark()
+		qts.pentool.context_base.create(t, {})
+		:set_brush(qts.pentool.create_box_brush("overworld:granite"))
+		:set_scale(vector.new(5, 3, 8))
+		:pendown()
+		:mark()
 	end,
 })
 

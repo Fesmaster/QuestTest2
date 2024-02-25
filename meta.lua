@@ -696,6 +696,9 @@ local LuaEntity_Def = {
 ---@field param1 number|nil the first param value
 ---@field param2 number|nil the second param value
 
+---@class NodeRefWithPos : NodeRef a noderef with a position
+---@field pos Vector
+
 ---@class Vector
 ---@field x number
 ---@field y number

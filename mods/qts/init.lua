@@ -39,6 +39,7 @@ dofile(qts.path.."/api/vector.lua") --vector math
 dofile(qts.path.."/api/transform.lua") --transform math
 
 dofile(qts.path.."/api/callbacks.lua")
+dofile(qts.path.."/api/chatcommandlib.lua")
 dofile(qts.path.."/api/creative.lua")
 dofile(qts.path.."/api/player.lua")
 dofile(qts.path.."/api/nodetypes.lua")

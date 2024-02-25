@@ -43,6 +43,10 @@ A PenTool brush must implement the following functions:
 }
 ```
 
+A Brush should never draw a node outside of the scale of the PenTool. If need be, it can Push and Pop a new scale, to make sure it informs the Context of its drawing size. This allows special contexts that measure the bounds of a PenTool to correctly know how large a brush is going to draw.
+
+For this context, the Scale is considered to be a box around the position from -Scale to Scale in size. Thus, Scale is a radius of this box. This box is rotated according to the current rotation. This means that each side is `Scale.n*2+1` in length
+
 Interestingly, a brush can return itself from `copy(...)` if it contains no data.
 
 ## PenTool Registration

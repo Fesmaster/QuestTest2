@@ -175,3 +175,9 @@ function qts.pentool.execute_tool(name, origin, params)
     local context = qts.pentool.context_base.create(t, combine_params(parent.params, params))
     parent.func(context)
 end
+
+---Check if an itemname is a PenTool or PenTool Instance
+---@param name ItemName
+function qts.pentool.is_tool(name)
+    return not ((qts.pentool.registered_tool_instances[name] == nil) and (qts.pentool.registered_tools[name] == nil))
+end

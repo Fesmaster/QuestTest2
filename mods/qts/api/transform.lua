@@ -9,10 +9,6 @@
 ---@field _cache table  Internal cache for calculated params like Right(), Forward(), and Up(). Do not use.
 ---@diagnostic disable-next-line: lowercase-global
 transform = {
-    __mt = {
-        __newindex = nil
-    },
-
     ---create a new transform
     ---@param pos Vector?
     ---@param rot Rotator?
@@ -196,6 +192,18 @@ transform = {
         return vector.add(p2, t.pos)
     end,
 
+    ---Take a relative position and make it absolute. Ignores the scale of the Transform
+    ---@param t Transform
+    ---@param relative Vector
+    ---@return Vector absolute
+    absolute_position_no_scale = function(t, relative)
+        local x = t:right() * relative.x
+        local y = t:up() * relative.y
+        local z = t:forward() * relative.z
+        local p2 = x+y+z
+        return vector.add(p2, t.pos)
+    end,
+
     ---Take an absolute position and make it relative
     ---@param t Transform
     ---@param absolute Vector
@@ -208,6 +216,11 @@ transform = {
         local z = vector.dot(t:forward(), p1)
         local p2 = vector.new(x,y,z)
         return p2 / t.scale
-    end
+    end,
+
+    __mt = {
+        __newindex = nil,
+    },
 }
 transform.__mt.__index = transform
+transform.__mt.__tostring = transform.to_string
