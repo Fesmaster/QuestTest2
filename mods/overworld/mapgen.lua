@@ -233,7 +233,7 @@ qts.worldgen.register_biome("snow", {
 	surface = "overworld:dirt_with_snow",
 	fill = "overworld:dirt",
 	stone = "overworld:granite",
-	plant = nil,
+	plant = {"overworld:grass_cotton_tall", "overworld:grass_cotton_short"},
 	plant_freq = 0,
 	surface_depth = 1,
 	fill_depth = 2,

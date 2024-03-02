@@ -281,6 +281,47 @@ minetest.register_node("overworld:beach_grass", {
 })
 minetest.register_alias("default:beach_grass", "overworld:beach_grass")
 
+--snow underbrush
+minetest.register_node("overworld:grass_cotton_tall", {
+	description = "Cotton Grass Node",
+	tiles ={"overworld_grass_cotton_tall.png"},
+	use_texture_alpha = "clip",
+	drawtype = "plantlike",
+	paramtype = "light",
+	paramtype2 = "meshoptions",
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	waving = 1,
+	buildable_to = true,
+	selection_box = qtcore.nb_level1(),
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	on_place = qtcore.place_random_plantlike,
+	drop = underbrush_drops,
+	on_flood = floodFunc,
+})
+
+minetest.register_node("overworld:grass_cotton_short", {
+	description = "Cotton Grass Node",
+	tiles ={"overworld_grass_cotton_short.png"},
+	use_texture_alpha = "clip",
+	drawtype = "plantlike",
+	paramtype = "light",
+	paramtype2 = "meshoptions",
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	waving = 1,
+	buildable_to = true,
+	selection_box = qtcore.nb_level1(),
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	on_place = qtcore.place_random_plantlike,
+	drop = underbrush_drops,
+	on_flood = floodFunc,
+})
+
 --natural coconut
 
 minetest.register_node("overworld:natural_coconut", {
