@@ -322,6 +322,64 @@ minetest.register_node("overworld:grass_cotton_short", {
 	on_flood = floodFunc,
 })
 
+minetest.register_node("overworld:ground_willow", {
+	description = "Ground Willow",
+	tiles ={"overworld_ground_willow.png"},
+	use_texture_alpha = "clip",
+	drawtype = "plantlike",
+	paramtype = "light",
+	paramtype2 = "meshoptions",
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	waving = 1,
+	buildable_to = true,
+	selection_box = qtcore.nb_level1(),
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	on_place = qtcore.place_random_plantlike,
+	drop = underbrush_drops,
+	on_flood = floodFunc,
+})
+
+--upper desert underbrush
+minetest.register_node("overworld:underbrush_cactus_barrel", {
+	description = "Underbrush",
+	tiles ={
+		"overworld_cactus_barrel_top.png",
+		"overworld_cactus_barrel_bottom.png",
+		"overworld_cactus.png",
+		"overworld_cactus.png",
+		"overworld_cactus.png",
+		"overworld_cactus.png",
+	},
+	use_texture_alpha = "clip",
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	buildable_to = true,
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ 3/16, -8/16, 2/16, 7/16, -4/16, 6/16, },
+			{ -5/16, -8/16, -6/16, -1/16, -4/16, -2/16, },
+		}
+	},
+	selection_box = {
+		type = "fixed",
+		fixed = {
+			{ -5/16, -8/16, -6/16, 7/16, -4/16, 6/16, },
+		},
+	},
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	drop = underbrush_drops,
+	on_flood = floodFunc,
+})
+
 --natural coconut
 
 minetest.register_node("overworld:natural_coconut", {
@@ -440,6 +498,27 @@ minetest.register_node("overworld:flower_violet", {
 	description = "Violet",
 	tiles ={"overworld_violet.png"},
 	inventory_image = "overworld_violet_item.png",
+	use_texture_alpha = "clip",
+	drawtype = "plantlike",
+	paramtype = "light",
+	paramtype2 = "meshoptions",
+	param2 = 0,
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	waving = 1,
+	buildable_to = true,
+	selection_box = qtcore.nb_level1(),
+	groups = {snappy=3, flammable = 2, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	on_place = qtcore.place_random_plantlike,
+	on_flood = floodFunc,
+})
+
+minetest.register_node("overworld:flower_arctic_poppy", {
+	description = "Arctic Poppy",
+	tiles ={"overworld_arctic_poppy.png"},
+	inventory_image = "overworld_arctic_poppy_item.png",
 	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",
