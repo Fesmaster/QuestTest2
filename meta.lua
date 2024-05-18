@@ -1386,7 +1386,9 @@ function ItemStack(item) end
 ---@class SecureRandom
 ---@class Settings
 ---@class StorageRef
-
+---@class VoxelManip
+---@class MapgenObject
+---@class TreeDef
 
 
 -- Definition Tables
@@ -1481,18 +1483,10 @@ minetest = {
     ---@param def ItemDefinition the node definition
     register_tool = function(name, def) end,
 
-
     ---Register a new entity
     ---@param name string
     ---@param def LuaEntity_Def
     register_entity = function (name, def) end,
-
-    ---Spawn a new LuaEntity
-    ---@param pos Vector|{x:number,y:number,z:number} the position to spawn the entity
-    ---@param name string the entity name
-    ---@param staticdata string? spawning staticdata
-    ---@return LuaObject?
-    add_entity = function(pos, name, staticdata) end,
 
     ---Convert a table that contains tables, strings, numbers, booleans, and nuls into a strings
     ---@param tbl table
@@ -1503,9 +1497,499 @@ minetest = {
     ---@param str string
     ---@param safe boolean? default: true
     ---@return table
-    deserialize = function(str, safe) return {} end
+    deserialize = function(str, safe) return {} end,
+
+    --[[---------------------------------------------------------------------------------------------------------
+                                                  Environment Access
+    ------------------------------------------------------------------------------------------------------------]]
+
+    ---Set node at position pos
+    ---@param pos Vector
+    ---@param node NodeRef
+    set_node = function (pos, node) return end,
+
+    ---Set node at position pos
+    ---@param pos Vector
+    ---@param node NodeRef
+    add_node = function (pos, node) return end,
+
+    ---Set node on all positions set in the first argument.
+    ---
+    ---Faster than set_node due to single call, but still considerably slower
+    ---than Lua Voxel Manipulators (LVM) for large numbers of nodes.
+    ---
+    ---Unlike LVMs, this will call node callbacks. It also allows setting nodes
+    ---in spread out positions which would cause LVMs to waste memory.
+    ---For setting a cube, this is 1.3x faster than set_node whereas LVM is 20
+    ---times faster.
+    ---@param positions Vector[]
+    ---@param node NodeRef
+    bulk_set_node = function(positions, node) end,
+    
+    ---Set node at position, but don't remove metadata
+    ---@param pos Vector
+    ---@param node NodeRef
+    swap_node = function (pos, node) return end,
+
+    ---By default it does the same as `minetest.set_node(pos, {name="air"})`
+    ---@param pos Vector
+    remove_node = function (pos) return end,
+    
+    ---Returns the node at the given position
+    ---
+    ---returns `{name="ignore", param1=0, param2=0}` for unloaded areas.
+    ---@param pos Vector
+    ---@return NodeRef
+    get_node = function (pos) return {} end,
+    
+    ---Returns the node at the given position, or nil if unloaded.
+    ---@param pos Vector
+    ---@return NodeRef?
+    get_node_or_nil = function (pos) return end,
+    
+    ---Gets the light value at the given position.
+    ---
+    ---Note that the light value "inside" the node at the given position is 
+    ---returned, so you usually want to get the light value of a neighbor.
+    ---@param pos Vector
+    ---@param time_of_day Alpha? Time of day. Nil for current time. 0=night, 0.5=day
+    ---@return integer? light level [0-15]. Nil for unloaded areas. 
+    get_node_light = function (pos, time_of_day) return end,
+
+    ---Figures out the sunlight (or moonlight) value at pos at the given time of day.
+    ---
+    ---This function tests 203 nodes in the worst case, which happens very unlikely
+    ---@param pos Vector
+    ---@param time_of_day Alpha? Time of day. Nil for current time. 0=night, 0.5=day
+    ---@return integer? light level [0-15]. Nil for unloaded areas. 
+    get_natural_light = function (pos, time_of_day) return end,
+
+    ---Calculates the artificial light (light from e.g. torches) value from the `param1` value.
+    ---@param param1 integer
+    ---@return integer? light level [0-15]. Nil for unloaded areas. 
+    get_artificial_light = function (param1) return end,
+
+    ---Place node with the same effects that a player would cause
+    ---@param pos Vector
+    ---@param node NodeRef
+    place_node = function (pos, node) return end,
+
+    ---Dig node with the same effects that a player would cause
+    ---@param pos Vector
+    ---@return boolean success False for protected areas.
+    dig_node = function (pos) return true end,
+
+    ---Punch node with the same effects that a player would cause
+    ---@param pos Vector
+    punch_node = function (pos) return end,
+    
+    ---Change node into falling node
+    ---@param pos Vector
+    ---@return boolean success, LuaObject? object True if the object is valid
+    spawn_falling_node = function (pos) return false end,
+
+    ---Get a table of positions of nodes that have metadata within a region
+    ---@param pos1 Vector
+    ---@param pos2 Vector
+    ---@return Vector[]
+    find_nodes_with_meta = function(pos1, pos2) return {} end,
+
+    ---Get a `NodeMetaRef` at that position
+    ---@param pos Vector
+    ---@return NodeMetaRef
+    get_meta = function (pos) return {} end,
+    
+    ---Get a NodeTimerRef
+    ---@param pos Vector
+    ---@return NodeTimerRef
+    get_node_timer = function (pos) return {} end,
+
+    ---Spawn a new LuaEntity
+    ---@param pos Vector|{x:number,y:number,z:number} the position to spawn the entity
+    ---@param name string the entity name
+    ---@param staticdata string? spawning staticdata
+    ---@return LuaObject?
+    add_entity = function(pos, name, staticdata) end,
+
+    ---Spawn item
+    ---@param pos Vector
+    ---@param item Item
+    ---@return LuaObject?
+    add_item = function(pos, item) end,
+
+    ---Get a Player by the player name
+    ---@param name string
+    ---@return Player?
+    get_player_by_name = function(name) end,
+
+    ---Get a list of ObjectRefs in a radius (Euclidian)
+    ---@param pos Vector
+    ---@param radius number
+    ---@return ObjectRef[]
+    get_objects_inside_radius = function(pos, radius) return {} end;
+
+    ---Get a list of ObjectRefs in an areas
+    ---@param pos1 Vector
+    ---@param pos2 Vector
+    ---@return ObjectRef[]
+    get_objects_in_area = function(pos1, pos2) return {} end,
+
+    ---Set the time of day
+    ---@param time Alpha 0=midnight, 0.5=noon
+    set_timeofday = function(time) end;
+
+    ---Get the time of day
+    ---@return Alpha time 0=midnight, 0.5=noon
+    get_timeofday = function() return 0 end;
+
+    ---Returns the time, in seconds, since the world was created.
+    ---@return number
+    get_gametime = function() return 0 end;
+
+    ---Returns number days elapsed since the world was created. Accounts for time changes.
+    ---@return number
+    get_day_count = function() return 0 end;
+
+    ---Finds a single node near a position, within a radius, that matches nodenames
+    ---@param pos Vector
+    ---@param radius number
+    ---@param nodenames Item[] Can contain groups
+    ---@param search_center boolean? If true, search pos itself.
+    find_node_near = function(pos, radius, nodenames, search_center) return end,
+
+    ---Finds a list of nodes that matches the nodenames inside the area.
+    ---
+    ---Area volume is limited to 4,096,000 nodes
+    ---@param pos1 Vector
+    ---@param pos2 Vector
+    ---@param nodenames Item[] Can contain groups
+    ---@param grouped boolean? Controls the format of the return
+    ---@return table<Item, Vector[]>|Vector[] Return1 if grouped = true, table indexed by node name with list of positions. If grouped = false, list of positions
+    ---@return table<Item, integer>? Return2 if grouped = false, table of node counts index by node name
+    find_nodes_in_area = function(pos1, pos2, nodenames, grouped) return {}, {} end,
+    
+    ---Get a list of all nodes in the area with an air node above.
+    ---
+    ---Area volume is limited to 4,096,000 nodes
+    ---@param pos1 Vector
+    ---@param pos2 Vector
+    ---@param nodenames Item[] Can contain groups
+    ---@return Vector[]
+    find_nodes_in_area_under_air = function(pos1, pos2, nodenames) return {} end,
+
+    ---Get the world-specific perlin noise object
+    ---@param noiseparams Perlin_Noise_Params
+    ---@return PerlinNoise
+    get_perlin = function(noiseparams) return {} end,
+
+    ---Gets a Lua Voxel Manipulator
+    ---@param post1 Vector?
+    ---@param pos2 Vector?
+    ---@return VoxelManip
+    get_voxel_manip = function(post1, pos2) return {} end,
+
+
+
+    ---Set the types of on-generate notifications that should be collected.
+    ---@param flags string flag field with the available flags: dungeon, temple, cave_begin, cave_end, large_cave_begin, large_cave_end, decoration
+    ---@param deco_ids DecorationID[]? list of IDs of decorations with notifications are requested for
+    set_gen_notify = function(flags, deco_ids) end,
+
+    ---Returns a flagstring and a table with the `deco_id`s.
+    ---@return string flags
+    ---@return DecorationID[]? deco_ids
+    get_gen_notify = function() end,
+
+    ---Return the decoration ID number for the provided decoration name string or nil on fail.
+    ---@param name string Decoration name
+    ---@return DecorationID 
+    get_decoration_id = function(name) end,
+
+    ---Gets the requested Mapgen Object if available
+    ---@param objectname string
+    ---@return MapgenObject
+    get_mapgen_object = function(objectname) end,
+
+    ---Returns the heat at the position or nil on failure
+    ---@param pos Vector
+    ---@return number? heat
+    get_heat = function(pos) return 0 end,
+
+    ---Returns the humidity at the position or nil on failure
+    ---@param pos Vector
+    ---@return number? humidity
+    get_humidity = function(pos) return 0 end,
+    
+    ---Get the biome data for a location
+    ---@param pos Vector
+    ---@return BiomeData?
+    get_biome_data = function(pos) end,
+
+    ---Get the biome ID of a registered biome from the biome name
+    ---@param biome_name string
+    ---@return BiomeID? biomeID
+    get_biome_id = function(biome_name) end,
+
+    ---Get the biome name of a registered biome from the biome id
+    ---@param biomeID BiomeID
+    ---@return string?
+    get_biome_name = function(biomeID) return "" end,
+
+    ---Get the minimum and maximum possible generated node positions in that order.
+    ---@param mapgen_limit number? If nil, then the value is that of the active mapgen setting "mapgen_limit"
+    ---@param chunksize number? If nil, then the valie is that of the active mapgen setting "chunksize"
+    ---@return Vector minimum_pos
+    ---@return Vector maximum_pos
+    get_mapgen_edges = function(mapgen_limit, chunksize) end,
+
+    ---Gets the *active* mapgen setting (or nil if none exists) in string
+    ---format with the following order of precedence:
+    ---
+    ---1) Settings loaded from map_meta.txt or overrides set during mod
+    ---execution.
+    ---
+    ---2) Settings set by mods without a metafile override
+    ---
+    ---3) Settings explicitly set in the user config file, minetest.conf
+    ---
+    ---4) Settings set as the user config default
+    ---@param name MapgenSetting
+    ---@return string? settingValue
+    get_mapgen_setting = function(name) end,
+
+    ---Get the *active* mapgen settings as a Perlin_Noise_Params if the setting exists and is NoiseParams
+    ---@param name string
+    ---@return Perlin_Noise_Params?
+    get_mapgen_setting_noiseparams= function(name) end,
+
+    ---Sets a mapgen param to `value`, and will take effect if the corresponding
+    ---mapgen setting is not already present in map_meta.txt.
+    ---@param name string
+    ---@param value string
+    ---@param override_meta boolean? if true, will override map_meta.txt and set immeately.
+    set_mapgen_setting = function(name, value, override_meta) end,
+    
+    ---Sets a mapgen param to `value`, and will take effect if the corresponding
+    ---mapgen setting is not already present in map_meta.txt.
+    ---@param name string
+    ---@param value string
+    ---@param override_meta boolean? if true, will override map_meta.txt and set immeately.
+    set_mapgen_setting_noiseparams = function(name, value, override_meta) end,
+
+    ---Sets the noiseparams setting of `name` to the noiseparams table specified in `noiseparams`.
+    ---@param name string
+    ---@param noiseparams Perlin_Noise_Params
+    ---@param set_defaults boolean? if true, sets the default config. If false, sets the current active config. Default: true
+    set_noiseparams = function(name, noiseparams, set_defaults) end,
+
+    ---Returns a table of the noiseparams for name.
+    ---@param name string
+    ---@return Perlin_Noise_Params
+    get_noiseparams = function(name) return {} end,
+
+    ---Generate all registered ores within the VoxelManip `vm` and in the area from `pos1` to `pos2`.
+    ---@param vm VoxelManip
+    ---@param pos1 Vector? Defaults to mapchunk minimum
+    ---@param pos2 Vector? Defaults to mapchunk maximum
+    generate_ores = function(vm, pos1, pos2) end,
+
+    ---Generate all registered decorations within the VoxelManip `vm` and in the area from `pos1` to `pos2`.
+    ---@param vm VoxelManip
+    ---@param pos1 Vector? Defaults to mapchunk minimum
+    ---@param pos2 Vector? Defaults to mapchunk maximum
+    generate_decorations = function(vm, pos1, pos2) end,
+
+    ---Clears all objects in the environment.
+    ---@param options {mode:"full"|"quick"}? How to clear. "full": Loads all mapblocks and clears all objects (default). "quick": Clears objects immedately in loaded mapblcks. Only clears other mapblocks when loaded.
+    clear_objects = function(options) end,
+
+    ---Loads the mapblocks containing the area from pos1 to pos2.
+    ---
+    ---This function does **not** trigger map generation
+    ---@param pos1 Vector
+    ---@param pos2 Vector? Defaults to pos1
+    load_area = function(pos1, pos2) end,
+
+    ---Queue all blocks in the area from `pos1` to `pos2`, inclusive, to be
+    ---asynchronously fetched from memory, loaded from disk, or if inexistent,
+    ---generates them.
+    ---@param pos1 Vector
+    ---@param pos2 Vector
+    ---@param callback fun(blockpos:Vector, action:EmergeAction, calls_remaining:integer, param:any?)?
+    ---@param param any?
+    emerge_area = function(pos1, pos2, callback, param) end,
+
+
+    ---Delete all mapblocks in the area of pos1 to pos2, inclusive
+    ---@param pos1 Vector
+    ---@param pos2 Vector
+    delete_area = function(pos1, pos2) end,
+
+    ---Checks if there is anything other than air between pos1 and pos2.
+    ---@param pos1 Vector start
+    ---@param pos2 Vector end
+    ---@return boolean
+    ---@return Vector? nodepos position of blocking node if first return is false.
+    line_of_sight = function(pos1, pos2) return true, nil end,
+
+    ---Create a Raycast object
+    ---@param pos1 Vector start
+    ---@param pos2 Vector end
+    ---@param objects boolean if false, then only nodes will be returned. Default: true
+    ---@param liquids boolean If false, then liquids will not be returned. Default: false
+    ---@return Raycast
+    raycast = function(pos1, pos2, objects, liquids) return {} end,
+
+    ---returns table containing path that can be walked on
+    ---@param pos1 Vector start
+    ---@param pos2 Vector end
+    ---@param searchdistance number distance outside of the cuboid defined by pos1, pos2. searchdistance=1 is the cuboid pos1, pos2
+    ---@param max_jump number maximum hieght difference to consider traversable moving upwards
+    ---@param max_drop number maximum hight difference to consider traversable moving downwards
+    ---@param algorithm "A*_noprefetch"|"A*"|"Dijkstra"|nil Algorithm to use. Default: "A*_noprefetch".
+    ---@return Vector[] Path Positions along the traversable path
+    find_path = function(pos1,pos2,searchdistance,max_jump,max_drop,algorithm) end,
+
+    ---Spwan an L-System tree
+    ---@param pos Vector
+    ---@param treedef TreeDef
+    spawn_tree = function(pos, treedef) end,
+
+    ---add node to liquid flow update queue
+    ---@param pos Vector
+    transforming_liquid_add = function(pos) end,
+
+    ---get max available level for leveled node
+    ---@param pos Vector
+    ---@return number
+    get_node_max_level = function(pos) return 0 end,
+
+    ---get current level for leveled node
+    ---@param pos Vector
+    ---@return number
+    get_node_level = function(pos) return 0 end,
+
+    ---set current level for leveled node
+    ---@param pos Vector
+    ---@param level number the new level. must be between -127 and 127
+    ---@return number? remaining if `totallevel > maxlevel`, returns rest (`total-max`).
+    set_node_level = function(pos, level) return nil end,
+
+    ---add to current level for leveled node
+    ---@param pos Vector
+    ---@param level number the new level. must be between -127 and 127
+    ---@return number? remaining if `totallevel > maxlevel`, returns rest (`total-max`).
+    add_node_level = function(pos, level) return nil end,
+
+    ---resets the light in a cuboid-shaped part of
+    ---the map and removes lighting bugs.
+    ---
+    ---Loads the area if it is not loaded.
+    ---
+    ---The actual updated cuboid might be larger than the specified one,
+    ---because only whole map blocks can be updated.
+    ---The actual updated area consists of those map blocks that intersect
+    ---with the given cuboid.
+    ---
+    ---However, the neighborhood of the updated area might change
+    ---as well, as light can spread out of the cuboid, also light
+    ---might be removed.
+    ---@param pos1 Vector
+    ---@param pos2 Vector
+    ---@return boolean is_fully_generated if the area is not fully generated or not
+    fix_light = function(pos1, pos2) return false end,
+
+
+    ---causes an unsupported `group:falling_node` node to fall and causes an
+    ---unattached `group:attached_node` node to fall.
+    ---
+    ---does not spread these updates to neighbors.
+    ---@param pos Vector
+    check_single_for_falling = function(pos) end,
+
+    ---causes an unsupported `group:falling_node` node to fall and causes an
+    ---unattached `group:attached_node` node to fall.
+    ---
+    ---spread these updates to neighbors and can cause a cascade
+    ---of nodes to fall.
+    ---@param pos Vector
+    check_for_falling = function(pos) end,
+
+    ---Returns a player spawn y co-ordinate for the provided (x, z)
+    ---co-ordinates, or `nil` for an unsuitable spawn point.
+    ---
+    ---For most mapgens a 'suitable spawn point' is one with y between
+    ---`water_level` and `water_level + 16`, and in mgv7 well away from rivers,
+    ---so `nil` will be returned for many (x, z) co-ordinates.
+    ---
+    ---The spawn level returned is for a player spawn in unmodified terrain.
+    ---
+    ---The spawn level is intentionally above terrain level to cope with
+    ---full-node biome 'dust' nodes.
+    ---@param x number
+    ---@param z number
+    ---@return number height
+    get_spawn_level = function(x,z) return 0 end;
+
+
+    --[[---------------------------------------------------------------------------------------------------------
+                                                  Logging
+    ------------------------------------------------------------------------------------------------------------]]
+
+    ---Log the messages concatinated with tabs
+    ---@param ... string
+    debug = function(...) end,
+
+    ---Log the message to the console.
+    ---@param verbocity LogVerbocity|string LogVerbocity if desired, or the message
+    ---@param message string? If log verbosity is used, the message
+    log = function(verbocity, message) end,
 }
 
+---@alias LogVerbocity
+---|"none"
+---|"error"
+---|"warning"
+---|"action"
+---|"info"
+---|"verbose"
+
+---@enum EmergeAction
+local EmergeAction = {
+    EMERGE_CANCELLED = 0,
+    EMERGE_ERRORED = 1,
+    EMERGE_FROM_MEMORY = 2,
+    EMERGE_FROM_DISK = 3,
+    EMERGE_GENERATED = 4 ,   
+}
+---@type EmergeAction
+minetest.EMERGE_CANCELLED = EmergeAction.EMERGE_CANCELLED
+---@type EmergeAction
+minetest.EMERGE_ERRORED = EmergeAction.EMERGE_ERRORED
+---@type EmergeAction
+minetest.EMERGE_FROM_MEMORY = EmergeAction.EMERGE_FROM_DISK
+---@type EmergeAction
+minetest.EMERGE_FROM_DISK = EmergeAction.EMERGE_FROM_MEMORY
+---@type EmergeAction
+minetest.EMERGE_GENERATED = EmergeAction.EMERGE_GENERATED
+
+---@class BiomeData
+---@field biome BiomeID
+---@field heat number
+---@field humitidy number
+
+---@alias MapgenSetting
+---|"mgname" - mapgen name
+---|"seed"
+---|"chunksize"
+---|"water_level"
+---|"flags"
+---|"mapgen_limit"
+
+
+
+---@class BiomeID Abstract ID of a registered biome
+---@class DecorationID Abstract ID of a registered decoration
 
 --[[
     Groups are common classifications of nodes.
