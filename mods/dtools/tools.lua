@@ -858,10 +858,19 @@ minetest.register_tool("dtools:pentool_tester", {
 		
 
 		qts.pentool.context_base.create(t, {})
-		:set_brush(qts.pentool.create_box_brush("overworld:granite"))
-		:set_scale(vector.new(5, 3, 8))
+		:set_brush(qts.pentool.create_shaped_point_brush("overworld:granite"))
+		:forward(1)
+		:face_up(true)
 		:pendown()
-		:mark()
+		:forward(4,1,true)
+		:rotate(rotator(0,-45,0))
+		:forward(4,1,true)
+		:rotate(rotator(0,-45,0))
+		:forward(4,1,true)
+		:rotate(rotator(0,-45,0))
+		:forward(4,1,true)
+		:rotate(rotator(0,-45,0))
+		:forward(4,1,true)
 	end,
 })
 

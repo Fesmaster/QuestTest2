@@ -219,11 +219,11 @@ local ObjectRef = {
     get_bone_position = function(self, bone) end,
     
     ---Set the object protperties
-    ---@param properties EntityProperties
+    ---@param properties ObjectProperties
     set_properties = function(self, properties) end, --
     
     ---Returns object property table
-    ---@return EntityProperties
+    ---@return ObjectProperties
     get_properties = function(self) end, --
 
     --- returns true for players, false otherwise
@@ -638,21 +638,73 @@ local Player = {
     get_lighting = function(self) end,
 }
 
+---@alias ObjectVisuals
+---| "cube"
+---| "sprite"
+---| "upright_sprite"
+---| "mesh"
+---| "wielditem"
+---| "item"
+
+---@class ObjectProperties
+---@field hp_max number? Defines the maximum and default HP of the entity. For Lua entities the maximum is not enforced. For players this defaults to `minetest.PLAYER_MAX_HP_DEFAULT`.
+---@field breath_max number? For players only. Defaults to `minetest.PLAYER_MAX_BREATH_DEFAULT`.
+---@field zoom_fov number? For players only. Zoom FOV in degrees.
+---@field eye_height number? For players only. Camera height above feet position in nodes.
+---@field physical boolean? Collide with "walkable" nodes
+---@field collide_with_objects boolean? Collide with other objects if physical = true
+---@field collisionbox table? { xmin, ymin, zmin, xmax, ymax, zmax } in nodes from object position.
+---@field selectionbox table? { xmin, ymin, zmin, xmax, ymax, zmax } in nodes from object position.
+---@field pointable boolean? Whether the object can be pointed at
+---@field visual ObjectVisuals? Visual form of the object
+---@field visual_size Vector|{x:number,y:number,x:number}? Multipliers for the visual size. If `z` is not specified, `x` will be used to scale the entity along both horizontal axes.
+---@field mesh string? File name of mesh when using "mesh" visual
+---@field textures table? Number of required textures depends on visual.
+---@field colors table? Number of required colors depends on visual
+---@field use_texture_alpha boolean? Use texture's alpha channel.
+---@field spritediv {x:integer,y:integer}? Used with spritesheet textures for animation and/or frame selection according to position relative to player. Defines the number of columns and rows in the spritesheet: {columns, rows}.
+---@field initial_sprite_basepos {x:integer,y:integer}? Used with spritesheet textures. Defines the {column, row} position of the initially used frame in the spritesheet.
+---@field is_visible boolean? If false, object is invisible and can't be pointed.
+---@field makes_footstep_sound boolean? If true, is able to make footstep sounds of nodes
+---@field automatic_rotate number? Set constant rotation in radians per second, positive or negative. Object rotates along the local Y-axis, and works with set_rotation. Set to 0 to disable constant rotation.
+---@field stepheight number? If positive number, object will climb upwards when it moves horizontally against a `walkable` node, if the height difference is within `stepheight`.
+---@field automatic_face_movement_dir number|boolean? Automatically set yaw to movement direction, offset in degrees. 'false' to disable.
+---@field automatic_face_movement_max_rotation_per_sec number? Limit automatic rotation to this value in degrees per second. No limit if value <= 0.
+---@field backface_culling boolean? Set to false to disable backface_culling for model
+---@field glow number? Add this much extra lighting when calculating texture color. Value < 0 disables light's effect on texture color.
+---@field nametag string? The name to display on the head of the object. By default empty. If the object is a player, a nil or empty nametag is replaced by the player's name. For all other objects, a nil or empty string removes the nametag. To hide a nametag, set its color alpha to zero. That will disable it entirely.
+---@field nametag_color ColorSpec? Sets text color of nametag
+---@field nametag_bgcolor ColorSpec? Sets background color of nametag. `false` will cause the background to be set automatically based on user settings.
+---@field infotext string? Same as infotext for nodes. Empty by default
+---@field static_save boolean? If false, never save this object statically. It will simply be deleted when the block gets unloaded. The get_staticdata() callback is never called then. Defaults to 'true'.
+---@field damage_texture_modifier string? Texture modifier to be applied for a short duration when object is hit
+---@field shaded boolean? Setting this to 'false' disables diffuse lighting of entity
+---@field show_on_minimap boolean? Defaults to true for players, false for other entities. If set to true the entity will show as a marker on the minimap.
+
+
+
 ---@class LuaEntity_Base
 local LuaEntity_Base = {
-    ---Called when the entity is activated, for the first time or from save
+
+
+    ---Called when the object is instantiated.
     ---@param self LuaEntity
     ---@param staticdata string|nil the saved string
     ---@param dtime_s number time since it was loaded
     on_activate = function(self, staticdata, dtime_s) end, --
 
-    ---Called every update step
+    ---Called when the object is about to get removed or unloaded.
+    ---@param self LuaEntity
+    ---@param removal boolean Indicates whether the object is about to get removed.
+    on_deactivate = function(self, removal) end,
+
+    ---Called on every server tick, after movement and collision processing.
     ---@param self LuaEntity
     ---@param dtime number time since last step
     ---@param moveresult table move results
     on_step = function(self, dtime, moveresult) end, --
 
-    ---Called when the entity is punched
+    ---Called when somebody punches the object.
     ---@param self LuaEntity
     ---@param puncher ObjectRef the creature that punched this ome
     ---@param time_from_last_punch number time since the puncher punched last
@@ -660,15 +712,35 @@ local LuaEntity_Base = {
     ---@param dir Vector the direction of the punch
     on_punch = function(self, puncher, time_from_last_punch, tool_capabilities, dir) end, --
 
-    ---Called when the entity is rightclicked
+    ---Called when the object dies.
+    ---@param self LuaEntity
+    ---@param killer ObjectRef? the killer
+    on_death = function(self, killer) end,
+
+    ---Called when `clicker` pressed the 'place/use' key while pointing to the object (not necessarily an actual rightclick)
     ---@param self LuaEntity
     ---@param clicker ObjectRef|Player
     on_rightclick = function(self, clicker) end, --
 
-    ---Called when the Entity is being unloaded
+    ---Called on the parent when a child is attached?
     ---@param self LuaEntity
-    ---@return string staticdata the save data, passed on on_activate when re-loaded
-    get_staticdata = function(self) end, --
+    ---@param child ObjectRef
+    on_attach_child = function(self, child) end,
+    
+    ---Called on the parent when a child is detached?
+    ---@param self LuaEntity
+    ---@param child ObjectRef
+    on_detach_child = function(self, child) end,
+
+    ---Called on the child when it is detached from the parent
+    ---@param self LuaEntity
+    ---@param parent ObjectRef
+    on_detach = function(self, parent) end,
+
+    ---Should return a string that will be passed to `on_activate` when the object is instantiated the next time.
+    ---@param self LuaEntity
+    ---@return string
+    get_staticdata = function(self) return "" end;
 }
 
 ---@class LuaEntity : LuaEntity_Base
@@ -687,7 +759,7 @@ local LuaEntity = {
 
 ---@class LuaEntity_Def : LuaEntity_Base
 local LuaEntity_Def = {
-    ---@type EntityProperties
+    ---@type ObjectProperties
     initial_properties = {}
 }
 
@@ -1319,7 +1391,6 @@ function ItemStack(item) end
 
 -- Definition Tables
 ---@class HudDefinition
----@alias EntityProperties table
 --[[
     Minetest namespace. Lots of stuff in here!
 ]]
@@ -1410,6 +1481,29 @@ minetest = {
     ---@param def ItemDefinition the node definition
     register_tool = function(name, def) end,
 
+
+    ---Register a new entity
+    ---@param name string
+    ---@param def LuaEntity_Def
+    register_entity = function (name, def) end,
+
+    ---Spawn a new LuaEntity
+    ---@param pos Vector|{x:number,y:number,z:number} the position to spawn the entity
+    ---@param name string the entity name
+    ---@param staticdata string? spawning staticdata
+    ---@return LuaObject?
+    add_entity = function(pos, name, staticdata) end,
+
+    ---Convert a table that contains tables, strings, numbers, booleans, and nuls into a strings
+    ---@param tbl table
+    ---@return string
+    serialize = function(tbl) return "" end,
+
+    --- Convert a string returned by `minetest.serialize` into a table
+    ---@param str string
+    ---@param safe boolean? default: true
+    ---@return table
+    deserialize = function(str, safe) return {} end
 }
 
 
@@ -1582,3 +1676,4 @@ function PcgRandom(seed, sequence) end;
 ---@class PCGRandom
 ---@field next fun(obj:PCGRandom, min:number?, max:number?): number get the next random number
 ---@field rand_normal_dist fun(obj:PCGRandom, min:number, max:number, num_trials:number?): number get a random number with a normal distribution. num_trials default is 6. Increase for more accuracy
+

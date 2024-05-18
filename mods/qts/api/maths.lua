@@ -173,3 +173,11 @@ function Counter()
 	end
 end
 
+
+---Interpolate between S1 and S2
+---@param S1 number
+---@param S2 number
+---@param alpha Alpha
+function qts.lerp(S1, S2, alpha)
+	return S1*(1-alpha)+ S2*alpha
+end
