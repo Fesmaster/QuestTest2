@@ -338,6 +338,18 @@ function vector.mid_element(v)
 	return v.x+v.y+v.z - (vector.max_element(v) + vector.min_element(v))
 end
 
+---Hash a vector
+---@param v Vector
+function vector.hash(v)
+	return bit.bxor(qts.hash_number(v.x), bit.bxor(qts.hash_number(v.y), 579823457), bit.bxor(qts.hash_number(v.z), 46608947))
+end
+
+---Hash a vector as an integer
+---@param v Vector
+function vector.ihash(v)
+	return vector.hash(vector.round(v))
+end
+
 ---Create a rotator from roll, pitch and yaw in degrees
 ---@param roll number roll in degrees
 ---@param pitch number pitch in degrees

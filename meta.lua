@@ -1944,6 +1944,19 @@ minetest = {
     ---@param verbocity LogVerbocity|string LogVerbocity if desired, or the message
     ---@param message string? If log verbosity is used, the message
     log = function(verbocity, message) end,
+
+
+
+
+    ---returns a 48-bit integer that hashes a node position
+    ---@param pos Vector
+    ---@return integer
+    hash_node_position = function(pos) return 0 end,
+
+    ---Get a vector from its hashed position
+    ---@param hash integer
+    ---@return Vector
+    get_position_from_hash = function(hash) return vector.new(0,0,0) end,
 }
 
 ---@alias LogVerbocity

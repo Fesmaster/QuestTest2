@@ -87,6 +87,20 @@ minetest.register_entity("qtcore:debug_visualizer", {
         }))
     end
 
+    minetest.register_chatcommand("debugpoint", {
+        params = "<position> <color> <size> <time>",
+        privs={creative=1},
+        description = "Draw a debug point",
+        func = function(name, param)
+            local args = qts.breakdown_args(param, {"vector", "string", "number", "number"}, minetest.get_player_by_name(name), nil)
+            if args then
+                qtcore.debug_point(args[1], args[2], args[3], args[4])
+            else
+                minetest.chat_send_player(name, "Unable to draw debug point - invalid arguments!")
+            end
+        end
+    })
+
 else
 -- debugging disabled
 local function define_debug_function(name)
@@ -94,5 +108,7 @@ local function define_debug_function(name)
         minetest.log('warning', "Debug Function Used! - " .. name)
     end
 end
+
+define_debug_function("debug_point")
 
 end

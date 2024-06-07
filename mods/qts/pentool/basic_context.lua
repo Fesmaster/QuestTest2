@@ -65,6 +65,9 @@ qts.pentool.context_base = {
     ---@param self PentoolContext
     ---@return PentoolContext
     penup = function (self)
+        if self.brush.stroke_end then
+            self.brush:stroke_end(self)
+        end
         self:drawweight(0)
         return self
     end,
@@ -73,6 +76,9 @@ qts.pentool.context_base = {
     ---@param self PentoolContext
     ---@return PentoolContext
     pendown = function (self)
+        if self.brush.stroke_begin then
+            self.brush:stroke_begin(self)
+        end
         self:drawweight(1)
         return self
     end,
@@ -82,11 +88,36 @@ qts.pentool.context_base = {
     ---@param brush PentoolBrush
     ---@return PentoolContext
     set_brush = function (self, brush)
+        self:_end_brush()
         self.brush = brush
+        self:_begin_brush()
         return self
     end,
 
+    ---INTERNAL USE ONLY - calls the brush callbacks for a brush being removed
+    ---@param self PentoolContext
+    _end_brush = function(self)
+        if self.draw_weight > 0 and self.brush.stroke_end then
+            self.brush:stroke_end(self)
+        end
+        if self.brush.on_remove then
+            self.brush:on_remove(self)
+        end
+    end,
+
+    ---INTERNAL USE ONLY - calls the brush callbacks for a brush being added
+    ---@param self PentoolContext
+    _begin_brush = function(self)
+        if self.brush.on_assign then
+            self.brush:on_assign(self)
+        end
+        if self.draw_weight > 0 and self.brush.stroke_begin then
+            self.brush:stroke_begin(self)
+        end
+    end,
+
     --#endregion PenControll
+
     --#region Movement
 
     ---Move the pen forward N nodes. Cannot move the pen backwards with a negative distance.
@@ -220,7 +251,11 @@ qts.pentool.context_base = {
         ))
         return self
     end,
+    
+    --#endregion Movement
 
+    --#region StackControls
+    
     ---Push the current transform to the stack
     ---@param self PentoolContext
     ---@return PentoolContext
@@ -232,33 +267,40 @@ qts.pentool.context_base = {
         }
         return self;
     end,
-
+    
+    
     ---Restore the pentool to its transform before the last pop. Removes that transform from the stack.
     ---@param self any
     ---@return any
     pop = function(self)
         if (#self._stack > 0) then
+            --call unassign brush stuff.
+            self:_end_brush()
             self.transform = self._stack[#self._stack].transform:copy()
             self.brush = self._stack[#self._stack].brush:copy()
             self.draw_weight = self._stack[#self._stack].weight
             self._stack[#self._stack] = nil
+            self:_begin_brush()
         end
         return self;
     end,
-
+    
     ---Restore the pentool to its transform before the last pop. Does not removes that transform from the stack.
     ---@param self any
     ---@return any
     peek = function(self)
         if (#self._stack > 0) then
+            self:_end_brush()
             self.transform = self._stack[#self._stack].transform:copy()
             self.brush = self._stack[#self._stack].brush:copy()
             self.draw_weight = self._stack[#self._stack].weight
+            self:_begin_brush()
         end
         return self;
     end,
-
-    --#endregion Movement
+    
+    --#endregion StackControls
+    
     --#region RandomFunctions
 
     ---Get the chance for drawing a node
@@ -299,8 +341,7 @@ qts.pentool.context_base = {
         return self._random:next(min, max)
     end,
 
-    --#endregion RandomFunctions
-
+    
     ---Get the value of any param.
     ---@param self PentoolContext
     ---@param param_name string
@@ -308,7 +349,10 @@ qts.pentool.context_base = {
     get_param = function(self, param_name)
         return self._params[param_name]
     end,
+    
+    --#endregion RandomFunctions
 
+    
     ---Debug print the current transform, and its location relative to the origin transform
     ---@param self PentoolContext
     ---@return PentoolContext

@@ -181,3 +181,16 @@ end
 function qts.lerp(S1, S2, alpha)
 	return S1*(1-alpha)+ S2*alpha
 end
+
+
+
+
+---Hashes an arbitrary number (int or float) and returns a 32 bit integer (as the bit library expects)
+---@param num number
+function qts.hash_number(num)
+	local int_part, float_part = math.modf(num)
+	local fp = float_part * math.pow(2, 32) --next 32 bits
+	local fp1, fp2 = math.modf(fp) -- break it again
+	local fp3 = fp2 * math.floor(math.pow(2, 52-32)) -- last bit of bits
+	return bit.bxor(int_part, fp1, fp3)
+end

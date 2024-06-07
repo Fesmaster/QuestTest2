@@ -5,8 +5,12 @@
 ]]
 
 ---@class PentoolBrush
----@field draw fun(self:PentoolBrush, transform:Transform, weight:Alpha, context:PentoolContext):nil
----@field copy fun(self:PentoolBrush):PentoolBrush
+---@field draw fun(self:PentoolBrush, transform:Transform, weight:Alpha, context:PentoolContext):nil function that is called to draw a point
+---@field copy fun(self:PentoolBrush):PentoolBrush function that is called to copy a brush
+---@field on_assign nil|fun(self:PentoolBrush, context:PentoolContext):nil optional function called by set_brush(...)
+---@field on_remove nil|fun(self:PentoolBrush, context:PentoolContext):nil optional function called by set_brush(...)
+---@field stroke_begin nil|fun(self:PentoolBrush, context:PentoolContext):nil optional function called by pendown(...)
+---@field stroke_end nil|fun(self:PentoolBrush, context:PentoolContext):nil optional function called by penup(...) (or when changing brushes if the pen is not currently up)
 
 ---Create an empty pentool brush. Does not draw anything
 ---@return PentoolBrush
@@ -270,74 +274,239 @@ end
 
 ---@class PenToolShapedPointBrush:PentoolBrush
 ---@field node NodeRef
+---@field map_of_nodes table<integer,{pos:Vector,field:integer,draw:boolean}>
+---@field spacing number
+---@field debug boolean
 
 ---Create a PenToolShapedPointBrush. This brush type draws a single node, and does not take into account shaped nodes or the scale of the current context.
 ---Works via minetest.set_node(...)
 ---@param node NodeRef|ItemName
+---@param spacing number? space around the original poitn to sample
+---@param debug boolean? draw debug points
 ---@return PenToolShapedPointBrush
-function qts.pentool.create_shaped_point_brush(node)
+function qts.pentool.create_shaped_point_brush(node, spacing, debug)
     if type(node) == "string" then
         node = {name=node}
     end
+    if debug==nil then debug = false end
+    if spacing == nil then spacing = 0.25 end
 
     return {
         ---PentoolBrush interface
-        ---@param self PentoolPointBrush
+        ---@param self PenToolShapedPointBrush
         ---@param transform Transform
         ---@param weight Alpha
         ---@param context PentoolContext
         draw = function(self, transform, weight, context)
             if (context:get_draw_alpha() < weight) then
                 local bitfield = 0x00;
-                local offset = 0.2
                 local node_pos = vector.round(transform.pos)
-                print(node_pos:to_string(), byte_to_string(255))
-                for z = 0,1 do
-                for y = 0,1 do
-                for x = 0,1 do
-                    local rel_pos = vector.new(
-                        qts.lerp(-offset,offset,x),
-                        qts.lerp(-offset,offset,y),
-                        qts.lerp(-offset,offset,z)
-                    )
-                    local abs_pos = transform:absolute_position_no_scale(rel_pos)
-                    --qtcore.debug_point(abs_pos, "#ff0000", 3)
-                    --print(abs_pos:to_string())
-                    bitfield = bit.bor(bitfield, get_quadrant_bit(abs_pos, node_pos))
-                end
-                end
-                end
-                --print(bitfield, "\n\n")
-                -- bitfield calculated, now, find a match
-                local bestmatch = 0xff
-                local lowesterr = 0x8 --highest possible error - only counting 8 bits
-                for field, data in pairs(shapes) do
-                    local err = count_bits_onebyte(bit.bxor(bitfield, field))
-                    --print(byte_to_string(bitfield) .. " ^ " .. byte_to_string(field) .. " -> err: ", err)
-                    if err < lowesterr then
-                        bestmatch = field
-                        lowesterr = err
-                    end
-                    -- special case - no need to search more
-                    if err == 0 then
-                        break
-                    end
-                end
+                for i = 1,2 do
+                    local offset = self.spacing / i
+                    --qtcore.debug_point(transform.pos, "#7070ff", 8, 300)
+                    --qtcore.debug_point(node_pos, "#0000ff", 8, 300)
+                    for z = 0,1 do
+                    for y = 0,1 do
+                    for x = 0,1 do
+                        local rel_pos = vector.new(
+                            qts.lerp(-offset,offset,x),
+                            qts.lerp(-offset,offset,y),
+                            qts.lerp(-offset,offset,z)
+                        )
+                        local abs_pos = transform:absolute_position_no_scale(rel_pos)
+                        local hit_node_pos = vector.round(abs_pos)
+                        if self.debug then
+                            qtcore.debug_point(abs_pos, "#ff0000", 3, 300)
+                        end
+                        --print(abs_pos:to_string())
+                        bitfield = bit.bor(bitfield, get_quadrant_bit(abs_pos, hit_node_pos))
+                        local hash = minetest.hash_node_position(hit_node_pos)
 
-                local node = {name=self.node.name .. shapes[bestmatch].postfix, param2=shapes[bestmatch].param2, param1 = self.node.param1}
-                minetest.set_node(node_pos, node) 
+                        if self.debug then
+                            qtcore.debug_point(hit_node_pos, "#00ff00", 5, 300)
+                        end
+
+                        local is_center = vector.equals(node_pos, hit_node_pos)
+
+                        if self.map_of_nodes[hash] == nil then
+
+                            self.map_of_nodes[hash] = {pos = hit_node_pos, field = bitfield, draw=is_center}
+                        else
+                            if not (vector.equals(self.map_of_nodes[hash].pos, hit_node_pos)) then
+                                minetest.debug("Hash collision!!!!", self.map_of_nodes[hash].pos, hit_node_pos, hash)
+                            end
+                            self.map_of_nodes[hash].field = bit.bor(self.map_of_nodes[hash].field, bitfield)
+                            self.map_of_nodes[hash].draw = self.map_of_nodes[hash].draw or is_center
+                        end
+                    end
+                    end
+                    end
+                end
             end
         end,
+
+        ---comment
+        ---@param self PenToolShapedPointBrush
+        ---@param context PentoolContext
+        stroke_end = function(self, context)
+            local matches = {}
+            local bitfield_to_best = {}
+            --first, gather all the matching positions
+            for _, entry in pairs(self.map_of_nodes) do
+                if entry.draw then
+                    local bestmatch = 0xff
+                    local lowesterr = 0x8 --highest possible error - only counting 8 bits
+                    
+                    -- keep track of the best match for each bitfield, so that we don't have to do as many loops
+                    if bitfield_to_best[entry.field] then
+                        bestmatch = bitfield_to_best[entry.field]
+                        lowesterr = 0
+                    else
+                        for field, data in pairs(shapes) do
+                            local err = count_bits_onebyte(bit.bxor(entry.field, field))
+                            --print(byte_to_string(bitfield) .. " ^ " .. byte_to_string(field) .. " -> err: ", err)
+                            if err < lowesterr then
+                                bestmatch = field
+                                lowesterr = err
+                            end
+                            -- special case - no need to search more
+                            if err == 0 then
+                                break
+                            end
+                        end
+
+                        if lowesterr < 4 then 
+                            bitfield_to_best[entry.field] = bestmatch
+                        end
+
+
+                    end
+
+                    if lowesterr < 4 then 
+                        if matches[bestmatch] then
+                            matches[bestmatch][#matches[bestmatch]+1] = entry.pos
+                        else
+                            matches[bestmatch] = {entry.pos}
+                        end
+                    end
+                end
+            end
+
+            -- now, since the nodes are already grouped by what node and what param2 they have, 
+            -- we can use the slightly faster minetest.bulk_set_node(...)
+            for bitfield, nodelist in pairs(matches) do
+                local node = {name=self.node.name .. shapes[bitfield].postfix, param2=shapes[bitfield].param2, param1 = self.node.param1}
+                minetest.bulk_set_node(nodelist, node)
+            end
+            -- reset the map of nodes
+            self.map_of_nodes = {}
+        end,
+
         ---PentoolBrush interface copy
-        ---@param self PentoolPointBrush
-        ---@return PentoolPointBrush
+        ---@param self PenToolShapedPointBrush
+        ---@return PenToolShapedPointBrush
         copy = function(self)
             return {
                 draw = self.draw,
                 copy = self.copy,
                 node = {name=self.node.name, param1=self.node.param1, param2=self.node.param2},
+                map_of_nodes = {},
+                spacing = self.spacing,
+                debug=self.debug,
             }
         end,
-        node = node
+        node = node,
+        map_of_nodes = {},
+        spacing = spacing,
+        debug=debug,
+    }
+end
+
+
+
+---@class PentoolGreedyBoxBrush:PentoolBrush
+---@field node NodeRef
+---@field spacing number
+---@field node_set {number:Vector}
+
+---Create a PentoolBoxBrush. This brush type draws a box of nodes that is scaled to match the PenTool. It does not smooth ShapedNodes.
+---Each full Box is controlled by the weight, not individual nodes.
+---Works via minetest.set_node(...)
+---@param node NodeRef|ItemName
+---@return PentoolGreedyBoxBrush
+function qts.pentool.create_greedy_box_brush(node, spacing)
+    if type(node) == "string" then
+        node = {name=node}
+    end
+
+    if spacing == nil then spacing = 0.25 end
+
+    return {
+        ---PentoolBrush interface
+        ---@param self PentoolGreedyBoxBrush
+        ---@param transform Transform
+        ---@param weight Alpha
+        ---@param context PentoolContext
+        draw = function(self, transform, weight, context)
+            if (context:get_draw_alpha() < weight) then
+                for x=-math.floor((transform.scale.x-1)/2), math.floor(transform.scale.x/2) do
+                for y=-math.floor((transform.scale.y-1)/2), math.floor(transform.scale.y/2) do
+                for z=-math.floor((transform.scale.z-1)/2), math.floor(transform.scale.z/2) do
+                    local pos = transform:absolute_position_no_scale(vector.new(x,y,z))
+                    
+                    --minetest.set_node(pos:round(), self.node)
+
+                    local offset = self.spacing
+                    --qtcore.debug_point(transform.pos, "#7070ff", 8, 300)
+                    --qtcore.debug_point(node_pos, "#0000ff", 8, 300)
+                    for z2 = 0,1 do
+                    for y2 = 0,1 do
+                    for x2 = 0,1 do
+                        local tf = transform.new(vector.new(0,0,0), transform.rot, vector.new(1,1,1))
+                        local offset_vector = tf:absolute_position_no_scale(vector.new(
+                            qts.lerp(-offset,offset,x2),
+                            qts.lerp(-offset,offset,y2),
+                            qts.lerp(-offset,offset,z2)
+                        ))
+                        local node_pos = vector.add(pos, offset_vector):round()
+                        
+                        local hash = minetest.hash_node_position(node_pos)
+                        if self.node_set[hash] == nil then
+                            self.node_set[hash] = node_pos
+                        end
+
+                    end
+                    end
+                    end
+                end
+                end
+                end
+            end
+        end,
+        ---when the stroke ends
+        ---@param self PentoolGreedyBoxBrush
+        ---@param context PentoolContext
+        stroke_end = function(self, context)
+            local point_list = {}
+            for _, pos in pairs(self.node_set) do
+                point_list[#point_list+1] = pos
+            end
+            minetest.bulk_set_node(point_list, self.node)
+        end,
+        ---PentoolBrush interface copy
+        ---@param self PentoolGreedyBoxBrush
+        ---@return PentoolGreedyBoxBrush
+        copy = function(self)
+            return {
+                draw = self.draw,
+                copy = self.copy,
+                node = {name=self.node.name, param1=self.node.param1, param2=self.node.param2},
+                spacing = spacing,
+                node_set = {}
+            }
+        end,
+        node = node,
+        spacing = spacing,
+        node_set = {},
     }
 end

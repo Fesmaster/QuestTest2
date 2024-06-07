@@ -706,6 +706,67 @@ function dtools.create_cave_brush()
     }
 end
 
+
+---@class PentoolHallwayBrush
+
+function dtools.create_hallway_brush()
+	
+	return {
+		---PentoolBrush interface
+        ---@param self PentoolHallwayBrush
+        ---@param transform Transform
+        ---@param weight Alpha
+        ---@param context PentoolContext
+        draw = function(self, transform, weight, context)
+			local pattern = {
+				[vector.new(2,0,0)] = {name="overworld:marble_brick_slab", param2=0},
+				[vector.new(2,3,0)] = {name="overworld:marble_brick_slab", param2=20},
+				[vector.new(3,0,0)] = {name="overworld:marble_border", param2=0},
+				[vector.new(3,1,0)] = {name="overworld:marble_brick_wall", param2=0},
+				[vector.new(4,1,0)] = {name="craftable:solas_block_white", param2=0},
+				[vector.new(3,2,0)] = {name="overworld:marble_border2", param2=0},
+				[vector.new(3,3,0)] = {name="overworld:marble_brick", param2=0},
+			}
+
+
+			-- enigma floor
+			context:push()
+			:set_brush(qts.pentool.create_greedy_box_brush("overworld:obsidian_enigma"))
+			:teleport_relative(vector.new(2,-1,0))
+			:rotate(rotator(0,0,90))
+			:forward(3)
+			:peek()
+
+			-- follow the pattern
+			for pos, node in pairs(pattern) do
+				context:set_brush(qts.pentool.create_point_brush(node))
+				:push()
+				:teleport_relative(pos)
+				:mark()
+				:peek()
+				:teleport_relative(vector.new(-pos.x,pos.y,pos.z))
+				:mark()
+				:pop()
+				:peek()
+			end
+			
+			--ceiling
+			context:set_brush(qts.pentool.create_greedy_box_brush("overworld:apple_wood_planks"))
+			:teleport_relative(vector.new(3,4,0))
+			:rotate(rotator(0,0,90))
+			:forward(5)
+			:pop()
+        end,
+        ---PentoolBrush interface copy
+        ---@param self PentoolCaveBrush
+        ---@return PentoolCaveBrush
+        copy = function(self)
+            return self
+        end,
+	}
+	
+end
+
 ---Generate a cave room and offshoots
 ---@param context PentoolContext
 ---@param iters integer how many recursive calls to make
@@ -784,45 +845,48 @@ qts.pentool.register_tool("dtools:palm", {}, function(context)
 	--:forward(1)
 end)
 
-qts.pentool.register_tool("dtools:cave", {
-	roomsizemin=4,
-	roomsizemax=6,
-	pathsizemin=1.5,
-	pathsizemax=3,
-	forwardmin=3,
-	forwardmax=5
-}, function (context)
-	context:penup()
-	:face_up()
-	:forward(1)
-	:face_horizontal()
-	:rotate(rotator(
-		0, 
-		context:get_random_int_in_range(-45,0), 
-		context:get_random_int_in_range(-180,180)
-	))
-	:set_brush(dtools:create_cave_brush())
-	:pendown()
-	:set_scale(vector.new(
-		context:get_random_int_in_range(
-			context:get_param("pathsizemin"),
-			context:get_param("pathsizemax")
-		),
-		context:get_random_int_in_range(
-			context:get_param("pathsizemin"),
-			context:get_param("pathsizemax")
-		),
-		context:get_random_int_in_range(
-			context:get_param("pathsizemin"),
-			context:get_param("pathsizemax")
-		)
-	))
-	:forward(context:get_random_int_in_range(
-		context:get_param("forwardmin"),
-		context:get_param("forwardmax")
-	),2)
-	generate_cave_room(context, 3)
-end)
+qts.pentool.register_tool("dtools:cave",
+	{
+		roomsizemin=4,
+		roomsizemax=6,
+		pathsizemin=1.5,
+		pathsizemax=3,
+		forwardmin=3,
+		forwardmax=5
+	}, 
+	function (context)
+		context:penup()
+		:face_up()
+		:forward(1)
+		:face_horizontal()
+		:rotate(rotator(
+			0, 
+			context:get_random_int_in_range(-45,0), 
+			context:get_random_int_in_range(-180,180)
+		))
+		:set_brush(dtools:create_cave_brush())
+		:pendown()
+		:set_scale(vector.new(
+			context:get_random_int_in_range(
+				context:get_param("pathsizemin"),
+				context:get_param("pathsizemax")
+			),
+			context:get_random_int_in_range(
+				context:get_param("pathsizemin"),
+				context:get_param("pathsizemax")
+			),
+			context:get_random_int_in_range(
+				context:get_param("pathsizemin"),
+				context:get_param("pathsizemax")
+			)
+		))
+		:forward(context:get_random_int_in_range(
+			context:get_param("forwardmin"),
+			context:get_param("forwardmax")
+		),2)
+		generate_cave_room(context, 3)
+	end
+)
 
 qts.pentool.register_tool_instance("dtools:cave_larger", "dtools:cave", {
 	roomsizemin=6,
@@ -833,6 +897,27 @@ qts.pentool.register_tool_instance("dtools:cave_bulky", "dtools:cave_larger", {
 	pathsizemin=3,
 	pathsizemax=5,
 })
+
+qts.pentool.register_tool("dtools:hallway_circle", 
+	{
+		length = 10,
+		angle_step = 10,
+	}, 
+	function (context)
+		local len = context:get_param("length")
+		local angle = context:get_param("angle_step")
+		context:face_horizontal(true)
+		:set_brush(dtools.create_hallway_brush())
+		:teleport_relative(vector.new(0,1,0))
+		:pendown()
+		for i=0,360,angle do
+			context:forward(len)
+			:teleport_relative(vector.new(0,0,-2))
+			:rotate(rotator(0,0,angle))
+		end
+		context:penup()
+	end
+)	
 
 minetest.register_tool("dtools:pentool_tester", {
 	description = "PenTool testing wand",
@@ -854,23 +939,43 @@ minetest.register_tool("dtools:pentool_tester", {
 
 		minetest.log("Transform: " .. t:format())
 
-		--qts.pentool.execute_tool("dtools:cave_bulky", t)
+		qts.pentool.execute_tool("dtools:hallway_circle", t, {length=5})
 		
-
+		--[[
+		-- Treetrunk (not great)
+		local tool = qts.pentool.context_base.create(t, {})
+		tool:set_brush(qts.pentool.create_shaped_point_brush("overworld:oak_log", 0.25, true))
+		:forward(1)
+		:face_up(true)
+		:pendown()
+		:forward(1)
+		:rotate(rotator(0, tool:get_random_int_in_range(-20,20), tool:get_random_int_in_range(-20,20)))
+		:forward(2)
+		:penup()
+		--]]
+		
+		--[[
+		-- Arch (also not great)
 		qts.pentool.context_base.create(t, {})
-		:set_brush(qts.pentool.create_shaped_point_brush("overworld:granite"))
+		:set_brush(qts.pentool.create_shaped_point_brush("overworld:granite", 0.35, true))
 		:forward(1)
 		:face_up(true)
 		:pendown()
 		:forward(4,1,true)
 		:rotate(rotator(0,-45,0))
-		:forward(4,1,true)
+		:teleport_relative(vector.new(0,-0.5,0))
+		:forward(4,0.6,false)
+		:teleport_relative(vector.new(0,0.5,0))
 		:rotate(rotator(0,-45,0))
 		:forward(4,1,true)
 		:rotate(rotator(0,-45,0))
-		:forward(4,1,true)
+		:teleport_relative(vector.new(0,-0.5,0))
+		:forward(4,0.6,false)
+		:teleport_relative(vector.new(0,0.5, 0))
 		:rotate(rotator(0,-45,0))
 		:forward(4,1,true)
+		:penup()
+		--]]
 	end,
 })
 

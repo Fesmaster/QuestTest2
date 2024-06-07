@@ -61,29 +61,37 @@ transform = {
     ---Hash the transform. All attributes are floored to the nearest int.
     ---@param t Transform
     ---@return number
+    ihash = function(t)
+        return bit.bxor(
+            vector.ihash(t.pos),
+            vector.ihash(t.rot),
+            vector.ihash(t.scale)
+        )
+    end,
+
+    ---Hash the transform.
+    ---@param t Transform
+    ---@return number
     hash = function(t)
         return bit.bxor(
-            math.floor(t.pos.x),
-            math.floor(t.pos.y),
-            math.floor(t.pos.z),
-            math.floor(t.rot.x),
-            math.floor(t.rot.y),
-            math.floor(t.rot.z),
-            math.floor(t.scale.x),
-            math.floor(t.scale.y),
-            math.floor(t.scale.z)
+            vector.hash(t.pos),
+            vector.hash(t.rot),
+            vector.hash(t.scale)
         )
+    end,
+
+    ---Hash the position of the transform. All attributes are rounded to the nearest int.
+    ---@param t Transform
+    ---@return number
+    ihashpos = function(t)
+        return vector.ihash(t.pos)
     end,
 
     ---Hash the position of the transform. All attributes are floored to the nearest int.
     ---@param t Transform
     ---@return number
     hashpos = function(t)
-        return bit.bxor(
-            math.floor(t.pos.x),
-            math.floor(t.pos.y),
-            math.floor(t.pos.z)
-        )
+        return vector.hash(t.pos)
     end,
 
     ---Set the position of a Transform
