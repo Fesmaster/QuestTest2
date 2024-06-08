@@ -33,6 +33,7 @@ end
 
 dofile(path.."/chatcommands.lua")
 dofile(path.."/tools.lua")
+dofile(path.."/pentool.lua")
 dofile(path.."/schematics.lua")
 
 dofile(path.."/other.lua")

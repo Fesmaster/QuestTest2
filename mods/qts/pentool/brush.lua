@@ -409,6 +409,7 @@ function qts.pentool.create_shaped_point_brush(node, spacing, debug)
             return {
                 draw = self.draw,
                 copy = self.copy,
+                stroke_end = self.stroke_end,
                 node = {name=self.node.name, param1=self.node.param1, param2=self.node.param2},
                 map_of_nodes = {},
                 spacing = self.spacing,
@@ -500,6 +501,7 @@ function qts.pentool.create_greedy_box_brush(node, spacing)
             return {
                 draw = self.draw,
                 copy = self.copy,
+                stroke_end = self.stroke_end,
                 node = {name=self.node.name, param1=self.node.param1, param2=self.node.param2},
                 spacing = spacing,
                 node_set = {}
