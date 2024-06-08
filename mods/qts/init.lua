@@ -15,7 +15,21 @@ dofile(qts.path.."/customversions.lua")
 --most players won't need this to work, and most should leave it off. Its for GIT integration into version watermarking.
 qts_internal.insecure = minetest.request_insecure_environment()
 dofile(qts.path.."/watermark.lua")
+local insecure = qts_internal.insecure
 qts_internal.insecure = nil
+
+--load FFI
+if insecure == nil then
+    minetest.log("error", "qts requires an insecure environment. Please add it to the list of allowed insecure environments.")
+    error("qts requires an insecure environment. Please add it to the list of allowed insecure environments.")
+end
+ffi = insecure.require("ffi")
+if ffi == nil then
+    minetest.log("error", "qts requires the use of Minetest compiled with luajit for the ffi library. Please compile minetest with luajit")
+    error("qts requires the use of Minetest compiled with luajit for the ffi library. Please compile minetest with luajit")
+end
+
+
 
 dofile(qts.path.."/worldsettings.lua")
 --load the QT2 Settings File
@@ -33,9 +47,12 @@ qts.LEVEL_MULTIPLIER = qts.config("LEVEL_MULTIPLIER", 0.2, "default level power 
 
 dofile(qts.path.."/benchmark.lua")
 
+
 dofile(qts.path.."/api/maths.lua") --non-vector math
 dofile(qts.path.."/api/util.lua")
 dofile(qts.path.."/api/vector.lua") --vector math
+
+dofile(qts.path.."/ffi/ffi_main.lua") -- ffi is used to load native c types
 
 dofile(qts.path.."/api/callbacks.lua")
 dofile(qts.path.."/api/creative.lua")
