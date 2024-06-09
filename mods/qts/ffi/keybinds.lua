@@ -200,7 +200,18 @@ unsigned short GetAsyncKeyState(int vKey);
 
     
 elseif ffi.os == "Linux" then
-    error("Linux keybinds not yet implemented.")
+    
+
+	
+	---Check if a key is currently pressed
+    ---@param key KeyCode
+    ---@return boolean
+    function qts.is_key_pressed(key)
+		return QTSNativeCommon.IsKeyPressed(key)
+        
+        --return false
+    end
+
 else
     error("QuestTest2 Only supports Windows and Linux")
 end
@@ -251,7 +262,7 @@ minetest.register_globalstep(function(dtime)
     end
 end)
 
---[[
+---[[
 qts.register_on_keypress(KeyCode[minetest.settings:get("keymap_inventory")], function()
     minetest.debug("Inventory Opened!")
 end)

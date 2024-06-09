@@ -3,3 +3,6 @@
 **/*.log
 **/*.backup
 **/.vscode
+/NativeCode/obj
+/NativeCode/Makefile
+/NativeCode/*.make

@@ -47,4 +47,8 @@ The Windows API offers the following function:
 unsigned short GetAsyncKeyState(int vKey);
 ```
 
+## Linux
+
+Linux is significantly less straightforward that Windows, and looks like it will require a custom library to do a bunch of parsing in C/C++ to interact with Xlib.
+
 
