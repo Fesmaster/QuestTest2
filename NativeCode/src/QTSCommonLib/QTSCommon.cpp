@@ -6,12 +6,11 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 
-#endif // QTS_LINUX
-
-
 bool LinuxKeymap::bInitalized = false;
 std::unordered_map<int, int> LinuxKeymap::LinuxToMinetest;
 std::unordered_map<int, int> LinuxKeymap::MinetestToLinux;
+
+#endif // QTS_LINUX
 
 //#include <stdbool.h>
 //#include <stdio.h>
