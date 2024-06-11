@@ -314,11 +314,25 @@ These biomes and their features and resources represent the current state. An ov
   - Trees: None
   - Stone: limestone
 
+##### Structures of the Overworld
+
+- Bandit Camps: These camps are in the wilds, where those people who don't like orderly society live, preying off the weak.
+- Goblin Mines: Found in caves, these are the homes of the semi-intelligent Goblins, who like to eat Humans.
+- Ruins: Various biomes have different ruins from a time long past. Some might have unusual creatures guarding them, some might have forgotten treasures.
+- Towns: Small towns, often with a fortified wall, dot the landscape. They are often self-sufficient, as trade is dangerous. New wealth coming in is always a big deal.
+- Waytowers: Large towers, with powerful magic beacons on top, Waytowers watch the landscape. Guarded by fierce inhuman enemies, they hold treasures, secrets, and more. There are often smaller structures around the base of these towers.
+- Shadow Veils: Structures built into the sides of mountains, with one set of doors leading in. Room upon room goes down and down, deep into the earth. Strange, lizard-like enemies guard these places and man them. There are armories and smithies, guard houses, farms, and store rooms. Maybe it is possible to befriend them?
+
 #### Cave Realm (Crystal Caves)
 
 Inspired by the Glittering Caves behind the Hornburg, the Crystal Caves lies from about -700 to -300. It is characterized by large, open caverans with many glowing crystals. Much of this biome is not yet implemented.
 
+In the Slate stone of some biomes at this level, rare geodes containing yellow Mese crystals can be found.
+
 ##### Biomes of the Crystal Caves
 
 - Shards: Characterized by many small glowing crystals of purple, green, and blue, the Shards is also where Mese can be mined. The dark blueish slate stone makes the environment darker and the crystals stand out.
-- 
+- Glittering Pools: Flat shelves of water, with pillars of stone rising from then. Strange glowing cave-plants can be found growing in the shallow pools.
+- Colonnade: Marble columns and folds, with a large amount of gold ore. A creeping blue moss brings light to this area.
+- Fossil Sands: Chocolate-brown sands, with many bones and fossils of ancient creatures. Ghostly blue wisps can be found, formed of colonies of microorganisms that float in the dense cave air.
+- Spires: Like the shards, many small crystals of purple, green, and blue. However, the Spires also has massive crystals of the same, many blocks tall. Mese is also found in the slate here.
