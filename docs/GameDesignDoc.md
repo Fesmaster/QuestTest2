@@ -50,7 +50,7 @@ When beginning work, create a branch, based on the development branch, for your 
 
 Work on the feature, regularly committing and pushing your work. Tasks on the issue should ONLY be marked complete when the relevant code is pushed to the repository.
 
-As you work on the feature, you might be simultaneously writing documentation for it. (Content additions and bug fixes likely won't have documentation - but systems will). Each commit should have accompanying documentation written about the features in the same commit. Documentation is written in Markdown (like this document) and belongs in the `/docs/` folder.
+As you work on the feature, you might be simultaneously writing documentation for it. (Content additions and bug fixes likely won't have documentation - but systems will). Each commit should have accompanying documentation written about the features in the same commit. Documentation is written in Markdown (like this document) and belongs in the `/docs/` folder. For information about Markdown formatting, please see the following website: [www.markdownguide.org](https://www.markdownguide.org/basic-syntax/)
 
 When you have finished the feature, rebase your branch on Development (if Development has any changes). This will prevent changes made since you created your branch from breaking your feature or vice versa.
 
@@ -195,4 +195,130 @@ QuestTest2 has several tools built into it. These are (usually) part of the dtoo
 
 DEVMODE is not intended to be playable. Nodes like structure generators will not work autogenerate structures in DEVMODE, and mob spawners are not invisible. On the other hand, debug items and development tools are made available. DEVMODE is intended to test and develop QuestTest2 functionality.
 
+## Gameplay and Systems
 
+This section of the GDD deals with the design of playing the game. It covers player interactions and game design elements.
+
+### Core Game Loop
+
+The core game loop is primarily about resource management - you need resources to generate resources, and all resources are consumable.
+
+Just because you have access to higher tiers of resources does not mean you no longer have interest in the lower tiers - indeed, the lower tiers might still be really valuable.
+
+- Travel to find resources or structures
+- Collect Resources from various sources, such as direct gathering, quest rewards, loot, mob drops
+- Use those Resources to build structures, craft gear, or otherwise improve your ability to travel and collect resources. 
+
+### Managing Resources
+
+Since the game is primarily about resources, how the player can managing collecting, storing, and utilizing those resources is a key area of design, and a key area we want to differentiate ourselves against most games for Minetest (and potentially against most voxel games and RPGs in general)
+
+Collecting resources that require low amounts is left as an incentive for the various pillars of the game, in differing ways. Common resources should have more effective ways of collecting them, including methods that can be automated.
+
+To store resources, QuestTest2 does two things:
+
+1. The stack max is raised from 99 to 1024. Configuration can be used to raise this higher.
+2. A planned native Storage Systems called Quartermaster that seamlessly links all nearby storage objects.
+
+To utilize resources, it depends on what type of utilization.
+
+For blocks used to build, the greater stack max allows for more to be carried and used. The Shaped Nodes system condenses stair, slab, and slant blocks into one block type in the inventory. Hammers easily change between types, and a planned feature to middle-click and change the default placed type is in the works.
+
+For crafting, much common crafting is done straight from the inventory. Inventory-based crafting should respect Quartermaster and allow usage of items stored in a Quartermaster network as ingredients.
+
+Most crafting should also be automatable. Automated crafting systems can help build bulk items from base resources and combine well with automated resource harvesting.
+
+For weapons, tools, and the like, they should all have a durability. This requires constant refresh of the materials required to make a tool, increasing the need to gather resources.
+
+Consumables, such as food, potions, and grenades, are destroyed upon use. Some of these items should be able to be bound to hotkeys.
+
+### Primary Game Systems
+
+Not all of these systems directly affect gameplay, some are underlying code systems that affect how we can make the gameplay better.
+
+Most of these systems exist primarily in the module `qts` (short for )
+
+For documentation on how each of the systems work in detail, please refer to the document titled after that system. Links are placed here for reference if the document exists.
+
+- Shaped Nodes: Allows for many nodes to have stair (straight, inner, outer), slab, and slant (straight, inner, outer) versions. No extra registrations are needed. Provides a system to "hammer" nodes to different shapes or rotate them. Also allows for custom hammering actions, for example, to remove posts from a fence (fence->rail->fence->... conversions).
+- [Scribe](./scribe.md): Allows for good GUI systems to be made with much more ease than with Formspec.
+- health override: We completely overrode how Minetest handles health and armor. This system does not have a name.
+- crafting system: We designed our own crafting system. Minetest's system of 9-square recipes was not the type of crafting we wanted, since it limits the way ingredients can be assembled. Instead, we built a system that just requires the ingredients, some non-consumed tools, and certain nearby blocks
+- Creatures - Allows for optimized entities with a generalized Finite State Machine AI to be created easily. Independent AI modules can be attached to a creature (even at runtime) to give it certain behavior.
+- Pentool (incomplete): This system adds a turtle graphics-like system to assist in generating structures.
+- Mechanics (not started): This system adds mechanical contraptions that can be linked, allowing you to create complex machines.
+- Quartermaster (not started): A system to link storage nodes and provide a unified access to them for item storage and crafting.
+
+### World Organization
+
+The world is organized in vertical layers, like the slices of a cake. The further you get, vertically, from the world origin (0,0,0), the more difficult and higher level the content gets.
+
+#### Overworld
+
+The starting area of the world, the Overworld compasses the vertical slice from -300 to 150. This area is the easiest to survive in, and contains much of the game's early content.
+
+##### Biomes of the Overworld
+
+These biomes and their features and resources represent the current state. An overhaul of biomes in in progress, and a major overhaul of worldgen is planned.
+
+- Grasslands:
+  - Surface: Green
+  - Trees: None
+  - Stone: Granite
+- Woods:
+  - Surface: Green
+  - Trees: Apple, Oak, Aspen, Rowan
+  - Stone: Granite
+- Prarie:
+  - Surface: Dry brown/tan
+  - Trees: Rosewood
+  - Stone: Granite
+- Swamp:
+  - Surface: Rich green, water
+  - Trees: Bamboo, Swamp tree
+  - Stone: Granite
+- Rainforest:
+  - Surface: Dark brown forest litter
+  - Trees: Coffee, Mahogany, Lanternfruit
+  - Stone: Granite
+- Mushroom Forest:
+  - Surface: White mushroom tendrils
+  - Trees: Mushrooms (Blue, Brown, Gold)
+  - Stone: Granite
+- Desert:
+  - Surface: desert sand
+  - Trees: none
+  - Stone: sandstone
+- Mountain:
+  - Surface: raw dirt and granite, covered in snow
+  - Trees: none
+  - Stone: granite
+- Desert Mountain:
+  - Surface: sandstone
+  - Trees: none
+  - Stone: sandstone
+- Beach:
+  - Surface: sand, with beach grass
+  - Trees: Palm
+  - Stone: limestone
+- Underwater:
+  - Surface: sand
+  - Trees: None
+  - Stone: granite
+- Snow:
+  - Surface: snow-covered dirt
+  - Trees: Pine
+  - Stone: granite
+- Snowy Beach:
+  - Surface: sand, with snow
+  - Trees: None
+  - Stone: limestone
+
+#### Cave Realm (Crystal Caves)
+
+Inspired by the Glittering Caves behind the Hornburg, the Crystal Caves lies from about -700 to -300. It is characterized by large, open caverans with many glowing crystals. Much of this biome is not yet implemented.
+
+##### Biomes of the Crystal Caves
+
+- Shards: Characterized by many small glowing crystals of purple, green, and blue, the Shards is also where Mese can be mined. The dark blueish slate stone makes the environment darker and the crystals stand out.
+- 
