@@ -20,6 +20,10 @@ project("QTSCommon")
         "thridparty", 
         "src/QTSCommonLib",  
     })
+    
+    links({
+        "GL"
+    })
 
     filter("configurations:Debug")
         defines({ "DEBUG" })

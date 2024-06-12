@@ -67,3 +67,22 @@ PROFILE: "native_vector"   Min: 186310 us  Max: 355202 us  Average: 248676 us   
 ```
 
 The use of native vectors is deemed "not worth it".
+
+## Native Entity Functionality
+
+The Creatures and Modules system is not designed to have an easy injection of Native code, as most of the code is dependant on Minetest API and on Lua structures.
+
+While it might not be impossible to create a native version, this would be more effort than the current investigation wants to spend on it.
+
+## Dedicated Lua Threads
+
+Dedicated Lua threads would not have Minetest API, so its better to leave any such code in C++.
+
+## Rendering
+
+Since Lua runs on a different thread than Minetest renders with, we cannot get the OpenGL context. There might be still an opportunity to create our own context for compute purposes (not rendering), but that can be a future investigation.
+
+Information about this:
+[Chapter 2. OpenGL and X: Getting Started](https://www-f9.ijs.si/~matevz/docs/007-2392-003/sgi_html/ch02.html)
+[Tutorial:_OpenGL_3.0_Context_Creation_(GLX)](https://www.khronos.org/opengl/wiki/Tutorial:_OpenGL_3.0_Context_Creation_(GLX))
+

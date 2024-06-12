@@ -10,6 +10,8 @@ ffi.cdef([[
 void ModuleStartup();
 void ModuleShutdown();
 
+
+void CheckOpenGLCompat();
 ]])
 
 if ffi.os == "Linux" then
@@ -20,10 +22,20 @@ if ffi.os == "Linux" then
 elseif ffi.os == "windows" then
     QTSNativeCommon = ffi.load(qts.path .. "/../../NativeCode/bin/Release/QTSCommon.dll")
 end
-QTSNativeCommon.ModuleStartup();
+QTSNativeCommon.ModuleStartup()
 minetest.register_on_shutdown(function()
-    QTSNativeCommon.ModuleShutdown();
+    QTSNativeCommon.ModuleShutdown()
 end)
 
 --/media/electra/InternalStorage/Minetest/minetest-source/bin/../games/QuestTest2/mods/qts../../NativeCode/bin/Release/libQTSCommon.so
 dofile(qts.path.."/ffi/keybinds.lua") --non-vector math
+
+--[[
+minetest.register_chatcommand("checkgl", {
+	params = "none",
+	description = "check if OpenGL can be used from Native Code",
+	func = function(name, param)
+		QTSNativeCommon.CheckOpenGLCompat()
+	end
+})
+--]]
