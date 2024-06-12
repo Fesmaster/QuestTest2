@@ -6,7 +6,10 @@
 
 QTSNativeCommon = nil
 
-
+ffi.cdef([[
+    void ModuleStartup();
+	void ModuleShutdown();
+]])
 if ffi.os == "Linux" then
     ffi.cdef([[
         bool IsKeyPressed(int KeyCode);
@@ -15,6 +18,11 @@ if ffi.os == "Linux" then
 elseif ffi.os == "windows" then
     QTSNativeCommon = ffi.load(qts.path .. "/../../NativeCode/bin/Release/QTSCommon.dll")
 end
+QTSNativeCommon.ModuleStartup();
+minetest.register_on_shutdown(function()
+    QTSNativeCommon.ModuleShutdown();
+end)
+
 
 
 --/media/electra/InternalStorage/Minetest/minetest-source/bin/../games/QuestTest2/mods/qts../../NativeCode/bin/Release/libQTSCommon.so

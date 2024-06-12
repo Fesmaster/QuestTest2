@@ -232,7 +232,7 @@ qts.registered_keypress_events = {}
 
 ---Register an event for a keybind
 ---@param key KeyCode
----@param event fun():nil
+---@param event fun(pressed:boolean):nil
 function qts.register_on_keypress(key, event)
     if qts.registered_keypress_events[key] == nil then
         qts.registered_keypress_events[key] = {}
@@ -250,11 +250,16 @@ minetest.register_globalstep(function(dtime)
         end
         local current_state = qts.is_key_pressed(code)
         if prev_state then
+			if not current_state then
+				for _, event in ipairs(events) do
+                    event(false)
+                end
+			end
             keys[code] = current_state
         else
             if current_state then
                 for _, event in ipairs(events) do
-                    event()
+                    event(true)
                 end
                 keys[code] = current_state
             end
@@ -262,12 +267,32 @@ minetest.register_globalstep(function(dtime)
     end
 end)
 
----[[
-qts.register_on_keypress(KeyCode[minetest.settings:get("keymap_inventory")], function()
-    minetest.debug("Inventory Opened!")
+--[[
+qts.register_on_keypress(KeyCode[minetest.settings:get("keymap_inventory")], function(pressed)
+    if pressed then
+		minetest.debug("Inventory pressed!")
+	else
+		minetest.debug("Inventory released")
+	end
 end)
 
-qts.register_on_keypress(KeyCode.KEY_MBUTTON, function()
-    minetest.debug("Middle Mouse!")
+qts.register_on_keypress(KeyCode.KEY_TAB, function(pressed)
+    if pressed then
+		minetest.debug("Tab pressed")
+	else
+		minetest.debug("Tab released")
+
+	end
 end)
+
+qts.register_on_keypress(KeyCode.KEY_SPACE, function(pressed)
+    if pressed then
+		minetest.debug("Space pressed")
+	else
+		minetest.debug("Space released")
+
+	end
+end)
+
+
 --]]

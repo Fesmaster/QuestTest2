@@ -51,4 +51,9 @@ unsigned short GetAsyncKeyState(int vKey);
 
 Linux is significantly less straightforward that Windows, and looks like it will require a custom library to do a bunch of parsing in C/C++ to interact with Xlib.
 
+Based on how Linux's input system works, we had to break apart keyboard and mouse events. Windows treats the mouse as part of the keyboard.
+
+Several limitations of the Linux implementation:
+
+- We cannot detect Mouse4 and Mouse5 buttons.
 
