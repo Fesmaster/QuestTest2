@@ -380,6 +380,95 @@ minetest.register_node("overworld:underbrush_cactus_barrel", {
 	on_flood = floodFunc,
 })
 
+minetest.register_node("overworld:underbrush_cactus_branched_side", {
+	description = "Underbrush",
+	tiles = {"overworld_cactus.png",},
+	use_texture_alpha = "clip",
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	buildable_to = true,
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ 3/16, -8/16, 2/16, 5/16, -1/16, 4/16, },
+			{ 3/16, -3/16, 1/16, 5/16, 1/16, 3/16, },
+			{ 3/16, 0/16, 0/16, 5/16, 2/16, 4/16, },
+			{ 3/16, 1/16, -1/16, 5/16, 3/16, 1/16, },
+			{ 3/16, 2/16, -2/16, 5/16, 7/16, 0/16, },
+			{ 3/16, 1/16, 3/16, 5/16, 5/16, 5/16, },
+			{ 2/16, 2/16, 3/16, 4/16, 4/16, 5/16, },
+			{ 1/16, 3/16, 3/16, 2/16, 5/16, 5/16, },
+			{ 0/16, 4/16, 4/16, 1/16, 8/16, 5/16, },
+			{ 5/16, -3/16, 2/16, 6/16, -1/16, 4/16, },
+			{ 5/16, -2/16, 2/16, 7/16, 0/16, 4/16, },
+			{ 6/16, -1/16, 2/16, 8/16, 4/16, 4/16, },
+			{ 6/16, 1/16, 0/16, 7/16, 6/16, 1/16, },
+			{ 6/16, 0/16, 1/16, 7/16, 2/16, 2/16, },
+			{ 2/16, 2/16, -1/16, 3/16, 4/16, 0/16, },
+			{ 1/16, 3/16, -1/16, 2/16, 6/16, 0/16, },
+		}
+	},
+	selection_box = {
+		type = "fixed",
+		fixed = {
+			{ -5/16, -8/16, -6/16, 7/16, -3/16, 6/16, },
+		},
+	},
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	drop = underbrush_drops,
+	on_flood = floodFunc,
+})
+
+minetest.register_node("overworld:underbrush_cactus_branched_center", {
+	description = "Underbrush",
+	tiles = {"overworld_cactus.png",},
+	use_texture_alpha = "clip",
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	buildable_to = true,
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -1/16, -8/16, -1/16, 1/16, -2/16, 1/16, },
+			{ -2/16, -3/16, 0/16, 0/16, 4/16, 2/16, },
+			{ 1/16, -3/16, -1/16, 3/16, -1/16, 1/16, },
+			{ 2/16, -2/16, -1/16, 4/16, 7/16, 1/16, },
+			{ 3/16, -1/16, 1/16, 4/16, 1/16, 2/16, },
+			{ 3/16, -1/16, 2/16, 4/16, 5/16, 3/16, },
+			{ -2/16, -2/16, -1/16, -1/16, 0/16, 0/16, },
+			{ -2/16, -1/16, -2/16, -1/16, 3/16, -1/16, },
+			{ 2/16, 0/16, -2/16, 3/16, 2/16, -1/16, },
+			{ 2/16, 1/16, -3/16, 3/16, 7/16, -2/16, },
+			{ 4/16, 0/16, -1/16, 5/16, 2/16, 0/16, },
+			{ 5/16, 1/16, -1/16, 6/16, 8/16, 0/16, },
+			{ -2/16, 1/16, 3/16, -1/16, 6/16, 4/16, },
+			{ -2/16, 0/16, 2/16, -1/16, 2/16, 3/16, },
+			{ -3/16, 1/16, 0/16, -1/16, 3/16, 1/16, },
+			{ -4/16, 1/16, 0/16, -3/16, 8/16, 1/16, },
+			{ 0/16, 0/16, 0/16, 1/16, 2/16, 1/16, },
+			{ 1/16, 0/16, 1/16, 2/16, 6/16, 2/16, },
+		}
+	},
+	selection_box = {
+		type = "fixed",
+		fixed = {
+			{ -5/16, -8/16, -6/16, 7/16, -3/16, 6/16, },
+		},
+	},
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	drop = underbrush_drops,
+	on_flood = floodFunc,
+})
 --natural coconut
 
 minetest.register_node("overworld:natural_coconut", {
