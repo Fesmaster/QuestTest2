@@ -47,7 +47,7 @@ The Windows API offers the following function:
 unsigned short GetAsyncKeyState(int vKey);
 ```
 
-## Linux
+### Linux
 
 Linux is significantly less straightforward that Windows, and looks like it will require a custom library to do a bunch of parsing in C/C++ to interact with Xlib.
 
@@ -57,3 +57,13 @@ Several limitations of the Linux implementation:
 
 - We cannot detect Mouse4 and Mouse5 buttons.
 
+## Vector types
+
+Attempting to use `__m128`-based float4 types resulted in code that was several orders of magnitude slower than Minetest Vectors. See profiling below:
+
+```Log
+PROFILE: "lua_vector"      Min: 38 us      Max: 403 us     Average: 123.9 us       Total Runs: 10  Total Time: 1239 us
+PROFILE: "native_vector"   Min: 186310 us  Max: 355202 us  Average: 248676 us      Total Runs: 10  Total Time: 2486760 us
+```
+
+The use of native vectors is deemed "not worth it".

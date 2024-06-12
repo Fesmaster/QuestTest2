@@ -13,6 +13,7 @@ extern "C" {
 #ifdef QTS_LINUX
     EXPORT bool IsKeyPressed(int KeyCode);
 #endif //QTS_LINUX
+
 };
 
 // Helper stuff - not exported
