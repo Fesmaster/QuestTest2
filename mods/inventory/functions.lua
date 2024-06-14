@@ -448,7 +448,7 @@ function inventory.refresh_inv(player, tab)
 		player = minetest.get_player_by_name(player)
 	end
 	if not tab then tab = 1 end
-	local formspec_code = qts.gui.show_gui(player:get_pos(), player, "inventory", tab, false)[2]
+	local formspec_code = qts.gui.show_gui(player:get_pos(), player, qts.gui.get_inventory_gui_name(), tab, false)[2]
 	player:set_inventory_formspec(formspec_code) 
 end
 

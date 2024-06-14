@@ -310,7 +310,10 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		formname = "qts:"..inventoryFormName
 		inv = true
 	end
-	local formname = formname:split(":")
+	local formname = formname:split(":", false, 1)
+	if formname[1] == "qts" and formname[2] then
+		formname[2] = string.gsub(formname[2], ":", "_")
+	end
 	if formname[1] == "qts" and formname[2] and qts.gui.forms[formname[2]] then
 		--found a form registered by this API
 		local handle_func = qts.gui.forms[formname[2]].handle

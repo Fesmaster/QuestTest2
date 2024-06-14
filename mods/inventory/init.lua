@@ -12,6 +12,7 @@ local P = function(x,y) return qts.gui.gui_makepos(x,y):get() end
 dofile(minetest.get_modpath("inventory") .."/functions.lua")
 dofile(minetest.get_modpath("inventory") .."/detached.lua")
 dofile(minetest.get_modpath("inventory") .."/hud.lua")
+dofile(minetest.get_modpath("inventory") .."/legacy.lua")
 --dofile(minetest.get_modpath("inventory") .."/exemplar.lua")
 
 
@@ -27,205 +28,193 @@ inventory.register_util_btn("Night!", function(playername)
 	minetest.set_timeofday(0.85)
 end)
 
+-- updated version, overrides the version in functions.lua
+---@type{group:string, template:string, pos:vec2}
+inventory.special_equipment_slots = {
+	{group="helmet",  template="inv_helmet.png",  pos={x=0.625, y=0}},
+	{group="gloves",  template="inv_gloves.png",  pos={x=  0,   y=1.125}},
+	{group="shield",  template="inv_shield.png",  pos={x=1.25,  y=1.125}},
+	{group="cuirass", template="inv_cuirass.png", pos={x=  0,   y=2.25}},
+	{group="cloak",   template="inv_cloak.png",   pos={x=1.25,  y=2.25}},
+	{group="boots",   template="inv_boots.png",   pos={x=0.625, y=3.375}},
+}
+
+qts.gui.register_scribe_gui("inventory:new_inventory", function (c1)
+	c1:set_style("qtcore:stormcloud")
+	:container({
+		position={x=0,y=0},
+		--texture="Transparent.png",
+		padding={x=0,y=0},
+		},function(c2)
+		c2:horizontal_box({
+			position={x=-0.2,y=0},
+			padding={x=0.5,y=0},
+			spacing={x=0.25,y=0},
+			--texture="Transparent.png",
+		}, function (c3)
+			c3:tab_header({
+				width=24.4,
+				height=16,
+				name="inventory_tabs",
+				inner_size={x=24,y=14.5},
+			},{
+				{
+					tab={
+						name="inventory_tab_equipment",
+						label="Equipment",
+						width=2,
+						height=1,
+						padding={x=0,y=0}
+					},
+					page=function (t1c1)
+						t1c1:vertical_box(
+							{
+								width=24,
+								height=14.5,
+								position={x=-0.2, y=0},
+								padding={x=0,y=0}
+							},
+							function (t1c2)
+								t1c2:horizontal_box(
+									{
+										texture="Transparent.png",
+										padding={x=0.125,y=0.125},
+										spacing={x=0.125,y=0.125},
+									},
+									function (t1c3)
+
+										-- Armor Slots
+										t1c3:container(
+											{
+												texture="Transparent.png",
+											},
+											function (t1c4)
+												for k, t in ipairs(inventory.special_equipment_slots) do
+													t1c4:image({
+														position=t.pos,
+														texture=t.template,
+														width=1,
+														height=1,
+													})
+													:inventory({		
+														position=t.pos,
+														width=1,
+														height=1,
+														listname="equipment",
+														slot_size={x=1,y=1},
+														source=qts.scribe.inventory_source.CURRENT_PLAYER,
+														starting_item_index=k-1
+													})
+												end
+		
+												
+											end -- END t1c4
+										)
+
+										-- Equipment slots
+										local totalSlots = inventory.equipment_slots_general_count + (
+											qts.get_player_bonus_equipment_slots(
+												t1c3.player:get_player_name()
+											) or 0
+										)
+										local width = math.floor(totalSlots / 4)
+										local extras = totalSlots % 4
+
+										t1c3:inventory({
+											width=width,
+											height=4,
+											slot_size={x=1,y=1},
+											listname="equipment",
+											source=qts.scribe.inventory_source.CURRENT_PLAYER,
+											starting_item_index=#inventory.special_equipment_slots,
+											orientation=qts.scribe.orientation.VERTICAL,
+											slot_spacing = {x=0.125,y=0.125},
+										})
+										:inventory({
+											width=1,
+											height=extras,
+											slot_size={x=1,y=1},
+											listname="equipment",
+											source=qts.scribe.inventory_source.CURRENT_PLAYER,
+											starting_item_index=#inventory.special_equipment_slots + totalSlots - extras,
+											orientation=qts.scribe.orientation.VERTICAL,
+											slot_spacing = {x=0.125,y=0.125},
+										})
 
 
---register the main player inventory gui
-qts.gui.register_gui("inventory", {
-	tab_owner = true,
-	get = function(data, pos, name)
-		if not data.player_item_list_page then data.player_item_list_page = 1 end
-		if not data.prev_search then data.prev_search = "" end
-		return inventory.get_default_size()
-	end,
-	handle = function(data, pos, name, fields)
-		if not data.player_item_list_page then data.player_item_list_page = 1 end
-		if not data.prev_search then data.prev_search = "" end
-		local page = data.player_item_list_page
-		local offset = (8*6) * (page-1)
-		--item buttons
-		for i = 1,6*8,1 do
-			if fields["btn_item_"..tostring(i)] then
-				qts.gui.click(name)
-				local item_name = inventory.itemlist_player[name][offset + i]
-				local recipe_list = qts.get_craft_recipes(item_name)
-				if recipe_list then
-					data.currRecipeList = recipe_list
-					data.currRecipeIndex = 1
-					data.currRecipeItem = item_name
-				end
+
+									end
+								)
+
+								t1c2:inventory({
+									source = qts.scribe.inventory_source.CURRENT_PLAYER,
+									sourcename = "",
+									listname = "main",
+									width=10,
+									height=4,
+									position={x=0,y=0},
+									slot_size = {x=1,y=1},
+									slot_spacing = {x=0.125,y=0.125},
+									use_list_ring=true,
+								})
+							end -- END t1c2
+						)
+					end -- END t1c1
+				}, --END Equipment tab
+
 				
-				if qts.is_player_creative(name) and data.cheat_mode_enabled then
-					local inv = minetest.get_player_by_name(name):get_inventory()
-					local item_name = inventory.itemlist_player[name][offset + i]
-					inv:add_item("main", item_name .. " " .. (minetest.registered_items[item_name].stack_max or 99))
-					
-				else
-					data.activeTab = 2
-					inventory.refresh_inv(name, 2) --TODO: make sure tab 2 is always crafting tab.
-				end
-			end
-		end
-		
-		--back and foreward buttons
-		if fields.btn_page_back then
-			page = page - 1
-			if page <= 0 then page = inventory.listdata_player[name].pages end
-			data.player_item_list_page = page
-			qts.gui.click(name)
-			inventory.refresh_inv(name, data.activeTab)
-			return
-		end
-		if fields.btn_page_forward then
-			page = page + 1
-			if page > inventory.listdata_player[name].pages then page = 1 end
-			data.player_item_list_page = page
-			qts.gui.click(name)
-			inventory.refresh_inv(name, data.activeTab)
-			return
-		end
-		
-		--things that modify the item list
-		if fields.btn_search or fields.key_enter_field or fields.craftonly_toggle then
-			page = 1
-			data.player_item_list_page = page
-			data.prev_search = fields.search_bar
-			
-			if (fields.craftonly_toggle) then
-				--craftable only visiblity
-				qts.gui.click(name)
-				data.craftonly_mode_enabled = not data.craftonly_mode_enabled
-			end
-			
-			inventory.gen_item_list_for_player (name, fields.search_bar, data.craftonly_mode_enabled)
-			inventory.refresh_inv(name, data.activeTab)
-			return
-		end
-		
-		--util buttons
-		for i, btn in ipairs(inventory.utils) do
-			if fields["util_btn_"..tostring(i)] then
-				btn.on_click(name)
-				qts.gui.click(name)
-			end
-		end
-		
-		--craft buttions
-		if fields.craft_prev then
-			qts.gui.click(name)
-			local i = (data.currRecipeIndex or 0)-1
-			if (i < 1) then
-				i = #data.currRecipeList or 1
-			end
-			data.currRecipeIndex = i
-			inventory.refresh_inv(name, data.activeTab)
-		end
-		
-		if fields.craft_next then
-			qts.gui.click(name)
-			local i = (data.currRecipeIndex or 0)+1
-			local l = #data.currRecipeList or 1
-			if (i > l) then
-				i = 1
-			end
-			data.currRecipeIndex = i
-			inventory.refresh_inv(name, data.activeTab)
-		end
-		
-		if (fields.craft_one) then
-			qts.gui.click(name)
-			if (data.currRecipeIndex and data.currRecipeList) then
-				local recipe = data.currRecipeList[data.currRecipeIndex]
-				if (recipe) then
-					qts.execute_craft(recipe, name)
-					inventory.refresh_inv(name, data.activeTab)
-				end
-			end
-		end
-		
-		if (fields.craft_ten or fields.craft_all) then
-			qts.gui.click(name)
-			local count = 0
-			if (data.currRecipeIndex and data.currRecipeList) then
-				local recipe = data.currRecipeList[data.currRecipeIndex]
-				if (recipe) then
-					while(qts.player_can_craft(recipe, name)) do
-						qts.execute_craft(recipe, name)
-						count = count + 1
-						if (fields.craft_ten and count >= 10) then
-							break
-						end
-						if (count > 10000) then
-							break --prevent inf. crafting loops
-						end
-					end
-					inventory.refresh_inv(name, data.activeTab)
-				end
-			end
-		end
-		
-		if (fields.cheat_toggle) then
-			--toggle cheat mode
-			qts.gui.click(name)
-			data.cheat_mode_enabled = not data.cheat_mode_enabled
-			inventory.refresh_inv(name, data.activeTab)
-		end
+			}) -- END Main tabs
+---[[
+			c3:tab_header({
+				width=8.4,
+				height=16,
+				name="itemsearch_tabs",
+				innser_size={x=8,y=14.5},
+			},
+			{
+				{
+					tab={
+						name="search_tab_main",
+						label="Catalog",
+						width=1.75,
+						height=1,
+						padding={x=0,y=0}
+					},
+					page=function (item_t1c1)
+						item_t1c1:container({
+							width=8,
+							height=14.5,
+							position={x=-0.2, y=0},
+							padding={x=0,y=0}
+						})
+					end -- END item_t1c1
+				}, -- END Tab1
+				{
+					tab={
+						name="search_tab_favorite",
+						label="Favorites",
+						width=1.75,
+						height=1,
+						padding={x=0,y=0}
+					},
+					page=function (item_t2c1)
+						item_t2c1:container({
+							width=8,
+							height=14.5,
+							position={x=-0.2, y=0},
+							padding={x=0,y=0}
+						}, function (item_t2c2)
+							
+						end) -- END item_t2c2
+					end -- END item_t2c1
+				}, -- END Tab2
+			}) -- END itemsearch_tabs
+--]]
+		end) -- END c3
+	end) --END c2 
+end)
 
-		
-	end,
-	tab_update = function(data, pos, name, fields, tabnumber) --only used for inventory
-		inventory.refresh_inv(name, tabnumber)
-	end,
-})
-qts.gui.set_inventory_gui_name("inventory") --set it to the main inventory
-
-
-qts.gui.register_gui("inv_tab_equipment", {
-	tab = true,
-	caption = "Equipment",
-	owner = "inventory",
-	get = function(data, pos, name)
-		return inventory.get_player_main()..
-			inventory.get_player_equipment(name)..
-			inventory.get_button_grid(name, data.player_item_list_page,
-				data.prev_search, data.cheat_mode_enabled, data.craftonly_mode_enabled)..
-			inventory.get_util_bar()..
-			"listring[current_player;main]listring[current_player;equipment]"
-	end,
-	handle = function(data, pos, name, fields)
-		return false
-	end,
-})
-
-qts.gui.register_gui("inv_tab_craft", {
-	tab = true,
-	caption = "Crafting",
-	owner = "inventory",
-	get = function(data, pos, name)
-		return inventory.get_craft_area(data, name)..
-			inventory.get_player_main()..
-			inventory.get_button_grid(name, data.player_item_list_page,
-				data.prev_search, data.cheat_mode_enabled, data.craftonly_mode_enabled)..
-			inventory.get_util_bar()
-	end,
-	handle = function(data, pos, name, fields)
-		return false
-	end,
-})
-
-qts.gui.register_gui("inv_tab_test", {
-	tab = true,
-	caption = "Test",
-	owner = "inventory",
-	get = function(data, pos, name)
-		return --inventory.get_player_main()..
-			inventory.get_button_grid(name, data.player_item_list_page, 
-				data.prev_search, data.cheat_mode_enabled, data.craftonly_mode_enabled)
-			--inventory.get_util_bar()
-	end,
-	handle = function(data, pos, name, fields)
-		return false
-	end,
-})
+qts.gui.set_inventory_gui_name("inventory:new_inventory") --set the new GUIs to the main inventory
 
 
 minetest.register_on_joinplayer(function(player)
