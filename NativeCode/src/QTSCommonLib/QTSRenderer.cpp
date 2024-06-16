@@ -1,8 +1,10 @@
 #include "QTSRenderer.h"
 
+#ifdef QTS_LINUX
 #include "X11/Xutil.h"
 #include "GL/gl.h"
 #include "GL/glx.h"
+#endif // QTS_LINUX
 
 
 #include <iostream>

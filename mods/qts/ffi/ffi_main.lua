@@ -14,21 +14,27 @@ void ModuleShutdown();
 void CheckOpenGLCompat();
 ]])
 
+local path = ""
 if ffi.os == "Linux" then
     ffi.cdef([[
         bool IsKeyPressed(int KeyCode);
     ]])
-    QTSNativeCommon = ffi.load(qts.path .. "/../../NativeCode/bin/Release/libQTSCommon.so")
-elseif ffi.os == "windows" then
-    QTSNativeCommon = ffi.load(qts.path .. "/../../NativeCode/bin/Release/QTSCommon.dll")
+    path = qts.path .. "/../../NativeCode/bin/Release/libQTSCommon.so"
+elseif ffi.os == "Windows" then
+    path = qts.path .. "/../../NativeCode/bin/Release/QTSCommon.dll"
 end
+
+QTSNativeCommon = ffi.load(path)
+if QTSNativeCommon == nil then
+    error("Issue loading QTS Native Code! OS: ".. ffi.os .. ". Path loaded: " .. path)
+end
+
 QTSNativeCommon.ModuleStartup()
 minetest.register_on_shutdown(function()
     QTSNativeCommon.ModuleShutdown()
 end)
 
---/media/electra/InternalStorage/Minetest/minetest-source/bin/../games/QuestTest2/mods/qts../../NativeCode/bin/Release/libQTSCommon.so
-dofile(qts.path.."/ffi/keybinds.lua") --non-vector math
+dofile(qts.path.."/ffi/keybinds.lua")
 
 --[[
 minetest.register_chatcommand("checkgl", {

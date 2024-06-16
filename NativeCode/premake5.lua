@@ -22,7 +22,7 @@ project("QTSCommon")
     })
     
     links({
-        "GL"
+        
     })
 
     filter("configurations:Debug")
@@ -42,7 +42,7 @@ project("QTSCommon")
     filter("platforms:Linux")
         defines({ "QTS_LINUX" })
         system("linux")
-        links({"X11"})
+        links({"X11", "GL"})
         buildoptions({ "-fPIC" })
         linkoptions({"-fPIC"})
         --toolset ("clang")
