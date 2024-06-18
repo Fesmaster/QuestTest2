@@ -7,14 +7,22 @@ inventory.listdata_player = {}
 inventory.list_items = {}
 inventory.exemplar = {}
 
-local esc = minetest.formspec_escape
-local P = function(x,y) return qts.gui.gui_makepos(x,y):get() end
+-- Settings for Inventory Looks
+local function refresh_inv_page_sizes(oldval, newval, src)
+	for k, v in pairs(inventory.listdata_player) do
+		v.pages = math.ceil(v.count / inventory.get_catalog_dimentions().count)
+	end
+end
+inventory.CATALOG_WIDTH = qts.config("InventoryCatalogWidth", 6, "Width of the item catalogue", {}, refresh_inv_page_sizes)
+inventory.CATALOG_HEIGHT = qts.config("InventoryCatalogHeight", 8, "Height of the item catalogue", {}, refresh_inv_page_sizes)
+inventory.CATALOG_BUTTON_PADDING = qts.config("InventoryCatalogButtonPadding", 0.125, "Padding between buttons in the item catalogue", {})
+inventory.CATALOG_BUTTON_SIZE = qts.config("InventoryCatalogButtonSize", 1.2, "Size of buttons in the item catalogue", {})
+
+
 dofile(minetest.get_modpath("inventory") .."/functions.lua")
 dofile(minetest.get_modpath("inventory") .."/detached.lua")
 dofile(minetest.get_modpath("inventory") .."/hud.lua")
 dofile(minetest.get_modpath("inventory") .."/legacy.lua")
---dofile(minetest.get_modpath("inventory") .."/exemplar.lua")
-
 
 --register util buttons
 --TODO: make more util buttons
@@ -38,6 +46,20 @@ inventory.special_equipment_slots = {
 	{group="cloak",   template="inv_cloak.png",   pos={x=1.25,  y=2.25}},
 	{group="boots",   template="inv_boots.png",   pos={x=0.625, y=3.375}},
 }
+inventory.equipment_slots_general_count = 12
+
+
+
+---comment
+---@param event ScribeEvent
+local function execute_inv_search(event)
+	local search_string = event.userdata.inventory_search_string or ""
+	local craftonly = event.userdata.inventory_search_craftonly
+	if craftonly == nil then craftonly = false end
+	inventory.gen_item_list_for_player(event.player:get_player_name(), search_string , craftonly)
+	event.userdata.catalog_current_page = 1
+	event:mark_for_refresh()
+end
 
 qts.gui.register_scribe_gui("inventory:new_inventory", function (c1)
 	c1:set_style("qtcore:stormcloud")
@@ -53,31 +75,31 @@ qts.gui.register_scribe_gui("inventory:new_inventory", function (c1)
 			--texture="Transparent.png",
 		}, function (c3)
 			c3:tab_header({
-				width=24.4,
-				height=16,
+				--width=24.4,
+				--height=16,
 				name="inventory_tabs",
-				inner_size={x=24,y=14.5},
+				--inner_size={x=24,y=14.5},
 			},{
 				{
 					tab={
 						name="inventory_tab_equipment",
 						label="Equipment",
-						width=2,
+						width=2.2,
 						height=1,
 						padding={x=0,y=0}
 					},
 					page=function (t1c1)
 						t1c1:vertical_box(
 							{
-								width=24,
-								height=14.5,
+								--width=24,
+								--height=14.5,
 								position={x=-0.2, y=0},
 								padding={x=0,y=0}
 							},
 							function (t1c2)
 								t1c2:horizontal_box(
 									{
-										texture="Transparent.png",
+										texture="_transparent",
 										padding={x=0.125,y=0.125},
 										spacing={x=0.125,y=0.125},
 									},
@@ -86,7 +108,7 @@ qts.gui.register_scribe_gui("inventory:new_inventory", function (c1)
 										-- Armor Slots
 										t1c3:container(
 											{
-												texture="Transparent.png",
+												texture="_transparent",
 											},
 											function (t1c4)
 												for k, t in ipairs(inventory.special_equipment_slots) do
@@ -106,57 +128,94 @@ qts.gui.register_scribe_gui("inventory:new_inventory", function (c1)
 														starting_item_index=k-1
 													})
 												end
-		
-												
 											end -- END t1c4
 										)
-
+										-- Custom Keybind Slots
+										-- TODO
 										-- Equipment slots
-										local totalSlots = inventory.equipment_slots_general_count + (
-											qts.get_player_bonus_equipment_slots(
-												t1c3.player:get_player_name()
-											) or 0
+										t1c3:container(
+											{
+												texture="_transparent",
+											},
+											function (t1c4)
+												local totalSlots = inventory.equipment_slots_general_count + (
+													qts.get_player_bonus_equipment_slots(
+														t1c4.player:get_player_name()
+													) or 0
+												)
+												local width = math.floor(totalSlots / 4)
+												local extras = totalSlots % 4
+		
+												t1c4:inventory({
+													width=width,
+													height=4,
+													slot_size={x=1,y=1},
+													listname="equipment",
+													source=qts.scribe.inventory_source.CURRENT_PLAYER,
+													starting_item_index=#inventory.special_equipment_slots,
+													orientation=qts.scribe.orientation.VERTICAL,
+													slot_spacing = {x=0.125,y=0.125},
+												})
+		
+												if extras > 0 then
+													t1c4:inventory({
+														width=1,
+														height=extras,
+														slot_size={x=1,y=1},
+														listname="equipment",
+														source=qts.scribe.inventory_source.CURRENT_PLAYER,
+														starting_item_index=#inventory.special_equipment_slots + totalSlots - extras,
+														orientation=qts.scribe.orientation.VERTICAL,
+														slot_spacing = {x=0.125,y=0.125},
+													})
+												end
+											end -- END t1c4
 										)
-										local width = math.floor(totalSlots / 4)
-										local extras = totalSlots % 4
-
-										t1c3:inventory({
-											width=width,
-											height=4,
-											slot_size={x=1,y=1},
-											listname="equipment",
-											source=qts.scribe.inventory_source.CURRENT_PLAYER,
-											starting_item_index=#inventory.special_equipment_slots,
-											orientation=qts.scribe.orientation.VERTICAL,
-											slot_spacing = {x=0.125,y=0.125},
-										})
-										:inventory({
-											width=1,
-											height=extras,
-											slot_size={x=1,y=1},
-											listname="equipment",
-											source=qts.scribe.inventory_source.CURRENT_PLAYER,
-											starting_item_index=#inventory.special_equipment_slots + totalSlots - extras,
-											orientation=qts.scribe.orientation.VERTICAL,
-											slot_spacing = {x=0.125,y=0.125},
-										})
-
-
-
 									end
 								)
+								
+								-- MAIN inventory
+								t1c2:horizontal_box({
+									texture="_transparent",
+									padding={x=0.25,y=0.25},
+									spacing={x=0.25,y=0.25},
+								}, function (t1c3)
+									t1c3:inventory({
+										source = qts.scribe.inventory_source.CURRENT_PLAYER,
+										sourcename = "",
+										listname = "main",
+										width=10,
+										height=4,
+										slot_size = {x=1,y=1},
+										slot_spacing = {x=0.125,y=0.125},
+										use_list_ring=true,
+									})
 
-								t1c2:inventory({
-									source = qts.scribe.inventory_source.CURRENT_PLAYER,
-									sourcename = "",
-									listname = "main",
-									width=10,
-									height=4,
-									position={x=0,y=0},
-									slot_size = {x=1,y=1},
-									slot_spacing = {x=0.125,y=0.125},
-									use_list_ring=true,
-								})
+									-- trash slot
+									t1c3:container({
+										texture="_transparent",
+										padding={x=0,y=0},
+										spacing={x=0,y=0},
+									}, function (t1c4)
+										t1c4:image({
+											position={x=0,y=0},
+											width=1,
+											height=1,
+											texture="inv_trash.png",
+										})
+										:inventory({
+											source = qts.scribe.inventory_source.DETACHED,
+											sourcename = "trash",
+											listname = "main",
+											width=1,
+											height=1,
+											position = {x=0,y=0},
+											slot_size = {x=1,y=1},
+											slot_spacing = {x=0.125,y=0.125},
+											use_list_ring=false,
+										})
+									end)
+								end)
 							end -- END t1c2
 						)
 					end -- END t1c1
@@ -166,32 +225,200 @@ qts.gui.register_scribe_gui("inventory:new_inventory", function (c1)
 			}) -- END Main tabs
 ---[[
 			c3:tab_header({
-				width=8.4,
-				height=16,
+				--width=8.4,
+				--height=16,
 				name="itemsearch_tabs",
-				innser_size={x=8,y=14.5},
+				--innser_size={x=8,y=14.5},
 			},
 			{
 				{
 					tab={
-						name="search_tab_main",
+						name="catalog_tab_main",
 						label="Catalog",
 						width=1.75,
 						height=1,
 						padding={x=0,y=0}
 					},
 					page=function (item_t1c1)
-						item_t1c1:container({
-							width=8,
-							height=14.5,
+						item_t1c1:vertical_box({
+							--width=8,
+							--height=14.5,
 							position={x=-0.2, y=0},
 							padding={x=0,y=0}
-						})
+						}, function (item_t1c2)
+							local playername = item_t1c2.player:get_player_name()
+							local current_page = (item_t1c2.userdata.catalog_current_page or 1) - 1 -- page base 0
+							local page_size = inventory.get_catalog_dimentions()
+							local buttonsize = inventory.CATALOG_BUTTON_SIZE:get()
+							local padding = inventory.CATALOG_BUTTON_PADDING:get()
+							
+							-- Pageing buttons and page display
+							item_t1c2:horizontal_box({
+								texture = "_transparent",
+								padding={x=padding,y=padding},
+								spacing={x=padding,y=padding},
+							}, function (item_t1c3)
+								local width = 
+									((page_size.width - 2) * buttonsize) + 
+									((page_size.width - 3) * padding)
+								item_t1c3:button({
+									texture="lshift.png",
+									width=buttonsize,
+									height=buttonsize,
+								}, function (event)
+									local page = (event.userdata.catalog_current_page or 1)
+									if page > 1 then
+										page = page - 1
+									else
+										page = inventory.listdata_player[playername].pages
+									end
+									event.userdata.catalog_current_page = page
+									event:mark_for_refresh()
+								end)
+								:text({
+									text = "page " .. tostring(current_page + 1) .. " of " .. tostring(inventory.listdata_player[playername].pages),
+									width=width,
+									height=buttonsize,
+									horizontal_allignment=qts.scribe.allignment.LEFT,
+									vertical_allignment=qts.scribe.allignment.CENTER,
+								})
+								:button({
+									texture="rshift.png",
+									width=buttonsize,
+									height=buttonsize,
+								}, function (event)
+									local page = (event.userdata.catalog_current_page or 1)
+									local maxpage = inventory.listdata_player[playername].pages
+									if page < maxpage then
+										page = page + 1
+									else
+										page = 1
+									end
+									event.userdata.catalog_current_page = page
+									event:mark_for_refresh()
+								end)
+							end) -- END item_t1c3
+
+							-- Main body
+							item_t1c2:container({
+								texture = "_transparent"
+							}, function (item_t1c3)
+								-- Button Grid
+								local x = 0
+								local y = 0
+								
+								
+								local index = (page_size.count * current_page) + 1
+								local itemlist = inventory.itemlist_player[playername]
+
+								for yy = 1, page_size.height do
+									for xx = 1, page_size.width do
+										local item_name = itemlist[index]
+										if item_name then
+											local item_desc = minetest.registered_items[item_name].description
+											item_t1c3:button({
+												item = item_name,
+												width=buttonsize,
+												height=buttonsize,
+												position={x=x,y=y},
+												tooltip=qts.select(qts.ISDEV, item_desc .. "\n" .. item_name, item_desc)
+											}, function (event)
+												local cheatmode = event.userdata.inventory_cheatmode
+												if cheatmode == nil then
+													cheatmode = qts.is_player_creative(playername)
+												end
+												if cheatmode then
+													local inv = item_t1c3.player:get_inventory()
+													if inv then
+														inv:add_item("main", item_name .. " " .. (minetest.registered_items[item_name].stack_max or 1024))
+													end
+												end
+											end)
+										end
+										if xx == page_size.width and yy == page_size.height and item_name == nil then
+											item_t1c3:separator({
+												width=buttonsize,
+												height=buttonsize,
+												-- not sure why the math on y is nesecary, but the seperator has a different size? Without it, empty pages wobble a bit.
+												position={x=x,y=y+buttonsize-(padding/16)} 
+											})
+										end
+										index = index + 1
+										x = x + buttonsize + padding
+									end
+									y = y + buttonsize + padding
+									x = 0
+								end
+
+							end) -- END item_t1c3
+							
+							-- Searching and Filtering
+							:horizontal_box({
+								texture = "_transparent",
+								padding={x=padding,y=padding},
+								spacing={x=padding,y=padding},
+							}, function (item_t1c3)
+								local width = 
+									((page_size.width - 3) * buttonsize) + 
+									((page_size.width - 4) * padding)
+								item_t1c3:text_entry({
+									close_on_enter=false,
+									name="inventory_search_string",
+									persistant_text=true,
+									width=width,
+									height=buttonsize,
+									multiline=false,
+									tooltip="Search",
+								}, function (event)
+									event.userdata.inventory_search_string = event.fields.inventory_search_string
+									execute_inv_search(event)
+								end)
+								:button({
+									texture="inv_glass.png",
+									width=buttonsize,
+									height=buttonsize,
+									name="inventory_search_button",
+									tooltip="Search",
+								}, function (event)
+									event.userdata.inventory_search_string = event.fields.inventory_search_string
+									execute_inv_search(event)
+								end)
+								:button({
+									texture="inv_craft_icon.png",
+									texture_pressed="inv_craft_icon.png",
+									toggleable=true,
+									width=buttonsize,
+									height=buttonsize,
+									name = "inventory_search_craftonly",
+									tooltip="Show Only Craftable Items",
+								}, function (event)
+									local toggled = event.userdata._scribe.inventory_search_craftonly.toggled
+									if toggled == nil then toggled = false end
+									event.userdata.inventory_search_craftonly = toggled
+									execute_inv_search(event)
+								end)
+								:button({
+									texture="inv_cheat_icon.png",
+									texture_pressed="inv_cheat_icon.png",
+									toggleable=true,
+									width=buttonsize,
+									height=buttonsize,
+									name = "inventory_cheat",
+									tooltip="Enable Cheat Mode\nCatalog will give items in Cheat Mode",
+									default_toggle_state=qts.is_player_creative(playername)
+								}, function (event)
+									local toggled = event.userdata._scribe.inventory_cheat.toggled
+									if toggled == nil then toggled = false end
+									event.userdata.inventory_cheatmode = toggled
+								end)
+								
+							end) -- END item_t1c3
+						end) -- END item_t1c2
 					end -- END item_t1c1
 				}, -- END Tab1
 				{
 					tab={
-						name="search_tab_favorite",
+						name="catalog_tab_favorite",
 						label="Favorites",
 						width=1.75,
 						height=1,
@@ -212,6 +439,10 @@ qts.gui.register_scribe_gui("inventory:new_inventory", function (c1)
 --]]
 		end) -- END c3
 	end) --END c2 
+
+	c1:quit_callback(function (event)
+		inventory.refresh_inv(event.player)
+	end)
 end)
 
 qts.gui.set_inventory_gui_name("inventory:new_inventory") --set the new GUIs to the main inventory

@@ -858,15 +858,19 @@ qts.scribe.context_base = {
         
         local is_toggled = false
         if def.toggleable then
-            if self.userdata._scribe == nil then
-                self.userdata._scribe = {[childformdata.details.name] = {toggled = false}}
-            elseif self.userdata._scribe[childformdata.details.name] == nil then 
-                self.userdata._scribe[childformdata.details.name] = {toggled = false}
-            elseif self.userdata._scribe[childformdata.details.name].toggled == nil then
-                self.userdata._scribe[childformdata.details.name].toggled = false
-            else
-                is_toggled = self.userdata._scribe[childformdata.details.name].toggled
+            do
+                local default_state = def.default_toggle_state
+                if default_state == nil then default_state = false end
+                
+                if self.userdata._scribe == nil then
+                    self.userdata._scribe = {[childformdata.details.name] = {toggled = default_state}}
+                elseif self.userdata._scribe[childformdata.details.name] == nil then 
+                    self.userdata._scribe[childformdata.details.name] = {toggled = default_state}
+                elseif self.userdata._scribe[childformdata.details.name].toggled == nil then
+                    self.userdata._scribe[childformdata.details.name].toggled = default_state
+                end
             end
+            is_toggled = self.userdata._scribe[childformdata.details.name].toggled
 
             --default textures
             if def.texture == nil and defaults.texture == nil then
@@ -1646,6 +1650,7 @@ All other types of elements are made from these collected together.
 ---@field style_pressed ScribeButtonStateStyle|nil Style in the pressed state
 ---@field style_all ScribeButtonStateStyle|nil Style in all states, overriding global style, but not overriding style set per state per element.
 ---@field toggleable boolean|nil Make the button a toggle button. When toggled "on", texture and texture_pressed are switched.
+---@field default_toggle_state boolean|nil
 ---@field style_toggled_any ScribeButtonStateStyle|nil Style when no other state specifies it. Global styles override this. Used when toggled on.
 ---@field style_toggled_normal ScribeButtonStateStyle|nil Style in the normal state. Used when toggled on.
 ---@field style_toggled_hovered ScribeButtonStateStyle|nil Style in the hovered state. Used when toggled on.

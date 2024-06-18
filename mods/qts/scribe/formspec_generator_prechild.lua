@@ -180,7 +180,7 @@ return {
 
         --if an texture is used, generate that element 
         local imgstring = ""
-        if formdata.details.texture then
+        if formdata.details.texture and formdata.details.texture ~= "_transparent" then
             if formdata.details.middle then
                 local middle = formdata.details.middle
                 imgstring = "background9["..qts.scribe.vec2.tostring(pos_bg)..";" .. sizestr ..";"..formdata.details.texture..";false;"..
@@ -225,7 +225,7 @@ return {
 
         --if an texture is used, generate that element 
         local imgstring = ""
-        if formdata.details.texture then
+        if formdata.details.texture and formdata.details.texture ~= "_transparent" then
             if formdata.details.middle then
                 local middle = formdata.details.middle
                 imgstring = "background9["..qts.scribe.vec2.tostring(pos_bg)..";" .. qts.scribe.vec2.tostring(formdata.details.size) ..";"..formdata.details.texture..";false;"..
@@ -291,7 +291,7 @@ return {
 
         --if an texture is used, generate that element 
         local imgstring = ""
-        if formdata.details.texture then
+        if formdata.details.texture and formdata.details.texture ~= "_transparent" then
             if formdata.details.middle then
                 local middle = formdata.details.middle
                 imgstring = "background9["..qts.scribe.vec2.tostring(pos_bg)..";" .. qts.scribe.vec2.tostring(formdata.details.size) ..";"..formdata.details.texture..";false;"..

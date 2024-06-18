@@ -151,8 +151,9 @@ minetest.register_privilege("settingmanager", {
 ---@param default_value any
 ---@param description string a long descrtiption of the value
 ---@param flags table|nil the flags of what to create
+---@param on_change nil|fun(oldval:any,newval:any,src:ConfigSetPoint):nil
 ---@return Config
-function qts.config(config_name, default_value, description, flags)
+function qts.config(config_name, default_value, description, flags, on_change)
 	---@type any
 	local val = default_value
 	
@@ -203,6 +204,7 @@ function qts.config(config_name, default_value, description, flags)
 				if not param or param == "" then
 					return true, config_name .. " = " .. dump(val) .. " (last set by " .. last_set_by..")"
 				else
+					local oldval = val;
 					local trimmed= string.trim(param)
 					if typestr == "string" then
 						val = trimmed
@@ -217,6 +219,9 @@ function qts.config(config_name, default_value, description, flags)
 						return false, "the type of "..config_name.." does not support setting by console."
 					end
 					last_set_by="console"
+					if (on_change) then
+						on_change(oldval, val, last_set_by)
+					end
 					return true, config_name .. " = " .. dump(val) .. " (last set by " .. last_set_by..")"
 				end
 			end
@@ -242,8 +247,12 @@ function qts.config(config_name, default_value, description, flags)
 				return
 			end
 			if type(newval) == typestr then
+				local oldval = val
 				val = newval
 				last_set_by="function"
+				if (on_change) then
+					on_change(oldval, val, last_set_by)
+				end
 			else
 				minetest.log("warning", "igoring the setting of Config "..config_name.." by code due to type mismatch.")
 			end
