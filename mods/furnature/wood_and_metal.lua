@@ -2,7 +2,7 @@
     This file contains furnature that has a form for each wood cross each metal. Thats a LOT of items.
 ]]
 
-
+local first = true
 
 qtcore.for_all_materials("wood", function (fields_wood)
     if fields_wood.name and fields_wood.desc and fields_wood.planks and fields_wood.plank_texture then
@@ -24,7 +24,7 @@ qtcore.for_all_materials("wood", function (fields_wood)
                             fields_wood.plank_texture.."^furnature_chest_"..fields_metal.name.."_front_overlay.png"
 
                         },
-                        groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
+                        groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1, chest=1},
                         drawtype = "nodebox",
                         paramtype = "light",
                         paramtype2 = "facedir",
@@ -63,6 +63,10 @@ qtcore.for_all_materials("wood", function (fields_wood)
                         results = {chestname},
                         near = fields_metal.craft_groups,
                     })
+
+                    if first then
+                        inventory.register_exemplar_item("chest", chestname, true)
+                    end
                 end
 
                 --door
@@ -73,7 +77,7 @@ qtcore.for_all_materials("wood", function (fields_wood)
                         tiles = {
                             "furnature_door_"..fields_wood.name..".png^furnature_door_"..fields_metal.name.."_overlay.png",
                         },
-                        groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
+                        groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1, door=1},
                         sounds = qtcore.node_sound_wood(),
                     })
 
@@ -82,6 +86,10 @@ qtcore.for_all_materials("wood", function (fields_wood)
                         results = {doorname},
                         near = fields_metal.craft_groups,
                     })
+
+                    if first then
+                        inventory.register_exemplar_item("door", doorname, true)
+                    end
                 end
 
                 --trapdoor
@@ -92,7 +100,7 @@ qtcore.for_all_materials("wood", function (fields_wood)
                         tiles = {
                             fields_wood.plank_texture.."^furnature_trapdoor_"..fields_metal.name.."_overlay.png",
                         },
-                        groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1},
+                        groups = {choppy = 2, oddly_breakable_by_hand = 1, generation_artificial=1, trapdoor=1},
                         sounds = qtcore.node_sound_wood(),
                     })
 
@@ -101,9 +109,15 @@ qtcore.for_all_materials("wood", function (fields_wood)
                         results = {doorname},
                         near = fields_metal.craft_groups,
                     })
+
+                    if first then
+                        inventory.register_exemplar_item("trapdoor", doorname, true)
+                    end
                 end
 
+                first = false
             end
+
         end)
     end
 end)

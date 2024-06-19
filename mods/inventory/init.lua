@@ -6,6 +6,7 @@ inventory.itemlist_player = {}
 inventory.listdata_player = {}
 inventory.list_items = {}
 inventory.exemplar = {}
+inventory.collapse_groups = {}
 
 -- Settings for Inventory Looks
 local function refresh_inv_page_sizes(oldval, newval, src)
@@ -315,25 +316,51 @@ qts.gui.register_scribe_gui("inventory:new_inventory", function (c1)
 									for xx = 1, page_size.width do
 										local item_name = itemlist[index]
 										if item_name then
-											local item_desc = minetest.registered_items[item_name].description
-											item_t1c3:button({
-												item = item_name,
-												width=buttonsize,
-												height=buttonsize,
-												position={x=x,y=y},
-												tooltip=qts.select(qts.ISDEV, item_desc .. "\n" .. item_name, item_desc)
-											}, function (event)
-												local cheatmode = event.userdata.inventory_cheatmode
-												if cheatmode == nil then
-													cheatmode = qts.is_player_creative(playername)
+											if qts.is_group(item_name) then
+												-- groups
+												local exemplar = inventory.collapse_groups[qts.remove_modname_from_item(item_name)]
+												if exemplar then
+													item_t1c3:button({
+														item = exemplar,
+														width=buttonsize,
+														height=buttonsize,
+														position={x=x,y=y},
+														tooltip=item_name.."\nClick to Expand"
+													}, function (event)
+														event.userdata.inventory_search_string = item_name
+														event.userdata._scribe.inventory_search_string = item_name
+														execute_inv_search(event)
+													end)
+													:image(
+														{
+															texture="inv_plus.png",
+															width=buttonsize/3,
+															height=buttonsize/3,
+															position={x=x+buttonsize*0.6666,y=y}
+														}
+													)
 												end
-												if cheatmode then
-													local inv = item_t1c3.player:get_inventory()
-													if inv then
-														inv:add_item("main", item_name .. " " .. (minetest.registered_items[item_name].stack_max or 1024))
+											else
+												local item_desc = minetest.registered_items[item_name].description
+												item_t1c3:button({
+													item = item_name,
+													width=buttonsize,
+													height=buttonsize,
+													position={x=x,y=y},
+													tooltip=qts.select(qts.ISDEV, item_desc .. "\n" .. item_name, item_desc)
+												}, function (event)
+													local cheatmode = event.userdata.inventory_cheatmode
+													if cheatmode == nil then
+														cheatmode = qts.is_player_creative(playername)
 													end
-												end
-											end)
+													if cheatmode then
+														local inv = item_t1c3.player:get_inventory()
+														if inv then
+															inv:add_item("main", item_name .. " " .. (minetest.registered_items[item_name].stack_max or 1024))
+														end
+													end
+												end)
+											end
 										end
 										if xx == page_size.width and yy == page_size.height and item_name == nil then
 											item_t1c3:separator({

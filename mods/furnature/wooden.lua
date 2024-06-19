@@ -5,8 +5,7 @@
 local table_nodeboxes = dofile(minetest.get_modpath("furnature").."/nodeboxes/table.lua")
 local chair_nodeboxes = dofile(minetest.get_modpath("furnature").."/nodeboxes/chair.lua")
 
-local registered_exemplar_table = false
-local registered_exemplar_press = false
+local first = true
 
 qtcore.for_all_materials("wood", function (fields)
     if fields.name and fields.desc and fields.planks then
@@ -23,7 +22,7 @@ qtcore.for_all_materials("wood", function (fields)
             qts.register_chest(":"..fields.crate, {
                 description = crate_desc,
                 tiles = {crate_texture},
-                groups = {choppy = 2, oddly_breakable_by_hand = 2, generation_artificial=1, bandit_waypoint=1},
+                groups = {choppy = 2, oddly_breakable_by_hand = 2, generation_artificial=1, bandit_waypoint=1, crate=1},
                 is_ground_content = false,
                 sounds = qtcore.node_sound_wood(),
                 invsize = 10*4,
@@ -35,6 +34,10 @@ qtcore.for_all_materials("wood", function (fields)
                 results = {fields.crate},
                 near = {"group:workbench"},
             })
+
+            if first then
+                inventory.register_exemplar_item("crate", "furnature:crate_"..fields.name, true)
+            end
         end
 
 
@@ -80,9 +83,8 @@ qtcore.for_all_materials("wood", function (fields)
                     near = {"group:workbench"},
                 })
 
-                if not registered_exemplar_table then
-                    registered_exemplar_table=true
-                    inventory.register_exemplar_item("table", fields.table)
+                if first then
+                    inventory.register_exemplar_item("table", fields.table, true)
                 end
             end
 
@@ -128,6 +130,10 @@ qtcore.for_all_materials("wood", function (fields)
                     results = {fields.chair.." 2"},
                     near = {"group:workbench"},
                 })
+
+                if first then
+                    inventory.register_exemplar_item("chair", fields.chair, true)
+                end
             end
 
             --bookshelf
@@ -166,6 +172,10 @@ qtcore.for_all_materials("wood", function (fields)
                     results = {fields.bookshelf},
                     near = {"group:workbench"},
                 })
+
+                if first then
+                    inventory.register_exemplar_item("bookshelf", fields.bookshelf, true)
+                end
             end
 
 
@@ -222,6 +232,10 @@ qtcore.for_all_materials("wood", function (fields)
                     ingredients = {fields.planks},
                     results = {fields.ladder.." 8"},
                 })
+
+                if first then
+                    inventory.register_exemplar_item("ladder", fields.ladder, true)
+                end
             end
 
             --presses
@@ -257,7 +271,7 @@ qtcore.for_all_materials("wood", function (fields)
                         },
                     },
                     sounds = qtcore.node_sound_wood(),
-            })
+                })
             
                 qts.register_craft({
                     ingredients = {fields.planks.." 2"},
@@ -265,9 +279,8 @@ qtcore.for_all_materials("wood", function (fields)
                     near = {"group:workbench"},
                 })
 
-                if not registered_exemplar_press then
-                    registered_exemplar_press=true
-                    inventory.register_exemplar_item("press", fields.press)
+                if first then
+                    inventory.register_exemplar_item("press", fields.press, true)
                 end
             end
 
@@ -315,14 +328,15 @@ qtcore.for_all_materials("wood", function (fields)
                     results = {fields.planter},
                     near = {"group:workbench"},
                 })
-            
-                if not registered_exemplar_planter then
-                    registered_exemplar_planter=true
-                    inventory.register_exemplar_item("planter", fields.planter)
+
+                if first then
+                    inventory.register_exemplar_item("planter", fields.planter, true)
                 end
             end
 
             --and more!!
         end
+
+        first = false
     end
 end)

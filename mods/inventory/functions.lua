@@ -20,7 +20,14 @@ function inventory.register_util_btn(label, on_click)
 	end
 end
 
-function inventory.register_exemplar_item(group, item)
+---Register an item to show as a groups
+---@param group ItemString
+---@param item ItemString
+---@param collapsed boolean?
+function inventory.register_exemplar_item(group, item, collapsed)
+	--default values
+	if collapsed == nil then collapsed = false end
+
 	--remove any ":" prefix
 	if string.sub(item, 1,1) == ":" then
         item = string.gsub(item, ":", "",1)
@@ -28,6 +35,9 @@ function inventory.register_exemplar_item(group, item)
 	if (minetest.registered_items[item]) then
 		inventory.exemplar[group] = item
 		minetest.log("verbose", "Inventory: exemplar item for " .. group .. " added: " .. item)
+		if collapsed then
+			inventory.collapse_groups[group] = item
+		end
 	else
 		minetest.log("warning", "Inventory: register_exemplar_item: invalid item ["..dump(item).."]. please declare first!")
 	end
@@ -62,8 +72,6 @@ end
 
 
 
-
-
 ---Get the size of the catalog page
 ---@return {width:number,height:number,count:number}
 function inventory.get_catalog_dimentions()
@@ -88,20 +96,44 @@ function inventory.gen_item_list_for_player(playername, filter, craftonly)
 	end --this only inits the list
 	inventory.init_item_list()
 	local order = {}
+	local collapse_groups = (filter == "")
+	local filter_is_group = string.sub(filter, 1, 6) == "group:"
+	if (filter_is_group) then
+		filter = string.sub(filter, 7, -1)
+	end
 	for id, name in ipairs(inventory.list_items) do
-		local m = match(minetest.registered_items[name].description, filter) or match(name, filter)
-		if not m then
-			m = minetest.get_item_group(name, filter)
-			if m == 0 then m = nil end
+		local match_closeness = nil
+		if (not filter_is_group) then
+			match_closeness = match(minetest.registered_items[name].description, filter) or match(name, filter)
 		end
-		if m and craftonly then
+		if not match_closeness then
+			match_closeness = minetest.get_item_group(name, filter)
+			if match_closeness == 0 then match_closeness = nil end
+		end
+		if match_closeness and craftonly then
 			if not qts.player_can_craft_item(name, playername) then
-				m = nil
+				match_closeness = nil
 			end
 		end
-		if m then
+
+		if collapse_groups then
+			for group, root in pairs(inventory.collapse_groups) do
+				if minetest.get_item_group(name, group) > 0 then
+					-- collapse, unless its the id item
+					if name == root then
+						-- replace with group
+						name = "group:"..group
+					else
+						-- collapse
+						match_closeness = nil
+					end
+				end
+			end
+		end
+
+		if match_closeness then
 			playerlist[#playerlist+1] = name
-			order[name] = string.format("%02d", m) .. name
+			order[name] = string.format("%02d", match_closeness) .. name
 		end
 	end
 	table.sort(playerlist, function(a,b) return order[a] < order[b] end)

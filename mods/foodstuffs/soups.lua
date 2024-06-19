@@ -19,7 +19,7 @@ local ingredient_map = {
 
 
 local comb_complete = {}
-
+local first = true
 for i=1, #ingredient do
 	for j=i, #ingredient do
 		for k=j, #ingredient do
@@ -127,6 +127,12 @@ for i=1, #ingredient do
 					results = {"foodstuffs:bowl_clay_soup_"..comb_name, "foodstuffs:cup_clay"},
 					near = {"group:table", "group:furnace", "group:cookware"},
 				})
+
+				if first then
+					inventory.register_exemplar_item("soup", "foodstuffs:bowl_clay_soup_"..comb_name, true)
+				end
+
+				first = false
 			end
 		end
 	end
