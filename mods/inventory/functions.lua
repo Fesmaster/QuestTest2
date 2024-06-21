@@ -141,6 +141,84 @@ function inventory.gen_item_list_for_player(playername, filter, craftonly)
 	inventory.listdata_player[playername].pages = math.ceil(#playerlist / inventory.get_catalog_dimentions().count)
 end
 
+function inventory.gen_favorite_list_for_player(playername, filter, craftonly)
+	if not filter then filter = "" end
+	if not inventory.favoritelist_filtered_player[playername] then inventory.favoritelist_filtered_player[playername] = {} end
+	if not inventory.listdata_player[playername] then inventory.listdata_player[playername] = {} end
+	
+	local favlist = inventory.favoritelist_filtered_player[playername] -- local for faster access
+	--if craftonly == nil then craftonly = false end --nil is false
+	if favlist and #favlist ~= 0 then 
+		for id, name in ipairs(favlist) do
+			favlist[id] = nil --clear the list
+		end
+	end --this only inits the list
+	inventory.init_item_list()
+	local order = {}
+	local filter_is_group = string.sub(filter, 1, 6) == "group:"
+	if (filter_is_group) then
+		filter = string.sub(filter, 7, -1)
+	end
+	for name, _ in pairs(inventory.favoritelist_player[playername]) do
+		local match_closeness = nil
+		if (not filter_is_group) then
+			match_closeness = match(minetest.registered_items[name].description, filter) or match(name, filter)
+		end
+		if not match_closeness then
+			match_closeness = minetest.get_item_group(name, filter)
+			if match_closeness == 0 then match_closeness = nil end
+		end
+		if match_closeness and craftonly then
+			if not qts.player_can_craft_item(name, playername) then
+				match_closeness = nil
+			end
+		end
+
+		if match_closeness then
+			favlist[#favlist+1] = name
+			order[name] = string.format("%02d", match_closeness) .. name
+		end
+	end
+	table.sort(favlist, function(a,b) return order[a] < order[b] end)
+	inventory.listdata_player[playername].fav_count = #favlist
+	inventory.listdata_player[playername].fav_pages = math.ceil(#favlist / inventory.get_catalog_dimentions().count)
+end
+
+function inventory.add_item_to_favorites(playername, item)
+	local fav = inventory.favoritelist_player[playername]
+	if fav == nil then 
+		inventory.favoritelist_player[playername] = {}
+		fav = inventory.favoritelist_player[playername]
+	end
+	fav[item] = true
+	qts.set_player_data(playername, "inventory", "favorites", fav)
+end
+
+function inventory.remove_item_from_favorites(playername, item)
+	local fav = inventory.favoritelist_player[playername]
+	if fav == nil then 
+		inventory.favoritelist_player[playername] = {}
+		fav = inventory.favoritelist_player[playername]
+	end
+	fav[item] = nil
+	qts.set_player_data(playername, "inventory", "favorites", fav)
+end
+
+function inventory.is_item_favorite(playername, item)
+	local fav = inventory.favoritelist_player[playername]
+	if fav == nil then 
+		inventory.favoritelist_player[playername] = {}
+		fav = inventory.favoritelist_player[playername]
+	end
+	if fav[item] then
+		return true
+	else
+		return false
+	end
+end
+
+
+
 function inventory.init_inventory(player)
 
 	local formspec = [[
@@ -154,8 +232,8 @@ function inventory.init_inventory(player)
 			border=false]
 	]]
 
-	local name = player:get_player_name()
-	local info = minetest.get_player_information(name)
+	local playername = player:get_player_name()
+	local info = minetest.get_player_information(playername)
 	if info.formspec_version > 1 then
 		formspec = formspec .. "background9[5,5;1,1;gui_formbg.png;true;10]"
 	else
@@ -184,7 +262,12 @@ function inventory.init_inventory(player)
 	end
 
 	--generate item lists and refresh inventory
-	inventory.gen_item_list_for_player(name)
+	inventory.favoritelist_player[playername] = qts.get_player_data(player, "inventory", "favorites")
+	if inventory.favoritelist_player[playername] == nil then
+		inventory.favoritelist_player[playername] = {}
+	end
+	inventory.gen_item_list_for_player(playername, "", false)
+	inventory.gen_favorite_list_for_player(playername, "", false)
 	inventory.refresh_inv(player)
 end
 

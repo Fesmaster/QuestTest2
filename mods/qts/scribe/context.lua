@@ -1787,7 +1787,8 @@ function qts.gui.register_scribe_gui(name, func)
                     data.callbacks = context.callbacks
                 end
             )
-            
+            event:handle_callbacks()
+            --[[
             for name, callback in pairs(data.callbacks) do
                 if fields[name] then
                     if type(callback) == "function" then
@@ -1805,6 +1806,7 @@ function qts.gui.register_scribe_gui(name, func)
             elseif event.needs_refresh then
                event:refresh_gui(true)
             end
+            --]]
         end,
         tab=false,
         tab_owner=false,

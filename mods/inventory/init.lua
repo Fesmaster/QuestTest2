@@ -5,6 +5,8 @@ inventory.utils = {}
 inventory.itemlist_player = {}
 inventory.listdata_player = {}
 inventory.list_items = {}
+inventory.favoritelist_player = {}
+inventory.favoritelist_filtered_player = {}
 inventory.exemplar = {}
 inventory.collapse_groups = {}
 
@@ -51,15 +53,103 @@ inventory.equipment_slots_general_count = 12
 
 
 
----comment
+---event for interacting with search bar
 ---@param event ScribeEvent
 local function execute_inv_search(event)
 	local search_string = event.userdata.inventory_search_string or ""
 	local craftonly = event.userdata.inventory_search_craftonly
 	if craftonly == nil then craftonly = false end
-	inventory.gen_item_list_for_player(event.player:get_player_name(), search_string , craftonly)
+	local playername = event.player:get_player_name()
+	inventory.gen_item_list_for_player(playername, search_string , craftonly)
+	inventory.gen_favorite_list_for_player(playername, search_string , craftonly)
 	event.userdata.catalog_current_page = 1
 	event:mark_for_refresh()
+end
+
+---Event for clicking the favorite buttons on items
+---@param event ScribeEvent
+---@param item ItemString
+---@param favorite boolean
+local function favorite_state_change(event, item, favorite)
+	local playername = event.player:get_player_name()
+	if favorite then
+		inventory.add_item_to_favorites(playername, item)
+	else
+		inventory.remove_item_from_favorites(playername, item)
+	end
+	local search_string = event.userdata.inventory_search_string or ""
+	local craftonly = event.userdata.inventory_search_craftonly
+	if craftonly == nil then craftonly = false end
+	inventory.gen_favorite_list_for_player(playername, search_string , craftonly)
+	event.userdata.favorites_current_page = 1
+	event:mark_for_refresh()
+end
+
+---Reusable bar for searching and filtering. Used in both the main catalog and the favorite page
+---@param context ScribeContext
+---@param buttonsize number
+---@param padding number
+---@param page_size {width:number,height:number,count:number}
+local function add_search_bar(context, buttonsize, padding, page_size)
+	context:horizontal_box({
+		texture = "_transparent",
+		padding={x=padding,y=padding},
+		spacing={x=padding,y=padding},
+	}, function (item_t1c3)
+		local width = 
+			((page_size.width - 3) * buttonsize) + 
+			((page_size.width - 4) * padding)
+		item_t1c3:text_entry({
+			close_on_enter=false,
+			name="inventory_search_string",
+			persistant_text=true,
+			width=width,
+			height=buttonsize,
+			multiline=false,
+			tooltip="Search",
+		}, function (event)
+			event.userdata.inventory_search_string = event.fields.inventory_search_string
+			execute_inv_search(event)
+		end)
+		:button({
+			texture="inv_glass.png",
+			width=buttonsize,
+			height=buttonsize,
+			name="inventory_search_button",
+			tooltip="Search",
+		}, function (event)
+			event.userdata.inventory_search_string = event.fields.inventory_search_string
+			execute_inv_search(event)
+		end)
+		:button({
+			texture="inv_craft_icon.png",
+			texture_pressed="inv_craft_icon.png",
+			toggleable=true,
+			width=buttonsize,
+			height=buttonsize,
+			name = "inventory_search_craftonly",
+			tooltip="Show Only Craftable Items",
+		}, function (event)
+			local toggled = event:get_toggle_state()
+			if toggled == nil then toggled = false end
+			event.userdata.inventory_search_craftonly = toggled
+			execute_inv_search(event)
+		end)
+		:button({
+			texture="inv_cheat_icon.png",
+			texture_pressed="inv_cheat_icon.png",
+			toggleable=true,
+			width=buttonsize,
+			height=buttonsize,
+			name = "inventory_cheat",
+			tooltip="Enable Cheat Mode\nCatalog will give items in Cheat Mode",
+			default_toggle_state=qts.is_player_creative(item_t1c3.player:get_player_name())
+		}, function (event)
+			local toggled = event:get_toggle_state()
+			if toggled == nil then toggled = false end
+			event.userdata.inventory_cheatmode = toggled
+		end)
+	end)
 end
 
 qts.gui.register_scribe_gui("inventory:new_inventory", function (c1)
@@ -252,7 +342,7 @@ qts.gui.register_scribe_gui("inventory:new_inventory", function (c1)
 							local page_size = inventory.get_catalog_dimentions()
 							local buttonsize = inventory.CATALOG_BUTTON_SIZE:get()
 							local padding = inventory.CATALOG_BUTTON_PADDING:get()
-							
+							local pagecount = inventory.listdata_player[playername].pages
 							-- Pageing buttons and page display
 							item_t1c2:horizontal_box({
 								texture = "_transparent",
@@ -266,18 +356,19 @@ qts.gui.register_scribe_gui("inventory:new_inventory", function (c1)
 									texture="lshift.png",
 									width=buttonsize,
 									height=buttonsize,
+									visibility=qts.select(pagecount>1, qts.scribe.visibility.VISIBLE, qts.scribe.visibility.HIDDEN),
 								}, function (event)
 									local page = (event.userdata.catalog_current_page or 1)
 									if page > 1 then
 										page = page - 1
 									else
-										page = inventory.listdata_player[playername].pages
+										page = pagecount
 									end
 									event.userdata.catalog_current_page = page
 									event:mark_for_refresh()
 								end)
 								:text({
-									text = "page " .. tostring(current_page + 1) .. " of " .. tostring(inventory.listdata_player[playername].pages),
+									text = "page " .. tostring(current_page + 1) .. " of " .. tostring(pagecount),
 									width=width,
 									height=buttonsize,
 									horizontal_allignment=qts.scribe.allignment.LEFT,
@@ -287,10 +378,10 @@ qts.gui.register_scribe_gui("inventory:new_inventory", function (c1)
 									texture="rshift.png",
 									width=buttonsize,
 									height=buttonsize,
+									visibility=qts.select(pagecount>1, qts.scribe.visibility.VISIBLE, qts.scribe.visibility.HIDDEN),
 								}, function (event)
 									local page = (event.userdata.catalog_current_page or 1)
-									local maxpage = inventory.listdata_player[playername].pages
-									if page < maxpage then
+									if page < pagecount then
 										page = page + 1
 									else
 										page = 1
@@ -308,7 +399,6 @@ qts.gui.register_scribe_gui("inventory:new_inventory", function (c1)
 								local x = 0
 								local y = 0
 								
-								
 								local index = (page_size.count * current_page) + 1
 								local itemlist = inventory.itemlist_player[playername]
 
@@ -320,6 +410,7 @@ qts.gui.register_scribe_gui("inventory:new_inventory", function (c1)
 												-- groups
 												local exemplar = inventory.collapse_groups[qts.remove_modname_from_item(item_name)]
 												if exemplar then
+													-- group button
 													item_t1c3:button({
 														item = exemplar,
 														width=buttonsize,
@@ -328,9 +419,10 @@ qts.gui.register_scribe_gui("inventory:new_inventory", function (c1)
 														tooltip=item_name.."\nClick to Expand"
 													}, function (event)
 														event.userdata.inventory_search_string = item_name
-														event.userdata._scribe.inventory_search_string = item_name
+														--event.userdata._scribe.inventory_search_string = item_name
 														execute_inv_search(event)
 													end)
+													-- Plus image
 													:image(
 														{
 															texture="inv_plus.png",
@@ -342,6 +434,7 @@ qts.gui.register_scribe_gui("inventory:new_inventory", function (c1)
 												end
 											else
 												local item_desc = minetest.registered_items[item_name].description
+												-- Item button
 												item_t1c3:button({
 													item = item_name,
 													width=buttonsize,
@@ -354,14 +447,41 @@ qts.gui.register_scribe_gui("inventory:new_inventory", function (c1)
 														cheatmode = qts.is_player_creative(playername)
 													end
 													if cheatmode then
-														local inv = item_t1c3.player:get_inventory()
+														local inv = event.player:get_inventory()
 														if inv then
 															inv:add_item("main", item_name .. " " .. (minetest.registered_items[item_name].stack_max or 1024))
 														end
+													else
+														event.userdata.inventory_selected_item = item_name
+														event:mark_for_refresh()
 													end
+												end)
+												-- favorite button
+												local favbuttonname = "fav_toggle_"..item_name
+												item_t1c3:button({
+													texture="inv_favorite_empty.png",
+													texture_pressed="inv_favorite.png",
+													toggleable=true,
+													default_toggle_state=inventory.is_item_favorite(playername, item_name),
+													name=favbuttonname,
+													width=buttonsize/3,
+													height=buttonsize/3,
+													position={x=x+buttonsize*0.6666,y=y},
+													style_all={
+														background="Transparent.png",
+													},
+													style_toggled_all={
+														background="Transparent.png",
+													},
+													tooltip=qts.select(qts.ISDEV, item_desc .. "\n" .. item_name, item_desc).."\n"..
+														qts.select(inventory.is_item_favorite(playername, item_name), "Unfavorite", "Favorite")
+												}, function (event)
+													local toggled = event:get_toggle_state()
+													favorite_state_change(event, item_name, toggled)
 												end)
 											end
 										end
+										-- invisible item to add empty space when the page is not full
 										if xx == page_size.width and yy == page_size.height and item_name == nil then
 											item_t1c3:separator({
 												width=buttonsize,
@@ -380,66 +500,9 @@ qts.gui.register_scribe_gui("inventory:new_inventory", function (c1)
 							end) -- END item_t1c3
 							
 							-- Searching and Filtering
-							:horizontal_box({
-								texture = "_transparent",
-								padding={x=padding,y=padding},
-								spacing={x=padding,y=padding},
-							}, function (item_t1c3)
-								local width = 
-									((page_size.width - 3) * buttonsize) + 
-									((page_size.width - 4) * padding)
-								item_t1c3:text_entry({
-									close_on_enter=false,
-									name="inventory_search_string",
-									persistant_text=true,
-									width=width,
-									height=buttonsize,
-									multiline=false,
-									tooltip="Search",
-								}, function (event)
-									event.userdata.inventory_search_string = event.fields.inventory_search_string
-									execute_inv_search(event)
-								end)
-								:button({
-									texture="inv_glass.png",
-									width=buttonsize,
-									height=buttonsize,
-									name="inventory_search_button",
-									tooltip="Search",
-								}, function (event)
-									event.userdata.inventory_search_string = event.fields.inventory_search_string
-									execute_inv_search(event)
-								end)
-								:button({
-									texture="inv_craft_icon.png",
-									texture_pressed="inv_craft_icon.png",
-									toggleable=true,
-									width=buttonsize,
-									height=buttonsize,
-									name = "inventory_search_craftonly",
-									tooltip="Show Only Craftable Items",
-								}, function (event)
-									local toggled = event.userdata._scribe.inventory_search_craftonly.toggled
-									if toggled == nil then toggled = false end
-									event.userdata.inventory_search_craftonly = toggled
-									execute_inv_search(event)
-								end)
-								:button({
-									texture="inv_cheat_icon.png",
-									texture_pressed="inv_cheat_icon.png",
-									toggleable=true,
-									width=buttonsize,
-									height=buttonsize,
-									name = "inventory_cheat",
-									tooltip="Enable Cheat Mode\nCatalog will give items in Cheat Mode",
-									default_toggle_state=qts.is_player_creative(playername)
-								}, function (event)
-									local toggled = event.userdata._scribe.inventory_cheat.toggled
-									if toggled == nil then toggled = false end
-									event.userdata.inventory_cheatmode = toggled
-								end)
+							add_search_bar(item_t1c2, buttonsize, padding, page_size)
 								
-							end) -- END item_t1c3
+							--end) -- END item_t1c3
 						end) -- END item_t1c2
 					end -- END item_t1c1
 				}, -- END Tab1
@@ -452,13 +515,154 @@ qts.gui.register_scribe_gui("inventory:new_inventory", function (c1)
 						padding={x=0,y=0}
 					},
 					page=function (item_t2c1)
-						item_t2c1:container({
-							width=8,
-							height=14.5,
+						item_t2c1:vertical_box({
+							--width=8,
+							--height=14.5,
 							position={x=-0.2, y=0},
 							padding={x=0,y=0}
 						}, function (item_t2c2)
+							local playername = item_t2c2.player:get_player_name()
+							local current_page = (item_t2c2.userdata.favorites_current_page or 1) - 1 -- page base 0
+							local page_size = inventory.get_catalog_dimentions()
+							local buttonsize = inventory.CATALOG_BUTTON_SIZE:get()
+							local padding = inventory.CATALOG_BUTTON_PADDING:get()
+							local pagecount = inventory.listdata_player[playername].fav_pages
 							
+							-- Pageing buttons and page display
+							item_t2c2:horizontal_box({
+								texture = "_transparent",
+								padding={x=padding,y=padding},
+								spacing={x=padding,y=padding},
+							}, function (item_t2c3)
+								local width = 
+								((page_size.width - 2) * buttonsize) + 
+								((page_size.width - 3) * padding)
+								item_t2c3:button({
+									texture="lshift.png",
+									width=buttonsize,
+									height=buttonsize,
+									visibility = qts.select(pagecount > 1, qts.scribe.visibility.VISIBLE, qts.scribe.visibility.HIDDEN),
+								}, function (event)
+									local page = (event.userdata.favorites_current_page or 1)
+									if page > 1 then
+										page = page - 1
+									else
+										page = pagecount
+									end
+									event.userdata.favorites_current_page = page
+									event:mark_for_refresh()
+								end)
+								:text({
+									text = "page " .. tostring(current_page + 1) .. " of " .. tostring(pagecount),
+									width=width,
+									height=buttonsize,
+									horizontal_allignment=qts.scribe.allignment.LEFT,
+									vertical_allignment=qts.scribe.allignment.CENTER,
+								})
+								:button({
+									texture="rshift.png",
+									width=buttonsize,
+									height=buttonsize,
+									visibility = qts.select(pagecount > 1, qts.scribe.visibility.VISIBLE, qts.scribe.visibility.HIDDEN),
+								}, function (event)
+									local page = (event.userdata.favorites_current_page or 1)
+									if page < pagecount then
+										page = page + 1
+									else
+										page = 1
+									end
+									event.userdata.favorites_current_page = page
+									event:mark_for_refresh()
+								end)
+							end) -- END item_t1c3
+							--
+							-- Main body
+							item_t2c2:container({
+								texture = "_transparent"
+							}, function (item_t2c3)
+								-- Button Grid
+								local x = 0
+								local y = 0
+								
+								local index = (page_size.count * current_page) + 1
+								local itemlist = inventory.favoritelist_filtered_player[playername]
+								--
+								for yy = 1, page_size.height do
+									for xx = 1, page_size.width do
+										local item_name = itemlist[index]
+										if item_name then
+											if qts.is_group(item_name) then
+												-- groups
+												minetest.log("warning", "Group added to favorites. This should be impossible. Group: " .. item_name)
+											else
+												local item_desc = minetest.registered_items[item_name].description
+												-- Item button
+												item_t2c3:button({
+													item = item_name,
+													width=buttonsize,
+													height=buttonsize,
+													position={x=x,y=y},
+													tooltip=qts.select(qts.ISDEV, item_desc .. "\n" .. item_name, item_desc)
+												}, function (event)
+													local cheatmode = event.userdata.inventory_cheatmode
+													if cheatmode == nil then
+														cheatmode = qts.is_player_creative(playername)
+													end
+													if cheatmode then
+														local inv = event.player:get_inventory()
+														if inv then
+															inv:add_item("main", item_name .. " " .. (minetest.registered_items[item_name].stack_max or 1024))
+														end
+													else
+														event.userdata.inventory_selected_item = item_name
+														event:mark_for_refresh()
+													end
+												end)
+												-- favorite button
+												local favbuttonname = "fav_toggle_"..item_name
+												item_t2c3:button({
+													texture="inv_favorite_empty.png",
+													texture_pressed="inv_favorite.png",
+													toggleable=true,
+													default_toggle_state=inventory.is_item_favorite(playername, item_name),
+													name=favbuttonname,
+													width=buttonsize/3,
+													height=buttonsize/3,
+													position={x=x+buttonsize*0.6666,y=y},
+													style_all={
+														background="Transparent.png",
+													},
+													style_toggled_all={
+														background="Transparent.png",
+													},
+													tooltip=qts.select(qts.ISDEV, item_desc .. "\n" .. item_name, item_desc).."\n"..
+														qts.select(inventory.is_item_favorite(playername, item_name), "Unfavorite", "Favorite")
+												}, function (event)
+													local toggled = event:get_toggle_state()
+													favorite_state_change(event, item_name, toggled)
+												end)
+											end
+										end
+										-- invisible item to add empty space when the page is not full
+										if xx == page_size.width and yy == page_size.height and item_name == nil then
+											item_t2c3:separator({
+												width=buttonsize,
+												height=buttonsize,
+												-- not sure why the math on y is nesecary, but the seperator has a different size? Without it, empty pages wobble a bit.
+												position={x=x,y=y+buttonsize-(padding/16)} 
+											})
+										end
+										index = index + 1
+										x = x + buttonsize + padding
+									end
+									y = y + buttonsize + padding
+									x = 0
+								end
+	
+							end) -- END item_t1c3
+								
+								-- Searching and Filtering
+							add_search_bar(item_t2c2, buttonsize, padding, page_size)
 						end) -- END item_t2c2
 					end -- END item_t2c1
 				}, -- END Tab2
