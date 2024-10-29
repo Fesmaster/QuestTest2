@@ -19,6 +19,14 @@ function qts.nearly_equal(a, b, degree)
 	return (a >= b-degree and a <= b+degree)
 end
 
+---Clamp a number between two others. DOES NOT CHECK for min < max.
+---@param a number
+---@param min number
+---@param max number
+function qts.clamp(a, min, max)
+	return math.min(math.max(a, min), max)
+end
+
 --[[
 	Creats a set from a list.   
 	ie, {1="item1", 2="item2, ... N="itemN"}  
@@ -165,3 +173,24 @@ function Counter()
 	end
 end
 
+
+---Interpolate between S1 and S2
+---@param S1 number
+---@param S2 number
+---@param alpha Alpha
+function qts.lerp(S1, S2, alpha)
+	return S1*(1-alpha)+ S2*alpha
+end
+
+
+
+
+---Hashes an arbitrary number (int or float) and returns a 32 bit integer (as the bit library expects)
+---@param num number
+function qts.hash_number(num)
+	local int_part, float_part = math.modf(num)
+	local fp = float_part * math.pow(2, 32) --next 32 bits
+	local fp1, fp2 = math.modf(fp) -- break it again
+	local fp3 = fp2 * math.floor(math.pow(2, 52-32)) -- last bit of bits
+	return bit.bxor(int_part, fp1, fp3)
+end

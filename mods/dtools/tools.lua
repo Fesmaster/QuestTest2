@@ -674,3 +674,4 @@ minetest.register_tool("dtools:entity_analyzer", {
 		end
 	end
 })
+

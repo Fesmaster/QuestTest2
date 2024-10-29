@@ -11,12 +11,14 @@ qts.worldgen.registered_biomes = {}
 qts.worldgen.registered_structures = {}
 qts.worldgen.registered_scatters = {}
 qts.worldgen.scatters_stage_marker = {}
-qts.worldgen.force_singlenode = false
+
+
 
 local CID = qts.worldgen.CID --to simplify and shorten the naming
 local ORE = qts.worldgen.ORE --also faster
 
 dofile(qts.path .."/worldgen/wg_functions.lua") --load all the functions
+dofile(qts.path .."/worldgen/sandbox.lua") --load all the functions
 
 local function genParam2Meshoptions()
 	return (math.random(0,4)		--first 3 bits (0,1,2)
@@ -63,6 +65,7 @@ minetest.register_on_mods_loaded(function()
 	CID["ground"] = minetest.get_content_id(qts.worldgen.mpagen_aliases.stone)
 	CID["water"] = minetest.get_content_id(qts.worldgen.mpagen_aliases.water)
 	CID["river"] = minetest.get_content_id(qts.worldgen.mpagen_aliases.river)
+	CID["default"] = minetest.get_content_id("default:default")
 	
 	for name, _ in pairs(ORE) do
 		ORE[name] = CID[name]
@@ -74,6 +77,13 @@ local profile_start, profile_stop = qts.profile("WORLDGEN", "ms")
 
 ---[[
 minetest.register_on_generated(function(minp, maxp, blockseed)
+	if (qts.worldgen.SANDBOX_WORLD.get() > 0) then
+		profile_start()
+		qts.worldgen.sandbox(minp, maxp, blockseed)
+		profile_stop()
+		return
+	end
+
 	--minetest.log("WORLDGEN 1")
 	profile_start()
 	local columnID = 1
@@ -251,15 +261,15 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 	VM:set_light_data(LightData)
 	VM:set_param2_data(Param2Data)
 	
-	if not qts.worldgen.force_singlenode then
+	--if not qts.worldgen.force_singlenode then
 		
-		--pre-structre scatter stage
-		Data = qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "pre-structure")
-		VM:set_data(Data)
+	--pre-structre scatter stage
+	Data = qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "pre-structure")
+	VM:set_data(Data)
 
-		--STRUCTURES
-		columnID = 1
-		for z = minp.z, maxp.z do
+	--STRUCTURES
+	columnID = 1
+	for z = minp.z, maxp.z do
 		for x = minp.x, maxp.x do
 			local biomeID = biomeBuffer[columnID]
 			--gen trees, structures
@@ -299,121 +309,119 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 			end
 			columnID = columnID + 1
 		end
-		end
-		
-		
-		--get the new valid data
-		Data= VM:get_data()
-		LightData = VM:get_light_data()
-		Param2Data = VM:get_param2_data()
-		
-		--post-structure scatter stage
-		Data = qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "post-structure")
+	end
+	
+	
+	--get the new valid data
+	Data= VM:get_data()
+	LightData = VM:get_light_data()
+	Param2Data = VM:get_param2_data()
+	
+	--post-structure scatter stage
+	Data = qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "post-structure")
 
 		--PLANTS and DUST
-		columnID = 1
-		for z = minp.z, maxp.z do
-		for x = minp.x, maxp.x do
-			biomeID = biomeBuffer[columnID]
-			biomeRef = qts.worldgen.registered_biomes[biomeID]
-			
-			--PLANTS
-			if biomeRef.plant and biomeRef.plant_freq and biomeRef.plant_freq~=0 then
-				for y = maxp.y, minp.y, -1 do
-					local i = Area:index(x, y, z)
-					local nID = nil
-					local param2 = nil
-					if y < maxp.y then
-						local j = Area:index(x, y-1, z)
-						
-						if Data[i] == CID["air"] and qts.worldgen.is_biome_node(Data[j], biomeID,{"surface"}, true) then
-							--it can be a plant
-							--minetest.log("plant")
-							if math.random(1,biomeRef.plant_freq) == 1 then
-								local name = qts.worldgen.get_biome_node(biomeID,"plant", false)
-								nID = CID[name]
-								local nameDef = minetest.registered_nodes[name]
-								if nameDef and nameDef.paramtype2 then
-									if nameDef.paramtype2 == "meshoptions" then
-										param2 = genParam2Meshoptions()
-									elseif nameDef.paramtype2 == "facedir" then
-										param2 = genParam2Facedir()
-									elseif nameDef.paramtype2 == "wallmounted" then
-										param2 = 1
-									end
+	columnID = 1
+	for z = minp.z, maxp.z do
+	for x = minp.x, maxp.x do
+		biomeID = biomeBuffer[columnID]
+		biomeRef = qts.worldgen.registered_biomes[biomeID]
+		
+		--PLANTS
+		if biomeRef.plant and biomeRef.plant_freq and biomeRef.plant_freq~=0 then
+			for y = maxp.y, minp.y, -1 do
+				local i = Area:index(x, y, z)
+				local nID = nil
+				local param2 = nil
+				if y < maxp.y then
+					local j = Area:index(x, y-1, z)
+					
+					if Data[i] == CID["air"] and qts.worldgen.is_biome_node(Data[j], biomeID,{"surface"}, true) then
+						--it can be a plant
+						--minetest.log("plant")
+						if math.random(1,biomeRef.plant_freq) == 1 then
+							local name = qts.worldgen.get_biome_node(biomeID,"plant", false)
+							nID = CID[name]
+							local nameDef = minetest.registered_nodes[name]
+							if nameDef and nameDef.paramtype2 then
+								if nameDef.paramtype2 == "meshoptions" then
+									param2 = genParam2Meshoptions()
+								elseif nameDef.paramtype2 == "facedir" then
+									param2 = genParam2Facedir()
+								elseif nameDef.paramtype2 == "wallmounted" then
+									param2 = 1
 								end
 							end
 						end
 					end
-					
+				end
+				
+				if nID then
+					Data[i] = nID
+				end
+				if param2 then
+					Param2Data[i] = param2
+				end
+			end
+		end
+		
+		--DUST
+		if biomeRef and biomeRef.dust then
+			local dust_placed = false
+			for y = maxp.y, minp.y, -1 do
+				if not dust_placed then
+					local i = Area:index(x, y, z)
+					local nID = nil
+					local param2 = nil
+					if (
+							Data[i] == CID["air"]
+							and not(
+									Data[Area:index(x, y-1, z)] == CID["water"] 
+									or Data[Area:index(x, y-1, z)] == CID["river"]
+									or Data[Area:index(x, y-1, z)] == CID["air"]
+									)
+						)then
+						
+						local name = qts.worldgen.get_biome_node(biomeID,"dust", false)
+						nID = CID[name]
+						local nameDef = minetest.registered_nodes[name]
+						if (nameDef.leveled ~= nil) then
+							param2 = 8*math.random(1, 4);
+						end
+						dust_placed = true
+					end
 					if nID then
 						Data[i] = nID
 					end
 					if param2 then
 						Param2Data[i] = param2
 					end
+				else
+					break
 				end
 			end
-			
-			--DUST
-			if biomeRef and biomeRef.dust then
-				local dust_placed = false
-				for y = maxp.y, minp.y, -1 do
-					if not dust_placed then
-						local i = Area:index(x, y, z)
-						local nID = nil
-						local param2 = nil
-						if (
-								Data[i] == CID["air"]
-								and not(
-										Data[Area:index(x, y-1, z)] == CID["water"] 
-										or Data[Area:index(x, y-1, z)] == CID["river"]
-										or Data[Area:index(x, y-1, z)] == CID["air"]
-										)
-							)then
-							
-							local name = qts.worldgen.get_biome_node(biomeID,"dust", false)
-							nID = CID[name]
-							local nameDef = minetest.registered_nodes[name]
-							if (nameDef.leveled ~= nil) then
-								param2 = 8*math.random(1, 4);
-							end
-							dust_placed = true
-						end
-						if nID then
-							Data[i] = nID
-						end
-						if param2 then
-							Param2Data[i] = param2
-						end
-					else
-						break
-					end
-				end
-			end
-			
-			columnID = columnID + 1
 		end
-		end
-		--post-plant scatter stage
-		Data = qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "post-plant")
 		
-		--set node data, and write to map
-		VM:set_data(Data)
-		VM:set_light_data(LightData)
-		VM:set_param2_data(Param2Data)
-
-
-		--generate the ores and decorations
-		minetest.generate_ores(VM, minp, maxp)
-		minetest.generate_decorations(VM, minp, maxp)
-		
-		--one last scatter stage
-		Data= VM:get_data()
-		Data = qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "post-ore")
-		VM:set_data(Data)
-		
+		columnID = columnID + 1
 	end
+	end
+	--post-plant scatter stage
+	Data = qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "post-plant")
+		
+	--set node data, and write to map
+	VM:set_data(Data)
+	VM:set_light_data(LightData)
+	VM:set_param2_data(Param2Data)
+
+
+	--generate the ores and decorations
+	minetest.generate_ores(VM, minp, maxp)
+	minetest.generate_decorations(VM, minp, maxp)
+	
+	--one last scatter stage
+	Data= VM:get_data()
+	Data = qts.worldgen.process_scatter_stage(Area, Data, biomeBuffer, minp, maxp, "post-ore")
+	VM:set_data(Data)
 	
 	--VM:set_lighting{day=0, night=0}
 	VM:calc_lighting()

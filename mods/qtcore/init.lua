@@ -14,10 +14,12 @@ dofile(minetest.get_modpath("qtcore").."/nodeboxes.lua")
 dofile(minetest.get_modpath("qtcore").."/textures.lua")
 dofile(minetest.get_modpath("qtcore").."/forms.lua")
 dofile(minetest.get_modpath("qtcore").."/trees.lua")
+dofile(minetest.get_modpath("qtcore").."/nodes.lua")
 dofile(minetest.get_modpath("qtcore").."/deconodes.lua")
 dofile(minetest.get_modpath("qtcore").."/fire.lua")
 dofile(minetest.get_modpath("qtcore").."/materials.lua")
 dofile(minetest.get_modpath("qtcore").."/initial_items.lua")
+dofile(minetest.get_modpath("qtcore").."/debug.lua")
 
 
 --GUI styles
@@ -62,17 +64,9 @@ end
 	Some nodes
 ]]
 
---Ancient default node, the first made in QuestTest2
-minetest.register_node(":default:default", {
-	description = "Default Node",
-	tiles ={"default.png"},
-	groups = {oddly_breakable_by_hand=3},
-	sounds = qtcore.node_sound_defaults(),
-})
 
-minetest.override_item("air", {
-	groups={not_in_creative_inventory = 1, generation_replacable=1}
-})
+
+
 
 ---make the first letter of a string Upper Case
 ---@param str string

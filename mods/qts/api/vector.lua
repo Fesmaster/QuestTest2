@@ -21,6 +21,36 @@ vector.slerp(rot1, rot2, alpha)
 
 --]]
 
+--fixing vector.multiply
+
+vector.old_multiply = vector.multiply
+
+---Vector multiplication
+---@param v Vector
+---@param x Vector|number
+---@return Vector
+function vector.multiply(v, x)
+	if vector.check(x) then
+		return vector.new(v.x * x.x, v.y * x.y, v.z * x.z)
+	else
+		return vector.new(v.x * x, v.y*x, v.z*x)
+	end
+end
+vector.metatable.__mul = vector.multiply
+
+---Vector division
+---@param v Vector
+---@param x Vector|number
+---@return Vector
+function vector.divide(v, x)
+	if vector.check(x) then
+		return vector.new(v.x / x.x, v.y / x.y, v.z / x.z)
+	else
+		return vector.new(v.x / x, v.y / x, v.z / x)
+	end
+end
+vector.metatable.__div = vector.divide
+
 --[[
 	create a read-only vector, that operates as a normal vector
 
@@ -198,84 +228,43 @@ function vector.get_rot(vec)
 	return rot
 end
 
---TODO: vector.set_rot(vec, rot)
 
-local function get_forward_vector(yaw, pitch)
-	local dir = vector.new(
-		math.sin(yaw),
-		math.cos(pitch or math.pi), --if pitch is null, PI used (dir.y == 0)
-		math.cos(yaw)
-	)
-	if dir.x ~= dir.x then 
-		dir.x=0
-	end
-	if dir.y ~= dir.y then 
-		dir.y=0
-	end
-	if dir.z ~= dir.z then 
-		dir.z=0
-	end
-	dir.x = dir.x*-1
-	return dir
-end
-
---[[
-	Gets the forward vector of a rotation
-	
-	Params:
-		rot - a vector, as euler rotation
-	--OR--
-		yaw - the yaw or the rotation
-		pitch (optional) - the pitch of the rotation
-	
-	Return: 
-		unit vector, as direction
-]]
-function vector.get_forward_vector(yaw, pitch)
-	if (type(yaw) == "table") and yaw.x ~= nil and yaw.y ~= nil then
-		return get_forward_vector(yaw.y, yaw.x)
+---Gets the forward vector of a rotation
+---@param rot Rotator|number
+---@param pitch number?
+---@param roll number?
+---@return Vector
+function vector.get_forward_vector(rot, pitch, roll)
+	if vector.check(rot) then
+		return vector.rotate(vector.new(0,0,1), rot):normalize()
 	else
-		return get_forward_vector(yaw, pitch)
+		return vector.rotate(vector.new(0,0,1), vector.new(pitch,rot,roll)):normalize()
 	end
 end
 
---[[
-	Gets the right vector of a rotation
-	
-	Params:
-		rot - a vector, as euler rotation
-	--OR--
-		yaw - the yaw or the rotation
-		pitch (optional) - the pitch of the rotation
-	
-	Return: 
-		unit vector, as direction
-]]
-function vector.get_right_vector(yaw, pitch)
-	if (type(yaw) == "table") and yaw.x and yaw.y then
-		return get_forward_vector(yaw.y+(math.pi/2), yaw.z)
+---Gets the right vector of a rotation
+---@param rot Rotator|number
+---@param pitch number?
+---@param roll number?
+---@return Vector
+function vector.get_right_vector(rot, pitch, roll)
+	if vector.check(rot) then
+		return vector.rotate(vector.new(1,0,0), rot):normalize()
 	else
-		return get_forward_vector(yaw+(math.pi/2), pitch)
+		return vector.rotate(vector.new(1,0,0), vector.new(pitch,rot,roll)):normalize()
 	end
 end
 
---[[
-	gets the up vector of a rotation
-	
-	Params:
-		rot - a vector, as euler rotation
-	--OR--
-		yaw - the yaw or the rotation
-		pitch (optional) - the pitch of the rotation. If nil, assumed to be 0
-	
-	Return: 
-		unit vector, as direction
-]]
-function vector.get_up_vector(yaw, pitch)
-	if (type(yaw) == "table") and yaw.x and yaw.y then
-		return get_forward_vector(yaw.y, yaw.z+(math.pi/2))
+---Gets the up vector of a rotation
+---@param rot Rotator|number
+---@param pitch number?
+---@param roll number?
+---@return Vector
+function vector.get_up_vector(rot, pitch, roll)
+	if vector.check(rot) then
+		return vector.rotate(vector.new(0,1,0), rot):normalize()
 	else
-		return get_forward_vector(yaw, (pitch or 0) +(math.pi/2))
+		return vector.rotate(vector.new(0,1,0), vector.new(pitch,rot,roll)):normalize()
 	end
 end
 
@@ -328,3 +317,45 @@ function vector.slerp(rot1, rot2, alpha)
 	return result
 end
 
+---Get the maximum element in a vector
+---@param v Vector
+---@return number
+function vector.max_element(v)
+	return math.max(v.x, math.max(v.y, v.z))
+end
+
+---Get the minimum element in a vector
+---@param v Vector
+---@return number
+function vector.min_element(v)
+	return math.min(v.x, math.min(v.y, v.z))
+end
+
+---Get the middle element in a vector
+---@param v Vector
+---@return number
+function vector.mid_element(v)
+	return v.x+v.y+v.z - (vector.max_element(v) + vector.min_element(v))
+end
+
+---Hash a vector
+---@param v Vector
+function vector.hash(v)
+	return bit.bxor(qts.hash_number(v.x), bit.bxor(qts.hash_number(v.y), 579823457), bit.bxor(qts.hash_number(v.z), 46608947))
+end
+
+---Hash a vector as an integer
+---@param v Vector
+function vector.ihash(v)
+	return vector.hash(vector.round(v))
+end
+
+---Create a rotator from roll, pitch and yaw in degrees
+---@param roll number roll in degrees
+---@param pitch number pitch in degrees
+---@param yaw number yaw in degrees
+---@return Rotator
+---@diagnostic disable-next-line: lowercase-global
+function rotator(roll, pitch, yaw)
+	return vector.new(math.rad(pitch), math.rad(yaw), math.rad(roll))
+end
