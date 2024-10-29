@@ -334,6 +334,18 @@ qts.register_craft({
 })
 
 qts.register_craft({
+	ingredients = {"overworld:flower_arctic_poppy", "tools:bucket_wood_overworld_river_water"},
+	results = {"craftable:dye_yellow", "tools:bucket_wood"},
+	near = {"group:furnace", "group:cookware", "group:table"}
+})
+
+qts.register_craft({
+	ingredients = {"overworld:flower_arctic_poppy", "tools:bucket_wood_overworld_water"},
+	results = {"craftable:dye_yellow", "tools:bucket_wood"},
+	near = {"group:furnace", "group:cookware", "group:table"}
+})
+
+qts.register_craft({
 	ingredients = {"craftable:dye_blue", "craftable:dye_green"},
 	results = {"craftable:dye_cyan 2"},
 	near = {"group:table"}

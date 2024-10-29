@@ -65,6 +65,19 @@ local underbrush_drops_mushroom = {
 	},
 }
 
+local underbrush_drops_cacti = {
+	max_items = 1,
+	items={
+		{
+			tool_groups = {"axe", "knife"},
+			items = {"craftable:tinder"}
+		},
+		{
+			items = {"overworld:underbrush_item"}
+		}
+	},
+}
+
 local function floodFunc(pos, oldnode, newnode)
 	local d = minetest.get_node_drops(oldnode, "wieldhand")
 	for index, item in ipairs(d) do
@@ -281,6 +294,215 @@ minetest.register_node("overworld:beach_grass", {
 })
 minetest.register_alias("default:beach_grass", "overworld:beach_grass")
 
+--snow underbrush
+minetest.register_node("overworld:grass_cotton_tall", {
+	description = "Cotton Grass Node",
+	tiles ={"overworld_grass_cotton_tall.png"},
+	use_texture_alpha = "clip",
+	drawtype = "plantlike",
+	paramtype = "light",
+	paramtype2 = "meshoptions",
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	waving = 1,
+	buildable_to = true,
+	selection_box = qtcore.nb_level1(),
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	on_place = qtcore.place_random_plantlike,
+	drop = underbrush_drops,
+	on_flood = floodFunc,
+})
+
+minetest.register_node("overworld:grass_cotton_short", {
+	description = "Cotton Grass Node",
+	tiles ={"overworld_grass_cotton_short.png"},
+	use_texture_alpha = "clip",
+	drawtype = "plantlike",
+	paramtype = "light",
+	paramtype2 = "meshoptions",
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	waving = 1,
+	buildable_to = true,
+	selection_box = qtcore.nb_level1(),
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	on_place = qtcore.place_random_plantlike,
+	drop = underbrush_drops,
+	on_flood = floodFunc,
+})
+
+minetest.register_node("overworld:ground_willow", {
+	description = "Ground Willow",
+	tiles ={"overworld_ground_willow.png"},
+	use_texture_alpha = "clip",
+	drawtype = "plantlike",
+	paramtype = "light",
+	paramtype2 = "meshoptions",
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	waving = 1,
+	buildable_to = true,
+	selection_box = qtcore.nb_level1(),
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	on_place = qtcore.place_random_plantlike,
+	drop = underbrush_drops,
+	on_flood = floodFunc,
+})
+
+--upper desert underbrush
+minetest.register_node("overworld:underbrush_cactus_barrel", {
+	description = "Underbrush",
+	tiles ={
+		"overworld_cactus_barrel_top.png",
+		"overworld_cactus_barrel_bottom.png",
+		"overworld_cactus.png",
+		"overworld_cactus.png",
+		"overworld_cactus.png",
+		"overworld_cactus.png",
+	},
+	use_texture_alpha = "clip",
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	buildable_to = true,
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ 3/16, -8/16, 2/16, 7/16, -4/16, 6/16, },
+			{ -5/16, -8/16, -6/16, -1/16, -4/16, -2/16, },
+		}
+	},
+	selection_box = {
+		type = "fixed",
+		fixed = {
+			{ -5/16, -8/16, -6/16, 7/16, -4/16, 6/16, },
+		},
+	},
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	drop = underbrush_drops_cacti,
+	on_flood = floodFunc,
+})
+
+minetest.register_node("overworld:underbrush_cactus_branched_side", {
+	description = "Underbrush",
+	tiles = {"overworld_cactus.png",},
+	use_texture_alpha = "clip",
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	buildable_to = true,
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ 3/16, -8/16, 2/16, 5/16, -1/16, 4/16, },
+			{ 3/16, -3/16, 1/16, 5/16, 1/16, 3/16, },
+			{ 3/16, 0/16, 0/16, 5/16, 2/16, 4/16, },
+			{ 3/16, 1/16, -1/16, 5/16, 3/16, 1/16, },
+			{ 3/16, 2/16, -2/16, 5/16, 7/16, 0/16, },
+			{ 3/16, 1/16, 3/16, 5/16, 5/16, 5/16, },
+			{ 2/16, 2/16, 3/16, 4/16, 4/16, 5/16, },
+			{ 1/16, 3/16, 3/16, 2/16, 5/16, 5/16, },
+			{ 0/16, 4/16, 4/16, 1/16, 8/16, 5/16, },
+			{ 5/16, -3/16, 2/16, 6/16, -1/16, 4/16, },
+			{ 5/16, -2/16, 2/16, 7/16, 0/16, 4/16, },
+			{ 6/16, -1/16, 2/16, 8/16, 4/16, 4/16, },
+			{ 6/16, 1/16, 0/16, 7/16, 6/16, 1/16, },
+			{ 6/16, 0/16, 1/16, 7/16, 2/16, 2/16, },
+			{ 2/16, 2/16, -1/16, 3/16, 4/16, 0/16, },
+			{ 1/16, 3/16, -1/16, 2/16, 6/16, 0/16, },
+		}
+	},
+	selection_box = {
+		type = "fixed",
+		fixed = {
+			{ 0/16, -8/16, -2/16, 8/16, 8/16, 5/16, },
+		},
+	},
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	drop = underbrush_drops_cacti,
+	on_flood = floodFunc,
+})
+
+minetest.register_node("overworld:underbrush_cactus_branched_center", {
+	description = "Underbrush",
+	tiles = {"overworld_cactus.png",},
+	use_texture_alpha = "clip",
+	drawtype = "nodebox",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	buildable_to = true,
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -1/16, -8/16, -1/16, 1/16, -2/16, 1/16, },
+			{ -2/16, -3/16, 0/16, 0/16, 4/16, 2/16, },
+			{ 1/16, -3/16, -1/16, 3/16, -1/16, 1/16, },
+			{ 2/16, -2/16, -1/16, 4/16, 7/16, 1/16, },
+			{ 3/16, -1/16, 1/16, 4/16, 1/16, 2/16, },
+			{ 3/16, -1/16, 2/16, 4/16, 5/16, 3/16, },
+			{ -2/16, -2/16, -1/16, -1/16, 0/16, 0/16, },
+			{ -2/16, -1/16, -2/16, -1/16, 3/16, -1/16, },
+			{ 2/16, 0/16, -2/16, 3/16, 2/16, -1/16, },
+			{ 2/16, 1/16, -3/16, 3/16, 7/16, -2/16, },
+			{ 4/16, 0/16, -1/16, 5/16, 2/16, 0/16, },
+			{ 5/16, 1/16, -1/16, 6/16, 8/16, 0/16, },
+			{ -2/16, 1/16, 3/16, -1/16, 6/16, 4/16, },
+			{ -2/16, 0/16, 2/16, -1/16, 2/16, 3/16, },
+			{ -3/16, 1/16, 0/16, -1/16, 3/16, 1/16, },
+			{ -4/16, 1/16, 0/16, -3/16, 8/16, 1/16, },
+			{ 0/16, 0/16, 0/16, 1/16, 2/16, 1/16, },
+			{ 1/16, 0/16, 1/16, 2/16, 6/16, 2/16, },
+		}
+	},
+	selection_box = {
+		type = "fixed",
+		fixed = {
+			{ -4/16, -8/16, -3/16, 6/16, 8/16, 4/16, },
+		},
+	},
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	drop = underbrush_drops_cacti,
+	on_flood = floodFunc,
+})
+
+minetest.register_node("overworld:yucca", {
+	description = "Yucca",
+	tiles ={"overworld_yucca.png"},
+	use_texture_alpha = "clip",
+	drawtype = "plantlike",
+	paramtype = "light",
+	paramtype2 = "meshoptions",
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	waving = 1,
+	buildable_to = true,
+	selection_box = qtcore.nb_level1(),
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	on_place = qtcore.place_random_plantlike,
+	drop = underbrush_drops,
+	on_flood = floodFunc,
+})
+
 --natural coconut
 
 minetest.register_node("overworld:natural_coconut", {
@@ -399,6 +621,27 @@ minetest.register_node("overworld:flower_violet", {
 	description = "Violet",
 	tiles ={"overworld_violet.png"},
 	inventory_image = "overworld_violet_item.png",
+	use_texture_alpha = "clip",
+	drawtype = "plantlike",
+	paramtype = "light",
+	paramtype2 = "meshoptions",
+	param2 = 0,
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	waving = 1,
+	buildable_to = true,
+	selection_box = qtcore.nb_level1(),
+	groups = {snappy=3, flammable = 2, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	on_place = qtcore.place_random_plantlike,
+	on_flood = floodFunc,
+})
+
+minetest.register_node("overworld:flower_arctic_poppy", {
+	description = "Arctic Poppy",
+	tiles ={"overworld_arctic_poppy.png"},
+	inventory_image = "overworld_arctic_poppy_item.png",
 	use_texture_alpha = "clip",
 	drawtype = "plantlike",
 	paramtype = "light",

@@ -97,6 +97,32 @@ local function get_camp_materials_prarie()
     }
 end
 
+local function get_camp_materials_snow()
+    return {
+        log = "overworld:pine_log",
+        wood = "overworld:pine_wood_planks",
+        fence = "overworld:pine_wood_fence",
+        crate = "furnature:crate_pine",
+
+        ladder = "furnature:ladder_pine",
+        campfire = "craftable:campfire_lit",
+        torch = "craftable:torch",
+    }
+end
+
+local function get_camp_materials_swamp()
+    return {
+        log = "overworld:swamp_log",
+        wood = "overworld:swamp_wood_planks",
+        fence = "overworld:swamp_wood_fence",
+        crate = "furnature:crate_swamp",
+
+        ladder = "furnature:ladder_swamp",
+        campfire = "craftable:campfire_lit",
+        torch = "craftable:torch",
+    }
+end
+
 local cage_fence_area = {
     vector.new(-1,0,-1), vector.new(-1,0,0), vector.new(-1,0,1),
     vector.new(0,0,-1),                      vector.new(0,0,1),
@@ -150,7 +176,7 @@ local banit_crate_items = {
     "tools:axe_bronze", "tools:axe_copper", "tools:axe_flint", 
     "foodstuffs:bread", "overworld:bronze_alloy", "overworld:bronze_bar", "tools:bucket_wood",
     "craftable:charcoal", "overworld:coal", "overworld:clay_lump", "overworld:coconut", "overworld:copper_bar", "foodstuffs:dishes_clay",  
-    "farmworks:herb_bloodbulb", "farmworks:herb_flax", "farmworks:herb_grain", "deffarmworksault:herb_milfoil",
+    "farmworks:herb_bloodbulb", "farmworks:herb_flax", "farmworks:herb_grain", "farmworks:herb_milfoil",
     "farmworks:herb_potatoe", "farmworks:herb_wolfshood", "farmworks:herb_carrot", "farmworks:herb_goard", "farmworks:herb_onion",
 	"tools:hammer_stone", "tools:knife_flint",  "craftable:paper",
 	"farmworks:seed_bloodbulb", "farmworks:seed_flax", "farmworks:seed_grain", "farmworks:seed_milfoil", "farmworks:seed_potatoe", 
@@ -440,6 +466,64 @@ if not qts.ISDEV then
 		action = function(pos, node)
 			minetest.set_node(pos, {name="air"})
 			local materials = get_camp_materials_prarie()
+            build_camp(pos, materials)
+		end
+	})
+end
+
+minetest.register_node ("dungeon:camp_generator_snow", {
+	description = "Camp Generator - Snow",
+	tiles = {"default.png"},
+	groups = DUNGEON_GENERATOR_GROUPS,
+	sounds = qtcore.node_sound_defaults(),
+	drop = "",
+	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
+		minetest.set_node(pos, {name="air"})
+		local materials = get_camp_materials_snow()
+        
+        build_camp(pos, materials)
+		return itemstack
+	end
+})
+
+if not qts.ISDEV then
+	minetest.register_lbm({
+		label = "Camp Generator - Snow",
+		name = "dungeon:camp_generator_snow_lbm",
+		nodenames = {"dungeon:camp_generator_snow"},
+		run_at_every_load = true,
+		action = function(pos, node)
+			minetest.set_node(pos, {name="air"})
+			local materials = get_camp_materials_snow()
+            build_camp(pos, materials)
+		end
+	})
+end
+
+minetest.register_node ("dungeon:camp_generator_swamp", {
+	description = "Camp Generator - Swamp",
+	tiles = {"default.png"},
+	groups = DUNGEON_GENERATOR_GROUPS,
+	sounds = qtcore.node_sound_defaults(),
+	drop = "",
+	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
+		minetest.set_node(pos, {name="air"})
+		local materials = get_camp_materials_swamp()
+        
+        build_camp(pos, materials)
+		return itemstack
+	end
+})
+
+if not qts.ISDEV then
+	minetest.register_lbm({
+		label = "Camp Generator - Swamp",
+		name = "dungeon:camp_generator_swamp_lbm",
+		nodenames = {"dungeon:camp_generator_swamp"},
+		run_at_every_load = true,
+		action = function(pos, node)
+			minetest.set_node(pos, {name="air"})
+			local materials = get_camp_materials_swamp()
             build_camp(pos, materials)
 		end
 	})
