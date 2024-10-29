@@ -65,6 +65,19 @@ local underbrush_drops_mushroom = {
 	},
 }
 
+local underbrush_drops_cacti = {
+	max_items = 1,
+	items={
+		{
+			tool_groups = {"axe", "knife"},
+			items = {"craftable:tinder"}
+		},
+		{
+			items = {"overworld:underbrush_item"}
+		}
+	},
+}
+
 local function floodFunc(pos, oldnode, newnode)
 	local d = minetest.get_node_drops(oldnode, "wieldhand")
 	for index, item in ipairs(d) do
@@ -376,7 +389,7 @@ minetest.register_node("overworld:underbrush_cactus_barrel", {
 	},
 	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1, generation_replacable=1},
 	sounds = qtcore.node_sound_defaults(),
-	drop = underbrush_drops,
+	drop = underbrush_drops_cacti,
 	on_flood = floodFunc,
 })
 
@@ -415,12 +428,12 @@ minetest.register_node("overworld:underbrush_cactus_branched_side", {
 	selection_box = {
 		type = "fixed",
 		fixed = {
-			{ -5/16, -8/16, -6/16, 7/16, -3/16, 6/16, },
+			{ 0/16, -8/16, -2/16, 8/16, 8/16, 5/16, },
 		},
 	},
 	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1, generation_replacable=1},
 	sounds = qtcore.node_sound_defaults(),
-	drop = underbrush_drops,
+	drop = underbrush_drops_cacti,
 	on_flood = floodFunc,
 })
 
@@ -461,14 +474,35 @@ minetest.register_node("overworld:underbrush_cactus_branched_center", {
 	selection_box = {
 		type = "fixed",
 		fixed = {
-			{ -5/16, -8/16, -6/16, 7/16, -3/16, 6/16, },
+			{ -4/16, -8/16, -3/16, 6/16, 8/16, 4/16, },
 		},
 	},
 	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1, generation_replacable=1},
 	sounds = qtcore.node_sound_defaults(),
+	drop = underbrush_drops_cacti,
+	on_flood = floodFunc,
+})
+
+minetest.register_node("overworld:yucca", {
+	description = "Yucca",
+	tiles ={"overworld_yucca.png"},
+	use_texture_alpha = "clip",
+	drawtype = "plantlike",
+	paramtype = "light",
+	paramtype2 = "meshoptions",
+	sunlight_propagates = true,
+	walkable = false,
+	floodable = true,
+	waving = 1,
+	buildable_to = true,
+	selection_box = qtcore.nb_level1(),
+	groups = {snappy=3, flammable = 2, underbrush=1, growable =1, attached_node=1, generation_replacable=1},
+	sounds = qtcore.node_sound_defaults(),
+	on_place = qtcore.place_random_plantlike,
 	drop = underbrush_drops,
 	on_flood = floodFunc,
 })
+
 --natural coconut
 
 minetest.register_node("overworld:natural_coconut", {

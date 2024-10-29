@@ -148,7 +148,7 @@ qts.worldgen.register_biome("desert", {
 	surface = "overworld:desert_sand",
 	fill = {"overworld:desert_sand", "overworld:sandstone"},
 	stone = "overworld:sandstone",
-	plant = {"overworld:underbrush_cactus_barrel","overworld:underbrush_cactus_branched_center", "overworld:underbrush_cactus_branched_side"},
+	plant = {"overworld:underbrush_cactus_barrel","overworld:underbrush_cactus_branched_center", "overworld:underbrush_cactus_branched_side","overworld:yucca"},
 	plant_freq = 100,
 	surface_depth = 5,
 	fill_depth = 10,
