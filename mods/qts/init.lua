@@ -20,12 +20,16 @@ qts_internal.insecure = nil
 
 --load FFI
 if insecure == nil then
-    minetest.log("error", "qts requires an insecure environment. Please add it to the list of allowed insecure environments.")
+    minetest.log("error", [[qts requires an insecure environment. Please add it to the list of allowed insecure environments.
+QuestTest uses an insecure environment to load the luajit module "ffi". This module allows the loading of functions from a dynamic library (.dll)
+QuestTest uses dynamic libraries to allow for Custom Keybinds, and various other optimizations.
+You can find the source code and the compiled binaries in the NativeCode folder.
+]])
     error("qts requires an insecure environment. Please add it to the list of allowed insecure environments.")
 end
 ffi = insecure.require("ffi")
 if ffi == nil then
-    minetest.log("error", "qts requires the use of Minetest compiled with luajit for the ffi library. Please compile minetest with luajit")
+    minetest.log("error", "qts requires the use of Minetest compiled with luajit for the ffi library. Please compile minetest with luajit. ffi is used to support features like Custom Keybinds")
     error("qts requires the use of Minetest compiled with luajit for the ffi library. Please compile minetest with luajit")
 end
 

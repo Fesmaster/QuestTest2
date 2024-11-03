@@ -53,10 +53,6 @@ bool IsKeyPressed(int Code)
 {
 	if (GDisplay)
 	{
-		//if (LinuxKeymap::GetLinuxKeyFromMinetestKey((EKeyCode::Type)Code) == 0)
-		//{
-		//	std::cout << "WARNING! Unknown Linux keycode for key: " << EKeyCode::GetName((EKeyCode::Type)Code) << std::endl;
-		//}
 		EKeyCode::Type Key = (EKeyCode::Type)Code;
 		if (LinuxKeymap::IsKeyActuallyMouse(Key))
 		{

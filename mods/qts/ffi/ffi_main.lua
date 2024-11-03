@@ -10,8 +10,6 @@ ffi.cdef([[
 void ModuleStartup();
 void ModuleShutdown();
 
-
-void CheckOpenGLCompat();
 ]])
 
 local path = ""

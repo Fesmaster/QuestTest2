@@ -1,3 +1,20 @@
+
+#ifdef _WIN32
+#define QTS_WINDOWS
+#elif defined(__APPLE__) || defined (__MACH__)
+    #define QTS_MAC
+    #error "Mac builds not supported by qts at this time"
+#elif defined(__ANDROID__)
+    #define QTS_ANDROID
+	#error "Android builds not supported by qts at this time"
+#elif defined(__linux__)
+	#define QTS_LINUX
+#else
+    #error "Unknown build environment!"
+#endif
+
+
+
 #include <unordered_map>
 #include <vector>
 
