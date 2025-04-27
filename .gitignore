@@ -3,3 +3,10 @@
 **/*.log
 **/*.backup
 **/.vscode
+/NativeCode/obj
+/NativeCode/Makefile
+/NativeCode/*.make
+/NativeCode/QTS_Native.sln
+/NativeCode/*.vcxproj
+/NativeCode/*.vcxproj.user
+/NativeCode/.vs/
