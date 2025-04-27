@@ -26,7 +26,7 @@ qtcore.for_all_materials("wood", function (fields)
                 groups = {choppy = 2, oddly_breakable_by_hand = 2, generation_artificial=1, bandit_waypoint=1},
                 is_ground_content = false,
                 sounds = qtcore.node_sound_wood(),
-                invsize = 10*4,
+                invsize = 8*4,
                 get_chest_formspec = qtcore.get_default_chest_formspec,
             })
 
