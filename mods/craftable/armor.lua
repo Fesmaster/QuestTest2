@@ -5,7 +5,7 @@
 
 
 qtcore.for_all_materials("metal", function (fields_metal)
-    if fields_metal.name and fields_metal.desc and fields_metal.ingot and fields_metal.utility_metal and fields_metal.craft_groups then
+    if fields_metal.name and fields_metal.desc and fields_metal.ingot and fields_metal.utility_metal and fields_metal.craft_groups and fields_metal.quality then
         do
             local helmetname = "craftable:helmet_"..fields_metal.name
             local flesh = fields_metal.quality * 5
