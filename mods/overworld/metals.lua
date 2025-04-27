@@ -210,6 +210,7 @@ qtcore.register_material("metal", {
 	wealth_metal=true,
 	ingot_image="overworld_copper_ingot_stack.png",
 	craft_groups = {"group:workbench"},
+	quality = 0.6,
 })
 
 
@@ -258,6 +259,7 @@ qtcore.register_material("metal", {
 	wealth_metal=false,
 	ingot_image="overworld_bronze_ingot_stack.png",
 	craft_groups = {"group:workbench"},
+	quality = 0.75,
 })
 
 
@@ -332,6 +334,7 @@ qtcore.for_all_materials("stone", function(fields)
 	end
 end)
 
+--Quality is a measure of strength or value, for utility metals its reference is steel (value 1)
 qtcore.register_material("metal", {
 	name="iron",
 	desc = "Iron",
@@ -341,6 +344,7 @@ qtcore.register_material("metal", {
 	wealth_metal=false,
 	ingot_image="overworld_iron_ingot_stack.png",
 	craft_groups = {"group:anvil", "group:furnace"},
+	quality = 0.85,
 })
 
 
@@ -387,6 +391,7 @@ qtcore.register_material("metal", {
 	wealth_metal=false,
 	ingot_image="overworld_steel_ingot_stack.png",
 	craft_groups = {"group:anvil", "group:furnace"},
+	quality = 1,
 })
 
 

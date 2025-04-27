@@ -8,13 +8,14 @@ qtcore.for_all_materials("metal", function (fields_metal)
     if fields_metal.name and fields_metal.desc and fields_metal.ingot and fields_metal.utility_metal and fields_metal.craft_groups then
         do
             local helmetname = "craftable:helmet_"..fields_metal.name
+            local flesh = fields_metal.quality * 5
             minetest.register_craftitem(helmetname, {
                 description = fields_metal.desc .." Helmet",
                 inventory_image = "craftable_armor_"..fields_metal.name.."_helmet_item.png",
                 armor_image = "craftable_armor_"..fields_metal.name.."_helmet.png",
                 groups = {helmet=1,},
                 stack_max=1,
-                armor_groups = {fleshy=5},
+                armor_groups = {fleshy=flesh},
             })       
 
             qts.register_craft({
@@ -26,13 +27,14 @@ qtcore.for_all_materials("metal", function (fields_metal)
 
        do
         local cuirassname = "craftable:cuirass_"..fields_metal.name
+        local flesh = fields_metal.quality * 15
         minetest.register_craftitem(cuirassname, {
             description = fields_metal.desc .." Cuirass",
             inventory_image = "craftable_armor_"..fields_metal.name.."_cuirass_item.png",
             armor_image = "craftable_armor_"..fields_metal.name.."_cuirass.png",
             groups = {cuirass=1,},
             stack_max=1,
-            armor_groups = {fleshy=15},
+            armor_groups = {fleshy=flesh},
         })
 
         qts.register_craft({
@@ -45,13 +47,14 @@ qtcore.for_all_materials("metal", function (fields_metal)
 
        do
         local mailname = "craftable:mail_"..fields_metal.name
+        local flesh = fields_metal.quality * 10
         minetest.register_craftitem(mailname, {
             description = fields_metal.desc .." Mail",
             inventory_image = "craftable_armor_"..fields_metal.name.."_mail_item.png",
             armor_image = "craftable_armor_"..fields_metal.name.."_mail.png",
             groups = {cuirass=1,},
             stack_max=1,
-            armor_groups = {fleshy=15},
+            armor_groups = {fleshy=flesh},
         })
 
         qts.register_craft({
@@ -63,13 +66,14 @@ qtcore.for_all_materials("metal", function (fields_metal)
 
        do
         local glovesname = "craftable:gloves_"..fields_metal.name
+        local flesh = fields_metal.quality * 2
         minetest.register_craftitem(glovesname, {
             description = fields_metal.desc .." Gloves",
             inventory_image = "craftable_armor_"..fields_metal.name.."_gloves_item.png",
             armor_image = "craftable_armor_"..fields_metal.name.."_gloves.png",
             groups = {gloves=1,},
             stack_max=1,
-            armor_groups = {fleshy=2},
+            armor_groups = {fleshy=flesh},
         })
 
         qts.register_craft({
@@ -81,13 +85,14 @@ qtcore.for_all_materials("metal", function (fields_metal)
 
        do
         local bootsname = "craftable:boots_"..fields_metal.name
+        local flesh = fields_metal.quality * 2
         minetest.register_craftitem(bootsname, {
             description = fields_metal.desc .." Boots",
             inventory_image = "craftable_armor_"..fields_metal.name.."_boots_item.png",
             armor_image = "craftable_armor_"..fields_metal.name.."_boots.png",
             groups = {boots=1,},
             stack_max=1,
-            armor_groups = {fleshy=2},
+            armor_groups = {fleshy=flesh},
         })
 
         qts.register_craft({
@@ -99,13 +104,14 @@ qtcore.for_all_materials("metal", function (fields_metal)
 
        do
         local shieldname = "craftable:sheild_"..fields_metal.name
+        local flesh = fields_metal.quality * 15
         minetest.register_craftitem(shieldname, {
             description = fields_metal.desc .." Shield",
             inventory_image = "craftable_armor_"..fields_metal.name.."_sheild_item.png",
             armor_image = "craftable_armor_"..fields_metal.name.."_sheild.png",
             groups = {shield=1,},
             stack_max=1,
-            armor_groups = {fleshy=15},
+            armor_groups = {fleshy=flesh},
         })
 
         qts.register_craft({
