@@ -120,12 +120,11 @@ minetest.register_tool("tools:cloth_armor_boots", {
     Armor for each utility metal.
 ]]
 
-
-
 qtcore.for_all_materials("metal", function (fields_metal)
     if fields_metal.name and fields_metal.desc and fields_metal.ingot and fields_metal.utility_metal and fields_metal.craft_groups and fields_metal.quality then
         do
-            local helmetname = "overworld:armor_"..fields_metal.name.."_helmet"
+            local helmetname = ":tools:armor_"..fields_metal.name.."_helmet"
+			local craftname = "tools:armor_"..fields_metal.name.."_helmet"
             local flesh = fields_metal.quality * 5
             minetest.register_craftitem(helmetname, {
                 description = fields_metal.desc .." Helmet",
@@ -138,13 +137,14 @@ qtcore.for_all_materials("metal", function (fields_metal)
 
             qts.register_craft({
                 ingredients = {fields_metal.ingot.." 4"},
-                results = {helmetname},
+                results = {craftname},
                 near = fields_metal.craft_groups,
             })
        end
 
        do
-        local cuirassname = "overworld:armor_"..fields_metal.name.."_cuirass"
+        local cuirassname = ":tools:armor_"..fields_metal.name.."_cuirass"
+		local craftname = "tools:armor_"..fields_metal.name.."_cuirass"
         local flesh = fields_metal.quality * 15
         minetest.register_craftitem(cuirassname, {
             description = fields_metal.desc .." Cuirass",
@@ -157,14 +157,15 @@ qtcore.for_all_materials("metal", function (fields_metal)
 
         qts.register_craft({
             ingredients = {fields_metal.ingot.." 12"},
-            results = {cuirassname},
+            results = {craftname},
             near = fields_metal.craft_groups,
         })
        end
 
 
        do
-        local mailname = "overworld:armor_"..fields_metal.name.."_mail"
+        local mailname = ":tools:armor_"..fields_metal.name.."_mail"
+		local craftname = "tools:armor_"..fields_metal.name.."_mail"
         local flesh = fields_metal.quality * 10
         minetest.register_craftitem(mailname, {
             description = fields_metal.desc .." Mail",
@@ -177,13 +178,14 @@ qtcore.for_all_materials("metal", function (fields_metal)
 
         qts.register_craft({
             ingredients = {fields_metal.ingot.." 8"},
-            results = {cuirassname},
+            results = {craftname},
             near = fields_metal.craft_groups,
         })
        end
 
        do
-        local glovesname = "overworld:armor_"..fields_metal.name.."_gloves"
+        local glovesname = ":tools:armor_"..fields_metal.name.."_gloves"
+		local craftname = "tools:armor_"..fields_metal.name.."_gloves"
         local flesh = fields_metal.quality * 2
         minetest.register_craftitem(glovesname, {
             description = fields_metal.desc .." Gloves",
@@ -196,13 +198,14 @@ qtcore.for_all_materials("metal", function (fields_metal)
 
         qts.register_craft({
             ingredients = {fields_metal.ingot.." 2"},
-            results = {glovesname},
+            results = {craftname},
             near = fields_metal.craft_groups,
         })
        end
 
        do
-        local bootsname = "overworld:armor_"..fields_metal.name.."_boots"
+        local bootsname = ":tools:armor_"..fields_metal.name.."_boots"
+		local craftname = "tools:armor_"..fields_metal.name.."_boots"
         local flesh = fields_metal.quality * 2
         minetest.register_craftitem(bootsname, {
             description = fields_metal.desc .." Boots",
@@ -215,13 +218,14 @@ qtcore.for_all_materials("metal", function (fields_metal)
 
         qts.register_craft({
             ingredients = {fields_metal.ingot.." 4"},
-            results = {bootsname},
+            results = {craftname},
             near = fields_metal.craft_groups,
         })
        end
 
        do
-        local shieldname = "overworld:armor_"..fields_metal.name.."_sheild"
+        local shieldname = ":tools:armor_"..fields_metal.name.."_sheild"
+		local craftname = "tools:armor_"..fields_metal.name.."_sheild"
         local flesh = fields_metal.quality * 15
         minetest.register_craftitem(shieldname, {
             description = fields_metal.desc .." Shield",
@@ -234,7 +238,7 @@ qtcore.for_all_materials("metal", function (fields_metal)
 
         qts.register_craft({
             ingredients = {fields_metal.ingot.." 2", "group:wood 2"},
-            results = {shieldname},
+            results = {craftname},
             near = fields_metal.craft_groups,
         })
        end
