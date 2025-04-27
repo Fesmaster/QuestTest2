@@ -10,7 +10,6 @@ dofile(minetest.get_modpath("craftable").."/nodes.lua")
 dofile(minetest.get_modpath("craftable").."/tools.lua")
 
 --specific
-dofile(minetest.get_modpath("craftable").."/armor.lua")
 dofile(minetest.get_modpath("craftable").."/book.lua")
 dofile(minetest.get_modpath("craftable").."/campfire.lua")
 dofile(minetest.get_modpath("craftable").."/sifter.lua")
