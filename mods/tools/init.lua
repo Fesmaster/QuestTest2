@@ -6,6 +6,7 @@
 
     Why do these not use the qtcore materials system? each one needs its own custom tool capabilities, and thus, they are seperate.
     Sure, we could do something with a master list of capabilities and a sensible default, but that is a possible later move.
+        now there is some see metal armors
 ]]
 
 dofile(minetest.get_modpath("tools").."/knives.lua")
