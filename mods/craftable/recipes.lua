@@ -151,6 +151,12 @@ minetest.register_craft({
 	recipe = "group:underbrush",
 })
 
+minetest.register_craft({
+	type = "cooking",
+	output = "craftable:glass",
+	recipe = "group:sand",
+})
+
 --fuel
 minetest.register_craft({
 	type = "fuel",
@@ -472,4 +478,10 @@ minetest.register_craft({
 qts.register_craft({
 	ingredients = {"farmworks:herb_flax 6"},
 	results = {"craftable:textile_flax"},
+})
+
+--glass panes
+qts.register_craft({
+	ingredients = {"craftable:glass"},
+	results = {"craftable:glass_pane 8"},
 })
